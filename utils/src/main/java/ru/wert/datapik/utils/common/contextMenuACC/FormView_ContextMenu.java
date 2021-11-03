@@ -1,0 +1,106 @@
+package ru.wert.datapik.utils.common.contextMenuACC;
+
+import javafx.event.Event;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.common.commands.ItemCommands;
+import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.winform.enums.EOperation;
+
+import java.util.List;
+
+public abstract class FormView_ContextMenu<P extends Item> extends ContextMenu {
+
+    private final IFormView<P> formView;
+    private final ItemCommands<P> commands;
+    private final String itemACCRes;
+    protected FormViewACCWindow<P> accWindow;
+
+    //нельзя делать FINAL
+    private MenuItem ADD;
+    private MenuItem COPY;
+    private MenuItem CHANGE;
+    private MenuItem DELETE;
+
+    public abstract List<MenuItem> createExtraItems();
+    public abstract void createOnShowing();
+
+
+
+    public FormView_ContextMenu(IFormView<P> formView, ItemCommands<P> commands, String itemACCRes) {
+        this.formView = formView;
+        this.commands = commands;
+        this.itemACCRes = itemACCRes;
+
+        ADD = new MenuItem("Добавить");
+        ADD.setOnAction(this::add);
+
+        COPY = new MenuItem("Добавить копией");
+        COPY.setOnAction(this::copy);
+
+        CHANGE = new MenuItem("Изменить");
+        CHANGE.setOnAction(this::change);
+
+        DELETE = new MenuItem("Удалить");
+        DELETE.setOnAction(this::delete);
+
+        setOnShowing(e->{
+                createOnShowing();
+        });
+
+    }
+
+
+    protected void createMenu(boolean addItem, boolean copyItem, boolean changeItem, boolean deleteItem){
+
+        getItems().clear();
+
+        if(addItem) getItems().add(ADD);
+        if(copyItem) getItems().add(COPY);
+        if(changeItem) getItems().add(CHANGE);
+        if(deleteItem) getItems().add(DELETE);
+
+        List<MenuItem> extraItems = createExtraItems();
+
+        if(extraItems != null){
+            if(!extraItems.isEmpty()) {
+                getItems().add(new SeparatorMenuItem());
+                getItems().addAll(extraItems);
+            }
+        }
+    }
+
+
+    private void add(Event event){
+        accWindow = new FormViewACCWindow<P>();
+        accWindow.create(EOperation.ADD, formView, commands, itemACCRes);
+    }
+
+    private void copy(Event event){
+        accWindow = new FormViewACCWindow<P>();
+        accWindow.create(EOperation.COPY, formView,  commands, itemACCRes);
+    }
+
+    private void change(Event event){
+        accWindow = new FormViewACCWindow<P>();
+        accWindow.create(EOperation.CHANGE, formView,  commands, itemACCRes);
+    }
+
+    private void delete(Event event){
+        List<P> items = formView.getAllSelectedItems();
+        commands.delete(event, items);
+    }
+
+    public FormViewACCWindow<P> getACCWindow(){
+        return accWindow;
+    }
+
+    public void setAccWindow(FormViewACCWindow<P> accWindow){
+        this.accWindow = accWindow;
+    }
+
+
+
+}

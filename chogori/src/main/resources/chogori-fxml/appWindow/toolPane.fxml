@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import ru.wert.datapik.utils.toolpane.ChogoriToolBar?>
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.application.app_window.ToolPaneController">
+   <children>
+      <Separator prefWidth="200.0" />
+      <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+         <children>
+            <Separator orientation="VERTICAL">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="4.0" top="4.0" />
+               </padding>
+            </Separator>
+            <Separator orientation="VERTICAL">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="4.0" top="4.0" />
+               </padding>
+            </Separator>
+            <ChogoriToolBar fx:id="toolBar" HBox.hgrow="NEVER" />
+            <HBox fx:id="extraToolPane" alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </HBox>
+      <Separator prefWidth="200.0">
+         <VBox.margin>
+            <Insets bottom="2.0" />
+         </VBox.margin>
+      </Separator>
+   </children>
+</VBox>
