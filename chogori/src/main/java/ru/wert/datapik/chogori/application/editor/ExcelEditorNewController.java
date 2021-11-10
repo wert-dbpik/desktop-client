@@ -24,8 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.utils.images.BtnImages.BTN_CATALOG_IMG;
-import static ru.wert.datapik.utils.images.BtnImages.BTN_TABLE_VIEW_IMG;
+import static ru.wert.datapik.utils.images.BtnImages.*;
 
 /**
  * Класс описывает контроллер редактора таблиц Excel
@@ -82,10 +81,12 @@ public class ExcelEditorNewController {
     public void init(File excelFile){
         this.excelFile = excelFile;
 
+//        createInfoOrDraftsTableButton();
         loadStpInfo();
         loadStpDrafts();
         loadStpPreviewer();
         loadStpExcel();
+
     }
 
     /**
@@ -97,6 +98,11 @@ public class ExcelEditorNewController {
         excelPatchController = excelPatch.getExcelPatchController();
         excelPatchController.initExcelTableView(excelFile, previewerPatchController, true);
         excelPatchController.initExcelToolBar(true, true);
+        //Добавляем кнопки на панель
+        excelPatchController.getHbButtons().getChildren().add(createInfoOrDraftsTableButton());
+        excelPatchController.getHbButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.55));
+        //Наименование файла
+        excelPatchController.getLblExcelFile().setText(excelFile.getName());
 
         stpExcel.getChildren().add(excelPatch.getParent());
 
@@ -115,7 +121,7 @@ public class ExcelEditorNewController {
                 false, true);
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(false, true, true);
-        draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical));
+        draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
         //Для отображения чертежа
         draftsTable.getPreparedList().addListener((observable, oldValue, newValue) -> {
@@ -148,11 +154,11 @@ public class ExcelEditorNewController {
     }
 
     private BtnDouble createInfoOrDraftsTableButton(){
-        BtnDouble btnCatalogOrTable = new BtnDouble(
-                BTN_CATALOG_IMG, "Показать информацию",
+        BtnDouble btnInfoOrTable = new BtnDouble(
+                BTN_INFO_IMG, "Показать информацию",
                 BTN_TABLE_VIEW_IMG, "Показать чертежи");
-        btnCatalogOrTable.setOnAction(e->{
-            if(btnCatalogOrTable.getLogicProperty()) {
+        btnInfoOrTable.setOnAction(e->{
+            if(btnInfoOrTable.getLogicProperty()) {
                 stpInfo.getChildren().clear();
                 stpInfo.getChildren().add(0, draftPatch.getParent());
             } else {
@@ -161,7 +167,7 @@ public class ExcelEditorNewController {
                 stpInfo.getChildren().add(0, cat);
             }
         });
-        return btnCatalogOrTable;
+        return btnInfoOrTable;
     }
 
 }

@@ -95,10 +95,10 @@ public class AppStatic {
                         new FileFwdSlash(CH_TEMPDIR.toString() + "/" + fileId + "." + ext).toStrong());
             });
 
-        } else {
+        } else { //Если чертежа нет, показываем NO IMAGE заглушку
             Platform.runLater(()->{
                 try {
-                    //Показываем NO IMAGE файл
+                    if(previewerController != null)
                     previewerController.showDraft(null, new File(AppStatic.class.getResource("/utils-pics/NO_IMAGE.pdf").toURI()));
                 } catch (URISyntaxException e) {
                     e.printStackTrace();

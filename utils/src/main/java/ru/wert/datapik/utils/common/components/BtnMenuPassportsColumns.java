@@ -18,9 +18,7 @@ import static ru.wert.datapik.utils.images.BtnImages.BTN_COLUMNS_IMG;
 public class BtnMenuPassportsColumns extends MenuButton {
 
     public BtnMenuPassportsColumns(Passport_TableView tableView) {
-        setMaxHeight(18.0);
-        setMinHeight(18.0);
-        setPrefHeight(18.0);
+        setId("patchButton");
 
         setGraphic(new ImageView(BTN_COLUMNS_IMG));
         setTooltip(new Tooltip("Показать колонки"));

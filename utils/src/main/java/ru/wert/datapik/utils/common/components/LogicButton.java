@@ -32,6 +32,7 @@ public class LogicButton extends Button {
     public LogicButton(String text, ImageView image) {
         super(text, image);
 
+        setId("patchButton");
         createBigButton();
     }
 

@@ -29,6 +29,8 @@ public class ChevronButton extends Button {
         this.text2 = text2;
         this.image2 = image2;
 
+        setId("patchButton");
+
         //Первоначальное состояние
         setButtonRollFwd();
 

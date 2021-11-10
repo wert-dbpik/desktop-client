@@ -15,7 +15,7 @@ public class CatalogOfFoldersPatch {
     public CatalogOfFoldersPatch create() {
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/catalogOfFolders/catalogOfFolders.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfFolders/catalogOfFolders.fxml"));
             catalogOfFoldersPatch = loader.load();
             catalogOfFoldersController = loader.getController();
         } catch (IOException e) {

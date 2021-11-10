@@ -17,12 +17,11 @@ import static ru.wert.datapik.utils.images.BtnImages.BTN_COLUMNS_IMG;
 public class BtnMenuDraftsColumns extends MenuButton {
 
     public BtnMenuDraftsColumns(Draft_TableView tableView) {
-        setMaxHeight(18.0);
-        setMinHeight(18.0);
-        setPrefHeight(18.0);
 
         setGraphic(new ImageView(BTN_COLUMNS_IMG));
         setTooltip(new Tooltip("Показать колонки"));
+
+        setId("patchButton");
 
         setId("menu-button-no-arrow");
 

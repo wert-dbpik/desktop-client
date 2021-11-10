@@ -2,7 +2,6 @@ package ru.wert.datapik.utils.search;
 
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
-import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.popups.PastePopup;
 
 import java.awt.*;
@@ -43,6 +42,10 @@ public class SearchField extends TextField {
     public void setSearchableTableController(Searchable searchableTableController) {
         this.searchableTableController = searchableTableController;
     }
+
+//    public void setSearchableTableController(Excel_TableView searchableTableController) {
+//        this.searchableTableController = searchableTableController;
+//    }
 
     public void setSearchedText(String searchedText){
         setText(searchedText);

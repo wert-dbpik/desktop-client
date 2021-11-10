@@ -84,7 +84,7 @@ public class MenuController {
     @FXML
     void openCatalogOfProducts(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/catalogOfProducts/catalogOfProducts.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfProducts/catalogOfProducts.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Изделия", parent, true, null);
@@ -96,7 +96,7 @@ public class MenuController {
     @FXML
     public void openCatalogOfMaterials(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/catalogOfMaterials/catalogOfMaterials.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfMaterials/catalogOfMaterials.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Материалы", parent, true, null);
@@ -108,7 +108,7 @@ public class MenuController {
     @FXML
     void openCatalogOfFolders(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/catalogOfFolders/catalogOfFolders.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfFolders/catalogOfFolders.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Пакеты", parent, true, null);

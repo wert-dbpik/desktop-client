@@ -23,6 +23,7 @@ public class BtnImages {
     public static Image BTN_COLUMNS_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/columns(32x32).png"), size, size, true, true);
     public static Image BTN_TABLE_VIEW_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/view(32x32).png"), size, size, true, true);
     public static Image BTN_CATALOG_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/catalog(32x32).png"), size, size, true, true);
+    public static Image BTN_INFO_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/info(32x32).png"), size, size, true, true);
 
 
 }

@@ -19,7 +19,7 @@ public class CatalogOfProductPatch {
     public CatalogOfProductPatch create() {
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/catalogOfProducts/catalogOfProducts.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfProducts/catalogOfProducts.fxml"));
             catalogOfProductsPatch = loader.load();
             catalogOfProductsController = loader.getController();
         } catch (IOException e) {

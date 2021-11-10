@@ -12,6 +12,7 @@ public class BtnSearchFolder {
 
     public void create(Button btnSearchFolder){
         this.btnSearchFolder = btnSearchFolder;
+        btnSearchFolder.setId("patchButton");
 
         btnSearchFolder.setTooltip(new Tooltip("Найти/добавить\nпапку"));
         btnSearchFolder.setGraphic(new ImageView(BTN_ADD_SEARCH_IMG));

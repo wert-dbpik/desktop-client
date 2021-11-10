@@ -20,6 +20,7 @@ import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 public class Excel_PatchController {
 
     @FXML
+    @Getter
     private Label lblExcelFile;
 
     @FXML

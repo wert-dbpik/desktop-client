@@ -80,6 +80,7 @@ public class PreviewerPatchController {
     private void createPreviewerToolBar() {
         //ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         Button btnOpenInNewTab = new Button();
+        btnOpenInNewTab.setId("patchButton");
         btnOpenInNewTab.setGraphic(new ImageView(BTN_OPEN_IN_NEW_TAB_IMG));
         btnOpenInNewTab.setTooltip(new Tooltip("Открыть в отдельной вкладке"));
         btnOpenInNewTab.setOnAction(event -> {

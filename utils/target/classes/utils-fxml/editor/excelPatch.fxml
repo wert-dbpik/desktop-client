@@ -14,7 +14,7 @@
    <children>
       <VBox fx:id="vboxDrafts" layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id="excelHeader" alignment="CENTER_LEFT">
+            <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
                <children>
                   <Label fx:id="lblExcelFile" text="ИЗДЕЛИЕ">
                      <HBox.margin>

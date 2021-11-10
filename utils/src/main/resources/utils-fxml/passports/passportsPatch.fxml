@@ -11,7 +11,7 @@
    <children>
       <VBox fx:id="vboxPassports" layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER_LEFT">
+            <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
                <children>
                   <Label text="КАРТОТЕКА">
                      <HBox.margin>

@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
-import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.materials.Material_TableView;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class CatalogOfMaterialsPatch {
     public CatalogOfMaterialsPatch create() {
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/catalogOfMaterials/catalogOfMaterials.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfMaterials/catalogOfMaterials.fxml"));
             catalogOfMaterialsPatch = loader.load();
             catalogOfMaterialsController = loader.getController();
         } catch (IOException e) {

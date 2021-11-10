@@ -125,7 +125,7 @@ public class PassportsEditorController {
                 false, true);
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(false, true, true);
-        draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical));
+        draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
         //Для отображения чертежа
         draftsTable.getPreparedList().addListener((observable, oldValue, newValue) -> {
@@ -155,7 +155,8 @@ public class PassportsEditorController {
         passportsTable.setModifyingClass(new Folder());
         //Инструментальную панель инициируем в последнюю очередь
         passportPatchController.initPassportsToolBar(true, true);
-        passportPatchController.getHboxPassportsButtons().getChildren().addAll(createCatalogOrTableButton(), CommonUnits.createHorizontalDividerButton(sppHorizontal));
+        passportPatchController.getHboxPassportsButtons().getChildren().addAll(createCatalogOrTableButton(),
+                CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.4));
 
         passportsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(()->{
@@ -182,7 +183,7 @@ public class PassportsEditorController {
             passportsTable.updateView();
         });
 
-        catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical));
+        catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
 
     }

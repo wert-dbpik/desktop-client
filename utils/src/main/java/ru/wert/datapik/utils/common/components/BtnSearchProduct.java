@@ -13,6 +13,8 @@ public class BtnSearchProduct {
     public void create(Button btnSearchProduct){
         this.btnSearchProduct = btnSearchProduct;
 
+        btnSearchProduct.setId("patchButton");
+
         btnSearchProduct.setTooltip(new Tooltip("Найти/добавить\nизделие"));
         btnSearchProduct.setGraphic(new ImageView(BTN_ADD_SEARCH_IMG));
         btnSearchProduct.setOnAction(event -> {});

@@ -15,6 +15,8 @@ public class BtnDouble extends Button {
     public BtnDouble(Image image1, String hint1, Image image2, String hint2 ) {
         super();
 
+        setId("patchButton");
+
         switchBtn1(new ImageView(image1), hint1);
         //Кнопку нажали
         setOnMousePressed(e->{

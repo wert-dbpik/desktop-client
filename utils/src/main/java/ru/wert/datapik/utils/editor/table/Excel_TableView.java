@@ -16,6 +16,7 @@ import ru.wert.datapik.utils.editor.context_menu.Excel_ContextMenu;
 import ru.wert.datapik.utils.editor.context_menu.Excel_ExContextMenu;
 import ru.wert.datapik.utils.editor.model.EditorRow;
 import ru.wert.datapik.utils.editor.poi.POIReader;
+import ru.wert.datapik.utils.search.Searchable;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import static ru.wert.datapik.utils.editor.enums.EColName.*;
 import static ru.wert.datapik.utils.editor.table.TableMaster.*;
 
 @Data
-public class Excel_TableView extends TableView{
+public class Excel_TableView extends TableView {
 
     private ObservableList<EditorRow> data;
     private POIReader poi;

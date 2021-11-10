@@ -15,6 +15,8 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.utils.common.components.BtnRollDown;
+import ru.wert.datapik.utils.common.components.BtnRollUp;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch;
@@ -101,17 +103,13 @@ public class CatalogOfFoldersController {
      */
     private void createCatalog_ToolBar(){
         //Кнопка "Свернуть каталог"
-        Button btnCatalogRollUp = new Button();
-        btnCatalogRollUp.setGraphic(new ImageView(BTN_ROLLUP_IMG));
-        btnCatalogRollUp.setTooltip(new Tooltip("Свернуть каталог"));
+        Button btnCatalogRollUp = new BtnRollUp();
         btnCatalogRollUp.setOnAction((e)->{
             catalogTreeView.foldTreeView();
         });
 
         //Кнопка "Развернуть каталог"
-        Button btnCatalogRollDown = new Button();
-        btnCatalogRollDown.setGraphic(new ImageView(BTN_ROLLDOWN_IMG));
-        btnCatalogRollDown.setTooltip(new Tooltip("Развернуть каталог"));
+        Button btnCatalogRollDown = new BtnRollDown();
         btnCatalogRollDown.setOnAction((e)->{
             catalogTreeView.unfoldTreeView();
         });
@@ -133,6 +131,7 @@ public class CatalogOfFoldersController {
      */
     private void createFolders_ToolBar(){
         Button btnFoldersGlobe = new Button();
+        btnFoldersGlobe.setId("patchButton");
         btnFoldersGlobe.setGraphic(new ImageView(BTN_GLOBE_IMG));
         btnFoldersGlobe.setTooltip(new Tooltip("Показать все"));
         btnFoldersGlobe.setOnAction((e)->{

@@ -20,6 +20,8 @@ public class BtnGlobe<P extends Item> extends Button {
         setGraphic(new ImageView(BTN_GLOBE_IMG));
         setTooltip(new Tooltip("Показать все"));
 
+        setId("patchButton");
+
         if(view instanceof RoutineTableView) {
             setOnAction((e) -> {
                 view.setSearchedText("");

@@ -12,13 +12,13 @@
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <SplitPane fx:id="splitPaneDrafts" dividerPositions="0.4" VBox.vgrow="ALWAYS">
+            <SplitPane fx:id="sppHorizontal" dividerPositions="0.4" VBox.vgrow="ALWAYS">
               <items>
-                  <StackPane fx:id="spDrafts" />
-                  <SplitPane fx:id="splitPanePreview" dividerPositions="0.4" minHeight="0.0" minWidth="0.0" orientation="VERTICAL">
+                  <StackPane fx:id="spDrafts" minHeight="0.0" minWidth="0.0" />
+                  <SplitPane fx:id="sppVertical" dividerPositions="0.4" minHeight="0.0" minWidth="0.0" orientation="VERTICAL">
                     <items>
                         <StackPane fx:id="spCatalog" alignment="TOP_LEFT" minHeight="0.0" minWidth="0.0" />
-                        <StackPane fx:id="spPreviewer" />
+                        <StackPane fx:id="spPreviewer" minHeight="0.0" minWidth="0.0" />
                     </items>
                   </SplitPane>
               </items>

@@ -31,6 +31,8 @@ public class ExpandButton extends Button {
         this.text2 = text2;
         this.image2 = image2;
 
+        setId("patchButton");
+
         setButtonExpand();
 
         setOnAction(event -> {

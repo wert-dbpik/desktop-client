@@ -29,20 +29,20 @@ public class CommonUnits {
 
     }
 
-    public static ChevronButton createHorizontalDividerButton(SplitPane sppHorizontal){
+    public static ChevronButton createHorizontalDividerButton(SplitPane sppHorizontal, double posMax, double pozStart){
         SplitPane.Divider horizontalDivider = sppHorizontal.getDividers().get(0);
         return new ChevronButton(
-                "Развернуть", BTN_CHEVRON_RIGHT_IMG, 0.8,
-                "Свернуть", BTN_CHEVRON_LEFT_IMG, 0.4,
+                "Развернуть", BTN_CHEVRON_RIGHT_IMG, posMax, //0.8
+                "Свернуть", BTN_CHEVRON_LEFT_IMG, pozStart, //0.4
                 horizontalDivider);
 
     }
 
-    public static ChevronButton createVerticalDividerButton(SplitPane sppVertical){
+    public static ChevronButton createVerticalDividerButton(SplitPane sppVertical, double posMax, double pozStart){
         SplitPane.Divider verticalDivider = sppVertical.getDividers().get(0);
         return new ChevronButton(
-                "Развернуть", BTN_CHEVRON_DOWN_IMG, 0.8,
-                "Свернуть", BTN_CHEVRON_UP_IMG, 0.4,
+                "Развернуть", BTN_CHEVRON_DOWN_IMG, posMax, //0.8
+                "Свернуть", BTN_CHEVRON_UP_IMG, pozStart, //0.4
                 verticalDivider);
     }
 

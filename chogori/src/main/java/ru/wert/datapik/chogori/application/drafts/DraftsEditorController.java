@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
 import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
@@ -38,27 +39,19 @@ public class DraftsEditorController {
     private StackPane spCatalog;
 
     @FXML
-    private SplitPane splitPanePreview;
+    private SplitPane sppVertical;
 
     @FXML
-    private SplitPane splitPaneDrafts;
+    private SplitPane sppHorizontal;
 
 
     private Draft_TableView draftsTable;
-    private Parent previewer;
-    private ChevronButton horizontalDividerButton;
-    private ChevronButton verticalDividerButton;
-    private ExpandButton expandPreviewButton;
-    private SplitPane.Divider horizontalDivider;
-    private SplitPane.Divider verticalDivider;
     private PreviewerPatchController previewerController;
 
     @FXML
     void initialize() {
 
         createAppToolBar();
-
-        createChevronButtons(); //Кнопки управления сплитпейнами
 
         createCatalogOfFolders(); //Каталог пакетов
 
@@ -77,34 +70,9 @@ public class DraftsEditorController {
         previewerController = previewerPatch.getController();
         previewerController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
         previewerController.initPreviewerToolBar(true);
-        previewerController.getHboxPreviewerButtons().getChildren().add(expandPreviewButton);
+        previewerController.getHboxPreviewerButtons().getChildren().add(CommonUnits.createExpandPreviewButton(sppHorizontal, sppVertical));
 
         spPreviewer.getChildren().add(previewerPatch.getParent());
-    }
-
-    /**
-     * кнопочки с шевроном
-     */
-    private void createChevronButtons(){
-
-        horizontalDivider = splitPaneDrafts.getDividers().get(0);
-        verticalDivider = splitPanePreview.getDividers().get(0);
-
-        horizontalDividerButton = new ChevronButton(
-                "Развернуть", BTN_CHEVRON_RIGHT_IMG, 0.8,
-                "Свернуть", BTN_CHEVRON_LEFT_IMG, 0.4,
-                horizontalDivider);
-
-        verticalDividerButton = new ChevronButton(
-                "Развернуть", BTN_CHEVRON_DOWN_IMG, 0.8,
-                "Свернуть", BTN_CHEVRON_UP_IMG, 0.4,
-                verticalDivider);
-
-        expandPreviewButton = new ExpandButton(
-                "Развернуть", BTN_EXPAND_IMG,
-                "Свернуть", BTN_REDUCE_IMG, horizontalDivider,
-                verticalDivider);
-
     }
 
     /**
@@ -130,7 +98,7 @@ public class DraftsEditorController {
                 true, true);
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(true, true, true);
-        draftPatchController.getHboxDraftsButtons().getChildren().add(horizontalDividerButton);
+        draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.4));
 
         //Сообщаем Previewer ссылку на tableView
         previewerController.setDraftsTableView(draftsTable);
@@ -153,7 +121,7 @@ public class DraftsEditorController {
             draftsTable.updateView();
         });
 
-        catalogPatch.getFoldersButtons().getChildren().add(verticalDividerButton);
+        catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
 
         //Монтируем каталог в панель
