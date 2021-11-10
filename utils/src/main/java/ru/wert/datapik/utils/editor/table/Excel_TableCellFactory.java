@@ -19,9 +19,9 @@ import static ru.wert.datapik.utils.editor.enums.EColor.*;
 import static ru.wert.datapik.utils.editor.table.TableMaster.getAllColumns;
 
 @Log
-public class EditorTableCellFactory extends TableCell<EditorRow, String> {
+public class Excel_TableCellFactory extends TableCell<EditorRow, String> {
 
-    protected EditorTable editorTable;
+    protected Excel_TableView editorTable;
     protected TextField textField = new TextField();
     private String previousStyle;
     private static int startIndex, startId;
@@ -29,8 +29,8 @@ public class EditorTableCellFactory extends TableCell<EditorRow, String> {
     private final List<String> intCols =
             Arrays.asList(ROW_NUM.getColName(), TOTAL_AMOUNT.getColName(), A.getColName(), B.getColName());
 
-    public EditorTableCellFactory(EditorTable editorTable) {
-        this.editorTable = editorTable;
+    public Excel_TableCellFactory(Excel_TableView excelTable) {
+        this.editorTable = excelTable;
         textField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 commitEdit(textField.getText());

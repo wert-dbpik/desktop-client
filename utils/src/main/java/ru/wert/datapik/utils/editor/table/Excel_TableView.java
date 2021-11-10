@@ -12,8 +12,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import lombok.Data;
 import ru.wert.datapik.utils.editor.Cursors;
-import ru.wert.datapik.utils.editor.context_menu.EditorContextMenu;
-import ru.wert.datapik.utils.editor.context_menu.EditorExContextMenu;
+import ru.wert.datapik.utils.editor.context_menu.Excel_ContextMenu;
+import ru.wert.datapik.utils.editor.context_menu.Excel_ExContextMenu;
 import ru.wert.datapik.utils.editor.model.EditorRow;
 import ru.wert.datapik.utils.editor.poi.POIReader;
 
@@ -25,7 +25,7 @@ import static ru.wert.datapik.utils.editor.enums.EColName.*;
 import static ru.wert.datapik.utils.editor.table.TableMaster.*;
 
 @Data
-public class EditorTable {
+public class Excel_TableView extends TableView{
 
     private ObservableList<EditorRow> data;
     private POIReader poi;
@@ -38,7 +38,7 @@ public class EditorTable {
     private ScrollBar horizontalBar;
     double scrW = 20; //ширина бокового скролла
 
-    public EditorTable(POIReader poi, HBox hbox) {
+    public Excel_TableView(POIReader poi, HBox hbox) {
         this.poi = poi;
         this.hbox = hbox;
         this.data = poi.findModelData();
@@ -49,8 +49,8 @@ public class EditorTable {
 
         for (TableColumn tc : getAllColumns(tableView)) {
             if(tc.getText().equals("(кол)"))
-                tc.setCellFactory(param -> new EditorTableExCellFactory(this, tc.getParentColumn().getId()));
-            else tc.setCellFactory(param -> new EditorTableCellFactory(this));
+                tc.setCellFactory(param -> new Excel_TableExCellFactory(this, tc.getParentColumn().getId()));
+            else tc.setCellFactory(param -> new Excel_TableCellFactory(this));
             addStretchListenerToColumn(tc);
         }
 
@@ -75,7 +75,7 @@ public class EditorTable {
         tableView.resize(tW, tableView.getHeight());
         hbox.setPrefWidth(tW);
 
-        tableView.setContextMenu(new EditorContextMenu(tableView));
+        tableView.setContextMenu(new Excel_ContextMenu(tableView));
         reArrangeExecutionCols();
 //        testShowTableView();
     }
@@ -201,7 +201,7 @@ public class EditorTable {
         //Создаем исполнения
         for (int ex : executions.keySet()) {
             String exName = poi.getExecutionName(ex);
-            ExecutionColumn exCol = new ExecutionColumn(exName, "", ex, this);
+            Excel_ExecutionColumn exCol = new Excel_ExecutionColumn(exName, "", ex, this);
 
             //Добавляем исполнение в таблицу
             tableView.getColumns().add(exCol);
@@ -328,8 +328,8 @@ public class EditorTable {
             TableColumn<EditorRow, ?> tc = tableView.getColumns().get(index);
             if (tc.getId().startsWith("ex")) {
                 tc.setId("ex" + ex);
-                ((ExecutionColumn)tc).currentEx = ex;
-                tc.contextMenuProperty().setValue(new EditorExContextMenu(this, tc, ex));
+                ((Excel_ExecutionColumn)tc).currentEx = ex;
+                tc.contextMenuProperty().setValue(new Excel_ExContextMenu(this, tc, ex));
                 executions.put(ex, index);
                 ex++;
             }

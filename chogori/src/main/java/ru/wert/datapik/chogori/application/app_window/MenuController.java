@@ -5,9 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import ru.wert.datapik.chogori.StartChogori;
-import ru.wert.datapik.chogori.application.editor.ExcelEditorController;
-import ru.wert.datapik.utils.editor.EditorPatch;
+import ru.wert.datapik.chogori.application.editor.ExcelChooser;
+import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
 
+import java.io.File;
 import java.io.IOException;
 
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
@@ -26,13 +27,18 @@ public class MenuController {
     @FXML
     public void openExcelFile() {
 //        EditorPatch.getInstance().invokeFileChooser();
+        File chosenFile = new ExcelChooser().choose();
+        if(chosenFile == null) return;
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/excel/excelEditor.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/excel/excelEditorNew.fxml"));
             Parent parent = loader.load();
-            ExcelEditorController controller = loader.getController();
-            String fileName = controller.getFileName();
+            ExcelEditorNewController controller = loader.getController();
+            controller.init(chosenFile);
+//            String fileName = controller.getFileName();
+
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-            CH_TAB_PANE.createNewTab(fileName, parent, true, null);
+            CH_TAB_PANE.createNewTab(chosenFile.getName(), parent, true, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

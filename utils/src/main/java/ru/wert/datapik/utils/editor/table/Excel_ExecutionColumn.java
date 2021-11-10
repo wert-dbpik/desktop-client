@@ -5,29 +5,29 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
-import ru.wert.datapik.utils.editor.context_menu.EditorExContextMenu;
+import ru.wert.datapik.utils.editor.context_menu.Excel_ExContextMenu;
 import ru.wert.datapik.utils.editor.model.EditorRow;
 
 import java.util.ArrayList;
 
-public class ExecutionColumn extends TableColumn<EditorRow, String> {
+public class Excel_ExecutionColumn extends TableColumn<EditorRow, String> {
 
     private String name = "";
     private String description = "";
     Integer currentEx;
 
-    private EditorTable editorTable;
+    private Excel_TableView editorTable;
     private TableView<EditorRow> tv;
 
     private final double initialWidth = 35;
 
-    public ExecutionColumn(String name, String description, int ex, EditorTable editorTable) {
+    public Excel_ExecutionColumn(String name, String description, int ex, Excel_TableView excelTable) {
         super();
         this.name = name;
         this.description = description;
         this.currentEx = ex;
-        this.editorTable = editorTable;
-        this.tv = editorTable.getTableView();
+        this.editorTable = excelTable;
+        this.tv = excelTable.getTableView();
 
         //Присваиваем id сполнению
         setId("ex" + ex);
@@ -44,15 +44,15 @@ public class ExecutionColumn extends TableColumn<EditorRow, String> {
 //        vBox.setStyle("-fx-background-color: grey; -fx-border-color: black; -fx-alignment: center");
         vBox.setStyle("-fx-alignment: center");
 //        exInfo.setStyle("-fx-background-color: grey; -fx-text-fill: white");
-        contextMenuProperty().setValue(new EditorExContextMenu(editorTable, this, currentEx));
+        contextMenuProperty().setValue(new Excel_ExContextMenu(excelTable, this, currentEx));
         vBox.setOnMousePressed( e->{
             if(e.isSecondaryButtonDown()) {
                 vBox.onContextMenuRequestedProperty();
                 e.consume();
             }
             if(e.isPrimaryButtonDown()) {
-                TableColumn<EditorRow, ?> tcAmount = tv.getColumns().get(editorTable.getExecutions().get(currentEx)).getColumns().get(0);
-                TableColumn<EditorRow, ?> tcAmountPerAssemble = tv.getColumns().get(editorTable.getExecutions().get(currentEx)).getColumns().get(1);
+                TableColumn<EditorRow, ?> tcAmount = tv.getColumns().get(excelTable.getExecutions().get(currentEx)).getColumns().get(0);
+                TableColumn<EditorRow, ?> tcAmountPerAssemble = tv.getColumns().get(excelTable.getExecutions().get(currentEx)).getColumns().get(1);
                 if(e.isControlDown()){
                     selectExecutionColumn(tcAmount, tcAmountPerAssemble);
                 } else {
@@ -66,13 +66,13 @@ public class ExecutionColumn extends TableColumn<EditorRow, String> {
         //Кол
         TableColumn<EditorRow, String> totalAmount = new TableColumn<>("Кол");
         totalAmount.setPrefWidth(initialWidth);
-        totalAmount.setComparator(editorTable.createIntegerComparator(totalAmount));
+        totalAmount.setComparator(excelTable.createIntegerComparator(totalAmount));
         totalAmount.setCellValueFactory(val->{
             ArrayList<EditorRow.Execution> exx = val.getValue().getExecutions();
             exx.get(ex).setId("ex" + ex); //Присваиваем текущему исполнению id
             return new ReadOnlyStringWrapper(exx.get(currentEx).getTotalAmount());
         });
-        totalAmount.setCellFactory(param -> new EditorTableCellFactory(editorTable));
+        totalAmount.setCellFactory(param -> new Excel_TableCellFactory(excelTable));
         totalAmount.setOnEditCommit((CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow()))
                     .getExecutions().get(currentEx).setTotalAmount(t.getNewValue());
@@ -85,7 +85,7 @@ public class ExecutionColumn extends TableColumn<EditorRow, String> {
             ArrayList<EditorRow.Execution> exx = val.getValue().getExecutions();
             return new ReadOnlyStringWrapper(exx.get(currentEx).getAmountPerAssemble());
         });
-        amountPerAssemble.setCellFactory(param -> new EditorTableExCellFactory(editorTable, getId()));
+        amountPerAssemble.setCellFactory(param -> new Excel_TableExCellFactory(excelTable, getId()));
         amountPerAssemble.setOnEditCommit((CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow()))
                     .getExecutions().get(currentEx).setAmountPerAssemble(t.getNewValue());

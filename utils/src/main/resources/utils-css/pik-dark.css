@@ -308,18 +308,18 @@
 
 /*Excel таблицы*/
 
-#stpExcelTable{
-    -fx-background-color: white;
-}
+/*#stpExcelTable{*/
+/*    -fx-background-color: white;*/
+/*}*/
 
-#excelHeader{
-    -fx-background-color: aliceblue;
-    -fx-text-fill: black;
-    -fx-border-style: solid;
-    -fx-border-width: 0  0 1px 0;
-}
+/*#excelHeader{*/
+/*    -fx-background-color: aliceblue;*/
+/*    -fx-text-fill: black;*/
+/*    -fx-border-style: solid;*/
+/*    -fx-border-width: 0  0 1px 0;*/
+/*}*/
 
-#excelHeader > .label{
-    -fx-background-color: aliceblue;
-    -fx-text-fill: black;
-}
+/*#excelHeader > .label{*/
+/*    -fx-background-color: aliceblue;*/
+/*    -fx-text-fill: black;*/
+/*}*/

@@ -5,9 +5,9 @@ import javafx.scene.control.TextFormatter;
 
 import java.util.function.UnaryOperator;
 
-public class EditorTableExCellFactory extends EditorTableCellFactory {
+public class Excel_TableExCellFactory extends Excel_TableCellFactory {
 
-    public EditorTableExCellFactory(EditorTable editorTable, final String exId) {
+    public Excel_TableExCellFactory(Excel_TableView editorTable, final String exId) {
         super(editorTable);
         //Операция отслеживает посимвольный ввод цифр
         UnaryOperator<TextFormatter.Change> numbersOnlyFilter = change -> {

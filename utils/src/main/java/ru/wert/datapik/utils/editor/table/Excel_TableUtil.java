@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-public class EditorTableUtil {
+public class Excel_TableUtil {
 
     private final LinkedList<EditorCommand> undoStack = new LinkedList<>();
     private final LinkedList<EditorCommand> redoStack = new LinkedList<>();

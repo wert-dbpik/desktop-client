@@ -7,28 +7,28 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import ru.wert.datapik.utils.editor.model.EditorRow;
-import ru.wert.datapik.utils.editor.table.EditorTable;
-import ru.wert.datapik.utils.editor.table.ExecutionColumn;
+import ru.wert.datapik.utils.editor.table.Excel_ExecutionColumn;
+import ru.wert.datapik.utils.editor.table.Excel_TableView;
 
 import java.util.ArrayList;
 
 import static ru.wert.datapik.utils.editor.table.TableMaster.setIdToColumns;
 
 
-public class EditorExContextMenu extends ContextMenu {
+public class Excel_ExContextMenu extends ContextMenu {
 
-    private EditorTable editorTable;
+    private Excel_TableView excelTable;
     private TableView<EditorRow> tv;
 
     /**
      * Конструктор
-     * @param editorTable
+     * @param excelTable
      * @param exCol
      * @param exNum
      */
-    public EditorExContextMenu(EditorTable editorTable, TableColumn<EditorRow, ?> exCol, int exNum) {
-        this.editorTable = editorTable;
-        this.tv = editorTable.getTableView();
+    public Excel_ExContextMenu(Excel_TableView excelTable, TableColumn<EditorRow, ?> exCol, int exNum) {
+        this.excelTable = excelTable;
+        this.tv = excelTable.getTableView();
 
         MenuItem addExecution = new MenuItem("Добавить исполнение");
         addExecution.setOnAction(e-> addExecution(exCol, exNum));
@@ -47,8 +47,8 @@ public class EditorExContextMenu extends ContextMenu {
     private void deleteExecution(TableColumn<EditorRow, ?> col, int ex) {
         Platform.runLater(() -> {
             //если осталось только одно исполнение, то его удалить невозмоожно
-            if (editorTable.getExecutions().size() == 1) return;
-            else if (ex == editorTable.getExecutions().size() - 1) { //Если столбец крайний справа
+            if (excelTable.getExecutions().size() == 1) return;
+            else if (ex == excelTable.getExecutions().size() - 1) { //Если столбец крайний справа
                 tv.getSelectionModel().clearSelection();
                 for (EditorRow row : tv.getItems()) {
                     row.getExecutions().remove(ex);
@@ -62,7 +62,7 @@ public class EditorExContextMenu extends ContextMenu {
 
             }
             reArrangeExecutions(ex);
-            editorTable.changeTableWidth();
+            excelTable.changeTableWidth();
         });
     }
 
@@ -75,10 +75,10 @@ public class EditorExContextMenu extends ContextMenu {
     private void addExecution(TableColumn<EditorRow, ?> col, int ex) {
         Platform.runLater(() -> {
             //Определяем порядковый номер столбца. где выполнен клик мышью
-            int colPos = editorTable.getExecutions().get(ex);
+            int colPos = excelTable.getExecutions().get(ex);
 
             //Меняем модель таблицы добавив в него новое исполнение
-            if (ex == editorTable.getExecutions().size() - 1) //Если столбец крайний справа
+            if (ex == excelTable.getExecutions().size() - 1) //Если столбец крайний справа
                 for (EditorRow row : tv.getItems()) {
                     String exId = "ex" + ex;
                     row.getExecutions().add(new EditorRow.Execution(exId, "", ""));
@@ -93,10 +93,10 @@ public class EditorExContextMenu extends ContextMenu {
             colPos+=1;
 
             //Создадим столбец с новым исполнением
-            TableColumn<EditorRow, ?> newExCol = new ExecutionColumn("", "", ex + 1, editorTable);
+            TableColumn<EditorRow, ?> newExCol = new Excel_ExecutionColumn("", "", ex + 1, excelTable);
             tv.getColumns().add(colPos, newExCol);
             reArrangeExecutions(ex);
-            editorTable.changeTableWidth();
+            excelTable.changeTableWidth();
             selectExecutionColumn(colPos);
         });
     }
@@ -107,14 +107,14 @@ public class EditorExContextMenu extends ContextMenu {
      * @param ex
      */
     private void reArrangeExecutions(int ex) {
-        editorTable.reArrangeExecutionCols();
-        editorTable.reArrangeExecutionRows();
+        excelTable.reArrangeExecutionCols();
+        excelTable.reArrangeExecutionRows();
         setIdToColumns(tv);
 
-        int lastEx = editorTable.getExecutions().size()-1;
+        int lastEx = excelTable.getExecutions().size()-1;
         while(ex <= lastEx){
 
-            int colIndex = editorTable.getExecutions().get(ex);
+            int colIndex = excelTable.getExecutions().get(ex);
             int finalEx = ex;
             TableColumn<EditorRow, ?> tc = tv.getColumns().get(colIndex);
             ((TableColumn<EditorRow, String>)tc.getColumns().get(0)).setCellValueFactory(val->{

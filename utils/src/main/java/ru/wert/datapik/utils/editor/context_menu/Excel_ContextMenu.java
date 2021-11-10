@@ -5,7 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import ru.wert.datapik.utils.editor.enums.EColName;
@@ -22,11 +21,11 @@ import static ru.wert.datapik.utils.editor.table.TableMaster.findTableColumnById
 import static ru.wert.datapik.utils.editor.table.TableMaster.getAllColumns;
 import static ru.wert.datapik.utils.images.EditorImages.*;
 
-public class EditorContextMenu extends ContextMenu {
+public class Excel_ContextMenu extends ContextMenu {
 
     private TableView<EditorRow> tv;
 
-    public EditorContextMenu(TableView<EditorRow> tv) {
+    public Excel_ContextMenu(TableView<EditorRow> tv) {
         this.tv = tv;
 
         MenuItem cutItem = new MenuItem("Вырезать");

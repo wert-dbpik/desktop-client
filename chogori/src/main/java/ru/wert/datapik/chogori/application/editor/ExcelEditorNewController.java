@@ -5,22 +5,22 @@ import javafx.scene.Parent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
-import lombok.Getter;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.utils.common.components.BtnDouble;
-import ru.wert.datapik.utils.editor.EditorPatch;
+import ru.wert.datapik.utils.editor.table.Excel_Patch;
+import ru.wert.datapik.utils.editor.table.Excel_PatchController;
 import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
 import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
-import ru.wert.datapik.utils.entities.passports.Passport_Patch;
 import ru.wert.datapik.utils.info.InfoPatch;
 import ru.wert.datapik.utils.info.InfoPatchController;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ import static ru.wert.datapik.utils.images.BtnImages.BTN_TABLE_VIEW_IMG;
 /**
  * Класс описывает контроллер редактора таблиц Excel
  */
-public class ExcelEditorController {
+public class ExcelEditorNewController {
 
 
     @FXML
@@ -57,24 +57,35 @@ public class ExcelEditorController {
      * Патч с таблицей чертежей
      */
     private Draft_Patch draftPatch;
+    /**
+     * Таблица с чертежами
+     */
     private Draft_TableView draftsTable;
 
     /**
      * Патч с доступной информацией
      */
     private InfoPatch infoPatch;
+    /**
+     * Контроллер патча с доступной информацией
+     */
     private InfoPatchController infoPatchController;
-    @Getter
-    private String fileName;
+    /**
+     * Контроллер патча с таблицей excel файла
+     */
+    private Excel_PatchController excelPatchController;
+    /**
+     * Путь отображаемого excel файла
+     */
+    private File excelFile;
 
+    public void init(File excelFile){
+        this.excelFile = excelFile;
 
-    @FXML
-    void initialize() {
-
-        loadStpExcel();
         loadStpInfo();
         loadStpDrafts();
         loadStpPreviewer();
+        loadStpExcel();
     }
 
     /**
@@ -82,11 +93,12 @@ public class ExcelEditorController {
      */
     private void loadStpExcel() {
 
-        EditorPatch editorPatch = EditorPatch.getInstance();
-        editorPatch.invokeFileChooser();
+        Excel_Patch excelPatch = new Excel_Patch().create();
+        excelPatchController = excelPatch.getExcelPatchController();
+        excelPatchController.initExcelTableView(excelFile, previewerPatchController, true);
+        excelPatchController.initExcelToolBar(true, true);
 
-        fileName = editorPatch.getFileName();
-        stpExcel.getChildren().add(editorPatch.getParent());
+        stpExcel.getChildren().add(excelPatch.getParent());
 
     }
 
