@@ -89,6 +89,7 @@ public class AppStatic {
             }
             //В итоге, загружаем файл из временной папки
             Platform.runLater(()->{
+//                if(previewerController != null)
                 previewerController.showDraft(draft, new FileFwdSlash(CH_TEMPDIR.toString() + "/" + fileId + "." + ext));
                 log.debug("createSelectionListener : " +
                                 "Из временной папки загружен файл {}",

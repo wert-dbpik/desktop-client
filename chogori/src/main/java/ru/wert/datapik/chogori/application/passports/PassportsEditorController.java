@@ -68,13 +68,14 @@ public class PassportsEditorController {
 
         createAppToolBar();
 
+        loadStpPreviewer(); //Предпросмотр инициализируется до Чертежей!
+
         loadStpDrafts(); //Чертежи
 
         loadStpCatalog(); //Каталог
 
-        loadStpPassports(); //ЧЕРТЕЖИ
+        loadStpPassports(); //Пасспорта
 
-        loadStpPreviewer();
     }
 
     private void loadStpPreviewer() {
@@ -134,6 +135,7 @@ public class PassportsEditorController {
                 drafts.sort(Comparators.draftsForPreviewerComparator());
                 AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController);
             } else {
+                //Отображаем NO_IMAGE
                 AppStatic.openDraftInPreviewer(null, previewerPatchController);
             }
         });
