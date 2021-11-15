@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.users;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ru.wert.datapik.client.entity.models.User;
@@ -41,7 +42,10 @@ public class User_Columns {
      */
     public static TableColumn<User, String> createTcPassword(){
         TableColumn<User, String> tcUserPassport = new TableColumn<>("Пароль");
-        tcUserPassport.setCellValueFactory(new PropertyValueFactory<>("password"));
+        tcUserPassport.setCellValueFactory(cd ->{
+            String pass = "******";
+            return new ReadOnlyStringWrapper(pass);
+        });
         tcUserPassport.setMinWidth(150);
         tcUserPassport.setStyle("-fx-alignment: CENTER;");
         return tcUserPassport;

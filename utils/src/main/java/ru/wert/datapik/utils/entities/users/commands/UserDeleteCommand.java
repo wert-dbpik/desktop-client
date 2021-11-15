@@ -38,7 +38,7 @@ public class UserDeleteCommand implements ICommand {
                 log.info("Удален пользователь {}", item.getName());
             } catch (Exception e) {
                 Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
-                log.error("При добавление пользователя {} произошла ошибка {} по причине {}", item.getName(), e.getMessage(), e.getCause());
+                log.error("При удалении пользователя {} произошла ошибка {}", item.getName(), e.getMessage());
             }
         }
 

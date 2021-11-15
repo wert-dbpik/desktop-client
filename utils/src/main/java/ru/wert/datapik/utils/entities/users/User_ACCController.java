@@ -56,6 +56,7 @@ public class User_ACCController extends FormView_ACCController<User> {
     @Override
     public void init(EOperation operation, IFormView<User> formView, ItemCommands<User> commands){
         super.initSuper(operation, formView, commands, CH_USERS);
+        setInitialValues();
 
     }
 
