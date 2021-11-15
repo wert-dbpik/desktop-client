@@ -27,7 +27,7 @@ public class BtnMenuDraftsFilter extends MenuButton {
 
         CustomMenuItem legal = new CustomMenuItem();
         CheckBox cbLegal = new CheckBox("Действующие");
-        cbLegal.setSelected(tableView.isShowLegal());
+        cbLegal.setSelected(tableView.isShowValid());
         legal.setContent(cbLegal);
         legal.setHideOnClick(false);
 
@@ -47,7 +47,7 @@ public class BtnMenuDraftsFilter extends MenuButton {
 
         showingProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue) {
-                tableView.setShowLegal(cbLegal.isSelected());
+                tableView.setShowValid(cbLegal.isSelected());
                 tableView.setShowChanged(cbChanged.isSelected());
                 tableView.setShowAnnulled(cbAnnulled.isSelected());
 

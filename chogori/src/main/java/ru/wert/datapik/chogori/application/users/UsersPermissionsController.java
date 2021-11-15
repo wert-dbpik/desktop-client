@@ -1,12 +1,16 @@
 package ru.wert.datapik.chogori.application.users;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.entities.users.PermissionsController;
 import ru.wert.datapik.utils.entities.users.User_Controller;
 import ru.wert.datapik.utils.entities.users._UserPatch;
@@ -37,10 +41,15 @@ public class UsersPermissionsController {
     private Parent permissionsParent;
     private PermissionsController permissionsController;
 
+    private TableView<User> userTableView;
+    private User selectedUser;
+
     @FXML
     void initialize(){
 
         createChevronButtons();
+
+
 
         createUserPane();
 
@@ -56,6 +65,10 @@ public class UsersPermissionsController {
             apPermissions.getChildren().add(permissionsParent);
             permissionsController = loader.getController();
 
+//            userTableView.getSelectionModel().select(1);
+//            selectedUser = userTableView.getSelectionModel().getSelectedItem();
+//            permissionsController.init(selectedUser);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,6 +79,13 @@ public class UsersPermissionsController {
         usersParent = usersPatch.getUsersPatch();
         usersButtons = usersPatch.getUsersButtons();
         userController = usersPatch.getUserController();
+        userTableView = userController.getUserTableView();
+        userTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != oldValue)
+            permissionsController.init(newValue);
+        });
+
+
 
         AnchorPane userAnchorPane = userController.getApUsersPatch();
         AppStatic.setNodeInAnchorPane(userAnchorPane);

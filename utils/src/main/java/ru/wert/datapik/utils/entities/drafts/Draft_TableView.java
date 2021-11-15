@@ -4,8 +4,6 @@ import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.MouseButton;
@@ -26,7 +24,6 @@ import ru.wert.datapik.utils.statics.Comparators;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,7 +44,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     ListProperty<Draft> preparedList = new SimpleListProperty<>();
 
     //Фильтр
-    @Getter@Setter private boolean showLegal = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
+    @Getter@Setter private boolean showValid = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
     @Getter@Setter private boolean showChanged; //ЗАМЕНЕНННЫЕ
     @Getter@Setter private boolean showAnnulled; //АННУЛИРОВАННЫЕ
 
@@ -201,7 +198,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
             Draft d = i.next();
             EDraftStatus status = EDraftStatus.getStatusById(d.getStatus());
             if (status != null) {
-                if ((status.equals(EDraftStatus.LEGAL) && !isShowLegal()) ||
+                if ((status.equals(EDraftStatus.LEGAL) && !isShowValid()) ||
                         (status.equals(EDraftStatus.CHANGED) && !isShowChanged()) ||
                         (status.equals(EDraftStatus.ANNULLED) && !isShowAnnulled()))
                     i.remove();

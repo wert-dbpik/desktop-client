@@ -346,6 +346,14 @@
     -fx-text-fill: white;
 }
 
+#vbPermitions{
+    -fx-background-color: #b5dafe;
+}
+
+#vbPermitions > .check-box{
+    -fx-text-fill: black;
+}
+
 
 
 

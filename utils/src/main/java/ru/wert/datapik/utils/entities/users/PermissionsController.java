@@ -5,7 +5,13 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import ru.wert.datapik.client.entity.models.User;
+import ru.wert.datapik.client.entity.models.UserGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,60 +20,80 @@ import java.util.List;
 public class PermissionsController {
 
     @FXML
-    private VBox vbPermitions;
+    private StackPane stackPane;
+
+    @FXML
+    private HBox permitionsButtons;
+
+    @FXML
+    private CheckBox chbAdministrate;
+
+    @FXML
+    private CheckBox chbEditUsers;
+
+    @FXML
+    private CheckBox chbEditDrafts;
+
+    @FXML
+    private CheckBox chbCommentDrafts;
+
+    @FXML
+    private CheckBox chbEditProducts;
+
+    @FXML
+    private CheckBox chbEditMaterials;
+
+    private User user;
+    private UserGroup userGroup;
+    private boolean[] oldPermitions;
 
     @FXML
     void initialize(){
+        AnchorPane.setTopAnchor(stackPane, 0.0);
+        AnchorPane.setLeftAnchor(stackPane, 0.0);
+        AnchorPane.setBottomAnchor(stackPane, 0.0);
+        AnchorPane.setRightAnchor(stackPane, 0.0);
+    }
 
-        // определяем набор вложенных узлов
-        CheckBox chbUsers =  new CheckBox("Пользователи");
-        CheckBox chbAddUsers =  new CheckBox("Добавлять");
-        CheckBox chbChangeUsers =  new CheckBox("Изменять");
-        CheckBox chbDeleteUsers =  new CheckBox("Удалять");
+    public void init(User user){
+        this.user = user;
+        this.userGroup = user.getUserGroup();
 
-        CheckBox chbDrafts =  new CheckBox("Чертежи");
-        CheckBox chbAddDrafts =  new CheckBox("Добавлять");
-        CheckBox chbChangeDrafts =  new CheckBox("Изменять");
-        CheckBox chbDeleteDrafts =  new CheckBox("Удалять");
+        saveOldPermitions();
 
-        List<CheckBox> mainCheckboxes = Arrays.asList(chbUsers, chbDrafts);
-        List<CheckBox> usersCheckboxes = Arrays.asList(chbAddUsers, chbChangeUsers, chbDeleteUsers);
-        List<CheckBox> draftsCheckboxes = Arrays.asList(chbAddDrafts, chbChangeDrafts, chbDeleteDrafts);
-        List<CheckBox> minions = new ArrayList<>();
-        minions.addAll(usersCheckboxes);
-        minions.addAll(draftsCheckboxes);
+        List<CheckBox> boxes = Arrays.asList(chbAdministrate, chbEditUsers, chbEditDrafts,
+                chbCommentDrafts, chbEditProducts, chbEditMaterials);
 
-        for(CheckBox cb : mainCheckboxes)
-            cb.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: black; -fx-end-margin: 10;");
-
-        for(CheckBox cb : minions)
-            cb.setStyle("-fx-font-style: oblique; -fx-font-size: 16; -fx-text-fill: black; -fx-end-margin: 5;");
-
-
-        vbPermitions.getChildren().addAll(
-                new Separator(),
-                chbUsers,
-                chbAddUsers,
-                chbChangeUsers,
-                chbDeleteUsers,
-                new Separator(),
-                chbDrafts,
-                chbAddDrafts,
-                chbChangeDrafts,
-                chbDeleteDrafts,
-                new Separator()
-        );
+        if(user != null) {
+            chbAdministrate.setSelected(user.getUserGroup().isAdministrate());
+            chbEditUsers.setSelected(user.getUserGroup().isEditUsers());
+            chbEditDrafts.setSelected(user.getUserGroup().isEditDrafts());
+            chbCommentDrafts.setSelected(user.getUserGroup().isCommentDrafts());
+            chbEditProducts.setSelected(user.getUserGroup().isEditProducts());
+            chbEditMaterials.setSelected(user.getUserGroup().isEditMaterials());
+        } else {
+            for (CheckBox ch : boxes)
+                ch.setSelected(false);
+        }
 
 
 
     }
 
-    public void init(){
-
+    private void saveNewPermitions(){
+//        user.get
     }
 
-
-
+    private void saveOldPermitions() {
+        oldPermitions = new boolean[]{
+                user.getUserGroup().isAdministrate(),
+                user.getUserGroup().isAdministrate(),
+                user.getUserGroup().isAdministrate(),
+                user.getUserGroup().isAdministrate(),
+                user.getUserGroup().isAdministrate(),
+                user.getUserGroup().isAdministrate(),
+        };
+    }
 
 
 }

@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.controlsfx.control.*?>
+<?import javafx.scene.text.*?>
+
+<!--<?import org.controlsfx.control.*?>-->
+
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.entities.users.PermissionsController">
+
+<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.entities.users.PermissionsController">
    <children>
-      <VBox fx:id="vbPermitions" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="vbPermitions">
          <children>
-            <HBox alignment="CENTER_RIGHT">
+            <HBox alignment="CENTER_RIGHT" minHeight="25.0" prefHeight="25.0">
                <children>
                   <Label text="РАЗРЕШЕННЫЕ ОПЕРАЦИИ">
                      <HBox.margin>
@@ -27,7 +31,55 @@
                   </HBox>
                </children>
             </HBox>
+            <CheckBox fx:id="chbAdministrate" mnemonicParsing="false" text="Администрировать">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="50.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="chbEditUsers" mnemonicParsing="false" text="Редактировать пользователей">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="chbEditDrafts" mnemonicParsing="false" text="Редактировать чертежи">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="chbCommentDrafts" mnemonicParsing="false" text="Комментировать чертежи">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="chbEditProducts" mnemonicParsing="false" text="Редактировать таблицы продуктов">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="chbEditMaterials" mnemonicParsing="false" text="Редактировать материалы">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </CheckBox>
          </children>
       </VBox>
    </children>
-</AnchorPane>
+</StackPane>

@@ -1,0 +1,13 @@
+ru\wert\datapik\chogori\application\app_window\MenuController.class
+ru\wert\datapik\chogori\application\editor\ExcelEditorNewController.class
+ru\wert\datapik\chogori\StartChogori.class
+ru\wert\datapik\chogori\application\app_window\ApplicationController.class
+ru\wert\datapik\chogori\application\users\UsersPermissionsController.class
+ru\wert\datapik\chogori\application\editor\ExcelChooser.class
+ru\wert\datapik\chogori\application\drafts\DraftsEditorController.class
+ru\wert\datapik\chogori\application\passports\PassportsEditorController.class
+ru\wert\datapik\chogori\LoginController.class
+ru\wert\datapik\chogori\application\app_window\ToolPaneController.class
+ru\wert\datapik\chogori\application\common\CommonUnits.class
+ru\wert\datapik\chogori\AppPreloader.class
+ru\wert\datapik\chogori\application\app_window\ToolPaneCreator.class

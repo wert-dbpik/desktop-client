@@ -14,9 +14,12 @@ public class UserGroup extends _BaseEntity implements Item {
 
     private String name;
     private boolean administrate;
+    private boolean editUsers;
+    private boolean editDrafts;
+    private boolean commentDrafts;
     private boolean editProducts;
-    private boolean deleteProducts;
-    private boolean comment;
+    private boolean editMaterials;
+
 
     @Override
     public String toUsefulString() {

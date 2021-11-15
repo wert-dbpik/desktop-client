@@ -16,6 +16,7 @@ ru\wert\datapik\client\entity\api_interfaces\AppSettingsApiInterface.class
 ru\wert\datapik\client\entity\service_interfaces\IDraftService.class
 ru\wert\datapik\client\entity\serviceREST\DraftService.class
 ru\wert\datapik\client\entity\serviceQUICK\DetailQuickService.class
+ru\wert\datapik\client\entity\serviceQUICK\MaterialQuickService.class
 ru\wert\datapik\client\entity\serviceQUICK\FolderQuickService.class
 ru\wert\datapik\client\entity\api_interfaces\MatTypeApiInterface.class
 ru\wert\datapik\client\entity\models\Material.class
