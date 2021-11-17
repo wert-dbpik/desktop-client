@@ -9,8 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.entities.users.PermissionsController">
+<StackPane fx:id="stackPane" prefHeight="369.0" prefWidth="310.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.entities.users.PermissionsController">
    <children>
       <VBox fx:id="vbPermitions">
          <children>
@@ -31,54 +30,81 @@
                   </HBox>
                </children>
             </HBox>
-            <CheckBox fx:id="chbAdministrate" mnemonicParsing="false" text="Администрировать">
-               <font>
-                  <Font name="System Italic" size="16.0" />
-               </font>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <Label text="Разрешения :">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <CheckBox fx:id="chbAdministrate" mnemonicParsing="false" text="Администрировать">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="chbEditUsers" mnemonicParsing="false" text="Редактировать пользователей">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <Separator prefWidth="200.0" />
+                  <CheckBox fx:id="chbReadDrafts" mnemonicParsing="false" text="Общий доступ к чертежам">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="chbEditDrafts" mnemonicParsing="false" text="Редактировать чертежи">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="chbDeleteDrafts" mnemonicParsing="false" text="Удалять чертежи">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="chbCommentDrafts" mnemonicParsing="false" text="Комментировать чертежи">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <Separator prefHeight="29.0" prefWidth="325.0" />
+                  <CheckBox fx:id="chbReadProductStructure" mnemonicParsing="false" text="Общий доступ к структуре изделий">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="chbEditProductStructure" mnemonicParsing="false" text="Редактировать структуру изделий">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="chbDeleteProductStructure" mnemonicParsing="false" text="Удалять структуру изделий">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <Separator prefHeight="29.0" prefWidth="325.0" />
+                  <CheckBox fx:id="chbReadMaterials" mnemonicParsing="false" text="Общий доступ к материалам">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="chbEditMaterials" mnemonicParsing="false" text="Редактировать материалы">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="chbDeleteMaterials" mnemonicParsing="false" text="Удалять материалы">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+               </children>
                <VBox.margin>
-                  <Insets left="10.0" top="50.0" />
+                  <Insets left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
-            </CheckBox>
-            <CheckBox fx:id="chbEditUsers" mnemonicParsing="false" text="Редактировать пользователей">
-               <font>
-                  <Font name="System Italic" size="16.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </VBox.margin>
-            </CheckBox>
-            <CheckBox fx:id="chbEditDrafts" mnemonicParsing="false" text="Редактировать чертежи">
-               <font>
-                  <Font name="System Italic" size="16.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </VBox.margin>
-            </CheckBox>
-            <CheckBox fx:id="chbCommentDrafts" mnemonicParsing="false" text="Комментировать чертежи">
-               <font>
-                  <Font name="System Italic" size="16.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </VBox.margin>
-            </CheckBox>
-            <CheckBox fx:id="chbEditProducts" mnemonicParsing="false" text="Редактировать таблицы продуктов">
-               <font>
-                  <Font name="System Italic" size="16.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </VBox.margin>
-            </CheckBox>
-            <CheckBox fx:id="chbEditMaterials" mnemonicParsing="false" text="Редактировать материалы">
-               <font>
-                  <Font name="System Italic" size="16.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </VBox.margin>
-            </CheckBox>
+            </VBox>
          </children>
       </VBox>
    </children>

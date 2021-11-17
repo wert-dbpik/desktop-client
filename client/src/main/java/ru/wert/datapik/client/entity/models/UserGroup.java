@@ -13,12 +13,22 @@ import ru.wert.datapik.client.interfaces.Item;
 public class UserGroup extends _BaseEntity implements Item {
 
     private String name;
+
     private boolean administrate;
     private boolean editUsers;
+    //----------------------
+    private boolean readDrafts;
     private boolean editDrafts;
     private boolean commentDrafts;
-    private boolean editProducts;
+    private boolean deleteDrafts;
+    //------------------------
+    private boolean readProductStructure;
+    private boolean editProductStructure;
+    private boolean deleteProductStructure;
+    //------------------------
+    private boolean readMaterials;
     private boolean editMaterials;
+    private boolean deleteMaterials;
 
 
     @Override
