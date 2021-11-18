@@ -16,11 +16,7 @@
    <children>
       <VBox>
          <children>
-            <StackPane prefWidth="600.0">
-               <children>
-                  <fx:include source="menu.fxml" />
-               </children>
-            </StackPane>
+            <StackPane fx:id="spAppMenu" prefWidth="600.0" />
             <StackPane fx:id="stackPaneForToolPane" />
          </children>
       </VBox>

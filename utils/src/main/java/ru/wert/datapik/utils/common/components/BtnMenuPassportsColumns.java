@@ -10,6 +10,7 @@ import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.passports.Passport_TableView;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_COLUMNS_IMG;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
  * Класс описывает кнопку, при нажатии на которую на экране рядом с кнопкой появляется всплывающее окно
@@ -39,7 +40,9 @@ public class BtnMenuPassportsColumns extends MenuButton {
         useIdentity.setContent(cbUseIdentity);
         useIdentity.setHideOnClick(false);
 
-        getItems().addAll(useId, useIdentity);
+        if(CH_CURRENT_USER.getUserGroup().isAdministrate())
+            getItems().addAll(useId);
+        getItems().addAll(useIdentity);
 
         showingProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue) {

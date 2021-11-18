@@ -73,7 +73,7 @@ public class LoginController {
     private void openTestWindow(){
         //========================================================================================
 //        Platform.runLater(()->{
-            StartChogori.CH_MENU_CONTROLLER.openCatalogOfMaterials(new ActionEvent());
+//            StartChogori.CH_MENU_CONTROLLER.openCatalogOfMaterials(new ActionEvent());
 //        });
 
 

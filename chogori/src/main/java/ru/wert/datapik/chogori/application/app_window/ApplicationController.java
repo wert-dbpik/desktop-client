@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.StackPane;
@@ -34,13 +35,26 @@ public class ApplicationController {
     private StackPane stackPaneForToolPane;
 
     @FXML
+    private StackPane spAppMenu;
+
+
+    @FXML
     void initialize() {
+//        CH_APPLICATION_ROOT_PANEL = rootPanel;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
 
         createToolPanel();
         createUserLabel();
         createTabPane();
         createButtonInterceptor();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/appWindow/appMenu.fxml"));
+            Parent parent = loader.load();
+            spAppMenu.getChildren().add(parent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

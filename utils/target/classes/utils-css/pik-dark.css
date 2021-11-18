@@ -349,7 +349,7 @@
 #vbPermissions{
     /*-fx-background-color: #b5dafe;*/
     -fx-background-color: darkGray;
-
+    /*-fx-background-color: -fx-my-black;*/
 }
 
 #vbPermissions >.check-box .box {
@@ -369,11 +369,17 @@
 #vbPermissions >.check-box:selected .box {
 
     -fx-background-color: #28a3f4;
+
 }
 
 #vbPermissions >.check-box .text{
 
     -fx-fill: black; /*не работает*/
+}
+
+#apLogin {
+    /*-fx-background-color: #28a3f4;*/
+    -fx-background-color: -fx-my-black;
 }
 
 
