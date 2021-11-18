@@ -23,3 +23,7 @@
 hs_err_pid*
 .idea/vcs.xml
 client/client.iml
+/utils/target
+/chogori/target
+/winform/target
+/client/target
