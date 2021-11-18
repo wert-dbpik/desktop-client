@@ -138,6 +138,21 @@ public class MenuController {
     }
 
     @FXML
+    void openUserGroups(ActionEvent event) {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/users/userGroupsPermissions.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Группы Пользователей", parent, true, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @FXML
     void openAdminDrafts(ActionEvent event) {
 
     }

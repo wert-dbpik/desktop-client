@@ -346,12 +346,34 @@
     -fx-text-fill: white;
 }
 
-#vbPermitions{
-    -fx-background-color: #b5dafe;
+#vbPermissions{
+    /*-fx-background-color: #b5dafe;*/
+    -fx-background-color: darkGray;
+
 }
 
-#vbPermitions > .check-box{
-    -fx-text-fill: black;
+#vbPermissions >.check-box .box {
+
+    -fx-background-color: white;
+    -fx-border-color:grey;
+    -fx-border-radius:3px;
+
+}
+
+#vbPermissions >.check-box:selected .mark {
+
+    -fx-background-color: white;
+
+}
+
+#vbPermissions >.check-box:selected .box {
+
+    -fx-background-color: #28a3f4;
+}
+
+#vbPermissions >.check-box .text{
+
+    -fx-fill: black; /*не работает*/
 }
 
 

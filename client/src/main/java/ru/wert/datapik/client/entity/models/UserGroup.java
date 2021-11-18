@@ -22,9 +22,9 @@ public class UserGroup extends _BaseEntity implements Item {
     private boolean commentDrafts;
     private boolean deleteDrafts;
     //------------------------
-    private boolean readProductStructure;
-    private boolean editProductStructure;
-    private boolean deleteProductStructure;
+    private boolean readProductStructures;
+    private boolean editProductStructures;
+    private boolean deleteProductStructures;
     //------------------------
     private boolean readMaterials;
     private boolean editMaterials;

@@ -17,7 +17,7 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_USER_GROUPS;
 
 public class UserGroup_TableView extends RoutineTableView<UserGroup> {
 
-    private static final String accWindowRes = "/utils-fxml/users/usersACC.fxml";
+    private static final String accWindowRes = "/utils-fxml/user_group/userGroupACC.fxml";
     private final _UserGroupCommands commands;
     private UserGroup_ContextMenu contextMenu;
     private List<UserGroup> currentItemList;

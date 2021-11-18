@@ -2,6 +2,7 @@ package ru.wert.datapik.chogori;
 
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -38,10 +39,8 @@ public class StartChogori extends Application {
     @Override
     public void init(){
 
-
-            initServices();
-            initQuickServices();
-
+        initServices();
+        initQuickServices();
 
         new ChogoriToolBar();
         //Создадим папку временного хранения файлов чертежей

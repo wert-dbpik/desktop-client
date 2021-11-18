@@ -1,15 +1,11 @@
 package ru.wert.datapik.utils.entities.user_groups;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
 import ru.wert.datapik.client.entity.models.UserGroup;
-import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
@@ -19,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USER_GROUPS;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 
@@ -69,22 +64,17 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
 
     @FXML
     private Button btnCancel;
-    
-;
-
 
 
     @FXML
     void cancel(ActionEvent event) {
         super.cancelPressed(event);
-
     }
 
     @FXML
     void ok(ActionEvent event) {
         super.okPressed(event);
         closeWindow(event);
-
     }
 
     @FXML
@@ -128,15 +118,19 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
     public void fillFieldsOnTheForm(UserGroup oldItem) {
 
         tfUserGroupName.setText(oldItem.getName());
+        //-----------------------------------------
         chbAdministrate.setSelected(oldItem.isAdministrate());
         chbEditUsers.setSelected(oldItem.isEditUsers());
+        //----------------------------------------------------
         chbReadDrafts.setSelected(oldItem.isReadDrafts());
         chbEditDrafts.setSelected(oldItem.isEditDrafts());
         chbDeleteDrafts.setSelected(oldItem.isDeleteDrafts());
         chbCommentDrafts.setSelected(oldItem.isCommentDrafts());
-        chbReadProductStructure.setSelected(oldItem.isReadProductStructure());
-        chbEditProductStructure.setSelected(oldItem.isEditProductStructure());
-        chbDeleteProductStructure.setSelected(oldItem.isDeleteProductStructure());
+        //------------------------------------------------------------------
+        chbReadProductStructure.setSelected(oldItem.isReadProductStructures());
+        chbEditProductStructure.setSelected(oldItem.isEditProductStructures());
+        chbDeleteProductStructure.setSelected(oldItem.isDeleteProductStructures());
+        //---------------------------------------------------------------------------
         chbReadMaterials.setSelected(oldItem.isReadMaterials());
         chbEditMaterials.setSelected(oldItem.isEditMaterials());
         chbDeleteMaterials.setSelected(oldItem.isDeleteMaterials());
@@ -145,9 +139,24 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
     @Override
     public void changeOldItemFields(UserGroup oldItem) {
 
-        oldItem.setName(txtFldUserGroupName.getText());
-        oldItem.setPassword(txtFldPassword.getText());
-        oldItem.setUserGroup(cmbxGroup.getValue());
+        oldItem.setName(tfUserGroupName.getText());
+        //------------------------------------------
+        oldItem.setAdministrate(chbAdministrate.isSelected());
+        oldItem.setEditUsers(chbEditUsers.isSelected());
+        //--------------------------------------------
+        oldItem.setReadDrafts(chbReadDrafts.isSelected());
+        oldItem.setEditDrafts(chbEditDrafts.isSelected());
+        oldItem.setDeleteDrafts(chbDeleteDrafts.isSelected());
+        oldItem.setCommentDrafts(chbCommentDrafts.isSelected());
+        //-----------------------------------------------------
+        oldItem.setReadProductStructures(chbReadProductStructure.isSelected());
+        oldItem.setEditProductStructures(chbEditProductStructure.isSelected());
+        oldItem.setDeleteProductStructures(chbDeleteProductStructure.isSelected());
+        //---------------------------------------------------------------------
+        oldItem.setReadMaterials(chbReadMaterials.isSelected());
+        oldItem.setEditMaterials(chbEditMaterials.isSelected());
+        oldItem.setDeleteMaterials(chbDeleteMaterials.isSelected());
+
     }
 
     @Override

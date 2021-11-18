@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.entities.user_groups.UserGroup_ACCController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.entities.user_groups.UserGroup_ACCController">
    <children>
       <StackPane prefHeight="31.0" prefWidth="385.0">
          <children>
@@ -17,7 +17,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfUserGroupName" layoutX="87.0" layoutY="2.0" prefHeight="25.0" prefWidth="250.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="10.0">
+                  <TextField fx:id="tfUserGroupName" layoutX="87.0" layoutY="2.0" prefHeight="25.0" prefWidth="250.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
                      <font>
                         <Font size="14.0" />
                      </font></TextField>
@@ -36,6 +36,11 @@
                </font>
             </Label>
             <CheckBox fx:id="chbAdministrate" mnemonicParsing="false" text="Администрировать">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </CheckBox>
+            <CheckBox fx:id="chbEditUsers" mnemonicParsing="false" text="Редактировать пользователей">
                <font>
                   <Font size="14.0" />
                </font>

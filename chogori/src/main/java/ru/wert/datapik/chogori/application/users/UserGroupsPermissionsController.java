@@ -1,7 +1,5 @@
 package ru.wert.datapik.chogori.application.users;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,17 +9,19 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import ru.wert.datapik.client.entity.models.User;
-import ru.wert.datapik.utils.entities.users.PermissionsController;
-import ru.wert.datapik.utils.entities.users.User_Controller;
-import ru.wert.datapik.utils.entities.users._UserPatch;
+import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.components.ChevronButton;
+import ru.wert.datapik.utils.entities.user_groups.UserGroup_Controller;
+import ru.wert.datapik.utils.entities.user_groups._UserGroupPatch;
+import ru.wert.datapik.utils.entities.users.PermissionsController;
 import ru.wert.datapik.utils.statics.AppStatic;
 
 import java.io.IOException;
 
-import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_LEFT_IMG;
+import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_RIGHT_IMG;
 
-public class UsersPermissionsController {
+public class UserGroupsPermissionsController {
 
     @FXML
     private AnchorPane apUsers;
@@ -32,16 +32,16 @@ public class UsersPermissionsController {
     @FXML private SplitPane splitPane;
 
     private SplitPane.Divider divider;
-    private Parent usersParent;
+    private Parent userGroupsParent;
     private Button dividerButton;
-    private User_Controller userController;
-    private HBox usersButtons;
-    private AnchorPane apUsersPatch;
+    private UserGroup_Controller userGroupController;
+    private HBox userGroupsButtons;
+    private AnchorPane apUserGroupsPatch;
 
     private Parent permissionsParent;
     private PermissionsController permissionsController;
 
-    private TableView<User> userTableView;
+    private TableView<UserGroup> userGroupTableView;
     private User selectedUser;
 
     @FXML
@@ -51,7 +51,7 @@ public class UsersPermissionsController {
 
 
 
-        createUserPane();
+        createUserGroupPane();
 
         createPermissionsPane();
 
@@ -74,25 +74,25 @@ public class UsersPermissionsController {
         }
     }
 
-    private void createUserPane() {
-        _UserPatch usersPatch = new _UserPatch();
-        usersParent = usersPatch.getUsersPatch();
-        usersButtons = usersPatch.getUsersButtons();
-        userController = usersPatch.getUserController();
-        userTableView = userController.getUserTableView();
-        userTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue != null && newValue != oldValue)
-            permissionsController.init(newValue.getUserGroup());
+    private void createUserGroupPane() {
+        _UserGroupPatch usersGroupPatch = new _UserGroupPatch();
+        userGroupsParent = usersGroupPatch.getUserGroupsPatch();
+        userGroupsButtons = usersGroupPatch.getUsersButtons();
+        userGroupController = usersGroupPatch.getUserGroupController();
+        userGroupTableView = userGroupController.getUserGroupTableView();
+        userGroupTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != oldValue)
+            permissionsController.init(newValue);
         });
 
 
 
-        AnchorPane userAnchorPane = userController.getApUsersPatch();
+        AnchorPane userAnchorPane = userGroupController.getApUserGroupsPatch();
         AppStatic.setNodeInAnchorPane(userAnchorPane);
 
-        usersButtons.getChildren().add(dividerButton);
+        userGroupsButtons.getChildren().add(dividerButton);
 
-        apUsers.getChildren().add(usersParent);
+        apUsers.getChildren().add(userGroupsParent);
     }
 
     /**

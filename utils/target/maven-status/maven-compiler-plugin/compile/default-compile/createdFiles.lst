@@ -27,6 +27,7 @@ ru\wert\datapik\utils\common\contextMenuACC\FormViewACCWindow.class
 ru\wert\datapik\utils\common\tableView\TaskUpdateItemsInRoutineTableView.class
 ru\wert\datapik\utils\entities\drafts\Draft_PatchController.class
 ru\wert\datapik\utils\entities\users\PermissionsController.class
+ru\wert\datapik\utils\entities\user_groups\UserGroup_Controller.class
 ru\wert\datapik\utils\editor\context_menu\Excel_ExContextMenu.class
 ru\wert\datapik\utils\common\treeView\Item_TreeView.class
 ru\wert\datapik\utils\entities\material_groups\commands\MaterialGroup_ChangeCommand.class
@@ -85,6 +86,7 @@ ru\wert\datapik\utils\entities\material_groups\_MaterialGroup_TreeViewPatch.clas
 ru\wert\datapik\utils\entities\passports\commands\Passport_AddCommand.class
 ru\wert\datapik\utils\previewer\PreviewerPatchController$1.class
 ru\wert\datapik\utils\images\BtnImages.class
+ru\wert\datapik\utils\entities\user_groups\_UserGroupPatch.class
 ru\wert\datapik\utils\common\components\BXFolder$1.class
 ru\wert\datapik\utils\common\tableView\CatalogableTable.class
 ru\wert\datapik\utils\search\Searchable.class
@@ -130,17 +132,21 @@ ru\wert\datapik\utils\entities\catalogOfFolders\CatalogOfFoldersController.class
 ru\wert\datapik\utils\editor\table\TableMaster$1.class
 ru\wert\datapik\utils\editor\enums\EColName.class
 ru\wert\datapik\utils\entities\drafts\Draft_Columns.class
+ru\wert\datapik\utils\entities\user_groups\commands\UserGroupDeleteCommand.class
 ru\wert\datapik\utils\statics\Comparators.class
 ru\wert\datapik\utils\common\components\DraftPreviewer$1.class
 ru\wert\datapik\utils\images\AppImages.class
 ru\wert\datapik\utils\editor\enums\Btn.class
+ru\wert\datapik\utils\entities\user_groups\commands\_UserGroupCommands.class
 ru\wert\datapik\utils\common\components\ChevronButton.class
 ru\wert\datapik\utils\entities\users\User_TableView.class
 ru\wert\datapik\utils\entities\catalogOfMaterials\CatalogOfMaterialsController.class
 ru\wert\datapik\utils\search\SearchField.class
+ru\wert\datapik\utils\entities\user_groups\UserGroup_TableView.class
 ru\wert\datapik\utils\entities\material_groups\MaterialGroup_TreeView.class
 ru\wert\datapik\utils\common\components\BtnCancel.class
 ru\wert\datapik\utils\entities\catalogOfMaterials\CatalogOfMaterialsPatch.class
+ru\wert\datapik\utils\entities\user_groups\UserGroup_ContextMenu.class
 ru\wert\datapik\utils\entities\material_groups\MaterialGroup_ACCController.class
 ru\wert\datapik\utils\common\components\BXProduct$1.class
 ru\wert\datapik\utils\entities\drafts\commands\Draft_AddCommand.class
@@ -174,11 +180,13 @@ ru\wert\datapik\utils\entities\materials\Material_TableView.class
 ru\wert\datapik\utils\popups\CopyPopup.class
 ru\wert\datapik\utils\entities\folders\Folder_Chooser.class
 ru\wert\datapik\utils\orthography\Orthography.class
+ru\wert\datapik\utils\entities\user_groups\commands\UserGroupAddCommand.class
 ru\wert\datapik\utils\common\components\BXDensity.class
 ru\wert\datapik\utils\common\components\BXDensity$2.class
 ru\wert\datapik\utils\info\InfoPatch.class
 ru\wert\datapik\utils\entities\drafts\Draft_ContextMenu.class
 ru\wert\datapik\utils\statics\AppStatic$1.class
+ru\wert\datapik\utils\entities\user_groups\UserGroup_ACCController.class
 ru\wert\datapik\utils\common\components\BXDraftType.class
 ru\wert\datapik\utils\common\treeView\Item_TreeViewDAD$1$1.class
 ru\wert\datapik\utils\entities\folders\commands\Folder_ChangeCommand.class
@@ -188,6 +196,7 @@ ru\wert\datapik\utils\editor\model\EditorRow.class
 ru\wert\datapik\utils\common\components\BtnSearchFolder.class
 ru\wert\datapik\utils\common\components\BtnSearchProduct.class
 ru\wert\datapik\utils\common\tableView\ItemTableView.class
+ru\wert\datapik\utils\entities\user_groups\UserGroup_Columns.class
 ru\wert\datapik\utils\editor\table\StringInBracketsConverter.class
 ru\wert\datapik\utils\entities\folders\commands\Folder_DeleteCommand.class
 ru\wert\datapik\utils\common\components\BXStatus$1.class
@@ -215,6 +224,7 @@ ru\wert\datapik\utils\common\components\BXMaterial$2.class
 ru\wert\datapik\utils\views\lists\SimpleListView$1.class
 ru\wert\datapik\utils\entities\products\commands\Product_ChangeCommand.class
 ru\wert\datapik\utils\tabs\AppTab.class
+ru\wert\datapik\utils\entities\user_groups\commands\UserGroupChangeCommand.class
 ru\wert\datapik\utils\common\components\BtnMenuDraftsColumns.class
 ru\wert\datapik\utils\editor\enums\EColor.class
 ru\wert\datapik\utils\editor\Cursors.class

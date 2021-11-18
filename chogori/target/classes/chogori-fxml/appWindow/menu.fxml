@@ -53,6 +53,7 @@
                         <Menu mnemonicParsing="false" text="Админ">
                            <items>
                               <MenuItem fx:id="mUsers" mnemonicParsing="false" onAction="#openUsers" text="Пользователи" />
+                              <MenuItem fx:id="mUserGroups" mnemonicParsing="false" onAction="#openUserGroups" text="Группы пользователей" />
                            </items>
                         </Menu>
                     </menus>
