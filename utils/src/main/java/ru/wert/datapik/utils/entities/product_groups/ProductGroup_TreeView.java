@@ -18,12 +18,13 @@ public class ProductGroup_TreeView<P extends Item> extends Item_TreeView<P, Prod
     private List<ProductGroup> currentItemList;
     private ProductGroup_ACCController accController;
 
-    public ProductGroup_TreeView(ItemService<ProductGroup> itemService, ProductGroup rootItem) {
+    public ProductGroup_TreeView(ItemService<ProductGroup> itemService, ProductGroup rootItem, boolean useContextMenu) {
         super(itemService, rootItem);
 
         commands = new _ProductGroup_Commands(this);
 
-        createContextMenu();
+        if (useContextMenu)
+            createContextMenu();
 
     }
 

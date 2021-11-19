@@ -15,6 +15,7 @@ import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class CatalogOfProductsController {
 
@@ -79,7 +80,8 @@ public class CatalogOfProductsController {
      * ТАБЛИЦА ИЗДЕЛИЙ
      */
     private void createProducts_TableView() {
-        productTableView = new Product_TableView(catalogTreeView, "ИЗДЕЛИЯ");
+        boolean useContextMenu = CH_CURRENT_USER.getUserGroup().isEditProductStructures();
+        productTableView = new Product_TableView(catalogTreeView, "ИЗДЕЛИЯ", useContextMenu);
         productTableView.updateView();
 
         productTableView.setMinHeight(0.0);

@@ -202,7 +202,7 @@ public class DraftService implements IDraftService {
             Call<List<Draft>> call = api.getAll();
             return FXCollections.observableArrayList(call.execute().body());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("getAll : не удалось загрузить чертежи с сервера");
         }
         return null;
     }

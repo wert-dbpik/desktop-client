@@ -8,7 +8,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import ru.wert.datapik.chogori.application.editor.ExcelChooser;
+import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
 
+import java.io.File;
 import java.io.IOException;
 
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
@@ -29,39 +33,60 @@ public class AppMenuController {
         //Материалы
         if(CH_CURRENT_USER.getUserGroup().isReadMaterials())
             menuBar.getMenus().add(createMaterialsMenu());
+        //Изделия
+        if(CH_CURRENT_USER.getUserGroup().isReadProductStructures())
+            menuBar.getMenus().add(createEditorMenu());
         //Админ
         if(CH_CURRENT_USER.getUserGroup().isAdministrate())
             menuBar.getMenus().add(createAdminMenu());
     }
 
+    //######################   ОБЩЕЕ  #############################
+
     /**
-     * МЕНЮ МАТЕРИАЛОВ
+     * МЕНЮ ОБЩЕЕ
      */
-    private Menu createMaterialsMenu() {
+    private Menu createMainMenu() {
 
-        Menu materialsMenu = new Menu("Материалы");
+        Menu mainMenu = new Menu("Общее");
 
-        MenuItem catalogOfMaterialsItem = new MenuItem("Каталог материалов");
-        catalogOfMaterialsItem.setOnAction(this::openCatalogOfMaterials);
+        MenuItem changeUserItem = new MenuItem("Сменить пользователя");
+        changeUserItem.setOnAction(this::changeUser);
 
-        materialsMenu.getItems().add(catalogOfMaterialsItem);
+        MenuItem exitItem = new MenuItem("Выйти");
+        exitItem.setOnAction(this::exit);
 
-        return materialsMenu;
+        mainMenu.getItems().add(changeUserItem);
+        mainMenu.getItems().add(exitItem);
+
+        return mainMenu;
+    }
+
+
+    /**
+     * -- ЗАВЕРШЕНИЕ ПРОГРАММЫ
+     */
+    private void exit(Event e){
+        System.exit(0);
     }
 
     /**
-     * Каталог материалов
+     * -- СМЕНИТЬ ПОЛЬЗОВАТЕЛЯ
      */
-    private void openCatalogOfMaterials(ActionEvent actionEvent) {
+    private void changeUser(Event event) {
+        //Загружаем loginWindow
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfMaterials/catalogOfMaterials.fxml"));
-            Parent parent = loader.load();
-            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Материалы", parent, true, null);
+            FXMLLoader loginWindowLoader = new FXMLLoader(getClass().getResource("/chogori-fxml/login/login.fxml"));
+            Parent loginWindow = loginWindowLoader.load();
+            CH_TAB_PANE.getTabs().clear();
+            menuBar.getMenus().clear();
+            CH_DECORATION_ROOT_PANEL.getChildren().add(loginWindow);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+   //########################   ЧЕРТЕЖИ   ############################
 
     /**
      * МЕНЮ ЧЕРТЕЖЕЙ
@@ -84,6 +109,125 @@ public class AppMenuController {
     }
 
     /**
+     * -- КАРТОТЕКА
+     */
+    private void openFileCabinet(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/passports/passportsEditor.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Картотека", parent, true, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * -- ЧЕРТЕЖИ
+     */
+    private void openDrafts(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Чертежи", parent, true, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //######################   МАТЕРИАЛЫ   ##########################
+
+    /**
+     * МЕНЮ МАТЕРИАЛОВ
+     */
+    private Menu createMaterialsMenu() {
+
+        Menu materialsMenu = new Menu("Материалы");
+
+        MenuItem catalogOfMaterialsItem = new MenuItem("Каталог материалов");
+        catalogOfMaterialsItem.setOnAction(this::openCatalogOfMaterials);
+
+        materialsMenu.getItems().add(catalogOfMaterialsItem);
+
+        return materialsMenu;
+    }
+
+    /**
+     * -- МАТЕРИАЛЫ
+     */
+    private void openCatalogOfMaterials(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfMaterials/catalogOfMaterials.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Материалы", parent, true, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //######################   РЕДАКТОР   ##########################
+
+    /**
+     * МЕНЮ ИЗДЕЛИЙ
+     */
+    private Menu createEditorMenu() {
+
+        Menu editorMenu = new Menu("Изделия");
+
+        MenuItem catalogOfProductItem = new MenuItem("Каталог изделий");
+        catalogOfProductItem.setOnAction(this::openCatalogOfProducts);
+
+        MenuItem openExcelItem = new MenuItem("Открыть файл Excel");
+        openExcelItem.setOnAction(this::openCatalogOfProducts);
+
+        editorMenu.getItems().add(catalogOfProductItem);
+        if (CH_CURRENT_USER.getUserGroup().isEditProductStructures())
+            editorMenu.getItems().add(openExcelItem);
+
+        return editorMenu;
+    }
+
+    /**
+     * -- КАТАЛОГ ИЗДЕЛИЙ
+     */
+    void openCatalogOfProducts(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfProducts/catalogOfProducts.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Изделия", parent, true, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * -- ОТКРЫТЬ ФАЙЛ EXCEL
+     */
+    public void openExcelFile() {
+//        EditorPatch.getInstance().invokeFileChooser();
+        File chosenFile = new ExcelChooser().choose();
+        if(chosenFile == null) return;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/excel/excelEditorNew.fxml"));
+            Parent parent = loader.load();
+            ExcelEditorNewController controller = loader.getController();
+            controller.init(chosenFile);
+//            String fileName = controller.getFileName();
+
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
+            CH_TAB_PANE.createNewTab(chosenFile.getName(), parent, true, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //########################   АДМИН    ###########################
+
+    /**
      * МЕНЮ АДМИНИСТРАТОРА
      */
     private Menu createAdminMenu() {
@@ -96,49 +240,22 @@ public class AppMenuController {
         MenuItem userGroupsItem = new MenuItem("Группы Пользователей");
         userGroupsItem.setOnAction(this::openUserGroups);
 
+        MenuItem catalogOfFolders = new MenuItem("Каталог папок");
+        catalogOfFolders.setOnAction(this::openCatalogOfFolders);
+
+
+
         adminMenu.getItems().add(usersItem);
         adminMenu.getItems().add(userGroupsItem);
+        adminMenu.getItems().add(new SeparatorMenuItem());
+        adminMenu.getItems().add(catalogOfFolders);
 
         return adminMenu;
     }
 
     /**
-     * МЕНЮ ОСНОВНОЕ
+     * -- ПОЛЬЗОВАТЕЛИ
      */
-    private Menu createMainMenu() {
-
-        Menu mainMenu = new Menu("Общее");
-
-        MenuItem changeUserItem = new MenuItem("Сменить пользователя");
-        changeUserItem.setOnAction(this::changeUser);
-
-        MenuItem exitItem = new MenuItem("Выйти");
-        exitItem.setOnAction(this::exit);
-
-        mainMenu.getItems().add(changeUserItem);
-        mainMenu.getItems().add(exitItem);
-
-        return mainMenu;
-    }
-
-    private void exit(Event e){
-        System.exit(0);
-    }
-
-    private void changeUser(Event event) {
-        //Загружаем loginWindow
-        try {
-            FXMLLoader loginWindowLoader = new FXMLLoader(getClass().getResource("/chogori-fxml/login/login.fxml"));
-            Parent loginWindow = loginWindowLoader.load();
-            CH_TAB_PANE.getTabs().clear();
-            menuBar.getMenus().clear();
-            CH_DECORATION_ROOT_PANEL.getChildren().add(loginWindow);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     private void openUsers(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/users/usersPermissions.fxml"));
@@ -150,6 +267,9 @@ public class AppMenuController {
         }
     }
 
+    /**
+     * -- ГРУППЫ ПОЛЬЗОВАТЕЛЕЙ
+     */
     private void openUserGroups(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/users/userGroupsPermissions.fxml"));
@@ -162,24 +282,15 @@ public class AppMenuController {
 
     }
 
-
-    private void openFileCabinet(ActionEvent event) {
+    /**
+     * -- КАТАЛОГ ПАПОК
+     */
+    void openCatalogOfFolders(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/passports/passportsEditor.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfFolders/catalogOfFolders.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Картотека", parent, true, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void openDrafts(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
-            Parent parent = loader.load();
-            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Чертежи", parent, true, null);
+            CH_TAB_PANE.createNewTab("Пакеты", parent, true, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

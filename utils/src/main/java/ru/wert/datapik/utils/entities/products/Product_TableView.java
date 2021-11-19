@@ -21,12 +21,13 @@ public class Product_TableView extends  CatalogTableView<Product, ProductGroup>{
     private List<Product> currentItemList;
     private Product_ACCController accController;
 
-    public Product_TableView(Item_TreeView<Product, ProductGroup> catalogTree, String itemName) {
+    public Product_TableView(Item_TreeView<Product, ProductGroup> catalogTree, String itemName, boolean useContextMenu) {
         super(CH_QUICK_PRODUCTS, catalogTree, itemName);
 
         commands = new _Product_Commands(this);
 
-        createContextMenu();
+        if (useContextMenu)
+            createContextMenu();
     }
 
     @Override

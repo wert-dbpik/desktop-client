@@ -18,6 +18,7 @@ public class Warning1 extends ModalWindow {
 
     public static void create(String title, String problem, String decision){
 
+
         try {
             Stage stage = new Stage();
             FXMLLoader userDialogLoader = new FXMLLoader(Warning1.class.getResource("/winform-fxml/warnings/warning1.fxml"));
@@ -53,6 +54,8 @@ public class Warning1 extends ModalWindow {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
 }

@@ -15,6 +15,7 @@ import ru.wert.datapik.utils.common.components.BtnMenuMaterialsColumns;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_MATERIALS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Material_PatchController {
@@ -34,6 +35,8 @@ public class Material_PatchController {
 
 
     public void initMaterialsTableView(Item_TreeView<Material, MaterialGroup> treeView, Object modifyingClass, SelectionMode mode, boolean useContextMenu){
+        if(useContextMenu) //Решается окончательно использование контекстного меню
+            useContextMenu = CH_CURRENT_USER.getUserGroup().isEditMaterials();
         tableView = new Material_TableView(CH_QUICK_MATERIALS, treeView, "МАТЕРИАЛ", useContextMenu);
         tableView.setModifyingClass(modifyingClass);
         tableView.getSelectionModel().setSelectionMode(mode);

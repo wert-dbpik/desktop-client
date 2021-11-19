@@ -13,6 +13,8 @@ import ru.wert.datapik.winform.enums.EDraftStatus;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+
 public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
     private final _Draft_Commands commands;
@@ -35,11 +37,14 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
     @Override
     public void createOnShowing() {
-
         boolean addItem = true;
         boolean copyItem = false;//копирование не применяется
         boolean changeItem = true;
-        boolean deleteItem = true;
+        boolean deleteItem = false;
+
+        if(CH_CURRENT_USER.getUserGroup().isDeleteDrafts()) {
+            deleteItem = true;
+        }
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
@@ -53,6 +58,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         } else if(selectedDrafts.size() > 1){
             changeItem = false;
         }
+
 
         createMenu(addItem, copyItem, changeItem, deleteItem);
     }

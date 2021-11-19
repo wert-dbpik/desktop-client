@@ -25,12 +25,13 @@ public class UserGroup_TableView extends RoutineTableView<UserGroup> {
 
     private String searchedText = "";
 
-    public UserGroup_TableView(String itemName) {
+    public UserGroup_TableView(String itemName, boolean useContextMenu) {
         super(itemName);
 
         commands = new _UserGroupCommands(this);
 
-        createContextMenu();
+        if (useContextMenu)
+            createContextMenu();
     }
 
     @Override

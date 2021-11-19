@@ -19,6 +19,7 @@ import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.toolpane.ChogoriToolBar.*;
@@ -92,6 +93,7 @@ public class DraftsEditorController {
 
         Draft_Patch draftPatch = new Draft_Patch().create();
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
+
         draftPatchController.initDraftsTableView(previewerController, new Folder(), SelectionMode.MULTIPLE, true);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, false, true, true, true,

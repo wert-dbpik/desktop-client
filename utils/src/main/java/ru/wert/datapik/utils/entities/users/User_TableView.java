@@ -12,6 +12,7 @@ import ru.wert.datapik.utils.entities.users.commands._UserCommands;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class User_TableView extends RoutineTableView<User> {
 
@@ -23,12 +24,13 @@ public class User_TableView extends RoutineTableView<User> {
 
     private String searchedText = "";
 
-    public User_TableView(String itemName) {
+    public User_TableView(String itemName, boolean useContextMenu) {
         super(itemName);
 
         commands = new _UserCommands(this);
 
-        createContextMenu();
+        if (useContextMenu)
+            createContextMenu();
     }
 
     @Override

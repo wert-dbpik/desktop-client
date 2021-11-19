@@ -12,7 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.datapik.chogori.application.app_window.MenuController;
+import ru.wert.datapik.chogori.application.app_window.AppMenuController;
 import ru.wert.datapik.utils.statics.UtilStaticNodes;
 import ru.wert.datapik.utils.services.ChogoriServices;
 import ru.wert.datapik.utils.setteings.ChogoriSettings;
@@ -22,6 +22,7 @@ import ru.wert.datapik.utils.common.components.FileFwdSlash;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.tempfile.TempDir;
 import ru.wert.datapik.winform.statics.WinformStatic;
+import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.IOException;
@@ -29,18 +30,27 @@ import java.io.IOException;
 import static ru.wert.datapik.utils.services.ChogoriServices.initQuickServices;
 import static ru.wert.datapik.utils.services.ChogoriServices.initServices;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_MONITOR;
+import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 @Slf4j
 public class StartChogori extends Application {
 
     private Parent applicationPane;
-    public static MenuController CH_MENU_CONTROLLER;
+    public static AppMenuController CH_MENU_CONTROLLER;
+    private boolean initStatus = true;
 
     @Override
     public void init(){
 
-        initServices();
-        initQuickServices();
+
+        try {
+            initServices();
+            initQuickServices();
+        } catch (Exception e) {
+            log.error("init : не удалось загрузить данные с сервера");
+            initStatus = false;
+
+        }
 
         new ChogoriToolBar();
         //Создадим папку временного хранения файлов чертежей
@@ -59,6 +69,11 @@ public class StartChogori extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        if (!initStatus) {
+            Warning1.create($ATTENTION, "Не удалось загрузить чертежи с сервера", "Работа программы будет прекращена" +
+                    "\nдля перезагрузки сервера обратитесь к администратору");
+            System.exit(0);
+        }
         WinformStatic.CH_MAIN_STAGE = stage;
         try {
             //Загружаем WindowDecoration

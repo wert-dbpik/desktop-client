@@ -49,8 +49,6 @@ public class UsersPermissionsController {
 
         createChevronButtons();
 
-
-
         createUserPane();
 
         createPermissionsPane();

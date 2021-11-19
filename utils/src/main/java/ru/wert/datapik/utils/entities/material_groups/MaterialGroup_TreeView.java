@@ -19,12 +19,13 @@ public class MaterialGroup_TreeView<P extends Item> extends Item_TreeView<P, Mat
     private List<MaterialGroup> currentItemList;
     private MaterialGroup_ACCController accController;
 
-    public MaterialGroup_TreeView(ItemService<MaterialGroup> itemService, MaterialGroup rootItem) {
+    public MaterialGroup_TreeView(ItemService<MaterialGroup> itemService, MaterialGroup rootItem, boolean useContextMenu) {
         super(itemService, rootItem);
 
         commands = new _MaterialGroup_Commands(this);
 
-        createContextMenu();
+        if (useContextMenu)
+            createContextMenu();
 
     }
 

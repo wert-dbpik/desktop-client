@@ -6,6 +6,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+
 public class User_Controller {
 
     @FXML
@@ -39,8 +41,8 @@ public class User_Controller {
      * ТАБЛИЦА ИЗДЕЛИЙ
      */
     private void createUsers_TableView() {
-
-        userTableView = new User_TableView("ПОЛЬЗОВАТЕЛЬ");
+        boolean useContextMenu = CH_CURRENT_USER.getUserGroup().isEditUsers();
+        userTableView = new User_TableView("ПОЛЬЗОВАТЕЛЬ", useContextMenu);
         userTableView.updateView();
         VBox.setVgrow(userTableView, Priority.ALWAYS);
         vbUsers.getChildren().add(userTableView);
