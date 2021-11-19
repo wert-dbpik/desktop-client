@@ -46,7 +46,7 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
 
         if(getColumns().size() <= 1) hideHeader();
 
-        createFocusListener();
+//        createFocusListener(); //Отвечает за поиск
 
         createRowFactory();
 

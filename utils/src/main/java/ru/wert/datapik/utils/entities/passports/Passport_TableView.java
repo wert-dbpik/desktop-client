@@ -1,10 +1,7 @@
 package ru.wert.datapik.utils.entities.passports;
 
-import javafx.application.Platform;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +12,6 @@ import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.Sorting;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
-import ru.wert.datapik.utils.entities.drafts.Draft_Columns;
-import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.passports.commands._Passport_Commands;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 
@@ -24,7 +19,6 @@ import java.util.*;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PASSPORTS;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Passport_TableView extends RoutineTableView<Passport> implements Sorting<Passport> {
 
@@ -187,6 +181,7 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
      */
     public static Comparator<Passport> draftsComparator() {
         return (o1, o2) -> {
+
             //Сравниваем номер чертежа, причем 745 должен быть выше, чем 469
             int result = o2.toUsefulString()
                     .compareTo(o1.toUsefulString());

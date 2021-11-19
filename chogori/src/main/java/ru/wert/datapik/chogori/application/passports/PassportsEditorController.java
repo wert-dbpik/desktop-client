@@ -76,6 +76,9 @@ public class PassportsEditorController {
 
         loadStpPassports(); //Пасспорта
 
+        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
+        CH_SEARCH_FIELD.setPromptText("ДЕЦ.НОМЕР или НАИМЕНОВАНИЕ");
+
     }
 
     private void loadStpPreviewer() {

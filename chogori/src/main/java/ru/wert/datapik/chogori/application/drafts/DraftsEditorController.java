@@ -59,6 +59,9 @@ public class DraftsEditorController {
         createPreviewer(); //Предпросмотр
 
         createDraftsTable(); //ЧЕРТЕЖИ
+
+        CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
+        CH_SEARCH_FIELD.setPromptText("ЧЕРТЕЖ");
     }
 
 
