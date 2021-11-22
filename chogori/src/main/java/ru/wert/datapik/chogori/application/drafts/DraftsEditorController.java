@@ -135,7 +135,7 @@ public class DraftsEditorController implements SearchablePane {
 
     }
 
-    @Override
+    @Override//SearchablePane
     public void tuneSearching() {
         CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
         String searchedText = draftsTable.getSearchedText();
