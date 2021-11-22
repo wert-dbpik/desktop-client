@@ -66,8 +66,6 @@ public class PassportsEditorController implements SearchablePane {
     @FXML
     void initialize() {
 
-        createAppToolBar();
-
         loadStpPreviewer(); //Предпросмотр инициализируется до Чертежей!
 
         loadStpDrafts(); //Чертежи
@@ -100,18 +98,6 @@ public class PassportsEditorController implements SearchablePane {
         });
         return btnCatalogOrTable;
     }
-
-
-    /**
-     * Панель инструментов
-     */
-    private void createAppToolBar() {
-        if (!CH_TOOL_STACK_PANE.getChildren().contains(CH_TOOL_PANEL))
-            CH_TOOL_STACK_PANE.getChildren().add(CH_TOOL_PANEL);
-        CH_TOOL_BAR.getItems().clear();
-        CH_TOOL_BAR.getItems().addAll(BTN_ADD, BTN_ADD_FEW, BTN_COPY, BTN_CHANGE, BTN_DELETE);
-    }
-
 
     /**
      * Создаем таблицу ЧЕРТЕЖЕЙ

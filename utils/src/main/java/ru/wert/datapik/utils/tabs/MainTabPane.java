@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import static ru.wert.datapik.client.utils.BLConst.RAZLOZHENO;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 
 /**
  * Класс создает панель TabPane и входящие в нее вкладки Tab
@@ -51,6 +51,10 @@ public class MainTabPane extends TabPane {
     public void createNewTab(String name, Node content, boolean showTab, Task<Void> updateTask, SearchablePane searchablePane){
         this.searchablePane = searchablePane;
 
+        if(searchablePane != null)
+            showSearchPane();
+
+
         AppTab tab = tabIsAvailable(name);
         if(tab == null){
             tab = new AppTab(name, content, updateTask);
@@ -74,6 +78,11 @@ public class MainTabPane extends TabPane {
             }
         });
 
+        tab.setOnClosed((event)->{
+            if(getTabs().isEmpty())
+                hideSearchPane();
+        });
+
 
         if (showTab) {
             //ОТКРЫВАЕМ созданную вкладку
@@ -83,8 +92,16 @@ public class MainTabPane extends TabPane {
                 searchablePane.tuneSearching();
         }
 
+    }
 
+    private void showSearchPane() {
+        if(!SEARCH_CONTAINER.getChildren().contains(PANE_WITH_SEARCH))
+            SEARCH_CONTAINER.getChildren().add(PANE_WITH_SEARCH);
+    }
 
+    private void hideSearchPane() {
+        if(SEARCH_CONTAINER.getChildren().contains(PANE_WITH_SEARCH))
+            SEARCH_CONTAINER.getChildren().removeAll(PANE_WITH_SEARCH);
     }
 
     /**
@@ -157,6 +174,7 @@ public class MainTabPane extends TabPane {
     public void closeThisTab(Event event){
         Tab selectedTab = getSelectionModel().getSelectedItem();
         getTabs().remove(selectedTab);
+        if(getTabs().isEmpty()) hideSearchPane();
     }
 
 
@@ -167,6 +185,7 @@ public class MainTabPane extends TabPane {
     public void closeAllTabs(Event event){
         List<Tab> tabs = getTabs();
         tabs.clear();
+        hideSearchPane();
     }
 
     /**

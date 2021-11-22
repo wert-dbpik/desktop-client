@@ -4,30 +4,40 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import lombok.Getter;
 import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
 import ru.wert.datapik.chogori.application.passports.PassportsEditorController;
+import ru.wert.datapik.utils.search.SearchField;
 import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import java.io.File;
 import java.io.IOException;
 
+import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_DECORATION_ROOT_PANEL;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class AppMenuController {
 
     @FXML
     MenuBar menuBar;
 
+    @FXML @Getter
+    public HBox hbSearch;
+
     @FXML
     void initialize(){
+
+
+
         menuBar.getMenus().add(createMainMenu());
         //Чертежи
         if(CH_CURRENT_USER.getUserGroup().isReadDrafts())
@@ -41,6 +51,35 @@ public class AppMenuController {
         //Админ
         if(CH_CURRENT_USER.getUserGroup().isAdministrate())
             menuBar.getMenus().add(createAdminMenu());
+
+        //Создать поле поиска
+        SEARCH_CONTAINER = hbSearch;
+        PANE_WITH_SEARCH = createSearchField();
+
+
+    }
+
+    /**
+     * ПОЛЕ ПОИСКА в одной строке с главным меню
+     */
+    private HBox createSearchField() {
+
+        HBox hbox = new HBox();
+
+        CH_SEARCH_FIELD = new SearchField();
+        CH_SEARCH_FIELD.setPrefWidth(300);
+        Button btnClean = new Button();
+        btnClean.setOnAction((e)->{
+            CH_SEARCH_FIELD.setText("");
+            CH_SEARCH_FIELD.requestFocus();
+        });
+        btnClean.setGraphic(new ImageView(BTN_CLEAN_IMG_W));
+        hbox.getChildren().addAll(CH_SEARCH_FIELD, btnClean);
+        hbox.setAlignment(Pos.CENTER_RIGHT);
+        hbox.getStylesheets().add(getClass().getResource("/chogori-css/toolpane-dark.css").toString());
+
+        return hbox;
+
     }
 
     //######################   ОБЩЕЕ  #############################
@@ -277,7 +316,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/users/userGroupsPermissions.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Группы Пользователей", parent, true, null, null);
+            CH_TAB_PANE.createNewTab("Группы Пользователей", parent, true, null, loader.getController());
         } catch (IOException e) {
             e.printStackTrace();
         }

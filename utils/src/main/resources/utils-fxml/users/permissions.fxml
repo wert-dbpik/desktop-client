@@ -32,11 +32,6 @@
             </HBox>
             <VBox fx:id="vbPermissions" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                <children>
-                  <Label text="Разрешения :">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
                   <CheckBox fx:id="chbAdministrate" mnemonicParsing="false" text="Администрировать">
                      <font>
                         <Font size="14.0" />
@@ -102,7 +97,7 @@
                   </CheckBox>
                </children>
                <VBox.margin>
-                  <Insets left="15.0" right="15.0" top="15.0" />
+                  <Insets left="15.0" right="15.0" top="30.0" />
                </VBox.margin>
             </VBox>
          </children>

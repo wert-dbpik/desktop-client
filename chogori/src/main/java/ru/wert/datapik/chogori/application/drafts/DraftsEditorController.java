@@ -54,8 +54,6 @@ public class DraftsEditorController implements SearchablePane {
     @FXML
     void initialize() {
 
-        createAppToolBar();
-
         createCatalogOfFolders(); //Каталог пакетов
 
         createPreviewer(); //Предпросмотр
@@ -77,16 +75,6 @@ public class DraftsEditorController implements SearchablePane {
         previewerController.getHboxPreviewerButtons().getChildren().add(CommonUnits.createExpandPreviewButton(sppHorizontal, sppVertical));
 
         spPreviewer.getChildren().add(previewerPatch.getParent());
-    }
-
-    /**
-     * Панель инструментов
-     */
-    private void createAppToolBar() {
-        if (!CH_TOOL_STACK_PANE.getChildren().contains(CH_TOOL_PANEL))
-            CH_TOOL_STACK_PANE.getChildren().add(CH_TOOL_PANEL);
-        CH_TOOL_BAR.getItems().clear();
-        CH_TOOL_BAR.getItems().addAll(BTN_ADD, BTN_ADD_FEW, BTN_COPY, BTN_CHANGE, BTN_DELETE);
     }
 
     /**

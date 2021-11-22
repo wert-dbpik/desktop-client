@@ -43,7 +43,7 @@ public class ApplicationController {
 //        CH_APPLICATION_ROOT_PANEL = rootPanel;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
 
-        createToolPanel();
+//        createToolPanel();
         createUserLabel();
         createTabPane();
         createButtonInterceptor();
@@ -74,17 +74,6 @@ public class ApplicationController {
         CH_MAIN_STAGE.getScene().setOnKeyReleased((e)->{
             CH_KEYS_NOW_PRESSED.remove(e.getCode());
         });
-    }
-
-    private void createToolPanel() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/appWindow/toolPane.fxml"));
-            CH_TOOL_PANEL = loader.load();
-            CH_TOOL_BAR = (ChogoriToolBar) CH_TOOL_PANEL.lookup("#toolBar");
-            CH_TOOL_PANEL.getStylesheets().add(getClass().getResource("/chogori-css/toolpane-dark.css").toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void createTabPane(){
