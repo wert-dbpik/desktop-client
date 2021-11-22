@@ -17,7 +17,7 @@ public class SearchField extends TextField {
     public SearchField() {
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!oldValue.equals(newValue)) {
+            if (!oldValue.equals(newValue) && searchableTableController != null) {
                 searchableTableController.setSearchedText(newValue);
                 search();
             }

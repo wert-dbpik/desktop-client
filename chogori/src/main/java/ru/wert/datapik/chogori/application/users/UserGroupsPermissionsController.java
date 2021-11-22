@@ -12,16 +12,19 @@ import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.components.ChevronButton;
 import ru.wert.datapik.utils.entities.user_groups.UserGroup_Controller;
+import ru.wert.datapik.utils.entities.user_groups.UserGroup_TableView;
 import ru.wert.datapik.utils.entities.user_groups._UserGroupPatch;
 import ru.wert.datapik.utils.entities.users.PermissionsController;
 import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import java.io.IOException;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_LEFT_IMG;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_RIGHT_IMG;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
-public class UserGroupsPermissionsController {
+public class UserGroupsPermissionsController implements SearchablePane {
 
     @FXML
     private AnchorPane apUsers;
@@ -41,7 +44,7 @@ public class UserGroupsPermissionsController {
     private Parent permissionsParent;
     private PermissionsController permissionsController;
 
-    private TableView<UserGroup> userGroupTableView;
+    private UserGroup_TableView userGroupTable;
     private User selectedUser;
 
     @FXML
@@ -49,12 +52,9 @@ public class UserGroupsPermissionsController {
 
         createChevronButtons();
 
-
-
         createUserGroupPane();
 
         createPermissionsPane();
-
 
     }
 
@@ -64,10 +64,6 @@ public class UserGroupsPermissionsController {
             permissionsParent = loader.load();
             apPermissions.getChildren().add(permissionsParent);
             permissionsController = loader.getController();
-
-//            userTableView.getSelectionModel().select(1);
-//            selectedUser = userTableView.getSelectionModel().getSelectedItem();
-//            permissionsController.init(selectedUser);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,13 +75,11 @@ public class UserGroupsPermissionsController {
         userGroupsParent = usersGroupPatch.getUserGroupsPatch();
         userGroupsButtons = usersGroupPatch.getUsersButtons();
         userGroupController = usersGroupPatch.getUserGroupController();
-        userGroupTableView = userGroupController.getUserGroupTableView();
-        userGroupTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        userGroupTable = userGroupController.getUserGroupTableView();
+        userGroupTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != oldValue)
             permissionsController.init(newValue);
         });
-
-
 
         AnchorPane userAnchorPane = userGroupController.getApUserGroupsPatch();
         AppStatic.setNodeInAnchorPane(userAnchorPane);
@@ -107,5 +101,15 @@ public class UserGroupsPermissionsController {
                 "Свернуть", BTN_CHEVRON_LEFT_IMG, 0.6,
                 divider);
 
+    }
+
+    @Override
+    public void tuneSearching() {
+        CH_SEARCH_FIELD.setSearchableTableController(userGroupTable);
+        String searchedText = userGroupTable.getSearchedText();
+        if (searchedText.equals(""))
+            CH_SEARCH_FIELD.setPromptText("ГРУППА ПОЛЬЗОВАТЕЛЕЙ");
+        else
+            CH_SEARCH_FIELD.setSearchedText(userGroupTable.getSearchedText());
     }
 }

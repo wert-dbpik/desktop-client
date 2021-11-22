@@ -1,27 +1,28 @@
 package ru.wert.datapik.chogori.application.users;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import ru.wert.datapik.client.entity.models.User;
+import lombok.Getter;
+import lombok.Setter;
 import ru.wert.datapik.utils.entities.users.PermissionsController;
 import ru.wert.datapik.utils.entities.users.User_Controller;
+import ru.wert.datapik.utils.entities.users.User_TableView;
 import ru.wert.datapik.utils.entities.users._UserPatch;
 import ru.wert.datapik.utils.common.components.ChevronButton;
 import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import java.io.IOException;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
-public class UsersPermissionsController {
+public class UsersPermissionsController implements SearchablePane{
 
     @FXML
     private AnchorPane apUsers;
@@ -41,8 +42,7 @@ public class UsersPermissionsController {
     private Parent permissionsParent;
     private PermissionsController permissionsController;
 
-    private TableView<User> userTableView;
-    private User selectedUser;
+    private User_TableView userTable;
 
     @FXML
     void initialize(){
@@ -77,8 +77,8 @@ public class UsersPermissionsController {
         usersParent = usersPatch.getUsersPatch();
         usersButtons = usersPatch.getUsersButtons();
         userController = usersPatch.getUserController();
-        userTableView = userController.getUserTableView();
-        userTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        userTable = userController.getUserTableView();
+        userTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null && newValue != oldValue)
             permissionsController.init(newValue.getUserGroup());
         });
@@ -106,4 +106,16 @@ public class UsersPermissionsController {
                 divider);
 
     }
+
+    @Override
+    public void tuneSearching() {
+        CH_SEARCH_FIELD.setSearchableTableController(userTable);
+        String searchedText = userTable.getSearchedText();
+        if (searchedText.equals(""))
+            CH_SEARCH_FIELD.setPromptText("ПОЛЬЗОВАТЕЛЬ");
+        else
+            CH_SEARCH_FIELD.setSearchedText(userTable.getSearchedText());
+    }
+
+
 }

@@ -11,6 +11,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
+import ru.wert.datapik.chogori.application.passports.PassportsEditorController;
+import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,7 +118,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/passports/passportsEditor.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Картотека", parent, true, null);
+            CH_TAB_PANE.createNewTab("Картотека", parent, true, null, loader.getController());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,7 +132,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Чертежи", parent, true, null);
+            CH_TAB_PANE.createNewTab("Чертежи", parent, true, null, loader.getController());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,7 +163,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfMaterials/catalogOfMaterials.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Материалы", parent, true, null);
+            CH_TAB_PANE.createNewTab("Материалы", parent, true, null, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,7 +199,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfProducts/catalogOfProducts.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Изделия", parent, true, null);
+            CH_TAB_PANE.createNewTab("Изделия", parent, true, null, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -219,7 +221,7 @@ public class AppMenuController {
 //            String fileName = controller.getFileName();
 
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-            CH_TAB_PANE.createNewTab(chosenFile.getName(), parent, true, null);
+            CH_TAB_PANE.createNewTab(chosenFile.getName(), parent, true, null, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -261,7 +263,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/users/usersPermissions.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Пользователи", parent, true, null);
+            CH_TAB_PANE.createNewTab("Пользователи", parent, true, null, loader.getController());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -275,7 +277,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/users/userGroupsPermissions.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Группы Пользователей", parent, true, null);
+            CH_TAB_PANE.createNewTab("Группы Пользователей", parent, true, null, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -290,7 +292,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfFolders/catalogOfFolders.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Пакеты", parent, true, null);
+            CH_TAB_PANE.createNewTab("Пакеты", parent, true, null, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

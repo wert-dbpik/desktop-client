@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -17,6 +19,7 @@ import ru.wert.datapik.utils.common.components.ExpandButton;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
+import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
@@ -27,7 +30,7 @@ import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 
 @Slf4j
-public class DraftsEditorController {
+public class DraftsEditorController implements SearchablePane {
 
 
     @FXML
@@ -45,7 +48,6 @@ public class DraftsEditorController {
     @FXML
     private SplitPane sppHorizontal;
 
-
     private Draft_TableView draftsTable;
     private PreviewerPatchController previewerController;
 
@@ -60,8 +62,6 @@ public class DraftsEditorController {
 
         createDraftsTable(); //ЧЕРТЕЖИ
 
-        CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
-        CH_SEARCH_FIELD.setPromptText("ЧЕРТЕЖ");
     }
 
 
@@ -133,6 +133,16 @@ public class DraftsEditorController {
         Parent cat = catalogPatch.getCatalogOfFoldersPatch();
         spCatalog.getChildren().add(cat);
 
+    }
+
+    @Override
+    public void tuneSearching() {
+        CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
+        String searchedText = draftsTable.getSearchedText();
+        if (searchedText.equals(""))
+            CH_SEARCH_FIELD.setPromptText("ЧЕРТЕЖ");
+        else
+            CH_SEARCH_FIELD.setSearchedText(draftsTable.getSearchedText());
     }
 
 }

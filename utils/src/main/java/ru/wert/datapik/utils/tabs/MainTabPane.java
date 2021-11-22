@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import static ru.wert.datapik.client.utils.BLConst.RAZLOZHENO;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 /**
  * Класс создает панель TabPane и входящие в нее вкладки Tab
@@ -22,6 +23,7 @@ import static ru.wert.datapik.client.utils.BLConst.RAZLOZHENO;
 public class MainTabPane extends TabPane {
 
     private HintPopup hint; //Подсказка, дублирующая наименование вкладки
+    private SearchablePane searchablePane;
 
     /**
      * Конструктор
@@ -46,7 +48,9 @@ public class MainTabPane extends TabPane {
      * @param showTab boolean, опциональное - открывать созданную вкладку или не открывать
      * @param updateTask Task<Void>, задача на обновление вкладки
      */
-    public void createNewTab(String name, Node content, boolean showTab, Task<Void> updateTask){
+    public void createNewTab(String name, Node content, boolean showTab, Task<Void> updateTask, SearchablePane searchablePane){
+        this.searchablePane = searchablePane;
+
         AppTab tab = tabIsAvailable(name);
         if(tab == null){
             tab = new AppTab(name, content, updateTask);
@@ -58,10 +62,28 @@ public class MainTabPane extends TabPane {
         createTitle(tab, name);
 
         tab.setContextMenu(tabMenu());
+        //При выделении вкладки настраиваем поиск
 
-        if (showTab)
+        tab.setOnSelectionChanged((event)->{
+            if(searchablePane != null)
+                searchablePane.tuneSearching();
+            else {
+                CH_SEARCH_FIELD.setText("");
+                CH_SEARCH_FIELD.setPromptText("");
+                CH_SEARCH_FIELD.setSearchableTableController(null);
+            }
+        });
+
+
+        if (showTab) {
             //ОТКРЫВАЕМ созданную вкладку
             getSelectionModel().select(tab);
+            //Создаем поле поиска
+            if(searchablePane != null)
+                searchablePane.tuneSearching();
+        }
+
+
 
     }
 

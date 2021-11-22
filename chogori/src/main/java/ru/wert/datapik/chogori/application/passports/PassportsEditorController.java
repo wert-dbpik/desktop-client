@@ -7,8 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
+import ru.wert.datapik.utils.tabs.SearchablePane;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
@@ -21,7 +24,6 @@ import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.passports.Passport_Patch;
 import ru.wert.datapik.utils.entities.passports.Passport_PatchController;
 import ru.wert.datapik.utils.entities.passports.Passport_TableView;
-import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
@@ -30,14 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.toolpane.ChogoriToolBar.*;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 
 @Slf4j
-public class PassportsEditorController {
+public class PassportsEditorController implements SearchablePane {
 
 
     @FXML
@@ -75,9 +75,6 @@ public class PassportsEditorController {
         loadStpCatalog(); //Каталог
 
         loadStpPassports(); //Пасспорта
-
-        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
-        CH_SEARCH_FIELD.setPromptText("ДЕЦ.НОМЕР или НАИМЕНОВАНИЕ");
 
     }
 
@@ -192,5 +189,16 @@ public class PassportsEditorController {
 
 
     }
+
+    @Override
+    public void tuneSearching() {
+        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
+        String searchedText = passportsTable.getSearchedText();
+        if (searchedText.equals(""))
+            CH_SEARCH_FIELD.setPromptText("ДЕЦИМАЛЬНЫЙ НОМЕР");
+        else
+            CH_SEARCH_FIELD.setSearchedText(passportsTable.getSearchedText());
+    }
+
 
 }

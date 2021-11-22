@@ -127,7 +127,7 @@ public class AppStatic {
             boolean showTabNow = false;
             if(chosenDrafts.size() == 1) showTabNow = true;
 
-            CH_TAB_PANE.createNewTab(tabName, previewerPatch.getParent(), showTabNow, null);
+            CH_TAB_PANE.createNewTab(tabName, previewerPatch.getParent(), showTabNow, null, null);
 
             AppStatic.openDraftInPreviewer(d, previewerController);
 
