@@ -76,6 +76,7 @@ public class AppMenuController {
         btnClean.setGraphic(new ImageView(BTN_CLEAN_IMG_W));
         hbox.getChildren().addAll(CH_SEARCH_FIELD, btnClean);
         hbox.setAlignment(Pos.CENTER_RIGHT);
+        hbox.setSpacing(2);
         hbox.getStylesheets().add(getClass().getResource("/chogori-css/toolpane-dark.css").toString());
 
         return hbox;

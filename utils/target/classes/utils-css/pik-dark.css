@@ -53,7 +53,7 @@
     -fx-pref-height: -fx-patchbutton-height;
 }
 
-
+/*--------------------------------------------------------------------*/
 /*#stpExcelTable{*/
 /*    -fx-background-color: white;*/
 /*}*/
@@ -191,21 +191,21 @@
     -fx-text-fill: white;
 }
 
-#button_panel, .button{
-    -fx-padding: 1 5 1 5  ;
-    -fx-max-height: 15px;
-}
+/*#button_panel, .button{*/
+/*    -fx-padding: 1 5 1 5  ;*/
+/*    -fx-max-height: 15px;*/
+/*}*/
 
 #button_panel .button {
     -fx-background-color: -fx-my-black;
 }
 /*  ПОИСК */
 
-/*#menuBox > .text-field{*/
-    /*-fx-background-color: lightgrey ;*/
-    /*-fx-padding: 1 5 1 5 ;*/
-    /*-fx-max-height: 15px;*/
-/*}*/
+#menuBox > .text-field{
+    -fx-background-color: lightgrey ;
+    -fx-padding: 1 5 1 5 ;
+    -fx-max-height: 15px;
+}
 
 /*#menuBox > .text-field:hover {*/
     /*-fx-background-color: white ;*/
@@ -349,36 +349,23 @@
 }
 
 #vbPermissions{
-    /*-fx-background-color: #b5dafe;*/
     -fx-background-color: gainsboro;
-    /*-fx-background-color: #0033CC;*/
-    /*-fx-background-color: -fx-my-black;*/
 }
-
-
 #vbPermissions >.check-box .text{
-
-    -fx-fill: #000001; /*не работает*/
+    -fx-fill: #000001; /*работает только так!*/
 }
-
 #vbPermissions >.check-box .box {
-
     -fx-background-color: white;
     -fx-border-color:grey;
     -fx-border-radius:3px;
-
 }
 
 #vbPermissions >.check-box:selected .mark {
-
     -fx-background-color: white;
-
 }
 
 #vbPermissions >.check-box:selected .box {
-
     -fx-background-color: #28a3f4;
-
 }
 
 

@@ -136,7 +136,7 @@
                         <HBox spacing="5.0">
                            <children>
                               <ComboBox fx:id="bxFolder" maxHeight="32.0" maxWidth="1.7976931348623157E308" minHeight="32.0" prefHeight="32.0" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="btnSearchFolder" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
+                              <Button fx:id="btnSearchFolder" alignment="CENTER" contentDisplay="CENTER" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
                            </children>
                         </HBox>
                      </children>
@@ -176,22 +176,22 @@
                      </children>
                   </VBox>
                   <Separator prefWidth="200.0" />
-                  <HBox prefHeight="0.0" spacing="10.0">
+                  <HBox spacing="10.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
                      <children>
-                        <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#cancel" text="ОТМЕНИТЬ">
+                        <Button fx:id="btnCancel" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" maxHeight="39.0" maxWidth="125.0" minHeight="39.0" minWidth="125.0" mnemonicParsing="false" onAction="#cancel" prefHeight="39.0" prefWidth="125.0" text="ОТМЕНА">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnOk" defaultButton="true" mnemonicParsing="false" onAction="#ok" prefWidth="125.0" text="ПРИНЯТЬ">
+                        <Button fx:id="btnOk" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" maxHeight="39.0" maxWidth="125.0" minHeight="39.0" minWidth="125.0" mnemonicParsing="false" onAction="#ok" prefHeight="39.0" prefWidth="125.0" text="ОК">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Button>
                      </children>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
                   </HBox>
                </children>
                <padding>
