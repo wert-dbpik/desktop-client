@@ -1,7 +1,9 @@
+ru\wert\datapik\client\entity\api_interfaces\VersionDesktopApiInterface.class
 ru\wert\datapik\client\entity\serviceREST\AsmItemService.class
 ru\wert\datapik\client\entity\service_interfaces\IPrefixService.class
 ru\wert\datapik\client\entity\service_interfaces\IProcessService.class
 ru\wert\datapik\client\utils\StaticFunctions.class
+ru\wert\datapik\client\entity\service_interfaces\IVersionAndroidService.class
 ru\wert\datapik\client\entity\serviceREST\MaterialGroupService.class
 ru\wert\datapik\client\entity\service_interfaces\IMaterialService.class
 ru\wert\datapik\client\entity\serviceREST\ProductService.class
@@ -30,7 +32,9 @@ ru\wert\datapik\client\entity\api_interfaces\UserGroupApiInterface.class
 ru\wert\datapik\client\entity\serviceQUICK\PassportQuickService.class
 ru\wert\datapik\client\entity\serviceREST\CoatService.class
 ru\wert\datapik\client\entity\serviceREST\DetailService.class
+ru\wert\datapik\client\entity\serviceREST\VersionDesktopService.class
 ru\wert\datapik\client\entity\models\TechProcess.class
+ru\wert\datapik\client\entity\models\VersionDesktop.class
 ru\wert\datapik\client\entity\service_interfaces\IAnyPartService.class
 ru\wert\datapik\client\exceptions\ItemIsBusyException.class
 ru\wert\datapik\client\entity\api_interfaces\UserApiInterface.class
@@ -50,10 +54,13 @@ ru\wert\datapik\client\entity\serviceREST\AssembleService.class
 ru\wert\datapik\client\entity\models\ProductGroup.class
 ru\wert\datapik\client\entity\serviceQUICK\DraftQuickService.class
 ru\wert\datapik\client\entity\service_interfaces\IFolderService.class
+ru\wert\datapik\client\entity\service_interfaces\IVersionDesktopService.class
 ru\wert\datapik\client\entity\api_interfaces\FolderApiInterface.class
 ru\wert\datapik\client\entity\service_interfaces\IAnyPartGroupService.class
 ru\wert\datapik\client\utils\BLlinks.class
 ru\wert\datapik\client\entity\api_interfaces\AssembleApiInterface.class
+ru\wert\datapik\client\entity\serviceREST\VersionServerService.class
+ru\wert\datapik\client\entity\models\VersionServer.class
 ru\wert\datapik\client\entity\serviceREST\DensityService.class
 ru\wert\datapik\client\utils\CurrentUser.class
 ru\wert\datapik\client\entity\serviceREST\ProcessService.class
@@ -61,6 +68,7 @@ ru\wert\datapik\client\entity\models\Folder.class
 ru\wert\datapik\client\entity\models\AsmItem.class
 ru\wert\datapik\client\entity\api_interfaces\AsmItemApiInterface.class
 ru\wert\datapik\client\entity\serviceQUICK\ProductQuickService.class
+ru\wert\datapik\client\entity\serviceREST\VersionAndroidService.class
 ru\wert\datapik\client\entity\serviceREST\MaterialService.class
 ru\wert\datapik\client\entity\api_interfaces\PrefixApiInterface.class
 ru\wert\datapik\client\entity\service_interfaces\IProductService.class
@@ -69,7 +77,9 @@ ru\wert\datapik\client\entity\serviceREST\AppSettingsService.class
 ru\wert\datapik\client\entity\serviceREST\PrefixService.class
 ru\wert\datapik\client\entity\models\Prefix.class
 ru\wert\datapik\client\entity\models\AnyPart.class
+ru\wert\datapik\client\entity\service_interfaces\IVersionServerService.class
 ru\wert\datapik\client\interfaces\Item.class
+ru\wert\datapik\client\entity\models\VersionAndroid.class
 ru\wert\datapik\client\utils\Props.class
 ru\wert\datapik\client\entity\models\Assemble.class
 ru\wert\datapik\client\entity\models\AnyPartGroup.class
@@ -84,6 +94,7 @@ ru\wert\datapik\client\entity\serviceREST\AnyPartService.class
 ru\wert\datapik\client\entity\models\Passport.class
 ru\wert\datapik\client\interfaces\ItemService.class
 ru\wert\datapik\client\retrofit\RetrofitClient$CheckUpConnectionInterface.class
+ru\wert\datapik\client\entity\api_interfaces\VersionServerApiInterface.class
 ru\wert\datapik\client\entity\models\UserGroup.class
 ru\wert\datapik\client\entity\api_interfaces\DensityApiInterface.class
 ru\wert\datapik\client\entity\api_interfaces\MaterialApiInterface.class
@@ -103,5 +114,6 @@ ru\wert\datapik\client\interfaces\CatalogGroup.class
 ru\wert\datapik\client\entity\models\PartType.class
 ru\wert\datapik\client\entity\service_interfaces\IPassportService.class
 ru\wert\datapik\client\entity\models\_BaseEntity.class
+ru\wert\datapik\client\entity\api_interfaces\VersionAndroidApiInterface.class
 ru\wert\datapik\client\entity\api_interfaces\ProcessApiInterface.class
 ru\wert\datapik\client\entity\api_interfaces\AnyPartGroupApiInterface.class

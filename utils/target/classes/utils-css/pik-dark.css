@@ -344,8 +344,17 @@
     -fx-background-color: -fx-my-black;
 }
 
-#modal_pane > .label {
-    -fx-text-fill: white;
+
+
+#modal_pane {
+    -fx-background-color: -fx-my-black;
+    -fx-border-color:grey;
+    -fx-border-width: 2px;
+
+}
+
+#modal_pane .label {
+    -fx-text-fill: #FFFFFC;
 }
 
 #vbPermissions{

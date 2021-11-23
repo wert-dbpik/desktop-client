@@ -45,6 +45,8 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 public class AppStatic {
 
     public static final char TILDA = '\u02F7';
+    public static String CURRENT_ROJECT_VERSION;
+    public static String NEWER_PROJECT_VERSION;
 
     public static void closeWindow(Event event){
         ((Node) event.getSource()).getScene().getWindow().hide();

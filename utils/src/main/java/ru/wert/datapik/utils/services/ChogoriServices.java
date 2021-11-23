@@ -23,6 +23,9 @@ public class ChogoriServices {
     public static IMaterialGroupService CH_MATERIAL_GROUPS;
     public static IMatTypeService CH_MAT_TYPES;
     public static IDensityService CH_DENSITIES;
+    public static IVersionDesktopService CH_VERSIONS_DESKTOP;
+    public static IVersionAndroidService CH_VERSIONS_ANDROID;
+    public static IVersionServerService CH_VERSIONS_SERVER;
 
     public static FolderQuickService CH_QUICK_FOLDERS;
     public static ProductQuickService CH_QUICK_PRODUCTS;
@@ -35,6 +38,7 @@ public class ChogoriServices {
 
     public static void initServices(){
         ChogoriServices.CH_USERS = UserService.getInstance();
+
         ChogoriServices.CH_USER_GROUPS = UserGroupService.getInstance();
         ChogoriServices.CH_SETTINGS = AppSettingsService.getInstance();
         ChogoriServices.CH_PRODUCT_GROUPS = ProductGroupService.getInstance();
@@ -50,6 +54,9 @@ public class ChogoriServices {
         ChogoriServices.CH_MATERIAL_GROUPS = MaterialGroupService.getInstance();
         ChogoriServices.CH_MAT_TYPES = MatTypeService.getInstance();
         ChogoriServices.CH_DENSITIES = DensityService.getInstance();
+        ChogoriServices.CH_VERSIONS_DESKTOP = VersionDesktopService.getInstance();
+        ChogoriServices.CH_VERSIONS_ANDROID = VersionAndroidService.getInstance();
+        ChogoriServices.CH_VERSIONS_SERVER = VersionServerService.getInstance();
     }
 
     public static void initQuickServices(){

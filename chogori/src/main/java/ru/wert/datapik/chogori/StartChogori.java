@@ -2,7 +2,6 @@ package ru.wert.datapik.chogori;
 
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +12,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.app_window.AppMenuController;
+import ru.wert.datapik.client.entity.models.VersionDesktop;
+import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.statics.UtilStaticNodes;
 import ru.wert.datapik.utils.services.ChogoriServices;
 import ru.wert.datapik.utils.setteings.ChogoriSettings;
@@ -26,9 +27,9 @@ import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.IOException;
+import java.util.List;
 
-import static ru.wert.datapik.utils.services.ChogoriServices.initQuickServices;
-import static ru.wert.datapik.utils.services.ChogoriServices.initServices;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_MONITOR;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
@@ -51,6 +52,34 @@ public class StartChogori extends Application {
             initStatus = false;
 
         }
+
+
+//        URLClassLoader cl = (URLClassLoader) StartChogori.class.getClassLoader();
+//        try {
+//            URL url = cl.findResource("META-INF/MANIFEST.MF");
+//            Manifest manifest = new Manifest(url.openStream());
+//            log.info("manifest = {}", manifest);
+//            Attributes mainAttributes = manifest.getMainAttributes();
+//
+//            log.info("mainAttributes = {}", mainAttributes);
+//            AppStatic.PROJECT_VERSION = mainAttributes.getValue("Implementation-Version");
+//            log.info("PROJECT_VERSION = {}", mainAttributes.getValue("Implementation-Version"));
+//        } catch (IOException E) {
+//            // handle
+//        }
+
+        //Определяем версию программы
+        Package aPackage = About.class.getPackage();
+        AppStatic.CURRENT_ROJECT_VERSION = aPackage.getImplementationVersion();
+
+        VersionDesktop currentVersion = CH_VERSIONS_DESKTOP.findByName(AppStatic.CURRENT_ROJECT_VERSION);
+
+        List<VersionDesktop> versions = CH_VERSIONS_DESKTOP.findAll();
+        if(currentVersion.getId() < versions.size())
+            AppStatic.NEWER_PROJECT_VERSION = versions.get(versions.size() - 1).getName();
+
+
+
 
         new ChogoriToolBar();
         //Создадим папку временного хранения файлов чертежей
