@@ -136,7 +136,7 @@
                         <HBox spacing="5.0">
                            <children>
                               <ComboBox fx:id="bxFolder" maxHeight="32.0" maxWidth="1.7976931348623157E308" minHeight="32.0" prefHeight="32.0" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="btnSearchFolder" alignment="CENTER" contentDisplay="CENTER" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
+                              <Button fx:id="btnSearchFolder" alignment="CENTER" contentDisplay="CENTER" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" snapToPixel="false" />
                            </children>
                         </HBox>
                      </children>

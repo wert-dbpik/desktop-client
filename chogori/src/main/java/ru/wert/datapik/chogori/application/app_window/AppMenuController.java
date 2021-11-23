@@ -5,7 +5,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -13,9 +12,9 @@ import javafx.scene.layout.HBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
-import ru.wert.datapik.chogori.application.passports.PassportsEditorController;
+import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.search.SearchField;
-import ru.wert.datapik.utils.tabs.SearchablePane;
+import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +35,6 @@ public class AppMenuController {
     @FXML
     void initialize(){
 
-
-
         menuBar.getMenus().add(createMainMenu());
         //Чертежи
         if(CH_CURRENT_USER.getUserGroup().isReadDrafts())
@@ -51,6 +48,8 @@ public class AppMenuController {
         //Админ
         if(CH_CURRENT_USER.getUserGroup().isAdministrate())
             menuBar.getMenus().add(createAdminMenu());
+        //Помощь
+            menuBar.getMenus().add(createHelpMenu());
 
         //Создать поле поиска
         SEARCH_CONTAINER = hbSearch;
@@ -336,6 +335,31 @@ public class AppMenuController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //########################   ПОМОЩЬ    ###########################
+
+    /**
+     * МЕНЮ ПОМОЩЬ
+     */
+    private Menu createHelpMenu() {
+
+        Menu helpMenu = new Menu("Помощь");
+
+        MenuItem aboutItem = new MenuItem("О программе...");
+        aboutItem.setOnAction(this::openAbout);
+
+        helpMenu.getItems().add(aboutItem);
+
+        return helpMenu;
+    }
+
+    /**
+     * -- О ПРОГРАММЕ...
+     */
+    private void openAbout(ActionEvent event) {
+        new About().create();
+
     }
 
 }

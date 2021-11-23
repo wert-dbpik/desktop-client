@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane fx:id="modal_pane" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="103.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+               <image>
+                  <Image url="@../../utils-pics/Pikovka(256x256).png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+               </VBox.margin>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Baza PIK">
+               <font>
+                  <Font name="Arial Narrow Bold Italic" size="36.0" />
+               </font>
+            </Text>
+            <Text fx:id="tVersion" strokeType="OUTSIDE" strokeWidth="0.0" text="Veкsion 1.1.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Pane prefHeight="200.0" prefWidth="200.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Разработал: Алексей Cимонов, 2021г.">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Text>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
