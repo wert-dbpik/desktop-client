@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: Алексей Симонов
+Build-Jdk: 1.8.0_281
+Implementation-Title: DataPIK :: Chogori
+Implementation-Version: 1.1.2
+Implementation-Vendor-Id: ru.wert.datapik
+Main-Class: ru.wert.datapik.chogori.StartChogori
+

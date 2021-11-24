@@ -10,7 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.chogori.application.app_window.AppMenuController;
 import ru.wert.datapik.client.entity.models.VersionDesktop;
 import ru.wert.datapik.utils.help.About;
@@ -53,33 +55,8 @@ public class StartChogori extends Application {
 
         }
 
-
-//        URLClassLoader cl = (URLClassLoader) StartChogori.class.getClassLoader();
-//        try {
-//            URL url = cl.findResource("META-INF/MANIFEST.MF");
-//            Manifest manifest = new Manifest(url.openStream());
-//            log.info("manifest = {}", manifest);
-//            Attributes mainAttributes = manifest.getMainAttributes();
-//
-//            log.info("mainAttributes = {}", mainAttributes);
-//            AppStatic.PROJECT_VERSION = mainAttributes.getValue("Implementation-Version");
-//            log.info("PROJECT_VERSION = {}", mainAttributes.getValue("Implementation-Version"));
-//        } catch (IOException E) {
-//            // handle
-//        }
-
         //Определяем версию программы
-        Package aPackage = About.class.getPackage();
-        AppStatic.CURRENT_ROJECT_VERSION = aPackage.getImplementationVersion();
-
-        VersionDesktop currentVersion = CH_VERSIONS_DESKTOP.findByName(AppStatic.CURRENT_ROJECT_VERSION);
-
-        List<VersionDesktop> versions = CH_VERSIONS_DESKTOP.findAll();
-        if(currentVersion.getId() < versions.size())
-            AppStatic.NEWER_PROJECT_VERSION = versions.get(versions.size() - 1).getName();
-
-
-
+        findVersions();
 
         new ChogoriToolBar();
         //Создадим папку временного хранения файлов чертежей
@@ -93,6 +70,24 @@ public class StartChogori extends Application {
                 CH_MONITOR = defaultSettings.getMonitor();
                 break;
             }
+        }
+    }
+
+    /**
+     * Метод определяет текущую и последние версии
+     */
+    private void findVersions() {
+        Package aPackage = About.class.getPackage();
+        AppStatic.CURRENT_ROJECT_VERSION = aPackage.getImplementationVersion();
+        if(AppStatic.CURRENT_ROJECT_VERSION != null) {
+            VersionDesktop currentVersion = CH_VERSIONS_DESKTOP.findByName(AppStatic.CURRENT_ROJECT_VERSION);
+            List<VersionDesktop> versions = CH_VERSIONS_DESKTOP.findAll();
+            VersionDesktop lastVersion = versions.get(versions.size() - 1);
+            int comp = currentVersion.compareTo(lastVersion);
+            if(comp < 0)
+                AppStatic.NEWER_PROJECT_VERSION = lastVersion.getName();
+            else
+                AppStatic.NEWER_PROJECT_VERSION = null;
         }
     }
 

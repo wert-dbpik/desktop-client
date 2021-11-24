@@ -35,9 +35,12 @@ public class About extends ModalWindow {
 //            version.setText("Версия " + projectVersion);
             version.setText("Версия " + AppStatic.CURRENT_ROJECT_VERSION);
 
-
             Label versionInfo = (Label)parent.lookup("#lblVersionInfo");
-            versionInfo.setText("(последняя версия)");
+            versionInfo.setStyle("-fx-text-fill: #FFFF99");
+            if(AppStatic.NEWER_PROJECT_VERSION != null)
+                versionInfo.setText("доступна новая версия " + AppStatic.NEWER_PROJECT_VERSION);
+            else
+                versionInfo.setText("(это последняя версия)");
 
             AnchorPane anchorPane = (AnchorPane) parent.lookup("#modal_pane");
             anchorPane.setOnMouseClicked(AppStatic::closeWindow);

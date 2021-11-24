@@ -11,7 +11,6 @@
         <option value="$PROJECT_DIR$/utils/pom.xml" />
         <option value="$PROJECT_DIR$/client/pom.xml" />
         <option value="$PROJECT_DIR$/login/pom.xml" />
-        <option value="$PROJECT_DIR$/start/pom.xml" />
         <option value="$PROJECT_DIR$/chogori/pom.xml" />
       </list>
     </option>

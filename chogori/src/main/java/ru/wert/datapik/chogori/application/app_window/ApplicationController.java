@@ -7,14 +7,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.StartChogori;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.tabs.MainTabPane;
 import ru.wert.datapik.utils.toolpane.ChogoriToolBar;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
@@ -32,6 +40,12 @@ public class ApplicationController {
     private Label lblUser;
 
     @FXML
+    private Label lblTime;
+
+   @FXML
+    private StackPane spAdvert;
+
+    @FXML
     private StackPane stackPaneForToolPane;
 
     @FXML
@@ -45,8 +59,12 @@ public class ApplicationController {
 
 //        createToolPanel();
         createUserLabel();
+        createTimeLabel();
         createTabPane();
         createButtonInterceptor();
+
+        if(AppStatic.NEWER_PROJECT_VERSION != null)
+            createAdvertLabel();
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/appWindow/appMenu.fxml"));
@@ -89,4 +107,43 @@ public class ApplicationController {
         else
             lblUser.setText(CH_CURRENT_USER.getName());
     }
+
+    private void createTimeLabel(){
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                String time = (LocalTime.now()).format(DateTimeFormatter.ofPattern("HH:mm"));
+                Platform.runLater(()->{
+                    lblTime.setText(time);
+                });
+
+            }
+        }, 0, 1000);
+
+    }
+
+    private void createAdvertLabel(){
+        Label lblNewVersion = new Label();
+        lblNewVersion.setStyle("-fx-text-fill: #FFFF99; -fx-background-color: -fx-my-black;");
+        lblNewVersion.setText("Доступна новая версия v." + AppStatic.NEWER_PROJECT_VERSION);
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if(lblNewVersion.isVisible())
+                    lblNewVersion.setVisible(false);
+                else
+                    lblNewVersion.setVisible(true);
+            }
+        }, 0, 500);
+        spAdvert.getChildren().add(lblNewVersion);
+        spAdvert.setOnMouseClicked((event)->{
+            spAdvert.getChildren().clear();
+        });
+
+    }
+
 }

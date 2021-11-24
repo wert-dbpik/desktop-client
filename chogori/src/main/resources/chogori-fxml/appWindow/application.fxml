@@ -27,12 +27,21 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
          <children>
-            <Label text="21 Февраля 2021г" />
-            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+            <StackPane fx:id="spAdvert" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding></StackPane>
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
                <children>
-                  <Label fx:id="lblUser" text="РЕЖИМ РАЗРАБОТЧИКА">
+                  <Label fx:id="lblUser" text="РЕЖИМ РАЗРАБОТЧИКА" HBox.hgrow="NEVER">
                      <HBox.margin>
-                        <Insets />
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Separator orientation="VERTICAL" />
+                  <Label fx:id="lblTime" text="21.02.21">
+                     <HBox.margin>
+                        <Insets left="5.0" right="10.0" />
                      </HBox.margin>
                   </Label>
                </children>
