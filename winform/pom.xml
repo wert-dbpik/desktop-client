@@ -5,13 +5,13 @@
     <parent>
         <artifactId>data-pik</artifactId>
         <groupId>ru.wert.datapik</groupId>
-        <version>1.1.0</version>
+        <version>1.1.01</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>winform</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0</version>
+    <version>${project.version}</version>
 
     <name>DataPIK :: Winform</name>
     <description>
