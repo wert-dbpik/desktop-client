@@ -23,233 +23,25 @@
     /*-fx-text-hight: 14px;*/
 }
 
-/* Кнопки меню с выпадающим списком Фильтры, столбцы, обращение по ID */
-
-#menu-button-no-arrow {
-    -fx-width: -fx-patchbutton-width;
-    -fx-max-width: -fx-patchbutton-width;
-    -fx-pref-width: -fx-patchbutton-width;
-
-    -fx-min-height: -fx-patchbutton-height;
-    -fx-max-height: -fx-patchbutton-height;
-    -fx-pref-height: -fx-patchbutton-height;
+/*#############    ЧЕКБОКСЫ  #############################*/
+.check-box .text{
+    -fx-fill: #000001; /*работает только так!*/
+}
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color:grey;
+    -fx-border-radius:3px;
 }
 
-#menu-button-no-arrow > .arrow-button {
-    -fx-padding: 0;
+.check-box:selected .mark {
+    -fx-background-color: white;
 }
 
-#menu-button-no-arrow > .arrow-button > .arrow {
-    -fx-padding: 0;
-}
-/* Кнопки */
-#patchButton{
-    -fx-min-width: -fx-patchbutton-width;
-    -fx-max-width: -fx-patchbutton-width;
-    -fx-pref-width: -fx-patchbutton-width;
-
-    -fx-min-height: -fx-patchbutton-height;
-    -fx-max-height: -fx-patchbutton-height;
-    -fx-pref-height: -fx-patchbutton-height;
+>.check-box:selected .box {
+    -fx-background-color: #28a3f4;
 }
 
-/*--------------------------------------------------------------------*/
-/*#stpExcelTable{*/
-/*    -fx-background-color: white;*/
-/*}*/
-
-#patchHeader{
-    -fx-background-color: aliceblue;
-    -fx-text-fill: black;
-    -fx-border-style: solid;
-    -fx-border-width: 0  0 1px 0;
-}
-
-#patchHeader > .label{
-    -fx-background-color: aliceblue;
-    -fx-text-fill: black;
-}
-
-
-
-/* таблицы на этом фоне*/
-#rootPanel{
-    /*-fx-background-color: oldlace;*/
-    -fx-background-image: url("/chogori-pics/lightgray03.jpg"); /* абстракция */
-}
-
-#application{
-    -fx-background-image: url("/pics/texture_gray2.jpg");
-}
-
-#menuBox{
-    -fx-background-color: -fx-my-black;
-}
-
-/*бордюры окон*/
-#paneX, #paneR, #paneB
-{
-    -fx-background-color: -fx-my-black;
-}
-
-.label
-{
-    -fx-text-fill: white;
-    -fx-text-weight: bold;
-    /*-fx-text-hight: 18px;*/
-}
-.button
-{
-    /*-fx-font-size: 14px;*/
-    -fx-font-weight: bold;
-}
-
-#buttonsPane
-{
-    -fx-background-color: -fx-my-black;
-}
-#treeTableView {
-    -fx-font-size: 14px;
-}
-#usersTableView {
-    -fx-font-size: 14px;
-}
-#catalogTreeView{
-    -fx-font-size: 14px;
-}
-
-.table-view .column-header-background{
-    -fx-background-color: -fx-my-black;
-}
-.table-view .column-header-background .label{
-    -fx-background-color: gray;
-    -fx-text-fill: white;
-}
-
-.table-view .column-header-background .filler{
-    -fx-background-color: gray;
-    -fx-fill-width: 15px;
-
-}
-
-.tree-table-view .column-header-background .label{
-    -fx-background-color: gray;
-    -fx-text-fill: white;
-}
-
-
-.tab-pane .tab-header-background
-{
-    /*-fx-background-color: grey;*/
-    -fx-opacity: 0.0;
-}
-
-.tab {
-    /*-fx-font-size: 12;*/
-    -fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-    /*-fx-background-color:royalblue ;*/
-}
-
-.tab:selected {
-    -fx-font-size: 110%;
-    /*-fx-background-color:blue ;*/
-}
-
-
-#bottomLine
-{
-    -fx-background-color: -fx-my-black;
-    /*-fx-background-image: url("/pics/bl-steel(1920x25).jpg");*/
-    /*-fx-opacity: 0.0;*/
-}
-
-#tabPane
-{
-    -fx-background-image: url("/pics/texture_gray2.jpg");
-    /*-fx-background-color: grey;*/
-    /*-fx-opacity: 0.0;*/
-}
-
-#fourButtonsPane
-{
-    -fx-background-color: -fx-my-black;
-}
-
-#toolBarHBox{
-    -fx-background-color: -fx-my-black;
-}
-
-#button_panel
-{
-    -fx-background-color: -fx-my-black;
-}
-
-#button_panel > .button >.label
-{
-    -fx-background-color: -fx-my-black;
-    -fx-text-fill: white;
-}
-
-/*#button_panel, .button{*/
-/*    -fx-padding: 1 5 1 5  ;*/
-/*    -fx-max-height: 15px;*/
-/*}*/
-
-#button_panel .button {
-    -fx-background-color: -fx-my-black;
-}
-/*  ПОИСК */
-
-#menuBox > .text-field{
-    -fx-background-color: lightgrey ;
-    -fx-padding: 1 5 1 5 ;
-    -fx-max-height: 15px;
-}
-
-/*#menuBox > .text-field:hover {*/
-    /*-fx-background-color: white ;*/
-/*}*/
-
-/*#menuBox > .text-field:focused {*/
-    /*-fx-background-color: white ;*/
-/*}*/
-
-/* ---      */
-
-#txtFldSearch{
-    -fx-background-color: lightgrey ;
-    -fx-padding: 1 5 1 5 ;
-    -fx-max-height: 15px;
-}
-
-#txtFldSearch:hover {
-    -fx-background-color: white ;
-}
-
-#txtFldSearch:focused {
-    -fx-background-color: white ;
-}
-/* ----------- */
-
-/*#button_panel > #txtFldSearch , .button {*/
-/*-fx-padding: 1, 1, 1, 1;*/
-/*-fx-max-height: 15px;*/
-/*}*/
-
-#rightToolBar{
-    -fx-background-color: -fx-my-black;
-}
-
-.check-box{
-    -fx-text-fill: white;
-}
-
-
-
-
-
-/*==============================================*/
+/*#############   ГЛАВНОЕ МЕНЮ   #########################   */
 
 /* MENU BAR + Top-level MENU BUTTONS */
 /*** The menu bar itself ***/
@@ -294,6 +86,10 @@
     -fx-background-color: -fx-my-menu-color;
 }
 
+.menu-item .check-box .text{
+    -fx-fill: #FFFFFC;
+}
+
 /*** The item's label (not hovered / focused) ***/
 .menu-item .label {
     -fx-text-fill: -fx-my-menu-font-color;
@@ -315,7 +111,7 @@
     -fx-text-fill: -fx-my-menu-font-color-highlighted;
 }
 
-/* CONTEXT MENU */
+/*############################ CONTEXT MENU #########################################*/
 /*** The context menu that contains a menu's menu common ***/
 .context-menu {
     -fx-background-color: -fx-my-menu-color;
@@ -336,53 +132,267 @@
     -fx-border-style: solid;
 }
 
-#secondToolBar {
-    -fx-background-color: -fx-my-black;
-}
-
-#secondToolBar .button {
-    -fx-background-color: -fx-my-black;
-}
-
-
-
-#modal_pane {
-    -fx-background-color: -fx-my-black;
-    -fx-border-color:grey;
-    -fx-border-width: 2px;
-
-}
-
-#modal_pane .label {
-    -fx-text-fill: #FFFFFC;
-}
+/*#############   ПАНЕЛЬ РАЗРЕШЕНИЙ     ###########################################################*/
 
 #vbPermissions{
     -fx-background-color: gainsboro;
 }
-#vbPermissions >.check-box .text{
-    -fx-fill: #000001; /*работает только так!*/
-}
-#vbPermissions >.check-box .box {
-    -fx-background-color: white;
-    -fx-border-color:grey;
-    -fx-border-radius:3px;
-}
 
-#vbPermissions >.check-box:selected .mark {
-    -fx-background-color: white;
-}
+/*##################  ПАНЕЛЬ ЗАГОЛОВОК  ПАТЧА  ##############################################################*/
 
-#vbPermissions >.check-box:selected .box {
-    -fx-background-color: #28a3f4;
+/*!* Кнопки меню с выпадающим списком Фильтры, столбцы, обращение по ID *!*/
+#menu-button-no-arrow {
+    -fx-width: -fx-patchbutton-width;
+    -fx-max-width: -fx-patchbutton-width;
+    -fx-pref-width: -fx-patchbutton-width;
+
+    -fx-min-height: -fx-patchbutton-height;
+    -fx-max-height: -fx-patchbutton-height;
+    -fx-pref-height: -fx-patchbutton-height;
 }
 
-
-
-#apLogin {
-    /*-fx-background-color: #28a3f4;*/
-    -fx-background-color: -fx-my-black;
+#menu-button-no-arrow > .arrow-button {
+    -fx-padding: 0;
 }
+
+#menu-button-no-arrow > .arrow-button > .arrow {
+    -fx-padding: 0;
+}
+
+/* Кнопки */
+#patchButton{
+    -fx-min-width: -fx-patchbutton-width;
+    -fx-max-width: -fx-patchbutton-width;
+    -fx-pref-width: -fx-patchbutton-width;
+
+    -fx-min-height: -fx-patchbutton-height;
+    -fx-max-height: -fx-patchbutton-height;
+    -fx-pref-height: -fx-patchbutton-height;
+}
+
+#patchHeader{
+    -fx-background-color: aliceblue;
+    -fx-text-fill: black;
+    -fx-border-style: solid;
+    -fx-border-width: 0  0 1px 0;
+}
+
+#patchHeader > .label{
+    -fx-background-color: aliceblue;
+    -fx-text-fill: black;
+}
+
+/*####################################################################*/
+
+/* таблицы на этом фоне*/
+#rootPanel{
+    /*-fx-background-color: oldlace;*/
+    -fx-background-image: url("/chogori-pics/lightgray03.jpg"); /* абстракция */
+}
+
+/*#application{*/
+/*    -fx-background-image: url("/pics/texture_gray2.jpg");*/
+/*}*/
+
+/*#menuBox{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+
+/*!*бордюры окон*!*/
+/*#paneX, #paneR, #paneB*/
+/*{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+
+/*.label*/
+/*{*/
+/*    -fx-text-fill: white;*/
+/*    -fx-text-weight: bold;*/
+/*    !*-fx-text-hight: 18px;*!*/
+/*}*/
+/*.button*/
+/*{*/
+/*    !*-fx-font-size: 14px;*!*/
+/*    -fx-font-weight: bold;*/
+/*}*/
+
+/*#buttonsPane*/
+/*{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+/*#treeTableView {*/
+/*    -fx-font-size: 14px;*/
+/*}*/
+/*#usersTableView {*/
+/*    -fx-font-size: 14px;*/
+/*}*/
+/*#catalogTreeView{*/
+/*    -fx-font-size: 14px;*/
+/*}*/
+
+/*.table-view .column-header-background{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+/*.table-view .column-header-background .label{*/
+/*    -fx-background-color: gray;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+/*.table-view .column-header-background .filler{*/
+/*    -fx-background-color: gray;*/
+/*    -fx-fill-width: 15px;*/
+
+/*}*/
+
+/*.tree-table-view .column-header-background .label{*/
+/*    -fx-background-color: gray;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+
+.tab-pane .tab-header-background
+{
+    /*-fx-background-color: grey;*/
+    -fx-opacity: 0.0;
+}
+
+.tab {
+    /*-fx-font-size: 12;*/
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    /*-fx-background-color:royalblue ;*/
+}
+
+.tab:selected {
+    -fx-font-size: 110%;
+    /*-fx-background-color:blue ;*/
+}
+
+
+/*#bottomLine*/
+/*{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*    !*-fx-background-image: url("/pics/bl-steel(1920x25).jpg");*!*/
+/*    !*-fx-opacity: 0.0;*!*/
+/*}*/
+
+/*#tabPane*/
+/*{*/
+/*    -fx-background-image: url("/pics/texture_gray2.jpg");*/
+/*    !*-fx-background-color: grey;*!*/
+/*    !*-fx-opacity: 0.0;*!*/
+/*}*/
+
+/*#fourButtonsPane*/
+/*{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+
+/*#toolBarHBox{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+
+/*#button_panel*/
+/*{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+
+/*#button_panel > .button >.label*/
+/*{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+/*!*#button_panel, .button{*!*/
+/*!*    -fx-padding: 1 5 1 5  ;*!*/
+/*!*    -fx-max-height: 15px;*!*/
+/*!*}*!*/
+
+/*#button_panel .button {*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+/*!*  ПОИСК *!*/
+
+/*#menuBox > .text-field{*/
+/*    -fx-background-color: lightgrey ;*/
+/*    -fx-padding: 1 5 1 5 ;*/
+/*    -fx-max-height: 15px;*/
+/*}*/
+
+/*!*#menuBox > .text-field:hover {*!*/
+/*    !*-fx-background-color: white ;*!*/
+/*!*}*!*/
+
+/*!*#menuBox > .text-field:focused {*!*/
+/*    !*-fx-background-color: white ;*!*/
+/*!*}*!*/
+
+/*!* ---      *!*/
+
+/*#txtFldSearch{*/
+/*    -fx-background-color: lightgrey ;*/
+/*    -fx-padding: 1 5 1 5 ;*/
+/*    -fx-max-height: 15px;*/
+/*}*/
+
+/*#txtFldSearch:hover {*/
+/*    -fx-background-color: white ;*/
+/*}*/
+
+/*#txtFldSearch:focused {*/
+/*    -fx-background-color: white ;*/
+/*}*/
+/*!* ----------- *!*/
+
+/*!*#button_panel > #txtFldSearch , .button {*!*/
+/*!*-fx-padding: 1, 1, 1, 1;*!*/
+/*!*-fx-max-height: 15px;*!*/
+/*!*}*!*/
+
+/*#rightToolBar{*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+
+/*.check-box{*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+
+
+
+
+/*!*==============================================*!*/
+
+
+
+/*#secondToolBar {*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+
+/*#secondToolBar .button {*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
+
+
+
+/*#modal_pane {*/
+/*    -fx-background-color: -fx-my-black;*/
+/*    -fx-border-color:grey;*/
+/*    -fx-border-width: 2px;*/
+
+/*}*/
+
+/*#modal_pane .label {*/
+/*    -fx-text-fill: #FFFFFC;*/
+/*}*/
+
+
+
+
+/*#apLogin {*/
+/*    !*-fx-background-color: #28a3f4;*!*/
+/*    -fx-background-color: -fx-my-black;*/
+/*}*/
 
 
 
