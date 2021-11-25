@@ -55,7 +55,7 @@ public class Passport_Columns {
      * ДЕЦИМАЛЬНЫЙ НОМЕР
      */
     public static TableColumn<Passport, Label> createTcPassportNumber() {
-        TableColumn<Passport, Label> tcPassportNumber = new TableColumn<>("Децимальный\nномер");
+        TableColumn<Passport, Label> tcPassportNumber = new TableColumn<>("Дец.номер");
 
         tcPassportNumber.setCellValueFactory(cd -> {
             Passport passport = cd.getValue();

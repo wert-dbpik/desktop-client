@@ -64,7 +64,7 @@ public class Draft_Columns {
      * ДЕЦИМАЛЬНЫЙ НОМЕР
      */
     public static TableColumn<Draft, Label> createTcDraftNumber() {
-        TableColumn<Draft, Label> tcDraftNumber = new TableColumn<>("Децимальный\nномер");
+        TableColumn<Draft, Label> tcDraftNumber = new TableColumn<>("Дец.номер");
 
         tcDraftNumber.setCellValueFactory(cd -> {
             Passport passport = cd.getValue().getPassport();
@@ -152,7 +152,7 @@ public class Draft_Columns {
      * ПАПКА ХРАНЕНИЯ
      */
     public static TableColumn<Draft, String> createTcFolder(){
-        TableColumn<Draft, String> tcFolder = new TableColumn<>("Папка\nхранения");
+        TableColumn<Draft, String> tcFolder = new TableColumn<>("Папка хранения");
         tcFolder.setCellValueFactory(new PropertyValueFactory<>("folder"));
         tcFolder.setStyle("-fx-alignment: CENTER;");
         tcFolder.setMinWidth(120);
@@ -163,7 +163,7 @@ public class Draft_Columns {
      * ИСХОДНОЕ НАЗВАНИЕ ФАЙЛА
      */
     public static TableColumn<Draft, String> createTcInitialDraftName(){
-        TableColumn<Draft, String> tcInitialDraftName = new TableColumn<>("Исходное\nнаименование");
+        TableColumn<Draft, String> tcInitialDraftName = new TableColumn<>("Имя файла");
         tcInitialDraftName.setCellValueFactory(new PropertyValueFactory<>("initialDraftName"));
         tcInitialDraftName.setStyle("-fx-alignment: CENTER;");
         tcInitialDraftName.setMinWidth(120);
@@ -193,7 +193,7 @@ public class Draft_Columns {
      * ИНФОРМАЦИЯ О СОЗДАНИИ
      */
     public static TableColumn<Draft, String> createTcCreation(){
-        TableColumn<Draft, String> tcCreation = new TableColumn<>("Документ\nсоздан");
+        TableColumn<Draft, String> tcCreation = new TableColumn<>("Создан");
         tcCreation.setCellValueFactory(cd->{
             Draft draft = cd.getValue();
             String str = parseLDTtoNormalDate(draft.getCreationTime());

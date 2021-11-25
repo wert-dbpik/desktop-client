@@ -13,7 +13,7 @@
                <children>
                   <VBox fx:id="vbCatalog" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT">
+                        <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
                            <children>
                               <Label fx:id="lblCatalog" text="ГРУППЫ">
                                  <HBox.margin>

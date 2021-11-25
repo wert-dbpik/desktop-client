@@ -9,18 +9,45 @@
     -fx-my-menu-font-color: #FFFFFF;             /* Change according to your needs */
     -fx-my-menu-font-color-highlighted: #FFFFFF; /* Change according to your needs */
 
+    -fx-pik-blue: #4169e1;
+    /*-fx-pik-blue: rgb(25, 41, 88);*/
+
     -fx-patchbutton-height: 20;
     -fx-patchbutton-width: 30;
 }
 
+/* Фон задника*/
+#rootPanel{
+    /*-fx-background-color: oldlace;*/
+    -fx-background-image: url("/chogori-pics/lightgray03.jpg"); /* абстракция */
+}
 
+#modal_pane{
+    -fx-border-width: 2px;
+    -fx-border-color: gray;
+}
 
 .root
 {
+    /*-fx-background-image: url("/utils-pics/tyled_grey.jpg");*/
+    /*-fx-background-repeat: repeat;*/
     -fx-background-color: -fx-my-black;
     -fx-text-fill: white;
     -fx-text-weight: bold;
     /*-fx-text-hight: 14px;*/
+}
+
+.label {
+    -fx-text-fill: #FFFFFC;
+}
+/*#############    ДИВАЙДЕРЫ  #############################*/
+.split-pane:horizontal >.split-pane-divider{
+    -fx-background-color: -fx-my-black;
+    -fx-padding: 0 0.01em 0 0.01em;
+}
+.split-pane:vertical >.split-pane-divider{
+    -fx-background-color: -fx-my-black;
+    -fx-padding: 0 0.01em 0 0.01em;
 }
 
 /*#############    ЧЕКБОКСЫ  #############################*/
@@ -141,18 +168,10 @@
 /*##################  ПАНЕЛЬ ЗАГОЛОВОК  ПАТЧА  ##############################################################*/
 
 /*!* Кнопки меню с выпадающим списком Фильтры, столбцы, обращение по ID *!*/
-#menu-button-no-arrow {
-    -fx-width: -fx-patchbutton-width;
-    -fx-max-width: -fx-patchbutton-width;
-    -fx-pref-width: -fx-patchbutton-width;
-
-    -fx-min-height: -fx-patchbutton-height;
-    -fx-max-height: -fx-patchbutton-height;
-    -fx-pref-height: -fx-patchbutton-height;
-}
 
 #menu-button-no-arrow > .arrow-button {
     -fx-padding: 0;
+
 }
 
 #menu-button-no-arrow > .arrow-button > .arrow {
@@ -160,7 +179,7 @@
 }
 
 /* Кнопки */
-#patchButton{
+#patchButton, #menu-button-no-arrow{
     -fx-min-width: -fx-patchbutton-width;
     -fx-max-width: -fx-patchbutton-width;
     -fx-pref-width: -fx-patchbutton-width;
@@ -168,87 +187,40 @@
     -fx-min-height: -fx-patchbutton-height;
     -fx-max-height: -fx-patchbutton-height;
     -fx-pref-height: -fx-patchbutton-height;
+
+    -fx-background-color: lightskyblue;
+}
+
+#patchButton:hover, #menu-button-no-arrow:hover{
+    -fx-background-color: deepskyblue;
+}
+
+#patchButton:pressed, #menu-button-no-arrow:pressed{
+    -fx-background-color: deepskyblue;
 }
 
 #patchHeader{
-    -fx-background-color: aliceblue;
+    -fx-background-color: lightskyblue;
     -fx-text-fill: black;
     -fx-border-style: solid;
     -fx-border-width: 0  0 1px 0;
 }
 
 #patchHeader > .label{
-    -fx-background-color: aliceblue;
+    -fx-background-color: lightskyblue;
     -fx-text-fill: black;
+    -fx-font-weight: bold;
 }
 
-/*####################################################################*/
-
-/* таблицы на этом фоне*/
-#rootPanel{
-    /*-fx-background-color: oldlace;*/
-    -fx-background-image: url("/chogori-pics/lightgray03.jpg"); /* абстракция */
+#patchHeader > .button .label{
+    -fx-background-color: lightskyblue;
 }
 
-/*#application{*/
-/*    -fx-background-image: url("/pics/texture_gray2.jpg");*/
-/*}*/
+#patchHeader > .button .label:hover{
+    -fx-background-color: midnightblue;
+}
 
-/*#menuBox{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-
-/*!*бордюры окон*!*/
-/*#paneX, #paneR, #paneB*/
-/*{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-
-/*.label*/
-/*{*/
-/*    -fx-text-fill: white;*/
-/*    -fx-text-weight: bold;*/
-/*    !*-fx-text-hight: 18px;*!*/
-/*}*/
-/*.button*/
-/*{*/
-/*    !*-fx-font-size: 14px;*!*/
-/*    -fx-font-weight: bold;*/
-/*}*/
-
-/*#buttonsPane*/
-/*{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-/*#treeTableView {*/
-/*    -fx-font-size: 14px;*/
-/*}*/
-/*#usersTableView {*/
-/*    -fx-font-size: 14px;*/
-/*}*/
-/*#catalogTreeView{*/
-/*    -fx-font-size: 14px;*/
-/*}*/
-
-/*.table-view .column-header-background{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-/*.table-view .column-header-background .label{*/
-/*    -fx-background-color: gray;*/
-/*    -fx-text-fill: white;*/
-/*}*/
-
-/*.table-view .column-header-background .filler{*/
-/*    -fx-background-color: gray;*/
-/*    -fx-fill-width: 15px;*/
-
-/*}*/
-
-/*.tree-table-view .column-header-background .label{*/
-/*    -fx-background-color: gray;*/
-/*    -fx-text-fill: white;*/
-/*}*/
-
+/*#####################  TAB PANE ###############################################*/
 
 .tab-pane .tab-header-background
 {
@@ -268,132 +240,48 @@
     /*-fx-background-color:blue ;*/
 }
 
+/*#############################  ПАНЕЛЬ ВВОДА ПАРОЛЯ ############################################*/
 
-/*#bottomLine*/
-/*{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*    !*-fx-background-image: url("/pics/bl-steel(1920x25).jpg");*!*/
-/*    !*-fx-opacity: 0.0;*!*/
-/*}*/
+/*Применяется, так как пр смене пользователя загружен другой фон*/
+#apLogin {
+    /*-fx-background-color: #28a3f4;*/
+    -fx-background-color: -fx-my-black;
+    /*-fx-background-image: url("/utils-pics/tyled_grey.jpg");*/
+    /*-fx-background-repeat: repeat;*/
+}
 
-/*#tabPane*/
-/*{*/
-/*    -fx-background-image: url("/pics/texture_gray2.jpg");*/
-/*    !*-fx-background-color: grey;*!*/
-/*    !*-fx-opacity: 0.0;*!*/
-/*}*/
+/*#############################   ТАБЛИЦЫ  ###############################################################*/
 
-/*#fourButtonsPane*/
-/*{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
+.table-view .column-header-background{
+    -fx-background-color: white;
+}
 
-/*#toolBarHBox{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
+.table-view .column-header {
+    -fx-background-color: -fx-pik-blue;
+    -fx-background-insets: 0 0.01em 0 0.1em;
+}
 
-/*#button_panel*/
-/*{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
+.table-view .column-header-background .label{
+    -fx-background-color: -fx-pik-blue;
+    -fx-text-fill: white;
+}
 
-/*#button_panel > .button >.label*/
-/*{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*    -fx-text-fill: white;*/
-/*}*/
+.table-view .column-header-background .filler{
+    -fx-background-color: -fx-pik-blue;
+    -fx-fill-width: 15px;
 
-/*!*#button_panel, .button{*!*/
-/*!*    -fx-padding: 1 5 1 5  ;*!*/
-/*!*    -fx-max-height: 15px;*!*/
-/*!*}*!*/
+}
 
-/*#button_panel .button {*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-/*!*  ПОИСК *!*/
+.tree-table-view .column-header-background .label{
+    -fx-background-color: -fx-my-menu-color-highlighted;
+    -fx-text-fill: white;
+}
 
-/*#menuBox > .text-field{*/
-/*    -fx-background-color: lightgrey ;*/
-/*    -fx-padding: 1 5 1 5 ;*/
-/*    -fx-max-height: 15px;*/
-/*}*/
-
-/*!*#menuBox > .text-field:hover {*!*/
-/*    !*-fx-background-color: white ;*!*/
-/*!*}*!*/
-
-/*!*#menuBox > .text-field:focused {*!*/
-/*    !*-fx-background-color: white ;*!*/
-/*!*}*!*/
-
-/*!* ---      *!*/
-
-/*#txtFldSearch{*/
-/*    -fx-background-color: lightgrey ;*/
-/*    -fx-padding: 1 5 1 5 ;*/
-/*    -fx-max-height: 15px;*/
-/*}*/
-
-/*#txtFldSearch:hover {*/
-/*    -fx-background-color: white ;*/
-/*}*/
-
-/*#txtFldSearch:focused {*/
-/*    -fx-background-color: white ;*/
-/*}*/
-/*!* ----------- *!*/
-
-/*!*#button_panel > #txtFldSearch , .button {*!*/
-/*!*-fx-padding: 1, 1, 1, 1;*!*/
-/*!*-fx-max-height: 15px;*!*/
-/*!*}*!*/
-
-/*#rightToolBar{*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-
-/*.check-box{*/
-/*    -fx-text-fill: white;*/
-/*}*/
+.table-view, .tree-table-view{
+    -fx-font-family: sans-serif;
+    -fx-font-size: 14px;
+}
 
 
 
-
-
-/*!*==============================================*!*/
-
-
-
-/*#secondToolBar {*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-
-/*#secondToolBar .button {*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-
-
-
-/*#modal_pane {*/
-/*    -fx-background-color: -fx-my-black;*/
-/*    -fx-border-color:grey;*/
-/*    -fx-border-width: 2px;*/
-
-/*}*/
-
-/*#modal_pane .label {*/
-/*    -fx-text-fill: #FFFFFC;*/
-/*}*/
-
-
-
-
-/*#apLogin {*/
-/*    !*-fx-background-color: #28a3f4;*!*/
-/*    -fx-background-color: -fx-my-black;*/
-/*}*/
-
-
-
-
+/*############################################################################################*/
