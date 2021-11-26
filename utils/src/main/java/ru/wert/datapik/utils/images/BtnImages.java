@@ -24,6 +24,7 @@ public class BtnImages {
     public static Image BTN_TABLE_VIEW_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/view(32x32).png"), size, size, true, true);
     public static Image BTN_CATALOG_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/catalog(32x32).png"), size, size, true, true);
     public static Image BTN_INFO_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/info(32x32).png"), size, size, true, true);
+    public static Image BTN_SEARCH_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/search(24x24).png"), 24, 24, true, true);
 
 
 }

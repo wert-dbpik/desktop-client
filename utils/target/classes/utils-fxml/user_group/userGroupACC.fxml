@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.entities.user_groups.UserGroup_ACCController">
+<VBox fx:id="modal_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.entities.user_groups.UserGroup_ACCController">
    <children>
       <StackPane prefHeight="31.0" prefWidth="385.0">
          <children>
@@ -28,7 +28,7 @@
             </AnchorPane>
          </children></StackPane>
       <Separator prefHeight="27.0" prefWidth="325.0" />
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+      <VBox id="modal_pane_permissions" fx:id="modal_pane_permissions" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
          <children>
             <Label text="Разрешения :">
                <font>
@@ -125,4 +125,7 @@
             </HBox>
          </children></StackPane>
    </children>
+   <padding>
+      <Insets bottom="10.0" />
+   </padding>
 </VBox>

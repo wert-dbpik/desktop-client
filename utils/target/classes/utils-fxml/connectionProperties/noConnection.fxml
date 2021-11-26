@@ -57,12 +57,12 @@
             </GridPane>
             <HBox alignment="CENTER_RIGHT" prefWidth="500.0" spacing="10.0" VBox.vgrow="NEVER">
                <children>
-                  <Button fx:id="btnCancel" mnemonicParsing="false" prefWidth="100.0" text="Отмена">
+                  <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" prefWidth="100.0" text="Отмена">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnOK" mnemonicParsing="false" prefWidth="100.0" text="ОК">
+                  <Button fx:id="btnOK" defaultButton="true" mnemonicParsing="false" prefWidth="100.0" text="ОК">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

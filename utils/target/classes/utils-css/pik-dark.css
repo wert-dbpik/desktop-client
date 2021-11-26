@@ -9,22 +9,21 @@
     -fx-my-menu-font-color: #FFFFFF;             /* Change according to your needs */
     -fx-my-menu-font-color-highlighted: #FFFFFF; /* Change according to your needs */
 
+    /*Цвет ПИК*/
     -fx-pik-blue: #4169e1;
-    /*-fx-pik-blue: rgb(25, 41, 88);*/
+
+    /*Заголовок вкладки*/
+    -fx-patch-header: lightgrey;
+    -fx-patch-header-text: black;
+    -fx-patch-header-button-hover: darkgrey;
+    /*Заголовок таблицы*/
+    -fx-table-header: grey;
+    -fx-table-header-text: white;
+
+    -fx-selector-tint: #28a3f4;
 
     -fx-patchbutton-height: 20;
     -fx-patchbutton-width: 30;
-}
-
-/* Фон задника*/
-#rootPanel{
-    /*-fx-background-color: oldlace;*/
-    -fx-background-image: url("/chogori-pics/lightgray03.jpg"); /* абстракция */
-}
-
-#modal_pane{
-    -fx-border-width: 2px;
-    -fx-border-color: gray;
 }
 
 .root
@@ -34,11 +33,30 @@
     -fx-background-color: -fx-my-black;
     -fx-text-fill: white;
     -fx-text-weight: bold;
-    /*-fx-text-hight: 14px;*/
 }
 
 .label {
-    -fx-text-fill: #FFFFFC;
+    -fx-text-fill: #fffffc;
+}
+
+/* ################    Фон задника  #########################################*/
+#rootPanel{
+    /*-fx-background-color: oldlace;*/
+    -fx-background-image: url("/chogori-pics/lightgray03.jpg"); /* абстракция */
+}
+/* ################    ПАНЕЛЬ О ПРОГРАММЕ  #########################################*/
+#about_pane{
+    -fx-border-width: 2px;
+    -fx-border-color: gray;
+}
+/*#############   ПАНЕЛЬ РАЗРЕШЕНИЙ КАК БОКОВАЯ ПАНЕЛЬ  ###########################################################*/
+
+#vbPermissions{
+    -fx-background-color: -fx-patch-header;
+}
+/*###########  МОДАЛЬНОЕ ОКНО РАЗРЕШЕНИЙ    ##################################*/
+#modal_pane_permissions >.check-box .text{
+    -fx-fill: FFFFFC;
 }
 /*#############    ДИВАЙДЕРЫ  #############################*/
 .split-pane:horizontal >.split-pane-divider{
@@ -49,7 +67,6 @@
     -fx-background-color: -fx-my-black;
     -fx-padding: 0 0.01em 0 0.01em;
 }
-
 /*#############    ЧЕКБОКСЫ  #############################*/
 .check-box .text{
     -fx-fill: #000001; /*работает только так!*/
@@ -65,7 +82,7 @@
 }
 
 >.check-box:selected .box {
-    -fx-background-color: #28a3f4;
+    -fx-background-color: -fx-selector-tint;
 }
 
 /*#############   ГЛАВНОЕ МЕНЮ   #########################   */
@@ -145,13 +162,10 @@
 }
 
 .tree-table-row-cell .tree-disclosure-node .arrow {
-    /*!*-fx-shape: "M0 -0.5 h2 v2 h1 v-2 h2 v-1 h-2 v-2 h-1 v2 h-2 v1z";*! - крестик*/
     -fx-padding: -10;
 }
 
 .tree-table-row-cell:expanded .tree-disclosure-node .arrow  {
-    /*-fx-shape: "M0 -0.5 h5 v-1 h-5 v1z";*/
-    /*-fx-padding: 4 0.25 4 0.25;*/
     -fx-padding: -10;
 }
 .tree-table-cell:default{
@@ -159,24 +173,17 @@
     -fx-border-style: solid;
 }
 
-/*#############   ПАНЕЛЬ РАЗРЕШЕНИЙ     ###########################################################*/
-
-#vbPermissions{
-    -fx-background-color: gainsboro;
-}
-
 /*##################  ПАНЕЛЬ ЗАГОЛОВОК  ПАТЧА  ##############################################################*/
 
 /*!* Кнопки меню с выпадающим списком Фильтры, столбцы, обращение по ID *!*/
 
-#menu-button-no-arrow > .arrow-button {
-    -fx-padding: 0;
-
-}
-
-#menu-button-no-arrow > .arrow-button > .arrow {
+#menu-button-no-arrow > .arrow-button,  #menu-button-no-arrow > .arrow-button > .arrow{
     -fx-padding: 0;
 }
+
+/*#menu-button-no-arrow > .arrow-button > .arrow {*/
+/*    -fx-padding: 0;*/
+/*}*/
 
 /* Кнопки */
 #patchButton, #menu-button-no-arrow{
@@ -188,66 +195,51 @@
     -fx-max-height: -fx-patchbutton-height;
     -fx-pref-height: -fx-patchbutton-height;
 
-    -fx-background-color: lightskyblue;
+    -fx-background-color: -fx-patch-header;
 }
 
-#patchButton:hover, #menu-button-no-arrow:hover{
-    -fx-background-color: deepskyblue;
-}
-
-#patchButton:pressed, #menu-button-no-arrow:pressed{
-    -fx-background-color: deepskyblue;
+#patchButton:hover, #menu-button-no-arrow:hover, #patchButton:pressed, #menu-button-no-arrow:pressed{
+    -fx-background-color: -fx-patch-header-button-hover;
 }
 
 #patchHeader{
-    -fx-background-color: lightskyblue;
-    -fx-text-fill: black;
+    -fx-background-color: -fx-patch-header;
+    -fx-text-fill: -fx-patch-header-text;
     -fx-border-style: solid;
     -fx-border-width: 0  0 1px 0;
 }
 
 #patchHeader > .label{
-    -fx-background-color: lightskyblue;
+    -fx-background-color: -fx-patch-header;
     -fx-text-fill: black;
     -fx-font-weight: bold;
 }
 
 #patchHeader > .button .label{
-    -fx-background-color: lightskyblue;
-}
-
-#patchHeader > .button .label:hover{
-    -fx-background-color: midnightblue;
+    -fx-background-color: -fx-patch-header;
 }
 
 /*#####################  TAB PANE ###############################################*/
 
 .tab-pane .tab-header-background
 {
-    /*-fx-background-color: grey;*/
     -fx-opacity: 0.0;
 }
 
 .tab {
-    /*-fx-font-size: 12;*/
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
-    /*-fx-background-color:royalblue ;*/
 }
 
 .tab:selected {
     -fx-font-size: 110%;
-    /*-fx-background-color:blue ;*/
 }
 
 /*#############################  ПАНЕЛЬ ВВОДА ПАРОЛЯ ############################################*/
 
 /*Применяется, так как пр смене пользователя загружен другой фон*/
 #apLogin {
-    /*-fx-background-color: #28a3f4;*/
     -fx-background-color: -fx-my-black;
-    /*-fx-background-image: url("/utils-pics/tyled_grey.jpg");*/
-    /*-fx-background-repeat: repeat;*/
 }
 
 /*#############################   ТАБЛИЦЫ  ###############################################################*/
@@ -257,19 +249,18 @@
 }
 
 .table-view .column-header {
-    -fx-background-color: -fx-pik-blue;
+    -fx-background-color: -fx-table-header;
     -fx-background-insets: 0 0.01em 0 0.1em;
 }
 
 .table-view .column-header-background .label{
-    -fx-background-color: -fx-pik-blue;
-    -fx-text-fill: white;
+    -fx-background-color: -fx-table-header;
+    -fx-text-fill: -fx-table-header-text;
 }
 
 .table-view .column-header-background .filler{
-    -fx-background-color: -fx-pik-blue;
+    -fx-background-color: -fx-table-header;
     -fx-fill-width: 15px;
-
 }
 
 .tree-table-view .column-header-background .label{

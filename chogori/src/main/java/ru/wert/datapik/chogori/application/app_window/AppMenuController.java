@@ -7,11 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
+import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.search.SearchField;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
@@ -20,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
+import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
@@ -32,9 +36,24 @@ public class AppMenuController {
     @FXML @Getter
     public HBox hbSearch;
 
+    private User tempUser;
+
     @FXML
     void initialize(){
 
+        createMenu();
+
+        //Создать поле поиска
+        SEARCH_CONTAINER = hbSearch;
+        PANE_WITH_SEARCH = createSearchField();
+
+
+    }
+
+    /**
+     * СОЗДАТЬ МЕНЯ
+     */
+    private void createMenu() {
         menuBar.getMenus().add(createMainMenu());
         //Чертежи
         if(CH_CURRENT_USER.getUserGroup().isReadDrafts())
@@ -49,19 +68,15 @@ public class AppMenuController {
         if(CH_CURRENT_USER.getUserGroup().isAdministrate())
             menuBar.getMenus().add(createAdminMenu());
         //Помощь
-            menuBar.getMenus().add(createHelpMenu());
-
-        //Создать поле поиска
-        SEARCH_CONTAINER = hbSearch;
-        PANE_WITH_SEARCH = createSearchField();
-
-
+        menuBar.getMenus().add(createHelpMenu());
     }
 
     /**
      * ПОЛЕ ПОИСКА в одной строке с главным меню
      */
     private HBox createSearchField() {
+
+        ImageView search = new ImageView(BTN_SEARCH_IMG);
 
         HBox hbox = new HBox();
 
@@ -73,7 +88,7 @@ public class AppMenuController {
             CH_SEARCH_FIELD.requestFocus();
         });
         btnClean.setGraphic(new ImageView(BTN_CLEAN_IMG_W));
-        hbox.getChildren().addAll(CH_SEARCH_FIELD, btnClean);
+        hbox.getChildren().addAll(search, CH_SEARCH_FIELD, btnClean);
         hbox.setAlignment(Pos.CENTER_RIGHT);
         hbox.setSpacing(2);
         hbox.getStylesheets().add(getClass().getResource("/chogori-css/toolpane-dark.css").toString());
@@ -115,13 +130,25 @@ public class AppMenuController {
      * -- СМЕНИТЬ ПОЛЬЗОВАТЕЛЯ
      */
     private void changeUser(Event event) {
+        //Сохраняем пользователя на случай, если он передумает
+        tempUser = CH_CURRENT_USER;
         //Загружаем loginWindow
         try {
             FXMLLoader loginWindowLoader = new FXMLLoader(getClass().getResource("/chogori-fxml/login/login.fxml"));
             Parent loginWindow = loginWindowLoader.load();
             CH_TAB_PANE.getTabs().clear();
+            SEARCH_CONTAINER.getChildren().clear();
             menuBar.getMenus().clear();
             CH_DECORATION_ROOT_PANEL.getChildren().add(loginWindow);
+            //При нажатии ESCAPE возвращаем прежнего пользователя
+            CH_DECORATION_ROOT_PANEL.setOnKeyPressed((event1 -> {
+                if(event1.getCode().equals(KeyCode.ESCAPE)){
+                    CH_DECORATION_ROOT_PANEL.getChildren().removeAll(loginWindow);
+                    CH_CURRENT_USER = tempUser;
+                    createMenu();
+                }
+            }));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
