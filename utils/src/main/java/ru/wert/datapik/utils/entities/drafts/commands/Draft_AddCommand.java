@@ -1,6 +1,7 @@
 package ru.wert.datapik.utils.entities.drafts.commands;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.client.entity.models.Draft;
@@ -17,7 +18,7 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PASSPORTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
-public class Draft_AddCommand implements ICommand {
+public class Draft_AddCommand  extends Task<Void>  implements ICommand {
 
     private final Draft newItem;
     private final Draft_TableView tableView;
@@ -98,5 +99,11 @@ public class Draft_AddCommand implements ICommand {
 
     protected Draft getResult() {
         return savedDraft;
+    }
+
+    @Override
+    protected Void call() throws Exception {
+        
+        return null;
     }
 }

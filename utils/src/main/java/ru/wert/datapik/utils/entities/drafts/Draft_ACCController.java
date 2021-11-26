@@ -105,6 +105,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     @FXML
     private Button btnCancel;
 
+    @FXML
+    private ProgressBar progressBar;
 
     private static File lastFile = new File("C:/test");
 
@@ -123,7 +125,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     @FXML
     void initialize() {
-
+        progressBar.setPrefHeight(3.0);
+        progressBar.setMaxHeight(3.0);
+        progressBar.setMinHeight(3.0);
     }
 
     @FXML
@@ -238,12 +242,16 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private void initOperationProperty(EOperation operation) {
         operationProperty = new SimpleObjectProperty<>();
         operationProperty.addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals(EOperation.ADD) || newValue.equals(EOperation.ADD_FOLDER))
+            if(newValue.equals(EOperation.ADD) || newValue.equals(EOperation.ADD_FOLDER)) {
                 btnOk.setText("ДОБАВИТЬ");
-            else if(newValue.equals(EOperation.REPLACE))
+                btnOk.setStyle("-fx-background-color: #8bc8ff;");
+            }else if(newValue.equals(EOperation.REPLACE)){
                 btnOk.setText("ЗАМЕНИТЬ");
-            else
+                btnOk.setStyle("-fx-background-color: #70DB55;");
+            }else {
                 btnOk.setText("ИЗМЕНИТЬ");
+                btnOk.setStyle("-fx-background-color: #ffd4a3;");
+            }
         });
         operationProperty.set(operation);
     }
