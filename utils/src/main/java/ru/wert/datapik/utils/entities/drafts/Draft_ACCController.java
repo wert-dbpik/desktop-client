@@ -131,16 +131,20 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     private StackPane spIndicator;//Панель с расположенным на ней индикатором прогресса, опявляется при длительных процессах
     private ICommand currentCommand; //Команда исполняемая в текущее время.
-    private Task<Draft> manipulation;
+    private Task<Draft> manipulation;//Текущая выполняемая задача
+
+
 
     @FXML
-    void cancelHere(ActionEvent event) {
-        System.out.println("cancel pressed");
-        if (manipulation.isRunning()) {
-            manipulation.cancel();
-        } else {
-            super.cancelPressed(event);
-        }
+    void initialize(){
+        btnCancel.setOnAction(event -> {
+            System.out.println("cancel pressed");
+            if (manipulation.isRunning()) {
+                manipulation.cancel();
+            } else {
+                super.cancelPressed(event);
+            }
+        });
     }
 
     @FXML
@@ -246,6 +250,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
+                Thread.sleep(10000);
                 currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
                 currentCommand.execute();
                 //Сохраняем новый чертеж
@@ -483,7 +488,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     }
 
     /**
-     * Одна из ветвей вилки - Загружаем единственный чертеж для замены
+     * Метод для замены одного чертежа другим
      */
     private void loadOneDraft(){
         draftsList = new ArrayList<>();

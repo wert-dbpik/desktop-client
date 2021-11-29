@@ -181,7 +181,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                      <children>
-                        <Button fx:id="btnCancel" alignment="CENTER" contentDisplay="CENTER" maxHeight="39.0" maxWidth="125.0" minHeight="39.0" minWidth="125.0" mnemonicParsing="false" onAction="#cancelHere" prefHeight="39.0" prefWidth="125.0" text="ОТМЕНА">
+                        <Button fx:id="btnCancel" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" maxHeight="39.0" maxWidth="125.0" minHeight="39.0" minWidth="125.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="125.0" text="ОТМЕНА">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
