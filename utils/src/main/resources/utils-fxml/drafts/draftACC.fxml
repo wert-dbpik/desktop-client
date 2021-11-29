@@ -175,7 +175,7 @@
                            </VBox.margin></TextArea>
                      </children>
                   </VBox>
-                  <Separator prefWidth="200.0" />
+                  <ProgressBar fx:id="progressBar" maxHeight="3.0" minWidth="3.0" prefHeight="3.0" prefWidth="260.0" progress="0.0" VBox.vgrow="NEVER" />
                   <HBox spacing="10.0">
                      <VBox.margin>
                         <Insets top="10.0" />

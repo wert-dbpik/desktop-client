@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -18,10 +19,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Prefix;
+import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.components.*;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
@@ -55,6 +58,12 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
+/**
+ * Класс описывает форму добавления и замены чертежей
+ * Вилка : можно просто добавить или добавить сразу папку.
+ * Добавит : делится на добавить один чертеж и несколько, зависит от того,
+ * сколько выбрал в папке пользователь
+ */
 @Slf4j
 public class Draft_ACCController extends FormView_ACCController<Draft> {
 
@@ -106,9 +115,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     @FXML
     private Button btnCancel;
 
-    @FXML
-    private ProgressBar progressBar;
-
     private static File lastFile = new File("C:/test");
 
     private Draft_TableView tableView;
@@ -121,25 +127,18 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private String currentFileName;
     private ObjectProperty<EOperation> operationProperty ;
 
-    private StackPane spIndicator;
-
-    public Draft_ACCController() {
-    }
-
-    @FXML
-    void initialize() {
-        spIndicator = new StackPane();
-        spIndicator.setMaxSize(90.0, 90.0);
-        spIndicator.setStyle("-fx-background-color: rgb(225, 225,225, 0.5)");
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        spIndicator.getChildren().addAll(progressIndicator);
-        spIndicator.setVisible(false);
-
-    }
+    private StackPane spIndicator;//Панель с расположенным на ней индикатором прогресса, опявляется при длительных процессах
+    private ICommand currentCommand; //Команда исполняемая в текущее время.
+    private Task<Draft> addDraft;
 
     @FXML
     void cancel(ActionEvent event) {
-        super.cancelPressed(event);
+        if (currentCommand instanceof Draft_MultipleAddCommand && addDraft != null) {
+            addDraft.cancel();
+        } else {
+            super.cancelPressed(event);
+        }
+
     }
 
     @FXML
@@ -148,39 +147,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         if (draftsList != null && draftsList.size() > 1) {
             if (operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)) {
                 //При сохранении чертежа, нам нужен id сохраненного чертежа
-                Draft_MultipleAddCommand command = new Draft_MultipleAddCommand(getNewItem(), tableView);
+                currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
                 btnOk.setDisable(true);
-                Task<Draft> addDraft = new Task<Draft>() {
-                    @Override
-                    protected Draft call() throws Exception {
-                        return command.addDraft();
-                    }
+                spIndicator.setVisible(true);
+                addDraft = getDraftTask();
 
-                    @Override
-                    protected void cancelled() {
-                        super.cancelled();
-                        btnOk.setDisable(false);
-                        spIndicator.setVisible(false);
-                    }
-
-                    @Override
-                    protected void failed() {
-                        super.failed();
-                        btnOk.setDisable(false);
-                        spIndicator.setVisible(false);
-                    }
-
-                    @Override
-                    protected void succeeded() {
-                        super.succeeded();
-                        btnOk.setDisable(false);
-                        spIndicator.setVisible(false);
-                        Draft savedDraft = this.getValue();
-                        Long saveDraftId = savedDraft.getId();
-                        draftsList.get(currentFile.get()).setDraftId(saveDraftId);
-                    }
-
-                };
                 new Thread(addDraft).start();
 
             } else {
@@ -188,12 +159,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 super.okPressed(event);
             }
 
-            //Если мы дошли до конца списка (кнопка активна)
-            if (!btnNext.isDisable())
-                btnNext.fire(); //Эмулируем нажатие кнопки
-            else
-                //Иначе перезаполняем форму с обновленными данными
-                fillForm(currentFile.get());
+
         } else if (operationProperty.get().equals(EOperation.REPLACE)) {
             replaceDraft(event);
         } else {
@@ -201,6 +167,47 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             closeWindow(event);
         }
 
+    }
+
+    @NotNull
+    private Task<Draft> getDraftTask() {
+        return new Task<Draft>() {
+            @Override
+            protected Draft call() throws Exception {
+                return ((Draft_MultipleAddCommand)currentCommand).addDraft();
+            }
+
+            @Override
+            protected void cancelled() {
+                super.cancelled();
+                btnOk.setDisable(false);
+                spIndicator.setVisible(false);
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                btnOk.setDisable(false);
+                spIndicator.setVisible(false);
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                btnOk.setDisable(false);
+                spIndicator.setVisible(false);
+                Draft savedDraft = this.getValue();
+                Long saveDraftId = savedDraft.getId();
+                draftsList.get(currentFile.get()).setDraftId(saveDraftId);
+                //Если мы дошли до конца списка (кнопка активна)
+                if (!btnNext.isDisable())
+                    btnNext.fire(); //Эмулируем нажатие кнопки
+                else
+                    //Иначе перезаполняем форму с обновленными данными
+                    fillForm(currentFile.get());
+            }
+
+        };
     }
 
     /**
@@ -211,12 +218,37 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
         oldDraft.setStatusUser(CH_CURRENT_USER);
         oldDraft.setStatusTime(LocalDateTime.now().toString());
-        Draft_ChangeCommand changeOldDraftCommand = new Draft_ChangeCommand(oldDraft, tableView);
-        changeOldDraftCommand.execute();
-        //Сохраняем новый чертеж
-        Draft_AddCommand addNewDraft = new Draft_AddCommand(getNewItem(), tableView);
-        addNewDraft.execute();
-        closeWindow(event);
+
+        addDraft = new Task<Draft>() {
+            @Override
+            protected Draft call() throws Exception {
+                currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
+                currentCommand.execute();
+                //Сохраняем новый чертеж
+                currentCommand = new Draft_AddCommand(getNewItem(), tableView);
+                currentCommand.execute();
+
+                return null;
+            }
+
+            @Override
+            protected void cancelled() {
+                super.cancelled();
+                closeWindow(event);
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                closeWindow(event);
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                closeWindow(event);
+            }
+        };
     }
 
     /**
@@ -267,6 +299,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     }
 
+    /**
+     * Метод инициирует надпись со статусом чертежа - ДЕЙСТВУЕТ, ЗАМЕНЕН, АННУЛИРОВАН
+     */
     private void initLabelDraftStatus() {
         if(operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER))
             setDraftStatus(null);
@@ -424,7 +459,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     }
 
     /**
-     * Загружаем единственный чертеж для замены
+     * Одна из ветвей вилки - Загружаем единственный чертеж для замены
      */
     private void loadOneDraft(){
         draftsList = new ArrayList<>();
@@ -471,7 +506,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     }
 
-
+    /**
+     * Метод создает кнопки NEXT и PREVIOUS
+     */
     private void createNextAndPreviousButtons() {
         currentFile = new SimpleIntegerProperty(0);
 
@@ -519,6 +556,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         }
     }
 
+    /**
+     * Метод создает панель предпросмотра, состоящий и двух панелей - собственно предпросмотра
+     * и панели с индикатором прогресса. Последняя панель находится в скрытом состоянии и появляется только
+     * на время асинхронных операций
+     */
     private void createPreviewer(){
 
         try {
@@ -527,7 +569,19 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             //Помещаем панель с previewer в шаблонное окно WindowDecoration
             previewerController = loader.getController();
             previewerController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
-            spPreviewer.getChildren().add(previewer);
+
+            //Создаем прозрачную панель с индикатором
+            spIndicator = new StackPane();
+            spIndicator.setAlignment(Pos.CENTER);
+            spIndicator.setStyle("-fx-background-color: rgb(225, 225,225, 0.5)");
+            //создаем сам индикатор
+            ProgressIndicator progressIndicator = new ProgressIndicator();
+            progressIndicator.setMaxSize(90.0, 90.0);
+            spIndicator.getChildren().addAll(progressIndicator);
+            spIndicator.setVisible(false);
+
+            //На панели размещаем предпросмотрщик и панель с индикатором
+            spPreviewer.getChildren().addAll(previewer, spIndicator);
         } catch (IOException e) {
             e.printStackTrace();
         }

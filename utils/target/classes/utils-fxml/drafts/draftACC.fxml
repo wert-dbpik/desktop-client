@@ -12,7 +12,7 @@
    <children>
       <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <StackPane fx:id="stackPanePreviewer" HBox.hgrow="ALWAYS" />
+            <StackPane fx:id="spPreviewer" HBox.hgrow="ALWAYS" />
             <VBox maxWidth="270.0" minWidth="270.0" prefWidth="270.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="NEVER">
                <children>
                   <HBox prefHeight="0.0" spacing="5.0">
