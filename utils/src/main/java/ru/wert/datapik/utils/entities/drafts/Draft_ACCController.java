@@ -40,6 +40,7 @@ import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.utils.popups.HintPopup;
 import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,6 +58,7 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 /**
  * Класс описывает форму добавления и замены чертежей
@@ -129,20 +131,24 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     private StackPane spIndicator;//Панель с расположенным на ней индикатором прогресса, опявляется при длительных процессах
     private ICommand currentCommand; //Команда исполняемая в текущее время.
-    private Task<Draft> addDraft;
+    private Task<Draft> manipulation;
 
     @FXML
-    void cancel(ActionEvent event) {
-        if (currentCommand instanceof Draft_MultipleAddCommand && addDraft != null) {
-            addDraft.cancel();
+    void cancelHere(ActionEvent event) {
+        System.out.println("cancel pressed");
+        if (manipulation.isRunning()) {
+            manipulation.cancel();
         } else {
             super.cancelPressed(event);
         }
-
     }
 
     @FXML
     void ok(ActionEvent event) {
+        if(notNullFieldEmpty()) {
+            Warning1.create($ATTENTION, "Некоторые поля не заполнены!", "Заполните все поля");
+            return;
+        }
         //draftsList == null при изменении
         if (draftsList != null && draftsList.size() > 1) {
             if (operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)) {
@@ -150,9 +156,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
-                addDraft = getDraftTask();
+                manipulation = addDraftTask();
 
-                new Thread(addDraft).start();
+                new Thread(manipulation).start();
 
             } else {
                 //при изменении чертежа нам не нужен его Id
@@ -170,18 +176,20 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     }
 
     @NotNull
-    private Task<Draft> getDraftTask() {
+    private Task<Draft> addDraftTask() {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
+                Thread.sleep(10000);
                 return ((Draft_MultipleAddCommand)currentCommand).addDraft();
             }
 
             @Override
             protected void cancelled() {
-                super.cancelled();
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
+                showNextDraft();
+                super.cancelled();
             }
 
             @Override
@@ -189,6 +197,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 super.failed();
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
+                showNextDraft();
             }
 
             @Override
@@ -199,16 +208,24 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 Draft savedDraft = this.getValue();
                 Long saveDraftId = savedDraft.getId();
                 draftsList.get(currentFile.get()).setDraftId(saveDraftId);
-                //Если мы дошли до конца списка (кнопка активна)
-                if (!btnNext.isDisable())
-                    btnNext.fire(); //Эмулируем нажатие кнопки
-                else
-                    //Иначе перезаполняем форму с обновленными данными
-                    fillForm(currentFile.get());
+                showNextDraft();
             }
 
         };
     }
+
+    /**
+     * Метод показывает следущий в списке чертеж, если активна нопка NEXT
+     */
+    private void showNextDraft() {
+        //Если мы дошли до конца списка (кнопка активна)
+        if (!btnNext.isDisable())
+            btnNext.fire(); //Эмулируем нажатие кнопки
+        else
+            //Иначе перезаполняем форму с обновленными данными
+            fillForm(currentFile.get());
+    }
+
 
     /**
      * ЗАМЕНИТЬ ЧЕРТЕЖ
@@ -219,7 +236,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         oldDraft.setStatusUser(CH_CURRENT_USER);
         oldDraft.setStatusTime(LocalDateTime.now().toString());
 
-        addDraft = new Task<Draft>() {
+        manipulation = replaceDraftTask(event, oldDraft);
+
+        new Thread(manipulation).start();
+    }
+
+    @NotNull
+    private Task<Draft> replaceDraftTask(ActionEvent event, Draft oldDraft) {
+        return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
                 currentCommand = new Draft_ChangeCommand(oldDraft, tableView);

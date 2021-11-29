@@ -175,13 +175,13 @@
                            </VBox.margin></TextArea>
                      </children>
                   </VBox>
-                  <ProgressBar fx:id="progressBar" maxHeight="3.0" minWidth="3.0" prefHeight="3.0" prefWidth="260.0" progress="0.0" VBox.vgrow="NEVER" />
+                  <Separator prefWidth="200.0" />
                   <HBox spacing="10.0">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                      <children>
-                        <Button fx:id="btnCancel" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" maxHeight="39.0" maxWidth="125.0" minHeight="39.0" minWidth="125.0" mnemonicParsing="false" onAction="#cancel" prefHeight="39.0" prefWidth="125.0" text="ОТМЕНА">
+                        <Button fx:id="btnCancel" alignment="CENTER" contentDisplay="CENTER" maxHeight="39.0" maxWidth="125.0" minHeight="39.0" minWidth="125.0" mnemonicParsing="false" onAction="#cancelHere" prefHeight="39.0" prefWidth="125.0" text="ОТМЕНА">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

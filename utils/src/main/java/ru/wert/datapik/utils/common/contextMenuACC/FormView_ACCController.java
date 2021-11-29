@@ -121,7 +121,7 @@ public abstract class FormView_ACCController<P extends Item>{
     /**
      * Проверка на заполненность ненулевых полей
      */
-    private boolean notNullFieldEmpty(){
+    public boolean notNullFieldEmpty(){
         ArrayList<String> notNullFields = getNotNullFields();
         for(Object s : notNullFields){
             if (s.toString().equals("")){
