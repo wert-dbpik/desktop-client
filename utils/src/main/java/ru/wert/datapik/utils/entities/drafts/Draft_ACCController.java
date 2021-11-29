@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,7 +74,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private Button btnPrevious;
 
     @FXML
-    private StackPane stackPanePreviewer;
+    private StackPane spPreviewer;
 
     @FXML
     private ComboBox<Prefix> bxPrefix;
@@ -120,14 +121,20 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private String currentFileName;
     private ObjectProperty<EOperation> operationProperty ;
 
+    private StackPane spIndicator;
+
     public Draft_ACCController() {
     }
 
     @FXML
     void initialize() {
-        progressBar.setPrefHeight(3.0);
-        progressBar.setMaxHeight(3.0);
-        progressBar.setMinHeight(3.0);
+        spIndicator = new StackPane();
+        spIndicator.setMaxSize(90.0, 90.0);
+        spIndicator.setStyle("-fx-background-color: rgb(225, 225,225, 0.5)");
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        spIndicator.getChildren().addAll(progressIndicator);
+        spIndicator.setVisible(false);
+
     }
 
     @FXML
@@ -142,8 +149,40 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             if (operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)) {
                 //При сохранении чертежа, нам нужен id сохраненного чертежа
                 Draft_MultipleAddCommand command = new Draft_MultipleAddCommand(getNewItem(), tableView);
-                Long saveDraftId = command.addDraft().getId();
-                draftsList.get(currentFile.get()).setDraftId(saveDraftId);
+                btnOk.setDisable(true);
+                Task<Draft> addDraft = new Task<Draft>() {
+                    @Override
+                    protected Draft call() throws Exception {
+                        return command.addDraft();
+                    }
+
+                    @Override
+                    protected void cancelled() {
+                        super.cancelled();
+                        btnOk.setDisable(false);
+                        spIndicator.setVisible(false);
+                    }
+
+                    @Override
+                    protected void failed() {
+                        super.failed();
+                        btnOk.setDisable(false);
+                        spIndicator.setVisible(false);
+                    }
+
+                    @Override
+                    protected void succeeded() {
+                        super.succeeded();
+                        btnOk.setDisable(false);
+                        spIndicator.setVisible(false);
+                        Draft savedDraft = this.getValue();
+                        Long saveDraftId = savedDraft.getId();
+                        draftsList.get(currentFile.get()).setDraftId(saveDraftId);
+                    }
+
+                };
+                new Thread(addDraft).start();
+
             } else {
                 //при изменении чертежа нам не нужен его Id
                 super.okPressed(event);
@@ -488,7 +527,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             //Помещаем панель с previewer в шаблонное окно WindowDecoration
             previewerController = loader.getController();
             previewerController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
-            stackPanePreviewer.getChildren().add(previewer);
+            spPreviewer.getChildren().add(previewer);
         } catch (IOException e) {
             e.printStackTrace();
         }
