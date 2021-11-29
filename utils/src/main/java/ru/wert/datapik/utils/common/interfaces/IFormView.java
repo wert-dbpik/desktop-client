@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.interfaces;
 
+import javafx.scene.layout.StackPane;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 
@@ -27,6 +28,11 @@ public interface IFormView<P extends Item> {
      * Связь с контроллером окна добавления/изменения
      */
     FormView_ACCController<P> getAccController();
+
+    /**
+     * Меод возвращает панель с вращающимся progressIndicator
+     */
+//    StackPane getSpIndicator();
 
 
 

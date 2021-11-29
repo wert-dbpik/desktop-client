@@ -1,9 +1,11 @@
 package ru.wert.datapik.utils.common.contextMenuACC;
 
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TreeItem;
+import javafx.scene.layout.StackPane;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -31,6 +33,8 @@ public abstract class FormView_ACCController<P extends Item>{
     protected IFormView<P> formView;
     protected ItemService<P> service;
     private P oldItem;
+    private Task<Void> manipulation;
+    private StackPane spIndicator;
 
     public abstract void init(EOperation operation, IFormView<P> formView, ItemCommands<P> commands);
     public abstract ArrayList<String> getNotNullFields();
@@ -45,6 +49,7 @@ public abstract class FormView_ACCController<P extends Item>{
         this.formView = formView;
         this.commands = commands;
         this.service = service;
+//        this.spIndicator = formView.getSpIndicator();
 
         formView.setAccController(this);
 
@@ -65,7 +70,7 @@ public abstract class FormView_ACCController<P extends Item>{
         closeWindow(event);
     }
 
-    protected void okPressed(Event event){
+    protected void okPressed(Event event, StackPane spIndicator){
 
         if(notNullFieldEmpty()) {
             Warning1.create($ATTENTION, "Некоторые поля не заполнены!", "Заполните все поля");
@@ -78,13 +83,67 @@ public abstract class FormView_ACCController<P extends Item>{
                     Warning1.create($ATTENTION, $ITEM_EXISTS,$USE_ORIGINAL_ITEM);
                     return;
                 }
-                commands.add(event, newItem);
+
+                manipulation = new Task<Void>() {
+
+                    @Override
+                    protected Void call() throws Exception {
+                        commands.add(event, newItem);
+                        return null;
+                    }
+
+                    @Override
+                    protected void succeeded() {
+                        super.succeeded();
+                        spIndicator.setVisible(false);
+                    }
+
+                    @Override
+                    protected void cancelled() {
+                        super.cancelled();
+                        spIndicator.setVisible(false);
+                    };
+
+                    @Override
+                    protected void failed() {
+                        super.failed();
+                        spIndicator.setVisible(false);
+                    }
+                };
+                spIndicator.setVisible(true);
+                new Thread(manipulation).start();
                 break;
             case COPY:
                 if(isDuplicated(newItem, null)){
                     break;
                 }
-                commands.add(event, newItem);
+                manipulation = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        commands.add(event, newItem);
+                        return null;
+                    }
+
+                    @Override
+                    protected void succeeded() {
+                        super.succeeded();
+                        spIndicator.setVisible(false);
+                    }
+
+                    @Override
+                    protected void cancelled() {
+                        super.cancelled();
+                        spIndicator.setVisible(false);
+                    };
+
+                    @Override
+                    protected void failed() {
+                        super.failed();
+                        spIndicator.setVisible(false);
+                    }
+                };
+                spIndicator.setVisible(true);
+                new Thread(manipulation).start();
                 break;
             case CHANGE:
                 if(isDuplicated(newItem, oldItem)){
@@ -92,7 +151,33 @@ public abstract class FormView_ACCController<P extends Item>{
                     return;
                 }
                 changeOldItemFields(oldItem);
-                commands.change(event, oldItem);
+                manipulation = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        commands.change(event, oldItem);
+                        return null;
+                    }
+
+                    @Override
+                    protected void succeeded() {
+                        super.succeeded();
+                        spIndicator.setVisible(false);
+                    }
+
+                    @Override
+                    protected void cancelled() {
+                        super.cancelled();
+                        spIndicator.setVisible(false);
+                    };
+
+                    @Override
+                    protected void failed() {
+                        super.failed();
+                        spIndicator.setVisible(false);
+                    }
+                };
+                spIndicator.setVisible(true);
+                new Thread(manipulation).start();
                 break;
         }
 

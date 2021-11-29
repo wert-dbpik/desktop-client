@@ -2,8 +2,10 @@ package ru.wert.datapik.utils.entities.products;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.*;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
@@ -39,6 +41,9 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 
     @FXML
     private TextArea taNote;
+
+    @FXML
+    private StackPane spIndicator;
 
     private ProductGroup group;
     private static ProductGroup defaultGroup;
@@ -86,7 +91,16 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 //    }
 
     @FXML
-    void initialize(){    }
+    void initialize(){
+        //Создаем прозрачную панель с индикатором
+        spIndicator.setAlignment(Pos.CENTER);
+        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
+        //создаем сам индикатор
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(35.0, 35.0);
+        spIndicator.getChildren().addAll(progressIndicator);
+        spIndicator.setVisible(false);
+    }
 
     @FXML
     void findProductGroup(ActionEvent event) {
@@ -107,7 +121,7 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event);
+        super.okPressed(event, spIndicator);
     }
 
 

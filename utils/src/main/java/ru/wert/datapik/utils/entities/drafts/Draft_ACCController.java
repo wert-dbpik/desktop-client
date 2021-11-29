@@ -166,14 +166,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
             } else {
                 //при изменении чертежа нам не нужен его Id
-                super.okPressed(event);
+                super.okPressed(event, spIndicator);
             }
 
 
         } else if (operationProperty.get().equals(EOperation.REPLACE)) {
             replaceDraft(event);
         } else {
-            super.okPressed(event);
+            super.okPressed(event, spIndicator);
             closeWindow(event);
         }
 
@@ -184,7 +184,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
-                Thread.sleep(10000);
                 return ((Draft_MultipleAddCommand)currentCommand).addDraft();
             }
 
@@ -250,7 +249,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
-                Thread.sleep(10000);
                 currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
                 currentCommand.execute();
                 //Сохраняем новый чертеж

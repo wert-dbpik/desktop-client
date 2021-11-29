@@ -3,8 +3,11 @@ package ru.wert.datapik.utils.entities.users;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -27,6 +30,9 @@ public class User_ACCController extends FormView_ACCController<User> {
     @FXML
     private ComboBox<UserGroup> cmbxGroup;
 
+    @FXML
+    private StackPane spIndicator;
+
 
     private Item focusedItem;
 
@@ -39,13 +45,22 @@ public class User_ACCController extends FormView_ACCController<User> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event);
+        super.okPressed(event, spIndicator);
         closeWindow(event);
 
     }
 
     @FXML
     void initialize() {
+
+        //Создаем прозрачную панель с индикатором
+        spIndicator.setAlignment(Pos.CENTER);
+        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
+        //создаем сам индикатор
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(35.0, 35.0);
+        spIndicator.getChildren().addAll(progressIndicator);
+        spIndicator.setVisible(false);
 
         //Инициализация комбобокса с группами юзеров
         ObservableList<UserGroup> list = CH_USER_GROUPS.findAll();

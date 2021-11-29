@@ -2,8 +2,10 @@ package ru.wert.datapik.utils.entities.folders;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.*;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
@@ -47,6 +49,9 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     @FXML
     private Button btnOk;
 
+    @FXML
+    private StackPane spIndicator;
+
     private ProductGroup group;
     private ProductGroup chosenGroup;
     private Folder focusedItem;
@@ -65,7 +70,16 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     }
 
     @FXML
-    void initialize() {    }
+    void initialize() {
+        //Создаем прозрачную панель с индикатором
+        spIndicator.setAlignment(Pos.CENTER);
+        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
+        //создаем сам индикатор
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(35.0, 35.0);
+        spIndicator.getChildren().addAll(progressIndicator);
+        spIndicator.setVisible(false);
+    }
 
     @FXML
     void findProductGroup(ActionEvent event) {
@@ -85,7 +99,7 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event);
+        super.okPressed(event, spIndicator);
         closeWindow(event);
     }
 

@@ -80,6 +80,11 @@
                   <Insets bottom="5.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </TextArea>
+            <StackPane fx:id="spIndicator" maxHeight="39.0" maxWidth="39.0" minHeight="39.0" minWidth="39.0" prefHeight="39.0" prefWidth="39.0" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="60.0" />
+               </GridPane.margin>
+            </StackPane>
          </children>
       </GridPane>
    </children>

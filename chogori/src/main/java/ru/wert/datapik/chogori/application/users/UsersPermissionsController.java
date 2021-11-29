@@ -63,10 +63,6 @@ public class UsersPermissionsController implements SearchablePane{
             apPermissions.getChildren().add(permissionsParent);
             permissionsController = loader.getController();
 
-//            userTableView.getSelectionModel().select(1);
-//            selectedUser = userTableView.getSelectionModel().getSelectedItem();
-//            permissionsController.init(selectedUser);
-
         } catch (IOException e) {
             e.printStackTrace();
         }

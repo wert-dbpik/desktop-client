@@ -43,6 +43,9 @@ public class Material_ACCController extends FormView_ACCController<Material> {
     @FXML
     private Button btnCancel;
 
+    @FXML
+    private StackPane spIndicator;
+
     private MaterialGroup defaultGroup;
     private MaterialGroup group;
 
@@ -62,7 +65,7 @@ public class Material_ACCController extends FormView_ACCController<Material> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event);
+        super.okPressed(event, spIndicator);
         closeWindow(event);
 
     }

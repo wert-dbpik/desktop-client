@@ -2,9 +2,12 @@ package ru.wert.datapik.utils.entities.user_groups;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
@@ -65,6 +68,9 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
     @FXML
     private Button btnCancel;
 
+    @FXML
+    private StackPane spIndicator;
+
 
     @FXML
     void cancel(ActionEvent event) {
@@ -73,12 +79,21 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event);
+        super.okPressed(event, spIndicator);
         closeWindow(event);
     }
 
     @FXML
     void initialize() {
+
+        //Создаем прозрачную панель с индикатором
+        spIndicator.setAlignment(Pos.CENTER);
+        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
+        //создаем сам индикатор
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(35.0, 35.0);
+        spIndicator.getChildren().addAll(progressIndicator);
+        spIndicator.setVisible(false);
 
         List<CheckBox> boxes = Arrays.asList(
                 chbAdministrate,chbEditUsers,

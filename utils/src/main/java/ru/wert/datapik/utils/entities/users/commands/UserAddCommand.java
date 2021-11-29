@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.users.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -34,10 +35,12 @@ public class UserAddCommand implements ICommand {
             tableView.easyUpdate(CH_USERS);
 
 //            tableView.updateView();
-            tableView.scrollTo(newItem);
-            tableView.getSelectionModel().select(newItem);
+            Platform.runLater(()->{
+                tableView.scrollTo(newItem);
+                tableView.getSelectionModel().select(newItem);
+                log.info("Добавлен пользователь {}", newItem.getName());
+            });
 
-            log.info("Добавлен пользователь {}", newItem.getName());
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
             log.error("При добавление пользователя {} произошла ошибка {} по причине {}", newItem.getName(), e.getMessage(), e.getCause());
