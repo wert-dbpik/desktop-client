@@ -138,6 +138,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     @FXML
     void initialize(){
         btnCancel.setOnAction(event -> {
+
+            // НЕ РАБОТААЕТ!!!!
             System.out.println("cancel pressed");
             if (manipulation.isRunning()) {
                 manipulation.cancel();
@@ -145,6 +147,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 super.cancelPressed(event);
             }
         });
+
+
     }
 
     @FXML
@@ -322,6 +326,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 //            if(draftsList.size() > 1)
                 lblNumFile.setText(String.format("Файл %d из %d", newValue.intValue()+1, draftsList.size()));
         });
+
+        //Показываем изначальное число файлов
+        lblNumFile.setText("Файлов: " + draftsList.size());
 
     }
 
