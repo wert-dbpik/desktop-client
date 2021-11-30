@@ -324,14 +324,15 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         //Устанавливаем начальные значения полей в зависимости от operation
         setInitialValues();
 
-        if(currentFile != null) //currentFile = null только при ИЗМЕНЕНИИ
-        currentFile.addListener((observable, oldValue, newValue) -> {
-//            if(draftsList.size() > 1)
+        if(operation.equals(EOperation.ADD) || operation.equals(EOperation.ADD_FOLDER) && currentFile != null){
+            //Показываем изначальное число файлов
+            lblNumFile.setText("Файлов: " + draftsList.size());
+            //Ghb последующей итерации
+            currentFile.addListener((observable, oldValue, newValue) -> {
                 lblNumFile.setText(String.format("Файл %d из %d", newValue.intValue()+1, draftsList.size()));
-        });
-
-        //Показываем изначальное число файлов
-        lblNumFile.setText("Файлов: " + draftsList.size());
+            });
+        } else
+            lblNumFile.setText("Файлов: 1");
 
     }
 

@@ -37,7 +37,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private String searchedText = "";
     @Setter private Object modifyingClass;
     @Getter@Setter private Object modifyingItem; //Product или Folder
-    private List<Draft> currentItemList = new ArrayList<>();
+    private List<Draft> currentItemList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
     private Draft_ACCController accController;
 
     @Getter

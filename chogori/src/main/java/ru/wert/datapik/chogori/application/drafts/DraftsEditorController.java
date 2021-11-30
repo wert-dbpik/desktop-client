@@ -127,6 +127,7 @@ public class DraftsEditorController implements SearchablePane {
     public void tuneSearching() {
         CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
         String searchedText = draftsTable.getSearchedText();
+        CH_SEARCH_FIELD.setSearchedText(searchedText);
         if (searchedText.equals(""))
             CH_SEARCH_FIELD.setPromptText("ЧЕРТЕЖ");
         else
