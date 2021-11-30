@@ -177,6 +177,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         } else if (operationProperty.get().equals(EOperation.REPLACE)) {
             replaceDraft(event);
         } else {
+            //Если операция была для множественного добавления, а в папке оказался всего один
+            //то самое время спенить название опреации
+            operation = EOperation.ADD;
             super.okPressed(event, spIndicator, btnOk);
         }
 
