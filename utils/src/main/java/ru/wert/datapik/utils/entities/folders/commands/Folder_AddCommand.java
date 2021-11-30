@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.folders.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.common.components.BXPrefix;
@@ -41,11 +42,13 @@ public class Folder_AddCommand implements ICommand {
             log.error("При добавлении изделия {} произошла ошибка", newItem.toUsefulString());
 
         }
-        ;
 
-        tableView.updateCatalogView(tableView.getChosenCatalogItem(), true);
-        tableView.scrollTo(newItem);
-        tableView.getSelectionModel().select(newItem);
+        Platform.runLater(()->{
+            tableView.updateCatalogView(tableView.getChosenCatalogItem(), true);
+            tableView.scrollTo(newItem);
+            tableView.getSelectionModel().select(newItem);
+        });
+
 
     }
 

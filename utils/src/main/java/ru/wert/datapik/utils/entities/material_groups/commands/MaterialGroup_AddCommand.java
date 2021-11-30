@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.material_groups.commands;
 
+import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.MaterialGroup;
@@ -39,12 +40,15 @@ public class MaterialGroup_AddCommand implements ICommand {
             log.error("При добавлении группы изделий {} произошла ошибка {} по причине {}",
                     newItem.getName(), e.getMessage(), e.getCause());
         }
-
         //Обновляем каталог
-        treeView.updateView();
-        int row = treeView.findTreeItemRow(newItem);
-        treeView.getSelectionModel().select(row);
-        treeView.scrollTo(row);
+        Platform.runLater(()->{
+            treeView.updateView();
+            int row = treeView.findTreeItemRow(newItem);
+            treeView.getSelectionModel().select(row);
+            treeView.scrollTo(row);
+        });
+
+
         //Обновляем Таблицу
 //        treeView.getConnectedForm().updateCatalogView(selectedItem, true);
 

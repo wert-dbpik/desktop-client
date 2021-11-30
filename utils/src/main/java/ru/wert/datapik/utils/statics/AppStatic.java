@@ -3,8 +3,10 @@ package ru.wert.datapik.utils.statics;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
@@ -216,6 +218,20 @@ public class AppStatic {
             return str[1];
         }
         return fullDecNumber;
+    }
+
+    /**
+     * Метод создает панель с ProgressIndicator
+     * @param spIndicator StackPane
+     */
+    public static void createSpIndicator(StackPane spIndicator){
+        //Создаем прозрачную панель с индикатором
+        spIndicator.setAlignment(Pos.CENTER);
+        //создаем сам индикатор
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(35.0, 35.0);
+        spIndicator.getChildren().addAll(progressIndicator);
+        spIndicator.setVisible(false);
     }
 
 }

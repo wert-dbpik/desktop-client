@@ -14,6 +14,7 @@ import ru.wert.datapik.utils.common.components.BXProductGroup;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_Chooser;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
@@ -71,14 +72,7 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     @FXML
     void initialize() {
-        //Создаем прозрачную панель с индикатором
-        spIndicator.setAlignment(Pos.CENTER);
-        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
-        //создаем сам индикатор
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setMaxSize(35.0, 35.0);
-        spIndicator.getChildren().addAll(progressIndicator);
-        spIndicator.setVisible(false);
+        AppStatic.createSpIndicator(spIndicator);
     }
 
     @FXML
@@ -99,8 +93,7 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event, spIndicator);
-        closeWindow(event);
+        super.okPressed(event, spIndicator, btnOk);
     }
 
     @Override

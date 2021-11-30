@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.product_groups.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
@@ -31,10 +32,12 @@ public class ProductGroup_ChangeCommand implements ICommand {
 
         try {
             CH_PRODUCT_GROUPS.update(item);
-            treeView.updateView();
+            Platform.runLater(()->{
+                treeView.updateView();
+                treeView.getSelectionModel().select(row);
+                treeView.scrollTo(row);
+            });
 
-            treeView.getSelectionModel().select(row);
-            treeView.scrollTo(row);
 
             log.info("Изменение группы изделий {}", item.getName());
         } catch (Exception e) {

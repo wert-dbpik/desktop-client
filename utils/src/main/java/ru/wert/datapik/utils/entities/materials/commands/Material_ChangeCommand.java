@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.materials.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Material;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -31,13 +32,14 @@ public class Material_ChangeCommand implements ICommand {
         try {
             CH_MATERIALS.update(item);
 
-            tableView.easyUpdate(CH_MATERIALS);
+            Platform.runLater(()->{
+                tableView.easyUpdate(CH_MATERIALS);
+                tableView.scrollTo(item);
+                tableView.getSelectionModel().select(item);
 
-//            tableView.updateView();
-            tableView.scrollTo(item);
-            tableView.getSelectionModel().select(item);
+                log.info("Обновлен материал {}", item.getName());
+            });
 
-            log.info("Обновлен материал {}", item.getName());
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
             log.error("При обновлении материала {} произошла ошибка", item.getName());

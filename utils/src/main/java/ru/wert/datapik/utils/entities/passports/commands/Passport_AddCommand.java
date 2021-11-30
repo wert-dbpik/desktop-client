@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.passports.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -31,13 +32,16 @@ public class Passport_AddCommand implements ICommand {
         try {
             CH_QUICK_PASSPORTS.save(newItem);
 
-            tableView.easyUpdate(CH_QUICK_PASSPORTS);
 
-//            tableView.updateView();
-            tableView.scrollTo(newItem);
-            tableView.getSelectionModel().select(newItem);
 
-            log.info("Добавлен пользователь {}", newItem.getName());
+            Platform.runLater(()->{
+                tableView.easyUpdate(CH_QUICK_PASSPORTS);
+                tableView.scrollTo(newItem);
+                tableView.getSelectionModel().select(newItem);
+
+                log.info("Добавлен пользователь {}", newItem.getName());
+            });
+
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
             log.error("При добавление пользователя {} произошла ошибка {} по причине {}", newItem.getName(), e.getMessage(), e.getCause());

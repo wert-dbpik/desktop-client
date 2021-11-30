@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.material_groups.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.MaterialGroup;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -31,12 +32,14 @@ public class MaterialGroup_ChangeCommand implements ICommand {
 
         try {
             CH_MATERIAL_GROUPS.update(item);
+            Platform.runLater(()->{
             treeView.updateView();
-
             treeView.getSelectionModel().select(row);
             treeView.scrollTo(row);
 
             log.info("Изменение группы изделий {}", item.getName());
+            });
+
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
             log.error("При зменении группы изделий {} произошла ошибка {} по причине {}",

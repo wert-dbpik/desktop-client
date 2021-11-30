@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.products.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.utils.entities.products.Product_TableView;
@@ -31,11 +32,12 @@ public class Product_ChangeCommand implements ICommand {
         try {
             CH_QUICK_PRODUCTS.update(item);
 
-            tableView.easyUpdate(CH_QUICK_PRODUCTS);
+            Platform.runLater(()->{
+                tableView.easyUpdate(CH_QUICK_PRODUCTS);
+                tableView.scrollTo(item);
+                tableView.getSelectionModel().select(item);
+            });
 
-//            tableView.updateView();
-            tableView.scrollTo(item);
-            tableView.getSelectionModel().select(item);
 
             log.info("Изменение изделия {} исп. {}", item.getPassport().toUsefulString(), item.getVariant());
         } catch (Exception e) {

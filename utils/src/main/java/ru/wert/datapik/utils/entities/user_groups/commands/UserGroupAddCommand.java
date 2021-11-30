@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.user_groups.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -32,11 +33,12 @@ public class UserGroupAddCommand implements ICommand {
         try {
             CH_USER_GROUPS.save(newItem);
 
-            tableView.easyUpdate(CH_USER_GROUPS);
+            Platform.runLater(()->{
+                tableView.easyUpdate(CH_USER_GROUPS);
+                tableView.scrollTo(newItem);
+                tableView.getSelectionModel().select(newItem);
+            });
 
-//            tableView.updateView();
-            tableView.scrollTo(newItem);
-            tableView.getSelectionModel().select(newItem);
 
             log.info("Добавлена группа пользователей {}", newItem.getName());
         } catch (Exception e) {

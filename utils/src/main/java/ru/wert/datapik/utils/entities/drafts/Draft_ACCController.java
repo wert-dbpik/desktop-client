@@ -166,15 +166,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
             } else {
                 //при изменении чертежа нам не нужен его Id
-                super.okPressed(event, spIndicator);
+                super.okPressed(event, spIndicator, btnOk);
             }
 
 
         } else if (operationProperty.get().equals(EOperation.REPLACE)) {
             replaceDraft(event);
         } else {
-            super.okPressed(event, spIndicator);
-            closeWindow(event);
+            super.okPressed(event, spIndicator, btnOk);
         }
 
     }

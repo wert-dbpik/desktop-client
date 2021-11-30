@@ -15,6 +15,7 @@ import ru.wert.datapik.utils.entities.product_groups.ProductGroup_Chooser;
 import ru.wert.datapik.utils.common.components.BXPrefix;
 import ru.wert.datapik.utils.common.components.BXProductGroup;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
@@ -44,6 +45,9 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 
     @FXML
     private StackPane spIndicator;
+
+    @FXML
+    private Button btnOk;
 
     private ProductGroup group;
     private static ProductGroup defaultGroup;
@@ -92,14 +96,7 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 
     @FXML
     void initialize(){
-        //Создаем прозрачную панель с индикатором
-        spIndicator.setAlignment(Pos.CENTER);
-        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
-        //создаем сам индикатор
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setMaxSize(35.0, 35.0);
-        spIndicator.getChildren().addAll(progressIndicator);
-        spIndicator.setVisible(false);
+        AppStatic.createSpIndicator(spIndicator);
     }
 
     @FXML
@@ -121,7 +118,7 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event, spIndicator);
+        super.okPressed(event, spIndicator, btnOk);
     }
 
 

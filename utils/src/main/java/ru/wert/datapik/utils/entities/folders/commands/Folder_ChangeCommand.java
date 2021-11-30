@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.folders.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
@@ -31,13 +32,13 @@ public class Folder_ChangeCommand implements ICommand {
         try {
             CH_QUICK_FOLDERS.update(item);
 
-            tableView.easyUpdate(CH_QUICK_FOLDERS);
+            Platform.runLater(()->{
+                tableView.easyUpdate(CH_QUICK_FOLDERS);
+                tableView.scrollTo(item);
+                tableView.getSelectionModel().select(item);
+                log.info("Изменен пакет {} ", item.toUsefulString());
+            });
 
-//            tableView.updateView();
-            tableView.scrollTo(item);
-            tableView.getSelectionModel().select(item);
-
-            log.info("Изменен пакет {} ", item.toUsefulString());
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
             log.error("При зменении пакета {} произошла ошибка {}",

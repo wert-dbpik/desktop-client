@@ -3,6 +3,7 @@ package ru.wert.datapik.utils.entities.product_groups;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -13,6 +14,7 @@ import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
@@ -27,6 +29,9 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
     @FXML
     private StackPane spIndicator;
+
+    @FXML
+    private Button btnOk;
 
     private ProductGroup focusedItem;
     private ProductGroup copiedGroup;
@@ -44,14 +49,7 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
     @FXML
     void initialize(){
-        //Создаем прозрачную панель с индикатором
-        spIndicator.setAlignment(Pos.CENTER);
-        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
-        //создаем сам индикатор
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setMaxSize(35.0, 35.0);
-        spIndicator.getChildren().addAll(progressIndicator);
-        spIndicator.setVisible(false);
+        AppStatic.createSpIndicator(spIndicator);
     }
 
 
@@ -62,7 +60,7 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event, spIndicator);
+        super.okPressed(event, spIndicator, btnOk);
     }
 
 

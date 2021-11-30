@@ -3,11 +3,9 @@ package ru.wert.datapik.utils.entities.materials;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import ru.wert.datapik.client.entity.models.*;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
@@ -15,6 +13,7 @@ import ru.wert.datapik.utils.common.components.BXMatType;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.io.IOException;
@@ -60,18 +59,16 @@ public class Material_ACCController extends FormView_ACCController<Material> {
     @FXML
     void cancel(ActionEvent event) {
         super.cancelPressed(event);
-
     }
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event, spIndicator);
-        closeWindow(event);
-
+        super.okPressed(event, spIndicator, btnOk);
     }
 
     @FXML
     void initialize() {
+        AppStatic.createSpIndicator(spIndicator);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.passports.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -31,13 +32,16 @@ public class Passport_ChangeCommand implements ICommand {
         try {
             CH_QUICK_PASSPORTS.update(item);
 
-            tableView.easyUpdate(CH_QUICK_PASSPORTS);
 
-//            tableView.updateView();
-            tableView.scrollTo(item);
-            tableView.getSelectionModel().select(item);
 
-            log.info("Обновлен пользователь {}", item.getName());
+            Platform.runLater(()->{
+                tableView.easyUpdate(CH_QUICK_PASSPORTS);
+                tableView.scrollTo(item);
+                tableView.getSelectionModel().select(item);
+
+                log.info("Обновлен пользователь {}", item.getName());
+            });
+
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
             log.error("При обновлении пользователя {} произошла ошибка {} по причине {}", item.getName(), e.getMessage(), e.getCause());

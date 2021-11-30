@@ -1,11 +1,14 @@
 package ru.wert.datapik.utils.common.contextMenuACC;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.StackPane;
+import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -13,6 +16,7 @@ import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.winform.warnings.Warning1;
 
@@ -24,6 +28,7 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
+import static ru.wert.datapik.winform.enums.EOperation.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 public abstract class FormView_ACCController<P extends Item>{
@@ -56,12 +61,12 @@ public abstract class FormView_ACCController<P extends Item>{
     }
 
     protected void setInitialValues(){
-        if(operation.equals(EOperation.CHANGE) || operation.equals(EOperation.COPY) || operation.equals(EOperation.REPLACE)){
+        if(operation.equals(CHANGE) || operation.equals(COPY) || operation.equals(EOperation.REPLACE)){
             List<P> items = formView.getAllSelectedItems();
             oldItem = items.get(0);
             fillFieldsOnTheForm(oldItem);
         }
-        if(operation.equals(EOperation.ADD) || operation.equals(EOperation.ADD_FOLDER)){
+        if(operation.equals(ADD) || operation.equals(EOperation.ADD_FOLDER)){
             showEmptyForm();
         }
     }
@@ -70,119 +75,76 @@ public abstract class FormView_ACCController<P extends Item>{
         closeWindow(event);
     }
 
-    protected void okPressed(Event event, StackPane spIndicator){
+    protected void okPressed(Event event, StackPane spIndicator, Button btnOk){
 
         if(notNullFieldEmpty()) {
             Warning1.create($ATTENTION, "Некоторые поля не заполнены!", "Заполните все поля");
             return;
         }
         P newItem = getNewItem();
-        switch(operation){
-            case ADD:
-                if(isDuplicated(newItem, null)){
-                    Warning1.create($ATTENTION, $ITEM_EXISTS,$USE_ORIGINAL_ITEM);
-                    return;
-                }
+        manipulation = manipulationTask(operation, event, spIndicator, btnOk, newItem);
+        if(spIndicator != null) spIndicator.setVisible(true);
+        if(btnOk != null) btnOk.setDisable(true);
+        new Thread(manipulation).start();
+    }
 
-                manipulation = new Task<Void>() {
 
-                    @Override
-                    protected Void call() throws Exception {
-                        commands.add(event, newItem);
+
+    @NotNull
+    private Task<Void> manipulationTask(EOperation operation, Event event, StackPane spIndicator, Button btnOk, P newItem) {
+        return new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                Thread.sleep(10000);
+                if(operation.equals(ADD)){
+                    if(isDuplicated(newItem, null)){
+                        Platform.runLater(()-> Warning1.create($ATTENTION, $ITEM_EXISTS,$USE_ORIGINAL_ITEM));
                         return null;
                     }
-
-                    @Override
-                    protected void succeeded() {
-                        super.succeeded();
-                        spIndicator.setVisible(false);
-                    }
-
-                    @Override
-                    protected void cancelled() {
-                        super.cancelled();
-                        spIndicator.setVisible(false);
-                    };
-
-                    @Override
-                    protected void failed() {
-                        super.failed();
-                        spIndicator.setVisible(false);
-                    }
-                };
-                spIndicator.setVisible(true);
-                new Thread(manipulation).start();
-                break;
-            case COPY:
-                if(isDuplicated(newItem, null)){
-                    break;
+                    commands.add(event, newItem);
                 }
-                manipulation = new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        commands.add(event, newItem);
+                if(operation.equals(COPY)) {
+                    if(isDuplicated(newItem, null)) {
+                        Platform.runLater(()->AppStatic.closeWindow(event));
+                        return null; //Закрываем окно, если новая запись повторяет старую
+                    }
+                    commands.add(event, newItem);
+                }
+                else if(operation.equals(CHANGE)) {
+                    if(isDuplicated(newItem, oldItem)){
+                        Platform.runLater(()-> Warning1.create($ATTENTION, $ITEM_EXISTS,$USE_ORIGINAL_ITEM));
                         return null;
                     }
-
-                    @Override
-                    protected void succeeded() {
-                        super.succeeded();
-                        spIndicator.setVisible(false);
-                    }
-
-                    @Override
-                    protected void cancelled() {
-                        super.cancelled();
-                        spIndicator.setVisible(false);
-                    };
-
-                    @Override
-                    protected void failed() {
-                        super.failed();
-                        spIndicator.setVisible(false);
-                    }
-                };
-                spIndicator.setVisible(true);
-                new Thread(manipulation).start();
-                break;
-            case CHANGE:
-                if(isDuplicated(newItem, oldItem)){
-                    Warning1.create($ATTENTION, $ITEM_EXISTS,$USE_ORIGINAL_ITEM);
-                    return;
+                    changeOldItemFields(oldItem);
+                    commands.change(event, oldItem);
                 }
-                changeOldItemFields(oldItem);
-                manipulation = new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        commands.change(event, oldItem);
-                        return null;
-                    }
 
-                    @Override
-                    protected void succeeded() {
-                        super.succeeded();
-                        spIndicator.setVisible(false);
-                    }
+                Platform.runLater(()->AppStatic.closeWindow(event));
+                return null;
+            }
 
-                    @Override
-                    protected void cancelled() {
-                        super.cancelled();
-                        spIndicator.setVisible(false);
-                    };
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                if(spIndicator != null) spIndicator.setVisible(false);
+                if(btnOk != null) btnOk.setDisable(false);
+            }
 
-                    @Override
-                    protected void failed() {
-                        super.failed();
-                        spIndicator.setVisible(false);
-                    }
-                };
-                spIndicator.setVisible(true);
-                new Thread(manipulation).start();
-                break;
-        }
+            @Override
+            protected void cancelled() {
+                super.cancelled();
+                if(spIndicator != null) spIndicator.setVisible(false);
+                if(btnOk != null) btnOk.setDisable(false);
+            };
 
-
-
+            @Override
+            protected void failed() {
+                super.failed();
+                if(spIndicator != null) spIndicator.setVisible(false);
+                if(btnOk != null) btnOk.setDisable(false);
+            }
+        };
     }
 
 

@@ -32,9 +32,7 @@ public class Passport_ACCController extends FormView_ACCController<Passport> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event, null);
-        closeWindow(event);
-
+        super.okPressed(event, null, null);
     }
 
     @FXML

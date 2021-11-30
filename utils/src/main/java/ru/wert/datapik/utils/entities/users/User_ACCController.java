@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
@@ -14,6 +15,7 @@ import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class User_ACCController extends FormView_ACCController<User> {
     @FXML
     private StackPane spIndicator;
 
+    @FXML
+    private Button btnOk;
 
     private Item focusedItem;
 
@@ -45,22 +49,13 @@ public class User_ACCController extends FormView_ACCController<User> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event, spIndicator);
-        closeWindow(event);
-
+        super.okPressed(event, spIndicator, btnOk);
     }
 
     @FXML
     void initialize() {
 
-        //Создаем прозрачную панель с индикатором
-        spIndicator.setAlignment(Pos.CENTER);
-        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
-        //создаем сам индикатор
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setMaxSize(35.0, 35.0);
-        spIndicator.getChildren().addAll(progressIndicator);
-        spIndicator.setVisible(false);
+        AppStatic.createSpIndicator(spIndicator);
 
         //Инициализация комбобокса с группами юзеров
         ObservableList<UserGroup> list = CH_USER_GROUPS.findAll();

@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.products.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.client.entity.models.AnyPart;
@@ -31,26 +32,29 @@ public class Product_AddCommand implements ICommand {
     @Override
     public void execute() {
 
-            @NotNull Passport finalPassport = createPassport();
-            @NotNull AnyPart finalPart = createAnyPart();
+        @NotNull Passport finalPassport = createPassport();
+        @NotNull AnyPart finalPart = createAnyPart();
 
-            newItem.setPassport(finalPassport);
-            newItem.setAnyPart(finalPart);
+        newItem.setPassport(finalPassport);
+        newItem.setAnyPart(finalPart);
 
-            //Сохраняем новое изделие
-            Product savedProduct = CH_QUICK_PRODUCTS.save(newItem);
+        //Сохраняем новое изделие
+        Product savedProduct = CH_QUICK_PRODUCTS.save(newItem);
 
-            if(savedProduct != null){ //Если сохранение произошло
-                log.info("Добавлено изделие {} исп. {}", savedProduct.getPassport().toUsefulString(), savedProduct.getVariant());
-            } else{//Если сохранение НЕ произошло
-                Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
-                log.error("При добавлении изделия {} произошла ошибка",
-                        newItem.toUsefulString());
-            };
+        if (savedProduct != null) { //Если сохранение произошло
+            log.info("Добавлено изделие {} исп. {}", savedProduct.getPassport().toUsefulString(), savedProduct.getVariant());
+        } else {//Если сохранение НЕ произошло
+            Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
+            log.error("При добавлении изделия {} произошла ошибка",
+                    newItem.toUsefulString());
+        }
 
+        Platform.runLater(() -> {
             tableView.updateCatalogView(tableView.getChosenCatalogItem(), true);
             tableView.scrollTo(newItem);
             tableView.getSelectionModel().select(newItem);
+        });
+
 
     }
 

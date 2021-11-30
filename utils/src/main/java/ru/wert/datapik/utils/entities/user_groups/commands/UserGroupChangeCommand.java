@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.user_groups.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -31,11 +32,12 @@ public class UserGroupChangeCommand implements ICommand {
         try {
             CH_USER_GROUPS.update(item);
 
-            tableView.easyUpdate(CH_USER_GROUPS);
+            Platform.runLater(()->{
+                tableView.easyUpdate(CH_USER_GROUPS);
+                tableView.scrollTo(item);
+                tableView.getSelectionModel().select(item);
+            });
 
-//            tableView.updateView();
-            tableView.scrollTo(item);
-            tableView.getSelectionModel().select(item);
 
             log.info("Обновлены разрешения для группы пользователей {}", item.getName());
         } catch (Exception e) {

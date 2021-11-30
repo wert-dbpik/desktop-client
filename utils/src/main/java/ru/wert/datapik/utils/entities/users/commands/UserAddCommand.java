@@ -32,10 +32,9 @@ public class UserAddCommand implements ICommand {
         try {
             CH_USERS.save(newItem);
 
-            tableView.easyUpdate(CH_USERS);
-
 //            tableView.updateView();
             Platform.runLater(()->{
+                tableView.easyUpdate(CH_USERS);
                 tableView.scrollTo(newItem);
                 tableView.getSelectionModel().select(newItem);
                 log.info("Добавлен пользователь {}", newItem.getName());

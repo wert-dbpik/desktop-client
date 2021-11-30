@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.users.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -31,11 +32,11 @@ public class UserChangeCommand implements ICommand {
         try {
             CH_USERS.update(item);
 
-            tableView.easyUpdate(CH_USERS);
-
-//            tableView.updateView();
-            tableView.scrollTo(item);
-            tableView.getSelectionModel().select(item);
+            Platform.runLater(() -> {
+                tableView.easyUpdate(CH_USERS);
+                tableView.scrollTo(item);
+                tableView.getSelectionModel().select(item);
+            });
 
             log.info("Обновлен пользователь {}", item.getName());
         } catch (Exception e) {

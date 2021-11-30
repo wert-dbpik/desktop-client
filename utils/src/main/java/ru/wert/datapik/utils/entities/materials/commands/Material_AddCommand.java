@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.materials.commands;
 
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.client.entity.models.AnyPart;
@@ -46,9 +47,12 @@ public class Material_AddCommand implements ICommand {
             log.error("При добавлении материала '{}' произошла ошибка",
                     newItem.toUsefulString());
         };
-        tableView.updateCatalogView(tableView.getChosenCatalogItem(), true);
-        tableView.scrollTo(newItem);
-        tableView.getSelectionModel().select(newItem);
+        Platform.runLater(()->{
+            tableView.updateCatalogView(tableView.getChosenCatalogItem(), true);
+            tableView.scrollTo(newItem);
+            tableView.getSelectionModel().select(newItem);
+        });
+
 
     }
 

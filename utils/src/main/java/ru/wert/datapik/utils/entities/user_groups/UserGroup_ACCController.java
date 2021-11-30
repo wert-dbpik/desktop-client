@@ -12,6 +12,7 @@ import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
@@ -79,21 +80,13 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
 
     @FXML
     void ok(ActionEvent event) {
-        super.okPressed(event, spIndicator);
-        closeWindow(event);
+        super.okPressed(event, spIndicator, btnOk);
     }
 
     @FXML
     void initialize() {
 
-        //Создаем прозрачную панель с индикатором
-        spIndicator.setAlignment(Pos.CENTER);
-        spIndicator.setStyle("-fx-background-color: rgb(0, 0, 0, 0.5)");
-        //создаем сам индикатор
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setMaxSize(35.0, 35.0);
-        spIndicator.getChildren().addAll(progressIndicator);
-        spIndicator.setVisible(false);
+        AppStatic.createSpIndicator(spIndicator);
 
         List<CheckBox> boxes = Arrays.asList(
                 chbAdministrate,chbEditUsers,
