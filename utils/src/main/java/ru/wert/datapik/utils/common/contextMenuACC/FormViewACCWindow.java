@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
@@ -44,7 +45,11 @@ public class FormViewACCWindow<P extends Item> {
             windowCreationAllowed = true;
             accController.init(op, formView, commands);
 
-            if(windowCreationAllowed) new WindowDecoration(op.getName(), parent, false, CH_MAIN_STAGE);
+            if(windowCreationAllowed){
+                boolean resizable = false;
+                if(formView instanceof Draft_TableView) resizable = true;  //Окно добавления чертежей на весь экран
+                new WindowDecoration(op.getName(), parent, resizable, CH_MAIN_STAGE);
+            }
 
 
 

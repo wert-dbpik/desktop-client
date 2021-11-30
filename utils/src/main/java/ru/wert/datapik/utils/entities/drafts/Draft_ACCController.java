@@ -569,6 +569,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             previewerController.showDraft(null, currentFilePath);
             currentFileName = draftsList.get(currentFile.get()).getDraftFile().getName(); //String
             lblFileName.setText(currentFileName);
+            bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
+            txtAreaNote.setText("");//Комментарий пустой
             //В случае если мы пришли сюда из EOperation.ADD_FOLDER, то мы будем теперь только добавлять
 //            operationProperty.set(EOperation.ADD);
             setDraftStatus(null);

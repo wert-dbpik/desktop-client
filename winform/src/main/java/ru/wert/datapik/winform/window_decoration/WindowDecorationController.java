@@ -6,6 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,9 +24,9 @@ import java.util.List;
 //@Slf4j
 public class WindowDecorationController {
 
-    @FXML private ImageView imgClose;
-    @FXML private ImageView imgMaximize;
-    @FXML private ImageView imgMinimize;
+    @FXML private ImageView imgBtnClose;
+    @FXML private ImageView imgBtnMaximize;
+    @FXML private ImageView imgBtnMinimize;
     @FXML private Label windowName;
     @FXML private StackPane stackPane;
     @FXML private VBox vBox;
@@ -264,7 +265,6 @@ public class WindowDecorationController {
     public Pane getPaneR(){
         return paneR;
     }
-
 
 }
 

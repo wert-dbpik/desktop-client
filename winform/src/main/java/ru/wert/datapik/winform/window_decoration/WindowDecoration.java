@@ -57,6 +57,7 @@ public class WindowDecoration {
         this.waiting = waiting;
         this.resizable = resizable;
         log.debug("{} создан", this.getClass().getSimpleName());
+        mountResizeButtons();
         createWindow(owner);
     }
 
@@ -74,12 +75,11 @@ public class WindowDecoration {
             decorationLoader = new FXMLLoader(getClass().getResource("/winform-fxml/window_decoration/window_decoration.fxml"));
             decoration = decorationLoader.load();
 
-
             StackPane pane = (StackPane)decoration.lookup("#mainPane");
             pane.getChildren().add(rootPane);
 
             //Меняем заголовок окна
-           windowName = (Label)decoration.lookup("#windowName");
+            windowName = (Label)decoration.lookup("#windowName");
             windowName.setText(headerName);
 
             Scene scene = new Scene(decoration);
@@ -93,6 +93,7 @@ public class WindowDecoration {
 
             window.sizeToScene();
             window.setResizable(this.resizable);
+
 
             if(!waiting) window.show();
 
@@ -114,11 +115,15 @@ public class WindowDecoration {
     private void settingOwner(Stage owner){
         window.initModality(Modality.WINDOW_MODAL);
         window.initOwner(owner);
+
+    }
+
+    private void mountResizeButtons(){
         //Для модальных окон скрываем кнопки свернуть/развернуть кнопки
         ImageView imgMinimizeWindow = (ImageView)decoration.lookup("#imgMinimize");
-        imgMinimizeWindow.setVisible(false);
+        imgMinimizeWindow.setVisible(resizable);
         ImageView imgMaximizeWindow = (ImageView)decoration.lookup("#imgMaximize");
-        imgMaximizeWindow.setVisible(false);
+        imgMaximizeWindow.setVisible(resizable);
     }
 
     /**

@@ -42,17 +42,17 @@
             </HBox>
             <AnchorPane maxWidth="100.0" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fx:id="imgMaximize" fitHeight="25.0" fitWidth="25.0" layoutX="33.0" layoutY="5.0" onMouseClicked="#maximizeWindow" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="5.0">
+                  <ImageView fx:id="imgBtnMaximize" fitHeight="25.0" fitWidth="25.0" layoutX="33.0" layoutY="5.0" onMouseClicked="#maximizeWindow" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="5.0">
                      <image>
                         <Image url="@../../winform-piсs/decoration_btns/maximize.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="imgClose" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#closeWindow" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <ImageView fx:id="imgBtnClose" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#closeWindow" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <image>
                         <Image url="@../../winform-piсs/decoration_btns/close.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="imgMinimize" fitHeight="25.0" fitWidth="25.0" layoutX="2.0" layoutY="8.0" onMouseClicked="#minimizeWindow" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="5.0">
+                  <ImageView fx:id="imgBtnMinimize" fitHeight="25.0" fitWidth="25.0" layoutX="2.0" layoutY="8.0" onMouseClicked="#minimizeWindow" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="5.0">
                      <image>
                         <Image url="@../../winform-piсs/decoration_btns/minimize.png" />
                      </image>
