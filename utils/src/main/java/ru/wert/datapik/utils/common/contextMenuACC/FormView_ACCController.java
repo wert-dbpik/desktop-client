@@ -96,7 +96,6 @@ public abstract class FormView_ACCController<P extends Item>{
 
             @Override
             protected Void call() throws Exception {
-                Thread.sleep(10000);
                 if(operation.equals(ADD)){
                     if(isDuplicated(newItem, null)){
                         Platform.runLater(()-> Warning1.create($ATTENTION, $ITEM_EXISTS,$USE_ORIGINAL_ITEM));
