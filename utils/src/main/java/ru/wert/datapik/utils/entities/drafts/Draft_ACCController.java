@@ -1,10 +1,7 @@
 package ru.wert.datapik.utils.entities.drafts;
 
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,6 +47,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -135,7 +133,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private Task<Draft> manipulation;//Текущая выполняемая задача
 
     private boolean ans; //переменная для хранения ответа пользователя
-
+    Draft currentDraft;
 
 
     @FXML
@@ -164,7 +162,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         if (draftsList != null && draftsList.size() > 1) {
             if (operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)) {
                 //При сохранении чертежа, нам нужен id сохраненного чертежа
-                currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
+                Draft currentDraft = getNewItem();
+                currentCommand = new Draft_MultipleAddCommand(currentDraft, tableView);
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
                 manipulation = addDraftTask();
@@ -188,7 +187,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     }
 
-    public boolean draftIsDuplicated(Draft newDraft){
+    public boolean draftIsDuplicated(Draft newDraft) throws InterruptedException {
         //Так как пасспорт нового чертежа еще фактически не существует, то ищем такой же пасспорт в базе по косвенным признакам
         Passport passport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(newDraft.getPassport().getPrefix(), newDraft.getPassport().getNumber());
         if (passport == null) {
@@ -199,46 +198,52 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         List<Draft> drafts = CH_QUICK_DRAFTS.findByPassport(passport);
         log.debug("draftIsDuplicated : найдено {} чертежей с пасспортом {}", drafts.size(), passport.toUsefulString());
-        if(drafts.isEmpty()) return false;
+        if (drafts.isEmpty()) return false;
 
-        for(Draft draft: drafts){
-            if(draft.equals(newDraft)){
-                if(draft.getStatus().equals(EDraftStatus.LEGAL.getStatusId())){
-                    Platform.runLater(()->{
-                        ans = Warning2.create($ATTENTION,
+        for (Draft draft : drafts) {
+            if (draft.equals(newDraft)) {
+                if (draft.getStatus().equals(EDraftStatus.LEGAL.getStatusId())) {
+                    CountDownLatch latch = new CountDownLatch(1);
+                    BooleanProperty answer = new SimpleBooleanProperty();
+                    Platform.runLater(() -> {
+                        answer.set(Warning2.create($ATTENTION,
                                 "Существует ДЕЙСТВУЮЩИЙ чертеж с номером " + draft.getDecimalNumber(),
-                                "Хотите заменить чертеж?");
-
-
+                                "Хотите заменить чертеж?"));
+                        latch.countDown();
                     });
-                    if(ans){
+                    latch.await();
+                    if (answer.get()) {
                         draft.setStatus(EDraftStatus.CHANGED.getStatusId());
                         draft.setStatusTime(LocalDateTime.now().toString());
                         log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", draft.toUsefulString());
-                        CH_QUICK_DRAFTS.update(draft);
-                    }else{
+                        Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(draft, tableView);
+                        updateCommand.execute();
+//                        CH_QUICK_DRAFTS.update(draft);
+                    } else {
                         log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", draft.toUsefulString());
                         return true; //Иначе возвращаем на доработку
                     }
 
-                }
-                else if (draft.getStatus().equals(EDraftStatus.ANNULLED.getStatusId())){
-                    Platform.runLater(()->{
-                        ans = Warning2.create($ATTENTION,
+                } else if (draft.getStatus().equals(EDraftStatus.ANNULLED.getStatusId())) {
+                    CountDownLatch latch = new CountDownLatch(1);
+                    BooleanProperty answer = new SimpleBooleanProperty();
+                    Platform.runLater(() -> {
+                        answer.set(Warning2.create($ATTENTION,
                                 "Существует АННУЛИРОВАННЫЙ чертеж с номером " + draft.getDecimalNumber(),
-                                "Хотите изменить статус чертежа на ЗАМЕННЫЙ?");
-                    });
+                                "Хотите изменить статус чертежа на ЗАМЕННЫЙ?"));
 
-                    if(ans){
+                        latch.countDown();
+                    });
+                    if (answer.get()) {
                         draft.setStatus(EDraftStatus.CHANGED.getStatusId());
                         draft.setStatusTime(LocalDateTime.now().toString());
                         log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
-                        CH_QUICK_DRAFTS.update(draft);
-                    }else{
+                        Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(draft, tableView);
+                        updateCommand.execute();
+                    } else {
                         log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
                         return true; //Иначе возвращаем на доработку
                     }
-
                 }
             }
         }
@@ -251,6 +256,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
+//                if(draftIsDuplicated(currentDraft)) return null;
                 return ((Draft_MultipleAddCommand)currentCommand).addDraft();
             }
 

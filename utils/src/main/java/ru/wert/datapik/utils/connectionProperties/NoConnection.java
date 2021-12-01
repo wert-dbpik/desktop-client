@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -37,6 +38,9 @@ public class NoConnection extends ModalWindow{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/connectionProperties/noConnection.fxml"));
             Parent parent = loader.load();
             stage.setScene(new Scene(parent));
+
+
+
 //            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
 
@@ -62,6 +66,9 @@ public class NoConnection extends ModalWindow{
                 RetrofitClient.restartWithNewUrl();
                 ((Node)e.getSource()).getScene().getWindow().hide();
             });
+
+            stage.getIcons().add(new Image("/utils-pics/Pikovka(256x256)b.png"));
+            stage.setTitle("Нет соединения");
 
             parent.getStylesheets().add(this.getClass().getResource("/utils-css/pik-dark.css").toString());;
             new WindowDecoration("Внимание!", parent, false, null, true );

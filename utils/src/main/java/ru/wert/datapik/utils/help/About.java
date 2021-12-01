@@ -42,7 +42,7 @@ public class About extends ModalWindow {
             else
                 versionInfo.setText("(это последняя версия)");
 
-            AnchorPane anchorPane = (AnchorPane) parent.lookup("#modal_pane");
+            AnchorPane anchorPane = (AnchorPane) parent.lookup("#about_pane");
             anchorPane.setOnMouseClicked(AppStatic::closeWindow);
 
             Platform.runLater(()->{

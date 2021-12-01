@@ -57,8 +57,9 @@ public class WindowDecoration {
         this.waiting = waiting;
         this.resizable = resizable;
         log.debug("{} создан", this.getClass().getSimpleName());
-        mountResizeButtons();
         createWindow(owner);
+        mountResizeButtons();
+
     }
 
 
@@ -120,9 +121,9 @@ public class WindowDecoration {
 
     private void mountResizeButtons(){
         //Для модальных окон скрываем кнопки свернуть/развернуть кнопки
-        ImageView imgMinimizeWindow = (ImageView)decoration.lookup("#imgMinimize");
+        ImageView imgMinimizeWindow = (ImageView)decoration.lookup("#imgBtnMinimize");
         imgMinimizeWindow.setVisible(resizable);
-        ImageView imgMaximizeWindow = (ImageView)decoration.lookup("#imgMaximize");
+        ImageView imgMaximizeWindow = (ImageView)decoration.lookup("#imgBtnMaximize");
         imgMaximizeWindow.setVisible(resizable);
     }
 
