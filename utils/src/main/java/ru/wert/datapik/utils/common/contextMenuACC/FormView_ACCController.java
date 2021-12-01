@@ -9,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -16,6 +17,7 @@ import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
+import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.winform.warnings.Warning1;
@@ -97,7 +99,12 @@ public abstract class FormView_ACCController<P extends Item>{
             @Override
             protected Void call() throws Exception {
                 if(operation.equals(ADD)){
-                    if(isDuplicated(newItem, null)){
+                    //Проверка чертежей сложнее и вынесена отдельно
+                    if(formView instanceof Draft_TableView){
+                        if(((Draft_TableView) formView).getAccController().draftIsDuplicated((Draft) newItem))
+                            return null;
+                    }
+                    else if(isDuplicated(newItem, null)){
                         Platform.runLater(()-> Warning1.create($ATTENTION, $ITEM_EXISTS,$USE_ORIGINAL_ITEM));
                         return null;
                     }
@@ -150,7 +157,7 @@ public abstract class FormView_ACCController<P extends Item>{
     /**
      * Проверка на дублирование при изменении записи
      * Запись проверяется со списком уже существующих записей
-     * Имя изменяемого пользователя из проверки исключается
+     * Имя изменяемой записи из проверки исключается
      */
     private boolean isDuplicated(P newItem, P oldItem){
 

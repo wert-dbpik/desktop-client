@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.drafts;
 
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -41,6 +42,7 @@ import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.utils.popups.HintPopup;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
+import ru.wert.datapik.winform.warnings.Warning2;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,8 +54,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
@@ -133,6 +134,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private ICommand currentCommand; //Команда исполняемая в текущее время.
     private Task<Draft> manipulation;//Текущая выполняемая задача
 
+    private boolean ans; //переменная для хранения ответа пользователя
+
 
 
     @FXML
@@ -183,6 +186,64 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             super.okPressed(event, spIndicator, btnOk);
         }
 
+    }
+
+    public boolean draftIsDuplicated(Draft newDraft){
+        //Так как пасспорт нового чертежа еще фактически не существует, то ищем такой же пасспорт в базе по косвенным признакам
+        Passport passport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(newDraft.getPassport().getPrefix(), newDraft.getPassport().getNumber());
+        if (passport == null) {
+            log.debug("draftIsDuplicated : пасспорта {} не найдено", newDraft.getPassport().toUsefulString());
+            return false; //Если пасспорта в базе нет - чертеж новый
+        } else
+            log.debug("draftIsDuplicated : найден пасспорт {}", passport.toUsefulString());
+
+        List<Draft> drafts = CH_QUICK_DRAFTS.findByPassport(passport);
+        log.debug("draftIsDuplicated : найдено {} чертежей с пасспортом {}", drafts.size(), passport.toUsefulString());
+        if(drafts.isEmpty()) return false;
+
+        for(Draft draft: drafts){
+            if(draft.equals(newDraft)){
+                if(draft.getStatus().equals(EDraftStatus.LEGAL.getStatusId())){
+                    Platform.runLater(()->{
+                        ans = Warning2.create($ATTENTION,
+                                "Существует ДЕЙСТВУЮЩИЙ чертеж с номером " + draft.getDecimalNumber(),
+                                "Хотите заменить чертеж?");
+
+
+                    });
+                    if(ans){
+                        draft.setStatus(EDraftStatus.CHANGED.getStatusId());
+                        draft.setStatusTime(LocalDateTime.now().toString());
+                        log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", draft.toUsefulString());
+                        CH_QUICK_DRAFTS.update(draft);
+                    }else{
+                        log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", draft.toUsefulString());
+                        return true; //Иначе возвращаем на доработку
+                    }
+
+                }
+                else if (draft.getStatus().equals(EDraftStatus.ANNULLED.getStatusId())){
+                    Platform.runLater(()->{
+                        ans = Warning2.create($ATTENTION,
+                                "Существует АННУЛИРОВАННЫЙ чертеж с номером " + draft.getDecimalNumber(),
+                                "Хотите изменить статус чертежа на ЗАМЕННЫЙ?");
+                    });
+
+                    if(ans){
+                        draft.setStatus(EDraftStatus.CHANGED.getStatusId());
+                        draft.setStatusTime(LocalDateTime.now().toString());
+                        log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
+                        CH_QUICK_DRAFTS.update(draft);
+                    }else{
+                        log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
+                        return true; //Иначе возвращаем на доработку
+                    }
+
+                }
+            }
+        }
+
+        return false;
     }
 
     @NotNull

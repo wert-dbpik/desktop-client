@@ -256,4 +256,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     public Draft_ACCController getAccController(){
         return accController;
     }
+
+
 }

@@ -14,21 +14,24 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@EqualsAndHashCode(of = {"passport", "draftType", "pageNumber", "status", "statusTime"}, callSuper = false)
+@EqualsAndHashCode(of = {"passport", "draftType", "pageNumber"}, callSuper = false)
 public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
 
-    private Passport passport;
+    private Passport passport; //ОСНОВНОЕ 1
     private String extension;
     private String initialDraftName;
     private Folder folder;
 
-    private Integer draftType;
-    private Integer pageNumber;
 
+    private Integer draftType; //ОСНОВНОЕ 2
+    private Integer pageNumber; //ОСНОВНОЕ 3
+
+    //Поля хранения информации о текущем статусе и когда он вступил в силу
     private Integer status;
     private User statusUser;
     private String statusTime; //LocalDateTime
 
+    //Поля хранения информации о СОЗДАНИИ
     private User creationUser;
     private String creationTime; //LocalDateTime
 
@@ -45,25 +48,29 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
         return passport.toUsefulString();
     }
 
+    public String getDecimalNumber(){
+        return "";
+    }
+
     @Override
     public int compareTo(@NotNull Draft o) {
 //        return toUsefulString().toLowerCase().compareTo(o.toUsefulString().toLowerCase());
 
         //Сравниваем номер чертежа, причем 745 должен быть выше, чем 469
         int result = o.getPassport().getNumber()
-                .compareTo(getPassport().getNumber());
+                .compareTo(getPassport().getNumber()); //745 вверху
         if (result == 0) {
             //Сравниваем тип чертежа
-            result = getDraftType() - o.getDraftType();
+            result = getDraftType() - o.getDraftType(); //Деталь вверху
             if (result == 0) {
                 //Сравниваем номер страницы
-                result = getPageNumber() - o.getPageNumber();
+                result = getPageNumber() - o.getPageNumber(); //1 вверху
                 if (result == 0) {
                     //Сравниваем статус id
-                    result = getStatus().compareTo(o.getStatus());
+                    result = getStatus().compareTo(o.getStatus()); // Действует вверху
                     if (result == 0) {
                         //Сравниваем время создания статуса
-                        result = getStatusTime().compareTo(o.getStatusTime());
+                        result = o.getStatusTime().compareTo(getStatusTime()); //поздние даты вверху
                     }
                 }
             }
@@ -89,30 +96,4 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Draft)) return false;
-        Draft draft = (Draft) o;
-        //Не должно быть двух чертежей со статусом ДЕЙСТВУЕТ
-        if (getStatus().equals(EDraftStatus.LEGAL.getStatusId())) {
-            return getPassport().equals(draft.getPassport()) &&
-                    getDraftType().equals(draft.getDraftType()) &&
-                    getPageNumber().equals(draft.getPageNumber()) &&
-                    getStatus().equals(draft.getStatus());
-        }
-        //Иначе статус чертежа ЗАМЕНЕН или АННУЛИРОВАН, а дата замены или аннулирования
-        //исключает их тождественность
-        return getPassport().equals(draft.getPassport()) &&
-                getDraftType().equals(draft.getDraftType()) &&
-                getPageNumber().equals(draft.getPageNumber()) &&
-                getStatus().equals(draft.getStatus()) &&
-                getStatusTime().equals(draft.getStatusTime());
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getPassport(), getDraftType(), getPageNumber(), getStatus(), getStatusTime());
-    }
 }
