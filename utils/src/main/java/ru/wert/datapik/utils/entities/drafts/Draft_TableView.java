@@ -45,7 +45,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
     //Фильтр
     @Getter@Setter private boolean showValid = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
-    @Getter@Setter private boolean showChanged; //ЗАМЕНЕНННЫЕ
+    @Getter@Setter private boolean showChanged = true; //ЗАМЕНЕНННЫЕ
     @Getter@Setter private boolean showAnnulled; //АННУЛИРОВАННЫЕ
 
     private TableColumn<Draft, String> tcId;

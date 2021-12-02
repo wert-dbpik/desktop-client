@@ -28,7 +28,7 @@ public class Draft_Columns {
         TableColumn<Draft, String> tcId = new TableColumn<>("ID");
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tcId.setStyle("-fx-alignment: CENTER;");
-        tcId.setMinWidth(40);
+        tcId.setMinWidth(0);//40
         return tcId;
     };
 
@@ -144,7 +144,7 @@ public class Draft_Columns {
             return new ReadOnlyObjectWrapper<>(lblStatus);
         });
         tcStatus.setStyle("-fx-alignment: CENTER;");
-        tcStatus.setMinWidth(100);
+        tcStatus.setMinWidth(10);//100
         return tcStatus;
     };
 
@@ -155,7 +155,7 @@ public class Draft_Columns {
         TableColumn<Draft, String> tcFolder = new TableColumn<>("Папка хранения");
         tcFolder.setCellValueFactory(new PropertyValueFactory<>("folder"));
         tcFolder.setStyle("-fx-alignment: CENTER;");
-        tcFolder.setMinWidth(120);
+        tcFolder.setMinWidth(10);//120
         return tcFolder;
     };
 
@@ -166,7 +166,7 @@ public class Draft_Columns {
         TableColumn<Draft, String> tcInitialDraftName = new TableColumn<>("Имя файла");
         tcInitialDraftName.setCellValueFactory(new PropertyValueFactory<>("initialDraftName"));
         tcInitialDraftName.setStyle("-fx-alignment: CENTER;");
-        tcInitialDraftName.setMinWidth(120);
+        tcInitialDraftName.setMinWidth(10);//120
         return tcInitialDraftName;
     };
 
@@ -184,7 +184,7 @@ public class Draft_Columns {
             return new ReadOnlyStringWrapper(str);
         });
         tcDraftType.setSortable(false);
-        tcDraftType.setMinWidth(80);
+        tcDraftType.setMinWidth(10);//80
         tcDraftType.setStyle("-fx-alignment: CENTER;");
         return tcDraftType;
     };
@@ -201,7 +201,7 @@ public class Draft_Columns {
         });
 
         tcCreation.setStyle("-fx-alignment: CENTER;");
-        tcCreation.setMinWidth(120);
+        tcCreation.setMinWidth(10);//120
         return tcCreation;
     };
 
@@ -213,7 +213,7 @@ public class Draft_Columns {
     public static TableColumn<Draft, String> createTcNote(){
         TableColumn<Draft, String> tcNote = new TableColumn<>("Примечание");
         tcNote.setCellValueFactory(new PropertyValueFactory<>("note"));
-        tcNote.setMinWidth(120);
+        tcNote.setMinWidth(10);//120
         tcNote.setSortable(false);
         return tcNote;
     };

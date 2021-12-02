@@ -45,6 +45,11 @@ public class _Draft_Commands implements ItemCommands<Draft> {
         command.execute();
     }
 
+    public void renameDraft(Event event){
+        ICommand command = new Draft_RenameCommand(tableView);
+        command.execute();
+    }
+
     public void replaceDraft(Event event){
         ICommand command = new Draft_ReplaceCommand(tableView);
         command.execute();

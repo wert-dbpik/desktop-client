@@ -20,6 +20,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private final _Draft_Commands commands;
     private TableView<Draft> tableView;
 
+    private MenuItem renameDraft; //Заменить
     private MenuItem replaceDraft; //Заменить
     private MenuItem nullifyDraft; //Аннулировать
     private MenuItem addFolder; //Добавить папку
@@ -68,6 +69,9 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         List<MenuItem> extraItems = new ArrayList<>();
 
+        renameDraft = new MenuItem("Переименовать");
+        renameDraft.setOnAction(commands::renameDraft);
+
         replaceDraft = new MenuItem("Заменить");
         replaceDraft.setOnAction(commands::replaceDraft);
 
@@ -82,20 +86,18 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
-
+        //======================================================
         extraItems.add(addFolder);
+        extraItems.add(new SeparatorMenuItem());//===============
         //Заменить можно только один чертеж за раз не являющегося уже ЗАМЕНЕННЫМ или АННУЛИРОВАННЫМ
-        if(selectedDrafts.size() == 1
-                && !selectedDrafts.get(0).getStatus().equals(EDraftStatus.CHANGED.getStatusId())
-                && !selectedDrafts.get(0).getStatus().equals(EDraftStatus.ANNULLED.getStatusId()))
-            extraItems.add(replaceDraft);
-        else if(selectedDrafts.size() == 1
-                && !selectedDrafts.get(0).getStatus().equals(EDraftStatus.ANNULLED.getStatusId()))
-            extraItems.add(nullifyDraft);
-        else if(selectedDrafts.size() > 0) {
-            extraItems.add(new SeparatorMenuItem());
-            extraItems.add(openInTab);
+        if (selectedDrafts.size() == 1
+                && selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId())) {//ДЕЙСТВУЮЩИЙ
+            extraItems.add(renameDraft); //ПЕРЕИМЕНОВАТЬ
+            extraItems.add(replaceDraft);//ЗАМЕНИТЬ
+            extraItems.add(nullifyDraft);//АННУЛИРОВАТЬ
         }
+        extraItems.add(new SeparatorMenuItem());//==================
+        extraItems.add(openInTab);//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         return extraItems;
     }
 

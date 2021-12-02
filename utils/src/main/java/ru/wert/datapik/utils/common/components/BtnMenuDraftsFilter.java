@@ -1,10 +1,7 @@
 package ru.wert.datapik.utils.common.components;
 
 import javafx.application.Platform;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.CustomMenuItem;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 
@@ -57,5 +54,6 @@ public class BtnMenuDraftsFilter extends MenuButton {
                 });
             }
         });
+
     }
 }

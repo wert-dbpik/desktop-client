@@ -2,6 +2,7 @@ package ru.wert.datapik.utils.entities.drafts;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.HBox;
@@ -23,6 +24,9 @@ public class Draft_PatchController {
 
     @FXML
     private VBox vboxDrafts;
+
+    @FXML
+    private Label lblShownFolder;
 
 
     @Getter private Draft_TableView draftsTable;

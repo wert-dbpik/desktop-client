@@ -132,14 +132,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private ICommand currentCommand; //Команда исполняемая в текущее время.
     private Task<Draft> manipulation;//Текущая выполняемая задача
 
-    private boolean ans; //переменная для хранения ответа пользователя
-    Draft currentDraft;
-
+    private Draft currentDraft; //Текущий чертеж для которого нажали OK
 
     @FXML
     void initialize(){
         btnCancel.setOnAction(event -> {
-
             // НЕ РАБОТААЕТ!!!!
             System.out.println("cancel pressed");
             if (manipulation.isRunning()) {
@@ -148,8 +145,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 super.cancelPressed(event);
             }
         });
-
-
     }
 
     @FXML
@@ -162,7 +157,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         if (draftsList != null && draftsList.size() > 1) {
             if (operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)) {
                 //При сохранении чертежа, нам нужен id сохраненного чертежа
-                Draft currentDraft = getNewItem();
+                currentDraft = getNewItem();
                 currentCommand = new Draft_MultipleAddCommand(currentDraft, tableView);
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
@@ -187,6 +182,15 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     }
 
+    /**
+     * Проверка чертежа на дубликаты
+     * Если новый чертеж повторяет имеющийся ДЕЙСТВУЮЩИЙ или АННУЛИРОВАННЫЙ, то пользователю поступит предложение его заменить
+     * Предполагается, что метод действует в потоке отличном от главного, поэтому окно с сообщением выводится принудительно
+     * в главном потоке. Ожидание ответа от пользователя происходит с помощью класса CountDownLatch и связывания BooleanProperty
+     * @param newDraft
+     * @return
+     * @throws InterruptedException
+     */
     public boolean draftIsDuplicated(Draft newDraft) throws InterruptedException {
         //Так как пасспорт нового чертежа еще фактически не существует, то ищем такой же пасспорт в базе по косвенным признакам
         Passport passport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(newDraft.getPassport().getPrefix(), newDraft.getPassport().getNumber());
@@ -204,15 +208,17 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             if (draft.equals(newDraft)) {
                 if (draft.getStatus().equals(EDraftStatus.LEGAL.getStatusId())) {
                     CountDownLatch latch = new CountDownLatch(1);
-                    BooleanProperty answer = new SimpleBooleanProperty();
+                    BooleanProperty changeDraft = new SimpleBooleanProperty();
                     Platform.runLater(() -> {
-                        answer.set(Warning2.create($ATTENTION,
-                                "Существует ДЕЙСТВУЮЩИЙ чертеж с номером " + draft.getDecimalNumber(),
+                        changeDraft.set(Warning2.create($ATTENTION,
+                                "Существует ДЕЙСТВУЮЩИЙ чертеж\n "
+                                        + "\"" + draft.toUsefulString() + "\",\n"
+                                        + "Статус: " + EDraftStatus.getStatusById(draft.getStatus()).getStatusName() + "-" + draft.getPageNumber(),
                                 "Хотите заменить чертеж?"));
                         latch.countDown();
                     });
                     latch.await();
-                    if (answer.get()) {
+                    if (changeDraft.get()) {
                         draft.setStatus(EDraftStatus.CHANGED.getStatusId());
                         draft.setStatusTime(LocalDateTime.now().toString());
                         log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", draft.toUsefulString());
@@ -256,7 +262,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
-//                if(draftIsDuplicated(currentDraft)) return null;
+                if(draftIsDuplicated(currentDraft)) return null;
                 return ((Draft_MultipleAddCommand)currentCommand).addDraft();
             }
 

@@ -1,5 +1,6 @@
 package ru.wert.datapik.winform.warnings;
 
+import com.sun.prism.paint.Color;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -8,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -26,6 +28,7 @@ public class Warning2 extends ModalWindow {
             Stage stage = new Stage();
             FXMLLoader userDialogLoader = new FXMLLoader(Warning2.class.getResource("/winform-fxml/warnings/warning2.fxml"));
             Parent parent = userDialogLoader.load();
+            parent.getStylesheets().add(Warning2.class.getResource("/utils-css/pik-dark.css").toString());
             stage.setScene(new Scene(parent));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
@@ -45,11 +48,13 @@ public class Warning2 extends ModalWindow {
 
             }));
 
-            Label lblTitle = (Label)parent.lookup("#lblTitle");
+            Label lblTitle = (Label)parent.lookup("#lblWarningTitle");
             lblTitle.setText(title);
+            lblTitle.setStyle("-fx-text-fill: #fcce45");
 
             Label lblProblem = (Label)parent.lookup("#lblProblem");
             lblProblem.setText(problem);
+            lblProblem.setStyle("-fx-text-fill: #fcce45");
 
             Label lblDecision = (Label)parent.lookup("#lblDecision");
             lblDecision.setText(decision);

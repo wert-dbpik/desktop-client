@@ -87,8 +87,8 @@ public class DraftsEditorController implements SearchablePane {
 
         draftPatchController.initDraftsTableView(previewerController, new Folder(), SelectionMode.MULTIPLE, true);
         draftsTable = draftPatchController.getDraftsTable();
-        draftsTable.showTableColumns(false, false, true, true, true,
-                true, true);
+        draftsTable.showTableColumns(false, false, true, true, false,
+                false, true);
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(true, true, true);
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.4));
