@@ -52,6 +52,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static jdk.nashorn.internal.objects.NativeString.substring;
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
@@ -268,10 +269,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
             @Override
             protected void cancelled() {
+                super.cancelled();
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
-                showNextDraft();
-                super.cancelled();
             }
 
             @Override
@@ -288,9 +288,12 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
                 Draft savedDraft = this.getValue();
-                Long saveDraftId = savedDraft.getId();
-                draftsList.get(currentFile.get()).setDraftId(saveDraftId);
-                showNextDraft();
+                if(savedDraft != null) {
+                    Long saveDraftId = savedDraft.getId();
+                    draftsList.get(currentFile.get()).setDraftId(saveDraftId);
+                    showNextDraft();
+                }
+
             }
 
         };
@@ -448,46 +451,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         Folder chosenFolder = Folder_Chooser.create(((Node) event.getSource()).getScene().getWindow());
         if(chosenFolder != null){
             bxFolder.setValue(chosenFolder);
-        }
-    }
-
-    /**
-     * Метод преобразовавает наименование файла в строки дец номера и наименования
-     */
-    private void setDecNumberAndName() {
-        //Обрезаем расширение файла
-        String numberAndName = currentFileName.substring(0, currentFileName.lastIndexOf("."));
-        //Определяем наличие префикса
-        Prefix prefix = null;
-        int index1 = numberAndName.indexOf(".");
-        if(index1 > 0)
-            prefix = CH_QUICK_PREFIXES.findByName(numberAndName.substring(0, index1));
-        //Если префикс присутствует, отрезаем его от строки
-        if(prefix != null) {
-            numberAndName = numberAndName.substring(index1 + 1);
-            bxPrefix.setValue(prefix);
-        }
-
-        //Если пробел разделяет номер группами по три
-        if(numberAndName.indexOf(" ") == 3) numberAndName = numberAndName.replaceFirst(" ", "");
-
-        //Имеем обрезок из номера и наименования
-        //В оставшейся части ищем первый пробел -
-        int index = numberAndName.indexOf(" ");
-
-        if(index > 0){
-            //Строка с номером - подстрока до первого пробела
-            String strWithNumber = numberAndName.substring(0, index);
-
-            Pattern pattern = Pattern.compile("\\d{3}.?\\d{3}\\.\\d{3}");
-            //В строке с номером находим сам номер
-            Matcher matcher = pattern.matcher(strWithNumber);
-            while (matcher.find()) {
-                txtNumber.setText(numberAndName.substring(matcher.start(), matcher.end()));
-            }
-            txtName.setText(numberAndName.substring(index + 1));
-        } else {
-            txtName.setText(numberAndName);
         }
     }
 
@@ -818,6 +781,70 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         setDecNumberAndName();
 
+    }
+
+    /**
+     * Метод преобразовавает наименование файла в строки дец номера и наименования
+     * Вызывается так же при изменении lblFileName в методе createLabelFileName()
+     */
+    private void setDecNumberAndName() {
+        //Обрезаем расширение файла
+        String initialFileName = currentFileName.substring(0, currentFileName.lastIndexOf("."));
+        log.debug("setDecNumberAndName : initial file name is '{}'", initialFileName);
+        //Определяем наличие префикса
+        Prefix prefix = null;
+        int index1 = initialFileName.indexOf(".");
+        if(index1 > 0)
+            prefix = CH_QUICK_PREFIXES.findByName(initialFileName.substring(0, index1));
+        //Если префикс присутствует, отрезаем его от строки
+        if(prefix != null) {
+            initialFileName = initialFileName.substring(index1 + 1);
+            bxPrefix.setValue(prefix);
+        }
+
+        //Если пробел разделяет номер группами по три
+        if(initialFileName.indexOf(" ") == 3) initialFileName = initialFileName.replaceFirst(" ", "");
+
+        //Предположительно на этом этапе мы имеем что-то вроде 745222.255 какая-то деталь
+        //Вычленим децимальный номер из оставшейся части получим наименование
+        //Если децимального номера нет, то это будет только наименованием
+        //Маска децимального номера XXXXXX.XXX, где X число
+
+        Pattern p = Pattern.compile("\\d{3}.?\\d{3}\\.\\d{3}"); //Децимальный номер xxxxxx.xxx
+        Matcher m = p.matcher(initialFileName);
+        String decNumber = "";
+        while(m.find()){
+            decNumber = initialFileName.substring(m.start(), m.end());
+        }
+        log.debug("setDecNumberAndName : found decimal number '{}'",  decNumber);
+
+        String partName = initialFileName.replace(decNumber, "").trim();
+        log.debug("setDecNumberAndName : part name is '{}'", partName);
+
+        txtNumber.setText(decNumber);
+        txtName.setText(partName);
+
+
+        //Имеем обрезок из номера и наименования
+        //В оставшейся части ищем первый пробел -
+//        int index = initialFileName.indexOf(" ");
+//
+//        if(index > 0 && count == 0){
+//            //Строка с номером - подстрока до первого пробела
+//            String strWithNumber = initialFileName.substring(0, index);
+//
+//            Pattern pattern = Pattern.compile("\\d{3}.?\\d{3}\\.\\d{3}");
+//            //В строке с номером находим сам номер
+//            Matcher matcher = pattern.matcher(strWithNumber);
+//            while (matcher.find()) {
+//                String decNumber = initialFileName.substring(matcher.start(), matcher.end());
+//                txtNumber.setText(decNumber);
+//            }
+//            txtName.setText(initialFileName.substring(index + 1));
+//        } else {
+//            txtNumber.setText("");
+//            txtName.setText(initialFileName);
+//        }
     }
 
 
