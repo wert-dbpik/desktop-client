@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -14,18 +12,13 @@ import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
 import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.catalogOfFolders.CatalogOfFoldersPatch;
-import ru.wert.datapik.utils.common.components.ChevronButton;
-import ru.wert.datapik.utils.common.components.ExpandButton;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.tabs.SearchablePane;
 
-import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
-import static ru.wert.datapik.utils.toolpane.ChogoriToolBar.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 
@@ -50,6 +43,7 @@ public class DraftsEditorController implements SearchablePane {
 
     private Draft_TableView draftsTable;
     private PreviewerPatchController previewerController;
+    private Label lblDraftInfo;
 
     @FXML
     void initialize() {
@@ -73,8 +67,10 @@ public class DraftsEditorController implements SearchablePane {
         previewerController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
         previewerController.initPreviewerToolBar(true);
         previewerController.getHboxPreviewerButtons().getChildren().add(CommonUnits.createExpandPreviewButton(sppHorizontal, sppVertical));
+        lblDraftInfo = previewerPatch.getLblDraftInfo();
 
         spPreviewer.getChildren().add(previewerPatch.getParent());
+
     }
 
     /**

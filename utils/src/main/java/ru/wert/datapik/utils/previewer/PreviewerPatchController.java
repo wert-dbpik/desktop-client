@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -37,6 +38,10 @@ public class PreviewerPatchController {
 
     @FXML
     @Getter private HBox hboxPreviewerButtons;
+
+    @FXML
+    @Getter private Label lblDraftInfo;
+
 
     private PDFReader pdfReader; //см enum PDFViewer
     private StackPane pdfStackPane; //панель на которой работает pdfReader

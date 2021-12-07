@@ -22,6 +22,7 @@ import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
 import ru.wert.datapik.winform.enums.EDraftStatus;
+import ru.wert.datapik.winform.enums.EDraftType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -89,6 +90,18 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
             if(newValue == null || newValue.getId() == null) return;
             Platform.runLater(()->{
                 AppStatic.openDraftInPreviewer(newValue, previewerController);
+                Label lblDraftInfo = previewerController.getLblDraftInfo();
+                EDraftStatus status = EDraftStatus.getStatusById(newValue.getStatus());
+                lblDraftInfo.setText(
+                        "   " + newValue.toUsefulString() + //Обозначение чертежа
+                                " : " + EDraftType.getDraftTypeById(newValue.getDraftType()).getShortName() + //Тип чертежа
+                                "-" + newValue.getPageNumber() + //страница
+                                " : " + status.getStatusName()); //Статус
+                if(status == EDraftStatus.LEGAL)
+                    lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
+                else
+                    lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
+
             });
         });
 

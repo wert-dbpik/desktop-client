@@ -2,20 +2,25 @@ package ru.wert.datapik.utils.previewer;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import lombok.Getter;
 
 import java.io.IOException;
 
 public class PreviewerPatch {
 
-    private Parent previewer;
-    private PreviewerPatchController controller;
+    @Getter private Parent parent;
+    @Getter private PreviewerPatchController controller;
+    @Getter private Label lblDraftInfo;
+
 
     public PreviewerPatch create() {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/previewer/previewerPatch.fxml"));
-            previewer = loader.load();
+            parent = loader.load();
             controller = loader.getController();
+            lblDraftInfo = (Label) parent.lookup("#lblDraftInfo");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -23,11 +28,4 @@ public class PreviewerPatch {
         return this;
     }
 
-    public PreviewerPatchController getController() {
-        return controller;
-    }
-
-    public Parent getParent() {
-        return previewer;
-    }
 }

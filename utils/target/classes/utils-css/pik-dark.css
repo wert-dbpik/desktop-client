@@ -39,6 +39,12 @@
     -fx-text-fill: #fffffc;
 }
 
+#lblDraftInfo{
+    -fx-font-weight: normal;
+    -fx-font-style: italic;
+    -fx-text-fill: blue;
+}
+
 /* ################    Фон задника  #########################################*/
 #rootPanel{
     /*-fx-background-color: oldlace;*/
