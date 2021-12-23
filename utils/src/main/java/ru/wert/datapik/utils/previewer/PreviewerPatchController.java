@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.utils.common.components.ZoomableScrollPane;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.views.pdf.PDFReader;
@@ -125,7 +126,7 @@ public class PreviewerPatchController {
             imageView.setFitWidth(imageDraft.getWidth());
             imageView.setFitHeight(imageDraft.getHeight());
             //
-            ScrollPane scrollPane = new ScrollPane(imageView);
+            ScrollPane scrollPane = new ZoomableScrollPane(imageView, paneViewer);
 
             Platform.runLater(() -> {
                 paneViewer.getChildren().set(0, scrollPane);
