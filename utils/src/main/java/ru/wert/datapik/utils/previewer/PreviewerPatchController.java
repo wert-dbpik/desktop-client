@@ -125,12 +125,9 @@ public class PreviewerPatchController {
             ImageView imageView = new ImageView(imageDraft);
             imageView.setFitWidth(imageDraft.getWidth());
             imageView.setFitHeight(imageDraft.getHeight());
-            //
-            ScrollPane scrollPane = new ZoomableScrollPane(imageView, paneViewer);
 
-            Platform.runLater(() -> {
-                paneViewer.getChildren().set(0, scrollPane);
-            });
+            ScrollPane scrollPane = new ZoomableScrollPane(imageView, paneViewer);
+            paneViewer.getChildren().set(0, scrollPane);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

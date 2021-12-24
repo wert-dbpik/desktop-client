@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.drafts;
 
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;

@@ -1,139 +1,96 @@
 package ru.wert.datapik.utils.common.components;
 
-import com.sun.deploy.security.SelectableSecurityManager;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Orientation;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-
-import java.util.Set;
-
-public class ZoomableScrollPane extends ScrollPane {
-
-    double imgWidth;
-    double imgHeight;
-    double paneWidth;
-    double paneHeight;
-    private ImageView image;
-    private StackPane stPane;
-    double ratio;
-
-    double mouseX, mouseY, mX, mY;
+import javafx.scene.layout.VBox;
 
 
-    public ZoomableScrollPane(ImageView image, StackPane stPane) {
-        super(image);
-        this.image = image;
-        this.stPane = stPane;
+public class ZoomableScrollPane extends ScrollPane{
+    private double scaleValue = 0.7;
+    private double zoomIntensity = 0.02;
+    private Node target;
+    private Node zoomNode;
 
-        setFitToHeight(true);
-        setFitToWidth(true);
+
+    public ZoomableScrollPane(Node target, StackPane stPane) {
+        super();
+        this.target = target;
+        this.zoomNode = new Group(target);
+        setContent(outerNode(zoomNode));
+
         setPannable(true);
+        setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        setFitToHeight(true); //center
+        setFitToWidth(true); //center
 
+        //Измеряем начальный масштаб, масштаб по высоте
+        scaleValue = stPane.getHeight()/target.getLayoutBounds().getHeight();
 
-        paneWidth = stPane.getWidth();
-        paneHeight = stPane.getHeight();
-        imgWidth = image.getFitWidth();
-        imgHeight = image.getFitHeight();
-
-        ratio = imgHeight/imgWidth;
-
-        fitHeight();
-
+        //При изменении окна, меняется и размер чертежа
         stPane.heightProperty().addListener((observable, oldValue, newValue) -> {
-            double delta = newValue.doubleValue() - oldValue.doubleValue();
-//            if(ratio >= 1) {
-                image.setFitHeight(image.getFitHeight() + delta);
-                image.setFitWidth(image.getFitHeight() / ratio);
-//            image.setTranslateX((paneWidth - image.getFitWidth())/2);
-                image.setTranslateX(image.getTranslateX() - delta / ratio / 2);
-//            } else
-//
-//                image.setTranslateY(image.getTranslateY() + delta/2);
+            scaleValue = stPane.getHeight()/target.getLayoutBounds().getHeight();
+            updateScale();
 
         });
 
-        stPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-            double delta = newValue.doubleValue() - oldValue.doubleValue();
-//            if(ratio < 1) {
-//                image.setFitWidth(image.getFitWidth() + delta);
-//                image.setFitHeight(image.getFitWidth() * ratio);
-//                image.setTranslateY(image.getTranslateY() - delta*ratio/2);
-//            } else
-                image.setTranslateX(image.getTranslateX() + delta/2);
 
-        });
+        updateScale();
+    }
 
-        image.setOnScroll(event -> {
-            if(event.isControlDown()){
-                double zoom = 1.05;
-                if(event.getDeltaY() < 0)
-                    zoom = 0.95;
-
-                double h = image.getFitHeight(); //начальная высота
-                double w = image.getFitWidth(); //начальная ширина
-
-                image.setFitHeight(image.getFitHeight() * zoom);
-                image.setFitWidth(image.getFitWidth() * zoom);
-
-                double deltaX = image.getTranslateX() - (image.getFitWidth() - w)/2; //c одной стороны
-                if (deltaX > 0)
-                    image.setTranslateX(deltaX);
-                else {
-                    if(getHvalue() != 0.0)
-                        setHvalue(0.5);
-                }
-
-                double deltaY = image.getTranslateY() - (image.getFitHeight() - h)/2; //c одной стороны
-                if (deltaY > 0)
-                    image.setTranslateY(deltaY);
-                else {
-                    if(getVvalue() != 0.0)
-                        setVvalue(0.5);
-                }
-
-                event.consume();
+    private Node outerNode(Node node) {
+        Node outerNode = centeredNode(node);
+        outerNode.setOnScroll(e -> {
+            if(e.isControlDown()) {
+                e.consume();
+                onScroll(e.getTextDeltaY(), new Point2D(e.getX(), e.getY()));
             }
         });
-
-        image.setOnMousePressed(event -> {
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-        });
-
-
-
-        image.setOnMouseDragOver(event -> {
-            mX = event.getSceneX();
-            mY = event.getSceneY();
-            double deltaX = mX - mouseX;
-            double deltaY = mY - mouseY;
-
-            image.setTranslateX(image.getTranslateX() + deltaX);
-            image.setTranslateY(image.getTranslateY() + deltaY);
-        });
-
-
+        return outerNode;
     }
 
-    private void fitHeight(){
-        image.setFitHeight(paneHeight);
-        image.setFitWidth(imgWidth * paneHeight / imgHeight);
-
-//        image.translateXProperty().bind(widthProperty().subtract(image.fitWidthProperty()).divide(2));
-
-        image.setTranslateX((paneWidth - image.getFitWidth())/2);
-
+    private Node centeredNode(Node node) {
+        VBox vBox = new VBox(node);
+        vBox.setAlignment(Pos.CENTER);
+        return vBox;
     }
 
-    private void fitWidth(){
-        image.setFitWidth(paneWidth);
-        image.setFitHeight(imgHeight * paneWidth / imgWidth);
+    private void updateScale() {
+        target.setScaleX(scaleValue);
+        target.setScaleY(scaleValue);
+    }
 
-        image.setTranslateY((paneHeight - image.getFitHeight())/2);
+    private void onScroll(double wheelDelta, Point2D mousePoint) {
+
+        double zoomFactor = Math.exp(wheelDelta * zoomIntensity);
+
+        Bounds innerBounds = zoomNode.getLayoutBounds();
+        Bounds viewportBounds = getViewportBounds();
+
+        // calculate pixel offsets from [0, 1] range
+        double valX = this.getHvalue() * (innerBounds.getWidth() - viewportBounds.getWidth());
+        double valY = this.getVvalue() * (innerBounds.getHeight() - viewportBounds.getHeight());
+
+        scaleValue = scaleValue * zoomFactor;
+        updateScale();
+        this.layout(); // refresh ScrollPane scroll positions & target bounds
+
+        // convert target coordinates to zoomTarget coordinates
+        Point2D posInZoomTarget = target.parentToLocal(zoomNode.parentToLocal(mousePoint));
+
+        // calculate adjustment of scroll position (pixels)
+        Point2D adjustment = target.getLocalToParentTransform().deltaTransform(posInZoomTarget.multiply(zoomFactor - 1));
+
+        // convert back to [0, 1] range
+        // (too large/small values are automatically corrected by ScrollPane)
+        Bounds updatedInnerBounds = zoomNode.getBoundsInLocal();
+        this.setHvalue((valX + adjustment.getX()) / (updatedInnerBounds.getWidth() - viewportBounds.getWidth()));
+        this.setVvalue((valY + adjustment.getY()) / (updatedInnerBounds.getHeight() - viewportBounds.getHeight()));
     }
 }

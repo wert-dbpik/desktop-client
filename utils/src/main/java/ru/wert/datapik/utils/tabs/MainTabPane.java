@@ -57,10 +57,12 @@ public class MainTabPane extends TabPane {
 
         AppTab tab = tabIsAvailable(name);
         if(tab == null){
-            tab = new AppTab(name, content, updateTask);
 
-            getTabs().add(tab);//вкладку добавляем к TabPane
-            setContextMenu(createContextMenu());
+                tab = new AppTab(name, content, updateTask);
+
+                getTabs().add(tab);//вкладку добавляем к TabPane
+                setContextMenu(createContextMenu());
+
         }
 
         createTitle(tab, name);
