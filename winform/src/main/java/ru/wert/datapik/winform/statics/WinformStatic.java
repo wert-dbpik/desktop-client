@@ -1,5 +1,6 @@
 package ru.wert.datapik.winform.statics;
 
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -19,6 +20,8 @@ public class WinformStatic {
 
     public static void closeWindow(Event event){
         ((Node) event.getSource()).getScene().getWindow().hide();
+        Platform.exit();
+        System.exit(0);
     }
 
 
