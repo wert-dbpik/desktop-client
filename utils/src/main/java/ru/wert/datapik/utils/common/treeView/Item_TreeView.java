@@ -271,6 +271,21 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
     }
 
     /**
+     * Ищет TreeItem в TreeView по id
+     * @param id Long
+     * @return
+     */
+    public TreeItem<T> findTreeItemById(Long id){
+        List<TreeItem<T>> listTreeItems = findAllChildren(getRoot());
+        listTreeItems.add(getRoot());
+        for(TreeItem<T> treeItem : listTreeItems){
+            if(treeItem.getValue().getId().equals(id))
+                return treeItem;
+        }
+        return null;
+    }
+
+    /**
      * Получить таблицу, с которой взаимодействует каталог treeView
      */
     public CatalogTableView<P, T> getConnectedForm() {
