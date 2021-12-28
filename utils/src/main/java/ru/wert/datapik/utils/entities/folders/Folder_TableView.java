@@ -14,6 +14,7 @@ import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.drafts.Draft_ContextMenu;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
@@ -27,13 +28,13 @@ import java.util.List;
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 
-public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item> {
+public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
 
     private static final String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
     private final _Folder_Commands commands;
 
     private List<Folder> currentItemList = new ArrayList<>();
-    private Folder_ACCController accController;
+    private FormView_ACCController<Item> accController;
     private TreeItem<ProductGroup> selectedItem;
     private Item_TreeView<Folder, ProductGroup> catalogTree;
 
@@ -129,7 +130,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     @Override
     public void easyUpdate(ItemService<Item> service) {
-
+        //No use
     }
 
     @Override
@@ -139,11 +140,21 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     @Override
     public void setAccController(FormView_ACCController<Item> accController) {
-
+        this.accController = accController;
     }
 
     @Override
     public FormView_ACCController<Item> getAccController() {
         return accController;
+    }
+
+    @Override
+    public TreeItem<ProductGroup> getChosenCatalogItem() {
+        return catalogTree.getSelectionModel().getSelectedItem();
+    }
+
+    @Override
+    public TreeItem<ProductGroup> getRootItem() {
+        return catalogTree.getRoot();
     }
 }

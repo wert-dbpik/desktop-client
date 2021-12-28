@@ -17,6 +17,7 @@ import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
+import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
@@ -193,11 +194,11 @@ public abstract class FormView_ACCController<P extends Item>{
         //Определяем дефолтную группу изделий на будущее
         ProductGroup defaultGroup = CH_PRODUCT_GROUPS.findByName("Разное");
         //Определяем нулевую группу в корне дерева, т.к. она нам нужна при нажатии на кнопку GLOBE
-        ProductGroup rootGroup = ((CatalogTableView<P, ProductGroup>)formView).getRootItem().getValue();
+        ProductGroup rootGroup = ((CatalogableTable<ProductGroup>)formView).getRootItem().getValue();
 
         //Потом определяем текущую выделенную группу, если она выбрана
         ProductGroup chosenGroup = null;
-        TreeItem<ProductGroup> productGroupTreeItem = ((CatalogTableView<P, ProductGroup>)formView).getChosenCatalogItem();
+        TreeItem<ProductGroup> productGroupTreeItem = ((CatalogableTable<ProductGroup>)formView).getChosenCatalogItem();
         if(productGroupTreeItem != null)
             chosenGroup = productGroupTreeItem.getValue();
 
