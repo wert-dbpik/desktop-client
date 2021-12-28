@@ -15,24 +15,17 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
-public abstract class ItemTableView<P extends Item>  extends TableView<P> implements ITableView<P>, Searchable<P> {
+public abstract class ItemTableView<P extends Item>  extends TableView<P> implements ITableView<P> {
 
 
-    private final String promptItemName;
+    protected final String promptItemName;
 
     public abstract void setTableColumns();
     public abstract void updateTableView();
     public abstract void createContextMenu();
     public abstract List<P> prepareList();
 
-    @Override//Searchable
-    public abstract void setCurrentItemSearchedList(List<P> currentItemList);
-    @Override//Searchable
-    public abstract List<P> getCurrentItemList();
-    @Override//Searchable
-    public abstract void setSearchedText(String searchedText);
-    @Override//Searchable
-    public abstract String getSearchedText();
+
 
 
     public ItemTableView(String promptText) {
@@ -79,62 +72,9 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
 
     }
 
-    /**
-     * Обновляет данные формы
-     */
-    @Override //Searchable
-    public void updateSearchedView(){
-        List<P> list = getCurrentItemList();
-        List<P> foundList = new ArrayList<>();
-        String searchedText = CH_SEARCH_FIELD.getText();
-        for(P item : list){
-            if(item.toUsefulString().contains(searchedText))
-                foundList.add(item);
-        }
-        updateForm(foundList);
-    }
 
-    /**
-     * Обновляет данные формы
-     */
-    @Override //Searchable
-    public void easyUpdate(ItemService<P> service) {
-        getItems().clear();
-        refresh();
-        String searchedText = getSearchedText();
-//        if (searchedText == null || searchedText.equals(""))
-        List<P> list = service.findAll();
-            setItems(FXCollections.observableArrayList(list));
-            setCurrentItemSearchedList(list);
-//        else
-//            setItems(service.findAllByText(searchedText));
-    }
 
-    @Override //IFormView
-    public List<P> getAllSelectedItems(){
-        return getSelectionModel().getSelectedItems();
-    }
 
-    /**
-     * Устаналивает FocusListener на таблицу
-     * При получении фокуса в поле SearchField появляется подсказка searchName,
-     * либо последняя набранная в SearchField строка searchedText
-     */
-    private void createFocusListener() {
-        focusedProperty().addListener((observable) -> {
-
-            CH_SEARCH_FIELD.setSearchableTableController(this);
-
-            if (getSearchedText() == null || getSearchedText().equals("")) {
-                CH_SEARCH_FIELD.setText("");
-                CH_SEARCH_FIELD.setPromptText(promptItemName);
-            } else {
-                CH_SEARCH_FIELD.setText(getSearchedText());
-            }
-
-        });
-
-    }
 
     /**
      * Метод скрывает заголовок таблицы если столбец всего один
