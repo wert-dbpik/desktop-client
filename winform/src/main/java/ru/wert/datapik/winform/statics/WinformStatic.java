@@ -20,8 +20,10 @@ public class WinformStatic {
 
     public static void closeWindow(Event event){
         ((Node) event.getSource()).getScene().getWindow().hide();
-        Platform.exit();
-        System.exit(0);
+        if(((Node) event.getSource()).getScene().getWindow().equals(WinformStatic.CH_MAIN_STAGE)){
+            Platform.exit();
+            System.exit(0);
+        }
     }
 
 

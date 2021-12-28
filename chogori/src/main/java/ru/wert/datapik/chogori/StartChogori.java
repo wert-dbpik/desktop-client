@@ -99,6 +99,7 @@ public class StartChogori extends Application {
             System.exit(0);
         }
         WinformStatic.CH_MAIN_STAGE = stage;
+
         try {
             //Загружаем WindowDecoration
             FXMLLoader decorationLoader = new FXMLLoader(WindowDecoration.class.getResource("/winform-fxml/window_decoration/window_decoration.fxml"));
