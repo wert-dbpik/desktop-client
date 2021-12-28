@@ -166,9 +166,11 @@ public class PassportsEditorController implements SearchablePane {
         //Подключаем слушатель
         Folder_TableView folderTableView = catalogPatch.getFolderTableView();
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            passportsTable.setSearchedText(""); //обнуляем поисковую строку
-            passportsTable.setModifyingItem(newValue);
-            passportsTable.updateView();
+            if (newValue instanceof Folder) {
+                passportsTable.setSearchedText(""); //обнуляем поисковую строку
+                passportsTable.setModifyingItem(newValue);
+                passportsTable.updateView();
+            }
         });
 
         catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));

@@ -33,7 +33,7 @@ public class Folder_ChangeCommand implements ICommand {
             CH_QUICK_FOLDERS.update(item);
 
             Platform.runLater(()->{
-                tableView.easyUpdate(CH_QUICK_FOLDERS);
+                tableView.updateTableView();
                 tableView.scrollTo(item);
                 tableView.getSelectionModel().select(item);
                 log.info("Изменен пакет {} ", item.toUsefulString());

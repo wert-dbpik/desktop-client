@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.entities.catalogOfFolders.CatalogOfFoldersPatch;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
@@ -47,9 +48,7 @@ public class Folder_Chooser {
 
             //OK
             Button btnOk = (Button)parent.lookup("#btnOk");
-            btnOk.setOnAction((e)->{
-                chosenFolder = folderTableView.getSelectionModel().getSelectedItem();
-            });
+            btnOk.setOnAction(Folder_Chooser::chooseFolder);
 
             new WindowDecoration("Выберите пакет", parent, true,  (Stage)stage, true);
 
@@ -61,7 +60,9 @@ public class Folder_Chooser {
     }
 
     private static void chooseFolder(Event e) {
-        chosenFolder = folderTableView.getSelectionModel().getSelectedItem();
+        Item item = folderTableView.getSelectionModel().getSelectedItem();
+        if(item instanceof Folder)
+            chosenFolder = (Folder) item;
         closeWindow(e);
     }
 

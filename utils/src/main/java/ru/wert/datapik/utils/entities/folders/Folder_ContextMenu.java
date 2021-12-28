@@ -4,6 +4,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 
@@ -19,7 +20,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     private MenuItem blueWaser;
 
 
-    public Folder_ContextMenu(Folder_TableView tableView, _Folder_Commands commands, String productsACCRes) {
+    public Folder_ContextMenu(ItemTableView tableView, _Folder_Commands commands, String productsACCRes) {
         super(tableView, commands, productsACCRes);
         this.commands = commands;
         this.tableView = tableView;

@@ -43,7 +43,7 @@ public class Folder_DeleteCommand implements ICommand {
             }
         }
 
-        tableView.updateCatalogView(tableView.getChosenCatalogItem(), true);
+        tableView.updateTableView();
 
 //            tableView.updateView();
         tableView.scrollTo(row);

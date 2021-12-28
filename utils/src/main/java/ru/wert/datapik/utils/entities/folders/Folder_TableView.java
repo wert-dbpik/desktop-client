@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;

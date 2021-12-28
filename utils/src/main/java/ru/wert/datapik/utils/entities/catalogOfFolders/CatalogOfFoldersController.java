@@ -15,8 +15,11 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.components.BtnRollDown;
 import ru.wert.datapik.utils.common.components.BtnRollUp;
+import ru.wert.datapik.utils.common.tableView.ItemTableView;
+import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch;
@@ -41,9 +44,9 @@ public class CatalogOfFoldersController {
     @FXML
     private Label lblCatalog;
 
-    private ProductGroup_TreeView<Folder> catalogTreeView;
+    private Item_TreeView<Folder, ProductGroup> catalogTreeView;
 
-    @Getter private CatalogTableView<Folder, ProductGroup> folderTableView;
+    @Getter private ItemTableView<Item> folderTableView;
 
 
 
@@ -58,7 +61,7 @@ public class CatalogOfFoldersController {
         createCatalog_TreeView();
         createFolders_TableView();
 
-        catalogTreeView.setConnectedForm(folderTableView);
+//        catalogTreeView.setConnectedForm(folderTableView);
 
     }
 
@@ -80,7 +83,7 @@ public class CatalogOfFoldersController {
         vbCatalog.getChildren().add(catalogTreeView);
 
         catalogTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newGroup) -> {
-            folderTableView.updateCatalogView((TreeItem<ProductGroup>) newGroup, false);
+            folderTableView.updateTableView();
         });
 
     }
@@ -137,7 +140,7 @@ public class CatalogOfFoldersController {
         btnFoldersGlobe.setOnAction((e)->{
 
             Platform.runLater(()->{
-                folderTableView.updateCatalogView(catalogTreeView.getRoot(), true);
+                folderTableView.updateTableView();
                 catalogTreeView.getSelectionModel().select(catalogTreeView.getRoot());
                 folderTableView.getSelectionModel().select(0);
             });

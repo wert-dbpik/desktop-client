@@ -105,9 +105,11 @@ public class DraftsEditorController implements SearchablePane {
         //Подключаем слушатель
         Folder_TableView folderTableView = catalogPatch.getFolderTableView();
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            draftsTable.setSearchedText(""); //обнуляем поисковую строку
-            draftsTable.setModifyingItem(newValue);
-            draftsTable.updateView();
+            if(newValue instanceof Folder) {
+                draftsTable.setSearchedText(""); //обнуляем поисковую строку
+                draftsTable.setModifyingItem(newValue);
+                draftsTable.updateView();
+            }
         });
 
         catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
