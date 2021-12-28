@@ -8,13 +8,14 @@ import ru.wert.datapik.client.entity.serviceREST.FolderService;
 import ru.wert.datapik.client.entity.service_interfaces.IFolderService;
 import ru.wert.datapik.client.exceptions.ItemIsBusyException;
 import ru.wert.datapik.client.interfaces.CatalogService;
+import ru.wert.datapik.client.interfaces.ItemService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.client.utils.BLConst.RAZLOZHENO;
 
-public class FolderQuickService implements IFolderService, CatalogService<Folder> {
+public class FolderQuickService implements IFolderService, CatalogService<Folder>, ItemService<Folder> {
 
     private static FolderQuickService instance;
     private static List<Folder> folders;

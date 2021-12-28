@@ -13,7 +13,9 @@ import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
+import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
+import ru.wert.datapik.utils.entities.drafts.Draft_ContextMenu;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
@@ -25,7 +27,7 @@ import java.util.List;
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 
-public class Folder_TableView extends ItemTableView<Item> {
+public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item> {
 
     private static final String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
     private final _Folder_Commands commands;
@@ -92,7 +94,8 @@ public class Folder_TableView extends ItemTableView<Item> {
 
     @Override
     public void createContextMenu() {
-
+        Folder_ContextMenu contextMenu = new Folder_ContextMenu(this, commands, accWindowRes);
+        setContextMenu(contextMenu);
     }
 
     @Override
@@ -131,7 +134,7 @@ public class Folder_TableView extends ItemTableView<Item> {
 
     @Override
     public List<Item> getAllSelectedItems() {
-        return null;
+        return getSelectionModel().getSelectedItems();
     }
 
     @Override
@@ -141,6 +144,6 @@ public class Folder_TableView extends ItemTableView<Item> {
 
     @Override
     public FormView_ACCController<Item> getAccController() {
-        return null;
+        return accController;
     }
 }

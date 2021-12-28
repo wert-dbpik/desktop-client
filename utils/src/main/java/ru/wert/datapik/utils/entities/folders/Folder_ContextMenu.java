@@ -4,6 +4,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
