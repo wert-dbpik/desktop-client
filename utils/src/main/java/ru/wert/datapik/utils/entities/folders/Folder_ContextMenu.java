@@ -4,10 +4,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
+import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +18,19 @@ import java.util.List;
 public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
     private final _Folder_Commands commands;
-    private TableView<Folder> tableView;
+    private Folder_TableView tableView;
+    private ProductGroup_TreeView<ProductGroup> treeView;
 
-    private MenuItem lickBoots;
-    private MenuItem blueWaser;
+    private MenuItem addProductGroup;
+    private MenuItem changeProductGroup;
+    private MenuItem deleteProductGroup;
 
 
-    public Folder_ContextMenu(ItemTableView tableView, _Folder_Commands commands, String productsACCRes) {
-        super(tableView, commands, productsACCRes);
+    public Folder_ContextMenu(Folder_TableView tableView, ProductGroup_TreeView<ProductGroup> treeView, _Folder_Commands commands, String productsACCRes) {
+        super((ItemTableView)tableView, commands, productsACCRes);
         this.commands = commands;
         this.tableView = tableView;
+        this.treeView = treeView;
 
         createOnShowing();
 
@@ -32,20 +38,38 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
     @Override
     public void createOnShowing() {
-        boolean addItem = true;
-        boolean copyItem =true;
-        boolean changeItem = true;
-        boolean deleteItem = true;
+        boolean addItem = false;
+        boolean copyItem = false;
+        boolean changeItem = false;
+        boolean deleteItem = false;
 
-        List<Folder> selectedFolders = tableView.getSelectionModel().getSelectedItems();
+        List<Item> selectedFolders = tableView.getSelectionModel().getSelectedItems();
 
-        if(selectedFolders.size() == 0){
-            copyItem = false;
-            changeItem = false;
-            deleteItem = false;
-        } else if(selectedFolders.size() > 1){
-            copyItem = false;
-            changeItem = false;
+        if (selectedFolders.size() == 0) {
+            addItem = true;
+        } else if (selectedFolders.size() == 1) {
+            if (selectedFolders.get(0) instanceof Folder) {
+                addItem = true;
+                copyItem = true;
+                changeItem = true;
+                deleteItem = true;
+            } else
+                addItem = true;
+        }else {
+            int countFolders = 0;
+            int countProductGroups = 0;
+            for (Item item : selectedFolders) {
+                if (item instanceof ProductGroup)
+                    countProductGroups++;
+                else
+                    countFolders++;
+            }
+            if(countFolders == 0 || (countFolders > 0 && countProductGroups > 0)){
+                addItem = true;
+            } else if(countProductGroups == 0){
+                deleteItem = true;
+                addItem = true;
+            }
         }
 
         createMenu(addItem, copyItem, changeItem, deleteItem);
@@ -53,17 +77,51 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
     @Override
     public List<MenuItem> createExtraItems(){
+        boolean extraAddProductGroup = false;
+        boolean extraChangeProductGroup = false;
+        boolean extraDeleteProductGroup = false;
+
 
         List<MenuItem> extraItems = new ArrayList<>();
-        lickBoots = new MenuItem("Лизать сапог");
+        addProductGroup = new MenuItem("Добавить директорию");
+        changeProductGroup = new MenuItem("Изменить");
+        deleteProductGroup = new MenuItem("Удалить");
 
-        lickBoots.setOnAction(commands::lick);
-        blueWaser = new MenuItem("Блевать в вазу");
+        _ProductGroup_Commands productGroup_commands = new _ProductGroup_Commands(treeView);
+//        addProductGroup.setOnAction(productGroup_commands::add);
+//        changeProductGroup.setOnAction(productGroup_commands.change);
+//        deleteProductGroup.setOnAction(productGroup_commands::delete);
 
-        List<Folder> selectedFolders = tableView.getSelectionModel().getSelectedItems();
 
-        if(selectedFolders.size() == 1) extraItems.add(lickBoots);
-        if(selectedFolders.size() == 1) extraItems.add(blueWaser);
+        List<Item> selectedFolders = tableView.getSelectionModel().getSelectedItems();
+
+        if (selectedFolders.size() == 0 || (selectedFolders.size() == 1 && !(selectedFolders.get(0) instanceof ProductGroup))) {
+            extraAddProductGroup = true;
+        } else if (selectedFolders.size() == 1 && selectedFolders.get(0) instanceof ProductGroup){
+            extraAddProductGroup = true;
+            extraChangeProductGroup = true;
+            extraDeleteProductGroup = true;
+        } else if (selectedFolders.size() > 1) {
+            int countFolders = 0;
+            int countProductGroups = 0;
+            for (Item item : selectedFolders) {
+                if (item instanceof ProductGroup)
+                    countProductGroups++;
+                else
+                    countFolders++;
+            }
+            if (countFolders == 0) {
+                extraAddProductGroup = true;
+                extraDeleteProductGroup = true;
+            } else if (countProductGroups == 0 || (countProductGroups > 0 && countFolders > 0)) {
+                extraAddProductGroup = true;
+            }
+        }
+
+
+        if (extraAddProductGroup) extraItems.add(addProductGroup);
+        if (extraChangeProductGroup) extraItems.add(changeProductGroup);
+        if (extraDeleteProductGroup) extraItems.add(deleteProductGroup);
 
         return extraItems;
     }

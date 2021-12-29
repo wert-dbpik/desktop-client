@@ -1,24 +1,24 @@
 package ru.wert.datapik.utils.entities.folders;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
-import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
+import ru.wert.datapik.utils.common.interfaces.FormViewControlIml;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
-import ru.wert.datapik.utils.entities.drafts.Draft_ContextMenu;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
-import ru.wert.datapik.utils.common.commands.ItemCommands;
-import ru.wert.datapik.utils.common.tableView.CatalogTableView;
-import ru.wert.datapik.utils.common.treeView.Item_TreeView;
+import ru.wert.datapik.utils.entities.product_groups.ProductGroup_ContextMenu;
+import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,22 +34,27 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     private List<Folder> currentItemList = new ArrayList<>();
     private FormView_ACCController<Item> accController;
     private TreeItem<ProductGroup> selectedItem;
-    private Item_TreeView<Folder, ProductGroup> catalogTree;
+    @Getter private ProductGroup_TreeView<ProductGroup> catalogTree;
+
     private Folder_ContextMenu contextMenu;
 
-
-    public Folder_TableView(Item_TreeView<Folder, ProductGroup> catalogTree, String prompt) {
+    public Folder_TableView(ProductGroup_TreeView<ProductGroup> catalogTree, String prompt) {
         super(prompt);
         this.catalogTree = catalogTree;
+
+        new FormViewControlIml(this, catalogTree);
 
         commands = new _Folder_Commands(this);
         createContextMenu();
 
+        //При двойном клике на верхнюю строку, поднимаемся по списку выше
+        //При двойном клике на папку открываем папку
+        //При клике правой кнопку по пустой строке снимаем всякое выделение
         setRowFactory( tv -> {
             TableRow<Item> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
+                Item rowData = row.getItem();
                 if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2 && (! row.isEmpty()) ) {
-                    Item rowData = row.getItem();
                     if(rowData instanceof ProductGroup){
                         if(rowData == selectedItem.getValue()){
                             selectedItem = catalogTree.findTreeItemById(((ProductGroup) rowData).getParentId());
@@ -59,22 +64,12 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
                         catalogTree.getSelectionModel().select(selectedItem);
                     }
                 }
-
-                if(event.getButton().equals(MouseButton.SECONDARY)){
-                    if(row.isEmpty()){
-                        getSelectionModel().clearSelection();
-                    }
+                if (row.isEmpty()) {
+                    getSelectionModel().clearSelection();
                 }
             });
-            return row ;
-        });
 
-        setOnContextMenuRequested(e->{
-            List<Item> items = getSelectionModel().getSelectedItems();
-            for(Item i : items){
-                if(i instanceof ProductGroup)
-                    getContextMenu().hide();
-            }
+            return row ;
         });
 
     }
@@ -107,7 +102,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     @Override
     public void createContextMenu() {
-        contextMenu = new Folder_ContextMenu(this, commands, accWindowRes);
+        contextMenu = new Folder_ContextMenu(this, catalogTree, commands, accWindowRes);
         setContextMenu(contextMenu);
     }
 
@@ -169,4 +164,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     public TreeItem<ProductGroup> getRootItem() {
         return catalogTree.getRoot();
     }
+
+
 }

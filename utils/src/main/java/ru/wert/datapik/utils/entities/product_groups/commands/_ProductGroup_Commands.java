@@ -1,6 +1,7 @@
 package ru.wert.datapik.utils.entities.product_groups.commands;
 
 import javafx.event.Event;
+import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
@@ -34,7 +35,8 @@ public class _ProductGroup_Commands implements ItemCommands<ProductGroup> {
 
     @Override
     public void delete(Event event, List<ProductGroup> items){
-        ICommand command = new ProductGroup_DeleteCommand(items.get(0), treeView);
+        TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(items.get(0).getId());
+        ICommand command = new ProductGroup_DeleteCommand(selectedTreeItem, treeView);
         command.execute();
     }
 

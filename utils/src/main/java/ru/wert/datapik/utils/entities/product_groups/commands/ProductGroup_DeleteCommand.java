@@ -19,7 +19,7 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class ProductGroup_DeleteCommand implements ICommand {
 
-    private ProductGroup item;
+    private TreeItem<ProductGroup> item;
     private ProductGroup_TreeView<ProductGroup> treeView;
 
     private List<ProductGroup> productGroups, notDeletedProductGroups;
@@ -30,7 +30,7 @@ public class ProductGroup_DeleteCommand implements ICommand {
      *
      * @param treeView ProductGroup_TreeView
      */
-    public ProductGroup_DeleteCommand(ProductGroup item, ProductGroup_TreeView<ProductGroup> treeView) {
+    public ProductGroup_DeleteCommand(TreeItem<ProductGroup> item, ProductGroup_TreeView<ProductGroup> treeView) {
         this.item = item;
         this.treeView = treeView;
 
@@ -44,17 +44,16 @@ public class ProductGroup_DeleteCommand implements ICommand {
     @Override
     public void execute() {
         //После удаления таблица "подтянется вверх" и поэтому нужна позиция первого из удаляемых элементов
-        int row = treeView.getSelectionModel().getSelectedIndex();
-        TreeItem<ProductGroup> treeItem = treeView.getSelectionModel().getSelectedItem();
+        int row = treeView.getRow(item);
             try {
 
-                List<TreeItem<ProductGroup>> allDeletingTreeItems  = treeView.findAllChildren(treeItem);
+                List<TreeItem<ProductGroup>> allDeletingTreeItems  = treeView.findAllChildren(item);
 
                 //Посчитаем удаляемые папки
                 for(TreeItem<ProductGroup> pgItem : allDeletingTreeItems){
                     productGroups.add(pgItem.getValue());
                 }
-                productGroups.add(treeItem.getValue()); //Добавляем исходную
+                productGroups.add(item.getValue()); //Добавляем исходную
 
                 //Посчитаем удаляемые изделия
                 for(ProductGroup pg : productGroups){
@@ -66,7 +65,7 @@ public class ProductGroup_DeleteCommand implements ICommand {
                     deleteProductGroups();
                 } else {
                     boolean answer = Warning2.create($ATTENTION, String.format("Вы уверены, что хотите удалить папку '%s'\n" +
-                            "и все входящие в папку изделия?", item.getName()), "Востановить удаленное будет трудно!");
+                            "и все входящие в папку изделия?", item.getValue().getName()), "Востановить удаленное будет трудно!");
                     if(answer) {
                         deleteProducts();
                         deleteProductGroups();
@@ -83,7 +82,7 @@ public class ProductGroup_DeleteCommand implements ICommand {
             } catch (Exception e) {
                 Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
                 log.error("При удалении группы изделий {} произошла ошибка {} по причине {}",
-                        item.getName(), e.getMessage(), e.getCause());
+                        item.getValue().getName(), e.getMessage(), e.getCause());
             }
 
     }

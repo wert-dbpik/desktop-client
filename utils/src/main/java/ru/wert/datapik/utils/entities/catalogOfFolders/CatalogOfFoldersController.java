@@ -44,7 +44,7 @@ public class CatalogOfFoldersController {
     @FXML
     private Label lblCatalog;
 
-    private Item_TreeView<Folder, ProductGroup> catalogTreeView;
+    private ProductGroup_TreeView<ProductGroup> catalogTreeView;
 
     @Getter private ItemTableView<Item> folderTableView;
 
