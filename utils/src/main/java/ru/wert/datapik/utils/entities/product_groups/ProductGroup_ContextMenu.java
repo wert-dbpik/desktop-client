@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.product_groups;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -45,12 +46,14 @@ public class ProductGroup_ContextMenu extends FormView_ContextMenu<ProductGroup>
         }
 
         createMenu(addItem, copyItem, changeItem, deleteItem);
+
+        setAddMenuName("Добавить директорию");
     }
 
     public List<MenuItem> createExtraItems(){
 
         List<MenuItem> extraItems = new ArrayList<>();
-        mAddProduct = new MenuItem("Добавить изделие");
+        mAddProduct = new MenuItem("Добавить пакет");
         mAddProduct.setOnAction(commands::addProductToFolder);
 
         List<ProductGroup> selectedTreeGroups = treeView.getSelectionModel().getSelectedItems();

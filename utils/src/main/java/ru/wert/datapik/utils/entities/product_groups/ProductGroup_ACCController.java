@@ -2,14 +2,14 @@ package ru.wert.datapik.utils.entities.product_groups;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.*;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
@@ -32,6 +32,8 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
     @FXML
     private Button btnOk;
+
+    private TableView<Item> tableView = null;
 
     private ProductGroup focusedItem;
     private ProductGroup copiedGroup;
@@ -76,8 +78,11 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
     public ProductGroup getNewItem() {
 
         Long parentId;
-        TreeItem<ProductGroup> chosenItem = ((Item_TreeView<Product, ProductGroup>)formView)
-                .getSelectionModel().getSelectedItem();
+        TreeItem<ProductGroup> chosenItem = null;
+        if (tableView == null)
+            chosenItem = ((Item_TreeView<Product, ProductGroup>) formView).getSelectionModel().getSelectedItem();
+        else
+            chosenItem = treeView.findTreeItemById(tableView.getSelectionModel().getSelectedItem().getId());
 
         if(chosenItem == null ) {
             parentId = treeView.getRoot().getValue().getId(); //=1L
@@ -100,15 +105,24 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
         return group;
     }
 
-
+    public void setTableView(TableView<Item> tableView) {
+        this.tableView = tableView;
+    }
 
     @Override
     public void fillFieldsOnTheForm(ProductGroup oldItem) {
+        if(tableView != null) {
+            oldItem = ((ProductGroup)tableView.getSelectionModel().getSelectedItem());
+        }
         tfName.setText(oldItem.getName());
+
     }
 
     @Override
     public void changeOldItemFields(ProductGroup oldItem) {
+        if(tableView != null) {
+            oldItem = ((ProductGroup)tableView.getSelectionModel().getSelectedItem());
+        }
         oldItem.setName(tfName.getText().trim());
     }
 
@@ -116,5 +130,6 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
     public void showEmptyForm() {
 
     }
+
 
 }

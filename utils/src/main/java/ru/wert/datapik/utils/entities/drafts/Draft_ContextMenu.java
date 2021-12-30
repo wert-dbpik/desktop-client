@@ -62,6 +62,8 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
 
         createMenu(addItem, copyItem, changeItem, deleteItem);
+
+        setAddMenuName("Добавить чертеж");
     }
 
     @Override
@@ -69,7 +71,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         List<MenuItem> extraItems = new ArrayList<>();
 
-        renameDraft = new MenuItem("Переименовать");
+        renameDraft = new MenuItem("Переименовать чертеж");
         renameDraft.setOnAction(commands::renameDraft);
 
         replaceDraft = new MenuItem("Заменить");
@@ -81,7 +83,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         openInTab = new MenuItem("Открыть в отдельной вкладке" );
         openInTab.setOnAction(commands::openInTab);
 
-        addFolder = new MenuItem("Добавить папку");
+        addFolder = new MenuItem("Добавить папку с чертежами");
         addFolder.setOnAction(commands::addFromFolder);
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();

@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.product_groups;
 
+import lombok.Getter;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
@@ -12,7 +13,8 @@ import java.util.List;
 
 public class ProductGroup_TreeView<P extends Item> extends Item_TreeView<P, ProductGroup> {
 
-    private static final String accWindowRes = "/utils-fxml/productGroup/productGroupACC.fxml";
+    @Getter
+    private String accWindowRes = "/utils-fxml/productGroup/productGroupACC.fxml";
     private _ProductGroup_Commands commands;
     private ProductGroup_ContextMenu contextMenu;
     private List<ProductGroup> currentItemList;

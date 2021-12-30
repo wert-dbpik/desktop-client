@@ -53,6 +53,11 @@ public abstract class FormView_ContextMenu<P extends Item> extends ContextMenu {
     }
 
 
+    protected void setAddMenuName(String name){
+        ADD.setText(name);
+    }
+
+
     protected void createMenu(boolean addItem, boolean copyItem, boolean changeItem, boolean deleteItem){
 
         getItems().clear();

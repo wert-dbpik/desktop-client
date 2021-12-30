@@ -28,7 +28,7 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 
 public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
 
-    private static final String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
+    private String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
     private final _Folder_Commands commands;
 
     private List<Folder> currentItemList = new ArrayList<>();

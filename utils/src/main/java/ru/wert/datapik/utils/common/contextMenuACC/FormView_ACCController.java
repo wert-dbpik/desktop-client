@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.StackPane;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Prefix;
@@ -40,13 +41,15 @@ public abstract class FormView_ACCController<P extends Item>{
     protected ItemCommands<P> commands;
     protected IFormView<P> formView;
     protected ItemService<P> service;
-    private P oldItem;
+    protected P oldItem;
     private Task<Void> manipulation;
     private StackPane spIndicator;
+
 
     public abstract void init(EOperation operation, IFormView<P> formView, ItemCommands<P> commands);
     public abstract ArrayList<String> getNotNullFields();
     public abstract P getNewItem();
+//    public abstract void setChosenItem(TreeItem<P> chosenItem);
     public abstract void fillFieldsOnTheForm(P oldItem);
     public abstract void changeOldItemFields(P oldItem);
     public abstract void showEmptyForm();
