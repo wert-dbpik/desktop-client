@@ -79,9 +79,9 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
         Long parentId;
         TreeItem<ProductGroup> chosenItem = null;
-        if (tableView == null)
+        if (tableView == null) //Если мы имеем дело только с деревом каталогом
             chosenItem = ((Item_TreeView<Product, ProductGroup>) formView).getSelectionModel().getSelectedItem();
-        else
+        else //Если имеем дело с таблицей и деревом каталога
             chosenItem = treeView.findTreeItemById(tableView.getSelectionModel().getSelectedItem().getId());
 
         if(chosenItem == null ) {

@@ -38,6 +38,7 @@ public class FormViewACCWindow<P extends Item> {
 
     public Parent create(EOperation op, IFormView<P> formView, ItemCommands<P> commands, String res, TableView<Item> tableView){
         this.tableView = tableView;
+
         return create(op, formView, commands, res);
     }
 
