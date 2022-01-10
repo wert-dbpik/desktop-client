@@ -1,9 +1,12 @@
 package ru.wert.datapik.utils.entities.product_groups.commands;
 
 import javafx.event.Event;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.products.Product_TableView;
 import ru.wert.datapik.utils.entities.products.commands._Product_Commands;
@@ -14,9 +17,15 @@ import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.List;
 
-public class _ProductGroup_Commands implements ItemCommands<ProductGroup> {
+public class _ProductGroup_Commands<P extends Item> implements ItemCommands<ProductGroup> {
 
+    private IFormView<P> tableView = null; //Таблица каталога, которая обновляется вместе с деревом
     private final ProductGroup_TreeView treeView;
+
+    public _ProductGroup_Commands(ProductGroup_TreeView treeView, IFormView<P> tableView) {
+        this.treeView = treeView;
+        this.tableView = tableView;
+    }
 
     public _ProductGroup_Commands(ProductGroup_TreeView treeView) {
         this.treeView = treeView;
@@ -42,7 +51,7 @@ public class _ProductGroup_Commands implements ItemCommands<ProductGroup> {
 
     @Override
     public void change(Event event, ProductGroup item){
-        ICommand command = new ProductGroup_ChangeCommand(item, treeView);
+        ICommand command = new ProductGroup_ChangeCommand(item, treeView, tableView);
         command.execute();
     }
 

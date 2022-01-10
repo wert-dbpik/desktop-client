@@ -105,6 +105,11 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
         return group;
     }
 
+    @Override
+    public ProductGroup getOldItem() {
+        return treeView.getSelectionModel().getSelectedItems().get(0).getValue();
+    }
+
     public void setTableView(TableView<Item> tableView) {
         this.tableView = tableView;
     }

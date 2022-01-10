@@ -3,16 +3,14 @@ package ru.wert.datapik.utils.common.contextMenuACC;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TableView;
-import ru.wert.datapik.client.entity.models.ProductGroup;
-import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
-import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_ACCController;
 import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
+
 import java.io.IOException;
 
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
@@ -55,6 +53,7 @@ public class FormViewACCWindow<P extends Item> {
 
             windowCreationAllowed = true;
 
+            //
             if(accController instanceof ProductGroup_ACCController && tableView != null)
                 ((ProductGroup_ACCController)accController).setTableView(tableView);
 

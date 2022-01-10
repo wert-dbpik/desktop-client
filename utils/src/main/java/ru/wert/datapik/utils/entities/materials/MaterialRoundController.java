@@ -152,6 +152,11 @@ public class MaterialRoundController extends MaterialCommonTypeController {
     }
 
     @Override
+    public Material getOldItem() {
+        return materialAccController.getOldItem();
+    }
+
+    @Override
     public void fillFieldsOnTheForm(Material oldItem) {
         //------------------- поля этого класса ----------------
         materialTreeGroup = oldItem.getCatalogGroup();

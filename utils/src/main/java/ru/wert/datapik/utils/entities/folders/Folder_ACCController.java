@@ -115,6 +115,11 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     }
 
     @Override
+    public Folder getOldItem() {
+        return getOldItem();
+    }
+
+    @Override
     public void fillFieldsOnTheForm(Folder oldItem) {
         bxPrefix.setValue(getPrefixInDecNumber(oldItem.getDecNumber()));
         tfNumber.setText(getShortDecNumber(oldItem.getDecNumber()));

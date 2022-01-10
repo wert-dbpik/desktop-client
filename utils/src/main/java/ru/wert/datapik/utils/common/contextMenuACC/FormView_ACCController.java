@@ -20,6 +20,7 @@ import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
+import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.winform.warnings.Warning1;
@@ -49,10 +50,12 @@ public abstract class FormView_ACCController<P extends Item>{
     public abstract void init(EOperation operation, IFormView<P> formView, ItemCommands<P> commands);
     public abstract ArrayList<String> getNotNullFields();
     public abstract P getNewItem();
+    public abstract P getOldItem();
 //    public abstract void setChosenItem(TreeItem<P> chosenItem);
     public abstract void fillFieldsOnTheForm(P oldItem);
     public abstract void changeOldItemFields(P oldItem);
     public abstract void showEmptyForm();
+
 //    public abstract void setFocusedItem(P focusedItem);
 
     protected void initSuper(EOperation operation, IFormView<P> formView, ItemCommands<P> commands, ItemService<P> service) {
@@ -66,13 +69,16 @@ public abstract class FormView_ACCController<P extends Item>{
 
     }
 
-    protected void setInitialValues(){
-        if(operation.equals(CHANGE) || operation.equals(COPY) || operation.equals(EOperation.REPLACE)){
-            List<P> items = formView.getAllSelectedItems();
-            oldItem = items.get(0);
-            fillFieldsOnTheForm(oldItem);
+    protected void setInitialValues() {
+        if (operation.equals(CHANGE) || operation.equals(COPY) || operation.equals(EOperation.REPLACE)) {
+                oldItem = getOldItem();
+
+//                List<P> items = formView.getAllSelectedItems();
+//                oldItem = items.get(0);
+                System.out.println("old Item = " + oldItem.getName());
+                fillFieldsOnTheForm(oldItem);
         }
-        if(operation.equals(ADD) || operation.equals(EOperation.ADD_FOLDER)){
+        if (operation.equals(ADD) || operation.equals(EOperation.ADD_FOLDER)) {
             showEmptyForm();
         }
     }
@@ -88,6 +94,7 @@ public abstract class FormView_ACCController<P extends Item>{
             return;
         }
         P newItem = getNewItem();
+
         manipulation = manipulationTask(operation, event, spIndicator, btnOk, newItem);
         if(spIndicator != null) spIndicator.setVisible(true);
         if(btnOk != null) btnOk.setDisable(true);
@@ -102,6 +109,7 @@ public abstract class FormView_ACCController<P extends Item>{
 
             @Override
             protected Void call() throws Exception {
+                //ДОБАВЛЕНИЕ
                 if(operation.equals(ADD)){
                     //Проверка чертежей сложнее и вынесена отдельно
                     if(formView instanceof Draft_TableView){
@@ -114,6 +122,7 @@ public abstract class FormView_ACCController<P extends Item>{
                     }
                     commands.add(event, newItem);
                 }
+                //КОПИРОВАНИЕ
                 if(operation.equals(COPY)) {
                     if(isDuplicated(newItem, null)) {
                         Platform.runLater(()->AppStatic.closeWindow(event));
@@ -121,6 +130,7 @@ public abstract class FormView_ACCController<P extends Item>{
                     }
                     commands.add(event, newItem);
                 }
+                //ЗАМЕНА
                 else if(operation.equals(CHANGE)) {
                     if(isDuplicated(newItem, oldItem)){
                         Platform.runLater(()-> Warning1.create($ATTENTION, $ITEM_EXISTS,$USE_ORIGINAL_ITEM));

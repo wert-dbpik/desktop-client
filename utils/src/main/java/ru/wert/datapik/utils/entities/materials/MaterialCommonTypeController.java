@@ -44,6 +44,8 @@ abstract class MaterialCommonTypeController extends FormView_ACCController<Mater
 
     }
 
+
+
     /**
      * Возвращает новую запись из таблицы AnyPart
      */

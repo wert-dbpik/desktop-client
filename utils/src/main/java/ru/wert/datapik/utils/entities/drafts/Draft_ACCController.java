@@ -703,6 +703,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return newDraft;
     }
 
+    @Override
+    public Draft getOldItem() {
+        return tableView.getSelectionModel().getSelectedItems().get(0);
+    }
+
     /**
      * Метод заполняет поля формы сохраненного ранее в БД чертежа
      * @param oldItem Draft
