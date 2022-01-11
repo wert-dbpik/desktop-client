@@ -153,7 +153,7 @@ public class MaterialRoundController extends MaterialCommonTypeController {
 
     @Override
     public Material getOldItem() {
-        return materialAccController.getOldItem();
+        return formView.getAllSelectedItems().get(0);
     }
 
     @Override

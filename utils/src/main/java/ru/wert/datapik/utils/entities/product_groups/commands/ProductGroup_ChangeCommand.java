@@ -19,7 +19,7 @@ public class ProductGroup_ChangeCommand<P extends Item> implements ICommand {
 
     private ProductGroup item;
     private ProductGroup_TreeView treeView;
-    private IFormView<P> tableView = null;
+    private IFormView<P> tableView;
 
     /**
      *

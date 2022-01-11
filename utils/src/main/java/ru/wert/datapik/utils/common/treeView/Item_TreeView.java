@@ -199,7 +199,7 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
         for (TreeItem<T> treeItem : list2) {
             //Если узел присутствует в новом листе
             if (expandedMap.containsKey((treeItem.getValue()).getId()))
-                //меняем его состояние исходя из того, как оно сохраненио в HashMap
+                //меняем его состояние исходя из того, как оно сохранено в HashMap
                 treeItem.setExpanded(expandedMap.get((treeItem.getValue()).getId()));
         }
     }

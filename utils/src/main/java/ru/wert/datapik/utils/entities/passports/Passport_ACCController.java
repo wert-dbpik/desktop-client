@@ -60,6 +60,11 @@ public class Passport_ACCController extends FormView_ACCController<Passport> {
     }
 
     @Override
+    public Passport getOldItem() {
+        return formView.getAllSelectedItems().get(0);
+    }
+
+    @Override
     public void fillFieldsOnTheForm(Passport oldItem) {
         Passport oldPassport = (Passport) oldItem;
 

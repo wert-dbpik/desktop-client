@@ -147,6 +147,11 @@ public class Product_ACCController extends FormView_ACCController<Product> {
         );
     }
 
+    @Override
+    public Product getOldItem() {
+        return formView.getAllSelectedItems().get(0);
+    }
+
 
     @Override
     public void fillFieldsOnTheForm(Product oldItem) {

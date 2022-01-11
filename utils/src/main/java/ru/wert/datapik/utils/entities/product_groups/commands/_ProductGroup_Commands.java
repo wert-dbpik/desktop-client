@@ -33,7 +33,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     @Override
     public void add(Event event, ProductGroup newItem){
-        ICommand command = new ProductGroup_AddCommand(newItem, treeView);
+        ICommand command = new ProductGroup_AddCommand(newItem, treeView, tableView);
         command.execute();
     }
 
@@ -45,7 +45,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     @Override
     public void delete(Event event, List<ProductGroup> items){
         TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(items.get(0).getId());
-        ICommand command = new ProductGroup_DeleteCommand(selectedTreeItem, treeView);
+        ICommand command = new ProductGroup_DeleteCommand(selectedTreeItem, treeView, tableView);
         command.execute();
     }
 

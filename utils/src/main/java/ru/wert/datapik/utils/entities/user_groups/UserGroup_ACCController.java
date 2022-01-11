@@ -123,6 +123,11 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
     }
 
     @Override
+    public UserGroup getOldItem() {
+        return formView.getAllSelectedItems().get(0);
+    }
+
+    @Override
     public void fillFieldsOnTheForm(UserGroup oldItem) {
 
         tfUserGroupName.setText(oldItem.getName());

@@ -10,5 +10,9 @@ public interface CatalogableTable <T extends CatalogGroup>{
 
     TreeItem<T> getRootItem();
 
+    TreeItem<T> getSelectedTreeItem();
+
+    void setSelectedTreeItem(TreeItem<T> item);
+
 
 }

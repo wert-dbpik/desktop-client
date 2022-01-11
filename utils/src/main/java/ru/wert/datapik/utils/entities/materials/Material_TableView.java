@@ -4,6 +4,7 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TreeItem;
 import lombok.Getter;
 import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Material;
@@ -143,4 +144,13 @@ public class Material_TableView extends CatalogTableView<Material, MaterialGroup
     }
 
 
+    @Override
+    public TreeItem<MaterialGroup> getSelectedTreeItem() {
+        return null;
+    }
+
+    @Override
+    public void setSelectedTreeItem(TreeItem<MaterialGroup> item) {
+
+    }
 }

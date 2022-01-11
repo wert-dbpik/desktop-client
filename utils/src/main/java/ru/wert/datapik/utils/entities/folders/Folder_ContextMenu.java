@@ -154,7 +154,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     }
 
     private void deleteProductGroups(Event e){
-
+        productGroup_commands.delete(e, tableView.getAllSelectedItems());
     }
 
 

@@ -1,9 +1,14 @@
 package ru.wert.datapik.utils.entities.product_groups.commands;
 
+import javafx.application.Platform;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.winform.warnings.Warning1;
@@ -17,10 +22,11 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PRODUCTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
-public class ProductGroup_DeleteCommand implements ICommand {
+public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
 
     private TreeItem<ProductGroup> item;
     private ProductGroup_TreeView<ProductGroup> treeView;
+    private IFormView<P> tableView = null;
 
     private List<ProductGroup> productGroups, notDeletedProductGroups;
     private List<Product> products, notDeletedProducts;
@@ -30,9 +36,10 @@ public class ProductGroup_DeleteCommand implements ICommand {
      *
      * @param treeView ProductGroup_TreeView
      */
-    public ProductGroup_DeleteCommand(TreeItem<ProductGroup> item, ProductGroup_TreeView<ProductGroup> treeView) {
+    public ProductGroup_DeleteCommand(TreeItem<ProductGroup> item, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView) {
         this.item = item;
         this.treeView = treeView;
+        this.tableView = tableView;
 
         productGroups = new ArrayList<>();
         products = new ArrayList<>();
@@ -112,8 +119,22 @@ public class ProductGroup_DeleteCommand implements ICommand {
     }
 
     private void update(int row) {
-        treeView.updateView();
-        treeView.getSelectionModel().select(row);
-        treeView.scrollTo(row);
+        Platform.runLater(() -> {
+            treeView.updateView();
+            if (tableView == null) {
+                treeView.getSelectionModel().select(row);
+                treeView.scrollTo(row);
+            } else {
+                int treeRow = treeView.getFocusModel().getFocusedIndex();
+                treeView.getSelectionModel().select(treeRow);
+                treeView.scrollTo(treeRow);
+                int trow = ((TableView<?>) tableView).getSelectionModel().getSelectedIndex();
+                ((ItemTableView<?>) tableView).updateTableView();
+                ((ItemTableView<?>) tableView).getSelectionModel().select(trow);
+                ((ItemTableView<?>) tableView).scrollTo(trow);
+            }
+
+        });
+
     }
 }

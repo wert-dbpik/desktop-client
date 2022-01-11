@@ -153,6 +153,11 @@ public class MaterialProfileController extends MaterialCommonTypeController {
     }
 
     @Override
+    public Material getOldItem() {
+        return formView.getAllSelectedItems().get(0);
+    }
+
+    @Override
     public void fillFieldsOnTheForm(Material oldItem) {
         //------------------- поля этого класса ----------------
         materialTreeGroup = oldItem.getCatalogGroup();

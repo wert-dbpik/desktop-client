@@ -91,6 +91,11 @@ public class User_ACCController extends FormView_ACCController<User> {
     }
 
     @Override
+    public User getOldItem() {
+        return formView.getAllSelectedItems().get(0);
+    }
+
+    @Override
     public void fillFieldsOnTheForm(User oldItem) {
         User oldUser = (User) oldItem;
         txtFldUserName.setText(oldUser.getName());

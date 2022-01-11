@@ -101,6 +101,10 @@ public class MaterialGroup_ACCController extends FormView_ACCController<Material
         return group;
     }
 
+    @Override
+    public MaterialGroup getOldItem() {
+        return formView.getAllSelectedItems().get(0);
+    }
 
 
     @Override

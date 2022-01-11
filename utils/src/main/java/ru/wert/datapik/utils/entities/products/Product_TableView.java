@@ -1,6 +1,7 @@
 package ru.wert.datapik.utils.entities.products;
 
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
@@ -86,5 +87,15 @@ public class Product_TableView extends  CatalogTableView<Product, ProductGroup>{
     @Override
     public FormView_ACCController<Product> getAccController() {
         return accController;
+    }
+
+    @Override
+    public TreeItem<ProductGroup> getSelectedTreeItem() {
+        return null;
+    }
+
+    @Override
+    public void setSelectedTreeItem(TreeItem<ProductGroup> item) {
+
     }
 }

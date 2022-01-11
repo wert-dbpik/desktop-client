@@ -1,7 +1,6 @@
 package ru.wert.datapik.utils.entities.folders;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -16,9 +15,7 @@ import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
-import ru.wert.datapik.utils.entities.product_groups.ProductGroup_ContextMenu;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
-import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +30,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     private List<Folder> currentItemList = new ArrayList<>();
     private FormView_ACCController<Item> accController;
-    private TreeItem<ProductGroup> selectedItem;
+    @Getter private TreeItem<ProductGroup> selectedTreeItem;
     @Getter private ProductGroup_TreeView<ProductGroup> catalogTree;
 
     private Folder_ContextMenu contextMenu;
@@ -42,7 +39,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         super(prompt);
         this.catalogTree = catalogTree;
 
-        new FormViewControlIml(this, catalogTree);
+        new FormViewControlIml(this, catalogTree, this);
 
         commands = new _Folder_Commands(this);
         createContextMenu();
@@ -56,12 +53,13 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
                 Item rowData = row.getItem();
                 if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     if(rowData instanceof ProductGroup){
-                        if(rowData == selectedItem.getValue()){
-                            selectedItem = catalogTree.findTreeItemById(((ProductGroup) rowData).getParentId());
+                        if(rowData == selectedTreeItem.getValue()){
+                            selectedTreeItem = catalogTree.findTreeItemById(((ProductGroup) rowData).getParentId());
                         } else {
-                            selectedItem = catalogTree.findTreeItemById(rowData.getId());
+                            selectedTreeItem = catalogTree.findTreeItemById(rowData.getId());
                         }
-                        catalogTree.getSelectionModel().select(selectedItem);
+//                        catalogTree.getSelectionModel().select(selectedItem);
+                        updateNow();
                     }
                 }
                 if (row.isEmpty()) {
@@ -74,19 +72,24 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     }
 
+
+
     @Override
     public void updateTableView() {
+        //Находим выделенный элемент в дереве каталогов
+        selectedTreeItem = catalogTree.getSelectionModel().getSelectedItem();
+        updateNow();
+    }
 
+    private void updateNow() {
         List<Item> items = new ArrayList<>();
-
-        selectedItem = catalogTree.getSelectionModel().getSelectedItem();
-        if (selectedItem == null) selectedItem = catalogTree.getRoot();
-        ProductGroup selectedGroup = selectedItem.getValue();
+        if (selectedTreeItem == null) selectedTreeItem = catalogTree.getRoot();
+        ProductGroup selectedGroup = selectedTreeItem.getValue();
         //Добавим верхнюю строку в список, потом она превратится в троеточие
         //Корневой элемент в список не добавляем
-        if(selectedItem != catalogTree.getRoot())
-            items.add(selectedItem.getValue());
-        List<TreeItem<ProductGroup>> children = selectedItem.getChildren();
+        if(selectedTreeItem != catalogTree.getRoot())
+            items.add(selectedTreeItem.getValue());
+        List<TreeItem<ProductGroup>> children = selectedTreeItem.getChildren();
         for (TreeItem<ProductGroup> ti : children) {
             items.add(ti.getValue());
         }
@@ -97,7 +100,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         getItems().clear();
         refresh();
         getItems().addAll(items);
-
     }
 
     @Override
@@ -118,7 +120,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
             Label label = new Label();
             Item item = cd.getValue();
             if(item instanceof ProductGroup) {
-                if(item.equals(selectedItem.getValue())){
+                if(item.equals(selectedTreeItem.getValue())){
                     label.setText("< . . . >");
                 }else {
                     label.setText(item.toUsefulString());
@@ -163,6 +165,11 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Override
     public TreeItem<ProductGroup> getRootItem() {
         return catalogTree.getRoot();
+    }
+
+    @Override
+    public void setSelectedTreeItem(TreeItem<ProductGroup> item) {
+
     }
 
 

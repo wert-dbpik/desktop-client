@@ -17,14 +17,17 @@ import ru.wert.datapik.utils.entities.product_groups.commands.ProductGroup_Delet
 import java.util.ArrayList;
 import java.util.List;
 
-public class FormViewControlIml {
+public class FormViewControlIml<P extends Item> {
 
     private final Folder_TableView view;
     private final ProductGroup_TreeView<ProductGroup> treeView;
+    private IFormView<P> tableView = null;
 
-    public FormViewControlIml(Folder_TableView view, ProductGroup_TreeView<ProductGroup> treeView) {
+    public FormViewControlIml(Folder_TableView view, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView) {
         this.view = view;
         this.treeView = treeView;
+        this.tableView = tableView;
+
         view.setOnKeyPressed(this::onKeyPressed);
     }
 
@@ -75,7 +78,7 @@ public class FormViewControlIml {
         for(Item item : items){
             if(item instanceof ProductGroup){
                 TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(item.getId());
-                new ProductGroup_DeleteCommand(selectedTreeItem, treeView).execute();
+                new ProductGroup_DeleteCommand(selectedTreeItem, treeView, tableView).execute();
             }
             if(item instanceof Folder){
                 List<Folder> folders = new ArrayList<>();

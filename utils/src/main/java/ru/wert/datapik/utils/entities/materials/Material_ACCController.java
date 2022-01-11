@@ -137,6 +137,11 @@ public class Material_ACCController extends FormView_ACCController<Material> {
     }
 
     @Override
+    public Material getOldItem() {
+        return formView.getAllSelectedItems().get(0);
+    }
+
+    @Override
     public void fillFieldsOnTheForm(Material oldItem) {
         tfMaterialName.setText(oldItem.getName());
         bxMatType.getSelectionModel().select(oldItem.getMatType());
