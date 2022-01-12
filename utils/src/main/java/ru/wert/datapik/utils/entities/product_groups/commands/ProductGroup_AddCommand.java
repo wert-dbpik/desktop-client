@@ -39,9 +39,10 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
         if(tableView == null) {
             selectedItem = treeView.getSelectionModel().getSelectedItem();
             if(selectedItem != null) selectedItem.setExpanded(true);//Условие когда добавляют в корень
-        } else {
-            selectedItem = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
         }
+//        else {
+//            selectedItem = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
+//        }
 
         try {
             CH_PRODUCT_GROUPS.save(newItem);
@@ -56,11 +57,14 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
         Platform.runLater(() -> {
             int row = treeView.getFocusModel().getFocusedIndex();
             treeView.updateView();
-            treeView.getSelectionModel().select(row);
-            treeView.scrollTo(row);
-            if (tableView != null) {
-                int trow = ((ItemTableView<?>) tableView).getSelectionModel().getSelectedIndex();
-                ((CatalogableTable<ProductGroup>) tableView).setSelectedTreeItem(selectedItem);
+            if (tableView == null) {
+                treeView.getSelectionModel().select(row);
+                treeView.scrollTo(row);
+            } else {
+                int treeRow = treeView.getFocusModel().getFocusedIndex();
+                treeView.getSelectionModel().select(treeRow);
+                treeView.scrollTo(treeRow);
+                int trow = ((TableView<?>) tableView).getSelectionModel().getSelectedIndex();
                 ((ItemTableView<?>) tableView).updateTableView();
                 ((ItemTableView<?>) tableView).getSelectionModel().select(trow);
                 ((ItemTableView<?>) tableView).scrollTo(trow);
