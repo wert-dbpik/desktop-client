@@ -5,6 +5,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
@@ -17,13 +18,15 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
-public class ProductGroup_AddCommand<P extends Item> implements ICommand {
+public class ProductGroup_AddCommand<P extends Item, T extends CatalogGroup> implements ICommand {
 
     private final ProductGroup newItem;
     private final ProductGroup_TreeView<ProductGroup> treeView;
     private IFormView<P> tableView = null;
 
     /**
+     * Если tableView = null, то добавление происходит в левой части каталога (treeView),
+     * иначе добавление происходит в правой части (tableView)
      * @param treeView ProductGroupTableView
      */
     public ProductGroup_AddCommand(ProductGroup newItem, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView) {
@@ -64,10 +67,10 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
                 int treeRow = treeView.getFocusModel().getFocusedIndex();
                 treeView.getSelectionModel().select(treeRow);
                 treeView.scrollTo(treeRow);
-                int trow = ((TableView<?>) tableView).getSelectionModel().getSelectedIndex();
-                ((ItemTableView<?>) tableView).updateTableView();
-                ((ItemTableView<?>) tableView).getSelectionModel().select(trow);
-                ((ItemTableView<?>) tableView).scrollTo(trow);
+                int trow = ((ItemTableView<T>) tableView).getSelectionModel().getSelectedIndex();
+                ((ItemTableView<T>) tableView).updateTableView();
+                ((ItemTableView<T>) tableView).getSelectionModel().select(trow);
+                ((ItemTableView<T>) tableView).scrollTo(trow);
             }
 
         });

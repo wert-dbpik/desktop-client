@@ -58,7 +58,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
                         } else {
                             selectedTreeItem = catalogTree.findTreeItemById(rowData.getId());
                         }
-//                        catalogTree.getSelectionModel().select(selectedItem);
                         updateNow();
                     }
                 }

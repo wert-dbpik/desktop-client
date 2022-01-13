@@ -139,7 +139,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     }
 
     private void addNewProductGroup(Event e){
-        new FormViewACCWindow<ProductGroup>().create(EOperation.ADD, treeView, productGroup_commands, treeView.getAccWindowRes());
+        new FormViewACCWindow<ProductGroup>().create(EOperation.ADD, treeView, productGroup_commands, treeView.getAccWindowRes(), tableView);
 
      }
 
