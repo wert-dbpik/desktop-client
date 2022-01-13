@@ -45,7 +45,8 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
         }
 
         try {
-            CH_PRODUCT_GROUPS.save(newItem);
+            ProductGroup newGroup = CH_PRODUCT_GROUPS.save(newItem);
+            _ProductGroup_Commands.update(treeView.findTreeItemById(newGroup.getId()));
             log.info("Добавлена группа изделий {}", newItem.getName());
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
@@ -53,26 +54,7 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
                     newItem.getName(), e.getMessage(), e.getCause());
         }
 
-        //Обновляем каталог
-        Platform.runLater(() -> {
-
-            int row = treeView.getFocusModel().getFocusedIndex();
-            treeView.updateView();
-            if (tableView == null) {
-                treeView.getSelectionModel().select(row);
-                treeView.scrollTo(row);
-            } else {
-                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
-                treeView.getFocusModel().focus(row);
-                treeView.scrollTo(row);
-                int trow = ((ItemTableView<P>) tableView).getSelectionModel().getSelectedIndex();
-                ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
-                ((ItemTableView<P>) tableView).getSelectionModel().select(trow);
-                ((ItemTableView<P>) tableView).scrollTo(trow);
-            }
-
-        });
-
-
     }
+
+
 }

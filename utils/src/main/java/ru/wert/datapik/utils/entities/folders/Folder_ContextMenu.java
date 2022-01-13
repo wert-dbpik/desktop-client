@@ -10,6 +10,7 @@ import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
@@ -99,7 +100,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         changeProductGroup = new MenuItem("Изменить");
         deleteProductGroup = new MenuItem("Удалить");
 
-        productGroup_commands = new _ProductGroup_Commands<>(treeView, tableView);
+        productGroup_commands = new _ProductGroup_Commands(treeView, tableView);
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);
@@ -154,7 +155,13 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     }
 
     private void deleteProductGroups(Event e){
-        productGroup_commands.delete(e, tableView.getAllSelectedItems());
+        List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
+        List<ProductGroup> selectedItemGroups = new ArrayList<>();
+        //преобразуем
+        for(Item item : selectedItems){
+            selectedItemGroups.add((ProductGroup)item);
+        }
+        productGroup_commands.delete(e, selectedItemGroups);
     }
 
 

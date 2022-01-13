@@ -67,8 +67,13 @@ public class CatalogOfMaterialsController {
 
         vbCatalog.getChildren().add(catalogTreeView);
 
-        catalogTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newGroup) -> {
-            materialTableView.updateCatalogView((TreeItem<MaterialGroup>) newGroup, false);
+//        catalogTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newGroup) -> {
+//            materialTableView.updateCatalogView((TreeItem<MaterialGroup>) newGroup, false);
+//        });
+
+        catalogTreeView.setOnMouseClicked((e)->{
+            if(e.getButton() == MouseButton.PRIMARY)
+                materialTableView.updateTableView();
         });
 
     }

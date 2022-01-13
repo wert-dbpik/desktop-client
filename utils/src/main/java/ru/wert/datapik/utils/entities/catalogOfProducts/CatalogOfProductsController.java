@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Product;
@@ -70,8 +71,13 @@ public class CatalogOfProductsController {
 
         vbCatalog.getChildren().add(catalogTreeView);
 
-        catalogTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newGroup) -> {
-            productTableView.updateCatalogView(newGroup, false);
+//        catalogTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newGroup) -> {
+//            productTableView.updateCatalogView(newGroup, false);
+//        });
+
+        catalogTreeView.setOnMouseClicked((e)->{
+            if(e.getButton() == MouseButton.PRIMARY)
+                productTableView.updateTableView();
         });
 
     }
