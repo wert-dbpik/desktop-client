@@ -6,8 +6,10 @@ import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -119,19 +121,36 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
     }
 
     private void update(int row) {
+//        Platform.runLater(() -> {
+//            treeView.updateView();
+//            if (tableView == null) {
+//                treeView.getSelectionModel().select(row);
+//                treeView.scrollTo(row);
+//            } else {
+//                int treeRow = treeView.getFocusModel().getFocusedIndex();
+//                treeView.getSelectionModel().select(treeRow);
+//                treeView.scrollTo(treeRow);
+//                int trow = ((TableView<?>) tableView).getSelectionModel().getSelectedIndex();
+//                ((ItemTableView<?>) tableView).updateTableView();
+//                ((ItemTableView<?>) tableView).getSelectionModel().select(trow);
+//                ((ItemTableView<?>) tableView).scrollTo(trow);
+//            }
+//
+//        });
+
         Platform.runLater(() -> {
+            TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
             treeView.updateView();
             if (tableView == null) {
                 treeView.getSelectionModel().select(row);
                 treeView.scrollTo(row);
             } else {
-                int treeRow = treeView.getFocusModel().getFocusedIndex();
-                treeView.getSelectionModel().select(treeRow);
-                treeView.scrollTo(treeRow);
-                int trow = ((TableView<?>) tableView).getSelectionModel().getSelectedIndex();
-                ((ItemTableView<?>) tableView).updateTableView();
-                ((ItemTableView<?>) tableView).getSelectionModel().select(trow);
-                ((ItemTableView<?>) tableView).scrollTo(trow);
+                treeView.getFocusModel().focus(row);
+                treeView.scrollTo(row);
+                int trow = ((ItemTableView<P>) tableView).getSelectionModel().getSelectedIndex();
+                ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
+                ((ItemTableView<P>) tableView).getSelectionModel().select(trow);
+                ((ItemTableView<P>) tableView).scrollTo(trow);
             }
 
         });

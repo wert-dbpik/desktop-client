@@ -46,6 +46,7 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class AppStatic {
 
+    public static final String UPWARD = "< . . . >";
     public static final char TILDA = '\u02F7';
     public static String CURRENT_ROJECT_VERSION;
     public static String NEWER_PROJECT_VERSION;

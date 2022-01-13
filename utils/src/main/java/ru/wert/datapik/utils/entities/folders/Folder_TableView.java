@@ -7,6 +7,7 @@ import javafx.scene.input.MouseButton;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
 
 public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
 
@@ -101,6 +103,35 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         getItems().addAll(items);
     }
 
+    /**
+     * Обновляет таблицу независимо от выделения в TreeView
+     */
+    @Override
+    public void updateOnlyTableView(CatalogGroup selectedProductGroup) {
+
+        selectedTreeItem = catalogTree.findTreeItemById(selectedProductGroup.getId());
+
+
+//        if (selectedTreeItem == null) selectedTreeItem = catalogTree.getRoot();
+        List<Item> items = new ArrayList<>();
+        ProductGroup selectedGroup = selectedTreeItem.getValue();
+        //Добавим верхнюю строку в список, потом она превратится в троеточие
+        //Корневой элемент в список не добавляем
+        if(selectedTreeItem != catalogTree.getRoot())
+            items.add(selectedTreeItem.getValue());
+        List<TreeItem<ProductGroup>> children = selectedTreeItem.getChildren();
+        for (TreeItem<ProductGroup> ti : children) {
+            items.add(ti.getValue());
+        }
+
+        List<Folder> folders = CH_QUICK_FOLDERS.findAllByGroupId(selectedGroup.getId());
+        items.addAll(folders);
+
+        getItems().clear();
+        refresh();
+        getItems().addAll(items);
+    }
+
     @Override
     public void createContextMenu() {
         contextMenu = new Folder_ContextMenu(this, catalogTree, commands, accWindowRes);
@@ -120,7 +151,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
             Item item = cd.getValue();
             if(item instanceof ProductGroup) {
                 if(item.equals(selectedTreeItem.getValue())){
-                    label.setText("< . . . >");
+                    label.setText(UPWARD);
                 }else {
                     label.setText(item.toUsefulString());
                     label.setGraphic(new ImageView(TREE_NODE_IMG));
@@ -170,6 +201,8 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     public void setSelectedTreeItem(TreeItem<ProductGroup> item) {
 
     }
+
+
 
 
 }

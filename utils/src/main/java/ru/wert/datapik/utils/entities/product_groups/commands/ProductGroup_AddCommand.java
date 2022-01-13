@@ -18,7 +18,7 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
-public class ProductGroup_AddCommand<P extends Item, T extends CatalogGroup> implements ICommand {
+public class ProductGroup_AddCommand<P extends Item> implements ICommand {
 
     private final ProductGroup newItem;
     private final ProductGroup_TreeView<ProductGroup> treeView;
@@ -43,9 +43,6 @@ public class ProductGroup_AddCommand<P extends Item, T extends CatalogGroup> imp
             selectedItem = treeView.getSelectionModel().getSelectedItem();
             if(selectedItem != null) selectedItem.setExpanded(true);//Условие когда добавляют в корень
         }
-//        else {
-//            selectedItem = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
-//        }
 
         try {
             CH_PRODUCT_GROUPS.save(newItem);
@@ -58,19 +55,20 @@ public class ProductGroup_AddCommand<P extends Item, T extends CatalogGroup> imp
 
         //Обновляем каталог
         Platform.runLater(() -> {
+
             int row = treeView.getFocusModel().getFocusedIndex();
             treeView.updateView();
             if (tableView == null) {
                 treeView.getSelectionModel().select(row);
                 treeView.scrollTo(row);
             } else {
-                int treeRow = treeView.getFocusModel().getFocusedIndex();
-                treeView.getSelectionModel().select(treeRow);
-                treeView.scrollTo(treeRow);
-                int trow = ((ItemTableView<T>) tableView).getSelectionModel().getSelectedIndex();
-                ((ItemTableView<T>) tableView).updateTableView();
-                ((ItemTableView<T>) tableView).getSelectionModel().select(trow);
-                ((ItemTableView<T>) tableView).scrollTo(trow);
+                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
+                treeView.getFocusModel().focus(row);
+                treeView.scrollTo(row);
+                int trow = ((ItemTableView<P>) tableView).getSelectionModel().getSelectedIndex();
+                ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
+                ((ItemTableView<P>) tableView).getSelectionModel().select(trow);
+                ((ItemTableView<P>) tableView).scrollTo(trow);
             }
 
         });

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Material;
 import ru.wert.datapik.client.entity.models.MaterialGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
@@ -153,4 +154,16 @@ public class Material_TableView extends CatalogTableView<Material, MaterialGroup
     public void setSelectedTreeItem(TreeItem<MaterialGroup> item) {
 
     }
+
+    /**
+     * Обновляет таблицу независимо от выделения в TreeView
+     *
+     * @param selectedCatalogGroup
+     */
+    @Override
+    public void updateOnlyTableView(CatalogGroup selectedCatalogGroup) {
+
+    }
+
+
 }

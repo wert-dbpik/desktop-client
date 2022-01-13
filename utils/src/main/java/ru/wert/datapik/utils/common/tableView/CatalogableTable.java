@@ -14,5 +14,10 @@ public interface CatalogableTable <T extends CatalogGroup>{
 
     void setSelectedTreeItem(TreeItem<T> item);
 
+    /**
+     * Обновляет таблицу независимо от выделения в TreeView
+     */
+    void updateOnlyTableView(CatalogGroup selectedCatalogGroup);
+
 
 }

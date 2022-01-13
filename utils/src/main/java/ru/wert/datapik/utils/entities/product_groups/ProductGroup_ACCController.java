@@ -83,19 +83,17 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
             chosenItem = ((Item_TreeView<Product, ProductGroup>) formView).getSelectionModel().getSelectedItem();
         else //Если имеем дело с таблицей и деревом каталога
 //            chosenItem = treeView.findTreeItemById(tableView.getSelectionModel().getSelectedItem().getId());
-        chosenItem = treeView.findTreeItemById(((ProductGroup)tableView.getItems().get(0)).getId());
+            chosenItem = treeView.findTreeItemById(((ProductGroup) tableView.getItems().get(0)).getId());
 
-        if(chosenItem == null ) {
+        if (chosenItem == null) {
             parentId = treeView.getRoot().getValue().getId(); //=1L
         }
 
         else {
             if (operation.equals(EOperation.COPY)) //При копировании берется родитель родителя
-                parentId = ((Item_TreeView<Product, ProductGroup>) formView)
-                        .getSelectionModel().getSelectedItem().getParent().getValue().getId();
+                parentId = chosenItem.getParent().getValue().getId();
             else {//При добавлении и изменении просто родитель
-                parentId = ((Item_TreeView<Product, ProductGroup>) formView)
-                        .getSelectionModel().getSelectedItem().getValue().getId();
+                parentId = chosenItem.getValue().getId();
             }
         }
 

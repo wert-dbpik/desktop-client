@@ -4,6 +4,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
@@ -98,4 +99,16 @@ public class Product_TableView extends  CatalogTableView<Product, ProductGroup>{
     public void setSelectedTreeItem(TreeItem<ProductGroup> item) {
 
     }
+
+    /**
+     * Обновляет таблицу независимо от выделения в TreeView
+     *
+     * @param selectedCatalogGroup
+     */
+    @Override
+    public void updateOnlyTableView(CatalogGroup selectedCatalogGroup) {
+
+    }
+
+
 }
