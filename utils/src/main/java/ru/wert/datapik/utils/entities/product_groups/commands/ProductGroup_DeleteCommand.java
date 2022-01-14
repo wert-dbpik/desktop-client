@@ -25,7 +25,7 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
 
-    private List<TreeItem<ProductGroup>> items;
+    private List<ProductGroup> items;
     private ProductGroup_TreeView<ProductGroup> treeView;
     private IFormView<P> tableView = null;
 
@@ -37,7 +37,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
      *
      * @param treeView ProductGroup_TreeView
      */
-    public ProductGroup_DeleteCommand(List<TreeItem<ProductGroup>> items, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView) {
+    public ProductGroup_DeleteCommand(List<ProductGroup> items, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView) {
         this.items = items;
         this.treeView = treeView;
         this.tableView = tableView;
@@ -56,7 +56,8 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
         TreeItem<ProductGroup> selectedItemAfterDeleting = null;
         Integer selectedRowAfterDeleting;
         if (tableView == null) {
-            selectedItemAfterDeleting = treeView.getSelectionModel().getSelectedItem();
+            //Находим родителя узла
+            selectedItemAfterDeleting = treeView.findTreeItemById(items.get(0).getId()).getParent();
             selectedRowAfterDeleting = null;
         } else {
             List<Integer> selectedRows = ((ItemTableView<Item>) tableView).getSelectionModel().getSelectedIndices();
@@ -71,6 +72,22 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
             }
         }
         try {
+
+            List<ProductGroup> allGroupsToBeDeleted = new ArrayList<>();
+            //Находим все группы вниз по дереву
+            for (ProductGroup productGroup : items) {
+                allGroupsToBeDeleted.add(productGroup);
+                TreeItem<ProductGroup> groupItem = treeView.findTreeItemById(productGroup.getId());
+                List<TreeItem<ProductGroup>> itemChildren = treeView.findAllChildren(groupItem);
+                for (TreeItem<ProductGroup> item : itemChildren) {
+                    allGroupsToBeDeleted.add(item.getValue());
+                }
+            }
+
+            //Находим удаляемые элементы
+            for(ProductGroup group: allGroupsToBeDeleted){
+
+            }
 
             List<TreeItem<ProductGroup>> allDeletingTreeItems = treeView.findAllChildren(items);
 

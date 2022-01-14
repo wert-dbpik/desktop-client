@@ -48,8 +48,8 @@ public class _ProductGroup_Commands implements ItemCommands<ProductGroup> {
 
     @Override
     public void delete(Event event, List<ProductGroup> items){
-        TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(items.get(0).getId());
-        ICommand command = new ProductGroup_DeleteCommand(selectedTreeItem, treeView, tableView);
+//        TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(items.get(0).getId());
+        ICommand command = new ProductGroup_DeleteCommand(items, treeView, tableView);
         command.execute();
     }
 
