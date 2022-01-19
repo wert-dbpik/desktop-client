@@ -8,6 +8,7 @@ import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
@@ -21,14 +22,18 @@ import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.List;
 
-public class _ProductGroup_Commands implements ItemCommands<ProductGroup> {
+public class _ProductGroup_Commands<P extends Item> implements ItemCommands<ProductGroup> {
 
     private static IFormView<? extends Item> tableView = null; //Таблица каталога, которая обновляется вместе с деревом
     private static ProductGroup_TreeView<? extends Item> treeView;
+    private ItemService<P> itemService;
 
-    public _ProductGroup_Commands(ProductGroup_TreeView<? extends Item> treeView, IFormView<? extends Item> tableView) {
+
+    public _ProductGroup_Commands(ProductGroup_TreeView<? extends Item> treeView, IFormView<? extends Item> tableView, ItemService<P> itemService) {
         _ProductGroup_Commands.treeView = treeView;
         _ProductGroup_Commands.tableView = tableView;
+        this.itemService = itemService;
+
     }
 
     public _ProductGroup_Commands(ProductGroup_TreeView treeView) {
@@ -49,7 +54,7 @@ public class _ProductGroup_Commands implements ItemCommands<ProductGroup> {
     @Override
     public void delete(Event event, List<ProductGroup> items){
 //        TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(items.get(0).getId());
-        ICommand command = new ProductGroup_DeleteCommand(items, treeView, tableView);
+        ICommand command = new ProductGroup_DeleteCommand(items, treeView, tableView, itemService);
         command.execute();
     }
 
@@ -70,9 +75,9 @@ public class _ProductGroup_Commands implements ItemCommands<ProductGroup> {
     /**
      * Обновляет как TreeView так и TableView
      * @param selectGroup
-     * @param selectTableRow
+     * @param rowToBeSelectedAfterAdding
      */
-    public static void update(TreeItem<ProductGroup> selectGroup, Integer selectTableRow){
+    public static void update(TreeItem<ProductGroup> selectGroup, Integer rowToBeSelectedAfterAdding){
 
         Platform.runLater(() -> {
             treeView.updateView();
@@ -87,9 +92,9 @@ public class _ProductGroup_Commands implements ItemCommands<ProductGroup> {
 
 //                int trow = ((ItemTableView<? extends Item>) tableView).getSelectionModel().getSelectedIndex();
                 ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
-                if(selectTableRow != null) {
-                    ((ItemTableView<? extends Item>) tableView).getSelectionModel().select(selectTableRow);
-                    ((ItemTableView<? extends Item>) tableView).scrollTo(selectTableRow);
+                if(rowToBeSelectedAfterAdding != null) {
+                    ((ItemTableView<? extends Item>) tableView).getSelectionModel().select(rowToBeSelectedAfterAdding);
+                    ((ItemTableView<? extends Item>) tableView).scrollTo(rowToBeSelectedAfterAdding);
                 }
             }
 

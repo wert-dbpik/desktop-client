@@ -24,6 +24,7 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
     private final ProductGroup_TreeView<ProductGroup> treeView;
     private IFormView<P> tableView = null;
 
+
     /**
      * Если tableView = null, то добавление происходит в левой части каталога (treeView),
      * иначе добавление происходит в правой части (tableView)
@@ -38,6 +39,10 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
 
     @Override
     public void execute() {
+
+        TreeItem<ProductGroup> itemToBeSelectedAfterAdding = null;
+        Integer rowToBeSelectedAfterDeleting = null;
+
         TreeItem<ProductGroup> selectedItem;
         if(tableView == null) {
             selectedItem = treeView.getSelectionModel().getSelectedItem();
@@ -46,7 +51,16 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
 
         try {
             ProductGroup newGroup = CH_PRODUCT_GROUPS.save(newItem);
-            _ProductGroup_Commands.update(treeView.findTreeItemById(newGroup.getId()));
+            if(newGroup != null){
+                if(tableView == null)
+                    itemToBeSelectedAfterAdding =
+                            treeView.findTreeItemById(newGroup.getId());
+                else
+                    rowToBeSelectedAfterDeleting =
+            }
+
+                rowToBeSelectedAfterDeleting = tableView.
+            _ProductGroup_Commands.update(treeView.findTreeItemById(newGroup.getId()), );
             log.info("Добавлена группа изделий {}", newItem.getName());
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);

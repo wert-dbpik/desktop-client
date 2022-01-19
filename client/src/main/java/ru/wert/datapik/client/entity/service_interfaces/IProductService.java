@@ -5,13 +5,14 @@ import javafx.collections.ObservableSet;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.GroupedItemService;
 import ru.wert.datapik.client.interfaces.ItemService;
 
 import java.util.List;
 import java.util.Set;
 
 
-public interface IProductService extends ItemService<Product> {
+public interface IProductService extends GroupedItemService<Product> {
 
     Product findByPassportId(Long id);
 

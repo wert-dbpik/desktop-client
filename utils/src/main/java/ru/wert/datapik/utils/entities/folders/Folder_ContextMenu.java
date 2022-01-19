@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
+
 public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
     private final _Folder_Commands commands;
@@ -100,7 +102,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         changeProductGroup = new MenuItem("Изменить");
         deleteProductGroup = new MenuItem("Удалить");
 
-        productGroup_commands = new _ProductGroup_Commands(treeView, tableView);
+        productGroup_commands = new _ProductGroup_Commands(treeView, tableView, CH_FOLDERS);
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);
