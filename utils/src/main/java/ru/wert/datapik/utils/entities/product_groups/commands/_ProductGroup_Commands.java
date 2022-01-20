@@ -7,6 +7,7 @@ import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
+import ru.wert.datapik.client.interfaces.GroupedItemService;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
@@ -54,7 +55,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     @Override
     public void delete(Event event, List<ProductGroup> items){
 //        TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(items.get(0).getId());
-        ICommand command = new ProductGroup_DeleteCommand(items, treeView, tableView, itemService);
+        ICommand command = new ProductGroup_DeleteCommand(items, treeView, tableView, (GroupedItemService<P>) itemService);
         command.execute();
     }
 
@@ -99,5 +100,32 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
             }
 
         });
+    }
+
+    /**
+     * Выделяет группу TreeItem после операции
+     * @param treeItemToBeSelected TreeItem<ProductGroup>
+     */
+    public static void selectTreeViewItem(TreeItem<ProductGroup> treeItemToBeSelected){
+        treeView.getSelectionModel().select(treeItemToBeSelected);
+        treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
+    }
+
+    /**
+     * Выделяет фокусом группу TreeItem после операции
+     * @param treeItemToBeFocused TreeItem<ProductGroup>
+     */
+    public static void focusTreeViewItem(int treeItemToBeFocused){
+        treeView.getFocusModel().focus(treeItemToBeFocused);
+        treeView.scrollTo(treeItemToBeFocused);
+    }
+
+    /**
+     * Выделяет строку в таблице после опреации
+     * @param rowToBeSelectedAfterAdding Integer
+     */
+    public static void selectTableViewPos(int rowToBeSelectedAfterAdding){
+        ((ItemTableView<? extends Item>) tableView).getSelectionModel().select(rowToBeSelectedAfterAdding);
+        ((ItemTableView<? extends Item>) tableView).scrollTo(rowToBeSelectedAfterAdding);
     }
 }

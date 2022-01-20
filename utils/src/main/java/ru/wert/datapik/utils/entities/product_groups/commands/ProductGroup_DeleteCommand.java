@@ -28,8 +28,11 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
     private ProductGroup_TreeView<ProductGroup> treeView;
     private IFormView<P> tableView = null;
 
-    private List<ProductGroup> groupsToBeDeleted, notDeletedGroups;
-    private List<P> itemsToBeDeleted, notDeletedItems;
+    private List<ProductGroup> groupsToBeDeleted;
+    private List<P> itemsToBeDeleted;
+
+    private List<ProductGroup> notDeletedGroups = new ArrayList<>();
+    private List<P> notDeletedItems = new ArrayList<>();
 
     private final GroupedItemService<P> itemService;
 
@@ -39,11 +42,12 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
      *
      * @param treeView ProductGroup_TreeView
      */
-    public ProductGroup_DeleteCommand(List<ProductGroup> items, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView, ItemService<P> itemService) {
+    public ProductGroup_DeleteCommand(List<ProductGroup> items, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView, GroupedItemService<P> itemService) {
         this.items = items;
         this.treeView = treeView;
         this.tableView = tableView;
-        this.itemService = (GroupedItemService<P>) itemService;
+        this.itemService = itemService;
+
     }
 
     @Override
@@ -90,6 +94,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
             log.error("При удалении произошла ошибка");
+            e.printStackTrace();
         }
 
     }

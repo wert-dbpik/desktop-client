@@ -7,6 +7,7 @@ import javafx.scene.input.KeyEvent;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
+import ru.wert.datapik.client.interfaces.GroupedItemService;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
@@ -16,6 +17,8 @@ import ru.wert.datapik.utils.entities.product_groups.commands.ProductGroup_Delet
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
 
 public class FormViewControlIml<P extends Item> {
 
@@ -78,7 +81,7 @@ public class FormViewControlIml<P extends Item> {
         for(Item item : items){
             if(item instanceof ProductGroup){
                 TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(item.getId());
-                new ProductGroup_DeleteCommand(selectedTreeItem, treeView, tableView).execute();
+                new ProductGroup_DeleteCommand((List<ProductGroup>) selectedTreeItem, treeView, tableView, (GroupedItemService<P>) CH_FOLDERS).execute();
             }
             if(item instanceof Folder){
                 List<Folder> folders = new ArrayList<>();
