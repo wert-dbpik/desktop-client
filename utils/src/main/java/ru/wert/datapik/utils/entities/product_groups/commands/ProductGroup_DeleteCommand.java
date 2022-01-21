@@ -3,7 +3,6 @@ package ru.wert.datapik.utils.entities.product_groups.commands;
 import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.*;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PRODUCTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
@@ -85,7 +83,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
             }
 
             //TODO: Обновляем дерево и таблицу
-            _ProductGroup_Commands.update(itemToBeSelectedAfterDeleting, rowToBeSelectedAfterDeleting);
+            _ProductGroup_Commands.updateFormsWhenDeleted(itemToBeSelectedAfterDeleting, rowToBeSelectedAfterDeleting);
 
             //TODO: Предупреждаем пользователя, если не все получилось удалить
             if (!notDeletedGroups.isEmpty() || !notDeletedItems.isEmpty())

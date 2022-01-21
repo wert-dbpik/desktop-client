@@ -35,6 +35,6 @@ public class Folder extends _BaseEntity implements Item, Comparable<Folder>, Ser
 
     @Override
     public String toUsefulString() {
-        return name + " : " + decNumber;
+        return decNumber + ", " + name;
     }
 }

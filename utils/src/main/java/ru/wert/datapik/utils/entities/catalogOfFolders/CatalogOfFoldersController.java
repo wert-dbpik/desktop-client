@@ -85,8 +85,11 @@ public class CatalogOfFoldersController {
         vbCatalog.getChildren().add(catalogTreeView);
 
         catalogTreeView.setOnMouseClicked((e)->{
-            if(e.getButton() == MouseButton.PRIMARY)
-                folderTableView.updateTableView();
+//            if(catalogTreeView.getFocusModel().getFocusedItem() == null) return;
+            if(e.getButton() == MouseButton.PRIMARY) {
+                if(catalogTreeView.getSelectionModel().getSelectedItem() != null)
+                    folderTableView.updateTableView();
+            }
         });
 
     }
