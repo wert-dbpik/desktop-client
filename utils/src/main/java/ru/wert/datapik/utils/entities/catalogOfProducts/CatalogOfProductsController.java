@@ -67,7 +67,7 @@ public class CatalogOfProductsController {
      * дерево КАТАЛОГА
      */
     private void createCatalog_TreeView() {
-        catalogTreeView = _ProductGroup_TreeViewPatch.create();
+        catalogTreeView = new _ProductGroup_TreeViewPatch<Product>().create();
 
         vbCatalog.getChildren().add(catalogTreeView);
 

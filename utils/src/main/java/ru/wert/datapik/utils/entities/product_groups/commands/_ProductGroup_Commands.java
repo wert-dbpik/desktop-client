@@ -2,7 +2,6 @@ package ru.wert.datapik.utils.entities.product_groups.commands;
 
 import javafx.application.Platform;
 import javafx.event.Event;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
@@ -27,18 +26,29 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     private static IFormView<? extends Item> tableView = null; //Таблица каталога, которая обновляется вместе с деревом
     private static ProductGroup_TreeView<? extends Item> treeView;
-    private ItemService<P> itemService;
+    private static ItemService<? extends Item>  dependedItemService;
 
-
-    public _ProductGroup_Commands(ProductGroup_TreeView<? extends Item> treeView, IFormView<? extends Item> tableView, ItemService<P> itemService) {
+    /**
+     * Конструктор для Таблицы
+     * @param treeView
+     * @param tableView
+     * @param dependedItemService
+     */
+    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, IFormView<P> tableView, ItemService<P> dependedItemService) {
         _ProductGroup_Commands.treeView = treeView;
         _ProductGroup_Commands.tableView = tableView;
-        this.itemService = itemService;
+        _ProductGroup_Commands.dependedItemService = dependedItemService;
 
     }
 
-    public _ProductGroup_Commands(ProductGroup_TreeView treeView) {
-        this.treeView = treeView;
+    /**
+     * Конструктор для дерева
+     * @param treeView
+     * @param dependedItemService
+     */
+    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, ItemService<P> dependedItemService) {
+        _ProductGroup_Commands.treeView = treeView;
+        _ProductGroup_Commands.dependedItemService = dependedItemService;
     }
 
     @Override
@@ -55,7 +65,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     @Override
     public void delete(Event event, List<ProductGroup> items){
 //        TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(items.get(0).getId());
-        ICommand command = new ProductGroup_DeleteCommand(items, treeView, tableView, (GroupedItemService<P>) itemService);
+        ICommand command = new ProductGroup_DeleteCommand(items, treeView, tableView, (GroupedItemService<P>) dependedItemService);
         command.execute();
     }
 

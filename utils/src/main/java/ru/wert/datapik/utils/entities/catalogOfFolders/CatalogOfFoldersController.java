@@ -26,6 +26,7 @@ import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
 
 public class CatalogOfFoldersController {
 
@@ -44,7 +45,7 @@ public class CatalogOfFoldersController {
     @FXML
     private Label lblCatalog;
 
-    private ProductGroup_TreeView<ProductGroup> catalogTreeView;
+    private ProductGroup_TreeView<Folder> catalogTreeView;
 
     @Getter private ItemTableView<Item> folderTableView;
 
@@ -78,7 +79,8 @@ public class CatalogOfFoldersController {
      */
     private void createCatalog_TreeView() {
 
-        catalogTreeView = _ProductGroup_TreeViewPatch.create();
+        catalogTreeView = new _ProductGroup_TreeViewPatch<Folder>().create();
+        catalogTreeView.setDependedItemService(CH_FOLDERS);
 
         vbCatalog.getChildren().add(catalogTreeView);
 

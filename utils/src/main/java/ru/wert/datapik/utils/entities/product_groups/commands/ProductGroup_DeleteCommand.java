@@ -52,41 +52,42 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
 
     @Override
     public void execute() {
-
+        System.out.println("itemService === " + itemService);
         if(items.isEmpty()) return;
-        //После удаления таблица "подтянется вверх" и поэтому нужна позиция первого из удаляемых элементов
-//        int row = treeView.getRow(item);
+
+        //TODO: Находим элементы, выделяемые после завершения операции
         TreeItem<ProductGroup> itemToBeSelectedAfterDeleting = null;
         Integer rowToBeSelectedAfterDeleting = null;
-        if (tableView == null) {
+        if (tableView == null) { //Если удаляется узел дерева
             //Находим родителя узла
             itemToBeSelectedAfterDeleting = treeView.findTreeItemById(items.get(0).getId()).getParent();
-        } else {
+        } else {//Если удаляются строки в таблице
             rowToBeSelectedAfterDeleting = findRowToBeSelectedAfterDeleting();
         }
 
         try {
+            //TODO:Находим входящие группы
             groupsToBeDeleted = findAllGroupsToBeDeleted(items);
             if (groupsToBeDeleted == null) return;
+
+            //TODO: Находим элементы входящие в группы
             itemsToBeDeleted = findAllItemsToBeDeleted(groupsToBeDeleted);
 
-            if (itemsToBeDeleted != null && !itemsToBeDeleted.isEmpty()) {
-                notDeletedItems = deleteItemsInGroup(itemsToBeDeleted);
-            }
-
-
+            //TODO: Спрашиваем пользователя в последний раз
             boolean answer = Warning2.create($ATTENTION, "Вы уверены, что хотите удалить папки\n" +
                     "и все входящие в папку изделия?", "Востановить удаленное будет трудно!");
             if (answer) {
-
-                deleteItemsInGroup(itemsToBeDeleted);
-
+                //TODO: Удаляем сначала элементы, входящие в папки, если они есть
+                if(!itemsToBeDeleted.isEmpty())
+                    deleteItemsInGroup(itemsToBeDeleted);
+                //TODO: Удаляем и сами папки
                 deleteProductGroups(groupsToBeDeleted);
             }
 
-
+            //TODO: Обновляем дерево и таблицу
             _ProductGroup_Commands.update(itemToBeSelectedAfterDeleting, rowToBeSelectedAfterDeleting);
 
+            //TODO: Предупреждаем пользователя, если не все получилось удалить
             if (!notDeletedGroups.isEmpty() || !notDeletedItems.isEmpty())
                 Warning1.create($ATTENTION, "Некоторые элементы не удалось удалить!",
                         "Возможно, они имеют зависимости");

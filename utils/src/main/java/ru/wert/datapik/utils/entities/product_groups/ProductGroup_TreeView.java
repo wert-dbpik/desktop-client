@@ -15,15 +15,20 @@ public class ProductGroup_TreeView<P extends Item> extends Item_TreeView<P, Prod
 
     @Getter
     private String accWindowRes = "/utils-fxml/productGroup/productGroupACC.fxml";
-    private _ProductGroup_Commands commands;
+    private _ProductGroup_Commands<P> commands;
     private ProductGroup_ContextMenu contextMenu;
     private List<ProductGroup> currentItemList;
     private ProductGroup_ACCController accController;
+    private ItemService<P> dependedItemService;
+
+    public void setDependedItemService(ItemService<P> dependedItemService){
+        this.dependedItemService = dependedItemService;
+    }
 
     public ProductGroup_TreeView(ItemService<ProductGroup> itemService, ProductGroup rootItem, boolean useContextMenu) {
         super(itemService, rootItem);
 
-        commands = new _ProductGroup_Commands(this);
+        commands = new _ProductGroup_Commands<>(this, dependedItemService);
 
         if (useContextMenu)
             createContextMenu();

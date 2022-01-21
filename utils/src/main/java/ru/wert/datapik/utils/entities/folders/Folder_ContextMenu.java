@@ -32,14 +32,14 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     private final _Folder_Commands commands;
     private _ProductGroup_Commands productGroup_commands;
     private Folder_TableView tableView;
-    private ProductGroup_TreeView<ProductGroup> treeView;
+    private ProductGroup_TreeView<Folder> treeView;
 
     private MenuItem addProductGroup;
     private MenuItem changeProductGroup;
     private MenuItem deleteProductGroup;
 
 
-    public Folder_ContextMenu(Folder_TableView tableView, ProductGroup_TreeView<ProductGroup> treeView, _Folder_Commands commands, String productsACCRes) {
+    public Folder_ContextMenu(Folder_TableView tableView, ProductGroup_TreeView<Folder> treeView, _Folder_Commands commands, String productsACCRes) {
         super((ItemTableView)tableView, commands, productsACCRes);
         this.commands = commands;
         this.tableView = tableView;

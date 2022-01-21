@@ -33,11 +33,11 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     private List<Folder> currentItemList = new ArrayList<>();
     private FormView_ACCController<Item> accController;
     @Getter private TreeItem<ProductGroup> selectedTreeItem;
-    @Getter private ProductGroup_TreeView<ProductGroup> catalogTree;
+    @Getter private ProductGroup_TreeView<Folder> catalogTree;
 
     private Folder_ContextMenu contextMenu;
 
-    public Folder_TableView(ProductGroup_TreeView<ProductGroup> catalogTree, String prompt) {
+    public Folder_TableView(ProductGroup_TreeView<Folder> catalogTree, String prompt) {
         super(prompt);
         this.catalogTree = catalogTree;
 
@@ -50,17 +50,20 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         //При двойном клике на папку открываем папку
         //При клике правой кнопку по пустой строке снимаем всякое выделение
         setRowFactory( tv -> {
+
             TableRow<Item> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
+                Item prevRowData = null;
                 Item rowData = row.getItem();
                 if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     if(rowData instanceof ProductGroup){
-                        if(rowData == selectedTreeItem.getValue()){
+                        if(rowData == selectedTreeItem.getValue()){ //Верхняя строка
+                            prevRowData = rowData;
                             selectedTreeItem = catalogTree.findTreeItemById(((ProductGroup) rowData).getParentId());
                         } else {
                             selectedTreeItem = catalogTree.findTreeItemById(rowData.getId());
                         }
-                        updateNow();
+                        updateNow((ProductGroup) prevRowData);
                     }
                 }
                 if (row.isEmpty()) {
@@ -79,10 +82,10 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     public void updateTableView() {
         //Находим выделенный элемент в дереве каталогов
         selectedTreeItem = catalogTree.getSelectionModel().getSelectedItem();
-        updateNow();
+        updateNow(null);
     }
 
-    private void updateNow() {
+    private void updateNow(ProductGroup prevGroupToBeSelected) {
         List<Item> items = new ArrayList<>();
         if (selectedTreeItem == null) selectedTreeItem = catalogTree.getRoot();
         ProductGroup selectedGroup = selectedTreeItem.getValue();
@@ -101,6 +104,11 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         getItems().clear();
         refresh();
         getItems().addAll(items);
+
+        //TODO:Выделяем родительскую группу
+        if(prevGroupToBeSelected != null){
+            getSelectionModel().select(prevGroupToBeSelected);
+        }
     }
 
     /**
