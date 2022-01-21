@@ -16,6 +16,7 @@ import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCTS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class CatalogOfProductsController {
@@ -67,13 +68,9 @@ public class CatalogOfProductsController {
      * дерево КАТАЛОГА
      */
     private void createCatalog_TreeView() {
-        catalogTreeView = new _ProductGroup_TreeViewPatch<Product>().create();
+        catalogTreeView = new _ProductGroup_TreeViewPatch<Product>().create(CH_PRODUCTS);
 
         vbCatalog.getChildren().add(catalogTreeView);
-
-//        catalogTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newGroup) -> {
-//            productTableView.updateCatalogView(newGroup, false);
-//        });
 
         catalogTreeView.setOnMouseClicked((e)->{
             if(e.getButton() == MouseButton.PRIMARY)

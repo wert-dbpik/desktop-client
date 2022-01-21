@@ -14,8 +14,9 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class ProductGroup_AddCommand<P extends Item> implements ICommand {
 
+    private final _ProductGroup_Commands<P> commands;
     private final ProductGroup newItem;
-    private final ProductGroup_TreeView<ProductGroup> treeView;
+    private final ProductGroup_TreeView<P> treeView;
     private IFormView<P> tableView = null;
 
 
@@ -24,7 +25,8 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
      * иначе добавление происходит в правой части (tableView)
      * @param treeView ProductGroupTableView
      */
-    public ProductGroup_AddCommand(ProductGroup newItem, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView) {
+    public ProductGroup_AddCommand(_ProductGroup_Commands<P> commands, ProductGroup newItem, ProductGroup_TreeView<P> treeView, IFormView<P> tableView) {
+        this.commands = commands;
         this.newItem = newItem;
         this.treeView = treeView;
         this.tableView = tableView;
@@ -38,7 +40,7 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
             ProductGroup newGroup = CH_PRODUCT_GROUPS.save(newItem);
             if(newGroup != null){
                 log.info("Добавлена группа изделий {}", newGroup.getName());
-                _ProductGroup_Commands.updateFormsWhenAddedOrChanged(newGroup);
+                commands.updateFormsWhenAddedOrChanged(newGroup);
             }
         } catch (Exception e){
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);

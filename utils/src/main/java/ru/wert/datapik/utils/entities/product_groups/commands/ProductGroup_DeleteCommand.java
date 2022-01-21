@@ -22,8 +22,10 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
 
+    private final _ProductGroup_Commands<P> commands;
+
     private final List<ProductGroup> items;
-    private ProductGroup_TreeView<ProductGroup> treeView;
+    private ProductGroup_TreeView<P> treeView;
     private IFormView<P> tableView = null;
 
     private List<ProductGroup> groupsToBeDeleted;
@@ -40,7 +42,8 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
      *
      * @param treeView ProductGroup_TreeView
      */
-    public ProductGroup_DeleteCommand(List<ProductGroup> items, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView, GroupedItemService<P> itemService) {
+    public ProductGroup_DeleteCommand(_ProductGroup_Commands<P> commands, List<ProductGroup> items, ProductGroup_TreeView<P> treeView, IFormView<P> tableView, GroupedItemService<P> itemService) {
+        this.commands = commands;
         this.items = items;
         this.treeView = treeView;
         this.tableView = tableView;
@@ -83,7 +86,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
             }
 
             //TODO: Обновляем дерево и таблицу
-            _ProductGroup_Commands.updateFormsWhenDeleted(itemToBeSelectedAfterDeleting, rowToBeSelectedAfterDeleting);
+            commands.updateFormsWhenDeleted(itemToBeSelectedAfterDeleting, rowToBeSelectedAfterDeleting);
 
             //TODO: Предупреждаем пользователя, если не все получилось удалить
             if (!notDeletedGroups.isEmpty() || !notDeletedItems.isEmpty())

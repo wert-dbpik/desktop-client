@@ -14,15 +14,17 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class ProductGroup_ChangeCommand<P extends Item> implements ICommand {
 
+    private final _ProductGroup_Commands<P> commands;
     private ProductGroup item;
-    private ProductGroup_TreeView treeView;
+    private ProductGroup_TreeView<P> treeView;
     private IFormView<P> tableView;
 
     /**
      *
      * @param treeView ProductGroup_TreeView
      */
-    public ProductGroup_ChangeCommand(ProductGroup item, ProductGroup_TreeView treeView, IFormView<P> tableView) {
+    public ProductGroup_ChangeCommand(_ProductGroup_Commands<P> commands, ProductGroup item, ProductGroup_TreeView<P> treeView, IFormView<P> tableView) {
+        this.commands = commands;
         this.item = item;
         this.treeView = treeView;
         this.tableView = tableView;
@@ -36,7 +38,7 @@ public class ProductGroup_ChangeCommand<P extends Item> implements ICommand {
             boolean res = CH_PRODUCT_GROUPS.update(item);
             if(res){
                 log.info("Изменена группа изделий {}", item.getName());
-                _ProductGroup_Commands.updateFormsWhenAddedOrChanged(item);
+                commands.updateFormsWhenAddedOrChanged(item);
 
             }
         } catch (Exception e){
@@ -46,19 +48,4 @@ public class ProductGroup_ChangeCommand<P extends Item> implements ICommand {
         }
 
     }
-
-//    private void updateForms() {
-//        Platform.runLater(()->{
-//            treeView.updateView();
-//            if(tableView == null){
-//                _ProductGroup_Commands.selectTreeViewItem(treeView.findTreeItemById(item.getId()));
-//            } else {
-//                TreeItem<? extends CatalogGroup> selectedTreeItemInTable = ((CatalogableTable<? extends CatalogGroup>) tableView).getSelectedTreeItem();
-//                ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
-//                _ProductGroup_Commands.focusTreeViewItem(treeView.getFocusModel().getFocusedIndex());
-//                int row = (((ItemTableView<P>) tableView).getItems()).indexOf(item);
-//                _ProductGroup_Commands.selectTableViewPos(row);
-//            }
-//        });
-//    }
-}
+    }

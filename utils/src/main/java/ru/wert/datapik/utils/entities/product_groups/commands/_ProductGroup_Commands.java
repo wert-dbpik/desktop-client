@@ -24,36 +24,36 @@ import java.util.List;
 
 public class _ProductGroup_Commands<P extends Item> implements ItemCommands<ProductGroup> {
 
-    private static IFormView<? extends Item> tableView = null; //Таблица каталога, которая обновляется вместе с деревом
-    private static ProductGroup_TreeView<? extends Item> treeView;
-    private static ItemService<? extends Item>  dependedItemService;
+    private IFormView<P> tableView = null; //Таблица каталога, которая обновляется вместе с деревом
+    private final ProductGroup_TreeView<P> treeView;
+    private final ItemService<P>  dependedItemService;
 
     /**
      * Конструктор для Таблицы
-     * @param treeView
-     * @param tableView
-     * @param dependedItemService
+     * @param treeView ProductGroup_TreeView<P>
+     * @param tableView IFormView<P>
+     * @param dependedItemService ItemService<P>
      */
     public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, IFormView<P> tableView, ItemService<P> dependedItemService) {
-        _ProductGroup_Commands.treeView = treeView;
-        _ProductGroup_Commands.tableView = tableView;
-        _ProductGroup_Commands.dependedItemService = dependedItemService;
+        this.treeView = treeView;
+        this.tableView = tableView;
+        this.dependedItemService = dependedItemService;
 
     }
 
     /**
      * Конструктор для дерева
-     * @param treeView
-     * @param dependedItemService
+     * @param treeView ProductGroup_TreeView<P>
+     * @param dependedItemService ItemService<P>
      */
     public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, ItemService<P> dependedItemService) {
-        _ProductGroup_Commands.treeView = treeView;
-        _ProductGroup_Commands.dependedItemService = dependedItemService;
+        this.treeView = treeView;
+        this.dependedItemService = dependedItemService;
     }
 
     @Override
     public void add(Event event, ProductGroup newItem){
-        ICommand command = new ProductGroup_AddCommand(newItem, treeView, tableView);
+        ICommand command = new ProductGroup_AddCommand<P>(this, newItem, treeView, tableView);
         command.execute();
     }
 
@@ -64,14 +64,13 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     @Override
     public void delete(Event event, List<ProductGroup> items){
-//        TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(items.get(0).getId());
-        ICommand command = new ProductGroup_DeleteCommand(items, treeView, tableView, (GroupedItemService<P>) dependedItemService);
+        ICommand command = new ProductGroup_DeleteCommand<P>(this, items, treeView, tableView, (GroupedItemService<P>) dependedItemService);
         command.execute();
     }
 
     @Override
     public void change(Event event, ProductGroup item){
-        ICommand command = new ProductGroup_ChangeCommand(item, treeView, tableView);
+        ICommand command = new ProductGroup_ChangeCommand<P>(this, item, treeView, tableView);
         command.execute();
     }
 
@@ -88,7 +87,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * @param selectGroup TreeItem<ProductGroup>
      * @param rowToBeSelectedAfterAdding Integer
      */
-    public static void updateFormsWhenDeleted(TreeItem<ProductGroup> selectGroup, Integer rowToBeSelectedAfterAdding){
+    public void updateFormsWhenDeleted(TreeItem<ProductGroup> selectGroup, Integer rowToBeSelectedAfterAdding){
 
         Platform.runLater(() -> {
             treeView.updateView();
@@ -115,17 +114,17 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * Обновление форм после добавления или изменения группы
      * @param item ProductGroup
      */
-    public static void updateFormsWhenAddedOrChanged(ProductGroup item) {
+    public void updateFormsWhenAddedOrChanged(ProductGroup item) {
         Platform.runLater(()->{
             treeView.updateView();
             if(tableView == null){
-                _ProductGroup_Commands.selectTreeViewItem(treeView.findTreeItemById(item.getId()));
+                selectTreeViewItem(treeView.findTreeItemById(item.getId()));
             } else {
                 TreeItem<? extends CatalogGroup> selectedTreeItemInTable = ((CatalogableTable<? extends CatalogGroup>) tableView).getSelectedTreeItem();
                 ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
-                _ProductGroup_Commands.focusTreeViewItem(treeView.getFocusModel().getFocusedIndex());
+                focusTreeViewItem(treeView.getFocusModel().getFocusedIndex());
                 int row = (((ItemTableView<? extends Item>) tableView).getItems()).indexOf(item);
-                _ProductGroup_Commands.selectTableViewPos(row);
+                selectTableViewPos(row);
             }
         });
     }
@@ -134,7 +133,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * Выделяет группу TreeItem после операции
      * @param treeItemToBeSelected TreeItem<ProductGroup>
      */
-    private static void selectTreeViewItem(TreeItem<ProductGroup> treeItemToBeSelected){
+    private void selectTreeViewItem(TreeItem<ProductGroup> treeItemToBeSelected){
         treeView.getSelectionModel().select(treeItemToBeSelected);
         treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
     }
@@ -143,7 +142,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * Выделяет фокусом группу TreeItem после операции
      * @param treeItemToBeFocused TreeItem<ProductGroup>
      */
-    private static void focusTreeViewItem(int treeItemToBeFocused){
+    private void focusTreeViewItem(int treeItemToBeFocused){
         treeView.getFocusModel().focus(treeItemToBeFocused);
         treeView.scrollTo(treeItemToBeFocused);
     }
@@ -152,7 +151,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * Выделяет строку в таблице после опреации
      * @param rowToBeSelectedAfterAdding Integer
      */
-    private static void selectTableViewPos(int rowToBeSelectedAfterAdding){
+    private void selectTableViewPos(int rowToBeSelectedAfterAdding){
         ((ItemTableView<? extends Item>) tableView).getSelectionModel().select(rowToBeSelectedAfterAdding);
         ((ItemTableView<? extends Item>) tableView).scrollTo(rowToBeSelectedAfterAdding);
     }

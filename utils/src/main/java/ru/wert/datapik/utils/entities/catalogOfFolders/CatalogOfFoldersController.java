@@ -79,8 +79,7 @@ public class CatalogOfFoldersController {
      */
     private void createCatalog_TreeView() {
 
-        catalogTreeView = new _ProductGroup_TreeViewPatch<Folder>().create();
-        catalogTreeView.setDependedItemService(CH_FOLDERS);
+        catalogTreeView = new _ProductGroup_TreeViewPatch<Folder>().create(CH_FOLDERS);
 
         vbCatalog.getChildren().add(catalogTreeView);
 

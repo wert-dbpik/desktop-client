@@ -14,6 +14,7 @@ import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.folders.commands.Folder_DeleteCommand;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.product_groups.commands.ProductGroup_DeleteCommand;
+import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +24,10 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
 public class FormViewControlIml<P extends Item> {
 
     private final Folder_TableView view;
-    private final ProductGroup_TreeView<ProductGroup> treeView;
+    private final ProductGroup_TreeView<P> treeView;
     private IFormView<P> tableView = null;
 
-    public FormViewControlIml(Folder_TableView view, ProductGroup_TreeView<ProductGroup> treeView, IFormView<P> tableView) {
+    public FormViewControlIml(Folder_TableView view, ProductGroup_TreeView<P> treeView, IFormView<P> tableView) {
         this.view = view;
         this.treeView = treeView;
         this.tableView = tableView;
@@ -80,8 +81,10 @@ public class FormViewControlIml<P extends Item> {
 
         for(Item item : items){
             if(item instanceof ProductGroup){
+
                 TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(item.getId());
-                new ProductGroup_DeleteCommand((List<ProductGroup>) selectedTreeItem, treeView, tableView, (GroupedItemService<P>) CH_FOLDERS).execute();
+                _ProductGroup_Commands<P> commands = (_ProductGroup_Commands<P>) treeView.getItemCommands();
+                new ProductGroup_DeleteCommand<P>(commands, (List<ProductGroup>) selectedTreeItem, treeView, tableView, (GroupedItemService<P>) CH_FOLDERS).execute();
             }
             if(item instanceof Folder){
                 List<Folder> folders = new ArrayList<>();
