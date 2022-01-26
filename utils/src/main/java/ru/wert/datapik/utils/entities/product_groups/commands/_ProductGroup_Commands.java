@@ -53,7 +53,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     @Override
     public void add(Event event, ProductGroup newItem){
-        ICommand command = new ProductGroup_AddCommand<P>(this, newItem, treeView, tableView);
+        ICommand command = new ProductGroup_AddCommand<P>(this, newItem);
         command.execute();
     }
 
@@ -70,7 +70,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     @Override
     public void change(Event event, ProductGroup item){
-        ICommand command = new ProductGroup_ChangeCommand<P>(this, item, treeView, tableView);
+        ICommand command = new ProductGroup_ChangeCommand<P>(this, item);
         command.execute();
     }
 

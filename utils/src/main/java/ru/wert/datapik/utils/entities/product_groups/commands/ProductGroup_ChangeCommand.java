@@ -16,19 +16,14 @@ public class ProductGroup_ChangeCommand<P extends Item> implements ICommand {
 
     private final _ProductGroup_Commands<P> commands;
     private ProductGroup item;
-    private ProductGroup_TreeView<P> treeView;
-    private IFormView<P> tableView;
+
 
     /**
      *
-     * @param treeView ProductGroup_TreeView
      */
-    public ProductGroup_ChangeCommand(_ProductGroup_Commands<P> commands, ProductGroup item, ProductGroup_TreeView<P> treeView, IFormView<P> tableView) {
+    public ProductGroup_ChangeCommand(_ProductGroup_Commands<P> commands, ProductGroup item) {
         this.commands = commands;
         this.item = item;
-        this.treeView = treeView;
-        this.tableView = tableView;
-
     }
 
     @Override

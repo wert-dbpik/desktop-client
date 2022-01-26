@@ -16,20 +16,16 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
 
     private final _ProductGroup_Commands<P> commands;
     private final ProductGroup newItem;
-    private final ProductGroup_TreeView<P> treeView;
-    private IFormView<P> tableView = null;
+
 
 
     /**
      * Если tableView = null, то добавление происходит в левой части каталога (treeView),
      * иначе добавление происходит в правой части (tableView)
-     * @param treeView ProductGroupTableView
      */
-    public ProductGroup_AddCommand(_ProductGroup_Commands<P> commands, ProductGroup newItem, ProductGroup_TreeView<P> treeView, IFormView<P> tableView) {
+    public ProductGroup_AddCommand(_ProductGroup_Commands<P> commands, ProductGroup newItem) {
         this.commands = commands;
         this.newItem = newItem;
-        this.treeView = treeView;
-        this.tableView = tableView;
 
     }
 
