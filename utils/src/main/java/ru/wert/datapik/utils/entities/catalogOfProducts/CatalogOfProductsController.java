@@ -10,7 +10,9 @@ import javafx.scene.layout.*;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
+import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.products.Product_TableView;
 import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
@@ -35,7 +37,9 @@ public class CatalogOfProductsController {
 
     private Item_TreeView<Product, ProductGroup> catalogTreeView;
 
-    @Getter private CatalogTableView<Product, ProductGroup> productTableView;
+    @Getter private CatalogTableView<Product, ProductGroup> tempProductTableView;
+
+    @Getter private ItemTableView<Item> productTableView;
 
 
 
@@ -52,7 +56,7 @@ public class CatalogOfProductsController {
 
 
 
-        catalogTreeView.setConnectedForm(productTableView);
+        catalogTreeView.setConnectedForm(tempProductTableView);
 
     }
 
@@ -68,7 +72,11 @@ public class CatalogOfProductsController {
      * дерево КАТАЛОГА
      */
     private void createCatalog_TreeView() {
-        catalogTreeView = new _ProductGroup_TreeViewPatch<Product>().create(CH_PRODUCTS);
+        _ProductGroup_TreeViewPatch<Product> catalogPatch = new _ProductGroup_TreeViewPatch<Product>();
+        catalogPatch.setDependedItemService(CH_PRODUCTS);
+        catalogPatch.setDependedTableView(productTableView);
+
+        catalogTreeView = catalogPatch.create();
 
         vbCatalog.getChildren().add(catalogTreeView);
 
@@ -84,7 +92,7 @@ public class CatalogOfProductsController {
      */
     private void createProducts_TableView() {
         boolean useContextMenu = CH_CURRENT_USER.getUserGroup().isEditProductStructures();
-        productTableView = new Product_TableView(catalogTreeView, "ИЗДЕЛИЯ", useContextMenu);
+        tempProductTableView = new Product_TableView(catalogTreeView, "ИЗДЕЛИЯ", useContextMenu);
         productTableView.updateView();
 
         productTableView.setMinHeight(0.0);
@@ -124,7 +132,7 @@ public class CatalogOfProductsController {
         btnProductsGlobe.setOnAction((e)->{
 
             Platform.runLater(()->{
-                productTableView.updateCatalogView(catalogTreeView.getRoot(), true);
+                tempProductTableView.updateCatalogView(catalogTreeView.getRoot(), true);
                 catalogTreeView.getSelectionModel().select(catalogTreeView.getRoot());
                 productTableView.getSelectionModel().select(0);
             });

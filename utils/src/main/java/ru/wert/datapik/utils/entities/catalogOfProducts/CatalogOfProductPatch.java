@@ -37,9 +37,9 @@ public class CatalogOfProductPatch {
         return catalogOfProductsPatch;
     }
 
-    public Product_TableView getProductTableView() {
-        return (Product_TableView) catalogOfProductsController.getProductTableView();
-    }
+//    public Product_TableView getProductTableView() {
+//        return (Product_TableView) catalogOfProductsController.getProductTableView();
+//    }
 
     public HBox getCatalogButtons(){
         return catalogOfProductsController.getCatalogButtons();

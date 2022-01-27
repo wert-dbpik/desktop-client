@@ -27,6 +27,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     private IFormView<P> tableView = null; //Таблица каталога, которая обновляется вместе с деревом
     private final ProductGroup_TreeView<P> treeView;
     private final ItemService<P>  dependedItemService;
+    private final ItemTableView<Item> dependedTableView;
 
     /**
      * Конструктор для Таблицы
@@ -34,10 +35,11 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * @param tableView IFormView<P>
      * @param dependedItemService ItemService<P>
      */
-    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, IFormView<P> tableView, ItemService<P> dependedItemService) {
+    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, IFormView<P> tableView, ItemService<P> dependedItemService, ItemTableView<Item> dependedTableView) {
         this.treeView = treeView;
         this.tableView = tableView;
         this.dependedItemService = dependedItemService;
+        this.dependedTableView = dependedTableView;
 
     }
 
@@ -46,9 +48,10 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * @param treeView ProductGroup_TreeView<P>
      * @param dependedItemService ItemService<P>
      */
-    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, ItemService<P> dependedItemService) {
+    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, ItemService<P> dependedItemService, ItemTableView<Item> dependedTableView) {
         this.treeView = treeView;
         this.dependedItemService = dependedItemService;
+        this.dependedTableView = dependedTableView;
     }
 
     @Override

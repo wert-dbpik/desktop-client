@@ -22,7 +22,7 @@ public class ProductGroup_Chooser {
     public static ProductGroup create(Window stage){
 
         try {
-            TreeView<ProductGroup> treeView = new _ProductGroup_TreeViewPatch<>().create(null);
+            TreeView<ProductGroup> treeView = new _ProductGroup_TreeViewPatch<>().create();
 
             FXMLLoader loader = new FXMLLoader(ProductGroup_Chooser.class.getResource("/utils-fxml/productGroup/productGroupChooser.fxml"));
             Parent parent = loader.load();
