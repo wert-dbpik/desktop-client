@@ -74,9 +74,9 @@ public class CatalogOfProductsController {
     private void createCatalog_TreeView() {
         _ProductGroup_TreeViewPatch<Product> catalogPatch = new _ProductGroup_TreeViewPatch<Product>();
         catalogPatch.setDependedItemService(CH_PRODUCTS);
-        catalogPatch.setDependedTableView(productTableView);
+//        catalogPatch.setDependedTableView(productTableView);
 
-        catalogTreeView = catalogPatch.create();
+//        catalogTreeView = catalogPatch.create();
 
         vbCatalog.getChildren().add(catalogTreeView);
 

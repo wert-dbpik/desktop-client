@@ -5,6 +5,7 @@ import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
+import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
@@ -24,7 +25,7 @@ public class ProductGroup_TreeView<P extends Item> extends Item_TreeView<P, Prod
     public ProductGroup_TreeView(ItemService<ProductGroup> itemService, ItemService<P> dependedItemService, ItemTableView<Item> dependedTableView, ProductGroup rootItem, boolean useContextMenu) {
         super(itemService, rootItem);
 
-        commands = new _ProductGroup_Commands<>(this, dependedItemService, dependedTableView);
+        commands = new _ProductGroup_Commands<>(this, null, dependedItemService, dependedTableView);
 
         if (useContextMenu)
             createContextMenu();

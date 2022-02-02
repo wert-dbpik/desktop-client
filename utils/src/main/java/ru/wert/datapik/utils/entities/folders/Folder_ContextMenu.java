@@ -13,6 +13,7 @@ import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
+import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
@@ -102,7 +103,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         changeProductGroup = new MenuItem("Изменить");
         deleteProductGroup = new MenuItem("Удалить");
 
-        productGroup_commands = new _ProductGroup_Commands(treeView, CH_FOLDERS, tableView);
+        productGroup_commands = new _ProductGroup_Commands<>(treeView, null, CH_FOLDERS, tableView);
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);

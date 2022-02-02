@@ -28,7 +28,7 @@ import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
 public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
 
     private String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
-    private final _Folder_Commands commands;
+    private _Folder_Commands commands;
 
     private List<Folder> currentItemList = new ArrayList<>();
     private FormView_ACCController<Item> accController;
@@ -37,11 +37,15 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     private Folder_ContextMenu contextMenu;
 
-    public Folder_TableView(ProductGroup_TreeView<Folder> catalogTree, String prompt) {
+    public Folder_TableView(String prompt) {
         super(prompt);
-        this.catalogTree = catalogTree;
 
-        new FormViewControlIml(this, catalogTree, this);
+//        new FormViewControlIml(this, catalogTree, this);
+
+    }
+
+    public void doWhatYouWant(ProductGroup_TreeView<Folder> catalogTree){
+        this.catalogTree = catalogTree;
 
         commands = new _Folder_Commands(this);
         createContextMenu();
@@ -73,7 +77,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
             return row ;
         });
-
     }
 
 

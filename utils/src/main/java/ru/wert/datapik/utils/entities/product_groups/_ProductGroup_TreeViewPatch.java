@@ -14,13 +14,17 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 public class _ProductGroup_TreeViewPatch<P extends Item> {
 
     @Setter private ItemService<P> dependedItemService;
-    @Setter private ItemTableView<Item> dependedTableView;
 
-    public ProductGroup_TreeView<P> create(){
+    public _ProductGroup_TreeViewPatch() {
+
+    }
+
+    public ProductGroup_TreeView<P> createProductTreeView(ItemTableView<Item> dependedTableView){
 
         ProductGroup rootProductGroup = new ProductGroup("Изделие", 0L);
         rootProductGroup.setId(1L);
         boolean useContextMenu = CH_CURRENT_USER.getUserGroup().isEditProductStructures();
+
         ProductGroup_TreeView<P> catalogTreeView = new ProductGroup_TreeView<>(CH_PRODUCT_GROUPS, dependedItemService, dependedTableView, rootProductGroup, useContextMenu);
         catalogTreeView.buildTree();
 
@@ -28,6 +32,8 @@ public class _ProductGroup_TreeViewPatch<P extends Item> {
 
         return catalogTreeView;
     }
+
+
 
 
 }

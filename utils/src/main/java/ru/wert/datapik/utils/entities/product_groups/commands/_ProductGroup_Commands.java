@@ -28,6 +28,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     private final ProductGroup_TreeView<P> treeView;
     private final ItemService<P>  dependedItemService;
     private final ItemTableView<Item> dependedTableView;
+//    private boolean changesInDependedTableView;
 
     /**
      * Конструктор для Таблицы
@@ -40,19 +41,22 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
         this.tableView = tableView;
         this.dependedItemService = dependedItemService;
         this.dependedTableView = dependedTableView;
+//        this.changesInDependedTableView = changesInDependedTableView;
+
+        System.out.println("TableVie = " + tableView + "; DependedTableView = " + dependedTableView);
 
     }
 
-    /**
-     * Конструктор для дерева
-     * @param treeView ProductGroup_TreeView<P>
-     * @param dependedItemService ItemService<P>
-     */
-    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, ItemService<P> dependedItemService, ItemTableView<Item> dependedTableView) {
-        this.treeView = treeView;
-        this.dependedItemService = dependedItemService;
-        this.dependedTableView = dependedTableView;
-    }
+//    /**
+//     * Конструктор для дерева
+//     * @param treeView ProductGroup_TreeView<P>
+//     * @param dependedItemService ItemService<P>
+//     */
+//    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, ItemService<P> dependedItemService, ItemTableView<Item> dependedTableView) {
+//        this.treeView = treeView;
+//        this.dependedItemService = dependedItemService;
+//        this.dependedTableView = dependedTableView;
+//    }
 
     @Override
     public void add(Event event, ProductGroup newItem){
@@ -94,9 +98,11 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
         Platform.runLater(() -> {
             treeView.updateView();
+
             if (tableView == null) {
                 treeView.getSelectionModel().select(selectGroup);
                 treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
+                if(dependedTableView != null) dependedTableView.updateView();
             } else {
                 TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
                 int row = treeView.getFocusModel().getFocusedIndex();
@@ -122,6 +128,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
             treeView.updateView();
             if(tableView == null){
                 selectTreeViewItem(treeView.findTreeItemById(item.getId()));
+                if(dependedTableView != null) dependedTableView.updateView();
             } else {
                 TreeItem<? extends CatalogGroup> selectedTreeItemInTable = ((CatalogableTable<? extends CatalogGroup>) tableView).getSelectedTreeItem();
                 ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
