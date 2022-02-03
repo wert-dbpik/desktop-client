@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.product_groups.commands;
 
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.control.TreeItem;
@@ -82,32 +83,52 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     /**
      * Обновление форм после удаления групп
      * @param selectGroup TreeItem<ProductGroup>
-     * @param rowToBeSelectedAfterAdding Integer
+     * @param rowToBeSelectedAfterDeleting Integer
      */
-    public void updateFormsWhenDeleted(TreeItem<ProductGroup> selectGroup, Integer rowToBeSelectedAfterAdding){
+    public void updateFormsWhenDeleted(TreeItem<ProductGroup> selectGroup, Integer rowToBeSelectedAfterDeleting){
+
 
         Platform.runLater(() -> {
             treeView.updateView();
+            System.out.println(selectGroup.getValue().getName());
+            treeView.getSelectionModel().select(selectGroup);
+            treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
 
-            if (!tableClicked) { //Если изменения произведены в TreeView
-                treeView.getSelectionModel().select(selectGroup);
-                treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
-                TreeItem<? extends CatalogGroup> selectedTreeItemInTable = catTableView.getSelectedTreeItem();
-                catTableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
-            } else {
+            if (catTableView != null) {
                 TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
-                int row = treeView.getFocusModel().getFocusedIndex();
-                treeView.getFocusModel().focus(row);
-                treeView.scrollTo(row);
-
                 catTableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
-                if(rowToBeSelectedAfterAdding != null) {
-                    tableView.getSelectionModel().select(rowToBeSelectedAfterAdding);
-                    tableView.scrollTo(rowToBeSelectedAfterAdding);
+                if (rowToBeSelectedAfterDeleting != null) {
+                    tableView.getSelectionModel().select(rowToBeSelectedAfterDeleting);
+                    tableView.scrollTo(rowToBeSelectedAfterDeleting);
                 }
             }
 
         });
+
+
+
+//        Platform.runLater(() -> {
+//            treeView.updateView();
+//
+//            if (!tableClicked) { //Если изменения произведены в TreeView
+//                treeView.getSelectionModel().select(selectGroup);
+//                treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
+//                TreeItem<? extends CatalogGroup> selectedTreeItemInTable = catTableView.getSelectedTreeItem();
+//                catTableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
+//            } else {
+//                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
+//                int row = treeView.getFocusModel().getFocusedIndex();
+//                treeView.getFocusModel().focus(row);
+//                treeView.scrollTo(row);
+//
+//                catTableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
+//                if(rowToBeSelectedAfterAdding != null) {
+//                    tableView.getSelectionModel().select(rowToBeSelectedAfterAdding);
+//                    tableView.scrollTo(rowToBeSelectedAfterAdding);
+//                }
+//            }
+//
+//        });
     }
 
     /**
@@ -116,47 +137,20 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      */
     public void updateFormsWhenAddedOrChanged(ProductGroup item) {
         TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
-        Platform.runLater(()->{
+        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
+        //Заранее раскрываем выбранный узел
+        //selectedTreeItemInTree != null - условие при добавлении в корень
+        if(selectedTreeItemInTree != null) selectedTreeItemInTree.setExpanded(true);
+
+        Platform.runLater(() -> {
             treeView.updateView();
-            if(!tableClicked){//Если изменения произведены в TreeView
-                selectedTreeItemInTree.setExpanded(true);
-                treeView.getFocusModel().focus( treeView.findTreeItemById(item.getId()).getParent().getChildren().indexOf(selectedTreeItemInTree)+1);
-                if(catTableView != null) { //Если имеем дело с каталогом, а не только с деревом
-                    catTableView.updateOnlyTableView(catTableView.getSelectedTreeItem().getValue());
-                }
-            } else {
-                TreeItem<? extends CatalogGroup> selectedTreeItemInTable = catTableView.getSelectedTreeItem();
-                catTableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
-                focusTreeViewItem(treeView.getFocusModel().getFocusedIndex());
-                int row = tableView.getItems().indexOf(item);
-                selectTableViewPos(row);
+            TreeItem<? extends CatalogGroup> addedTreeItem = treeView.findTreeItemById(item.getId());
+            treeView.getFocusModel().focus(selectedItemIndex + addedTreeItem.getParent().getChildren().indexOf(addedTreeItem) + 1);
+            if (catTableView != null) { //Если имеем дело с каталогом, а не только с деревом
+                catTableView.updateOnlyTableView(catTableView.getSelectedTreeItem().getValue());
+                tableView.getSelectionModel().select(item);
+                tableView.scrollTo(item);
             }
         });
-    }
-
-    /**
-     * Выделяет группу TreeItem после операции
-     * @param treeItemToBeSelected TreeItem<ProductGroup>
-     */
-    private void focusTreeViewItem(TreeItem<ProductGroup> treeItemToBeSelected){
-        treeView.getFocusModel().focus(treeItemToBeSelected.getParent().getChildren().indexOf(treeItemToBeSelected) + 1);
-    }
-
-    /**
-     * Выделяет фокусом группу TreeItem после операции
-     * @param treeItemToBeFocused TreeItem<ProductGroup>
-     */
-    private void focusTreeViewItem(int treeItemToBeFocused){
-        treeView.getFocusModel().focus(treeItemToBeFocused);
-        treeView.scrollTo(treeItemToBeFocused);
-    }
-
-    /**
-     * Выделяет строку в таблице после опреации
-     * @param rowToBeSelectedAfterAdding Integer
-     */
-    private void selectTableViewPos(int rowToBeSelectedAfterAdding){
-        tableView.getSelectionModel().select(rowToBeSelectedAfterAdding);
-        tableView.scrollTo(rowToBeSelectedAfterAdding);
     }
 }
