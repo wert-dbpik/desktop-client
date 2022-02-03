@@ -80,7 +80,10 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     }
 
 
-
+    /**
+     * Обновление с учетом выделенного элемента в TREE VIEW
+     * Метод вызывается извне этого класса
+     */
     @Override
     public void updateTableView() {
         //Находим выделенный элемент в дереве каталогов
@@ -88,6 +91,11 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         updateNow(null);
     }
 
+    /**
+     * Обновление с учетом выделенного элемента в TREE VIEW
+     * Метод вызывается в этом классе
+     * @param prevGroupToBeSelected группа TreeView - верхняя строка в таблице, указывающая на верхний уровень ProductGroup
+     */
     private void updateNow(ProductGroup prevGroupToBeSelected) {
         List<Item> items = new ArrayList<>();
         if (selectedTreeItem == null) selectedTreeItem = catalogTree.getRoot();
