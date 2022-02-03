@@ -41,9 +41,6 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
         this.tableView = tableView;
         this.dependedItemService = dependedItemService;
         this.dependedTableView = dependedTableView;
-//        this.changesInDependedTableView = changesInDependedTableView;
-
-        System.out.println("TableVie = " + tableView + "; DependedTableView = " + dependedTableView);
 
     }
 
