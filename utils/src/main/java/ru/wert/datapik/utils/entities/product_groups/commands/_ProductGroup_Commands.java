@@ -71,7 +71,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     @Override
     public void delete(Event event, List<ProductGroup> items){
-        ICommand command = new ProductGroup_DeleteCommand<P>(this, items, treeView, tableView, (GroupedItemService<P>) dependedItemService);
+        ICommand command = new ProductGroup_DeleteCommand<P>(this, items, treeView, dependedTableView, (GroupedItemService<P>) dependedItemService);
         command.execute();
     }
 
@@ -102,17 +102,18 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
             if (tableView == null) {
                 treeView.getSelectionModel().select(selectGroup);
                 treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
-                if(dependedTableView != null) dependedTableView.updateView();
+                TreeItem<? extends CatalogGroup> selectedTreeItemInTable = ((CatalogableTable<? extends CatalogGroup>) dependedTableView).getSelectedTreeItem();
+                if(dependedTableView != null) ((CatalogableTable<? extends CatalogGroup>)dependedTableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
             } else {
-                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
+                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) dependedTableView).getSelectedTreeItem();
                 int row = treeView.getFocusModel().getFocusedIndex();
                 treeView.getFocusModel().focus(row);
                 treeView.scrollTo(row);
 
-                ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
+                ((CatalogableTable<? extends CatalogGroup>) dependedTableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
                 if(rowToBeSelectedAfterAdding != null) {
-                    ((ItemTableView<? extends Item>) tableView).getSelectionModel().select(rowToBeSelectedAfterAdding);
-                    ((ItemTableView<? extends Item>) tableView).scrollTo(rowToBeSelectedAfterAdding);
+                    ((ItemTableView<? extends Item>) dependedTableView).getSelectionModel().select(rowToBeSelectedAfterAdding);
+                    ((ItemTableView<? extends Item>) dependedTableView).scrollTo(rowToBeSelectedAfterAdding);
                 }
             }
 
@@ -127,13 +128,14 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
         Platform.runLater(()->{
             treeView.updateView();
             if(tableView == null){
-                selectTreeViewItem(treeView.findTreeItemById(item.getId()));
-                if(dependedTableView != null) dependedTableView.updateView();
+//                selectTreeViewItem(treeView.findTreeItemById(item.getId()));
+                TreeItem<? extends CatalogGroup> selectedTreeItemInTable = ((CatalogableTable<? extends CatalogGroup>) dependedTableView).getSelectedTreeItem();
+                if(dependedTableView != null) ((CatalogableTable<? extends CatalogGroup>)dependedTableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
             } else {
-                TreeItem<? extends CatalogGroup> selectedTreeItemInTable = ((CatalogableTable<? extends CatalogGroup>) tableView).getSelectedTreeItem();
-                ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
+                TreeItem<? extends CatalogGroup> selectedTreeItemInTable = ((CatalogableTable<? extends CatalogGroup>) dependedTableView).getSelectedTreeItem();
+                ((CatalogableTable<? extends CatalogGroup>) dependedTableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
                 focusTreeViewItem(treeView.getFocusModel().getFocusedIndex());
-                int row = (((ItemTableView<? extends Item>) tableView).getItems()).indexOf(item);
+                int row = (((ItemTableView<? extends Item>) dependedTableView).getItems()).indexOf(item);
                 selectTableViewPos(row);
             }
         });

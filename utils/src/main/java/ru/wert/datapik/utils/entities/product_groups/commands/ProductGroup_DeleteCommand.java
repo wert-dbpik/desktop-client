@@ -26,7 +26,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
 
     private final List<ProductGroup> items;
     private ProductGroup_TreeView<P> treeView;
-    private IFormView<P> tableView = null;
+    private ItemTableView<Item> tableView = null;
 
     private List<ProductGroup> groupsToBeDeleted;
     private List<P> itemsToBeDeleted;
@@ -42,7 +42,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
      *
      * @param treeView ProductGroup_TreeView
      */
-    public ProductGroup_DeleteCommand(_ProductGroup_Commands<P> commands, List<ProductGroup> items, ProductGroup_TreeView<P> treeView, IFormView<P> tableView, GroupedItemService<P> itemService) {
+    public ProductGroup_DeleteCommand(_ProductGroup_Commands<P> commands, List<ProductGroup> items, ProductGroup_TreeView<P> treeView, ItemTableView<Item> tableView, GroupedItemService<P> itemService) {
         this.commands = commands;
         this.items = items;
         this.treeView = treeView;

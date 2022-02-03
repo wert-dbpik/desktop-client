@@ -9,6 +9,7 @@ import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.GroupedItemService;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.folders.commands.Folder_DeleteCommand;
@@ -84,7 +85,7 @@ public class FormViewControlIml<P extends Item> {
 
                 TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(item.getId());
                 _ProductGroup_Commands<P> commands = (_ProductGroup_Commands<P>) treeView.getItemCommands();
-                new ProductGroup_DeleteCommand<P>(commands, (List<ProductGroup>) selectedTreeItem, treeView, tableView, (GroupedItemService<P>) CH_FOLDERS).execute();
+                new ProductGroup_DeleteCommand<P>(commands, (List<ProductGroup>) selectedTreeItem, treeView, (ItemTableView<Item>)tableView, (GroupedItemService<P>) CH_FOLDERS).execute();
             }
             if(item instanceof Folder){
                 List<Folder> folders = new ArrayList<>();
