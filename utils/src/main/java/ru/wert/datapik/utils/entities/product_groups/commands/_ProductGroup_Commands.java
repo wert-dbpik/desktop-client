@@ -86,17 +86,21 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * @param rowToBeSelectedAfterDeleting Integer
      */
     public void updateFormsWhenDeleted(TreeItem<ProductGroup> selectGroup, Integer rowToBeSelectedAfterDeleting){
-
+        TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
+        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
 
         Platform.runLater(() -> {
             treeView.updateView();
-            System.out.println(selectGroup.getValue().getName());
-            treeView.getSelectionModel().select(selectGroup);
-            treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
+            treeView.getFocusModel().focus(selectedItemIndex - 1);
+            treeView.scrollTo(selectedItemIndex - 1);
 
             if (catTableView != null) {
                 TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
+                if(selectedTreeItemInTable.getValue().equals(selectedTreeItemInTree.getValue())) {
+                    selectedTreeItemInTable = selectedTreeItemInTable.getParent();
+                }
                 catTableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
+                System.out.println("rowToBeSelectedAfterDeleting = " + rowToBeSelectedAfterDeleting);
                 if (rowToBeSelectedAfterDeleting != null) {
                     tableView.getSelectionModel().select(rowToBeSelectedAfterDeleting);
                     tableView.scrollTo(rowToBeSelectedAfterDeleting);
