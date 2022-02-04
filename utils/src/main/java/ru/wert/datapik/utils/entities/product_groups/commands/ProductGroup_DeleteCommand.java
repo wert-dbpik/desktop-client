@@ -57,12 +57,9 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
         if(items.isEmpty()) return;
 
         //TODO: Находим элементы, выделяемые после завершения операции
-        TreeItem<ProductGroup> itemToBeSelectedAfterDeleting = null;
+
         Integer rowToBeSelectedAfterDeleting = null;
-        if (tableView == null) { //Если удаляется узел дерева
-            //Находим родителя узла
-            itemToBeSelectedAfterDeleting = treeView.findTreeItemById(items.get(0).getId()).getParent();
-        } else {//Если удаляются строки в таблице
+        if (tableView != null) { //Если удаляется узел дерева
             rowToBeSelectedAfterDeleting = findRowToBeSelectedAfterDeleting();
         }
 
@@ -86,7 +83,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
             }
 
             //TODO: Обновляем дерево и таблицу
-            commands.updateFormsWhenDeleted(itemToBeSelectedAfterDeleting, rowToBeSelectedAfterDeleting);
+            commands.updateFormsWhenDeleted(rowToBeSelectedAfterDeleting);
 
             //TODO: Предупреждаем пользователя, если не все получилось удалить
             if (!notDeletedGroups.isEmpty() || !notDeletedItems.isEmpty())

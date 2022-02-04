@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.contextMenuACC;
 
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TableView;
@@ -30,9 +31,6 @@ public class FormViewACCWindow<P extends Item> {
     //Контроллер диалогового окна ДОБАВИТЬ/ИЗМЕНИТЬ
     private FormView_ACCController<P> accController;
     private TableView<Item> tableView = null;
-
-    public FormViewACCWindow() {
-    }
 
     public Parent create(EOperation op, IFormView<P> formView, ItemCommands<P> commands, String res, TableView<Item> tableView){
         this.tableView = tableView;

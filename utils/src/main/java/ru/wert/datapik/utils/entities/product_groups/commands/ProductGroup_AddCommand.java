@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.product_groups.commands;
 
+import javafx.event.Event;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -16,16 +17,13 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
 
     private final _ProductGroup_Commands<P> commands;
     private final ProductGroup newItem;
+    private final Event event;
 
 
-
-    /**
-     * Если tableView = null, то добавление происходит в левой части каталога (treeView),
-     * иначе добавление происходит в правой части (tableView)
-     */
-    public ProductGroup_AddCommand(_ProductGroup_Commands<P> commands, ProductGroup newItem) {
+    public ProductGroup_AddCommand(_ProductGroup_Commands<P> commands, ProductGroup newItem, Event event) {
         this.commands = commands;
         this.newItem = newItem;
+        this.event = event;
 
     }
 

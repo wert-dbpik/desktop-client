@@ -25,7 +25,7 @@ public class ProductGroup_TreeView<P extends Item> extends Item_TreeView<P, Prod
     public ProductGroup_TreeView(ItemService<ProductGroup> itemService, ItemService<P> dependedItemService, ItemTableView<Item> dependedTableView, ProductGroup rootItem, boolean useContextMenu) {
         super(itemService, rootItem);
 
-        commands = new _ProductGroup_Commands<>(this, dependedTableView, dependedItemService, false );
+        commands = new _ProductGroup_Commands<>(this, dependedTableView, dependedItemService);
 
         if (useContextMenu)
             createContextMenu();

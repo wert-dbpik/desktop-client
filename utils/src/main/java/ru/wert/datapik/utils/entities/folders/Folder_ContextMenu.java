@@ -34,6 +34,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     private _ProductGroup_Commands productGroup_commands;
     private Folder_TableView tableView;
     private ProductGroup_TreeView<Folder> treeView;
+    private Event event;
 
     private MenuItem addProductGroup;
     private MenuItem changeProductGroup;
@@ -46,7 +47,13 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         this.tableView = tableView;
         this.treeView = treeView;
 
+        setOnShowing(e->{
+            this.event = e;
+        });
+
         createOnShowing();
+
+
 
     }
 
@@ -103,7 +110,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         changeProductGroup = new MenuItem("Изменить");
         deleteProductGroup = new MenuItem("Удалить");
 
-        productGroup_commands = new _ProductGroup_Commands<>(treeView, tableView, CH_FOLDERS, false);
+        productGroup_commands = new _ProductGroup_Commands<>(treeView, tableView, CH_FOLDERS, event);
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);
@@ -113,7 +120,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         if (selectedFolders.size() == 0 || (selectedFolders.size() == 1 && !(selectedFolders.get(0) instanceof ProductGroup))) {
             extraAddProductGroup = true;
-        } else if (selectedFolders.size() == 1 && selectedFolders.get(0) instanceof ProductGroup){
+        } else if (selectedFolders.size() == 1 && selectedFolders.get(0) instanceof ProductGroup &&
+                !selectedFolders.get(0).equals(tableView.getItems().get(0)) ) { //не верхняя строка в таблице
             extraAddProductGroup = true;
             extraChangeProductGroup = true;
             extraDeleteProductGroup = true;
@@ -144,6 +152,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
     private void addNewProductGroup(Event e){
         new FormViewACCWindow<ProductGroup>().create(EOperation.ADD, treeView, productGroup_commands, treeView.getAccWindowRes(), tableView);
+        System.out.println("EVENT SOURCE = " + event.getSource());
 
      }
 
