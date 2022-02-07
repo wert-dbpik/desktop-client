@@ -13,6 +13,7 @@ import ru.wert.datapik.utils.common.components.BXPrefix;
 import ru.wert.datapik.utils.common.components.BXProductGroup;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_Chooser;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
@@ -115,8 +116,7 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     @Override
     public Folder getOldItem() {
-//        return tableView.getSelectionModel().getSelectedItems().get(0);
-        return null;
+        return ((ItemTableView<Folder>)formView).getSelectionModel().getSelectedItems().get(0);
     }
 
     @Override
