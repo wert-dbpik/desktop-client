@@ -35,6 +35,8 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
     private TableView<Item> tableView = null;
 
+    private boolean changesInTableView = false;
+
     private ProductGroup focusedItem;
     private ProductGroup copiedGroup;
 
@@ -79,12 +81,17 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
         Long parentId;
         TreeItem<ProductGroup> chosenItem = null;
-        if (tableView == null) //Если мы имеем дело только с деревом каталогом
+        if (!changesInTableView) //Если мы имеем дело только с деревом каталогом
             chosenItem = ((Item_TreeView<Product, ProductGroup>) formView).getSelectionModel().getSelectedItem();
-        else //Если имеем дело с таблицей и деревом каталога
-//            chosenItem = treeView.findTreeItemById(tableView.getSelectionModel().getSelectedItem().getId());
-            chosenItem = treeView.findTreeItemById(((ProductGroup) tableView.getItems().get(0)).getId());
+        else {//Если имеем дело с таблицей и деревом каталога
+            Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+            if(selectedItem == null) //Если клик по пустому полю
+                chosenItem = treeView.findTreeItemById(tableView.getItems().get(0).getId());
+            else //Если клик по элементу с папкой
+                chosenItem = treeView.findTreeItemById(((ProductGroup) selectedItem).getId());
+        }
 
+        //Если добавление проимсходит в корень каталога
         if (chosenItem == null) {
             parentId = treeView.getRoot().getValue().getId(); //=1L
         }
@@ -114,6 +121,10 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
     public void setTableView(TableView<Item> tableView) {
         this.tableView = tableView;
+    }
+
+    public void setChangesInTableView(boolean changesInTableView){
+        this.changesInTableView = changesInTableView;
     }
 
     @Override

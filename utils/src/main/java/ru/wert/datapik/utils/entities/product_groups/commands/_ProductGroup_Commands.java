@@ -29,7 +29,6 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     private final ItemService<P> tableItemService;
     private final ItemTableView<Item> tableView;
     private final CatalogableTable<? extends CatalogGroup> catTableView;
-    private final Event event;
 
 
     /**
@@ -37,13 +36,12 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * @param treeView ProductGroup_TreeView<P>
      * @param tableView ItemTableView<Item>
      * @param tableItemService ItemService<P>, ItemService для TableView
-     * @param event Event, для выяснения источника события
      */
-    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, ItemTableView<Item> tableView, ItemService<P> tableItemService, Event event) {
+    public _ProductGroup_Commands(ProductGroup_TreeView<P> treeView, ItemTableView<Item> tableView, ItemService<P> tableItemService) {
         this.treeView = treeView;
         this.tableView = tableView;
         this.tableItemService = tableItemService;
-        this.event = event;
+
 
         //Для удобства и сокращения длины строк
         this.catTableView = (CatalogableTable<? extends CatalogGroup>) tableView;
@@ -52,7 +50,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     @Override
     public void add(Event event, ProductGroup newItem){
-        ICommand command = new ProductGroup_AddCommand<P>(this, newItem, event);
+        ICommand command = new ProductGroup_AddCommand<P>(this, newItem);
         command.execute();
     }
 

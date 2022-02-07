@@ -1,6 +1,5 @@
 package ru.wert.datapik.utils.common.contextMenuACC;
 
-import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TableView;
@@ -31,9 +30,12 @@ public class FormViewACCWindow<P extends Item> {
     //Контроллер диалогового окна ДОБАВИТЬ/ИЗМЕНИТЬ
     private FormView_ACCController<P> accController;
     private TableView<Item> tableView = null;
+    private boolean changesAreInTableView;
 
-    public Parent create(EOperation op, IFormView<P> formView, ItemCommands<P> commands, String res, TableView<Item> tableView){
+    public Parent create(EOperation op, IFormView<P> formView, ItemCommands<P> commands, String res, TableView<Item> tableView, boolean changesAreInTableView){
         this.tableView = tableView;
+        this.changesAreInTableView = changesAreInTableView;
+
 
         return create(op, formView, commands, res);
     }
@@ -51,9 +53,12 @@ public class FormViewACCWindow<P extends Item> {
 
             windowCreationAllowed = true;
 
-            //
-            if(accController instanceof ProductGroup_ACCController && tableView != null)
-                ((ProductGroup_ACCController)accController).setTableView(tableView);
+            //Если изменения происходят в таблице, не в дереве
+            if(accController instanceof ProductGroup_ACCController && changesAreInTableView) {
+                ((ProductGroup_ACCController) accController).setChangesInTableView(changesAreInTableView);
+                ((ProductGroup_ACCController) accController).setTableView(tableView);
+
+            }
 
             accController.init(op, formView, commands);
 

@@ -17,14 +17,10 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
 
     private final _ProductGroup_Commands<P> commands;
     private final ProductGroup newItem;
-    private final Event event;
 
-
-    public ProductGroup_AddCommand(_ProductGroup_Commands<P> commands, ProductGroup newItem, Event event) {
+    public ProductGroup_AddCommand(_ProductGroup_Commands<P> commands, ProductGroup newItem) {
         this.commands = commands;
         this.newItem = newItem;
-        this.event = event;
-
     }
 
     @Override
