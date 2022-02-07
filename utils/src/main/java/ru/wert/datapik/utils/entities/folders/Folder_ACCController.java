@@ -54,8 +54,7 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     private StackPane spIndicator;
 
     private ProductGroup group;
-    private ProductGroup chosenGroup;
-    private Folder focusedItem;
+
 
     @Override
     public void init(EOperation operation, IFormView<Folder> formView, ItemCommands<Folder> commands) {
@@ -116,7 +115,8 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     @Override
     public Folder getOldItem() {
-        return getOldItem();
+//        return tableView.getSelectionModel().getSelectedItems().get(0);
+        return null;
     }
 
     @Override

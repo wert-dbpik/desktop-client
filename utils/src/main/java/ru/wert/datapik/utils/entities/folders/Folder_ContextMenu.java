@@ -1,27 +1,20 @@
 package ru.wert.datapik.utils.entities.folders;
 
-import com.sun.deploy.util.FXLoader;
 import javafx.event.Event;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
-import org.bouncycastle.tsp.TSPUtil;
-import ru.wert.datapik.client.entity.models.Draft;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TablePosition;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
-import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
-import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
-import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
-import ru.wert.datapik.utils.entities.product_groups.ProductGroup_ACCController;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 import ru.wert.datapik.winform.enums.EOperation;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +23,6 @@ import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
 
 public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
-    private final _Folder_Commands commands;
     private _ProductGroup_Commands productGroup_commands;
     private Folder_TableView tableView;
     private ProductGroup_TreeView<Folder> treeView;
@@ -42,7 +34,6 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
     public Folder_ContextMenu(Folder_TableView tableView, ProductGroup_TreeView<Folder> treeView, _Folder_Commands commands, String productsACCRes) {
         super((ItemTableView)tableView, commands, productsACCRes);
-        this.commands = commands;
         this.tableView = tableView;
         this.treeView = treeView;
 
@@ -99,7 +90,6 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         boolean extraChangeProductGroup = false;
         boolean extraDeleteProductGroup = false;
 
-
         List<MenuItem> extraItems = new ArrayList<>();
         addProductGroup = new MenuItem("Добавить директорию");
         changeProductGroup = new MenuItem("Изменить");
@@ -109,7 +99,6 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);
-
 
         List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
 
@@ -158,7 +147,6 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
             }
         }
 
-
         if (extraAddProductGroup) extraItems.add(addProductGroup);
         if (extraChangeProductGroup) extraItems.add(changeProductGroup);
         if (extraDeleteProductGroup) extraItems.add(deleteProductGroup);
@@ -167,9 +155,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     }
 
     private void addNewProductGroup(Event e){
-        new FormViewACCWindow<ProductGroup>().create(EOperation.ADD, treeView, productGroup_commands, treeView.getAccWindowRes(), tableView, true);
-//        System.out.println("EVENT SOURCE = " + event.getSource());
-
+        new FormViewACCWindow<ProductGroup>()
+                .create(EOperation.ADD, treeView, productGroup_commands, treeView.getAccWindowRes(), tableView, true);
      }
 
     private void changeProductGroup(Event e){
@@ -177,9 +164,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         if(chosenItem instanceof Folder) return;
 
         FormViewACCWindow<ProductGroup> formViewACCWindow = new FormViewACCWindow<>();
-        formViewACCWindow.create(EOperation.CHANGE, treeView, productGroup_commands, treeView.getAccWindowRes(), tableView, true);
-
-
+        formViewACCWindow
+                .create(EOperation.CHANGE, treeView, productGroup_commands, treeView.getAccWindowRes(), tableView, true);
     }
 
     private void deleteProductGroups(Event e){
@@ -191,6 +177,4 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         }
         productGroup_commands.delete(e, selectedItemGroups);
     }
-
-
 }

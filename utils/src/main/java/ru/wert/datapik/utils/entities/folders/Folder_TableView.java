@@ -1,7 +1,10 @@
 package ru.wert.datapik.utils.entities.folders;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import lombok.Getter;
@@ -11,7 +14,6 @@ import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
-import ru.wert.datapik.utils.common.interfaces.FormViewControlIml;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
@@ -30,7 +32,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     private String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
     private _Folder_Commands commands;
 
-    private List<Folder> currentItemList = new ArrayList<>();
     private FormView_ACCController<Item> accController;
     @Getter private TreeItem<ProductGroup> selectedTreeItem;
     @Getter private ProductGroup_TreeView<Folder> catalogTree;
@@ -130,8 +131,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
         selectedTreeItem = catalogTree.findTreeItemById(selectedProductGroup.getId());
 
-
-//        if (selectedTreeItem == null) selectedTreeItem = catalogTree.getRoot();
         List<Item> items = new ArrayList<>();
         ProductGroup selectedGroup = selectedTreeItem.getValue();
         //Добавим верхнюю строку в список, потом она превратится в троеточие
@@ -220,8 +219,4 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     public void setSelectedTreeItem(TreeItem<ProductGroup> item) {
 
     }
-
-
-
-
 }

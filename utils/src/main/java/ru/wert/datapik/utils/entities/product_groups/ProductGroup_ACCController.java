@@ -37,9 +37,6 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
 
     private boolean changesInTableView = false;
 
-    private ProductGroup focusedItem;
-    private ProductGroup copiedGroup;
-
     private ProductGroup_TreeView<ProductGroup> treeView;
 
     @Override
@@ -56,7 +53,6 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
         AppStatic.createSpIndicator(spIndicator);
     }
 
-
     @FXML
     void cancel(ActionEvent event) {
         super.cancelPressed(event);
@@ -66,8 +62,6 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
     void ok(ActionEvent event) {
         super.okPressed(event, spIndicator, btnOk);
     }
-
-
 
     @Override
     public ArrayList<String> getNotNullFields() {
@@ -148,6 +142,4 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
     public void showEmptyForm() {
 
     }
-
-
 }
