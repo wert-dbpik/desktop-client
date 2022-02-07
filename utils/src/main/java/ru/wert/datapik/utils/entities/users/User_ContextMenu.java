@@ -8,8 +8,6 @@ import ru.wert.datapik.utils.entities.users.commands._UserCommands;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
-
 public class User_ContextMenu extends FormView_ContextMenu<User> {
 
     private final _UserCommands commands;
@@ -23,11 +21,11 @@ public class User_ContextMenu extends FormView_ContextMenu<User> {
         this.commands = commands;
         this.tableView = tableView;
 
-        createOnShowing();
+        createMainMenuItems();
     }
 
     @Override
-    public void createOnShowing() {
+    public void createMainMenuItems() {
         boolean addItem = true;
         boolean copyItem =true;
         boolean changeItem = true;

@@ -20,12 +20,12 @@ public class MaterialGroup_ContextMenu extends FormView_ContextMenu<MaterialGrou
         this.commands = commands;
         this.treeView = treeView;
 
-        createOnShowing();
+        createMainMenuItems();
 
     }
 
     @Override
-    public void createOnShowing() {
+    public void createMainMenuItems() {
         boolean addItem = true;
         boolean copyItem =true;
         boolean changeItem = true;

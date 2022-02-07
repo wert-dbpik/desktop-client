@@ -3,6 +3,7 @@ package ru.wert.datapik.utils.entities.folders;
 import javafx.event.Event;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TablePosition;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
@@ -27,6 +28,9 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     private Folder_TableView tableView;
     private ProductGroup_TreeView<Folder> treeView;
 
+    private MenuItem eraseItems;
+    private MenuItem pasteItems;
+
     private MenuItem addProductGroup;
     private MenuItem changeProductGroup;
     private MenuItem deleteProductGroup;
@@ -37,12 +41,13 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         this.tableView = tableView;
         this.treeView = treeView;
 
-        createOnShowing();
+        createMainMenuItems();
 
     }
 
+
     @Override
-    public void createOnShowing() {
+    public void createMainMenuItems() {
         boolean addItem = false;
         boolean copyItem = false;
         boolean changeItem = false;
@@ -84,18 +89,29 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         setAddMenuName("Добавить пакет");
     }
 
+
+
     @Override
     public List<MenuItem> createExtraItems(){
+        boolean extraEraseItems = true;
+        boolean extraPasteItems = true;
         boolean extraAddProductGroup = false;
         boolean extraChangeProductGroup = false;
         boolean extraDeleteProductGroup = false;
 
         List<MenuItem> extraItems = new ArrayList<>();
+
+        eraseItems = new MenuItem("Вырезать");
+        pasteItems = new MenuItem("Вставить");
+
         addProductGroup = new MenuItem("Добавить директорию");
         changeProductGroup = new MenuItem("Изменить");
         deleteProductGroup = new MenuItem("Удалить");
 
         productGroup_commands = new _ProductGroup_Commands<>(treeView, tableView, CH_FOLDERS);
+
+        eraseItems.setOnAction(this::eraseItems);
+        pasteItems.setOnAction(this::pasteItems);
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);
@@ -147,11 +163,22 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
             }
         }
 
+        if(extraEraseItems) extraItems.add(eraseItems);
+        if(extraPasteItems) extraItems.add(pasteItems);
+        if(extraEraseItems || extraPasteItems) extraItems.add(new SeparatorMenuItem());
         if (extraAddProductGroup) extraItems.add(addProductGroup);
         if (extraChangeProductGroup) extraItems.add(changeProductGroup);
         if (extraDeleteProductGroup) extraItems.add(deleteProductGroup);
 
         return extraItems;
+    }
+
+    private void eraseItems(Event e){
+
+    }
+
+    private void pasteItems(Event e){
+
     }
 
     private void addNewProductGroup(Event e){

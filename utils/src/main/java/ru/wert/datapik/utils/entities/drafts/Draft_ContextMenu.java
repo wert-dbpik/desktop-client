@@ -1,11 +1,9 @@
 package ru.wert.datapik.utils.entities.drafts;
 
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableView;
 import ru.wert.datapik.client.entity.models.Draft;
-import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.entities.drafts.commands._Draft_Commands;
 import ru.wert.datapik.winform.enums.EDraftStatus;
@@ -32,12 +30,12 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         this.commands = commands;
         this.tableView = tableView;
 
-        createOnShowing();
+        createMainMenuItems();
 
     }
 
     @Override
-    public void createOnShowing() {
+    public void createMainMenuItems() {
         boolean addItem = true;
         boolean copyItem = false;//копирование не применяется
         boolean changeItem = true;

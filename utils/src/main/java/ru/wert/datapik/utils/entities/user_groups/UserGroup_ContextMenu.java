@@ -18,11 +18,11 @@ public class UserGroup_ContextMenu extends FormView_ContextMenu<UserGroup> {
         this.commands = commands;
         this.tableView = tableView;
 
-        createOnShowing();
+        createMainMenuItems();
     }
 
     @Override
-    public void createOnShowing() {
+    public void createMainMenuItems() {
         boolean addItem = true;
         boolean copyItem = true;
         boolean changeItem = true;

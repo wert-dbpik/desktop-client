@@ -1,9 +1,6 @@
 package ru.wert.datapik.utils.entities.product_groups;
 
-import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeItem;
-import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
@@ -23,12 +20,12 @@ public class ProductGroup_ContextMenu extends FormView_ContextMenu<ProductGroup>
         this.commands = commands;
         this.treeView = treeView;
 
-        createOnShowing();
+        createMainMenuItems();
 
     }
 
     @Override
-    public void createOnShowing() {
+    public void createMainMenuItems() {
         boolean addItem = true;
         boolean copyItem =true;
         boolean changeItem = true;

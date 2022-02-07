@@ -18,11 +18,11 @@ public class Material_ContextMenu extends FormView_ContextMenu<Material> {
         this.commands = commands;
         this.tableView = tableView;
 
-        createOnShowing();
+        createMainMenuItems();
     }
 
     @Override
-    public void createOnShowing() {
+    public void createMainMenuItems() {
         boolean addItem = true;
         boolean copyItem =true;
         boolean changeItem = true;

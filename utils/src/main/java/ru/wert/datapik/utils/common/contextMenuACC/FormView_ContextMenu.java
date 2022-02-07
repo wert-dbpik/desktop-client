@@ -25,9 +25,7 @@ public abstract class FormView_ContextMenu<P extends Item> extends ContextMenu {
     private MenuItem DELETE;
 
     public abstract List<MenuItem> createExtraItems();
-    public abstract void createOnShowing();
-
-
+    public abstract void createMainMenuItems();
 
     public FormView_ContextMenu(IFormView<P> formView, ItemCommands<P> commands, String itemACCRes) {
         this.formView = formView;
@@ -47,7 +45,7 @@ public abstract class FormView_ContextMenu<P extends Item> extends ContextMenu {
         DELETE.setOnAction(this::delete);
 
         setOnShowing(e->{
-                createOnShowing();
+                createMainMenuItems();
         });
 
 

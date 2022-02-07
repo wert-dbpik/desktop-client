@@ -2,7 +2,6 @@ package ru.wert.datapik.utils.entities.products;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
-import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.entities.products.commands._Product_Commands;
@@ -24,12 +23,12 @@ public class Product_ContextMenu extends FormView_ContextMenu<Product> {
         this.commands = commands;
         this.tableView = tableView;
 
-        createOnShowing();
+        createMainMenuItems();
 
     }
 
     @Override
-    public void createOnShowing() {
+    public void createMainMenuItems() {
         boolean addItem = true;
         boolean copyItem =true;
         boolean changeItem = true;
