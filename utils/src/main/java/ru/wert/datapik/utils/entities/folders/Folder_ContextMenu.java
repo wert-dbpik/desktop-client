@@ -1,15 +1,15 @@
 package ru.wert.datapik.utils.entities.folders;
 
+import javafx.application.Platform;
 import javafx.event.Event;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TablePosition;
+import javafx.scene.control.*;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
+import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.folders.commands.Folder_AddCommand;
@@ -229,18 +229,38 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         for(String s : pasteData){
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
             Long id = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
+            ProductGroup selectedItem = ((ProductGroup)tableView.getSelectionModel().getSelectedItem());
+            if(selectedItem == null) selectedItem = tableView.getSelectedTreeItem().getValue();
+
             if(clazz.equals("PG")){
                 ProductGroup pg = CH_PRODUCT_GROUPS.findById(id);
-                //Определяем, куда вставляем
-                tableView.getSelectionModel().get
-                pg.setParentId(tableView.getSelectedTreeItem().getValue().getId());
-                new ProductGroup_AddCommand<>(productGroup_commands, CH_PRODUCT_GROUPS.findById(id)).execute();
+                pg.setParentId(selectedItem.getId());
+                CH_PRODUCT_GROUPS.update(pg);
             } else {
-                new Folder_AddCommand(CH_FOLDERS.findById(id), tableView).execute();
+                Folder folder = CH_FOLDERS.findById(id);
+                folder.setProductGroup(CH_PRODUCT_GROUPS.findById(selectedItem.getId()));
+                CH_FOLDERS.update(folder);
             }
         }
 
-
+        TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
+        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
+        Platform.runLater(() -> {
+            treeView.updateView();
+            treeView.getFocusModel().focus(selectedItemIndex - 1);
+            treeView.scrollTo(selectedItemIndex - 1);
+            if (tableView != null) {
+                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
+                if(selectedTreeItemInTree != null && selectedTreeItemInTable.getValue().equals(selectedTreeItemInTree.getValue())) {
+                    selectedTreeItemInTable = selectedTreeItemInTable.getParent();
+                }
+                tableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
+//                if (rowToBeSelectedAfterDeleting != null) {
+//                    tableView.getSelectionModel().select(rowToBeSelectedAfterDeleting);
+//                    tableView.scrollTo(rowToBeSelectedAfterDeleting);
+//                }
+            }
+        });
     }
 
     private void addNewProductGroup(Event e){
