@@ -11,15 +11,20 @@ import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
+import ru.wert.datapik.utils.common.utils.ClipboardUtils;
+import ru.wert.datapik.utils.entities.folders.commands.Folder_AddCommand;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.utils.entities.product_groups.commands.ProductGroup_AddCommand;
 import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
 
 public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
@@ -34,6 +39,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     private MenuItem addProductGroup;
     private MenuItem changeProductGroup;
     private MenuItem deleteProductGroup;
+
+    private String[] pasteData;
 
 
     public Folder_ContextMenu(Folder_TableView tableView, ProductGroup_TreeView<Folder> treeView, _Folder_Commands commands, String productsACCRes) {
@@ -93,8 +100,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
     @Override
     public List<MenuItem> createExtraItems(){
-        boolean extraEraseItems = true;
-        boolean extraPasteItems = true;
+        boolean extraEraseItems = false;
+        boolean extraPasteItems = false;
         boolean extraAddProductGroup = false;
         boolean extraChangeProductGroup = false;
         boolean extraDeleteProductGroup = false;
@@ -121,30 +128,37 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         //Если ничего не выделено
         if (selectedItems.size() == 0) {
             extraAddProductGroup = true;
-        //Если выделен значок с папкой и это не переход на уровень вверх
-        } else if (selectedItems.size() == 1
-               && selectedItems.get(0) instanceof ProductGroup){
-            //Если выделенный элемент не самый верхний в таблице
-            if (!selectedItems.get(0).equals(tableView.getItems().get(0))){
-                extraAddProductGroup = true;
-                extraChangeProductGroup = true;
-                extraDeleteProductGroup = true;
-            } else { //Если выделенный элемент  - самый верхний
-
-                TablePosition<Item, Label> ts = tableView.getSelectionModel().getSelectedCells().get(0);
-
-                String s = ((ts.getTableColumn().getCellData(0)).getText());
-                //Если строка элемента не является < . . . >
-                if(s.equals(UPWARD))
-                    extraAddProductGroup = true;
-                else{
+            if (pastePossible()) extraPasteItems = true;
+        } else if (selectedItems.size() == 1) {
+            if (selectedItems.get(0) instanceof ProductGroup) {
+                //Если выделенный элемент не самый верхний в таблице
+                if (!selectedItems.get(0).equals(tableView.getItems().get(0))) {
                     extraAddProductGroup = true;
                     extraChangeProductGroup = true;
                     extraDeleteProductGroup = true;
+                    extraEraseItems = true;
+                    if (pastePossible()) extraPasteItems = true;
+                } else {
+
+                    TablePosition<Item, Label> ts = tableView.getSelectionModel().getSelectedCells().get(0);
+
+                    String s = ((ts.getTableColumn().getCellData(0)).getText());
+                    //Если строка элемента не является < . . . >
+                    if (s.equals(UPWARD)) {
+                        extraAddProductGroup = true;
+                        if (pastePossible()) extraPasteItems = true;
+                    } else {
+                        extraAddProductGroup = true;
+                        extraChangeProductGroup = true;
+                        extraDeleteProductGroup = true;
+                        extraEraseItems = true;
+                    }
                 }
+            } else { //selectedItems.get(0) instanceof Folder
+                extraEraseItems = true;
             }
             //Если выделено много элементов
-        } else if (selectedItems.size() > 1) {
+        } else  { //selectedItems.size() > 1
             int countFolders = 0;
             int countProductGroups = 0;
             for (Item item : selectedItems) {
@@ -157,29 +171,75 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
             if (countFolders == 0) {
                 extraAddProductGroup = true;
                 extraDeleteProductGroup = true;
+                extraEraseItems = true;
             //Если выделена смесь значков с папкой и простых элементов
             } else if (countProductGroups == 0 || (countProductGroups > 0 && countFolders > 0)) {
                 extraAddProductGroup = true;
+                extraEraseItems = true;
             }
         }
 
-        if(extraEraseItems) extraItems.add(eraseItems);
-        if(extraPasteItems) extraItems.add(pasteItems);
-        if(extraEraseItems || extraPasteItems) extraItems.add(new SeparatorMenuItem());
+        if (extraEraseItems) extraItems.add(eraseItems);
+        if (extraPasteItems) extraItems.add(pasteItems);
+        if ((extraEraseItems || extraPasteItems) && extraAddProductGroup) extraItems.add(new SeparatorMenuItem());
         if (extraAddProductGroup) extraItems.add(addProductGroup);
         if (extraChangeProductGroup) extraItems.add(changeProductGroup);
         if (extraDeleteProductGroup) extraItems.add(deleteProductGroup);
-
 
 
         return extraItems;
     }
 
     private void eraseItems(Event e){
+        StringBuilder sb = new StringBuilder();
+        sb.append("pik! ");
+        List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
+        for (Item item : selectedItems){
+            if(item instanceof ProductGroup){
+                sb.append("PG");
+                sb.append("#");
+                sb.append(item.getId());
+                sb.append(" ");
+            }
+            else if(item instanceof Folder){
+                sb.append("F");
+                sb.append("#");
+                sb.append(item.getId());
+                sb.append(" ");
+            }
+        }
+        ClipboardUtils.copyToClipboardText(sb.toString());
+    }
 
+    private boolean pastePossible(){
+        String str = ClipboardUtils.getString();
+        if(str == null || !str.startsWith("pik!")) return false;
+        str = str.replace("pik!", "");
+        str = str.trim();
+        pasteData = str.split(" ", -1);
+        for(String s : pasteData){
+            String clazz = Arrays.asList(s.split("#", -1)).get(0);
+            if(!clazz.equals("PG") && !clazz.equals("F"))
+                return false;
+        }
+        return true;
     }
 
     private void pasteItems(Event e){
+        for(String s : pasteData){
+            String clazz = Arrays.asList(s.split("#", -1)).get(0);
+            Long id = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
+            if(clazz.equals("PG")){
+                ProductGroup pg = CH_PRODUCT_GROUPS.findById(id);
+                //Определяем, куда вставляем
+                tableView.getSelectionModel().get
+                pg.setParentId(tableView.getSelectedTreeItem().getValue().getId());
+                new ProductGroup_AddCommand<>(productGroup_commands, CH_PRODUCT_GROUPS.findById(id)).execute();
+            } else {
+                new Folder_AddCommand(CH_FOLDERS.findById(id), tableView).execute();
+            }
+        }
+
 
     }
 
