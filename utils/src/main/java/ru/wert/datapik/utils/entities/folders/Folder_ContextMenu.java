@@ -170,6 +170,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         if (extraChangeProductGroup) extraItems.add(changeProductGroup);
         if (extraDeleteProductGroup) extraItems.add(deleteProductGroup);
 
+
+
         return extraItems;
     }
 
