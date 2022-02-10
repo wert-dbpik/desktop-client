@@ -3,6 +3,7 @@ package ru.wert.datapik.utils.entities.product_groups.commands;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.common.commands.Catalogs;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.common.commands.ICommand;
@@ -33,7 +34,7 @@ public class ProductGroup_ChangeCommand<P extends Item> implements ICommand {
             boolean res = CH_PRODUCT_GROUPS.update(item);
             if(res){
                 log.info("Изменена группа изделий {}", item.getName());
-                commands.updateFormsWhenAddedOrChanged(item);
+                Catalogs.updateFormsWhenAddedOrChanged(commands.getTreeView(), commands.getTableView(), item);
 
             }
         } catch (Exception e){

@@ -4,6 +4,7 @@ import com.google.gson.internal.bind.util.ISO8601Utils;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.control.TreeItem;
+import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
@@ -25,9 +26,15 @@ import java.util.List;
 public class _ProductGroup_Commands<P extends Item> implements ItemCommands<ProductGroup> {
 
 //    private IFormView<P> tableView = null; //Таблица каталога, которая обновляется вместе с деревом
-    private final ProductGroup_TreeView<P> treeView;
+    private ProductGroup_TreeView<P> treeView;
+
+    public ProductGroup_TreeView<Item> getTreeView() {
+        return (ProductGroup_TreeView<Item>) treeView;
+    }
+
+    @Getter private ItemTableView<Item> tableView;
     private final ItemService<P> tableItemService;
-    private final ItemTableView<Item> tableView;
+
     private final CatalogableTable<? extends CatalogGroup> catTableView;
 
 
@@ -108,26 +115,26 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     }
 
-    /**
-     * Обновление форм после добавления или изменения группы
-     * @param item ProductGroup
-     */
-    public void updateFormsWhenAddedOrChanged(ProductGroup item) {
-        TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
-        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
-        //Заранее раскрываем выбранный узел
-        //selectedTreeItemInTree != null - условие при добавлении в корень
-        if(selectedTreeItemInTree != null) selectedTreeItemInTree.setExpanded(true);
-
-        Platform.runLater(() -> {
-            treeView.updateView();
-            TreeItem<? extends CatalogGroup> addedTreeItem = treeView.findTreeItemById(item.getId());
-            treeView.getFocusModel().focus(selectedItemIndex + addedTreeItem.getParent().getChildren().indexOf(addedTreeItem) + 1);
-            if (catTableView != null) { //Если имеем дело с каталогом, а не только с деревом
-                catTableView.updateOnlyTableView(catTableView.getSelectedTreeItem().getValue());
-                tableView.getSelectionModel().select(item);
-                tableView.scrollTo(item);
-            }
-        });
-    }
+//    /**
+//     * Обновление форм после добавления или изменения группы
+//     * @param item ProductGroup
+//     */
+//    public void updateFormsWhenAddedOrChanged(ProductGroup item) {
+//        TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
+//        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
+//        //Заранее раскрываем выбранный узел
+//        //selectedTreeItemInTree != null - условие при добавлении в корень
+//        if(selectedTreeItemInTree != null) selectedTreeItemInTree.setExpanded(true);
+//
+//        Platform.runLater(() -> {
+//            treeView.updateView();
+//            TreeItem<? extends CatalogGroup> addedTreeItem = treeView.findTreeItemById(item.getId());
+//            treeView.getFocusModel().focus(selectedItemIndex + addedTreeItem.getParent().getChildren().indexOf(addedTreeItem) + 1);
+//            if (catTableView != null) { //Если имеем дело с каталогом, а не только с деревом
+//                catTableView.updateOnlyTableView(catTableView.getSelectedTreeItem().getValue());
+//                tableView.getSelectionModel().select(item);
+//                tableView.scrollTo(item);
+//            }
+//        });
+//    }
 }

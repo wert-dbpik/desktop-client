@@ -7,6 +7,7 @@ import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.common.commands.Catalogs;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
@@ -243,24 +244,26 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
             }
         }
 
-        TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
-        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
-        Platform.runLater(() -> {
-            treeView.updateView();
-            treeView.getFocusModel().focus(selectedItemIndex - 1);
-            treeView.scrollTo(selectedItemIndex - 1);
-            if (tableView != null) {
-                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
-                if(selectedTreeItemInTree != null && selectedTreeItemInTable.getValue().equals(selectedTreeItemInTree.getValue())) {
-                    selectedTreeItemInTable = selectedTreeItemInTable.getParent();
-                }
-                tableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
-//                if (rowToBeSelectedAfterDeleting != null) {
-//                    tableView.getSelectionModel().select(rowToBeSelectedAfterDeleting);
-//                    tableView.scrollTo(rowToBeSelectedAfterDeleting);
+        Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, newGroup);
+
+//        TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
+//        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
+//        Platform.runLater(() -> {
+//            treeView.updateView();
+//            treeView.getFocusModel().focus(selectedItemIndex - 1);
+//            treeView.scrollTo(selectedItemIndex - 1);
+//            if (tableView != null) {
+//                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
+//                if(selectedTreeItemInTree != null && selectedTreeItemInTable.getValue().equals(selectedTreeItemInTree.getValue())) {
+//                    selectedTreeItemInTable = selectedTreeItemInTable.getParent();
 //                }
-            }
-        });
+//                tableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
+////                if (rowToBeSelectedAfterDeleting != null) {
+////                    tableView.getSelectionModel().select(rowToBeSelectedAfterDeleting);
+////                    tableView.scrollTo(rowToBeSelectedAfterDeleting);
+////                }
+//            }
+//        });
     }
 
     private void addNewProductGroup(Event e){
