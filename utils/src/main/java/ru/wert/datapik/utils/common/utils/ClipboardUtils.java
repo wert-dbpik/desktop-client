@@ -32,6 +32,11 @@ public class ClipboardUtils {
         return clipboard.getString();
     }
 
+    public static void clear(){
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        clipboard.clear();
+    }
+
     public static void copyToClipboardImage(Label lbl) {
 
         WritableImage snapshot = lbl.snapshot(new SnapshotParameters(), null);

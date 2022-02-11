@@ -54,8 +54,6 @@ public class CatalogOfProductsController {
         createCatalog_TreeView();
         createProducts_TableView();
 
-
-
         catalogTreeView.setConnectedForm(tempProductTableView);
 
     }

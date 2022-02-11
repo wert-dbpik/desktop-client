@@ -13,9 +13,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.components.BtnRollDown;
 import ru.wert.datapik.utils.common.components.BtnRollUp;
+import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
@@ -94,8 +97,6 @@ public class CatalogOfFoldersController {
         });
 
             folderTableView.updateView();
-
-
 
         folderTableView.setMinHeight(0.0);
 

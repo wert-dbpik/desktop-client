@@ -80,7 +80,9 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
 
     public void addProductToFolder(Event event){
         Product_TableView formView = (Product_TableView) treeView.getConnectedForm();
+//        Product_TableView formView = (Product_TableView) treeView.getItemCommands();
         _Product_Commands commands = (_Product_Commands) formView.getCommands();
+
         String itemACCRes = formView.getAccWindowRes();
 
         new FormViewACCWindow<Product>().create(EOperation.ADD, formView, commands, itemACCRes);
