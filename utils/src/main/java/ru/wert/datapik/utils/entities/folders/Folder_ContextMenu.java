@@ -227,6 +227,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     }
 
     private void pasteItems(Event e){
+        List<Item> selectedItems = new ArrayList<>();
         for(String s : pasteData){
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
             Long id = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
@@ -237,14 +238,16 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                 ProductGroup pg = CH_PRODUCT_GROUPS.findById(id);
                 pg.setParentId(selectedItem.getId());
                 CH_PRODUCT_GROUPS.update(pg);
+                selectedItems.add(pg);
             } else {
                 Folder folder = CH_FOLDERS.findById(id);
                 folder.setProductGroup(CH_PRODUCT_GROUPS.findById(selectedItem.getId()));
                 CH_FOLDERS.update(folder);
+                selectedItems.add(folder);
             }
         }
 
-        Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, newGroup);
+        Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, selectedItems);
 
 //        TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
 //        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
