@@ -34,7 +34,7 @@ public class ProductGroup_TreeView<P extends Item> extends Item_TreeView<P, Prod
 
     @Override
     public void createContextMenu() {
-        contextMenu = new ProductGroup_ContextMenu( this, commands, accWindowRes);
+        contextMenu = new ProductGroup_ContextMenu((ProductGroup_TreeView<Item>) this, commands, accWindowRes);
         setContextMenu(contextMenu);
     }
 

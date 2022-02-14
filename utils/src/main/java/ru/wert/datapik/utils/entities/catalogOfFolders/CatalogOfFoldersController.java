@@ -20,6 +20,7 @@ import ru.wert.datapik.utils.common.components.BtnRollUp;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
+import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch;
@@ -52,6 +53,8 @@ public class CatalogOfFoldersController {
 
     @FXML
     void initialize() {
+
+        ClipboardUtils.clear();
 
         //Создаем панели инструментов
         createCatalog_ToolBar();

@@ -237,6 +237,15 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
         return finalList;
     }
 
+    public List<T> findAllGroupChildren(TreeItem<T> treeItem){
+        List<TreeItem<T>> allItemChildren = findAllChildren(treeItem);
+        List<T> allGroupChildren = new ArrayList<>();
+        for(TreeItem<T> baby : allItemChildren){
+            allGroupChildren.add(baby.getValue());
+        }
+        return allGroupChildren;
+    }
+
     /**
      * Свернуть все узлы
      */
