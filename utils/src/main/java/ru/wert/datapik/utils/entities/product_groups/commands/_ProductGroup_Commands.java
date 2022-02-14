@@ -5,14 +5,18 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.control.TreeItem;
 import lombok.Getter;
+import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.GroupedItemService;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
+import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
+import ru.wert.datapik.utils.entities.folders.Folder_TableView;
+import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.products.Product_TableView;
 import ru.wert.datapik.utils.entities.products.commands._Product_Commands;
@@ -79,13 +83,12 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     }
 
     public void addProductToFolder(Event event){
-        Product_TableView formView = (Product_TableView) treeView.getConnectedForm();
-//        Product_TableView formView = (Product_TableView) treeView.getItemCommands();
-        _Product_Commands commands = (_Product_Commands) formView.getCommands();
+        ItemTableView<Item> formView = treeView.getConnectedForm();
+        ItemCommands<?> commands = ((Folder_TableView)formView).getCommands();
 
-        String itemACCRes = formView.getAccWindowRes();
+        String itemACCRes = ((Folder_TableView)formView).getAccWindowRes();
 
-        new FormViewACCWindow<Product>().create(EOperation.ADD, formView, commands, itemACCRes);
+        new FormViewACCWindow<Folder>().create(EOperation.ADD, (IFormView)formView, (ItemCommands<Folder>) commands, itemACCRes);
     }
 
     /**

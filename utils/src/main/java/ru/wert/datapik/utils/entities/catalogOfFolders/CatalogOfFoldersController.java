@@ -61,7 +61,7 @@ public class CatalogOfFoldersController {
         createCatalogForms();
 //        createFolders_TableView();
 
-//        catalogTreeView.setConnectedForm(folderTableView);
+        catalogTreeView.setConnectedForm(folderTableView);
 
 
     }

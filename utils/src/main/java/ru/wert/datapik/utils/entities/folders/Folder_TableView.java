@@ -29,8 +29,8 @@ import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
 
 public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
 
-    private String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
-    private _Folder_Commands commands;
+    @Getter private String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
+    @Getter private _Folder_Commands commands;
 
     private FormView_ACCController<Item> accController;
     @Getter private TreeItem<ProductGroup> selectedTreeItem;

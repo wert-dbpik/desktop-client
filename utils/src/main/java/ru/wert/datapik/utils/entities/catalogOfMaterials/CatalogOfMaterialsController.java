@@ -54,7 +54,7 @@ public class CatalogOfMaterialsController {
         createCatalog_TreeView();
         createMaterials_TableView();
 
-        catalogTreeView.setConnectedForm(materialTableView);
+//        catalogTreeView.setConnectedForm(materialTableView);
 
     }
 

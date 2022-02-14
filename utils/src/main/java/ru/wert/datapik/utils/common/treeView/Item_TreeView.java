@@ -11,6 +11,7 @@ import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.common.tableView.ItemTableView;
 
 import java.util.*;
 
@@ -25,7 +26,7 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
     @Getter private final ItemService<T> itemService;
     private final T rootItem;
     private TreeItem<T> root;
-    private CatalogTableView<P, T> connectedForm;
+    private ItemTableView<Item> connectedForm;
 
     public abstract void createContextMenu();
     public abstract ItemCommands<T> getItemCommands();
@@ -61,7 +62,7 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
 
         buildTree();
 
-        Item_TreeViewDAD<P, T> myDragAndDrop = new Item_TreeViewDAD<>(this, connectedForm);
+        Item_TreeViewDAD<P, T> myDragAndDrop = new Item_TreeViewDAD<>(this, (CatalogTableView<P, T>) connectedForm);
 
         setOnKeyPressed(myDragAndDrop::onKeyPressed);
 
@@ -288,14 +289,14 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
     /**
      * Получить таблицу, с которой взаимодействует каталог treeView
      */
-    public CatalogTableView<P, T> getConnectedForm() {
+    public ItemTableView<Item> getConnectedForm() {
         return connectedForm;
     }
 
     /**
      * Подключить таблицу, с которой будет взаимодействовать каталог treeView
      */
-    public void setConnectedForm(CatalogTableView<P, T> connectedForm) {
+    public void setConnectedForm(ItemTableView<Item> connectedForm) {
         this.connectedForm = connectedForm;
     }
 }
