@@ -11,5 +11,6 @@ public class EditorImages {
     public static Image ORANGE_SQ_IMG = new Image(EditorImages.class.getResourceAsStream("/utils-pics/btns/editor/orange-sq(16x16).png"), size, size, true, true);
     public static Image YELLOW_SQ_IMG = new Image(EditorImages.class.getResourceAsStream("/utils-pics/btns/editor/yellow-sq(16x16).png"), size, size, true, true);
     public static Image BLUE_SQ_IMG = new Image(EditorImages.class.getResourceAsStream("/utils-pics/btns/editor/blue-sq(16x16).png"), size, size, true, true);
+    public static Image DRAGGED_BOX_IMG = new Image(EditorImages.class.getResourceAsStream("/utils-pics/dragged_box.png"), size, size, true, true);
 
 }

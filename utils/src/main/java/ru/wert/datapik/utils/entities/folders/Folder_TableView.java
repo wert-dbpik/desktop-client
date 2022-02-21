@@ -37,11 +37,11 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Getter private ProductGroup_TreeView<Folder> catalogTree;
 
     private Folder_ContextMenu contextMenu;
+    private boolean useContextMenu;
 
-    public Folder_TableView(String prompt) {
+    public Folder_TableView(String prompt, boolean useContextMenu) {
         super(prompt);
-
-//        new FormViewControlIml(this, catalogTree, this);
+        this.useContextMenu = useContextMenu;
 
     }
 
@@ -49,7 +49,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         this.catalogTree = catalogTree;
 
         commands = new _Folder_Commands(this);
-        createContextMenu();
+        if(useContextMenu) createContextMenu();
 
         //При двойном клике на верхнюю строку, поднимаемся по списку выше
         //При двойном клике на папку открываем папку

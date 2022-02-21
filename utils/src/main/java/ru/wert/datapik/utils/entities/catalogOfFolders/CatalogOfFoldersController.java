@@ -27,6 +27,7 @@ import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class CatalogOfFoldersController {
 
@@ -61,7 +62,9 @@ public class CatalogOfFoldersController {
         createFolders_ToolBar();
 
         //Создаем связанные между собой панели каталога и изделий
-        createCatalogForms();
+        boolean useContextMenu = false;
+        if(CH_CURRENT_USER.getUserGroup().isEditDrafts()) useContextMenu = true;
+        createCatalogForms(useContextMenu);
 //        createFolders_TableView();
 
         catalogTreeView.setConnectedForm(folderTableView);
@@ -80,12 +83,12 @@ public class CatalogOfFoldersController {
     /**
      * дерево КАТАЛОГА
      */
-    private void createCatalogForms() {
+    private void createCatalogForms(boolean useContextMenu) {
 
         _ProductGroup_TreeViewPatch<Folder> catalogPatch = new _ProductGroup_TreeViewPatch<>();
         catalogPatch.setDependedItemService(CH_FOLDERS);
 
-        folderTableView = new Folder_TableView("ПАКЕТЫ ИЗДЕЛИЙ");
+        folderTableView = new Folder_TableView("ПАКЕТЫ ИЗДЕЛИЙ", useContextMenu);
 
         catalogTreeView = catalogPatch.createProductTreeView(folderTableView);
 

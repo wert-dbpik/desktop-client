@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import lombok.Getter;
 
 import java.io.InputStream;
 
@@ -15,13 +16,15 @@ public class ClipboardUtils {
 
     //To copy
 
-    public static void copyToClipboardText(String s) {
+    public static ClipboardContent copyToClipboardText(String s) {
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
-        final ClipboardContent content = new ClipboardContent();
+        ClipboardContent content = new ClipboardContent();
 
         content.putString(s);
         clipboard.setContent(content);
+
+        return content;
 
     }
 

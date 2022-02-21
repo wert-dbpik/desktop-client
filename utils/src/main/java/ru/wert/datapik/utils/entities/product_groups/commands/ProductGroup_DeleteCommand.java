@@ -126,6 +126,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
 
         log.debug("findAllGroupsToBeDeleted : Определяем группы, входящие в выделенные группы");
         for (ProductGroup selectedGroup : selectedGroups) {
+
             log.debug(String.format("Находим TreeItem для выделенной группы '%s'", selectedGroup.getName()));
             TreeItem<ProductGroup> selectedTreeItem = treeView.findTreeItemById(selectedGroup.getId());
 

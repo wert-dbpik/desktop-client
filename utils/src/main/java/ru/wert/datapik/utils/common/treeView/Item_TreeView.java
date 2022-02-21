@@ -62,11 +62,11 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
 
         buildTree();
 
-        Item_TreeViewDAD<P, T> myDragAndDrop = new Item_TreeViewDAD<>(this, (CatalogTableView<P, T>) connectedForm);
-
-        setOnKeyPressed(myDragAndDrop::onKeyPressed);
-
-        myDragAndDrop.createDragAndDropHandler();
+//        Item_TreeViewDragAndDrop<P, T> myDragAndDrop = new Item_TreeViewDragAndDrop<>(this, (CatalogTableView<P, T>) connectedForm);
+//
+//        setOnKeyPressed(myDragAndDrop::onKeyPressed);
+//
+//        myDragAndDrop.createDragAndDropHandler();
 
 
     }

@@ -29,7 +29,7 @@ import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
  * @param <P>
  * @param <T>
  */
-public class Item_TreeViewDAD<P extends Item, T extends CatalogGroup> {
+public class Item_TreeViewDragAndDrop<P extends Item, T extends CatalogGroup> {
 
     //Переменные, необходимые для DragAndDrop и Erase-Paste
     private TreeItem<T> draggedTarget; //то, куда вставляем
@@ -42,7 +42,7 @@ public class Item_TreeViewDAD<P extends Item, T extends CatalogGroup> {
     private Item_TreeView<P, T> treeView;
     private CatalogTableView<P, T> tableView;
 
-    public Item_TreeViewDAD(Item_TreeView<P, T> treeView, CatalogTableView<P, T> tableView) {
+    public Item_TreeViewDragAndDrop(Item_TreeView<P, T> treeView, CatalogTableView<P, T> tableView) {
         this.treeView = treeView;
         this.tableView = tableView;
     }
@@ -82,7 +82,7 @@ public class Item_TreeViewDAD<P extends Item, T extends CatalogGroup> {
     }
 
     /**
-     * На treeView добавляются возможности DragAndDrop, дублирующие в нашем случае Erase-Paste.
+     * На treeView добавляются возможности DragAndDrop, дублирующие в нашем случае Cut-Paste.
      */
     public void createDragAndDropHandler(){
         treeView.setCellFactory(new Callback<TreeView<T>, TreeCell<T>>() {

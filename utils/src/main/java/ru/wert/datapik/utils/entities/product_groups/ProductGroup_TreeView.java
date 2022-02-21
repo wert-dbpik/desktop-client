@@ -20,15 +20,16 @@ public class ProductGroup_TreeView<P extends Item> extends Item_TreeView<P, Prod
     private _ProductGroup_Commands<P> commands;
     private ProductGroup_ContextMenu contextMenu;
     private ProductGroup_ACCController accController;
+    @Getter private ProductGroup_Manipulator manipulator;
 
 
     public ProductGroup_TreeView(ItemService<ProductGroup> itemService, ItemService<P> dependedItemService, ItemTableView<Item> dependedTableView, ProductGroup rootItem, boolean useContextMenu) {
         super(itemService, rootItem);
 
         commands = new _ProductGroup_Commands<>(this, dependedTableView, dependedItemService);
+        manipulator = new ProductGroup_Manipulator((Item_TreeView<Item, ProductGroup>) this, dependedTableView);
+        if (useContextMenu) createContextMenu();
 
-        if (useContextMenu)
-            createContextMenu();
 
     }
 
