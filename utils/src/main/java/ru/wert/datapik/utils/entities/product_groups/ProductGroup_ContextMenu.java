@@ -110,19 +110,20 @@ public class ProductGroup_ContextMenu extends FormView_ContextMenu<ProductGroup>
     }
 
     /**
-     * Проверка возможности вставки
-     * 1) ClipboardUtils = null
-     * 2) Начинается НЕ с "pik!"
-     * 3) Содержит отличные от "PG" - ProductGroup и "F" - Folder объекты
-     * 4) Вставляется в сам себя
-     * 5) Вставляется в свои потомки
-     * @return true - разрешается вставка
+     *Нна лету проверяется возможность вставки
+     * Вставка не возможна если:
+     * 1) Если буфер обмена пустой
+     * 2) Если буфер обмена не содержит в начале строки "pik!"
+     * 3) Если сожержит классы отличные от ProductGroup(PG) и Folder(F)
+     * 4) Если вставка производится в ту же группу или в группу потомка
+     * @return true - вставка возможна
      */
     private boolean pastePossible(){
         TreeItem<ProductGroup> selectedItem = treeView.getSelectionModel().getSelectedItem();
         if(selectedItem == null) selectedItem = treeView.getRoot();
         List<ProductGroup> children = treeView.findAllGroupChildren(selectedItem);
-
+        //Флаг проверки первого PG в буфере обмена
+        boolean pgPK = false;
         String str = ClipboardUtils.getString();
         //1)ClipboardUtils = null или 2)Начинается НЕ с "pik!"
         if(str == null || !str.startsWith("pik!")) return false;
@@ -130,19 +131,27 @@ public class ProductGroup_ContextMenu extends FormView_ContextMenu<ProductGroup>
         str = str.trim();
         pasteData = str.split(" ", -1);
         for(String s : pasteData){
-            List<String> arr = Arrays.asList(s.split("#", -1));
-            String clazz = arr.get(0);
-            Long id = Long.valueOf(arr.get(1));
-            //3)Содержит отличные от "PG" - ProductGroup и "F" - Folder объекты
+            String clazz = Arrays.asList(s.split("#", -1)).get(0);
             if(!clazz.equals("PG") && !clazz.equals("F"))
                 return false;
-            //4) Вставляется в сам себя или 5) Вставляется в свои потомки
-            if(clazz.equals("PG")) {
-                ProductGroup group = CH_PRODUCT_GROUPS.findById(id);
-                children.add(group);
-                if(children.contains(group))
-                    return false;
+            if(clazz.equals("PG") && !pgPK){
+                //Вставляемый PG, найденный по его id
+                Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
+                ProductGroup pastedPG = CH_PRODUCT_GROUPS.findById(pastedItemId);
+                //Элелемент каталога, куда производится вставка
+                ProductGroup selectedPG = ((ProductGroup)treeView.getSelectionModel().getSelectedItem().getValue());
+                TreeItem<ProductGroup> pastedTreeItem = treeView.findTreeItemById(pastedPG.getId());
+                //Группа потомков с родителем, куда вставка не допускается
+                List<ProductGroup> pastedItemChildren  = treeView.findAllGroupChildren(pastedTreeItem);
+                pastedItemChildren.add(pastedPG);
+                for(ProductGroup childPastedPG : pastedItemChildren){
+                    if(childPastedPG.getId().equals(selectedPG.getId()))
+                        return false;
+                }
+                //После пройденной проверки первого же PG меняем флаг, следущие PG проверяться не будут
+                pgPK = true;
             }
+
         }
         return true;
     }
