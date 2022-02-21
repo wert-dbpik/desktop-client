@@ -34,18 +34,22 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     private FormView_ACCController<Item> accController;
     @Getter private TreeItem<ProductGroup> selectedTreeItem;
-    @Getter private ProductGroup_TreeView<Folder> catalogTree;
+    @Getter private ProductGroup_TreeView<Item> catalogTree;
+    @Getter private Folder_Manipulator manipulator;
 
     private Folder_ContextMenu contextMenu;
-    private boolean useContextMenu;
+    private final boolean useContextMenu;
+
+
 
     public Folder_TableView(String prompt, boolean useContextMenu) {
         super(prompt);
         this.useContextMenu = useContextMenu;
 
+        if(useContextMenu) manipulator = new Folder_Manipulator(this, catalogTree);
     }
 
-    public void doWhatYouWant(ProductGroup_TreeView<Folder> catalogTree){
+    public void doWhatYouWant(ProductGroup_TreeView catalogTree){
         this.catalogTree = catalogTree;
 
         commands = new _Folder_Commands(this);

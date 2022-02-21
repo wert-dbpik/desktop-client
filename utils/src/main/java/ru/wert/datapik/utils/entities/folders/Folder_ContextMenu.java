@@ -35,13 +35,16 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     private MenuItem changeProductGroup;
     private MenuItem deleteProductGroup;
 
-    private String[] pasteData;
+    Folder_Manipulator manipulator;
+
 
 
     public Folder_ContextMenu(Folder_TableView tableView, ProductGroup_TreeView treeView, _Folder_Commands commands, String productsACCRes) {
         super((ItemTableView)tableView, commands, productsACCRes);
         this.tableView = tableView;
         this.treeView = treeView;
+
+        manipulator = tableView.getManipulator();
 
         createMainMenuItems();
 
@@ -112,8 +115,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         productGroup_commands = new _ProductGroup_Commands(treeView, tableView, CH_FOLDERS);
 
-        cutItems.setOnAction(this::cutItems);
-        pasteItems.setOnAction(this::pasteItems);
+        cutItems.setOnAction(manipulator::cutItems);
+        pasteItems.setOnAction(manipulator::pasteItems);
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);
@@ -123,7 +126,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         //Если ничего не выделено
         if (selectedItems.size() == 0) {
             extraAddProductGroup = true;
-            if (pastePossible()) extraPasteItems = true;
+            if (manipulator.pastePossible()) extraPasteItems = true;
         } else if (selectedItems.size() == 1) {
             if (selectedItems.get(0) instanceof ProductGroup) {
                 //Если выделенный элемент не самый верхний в таблице
@@ -132,7 +135,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                     extraChangeProductGroup = true;
                     extraDeleteProductGroup = true;
                     extraCutItems = true;
-                    if (pastePossible()) extraPasteItems = true;
+                    if (manipulator.pastePossible()) extraPasteItems = true;
                 } else {
 
                     TablePosition<Item, Label> ts = tableView.getSelectionModel().getSelectedCells().get(0);
@@ -141,7 +144,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                     //Если строка элемента не является < . . . >
                     if (s.equals(UPWARD)) {
                         extraAddProductGroup = true;
-                        if (pastePossible()) extraPasteItems = true;
+                        if (manipulator.pastePossible()) extraPasteItems = true;
                     } else {
                         extraAddProductGroup = true;
                         extraChangeProductGroup = true;
@@ -185,111 +188,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         return extraItems;
     }
 
-    private void cutItems(Event e){
-        StringBuilder sb = new StringBuilder();
-        sb.append("pik! ");
-        List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
-        for (Item item : selectedItems){
-            if(item instanceof ProductGroup){
-                sb.append("PG");
-                sb.append("#");
-                sb.append(item.getId());
-                sb.append(" ");
-            }
-            else if(item instanceof Folder){
-                sb.append("F");
-                sb.append("#");
-                sb.append(item.getId());
-                sb.append(" ");
-            }
-        }
-        ClipboardUtils.copyToClipboardText(sb.toString());
-    }
 
-    /**
-     *Нна лету проверяется возможность вставки
-     * Вставка не возможна если:
-     * 1) Если буфер обмена пустой
-     * 2) Если буфер обмена не содержит в начале строки "pik!"
-     * 3) Если сожержит классы отличные от ProductGroup(PG) и Folder(F)
-     * 4) Если вставка производится в ту же группу или в группу потомка
-     * @return true - вставка возможна
-     */
-    private boolean pastePossible(){
-        //Строка в буфере обмена
-        String str = ClipboardUtils.getString();
-        //Флаг проверки первого PG в буфере обмена
-        boolean pgPK = false;
-        if(str == null || !str.startsWith("pik!")) return false;
-        str = str.replace("pik!", "");
-        str = str.trim();
-        pasteData = str.split(" ", -1);
-        for(String s : pasteData){
-            String clazz = Arrays.asList(s.split("#", -1)).get(0);
-            if(!clazz.equals("PG") && !clazz.equals("F"))
-                return false;
-            if(clazz.equals("PG") && !pgPK){
-                //Вставляемый PG, найденный по его id
-                Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
-                ProductGroup pastedPG = CH_PRODUCT_GROUPS.findById(pastedItemId);
-                //Элелемент каталога, куда производится вставка
-                ProductGroup selectedPG;
-                Item selectedItem = tableView.getSelectionModel().getSelectedItem();
-                if(selectedItem == null)
-                    //Если щелкнули по пустому месту
-                    selectedPG = tableView.getSelectedTreeItem().getValue();
-                else{
-                    if(selectedItem instanceof ProductGroup)
-                        selectedPG = (ProductGroup)selectedItem;
-                    else
-                        return false; //нельзя вставить в выделенный пакет (изделие)
-                }
-                TreeItem<ProductGroup> pastedTreeItem = treeView.findTreeItemById(pastedPG.getId());
-                //Группа потомков с родителем, куда вставка не допускается
-                List<ProductGroup> pastedItemChildren  = treeView.findAllGroupChildren(pastedTreeItem);
-                pastedItemChildren.add(pastedPG);
-                for(ProductGroup childPastedPG : pastedItemChildren){
-                    if(childPastedPG.getId().equals(selectedPG.getId()))
-                        return false;
-                }
-                //После пройденной проверки первого же PG меняем флаг, следущие PG проверяться не будут
-                pgPK = true;
-            }
-
-        }
-
-
-        return true;
-    }
-
-    /**
-     * Собственно вставка элементов
-     */
-    private void pasteItems(Event e){
-        List<Item> selectedItems = new ArrayList<>();
-        for(String s : pasteData){
-            String clazz = Arrays.asList(s.split("#", -1)).get(0);
-            Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
-            ProductGroup selectedItem = ((ProductGroup)tableView.getSelectionModel().getSelectedItem());
-            if(selectedItem == null) selectedItem = tableView.getSelectedTreeItem().getValue();
-
-            if(clazz.equals("PG")){
-                ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);
-                pg.setParentId(selectedItem.getId());
-                CH_PRODUCT_GROUPS.update(pg);
-                selectedItems.add(pg);
-            } else {
-                Folder folder = CH_QUICK_FOLDERS.findById(pastedItemId);
-                folder.setProductGroup(CH_PRODUCT_GROUPS.findById(selectedItem.getId()));
-                CH_QUICK_FOLDERS.update(folder);
-                selectedItems.add(folder);
-            }
-        }
-
-        Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, selectedItems);
-
-        ClipboardUtils.clear();
-    }
 
     private void addNewProductGroup(Event e){
         new FormViewACCWindow<ProductGroup>()
