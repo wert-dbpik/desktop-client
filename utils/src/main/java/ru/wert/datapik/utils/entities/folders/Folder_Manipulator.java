@@ -7,9 +7,11 @@ import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.Catalogs;
+import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +41,18 @@ public class Folder_Manipulator {
         tableView.setOnKeyPressed(e->{
 
             if (e.getCode() == KeyCode.DELETE) {
-                tableView.getCommands().delete(e, tableView.getAllSelectedItems()); //DELETE удаляем
+                List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
+                List<ProductGroup> selectedPG = new ArrayList<>();
+                List<Folder> selectedF = new ArrayList<>();
+                for (Item item : selectedItems) {
+                    if (item instanceof ProductGroup)
+                        selectedPG.add((ProductGroup) item);
+                    else
+                        selectedF.add((Folder) item);
+                }
+
+                if(!selectedF.isEmpty()) tableView.getCommands().delete(e, selectedF);
+                if(!selectedPG.isEmpty()) treeView.getItemCommands().delete(e, selectedPG);
             }
 
             if ((e.getCode() == KeyCode.C && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isControlDown())) {
@@ -47,7 +60,7 @@ public class Folder_Manipulator {
             }
 
             if ((e.getCode() == KeyCode.V && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isShiftDown())) {
-                if(pastePossible(null)) pasteItems(e); //(CTRL + V) вставляем
+                if(pastePossible()) pasteItems(e); //(CTRL + V) вставляем
             }
         });
     }
@@ -157,4 +170,7 @@ public class Folder_Manipulator {
 
         ClipboardUtils.clear();
     }
+
+
+
 }

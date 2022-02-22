@@ -45,12 +45,12 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     public Folder_TableView(String prompt, boolean useContextMenu) {
         super(prompt);
         this.useContextMenu = useContextMenu;
-
-        if(useContextMenu) manipulator = new Folder_Manipulator(this, catalogTree);
     }
 
     public void doWhatYouWant(ProductGroup_TreeView catalogTree){
         this.catalogTree = catalogTree;
+
+        if(useContextMenu) manipulator = new Folder_Manipulator(this, catalogTree);
 
         commands = new _Folder_Commands(this);
         if(useContextMenu) createContextMenu();

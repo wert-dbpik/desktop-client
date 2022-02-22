@@ -188,7 +188,15 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         return extraItems;
     }
 
-
+    public void deleteProductGroups(Event e){
+        List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
+        List<ProductGroup> selectedItemGroups = new ArrayList<>();
+        //преобразуем
+        for(Item item : selectedItems){
+            selectedItemGroups.add((ProductGroup)item);
+        }
+        treeView.getItemCommands().delete(e, selectedItemGroups);
+    }
 
     private void addNewProductGroup(Event e){
         new FormViewACCWindow<ProductGroup>()
@@ -204,13 +212,5 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                 .create(EOperation.CHANGE, treeView, productGroup_commands, treeView.getAccWindowRes(), tableView, true);
     }
 
-    private void deleteProductGroups(Event e){
-        List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
-        List<ProductGroup> selectedItemGroups = new ArrayList<>();
-        //преобразуем
-        for(Item item : selectedItems){
-            selectedItemGroups.add((ProductGroup)item);
-        }
-        productGroup_commands.delete(e, selectedItemGroups);
-    }
+
 }
