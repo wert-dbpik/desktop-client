@@ -6,6 +6,7 @@ import javafx.scene.control.TreeItem;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
+import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Commands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 
@@ -68,8 +69,8 @@ public class ProductGroup_ContextMenu extends FormView_ContextMenu<ProductGroup>
         pasteItems = new MenuItem("Вставить");
         addPack = new MenuItem("Добавить пакет");
 
-        cutItems.setOnAction(manipulator::cutItems);
-        pasteItems.setOnAction(manipulator::pasteItems);
+        cutItems.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems(e)));
+        pasteItems.setOnAction(e-> manipulator.pasteItems(ClipboardUtils.getStringFromClipboard()));
         addPack.setOnAction(commands::addProductToFolder);
 
         List<TreeItem<ProductGroup>> selectedTreeGroups = treeView.getSelectionModel().getSelectedItems();

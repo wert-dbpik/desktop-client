@@ -1,17 +1,16 @@
 package ru.wert.datapik.utils.entities.folders;
 
 import javafx.event.Event;
-import javafx.scene.control.TreeItem;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.*;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.*;
+import javafx.scene.text.Text;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.Catalogs;
-import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
-import ru.wert.datapik.utils.common.treeView.Item_TreeView;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
-import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +30,68 @@ public class Folder_Manipulator {
         this.treeView = treeView;
 
         setOnKeyManipulator(tableView);
+
+        createDragAndDropHandler();
+    }
+
+    public void createDragAndDropHandler(){
+
+        tableView.setOnDragDetected(e -> {
+            Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
+
+            cutItems(e);
+
+            ClipboardContent content = new ClipboardContent();
+            content.putString(e.toString());
+            db.setContent(content);
+
+            String shownString = "папки";
+            Text t = new Text(shownString);
+            WritableImage image = t.snapshot(null, null);
+
+            db.setDragViewOffsetY(25.0f);
+            db.setDragView(image);
+
+            e.consume();
+        });
+
+        tableView.setOnDragOver(event -> {
+            // data is dragged over the target
+            Dragboard db = event.getDragboard();
+
+            if (event.getDragboard().hasString()){
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+            event.consume();
+        });
+
+    }
+
+
+    /**
+     * Обработка события OnDragOver
+     */
+    private void createOnDragOver(DragEvent e, TableRow<Item> row){
+
+        treeView.getSelectionModel().select(row.getIndex());
+
+        if (pastePossible()) {
+            e.acceptTransferModes(TransferMode.MOVE);
+        } else{
+            e.acceptTransferModes(TransferMode.NONE);
+        }
+        e.consume();
+    }
+
+    /**
+     * Обработка события OnDragDropped
+     */
+    private void createOnDragDropped(DragEvent event, TableRow<Item> row){
+        treeView.getSelectionModel().select(row.getIndex());
+        if(event.getTransferMode().equals(TransferMode.MOVE)){
+            pasteItems(event);
+        }
+        event.consume();
     }
 
     /**
@@ -97,7 +158,7 @@ public class Folder_Manipulator {
      */
     public boolean pastePossible(){
         //Строка в буфере обмена
-        String str = ClipboardUtils.getString();
+        String str = ClipboardUtils.getStringFromClipboard();
         //Флаг проверки первого PG в буфере обмена
         boolean pgPK = false;
         if(str == null || !str.startsWith("pik!")) return false;

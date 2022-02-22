@@ -1,12 +1,9 @@
 package ru.wert.datapik.utils.entities.product_groups;
 
 import javafx.event.Event;
-import javafx.geometry.Bounds;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
@@ -14,22 +11,17 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
-import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.Catalogs;
-import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
-import ru.wert.datapik.utils.common.treeView.Item_TreeViewDragAndDrop;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
-import ru.wert.datapik.utils.images.EditorImages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
-import static ru.wert.datapik.utils.images.EditorImages.DRAGGED_BOX_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
@@ -74,7 +66,6 @@ public class ProductGroup_Manipulator {
                 treeCell.setOnDragDetected(e -> createOnDragDetected(e, treeCell));
                 treeCell.setOnDragOver(e -> createOnDragOver(e, treeCell));
                 treeCell.setOnDragDropped(e -> createOnDragDropped(e, treeCell));
-//                treeCell.setOnDragDone(e -> createOnDragDone(e, treeCell));
 
                 return treeCell;
             }
@@ -84,10 +75,11 @@ public class ProductGroup_Manipulator {
     private void createOnDragDetected(MouseEvent e, TreeCell<ProductGroup> treeCell){
 
         Dragboard db = treeCell.startDragAndDrop(TransferMode.MOVE);
-
         TreeItem<ProductGroup> draggedItem = treeCell.getTreeItem();
+
         if(draggedItem != null){
             ProductGroup draggedPG = draggedItem.getValue();
+
             ClipboardContent content = ClipboardUtils.copyToClipboardText("pik! PG#" + draggedPG.getId());
             db.setContent(content);
 
@@ -96,9 +88,8 @@ public class ProductGroup_Manipulator {
             Text t = new Text(s);
             WritableImage image = t.snapshot(null, null);
 
-            //Хитрость, чтобы расположить картинку НАД курсором, а не ПОД
-            Bounds b = treeCell.getBoundsInLocal();
-            db.setDragView(image, b.getMinX(), b.getMinY() + b.getHeight());
+            db.setDragViewOffsetY(25.0f);
+            db.setDragView(image);
         }
 
         e.consume();
@@ -108,15 +99,17 @@ public class ProductGroup_Manipulator {
      * Обработка события OnDragOver
      */
     private void createOnDragOver(DragEvent e, TreeCell<ProductGroup> treeCell){
-
+        Dragboard db = e.getDragboard();
         TreeItem<ProductGroup> target = treeCell.getTreeItem();
-        treeView.getSelectionModel().select(target);
-        expandIfNeeded(target);
+        if(db.hasString()) {
+            treeView.getSelectionModel().select(target);
+            expandIfNeeded(target);
             if (pastePossible(target)) {
                 e.acceptTransferModes(TransferMode.MOVE);
-            } else{
+            } else {
                 e.acceptTransferModes(TransferMode.NONE);
             }
+        }
         e.consume();
     }
 
@@ -124,9 +117,11 @@ public class ProductGroup_Manipulator {
      * Обработка события OnDragDropped
      */
     private void createOnDragDropped(DragEvent event, TreeCell<ProductGroup> treeCell){
-        treeView.getSelectionModel().select(treeCell.getTreeItem());
-        if(event.getTransferMode().equals(TransferMode.MOVE)){
-            pasteItems(event);
+        Dragboard db = event.getDragboard();
+        if(db.hasString() && db.getString().contains("pik!")) {
+            if (event.getTransferMode().equals(TransferMode.MOVE)) {
+                pasteItems(db.getString());
+            }
         }
         event.consume();
     }
@@ -174,17 +169,18 @@ public class ProductGroup_Manipulator {
             }
 
             if ((e.getCode() == KeyCode.C && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isControlDown())) {
-                cutItems(e); //(CTRL + C) вырезаем
+                String str = cutItems(e); //(CTRL + C) вырезаем
+                ClipboardUtils.copyToClipboardText(str);
             }
 
             if ((e.getCode() == KeyCode.V && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isShiftDown())) {
-                if(pastePossible(null)) pasteItems(e); //(CTRL + V) вставляем
+                if(pastePossible(null)) pasteItems(ClipboardUtils.getStringFromClipboard()); //(CTRL + V) вставляем
             }
         });
     }
 
 
-    public void cutItems(Event e) {
+    public String cutItems(Event e) {
         StringBuilder sb = new StringBuilder();
         sb.append("pik! ");
         ProductGroup selectedItem = treeView.getSelectionModel().getSelectedItem().getValue();
@@ -193,7 +189,7 @@ public class ProductGroup_Manipulator {
         sb.append(selectedItem.getId());
         sb.append(" ");
 
-        ClipboardUtils.copyToClipboardText(sb.toString());
+        return sb.toString();
     }
 
     /**
@@ -212,7 +208,7 @@ public class ProductGroup_Manipulator {
         List<ProductGroup> children = treeView.findAllGroupChildren(targetItem);
         //Флаг проверки первого PG в буфере обмена
         boolean pgPK = false;
-        String str = ClipboardUtils.getString();
+        String str = ClipboardUtils.getStringFromClipboard();
         //1)ClipboardUtils = null или 2)Начинается НЕ с "pik!"
         if(str == null || !str.startsWith("pik!")) return false;
         str = str.replace("pik!", "");
@@ -249,7 +245,10 @@ public class ProductGroup_Manipulator {
         return true;
     }
 
-    public void pasteItems(Event e) {
+    public void pasteItems(String str) {
+
+        String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
+
         List<Item> selectedItems = new ArrayList<>();
         for (String s : pasteData) {
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
@@ -273,7 +272,6 @@ public class ProductGroup_Manipulator {
 
         Catalogs.updateFormsWhenAddedOrChanged(treeView, treeView.getConnectedForm(), selectedItems);
 
-        ClipboardUtils.clear();
     }
 
 }

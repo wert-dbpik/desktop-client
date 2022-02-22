@@ -28,7 +28,7 @@ public class ClipboardUtils {
 
     }
 
-    public static String getString(){
+    public static String getStringFromClipboard(){
         final Clipboard clipboard = Clipboard.getSystemClipboard();
 //        final ClipboardContent content = new ClipboardContent();
 
