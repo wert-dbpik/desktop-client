@@ -30,7 +30,6 @@ public class ProductGroup_Manipulator {
 
     private Item_TreeView<Item, ProductGroup> treeView;
     private ItemTableView<Item> tableView;
-    private String[] pasteData;
 
     private TreeItem<ProductGroup> hoveredItem = null;
     private Thread hoveredThread;
@@ -104,7 +103,7 @@ public class ProductGroup_Manipulator {
         if(db.hasString()) {
             treeView.getSelectionModel().select(target);
             expandIfNeeded(target);
-            if (pastePossible(target)) {
+            if (pastePossible(target, db.getString())) {
                 e.acceptTransferModes(TransferMode.MOVE);
             } else {
                 e.acceptTransferModes(TransferMode.NONE);
@@ -174,7 +173,8 @@ public class ProductGroup_Manipulator {
             }
 
             if ((e.getCode() == KeyCode.V && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isShiftDown())) {
-                if(pastePossible(null)) pasteItems(ClipboardUtils.getStringFromClipboard()); //(CTRL + V) вставляем
+                String str = ClipboardUtils.getStringFromClipboard();
+                if(pastePossible(null, str)) pasteItems(str); //(CTRL + V) вставляем
             }
         });
     }
@@ -201,19 +201,18 @@ public class ProductGroup_Manipulator {
      * 4) Если вставка производится в ту же группу или в группу потомка
      * @return true - вставка возможна
      */
-    public boolean pastePossible(TreeItem<ProductGroup> targetItem){
+    public boolean pastePossible(TreeItem<ProductGroup> targetItem, String str){
         if(targetItem != null )
             targetItem = treeView.getSelectionModel().getSelectedItem();
         if(targetItem == null) targetItem = treeView.getRoot();
         List<ProductGroup> children = treeView.findAllGroupChildren(targetItem);
         //Флаг проверки первого PG в буфере обмена
         boolean pgPK = false;
-        String str = ClipboardUtils.getStringFromClipboard();
         //1)ClipboardUtils = null или 2)Начинается НЕ с "pik!"
         if(str == null || !str.startsWith("pik!")) return false;
         str = str.replace("pik!", "");
         str = str.trim();
-        pasteData = str.split(" ", -1);
+        String[] pasteData = str.split(" ", -1);
         for(String s : pasteData){
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
             if(!clazz.equals("PG") && !clazz.equals("F"))

@@ -23,7 +23,6 @@ public class Folder_Manipulator {
 
     private Folder_TableView tableView;
     private ProductGroup_TreeView<Item> treeView;
-    private String[] pasteData;
 
     public Folder_Manipulator(Folder_TableView tableView, ProductGroup_TreeView<Item> treeView) {
         this.tableView = tableView;
@@ -71,25 +70,33 @@ public class Folder_Manipulator {
     /**
      * Обработка события OnDragOver
      */
-    private void createOnDragOver(DragEvent e, TableRow<Item> row){
+    private void createOnDragOver(){
+        tableView.setOnDragOver(event -> {
+            Dragboard db = event.getDragboard();
+            tableView.getSelectionModel().select(row.getIndex());
 
-        treeView.getSelectionModel().select(row.getIndex());
+            if (pastePossible(db.getString())) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            } else{
+                event.acceptTransferModes(TransferMode.NONE);
+            }
+            e.consume();
+        });
 
-        if (pastePossible()) {
-            e.acceptTransferModes(TransferMode.MOVE);
-        } else{
-            e.acceptTransferModes(TransferMode.NONE);
-        }
-        e.consume();
     }
 
     /**
      * Обработка события OnDragDropped
      */
     private void createOnDragDropped(DragEvent event, TableRow<Item> row){
-        treeView.getSelectionModel().select(row.getIndex());
-        if(event.getTransferMode().equals(TransferMode.MOVE)){
-            pasteItems(event);
+        Dragboard db = event.getDragboard();
+        if(db.hasString()) {
+            String str = db.getString();
+            if (pastePossible(str)) {
+                if (event.getTransferMode().equals(TransferMode.MOVE)) {
+                    pasteItems(str);
+                }
+            }
         }
         event.consume();
     }
@@ -117,16 +124,18 @@ public class Folder_Manipulator {
             }
 
             if ((e.getCode() == KeyCode.C && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isControlDown())) {
-                cutItems(e); //(CTRL + C) вырезаем
+                String str = cutItems(); //(CTRL + C) вырезаем
+                ClipboardUtils.copyToClipboardText(str);
             }
 
             if ((e.getCode() == KeyCode.V && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isShiftDown())) {
-                if(pastePossible()) pasteItems(e); //(CTRL + V) вставляем
+                String str = ClipboardUtils.getStringFromClipboard();
+                if(pastePossible(str)) pasteItems(str); //(CTRL + V) вставляем
             }
         });
     }
 
-    public void cutItems(Event e){
+    public String cutItems(){
         StringBuilder sb = new StringBuilder();
         sb.append("pik! ");
         List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
@@ -144,7 +153,7 @@ public class Folder_Manipulator {
                 sb.append(" ");
             }
         }
-        ClipboardUtils.copyToClipboardText(sb.toString());
+        return sb.toString();
     }
 
     /**
@@ -156,15 +165,13 @@ public class Folder_Manipulator {
      * 4) Если вставка производится в ту же группу или в группу потомка
      * @return true - вставка возможна
      */
-    public boolean pastePossible(){
-        //Строка в буфере обмена
-        String str = ClipboardUtils.getStringFromClipboard();
+    public boolean pastePossible(String str){
         //Флаг проверки первого PG в буфере обмена
         boolean pgPK = false;
         if(str == null || !str.startsWith("pik!")) return false;
         str = str.replace("pik!", "");
         str = str.trim();
-        pasteData = str.split(" ", -1);
+        String[] pasteData = str.split(" ", -1);
         for(String s : pasteData){
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
             if(!clazz.equals("PG") && !clazz.equals("F"))
@@ -199,14 +206,16 @@ public class Folder_Manipulator {
 
         }
 
-
         return true;
     }
 
     /**
      * Собственно вставка элементов
      */
-    public void pasteItems(Event e){
+    public void pasteItems(String str){
+
+        String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
+
         List<Item> selectedItems = new ArrayList<>();
         for(String s : pasteData){
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
