@@ -38,21 +38,34 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     private Folder_ContextMenu contextMenu;
     private final boolean useContextMenu;
 
-
-
     public Folder_TableView(String prompt, boolean useContextMenu) {
         super(prompt);
         this.useContextMenu = useContextMenu;
     }
 
-    public void doWhatYouWant(ProductGroup_TreeView catalogTree){
+    public List<ProductGroup> findMultipleProductGroups(ProductGroup productGroup){
+        List<ProductGroup> foundProductGroups =
+                catalogTree.findAllGroupChildren(catalogTree.findTreeItemById(productGroup.getId()));
+        foundProductGroups.add(productGroup);
+        return foundProductGroups;
+
+
+
+
+    }
+
+    /**
+     * Метод подключает Folder_Manipulator и RowFactory к таблице
+     * @param catalogTree ProductGroup_TreeView
+     */
+    public void plugContextMenuAndFolderManipulators(ProductGroup_TreeView catalogTree){
         this.catalogTree = catalogTree;
 
         if(useContextMenu) manipulator = new Folder_Manipulator(this, catalogTree);
 
         commands = new _Folder_Commands(this);
         if(useContextMenu) createContextMenu();
-        final Callback<TableView<Item>, TableRow<Item>> rf = getRowFactory();
+
         //При двойном клике на верхнюю строку, поднимаемся по списку выше
         //При двойном клике на папку открываем папку
         //При клике правой кнопку по пустой строке снимаем всякое выделение
@@ -73,11 +86,13 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
                         updateNow((ProductGroup) prevRowData);
                     }
                 }
+                //Снимаем всякое выделение, если клик по пустому месту
                 if (row.isEmpty()) {
                     getSelectionModel().clearSelection();
                 }
             });
 
+            row.setOnDragDetected(e->manipulator.createOnDragDetected(row));
             row.setOnDragOver(e->manipulator.createOnDragOver(row));
             row.setOnDragDropped(e->manipulator.createOnDragDropped(e, row));
 

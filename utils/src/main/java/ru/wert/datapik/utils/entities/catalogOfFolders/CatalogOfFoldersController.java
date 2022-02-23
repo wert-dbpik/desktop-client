@@ -13,12 +13,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
-import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.components.BtnRollDown;
 import ru.wert.datapik.utils.common.components.BtnRollUp;
-import ru.wert.datapik.utils.common.interfaces.IFormView;
-import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
@@ -65,7 +62,6 @@ public class CatalogOfFoldersController {
         boolean useContextMenu = false;
         if(CH_CURRENT_USER.getUserGroup().isEditDrafts()) useContextMenu = true;
         createCatalogForms(useContextMenu);
-//        createFolders_TableView();
 
         catalogTreeView.setConnectedForm(folderTableView);
 
@@ -92,17 +88,16 @@ public class CatalogOfFoldersController {
 
         catalogTreeView = catalogPatch.createProductTreeView(folderTableView);
 
-        ((Folder_TableView)folderTableView).doWhatYouWant(catalogTreeView);
+        ((Folder_TableView)folderTableView).plugContextMenuAndFolderManipulators(catalogTreeView);
 
         catalogTreeView.setOnMouseClicked((e)->{
-//            if(catalogTreeView.getFocusModel().getFocusedItem() == null) return;
             if(e.getButton() == MouseButton.PRIMARY) {
                 if(catalogTreeView.getSelectionModel().getSelectedItem() != null)
                     folderTableView.updateTableView();
             }
         });
 
-            folderTableView.updateView();
+        folderTableView.updateView();
 
         folderTableView.setMinHeight(0.0);
 
@@ -111,14 +106,6 @@ public class CatalogOfFoldersController {
 
     }
 
-    /**
-     * ТАБЛИЦА ИЗДЕЛИЙ
-     */
-//    private void createFolders_TableView() {
-//        folderTableView = new Folder_TableView(catalogTreeView, "ПАКЕТЫ ИЗДЕЛИЙ");
-//
-//
-//    }
 
     /**
      * ИНСТРУМЕНТАЛЬНАЯ ПАНЕЛЬ ДЛЯ КАТАЛОГА ИЗДЕЛИЙ

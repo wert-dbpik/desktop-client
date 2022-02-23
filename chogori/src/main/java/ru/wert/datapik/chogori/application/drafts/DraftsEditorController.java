@@ -4,10 +4,13 @@ package ru.wert.datapik.chogori.application.drafts;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
 import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
@@ -16,6 +19,8 @@ import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.tabs.SearchablePane;
+
+import java.util.List;
 
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
@@ -104,11 +109,28 @@ public class DraftsEditorController implements SearchablePane {
 
         //Подключаем слушатель
         Folder_TableView folderTableView = catalogPatch.getFolderTableView();
-        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue instanceof Folder) {
-                draftsTable.setSearchedText(""); //обнуляем поисковую строку
-                draftsTable.setModifyingItem(newValue);
-                draftsTable.updateView();
+//        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//            if(newValue instanceof Folder) {
+//                draftsTable.setSearchedText(""); //обнуляем поисковую строку
+//                draftsTable.setModifyingItem(newValue);
+//                draftsTable.updateView();
+//            }
+//        });
+
+        folderTableView.setOnMouseClicked(e->{
+            if(e.getButton().equals(MouseButton.PRIMARY) && e.isAltDown()){
+                Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
+                if(selectedItem instanceof Folder){
+                    draftsTable.setSearchedText(""); //обнуляем поисковую строку
+                    draftsTable.setModifyingItem(selectedItem);
+                    draftsTable.updateView();
+                }
+                if(selectedItem instanceof ProductGroup){
+                    List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
+                    draftsTable
+
+                }
+
             }
         });
 

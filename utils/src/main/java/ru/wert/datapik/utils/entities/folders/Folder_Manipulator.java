@@ -32,13 +32,10 @@ public class Folder_Manipulator {
         this.treeView = treeView;
 
         setOnKeyManipulator(tableView);
-
-        createDragAndDropHandler();
     }
 
-    public void createDragAndDropHandler(){
-
-        tableView.setOnDragDetected(e -> {
+    public void createOnDragDetected(TableRow<Item> row){
+        row.setOnDragDetected(event -> {
             Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
 
             ClipboardContent content = new ClipboardContent();
@@ -52,7 +49,7 @@ public class Folder_Manipulator {
             db.setDragViewOffsetY(25.0f);
             db.setDragView(image);
 
-            e.consume();
+            event.consume();
         });
 
     }
