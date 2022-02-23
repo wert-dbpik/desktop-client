@@ -33,7 +33,7 @@ public class BtnGlobe<P extends Item> extends Button {
         if(view instanceof CatalogTableView){
             setOnAction((e)-> {
                 view.setSearchedText("");
-                ((CatalogTableView)view).updateFuck();
+                ((CatalogTableView)view).updateTableView();
             });
         }
 

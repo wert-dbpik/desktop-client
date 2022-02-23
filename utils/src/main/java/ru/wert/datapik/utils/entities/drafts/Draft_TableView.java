@@ -44,6 +44,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private List<Draft> currentItemList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
     private Draft_ACCController accController;
 
+    @Setter private List<Folder> selectedFolders;
+
     @Getter
     ListProperty<Draft> preparedList = new SimpleListProperty<>();
 
@@ -184,10 +186,17 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     public List<Draft> prepareList() {
         List<Draft> list = new ArrayList<>();
         if(modifyingClass instanceof Folder){
-            if(modifyingItem == null)
-                list = CH_QUICK_DRAFTS.findAll();
-            else {
-                list = CH_QUICK_DRAFTS.findAllByFolder((Folder)modifyingItem);
+            if(selectedFolders == null || selectedFolders.isEmpty()) {
+                if (modifyingItem == null)
+                    list = CH_QUICK_DRAFTS.findAll();
+                else {
+                    list = CH_QUICK_DRAFTS.findAllByFolder((Folder) modifyingItem);
+                }
+            } else {
+                for(Folder folder: selectedFolders){
+                    list.addAll(CH_QUICK_DRAFTS.findAllByFolder(folder));
+                }
+                selectedFolders = null;
             }
         }
 

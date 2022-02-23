@@ -20,8 +20,11 @@ import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.tabs.SearchablePane;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
@@ -127,8 +130,12 @@ public class DraftsEditorController implements SearchablePane {
                 }
                 if(selectedItem instanceof ProductGroup){
                     List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
-                    draftsTable
-
+                    List<Folder> folders = new ArrayList<>();
+                    for(ProductGroup pg : selectedGroups){
+                        folders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(pg.getId()));
+                    }
+                    draftsTable.setSelectedFolders(folders);
+                    draftsTable.updateView();
                 }
 
             }

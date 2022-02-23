@@ -49,9 +49,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         foundProductGroups.add(productGroup);
         return foundProductGroups;
 
-
-
-
     }
 
     /**
@@ -64,11 +61,14 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         if(useContextMenu) manipulator = new Folder_Manipulator(this, catalogTree);
 
         commands = new _Folder_Commands(this);
+
         if(useContextMenu) createContextMenu();
+
 
         //При двойном клике на верхнюю строку, поднимаемся по списку выше
         //При двойном клике на папку открываем папку
         //При клике правой кнопку по пустой строке снимаем всякое выделение
+
         setRowFactory( tv -> {
             TableRow<Item> row = new TableRow<>();
 
@@ -92,9 +92,11 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
                 }
             });
 
-            row.setOnDragDetected(e->manipulator.createOnDragDetected(row));
-            row.setOnDragOver(e->manipulator.createOnDragOver(row));
-            row.setOnDragDropped(e->manipulator.createOnDragDropped(e, row));
+            if(useContextMenu) {
+                row.setOnDragDetected(e -> manipulator.createOnDragDetected(row));
+                row.setOnDragOver(e -> manipulator.createOnDragOver(row));
+                row.setOnDragDropped(e -> manipulator.createOnDragDropped(e, row));
+            }
 
             return row ;
         });

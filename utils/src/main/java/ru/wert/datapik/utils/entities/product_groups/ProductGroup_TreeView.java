@@ -27,7 +27,8 @@ public class ProductGroup_TreeView<P extends Item> extends Item_TreeView<P, Prod
         super(itemService, rootItem);
 
         commands = new _ProductGroup_Commands<>(this, dependedTableView, dependedItemService);
-        manipulator = new ProductGroup_Manipulator((Item_TreeView<Item, ProductGroup>) this, dependedTableView);
+
+        if(useContextMenu) manipulator = new ProductGroup_Manipulator((Item_TreeView<Item, ProductGroup>) this, dependedTableView);
         if (useContextMenu) createContextMenu();
 
 
