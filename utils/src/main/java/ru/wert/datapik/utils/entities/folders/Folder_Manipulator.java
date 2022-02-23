@@ -2,9 +2,11 @@ package ru.wert.datapik.utils.entities.folders;
 
 import javafx.event.Event;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 
@@ -38,10 +41,8 @@ public class Folder_Manipulator {
         tableView.setOnDragDetected(e -> {
             Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
 
-            cutItems(e);
-
             ClipboardContent content = new ClipboardContent();
-            content.putString(e.toString());
+            content.putString(cutItems());
             db.setContent(content);
 
             String shownString = "папки";
@@ -54,33 +55,22 @@ public class Folder_Manipulator {
             e.consume();
         });
 
-        tableView.setOnDragOver(event -> {
-            // data is dragged over the target
-            Dragboard db = event.getDragboard();
-
-            if (event.getDragboard().hasString()){
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            event.consume();
-        });
-
     }
-
 
     /**
      * Обработка события OnDragOver
      */
-    private void createOnDragOver(){
-        tableView.setOnDragOver(event -> {
+    public void createOnDragOver(TableRow<Item> row){
+        row.setOnDragOver(event -> {
             Dragboard db = event.getDragboard();
-            tableView.getSelectionModel().select(row.getIndex());
+            tableView.getSelectionModel().clearAndSelect(row.getIndex());
 
             if (pastePossible(db.getString())) {
                 event.acceptTransferModes(TransferMode.MOVE);
             } else{
                 event.acceptTransferModes(TransferMode.NONE);
             }
-            e.consume();
+            event.consume();
         });
 
     }
@@ -88,7 +78,7 @@ public class Folder_Manipulator {
     /**
      * Обработка события OnDragDropped
      */
-    private void createOnDragDropped(DragEvent event, TableRow<Item> row){
+    public void createOnDragDropped(DragEvent event, TableRow<Item> row){
         Dragboard db = event.getDragboard();
         if(db.hasString()) {
             String str = db.getString();

@@ -69,13 +69,13 @@ public class ProductGroup_ContextMenu extends FormView_ContextMenu<ProductGroup>
         pasteItems = new MenuItem("Вставить");
         addPack = new MenuItem("Добавить пакет");
 
-        cutItems.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems(e)));
+        cutItems.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
         pasteItems.setOnAction(e-> manipulator.pasteItems(ClipboardUtils.getStringFromClipboard()));
         addPack.setOnAction(commands::addProductToFolder);
 
         List<TreeItem<ProductGroup>> selectedTreeGroups = treeView.getSelectionModel().getSelectedItems();
 
-        if(manipulator.pastePossible(null)) extraPasteItems = true;
+        if(manipulator.pastePossible(null, ClipboardUtils.getStringFromClipboard())) extraPasteItems = true;
 
         if(selectedTreeGroups.size() == 1){
             extraCutItems = true;

@@ -1,12 +1,10 @@
 package ru.wert.datapik.utils.entities.folders;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.util.Callback;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
@@ -54,13 +52,13 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
         commands = new _Folder_Commands(this);
         if(useContextMenu) createContextMenu();
-
+        final Callback<TableView<Item>, TableRow<Item>> rf = getRowFactory();
         //При двойном клике на верхнюю строку, поднимаемся по списку выше
         //При двойном клике на папку открываем папку
         //При клике правой кнопку по пустой строке снимаем всякое выделение
         setRowFactory( tv -> {
-
             TableRow<Item> row = new TableRow<>();
+
             row.setOnMouseClicked(event -> {
                 Item prevRowData = null;
                 Item rowData = row.getItem();
@@ -79,6 +77,9 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
                     getSelectionModel().clearSelection();
                 }
             });
+
+            row.setOnDragOver(e->manipulator.createOnDragOver(row));
+            row.setOnDragDropped(e->manipulator.createOnDragDropped(e, row));
 
             return row ;
         });

@@ -115,8 +115,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         productGroup_commands = new _ProductGroup_Commands(treeView, tableView, CH_FOLDERS);
 
-        cutItems.setOnAction(manipulator::cutItems);
-        pasteItems.setOnAction(manipulator::pasteItems);
+        cutItems.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
+        pasteItems.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboard()));
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);
@@ -126,7 +126,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         //Если ничего не выделено
         if (selectedItems.size() == 0) {
             extraAddProductGroup = true;
-            if (manipulator.pastePossible()) extraPasteItems = true;
+            if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard())) extraPasteItems = true;
         } else if (selectedItems.size() == 1) {
             if (selectedItems.get(0) instanceof ProductGroup) {
                 //Если выделенный элемент не самый верхний в таблице
@@ -135,7 +135,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                     extraChangeProductGroup = true;
                     extraDeleteProductGroup = true;
                     extraCutItems = true;
-                    if (manipulator.pastePossible()) extraPasteItems = true;
+                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard())) extraPasteItems = true;
                 } else {
 
                     TablePosition<Item, Label> ts = tableView.getSelectionModel().getSelectedCells().get(0);
@@ -144,7 +144,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                     //Если строка элемента не является < . . . >
                     if (s.equals(UPWARD)) {
                         extraAddProductGroup = true;
-                        if (manipulator.pastePossible()) extraPasteItems = true;
+                        if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard())) extraPasteItems = true;
                     } else {
                         extraAddProductGroup = true;
                         extraChangeProductGroup = true;

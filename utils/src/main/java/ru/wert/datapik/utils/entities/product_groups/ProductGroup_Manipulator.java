@@ -168,7 +168,7 @@ public class ProductGroup_Manipulator {
             }
 
             if ((e.getCode() == KeyCode.C && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isControlDown())) {
-                String str = cutItems(e); //(CTRL + C) вырезаем
+                String str = cutItems(); //(CTRL + C) вырезаем
                 ClipboardUtils.copyToClipboardText(str);
             }
 
@@ -180,7 +180,7 @@ public class ProductGroup_Manipulator {
     }
 
 
-    public String cutItems(Event e) {
+    public String cutItems() {
         StringBuilder sb = new StringBuilder();
         sb.append("pik! ");
         ProductGroup selectedItem = treeView.getSelectionModel().getSelectedItem().getValue();
