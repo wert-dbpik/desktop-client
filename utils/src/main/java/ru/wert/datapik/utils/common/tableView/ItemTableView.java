@@ -5,6 +5,7 @@ import com.sun.javafx.scene.control.skin.TableViewSkinBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import lombok.Setter;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.interfaces.ITableView;
@@ -24,6 +25,8 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
     public abstract void updateTableView();
     public abstract void createContextMenu();
     public abstract List<P> prepareList();
+    @Setter
+    protected boolean globalOn; //Режим всеобщего представления вкл
 
 
 

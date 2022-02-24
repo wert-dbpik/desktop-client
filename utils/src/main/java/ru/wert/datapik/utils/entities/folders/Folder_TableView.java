@@ -1,11 +1,15 @@
 package ru.wert.datapik.utils.entities.folders;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.util.Callback;
 import lombok.Getter;
+import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
@@ -35,6 +39,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Getter private ProductGroup_TreeView<Item> catalogTree;
     @Getter private Folder_Manipulator manipulator;
 
+
     private Folder_ContextMenu contextMenu;
     private final boolean useContextMenu;
 
@@ -63,7 +68,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         commands = new _Folder_Commands(this);
 
         if(useContextMenu) createContextMenu();
-
 
         //При двойном клике на верхнюю строку, поднимаемся по списку выше
         //При двойном клике на папку открываем папку
@@ -109,9 +113,24 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
      */
     @Override
     public void updateTableView() {
-        //Находим выделенный элемент в дереве каталогов
-        selectedTreeItem = catalogTree.getSelectionModel().getSelectedItem();
-        updateNow(null);
+        if(globalOn) updateWithGlobalOn();
+        else {
+            //Находим выделенный элемент в дереве каталогов
+            selectedTreeItem = catalogTree.getSelectionModel().getSelectedItem();
+            updateNow(null);
+        }
+    }
+
+    private void updateWithGlobalOn(){
+        Platform.runLater(()->{
+            ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
+            ObservableList<Item> items = FXCollections.observableArrayList();
+            for(Folder folder: folders){
+                items.add((Item)folder);
+            }
+            getItems().clear();
+            setItems(items);
+        });
     }
 
     /**

@@ -18,9 +18,7 @@ import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogableItem;
 import ru.wert.datapik.client.interfaces.Item;
-import ru.wert.datapik.utils.common.components.BtnGlobe;
-import ru.wert.datapik.utils.common.components.BtnRollDown;
-import ru.wert.datapik.utils.common.components.BtnRollUp;
+import ru.wert.datapik.utils.common.components.*;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
@@ -151,24 +149,26 @@ public class CatalogOfFoldersController {
      * ИНСТРУМЕНТАЛЬНАЯ ПАНЕЛЬ для ТАБЛИЦЫ ИЗДЕЛИЙ
      */
     private void createFolders_ToolBar(){
-        Button btnFoldersGlobe = new Button();
-        btnFoldersGlobe.setId("patchButton");
-        btnFoldersGlobe.setGraphic(new ImageView(BTN_GLOBE_IMG));
-        btnFoldersGlobe.setTooltip(new Tooltip("Показать все"));
-        btnFoldersGlobe.setOnAction((e)->{
+//        Button btnFoldersGlobe = new Button();
+//        btnFoldersGlobe.setId("patchButton");
+//        btnFoldersGlobe.setGraphic(new ImageView(BTN_GLOBE_IMG));
+//        btnFoldersGlobe.setTooltip(new Tooltip("Показать все"));
+//        btnFoldersGlobe.setOnAction((e)->{
+//
+//            Platform.runLater(()->{
+//                ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
+//                ObservableList<Item> items = FXCollections.observableArrayList();
+//                for(Folder folder: folders){
+//                    items.add((Item)folder);
+//                }
+//                folderTableView.getItems().clear();
+//                folderTableView.setItems(items);
+//            });
+//        });
 
-            Platform.runLater(()->{
-                ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
-                ObservableList<Item> items = FXCollections.observableArrayList();
-                for(Folder folder: folders){
-                    items.add((Item)folder);
-                }
-                folderTableView.getItems().clear();
-                folderTableView.setItems(items);
-            });
-        });
+        Button btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView).create();
 
-        foldersButtons.getChildren().addAll(btnFoldersGlobe);
+        foldersButtons.getChildren().addAll(btnDoubleGlobeVsCatalog);
     }
 
 
