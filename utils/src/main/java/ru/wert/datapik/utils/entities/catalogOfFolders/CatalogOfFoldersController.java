@@ -66,7 +66,7 @@ public class CatalogOfFoldersController {
 
         //Создаем панели инструментов
         createCatalog_ToolBar();
-        createFolders_ToolBar();
+
 
         //Создаем связанные между собой панели каталога и изделий
         boolean useContextMenu = false;
@@ -74,6 +74,8 @@ public class CatalogOfFoldersController {
         createCatalogForms(useContextMenu);
 
         catalogTreeView.setConnectedForm(folderTableView);
+        createFolders_ToolBar();
+
 
 
     }
@@ -149,22 +151,6 @@ public class CatalogOfFoldersController {
      * ИНСТРУМЕНТАЛЬНАЯ ПАНЕЛЬ для ТАБЛИЦЫ ИЗДЕЛИЙ
      */
     private void createFolders_ToolBar(){
-//        Button btnFoldersGlobe = new Button();
-//        btnFoldersGlobe.setId("patchButton");
-//        btnFoldersGlobe.setGraphic(new ImageView(BTN_GLOBE_IMG));
-//        btnFoldersGlobe.setTooltip(new Tooltip("Показать все"));
-//        btnFoldersGlobe.setOnAction((e)->{
-//
-//            Platform.runLater(()->{
-//                ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
-//                ObservableList<Item> items = FXCollections.observableArrayList();
-//                for(Folder folder: folders){
-//                    items.add((Item)folder);
-//                }
-//                folderTableView.getItems().clear();
-//                folderTableView.setItems(items);
-//            });
-//        });
 
         Button btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView).create();
 

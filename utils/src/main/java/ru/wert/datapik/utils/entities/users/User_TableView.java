@@ -75,7 +75,7 @@ public class User_TableView extends RoutineTableView<User> {
     }
 
     @Override //IFormView
-    public List<User> getCurrentItemList() {
+    public List<User> getCurrentItemSearchedList() {
         return currentItemList;
     }
 

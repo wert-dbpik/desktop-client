@@ -1,13 +1,11 @@
 package ru.wert.datapik.utils.entities.drafts;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -15,7 +13,6 @@ import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
-import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.Sorting;
@@ -38,11 +35,12 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private static final String accWindowRes = "/utils-fxml/drafts/draftACC.fxml";
     private final _Draft_Commands commands;
     private PreviewerPatchController previewerController;
-    private String searchedText = "";
+    @Getter@Setter private String searchedText = "";
     @Setter private Object modifyingClass;
     @Getter@Setter private Object modifyingItem; //Product или Folder
     private List<Draft> currentItemList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
     private Draft_ACCController accController;
+    private Draft_Manipulator draftManipulator;
 
     @Setter private List<Folder> selectedFolders;
 
@@ -84,6 +82,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     public Draft_TableView(String promptText, PreviewerPatchController previewerController, boolean useContextMenu) {
         super(promptText);
         this.previewerController = previewerController;
+
+        if(useContextMenu) draftManipulator = new Draft_Manipulator(this);
 
         commands = new _Draft_Commands(this);
 
@@ -235,16 +235,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     }
 
     @Override
-    public void setSearchedText(String searchedText) {
-        this.searchedText = searchedText;
-    }
-
-    @Override
-    public String getSearchedText() {
-        return searchedText;
-    }
-
-    @Override
     public ItemCommands<Draft> getCommands() {
         return commands;
     }
@@ -266,7 +256,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
 
     @Override //Searchable
-    public List<Draft> getCurrentItemList() {
+    public List<Draft> getCurrentItemSearchedList() {
         return currentItemList;
     }
 

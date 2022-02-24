@@ -58,7 +58,8 @@ public class Catalogs<P extends Item, T extends CatalogGroup> {
                 for(Item i : items) {
                     catTableView.getSelectionModel().select(i);
                 }
-                catTableView.scrollTo(items.get(0));
+                if(!items.isEmpty())
+                    catTableView.scrollTo(items.get(0));
             }
         });
     }

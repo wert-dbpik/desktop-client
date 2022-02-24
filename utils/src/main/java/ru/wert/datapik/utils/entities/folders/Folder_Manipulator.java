@@ -7,6 +7,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -19,8 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 
 public class Folder_Manipulator {
 
@@ -42,7 +42,7 @@ public class Folder_Manipulator {
             content.putString(cutItems());
             db.setContent(content);
 
-            String shownString = "папки";
+            String shownString = "Комплекты чертежей";
             Text t = new Text(shownString);
             WritableImage image = t.snapshot(null, null);
 
@@ -153,7 +153,7 @@ public class Folder_Manipulator {
      * @return true - вставка возможна
      */
     public boolean pastePossible(String str){
-        //Флаг проверки первого PG в буфере обмена
+        //Флаг проверки первого PG в буфере обмена - проверяем только первый
         boolean pgPK = false;
         if(str == null || !str.startsWith("pik!")) return false;
         str = str.replace("pik!", "");
@@ -161,7 +161,8 @@ public class Folder_Manipulator {
         String[] pasteData = str.split(" ", -1);
         for(String s : pasteData){
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
-            if(!clazz.equals("PG") && !clazz.equals("F"))
+            Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+            if(!clazz.equals("PG") && !clazz.equals("F") && !clazz.equals("DR"))
                 return false;
             if(clazz.equals("PG") && !pgPK){
                 //Вставляемый PG, найденный по его id
@@ -169,7 +170,7 @@ public class Folder_Manipulator {
                 ProductGroup pastedPG = CH_PRODUCT_GROUPS.findById(pastedItemId);
                 //Элелемент каталога, куда производится вставка
                 ProductGroup selectedPG;
-                Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+
                 if(selectedItem == null)
                     //Если щелкнули по пустому месту
                     selectedPG = tableView.getSelectedTreeItem().getValue();
@@ -190,6 +191,11 @@ public class Folder_Manipulator {
                 //После пройденной проверки первого же PG меняем флаг, следущие PG проверяться не будут
                 pgPK = true;
             }
+            if(clazz.equals("DR")){
+                //Чертеж можем добавлять только в комплект (папку)
+                if(selectedItem == null || selectedItem instanceof ProductGroup)
+                    return false;
+            }
 
         }
 
@@ -207,20 +213,32 @@ public class Folder_Manipulator {
         for(String s : pasteData){
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
             Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
-            ProductGroup selectedItem = ((ProductGroup)tableView.getSelectionModel().getSelectedItem());
-            if(selectedItem == null) selectedItem = tableView.getSelectedTreeItem().getValue();
 
-            if(clazz.equals("PG")){
-                ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);
-                pg.setParentId(selectedItem.getId());
-                CH_PRODUCT_GROUPS.update(pg);
-                selectedItems.add(pg);
+            Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+            if(selectedItem instanceof ProductGroup){
+                ProductGroup selectedGroup = (ProductGroup)selectedItem;
+                if(selectedGroup == null) selectedItem = tableView.getSelectedTreeItem().getValue();
+
+                if(clazz.equals("PG")){
+                    ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);
+                    pg.setParentId(selectedGroup.getId());
+                    CH_PRODUCT_GROUPS.update(pg);
+                    selectedItems.add(pg);
+                } else if(clazz.equals("F")){
+                    Folder folder = CH_QUICK_FOLDERS.findById(pastedItemId);
+                    folder.setProductGroup(CH_PRODUCT_GROUPS.findById(selectedGroup.getId()));
+                    CH_QUICK_FOLDERS.update(folder);
+                    selectedItems.add(folder);
+                }
+
             } else {
-                Folder folder = CH_QUICK_FOLDERS.findById(pastedItemId);
-                folder.setProductGroup(CH_PRODUCT_GROUPS.findById(selectedItem.getId()));
-                CH_QUICK_FOLDERS.update(folder);
-                selectedItems.add(folder);
+                Folder selectedFolder = (Folder)selectedItem;
+                Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
+                draft.setFolder(selectedFolder);
+                CH_QUICK_DRAFTS.update(draft);
+                treeView.updateViewwww();
             }
+
         }
 
         Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, selectedItems);

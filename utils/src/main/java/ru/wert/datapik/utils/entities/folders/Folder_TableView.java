@@ -21,6 +21,7 @@ import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.utils.search.Searchable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
 
-public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
+public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup>, Searchable<Item> {
 
     @Getter private String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
     @Getter private _Folder_Commands commands;
@@ -38,6 +39,8 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Getter private TreeItem<ProductGroup> selectedTreeItem;
     @Getter private ProductGroup_TreeView<Item> catalogTree;
     @Getter private Folder_Manipulator manipulator;
+
+    @Getter@Setter private String searchedText;
 
 
     private Folder_ContextMenu contextMenu;
@@ -121,6 +124,9 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         }
     }
 
+    /**
+     * Обновление таблицы с учетом нажатой кнопки Global
+     */
     private void updateWithGlobalOn(){
         Platform.runLater(()->{
             ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
@@ -258,6 +264,35 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     @Override
     public void setSelectedTreeItem(TreeItem<ProductGroup> item) {
+
+    }
+
+    /**
+     * Searchable
+     * Метод вызывается для обновления таблицы
+     */
+    @Override
+    public void updateSearchedView() {
+
+    }
+
+    /**
+     * Searchable
+     * Метод возвращает текущий список таблицы, с этим списком работает поиск
+     * Метод необходим для ускорения работы поиска и вообще апдейта таблиц
+     */
+    @Override
+    public List<Item> getCurrentItemSearchedList() {
+        return null;
+    }
+
+    /**
+     * Searchable
+     * Метод устанавливает текущий список элементов, отображаемых в таблице
+     * Он вызывается, например в Тасках для передачи окончательного списка
+     */
+    @Override
+    public void setCurrentItemSearchedList(List<Item> currentItemList) {
 
     }
 }

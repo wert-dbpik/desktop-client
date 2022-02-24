@@ -4,13 +4,10 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import ru.wert.datapik.client.entity.models.Product;
-import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.*;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.common.treeView.Item_TreeView;
-import ru.wert.datapik.utils.entities.products.Product_TableView;
 import ru.wert.datapik.utils.search.Searchable;
 import ru.wert.datapik.winform.enums.EOperation;
 
@@ -33,7 +30,7 @@ public abstract class CatalogTableView<P extends Item, T extends CatalogGroup>  
     @Override//Searchable
     public abstract void setCurrentItemSearchedList(List<P> currentItemList);
     @Override//Searchable
-    public abstract List<P> getCurrentItemList();
+    public abstract List<P> getCurrentItemSearchedList();
     @Override//Searchable
     public abstract void setSearchedText(String searchedText);
     @Override//Searchable
@@ -136,7 +133,7 @@ public abstract class CatalogTableView<P extends Item, T extends CatalogGroup>  
      */
     @Override //Searchable
     public void updateSearchedView(){
-        List<P> list = getCurrentItemList();
+        List<P> list = getCurrentItemSearchedList();
         List<P> foundList = new ArrayList<>();
         String searchedText = CH_SEARCH_FIELD.getText();
         for(P item : list){

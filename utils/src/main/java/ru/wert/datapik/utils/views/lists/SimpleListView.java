@@ -101,7 +101,7 @@ public class SimpleListView<P extends Item> extends ListView<P> implements Searc
     }
 
     @Override
-    public List getCurrentItemList() {
+    public List getCurrentItemSearchedList() {
         return null;
     }
 

@@ -71,7 +71,7 @@ public class Product_TableView extends  CatalogTableView<Product, ProductGroup>{
     }
 
     @Override //Searchable
-    public List<Product> getCurrentItemList() {
+    public List<Product> getCurrentItemSearchedList() {
         return currentItemList;
     }
 

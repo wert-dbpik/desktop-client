@@ -199,7 +199,7 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
 
 
     @Override //Searchable
-    public List<Passport> getCurrentItemList() {
+    public List<Passport> getCurrentItemSearchedList() {
         return currentItemList;
     }
 

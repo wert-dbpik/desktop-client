@@ -29,7 +29,7 @@ public class Material_TableView extends CatalogTableView<Material, MaterialGroup
     @Getter@Setter private String searchedText = "";
     @Setter private Object modifyingClass;
     @Getter@Setter private Object modifyingItem; //Product или Folder
-    @Getter@Setter  private List<Material> currentItemList = new ArrayList<>(); //Searchable
+    @Getter@Setter  private List<Material> currentItemSearchedList = new ArrayList<>(); //Searchable
     @Getter@Setter private FormView_ACCController<Material> accController;
 
     @Getter
@@ -138,12 +138,6 @@ public class Material_TableView extends CatalogTableView<Material, MaterialGroup
 
         return list;
     }
-
-    @Override //Searchable
-    public void setCurrentItemSearchedList(List<Material> currentItemList) {
-        this.currentItemList = currentItemList;
-    }
-
 
     @Override
     public TreeItem<MaterialGroup> getSelectedTreeItem() {

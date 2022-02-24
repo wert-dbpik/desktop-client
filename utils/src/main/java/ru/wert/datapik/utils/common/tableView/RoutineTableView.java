@@ -23,7 +23,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
     @Override//Searchable
     public abstract void setCurrentItemSearchedList(List<P> currentItemList);
     @Override//Searchable
-    public abstract List<P> getCurrentItemList();
+    public abstract List<P> getCurrentItemSearchedList();
     @Override//Searchable
     public abstract void setSearchedText(String searchedText);
     @Override//Searchable
@@ -55,7 +55,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      */
     @Override //Searchable
     public void updateSearchedView(){
-        List<P> list = getCurrentItemList();
+        List<P> list = getCurrentItemSearchedList();
         List<P> foundList = new ArrayList<>();
         String searchedText = CH_SEARCH_FIELD.getText();
         for(P item : list){
