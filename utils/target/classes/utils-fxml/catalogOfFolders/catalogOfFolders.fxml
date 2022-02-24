@@ -43,7 +43,7 @@
                      <children>
                         <HBox fx:id="patchHeader" alignment="CENTER_RIGHT">
                            <children>
-                              <Label text="ПАКЕТЫ">
+                              <Label fx:id="lblSetOfDrafts" text="КОМПЛЕКТЫ ЧЕРТЕЖЕЙ">
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>
@@ -51,6 +51,7 @@
                                     <Insets bottom="10.0" top="5.0" />
                                  </VBox.margin>
                               </Label>
+                              <Label fx:id="lblSetOfDrafts1" text="  (+Alt)" />
                               <HBox fx:id="foldersButtons" alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                                  <padding>
                                     <Insets bottom="3.0" top="3.0" />

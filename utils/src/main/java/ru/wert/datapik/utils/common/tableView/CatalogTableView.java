@@ -51,6 +51,7 @@ public abstract class CatalogTableView<P extends Item, T extends CatalogGroup>  
     /**
      * Обновляет данные формы
      */
+    @Override
     public void updateTableView() {
 
         TreeItem<T> treeItem = catalogTree.getSelectionModel().getSelectedItem();

@@ -1,6 +1,8 @@
 package ru.wert.datapik.utils.entities.catalogOfFolders;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.Button;
@@ -13,17 +15,24 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogableItem;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.common.components.BtnGlobe;
 import ru.wert.datapik.utils.common.components.BtnRollDown;
 import ru.wert.datapik.utils.common.components.BtnRollUp;
+import ru.wert.datapik.utils.common.tableView.CatalogTableView;
+import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch;
+import ru.wert.datapik.utils.search.Searchable;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class CatalogOfFoldersController {
@@ -42,6 +51,9 @@ public class CatalogOfFoldersController {
 
     @FXML
     private Label lblCatalog;
+
+    @FXML
+    private Label lblSetOfDrafts;
 
     private ProductGroup_TreeView<Folder> catalogTreeView;
 
@@ -146,14 +158,15 @@ public class CatalogOfFoldersController {
         btnFoldersGlobe.setOnAction((e)->{
 
             Platform.runLater(()->{
-                folderTableView.updateTableView();
-                catalogTreeView.getSelectionModel().select(catalogTreeView.getRoot());
-                folderTableView.getSelectionModel().select(0);
+                ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
+                ObservableList<Item> items = FXCollections.observableArrayList();
+                for(Folder folder: folders){
+                    items.add((Item)folder);
+                }
+                folderTableView.getItems().clear();
+                folderTableView.setItems(items);
             });
-
         });
-
-//        Button btnFoldersGlobe = new BtnGlobe(productTableView);
 
         foldersButtons.getChildren().addAll(btnFoldersGlobe);
     }
