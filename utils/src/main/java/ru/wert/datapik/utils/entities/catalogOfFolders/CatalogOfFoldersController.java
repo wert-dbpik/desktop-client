@@ -76,8 +76,6 @@ public class CatalogOfFoldersController {
         catalogTreeView.setConnectedForm(folderTableView);
         createFolders_ToolBar();
 
-
-
     }
 
     public HBox getCatalogButtons() {

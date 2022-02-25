@@ -21,6 +21,8 @@ import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
@@ -52,6 +54,7 @@ public class DraftsEditorController implements SearchablePane {
     private Draft_TableView draftsTable;
     private PreviewerPatchController previewerController;
     private Label lblDraftInfo;
+    private Folder_TableView folderTableView;
 
     @FXML
     void initialize() {
@@ -62,6 +65,7 @@ public class DraftsEditorController implements SearchablePane {
 
         createDraftsTable(); //ЧЕРТЕЖИ
 
+        folderTableView.setDraftTable(draftsTable);
     }
 
 
@@ -111,7 +115,7 @@ public class DraftsEditorController implements SearchablePane {
         CatalogOfFoldersPatch catalogPatch = new CatalogOfFoldersPatch().create();
 
         //Подключаем слушатель
-        Folder_TableView folderTableView = catalogPatch.getFolderTableView();
+        folderTableView = catalogPatch.getFolderTableView();
 //        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //            if(newValue instanceof Folder) {
 //                draftsTable.setSearchedText(""); //обнуляем поисковую строку
@@ -124,6 +128,7 @@ public class DraftsEditorController implements SearchablePane {
             if(e.getButton().equals(MouseButton.PRIMARY) && e.isAltDown()){
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if(selectedItem instanceof Folder){
+                    draftsTable.setSelectedFolders(Collections.singletonList((Folder) selectedItem));
                     draftsTable.setSearchedText(""); //обнуляем поисковую строку
                     draftsTable.setModifyingItem(selectedItem);
                     draftsTable.updateView();

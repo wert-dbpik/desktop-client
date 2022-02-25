@@ -154,6 +154,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                 }
             } else { //selectedItems.get(0) instanceof Folder
                 extraCutItems = true;
+                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard())) extraPasteItems = true;
             }
             //Если выделено много элементов
         } else  { //selectedItems.size() > 1

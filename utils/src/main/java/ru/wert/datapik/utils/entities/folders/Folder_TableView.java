@@ -19,6 +19,7 @@ import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
+import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.search.Searchable;
@@ -39,6 +40,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Getter private TreeItem<ProductGroup> selectedTreeItem;
     @Getter private ProductGroup_TreeView<Item> catalogTree;
     @Getter private Folder_Manipulator manipulator;
+    @Getter@Setter private Draft_TableView draftTable;
 
     @Getter@Setter private String searchedText;
 
@@ -66,7 +68,9 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     public void plugContextMenuAndFolderManipulators(ProductGroup_TreeView catalogTree){
         this.catalogTree = catalogTree;
 
-        if(useContextMenu) manipulator = new Folder_Manipulator(this, catalogTree);
+        if(useContextMenu) {
+            manipulator = new Folder_Manipulator(this, catalogTree);
+        }
 
         commands = new _Folder_Commands(this);
 

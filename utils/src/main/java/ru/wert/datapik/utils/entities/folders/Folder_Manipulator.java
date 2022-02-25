@@ -7,12 +7,15 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import lombok.Getter;
+import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.Catalogs;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
+import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class Folder_Manipulator {
 
     private Folder_TableView tableView;
     private ProductGroup_TreeView<Item> treeView;
+    @Setter private Draft_TableView draftTable;
+
 
     public Folder_Manipulator(Folder_TableView tableView, ProductGroup_TreeView<Item> treeView) {
         this.tableView = tableView;
@@ -191,7 +196,7 @@ public class Folder_Manipulator {
                 //После пройденной проверки первого же PG меняем флаг, следущие PG проверяться не будут
                 pgPK = true;
             }
-            if(clazz.equals("DR")){
+            else if(clazz.equals("DR")){
                 //Чертеж можем добавлять только в комплект (папку)
                 if(selectedItem == null || selectedItem instanceof ProductGroup)
                     return false;
@@ -236,7 +241,7 @@ public class Folder_Manipulator {
                 Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
                 draft.setFolder(selectedFolder);
                 CH_QUICK_DRAFTS.update(draft);
-                treeView.updateViewwww();
+                tableView.getDraftTable().updateRoutineTableView();
             }
 
         }

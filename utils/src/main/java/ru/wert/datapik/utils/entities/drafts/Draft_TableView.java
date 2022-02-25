@@ -42,7 +42,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private Draft_ACCController accController;
     private Draft_Manipulator draftManipulator;
 
-    @Setter private List<Folder> selectedFolders;
+    @Getter@Setter private List<Folder> selectedFolders;
 
     @Getter
     ListProperty<Draft> preparedList = new SimpleListProperty<>();
@@ -178,7 +178,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
     @Override
     public void createContextMenu() {
-        contextMenu = new Draft_ContextMenu(this, commands, accWindowRes);
+        contextMenu = new Draft_ContextMenu(this, commands, accWindowRes, draftManipulator);
         setContextMenu(contextMenu);
     }
 

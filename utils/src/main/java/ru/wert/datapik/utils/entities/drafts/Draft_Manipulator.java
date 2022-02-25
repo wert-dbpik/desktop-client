@@ -3,26 +3,57 @@ package ru.wert.datapik.utils.entities.drafts;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Text;
 import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
+import ru.wert.datapik.utils.common.utils.ClipboardUtils;
+import ru.wert.datapik.utils.entities.drafts.commands._Draft_Commands;
+import ru.wert.datapik.winform.warnings.Warning2;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 public class Draft_Manipulator {
 
-    private final RoutineTableView<Draft> tableView;
+    private final Draft_TableView tableView;
 
 
-    public Draft_Manipulator(RoutineTableView<Draft> tableView) {
+    public Draft_Manipulator(Draft_TableView tableView) {
         this.tableView = tableView;
+
+        tableView.setOnKeyPressed(e->{
+            if (e.getCode() == KeyCode.DELETE) {
+                List<Draft> selectedItems = tableView.getSelectionModel().getSelectedItems();
+                if (selectedItems != null && !selectedItems.isEmpty()) {
+                    if(Warning2.create($ATTENTION, "Вы уверены, что хотите удалить чертежи?",
+                            "Их восстановление будет невозможно!")){
+                        ((_Draft_Commands) tableView.getCommands()).delete(e, selectedItems);
+                        tableView.updateRoutineTableView();
+                    };
+                }
+            }
+
+            if ((e.getCode() == KeyCode.C && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isControlDown())) {
+                String str = cutItems(); //(CTRL + C) вырезаем
+                ClipboardUtils.copyToClipboardText(str);
+            }
+
+        });
 
         tableView.setOnDragDetected(event->{
             Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
 
             ClipboardContent context = new ClipboardContent();
-            context.putString(cutDrafts());
+            context.putString(cutItems());
             db.setContent(context);
 
             String shownString = "Чертежи";
@@ -36,7 +67,7 @@ public class Draft_Manipulator {
         });
     }
 
-    public String cutDrafts(){
+    public String cutItems(){
         StringBuilder sb = new StringBuilder();
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
@@ -47,6 +78,35 @@ public class Draft_Manipulator {
         }
 
         return sb.toString();
+
+    }
+
+    public boolean pastePossible(String str){
+        if(str == null || !str.startsWith("pik!")) return false;
+        str = str.replace("pik!", "");
+        str = str.trim();
+        String[] pasteData = str.split(" ", -1);
+        for(String s : pasteData) {
+            String clazz = Arrays.asList(s.split("#", -1)).get(0);
+            List<Folder> selectedFolders = tableView.getSelectedFolders();
+            if (!clazz.equals("PG") || selectedFolders == null || selectedFolders.size() > 1)
+                return false;
+        }
+
+        return true;
+    }
+
+
+    public void pasteItems(String str){
+        String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
+        List<Item> selectedItems = new ArrayList<>();
+        Folder selectedFolder = tableView.getSelectedFolders().get(0);
+        for(String s : pasteData) {
+            Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
+            Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
+            draft.setFolder(selectedFolder);
+            CH_QUICK_DRAFTS.update(draft);
+        }
 
     }
 }
