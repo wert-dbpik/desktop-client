@@ -25,6 +25,7 @@ import java.io.IOException;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
@@ -56,16 +57,16 @@ public class AppMenuController {
     private void createMenu() {
         menuBar.getMenus().add(createMainMenu());
         //Чертежи
-        if(CH_CURRENT_USER.getUserGroup().isReadDrafts())
+        if(CH_CURRENT_USER_GROUP.isReadDrafts())
             menuBar.getMenus().add(createDraftsMenu());
         //Материалы
-        if(CH_CURRENT_USER.getUserGroup().isReadMaterials())
+        if(CH_CURRENT_USER_GROUP.isReadMaterials())
             menuBar.getMenus().add(createMaterialsMenu());
         //Изделия
-        if(CH_CURRENT_USER.getUserGroup().isReadProductStructures())
+        if(CH_CURRENT_USER_GROUP.isReadProductStructures())
             menuBar.getMenus().add(createEditorMenu());
         //Админ
-        if(CH_CURRENT_USER.getUserGroup().isAdministrate())
+        if(CH_CURRENT_USER_GROUP.isAdministrate())
             menuBar.getMenus().add(createAdminMenu());
         //Помощь
         menuBar.getMenus().add(createHelpMenu());
@@ -170,8 +171,7 @@ public class AppMenuController {
         draftsItem.setOnAction(this::openDrafts);
 
         draftsMenu.getItems().add(draftsCabinetItem);
-        if(CH_CURRENT_USER.getUserGroup().isEditDrafts())
-            draftsMenu.getItems().add(draftsItem);
+        draftsMenu.getItems().add(draftsItem);
 
         return draftsMenu;
     }
@@ -251,7 +251,7 @@ public class AppMenuController {
         openExcelItem.setOnAction(this::openCatalogOfProducts);
 
         editorMenu.getItems().add(catalogOfProductItem);
-        if (CH_CURRENT_USER.getUserGroup().isEditProductStructures())
+        if (CH_CURRENT_USER_GROUP.isEditProductStructures())
             editorMenu.getItems().add(openExcelItem);
 
         return editorMenu;
@@ -310,8 +310,6 @@ public class AppMenuController {
 
         MenuItem catalogOfFolders = new MenuItem("Каталог папок");
         catalogOfFolders.setOnAction(this::openCatalogOfFolders);
-
-
 
         adminMenu.getItems().add(usersItem);
         adminMenu.getItems().add(userGroupsItem);

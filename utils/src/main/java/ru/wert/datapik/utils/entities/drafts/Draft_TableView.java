@@ -23,24 +23,26 @@ import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 import ru.wert.datapik.winform.enums.EDraftType;
+import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<Draft> {
 
     private static final String accWindowRes = "/utils-fxml/drafts/draftACC.fxml";
-    private final _Draft_Commands commands;
+    private _Draft_Commands commands;
     private PreviewerPatchController previewerController;
     @Getter@Setter private String searchedText = "";
     @Setter private Object modifyingClass;
     @Getter@Setter private Object modifyingItem; //Product или Folder
     private List<Draft> currentItemList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
     private Draft_ACCController accController;
-    private Draft_Manipulator draftManipulator;
+    @Getter private Draft_Manipulator manipulator;
 
     @Getter@Setter private List<Folder> selectedFolders;
 
@@ -79,16 +81,17 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
      * @param promptText String, текст, добавляемый в поисковую строку
      * @param previewerController PreviewerNoTBController контроллер окна предпросмотра
      */
-    public Draft_TableView(String promptText, PreviewerPatchController previewerController, boolean useContextMenu) {
+    public Draft_TableView(String promptText, PreviewerPatchController previewerController) {
         super(promptText);
         this.previewerController = previewerController;
 
-        if(useContextMenu) draftManipulator = new Draft_Manipulator(this);
+        manipulator = new Draft_Manipulator(this);
 
         commands = new _Draft_Commands(this);
 
         //Создаем изначальное контекстное меню, чтобы оно могло открыться при клике в пустом месте
-        if(useContextMenu) createContextMenu();
+
+        createContextMenu();
 
 
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -110,16 +113,15 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
             });
         });
 
-        setOnMouseClicked(e->{
-            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
-                AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
-                e.consume();
-            } else if(e.getButton().equals(MouseButton.SECONDARY) && useContextMenu){
-                createContextMenu();
-                e.consume();
-            }
-        });
-
+//        setOnMouseClicked(e->{
+//            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
+//                AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
+//                e.consume();
+//            } else if(e.getButton().equals(MouseButton.SECONDARY) && useContextMenu){
+//                createContextMenu();
+//                e.consume();
+//            }
+//        });
     }
 
 
@@ -175,11 +177,12 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     }
 
 
-
     @Override
     public void createContextMenu() {
-        contextMenu = new Draft_ContextMenu(this, commands, accWindowRes, draftManipulator);
-        setContextMenu(contextMenu);
+        setOnContextMenuRequested(event->{
+            contextMenu = new Draft_ContextMenu(this, commands, accWindowRes);
+            contextMenu.show(this.getScene().getWindow(), event.getScreenX(), event.getSceneY());
+        });
     }
 
     @Override

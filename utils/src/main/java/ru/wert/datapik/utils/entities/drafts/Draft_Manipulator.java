@@ -99,7 +99,6 @@ public class Draft_Manipulator {
 
     public void pasteItems(String str){
         String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
-        List<Item> selectedItems = new ArrayList<>();
         Folder selectedFolder = tableView.getSelectedFolders().get(0);
         for(String s : pasteData) {
             Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));

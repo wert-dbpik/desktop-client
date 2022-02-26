@@ -27,6 +27,7 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
@@ -93,7 +94,7 @@ public class DraftsEditorController implements SearchablePane {
         Draft_Patch draftPatch = new Draft_Patch().create();
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
 
-        draftPatchController.initDraftsTableView(previewerController, new Folder(), SelectionMode.MULTIPLE, true);
+        draftPatchController.initDraftsTableView(previewerController, new Folder(), SelectionMode.MULTIPLE);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, false, true, true, false,
                 false, true);
@@ -116,16 +117,17 @@ public class DraftsEditorController implements SearchablePane {
 
         //Подключаем слушатель
         folderTableView = catalogPatch.getFolderTableView();
-//        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            if(newValue instanceof Folder) {
-//                draftsTable.setSearchedText(""); //обнуляем поисковую строку
-//                draftsTable.setModifyingItem(newValue);
-//                draftsTable.updateView();
-//            }
-//        });
+        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue instanceof Folder) {
+                draftsTable.setSearchedText(""); //обнуляем поисковую строку
+                draftsTable.setModifyingItem(newValue);
+                draftsTable.updateView();
+            }
+        });
 
         folderTableView.setOnMouseClicked(e->{
-            if(e.getButton().equals(MouseButton.PRIMARY) && e.isAltDown()){
+            if((CH_CURRENT_USER_GROUP.isEditDrafts() && e.isAltDown() && e.getButton().equals(MouseButton.PRIMARY)) ||
+                    (!CH_CURRENT_USER_GROUP.isEditDrafts() && e.getButton().equals(MouseButton.PRIMARY)) ){
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if(selectedItem instanceof Folder){
                     draftsTable.setSelectedFolders(Collections.singletonList((Folder) selectedItem));
@@ -133,7 +135,8 @@ public class DraftsEditorController implements SearchablePane {
                     draftsTable.setModifyingItem(selectedItem);
                     draftsTable.updateView();
                 }
-                if(selectedItem instanceof ProductGroup){
+                if((CH_CURRENT_USER_GROUP.isEditDrafts() && selectedItem instanceof ProductGroup) ||
+                        (!CH_CURRENT_USER_GROUP.isEditDrafts() && selectedItem instanceof ProductGroup && e.isAltDown())){
                     List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
                     List<Folder> folders = new ArrayList<>();
                     for(ProductGroup pg : selectedGroups){

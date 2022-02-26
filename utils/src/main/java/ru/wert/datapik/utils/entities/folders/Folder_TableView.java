@@ -30,6 +30,7 @@ import java.util.List;
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
+import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup>, Searchable<Item> {
 
@@ -74,7 +75,8 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
         commands = new _Folder_Commands(this);
 
-        if(useContextMenu) createContextMenu();
+        if(useContextMenu)
+            createContextMenu();
 
         //При двойном клике на верхнюю строку, поднимаемся по списку выше
         //При двойном клике на папку открываем папку
@@ -203,8 +205,10 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
     @Override
     public void createContextMenu() {
-        contextMenu = new Folder_ContextMenu(this, catalogTree, commands, accWindowRes);
-        setContextMenu(contextMenu);
+        setOnContextMenuRequested(event->{
+            contextMenu = new Folder_ContextMenu(this, catalogTree, commands, accWindowRes);
+            contextMenu.show(this.getScene().getWindow(), event.getScreenX(), event.getSceneY());
+        });
     }
 
     @Override

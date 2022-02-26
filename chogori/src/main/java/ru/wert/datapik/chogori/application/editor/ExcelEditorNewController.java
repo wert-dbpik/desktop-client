@@ -115,7 +115,7 @@ public class ExcelEditorNewController {
 
         draftPatch = new Draft_Patch().create();
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
-        draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.SINGLE, false);
+        draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.SINGLE);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, true, true, true, false,
                 false, true);

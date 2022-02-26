@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 
 public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
     private final _Draft_Commands commands;
-    private TableView<Draft> tableView;
+    private Draft_TableView tableView;
     private Draft_Manipulator manipulator;
+    private final boolean editDraftsPermission;
 
     private MenuItem cutDrafts; //Вырезать чертеж
     private MenuItem pasteDrafts; //Вставить чертеж
@@ -31,11 +33,14 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
 
 
-    public Draft_ContextMenu(Draft_TableView tableView, _Draft_Commands commands, String draftsACCRes, Draft_Manipulator manipulator) {
+    public Draft_ContextMenu(Draft_TableView tableView, _Draft_Commands commands, String draftsACCRes) {
         super(tableView, commands, draftsACCRes);
         this.commands = commands;
         this.tableView = tableView;
-        this.manipulator = manipulator;
+
+        editDraftsPermission = CH_CURRENT_USER_GROUP.isEditDrafts();
+
+        manipulator = tableView.getManipulator();
 
         createMainMenuItems();
 
@@ -43,9 +48,9 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
     @Override
     public void createMainMenuItems() {
-        boolean addItem = true;
+        boolean addItem = false;
         boolean copyItem = false;//копирование не применяется
-        boolean changeItem = true;
+        boolean changeItem = false;
         boolean deleteItem = false;
 
         if(CH_CURRENT_USER.getUserGroup().isDeleteDrafts()) {
@@ -54,15 +59,16 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
-        if(selectedDrafts.size() == 0) {
-            changeItem = false;
-            deleteItem = false;
-        }else if(selectedDrafts.size() == 1
-                    && (selectedDrafts.get(0).getStatus().equals(EDraftStatus.CHANGED.getStatusId())
-                    || selectedDrafts.get(0).getStatus().equals(EDraftStatus.ANNULLED.getStatusId()))){
-            changeItem = false;
-        } else if(selectedDrafts.size() > 1){
-            changeItem = false;
+        if(editDraftsPermission) {
+            addItem = true;
+            if (selectedDrafts.size() != 0) {
+                deleteItem = true;
+                if (selectedDrafts.size() == 1){
+                    Integer itemStatus = selectedDrafts.get(0).getStatus();
+                    if (itemStatus.equals(EDraftStatus.LEGAL.getStatusId()))
+                        changeItem = true;
+                }
+            }
         }
 
 
@@ -84,54 +90,59 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         //=============================
         boolean extraOpenInTab = false;
 
-        cutDrafts = new MenuItem("Вырезать");
-        cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
-
-        pasteDrafts = new MenuItem("Вставить");
-        pasteDrafts.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboard()));
-
-        renameDraft = new MenuItem("Переименовать чертеж");
-        renameDraft.setOnAction(commands::renameDraft);
-
-        replaceDraft = new MenuItem("Заменить");
-        replaceDraft.setOnAction(commands::replaceDraft);
-
-        nullifyDraft = new MenuItem("Аннулировать");
-        nullifyDraft.setOnAction(commands::nullifyDraft);
-
-        openInTab = new MenuItem("Открыть в отдельной вкладке" );
-        openInTab.setOnAction(commands::openInTab);
-
         addFolder = new MenuItem("Добавить папку с чертежами");
+        cutDrafts = new MenuItem("Вырезать");
+        pasteDrafts = new MenuItem("Вставить");
+        renameDraft = new MenuItem("Переименовать чертеж");
+        replaceDraft = new MenuItem("Заменить");
+        nullifyDraft = new MenuItem("Аннулировать");
+        openInTab = new MenuItem("Открыть в отдельной вкладке" );
+
+
         addFolder.setOnAction(commands::addFromFolder);
+        cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
+        pasteDrafts.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboard()));
+        renameDraft.setOnAction(commands::renameDraft);
+        replaceDraft.setOnAction(commands::replaceDraft);
+        nullifyDraft.setOnAction(commands::nullifyDraft);
+        openInTab.setOnAction(commands::openInTab);
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
-        //Если ничего не выделено
-        if (selectedDrafts.size() == 0) {
-            extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
-            if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard())) extraPasteDrafts = true;
+        if(editDraftsPermission) {
+            //Если ничего не выделено
+            if (selectedDrafts.size() == 0) {
+                extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
+                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
+                    extraPasteDrafts = true;
 
-        } else if (selectedDrafts.size() == 1) {
-            extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
-            extraCutDrafts = true;//ВЫРЕЗАТЬ
-            extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
-            if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard())) extraPasteDrafts = true;
-            if (selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId())) {
-                extraRenameDraft = true; //ПЕРЕИМЕНОВАТЬ
-                extraReplaceDraft = true;//ЗАМЕНИТЬ
-                extraNullifyDraft = true;//АННУЛИРОВАТЬ
+            } else if (selectedDrafts.size() == 1) {
+                extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
+                extraCutDrafts = true;//ВЫРЕЗАТЬ
+                extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
+                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
+                    extraPasteDrafts = true;
+                //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
+                if (selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId()) && editDraftsPermission) {
+                    extraRenameDraft = true; //ПЕРЕИМЕНОВАТЬ
+                    extraReplaceDraft = true;//ЗАМЕНИТЬ
+                    extraNullifyDraft = true;//АННУЛИРОВАТЬ
+                }
+
+            } else { //selectedDrafts.size() >1
+                extraAddFolder = true; //ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
+                extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
+                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
+                    extraPasteDrafts = true;
             }
-
-        } else { //selectedDrafts.size() >1
-            extraAddFolder = true; //ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
-            extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
-            if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard())) extraPasteDrafts = true;
+        } else{
+            if(selectedDrafts.size() > 0)
+                extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         }
 
         List<MenuItem> extraItems = new ArrayList<>();
 
-        if (extraAddFolder) extraItems.add(addFolder); //Добавить папку
+        if (extraAddFolder) extraItems.add(addFolder); //ДОБАВИТЬ ПАПКУ
 
         if (extraCutDrafts || extraPasteDrafts) extraItems.add(new SeparatorMenuItem());//===============
         if (extraCutDrafts) extraItems.add(cutDrafts);//ВЫРЕЗАТЬ ЧЕРТЕЖИ
@@ -141,10 +152,10 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if (extraRenameDraft) extraItems.add(renameDraft);//ПЕРЕИМЕНОВАТЬ
         if (extraReplaceDraft) extraItems.add(replaceDraft);//ЗАМЕНИТЬ
         if (extraNullifyDraft) extraItems.add(nullifyDraft);//АННУЛИРОВАТЬ
-
+//
         if (extraOpenInTab || extraAddFolder) extraItems.add(new SeparatorMenuItem());//==================
         if (extraOpenInTab) extraItems.add(openInTab);//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
-        if (extraAddFolder) extraItems.add(addFolder);//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
+
 
         return extraItems;
     }

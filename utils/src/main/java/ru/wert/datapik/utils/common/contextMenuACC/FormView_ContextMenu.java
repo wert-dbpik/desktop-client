@@ -59,21 +59,22 @@ public abstract class FormView_ContextMenu<P extends Item> extends ContextMenu {
 
     protected void createMenu(boolean addItem, boolean copyItem, boolean changeItem, boolean deleteItem){
 
-        getItems().clear();
+            getItems().clear();
 
-        if(addItem) getItems().add(ADD);
-        if(copyItem) getItems().add(COPY);
-        if(changeItem) getItems().add(CHANGE);
-        if(deleteItem) getItems().add(DELETE);
+            if(addItem) getItems().add(ADD);
+            if(copyItem) getItems().add(COPY);
+            if(changeItem) getItems().add(CHANGE);
+            if(deleteItem) getItems().add(DELETE);
 
-        List<MenuItem> extraItems = createExtraItems();
+            List<MenuItem> extraItems = createExtraItems();
 
-        if(extraItems != null){
-            if(!extraItems.isEmpty()) {
-                getItems().add(new SeparatorMenuItem());
-                getItems().addAll(extraItems);
+            if(extraItems != null){
+                if(!extraItems.isEmpty()) {
+                    if(!getItems().isEmpty()) getItems().add(new SeparatorMenuItem());
+                    getItems().addAll(extraItems);
+                }
             }
-        }
+
     }
 
 

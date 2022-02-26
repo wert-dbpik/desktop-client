@@ -40,13 +40,11 @@ public class Draft_PatchController {
     private boolean useBtnDraftsGlobe; //Показать все чертежи
     private boolean useBtnShowFilter; //Фильтровать список
     private boolean useBtnShowColumns;
-    private boolean useContextMenu;
 
-    public void initDraftsTableView(PreviewerPatchController previewerController, Object modifyingClass, SelectionMode mode, boolean useContextMenu){
+    public void initDraftsTableView(PreviewerPatchController previewerController, Object modifyingClass, SelectionMode mode){
         this.previewerController = previewerController;
         this.modifyingClass = modifyingClass;
         this.mode = mode;
-        this.useContextMenu = useContextMenu;
 
         createDraftTableView();
 
@@ -62,7 +60,7 @@ public class Draft_PatchController {
 
     private void createDraftTableView() {
         //запуск новой версии
-        draftsTable = new Draft_TableView("ЧЕРТЕЖ", previewerController, useContextMenu);
+        draftsTable = new Draft_TableView("ЧЕРТЕЖ", previewerController);
         draftsTable.setModifyingClass(modifyingClass);
         draftsTable.getSelectionModel().setSelectionMode(mode);
         VBox.setVgrow(draftsTable, Priority.ALWAYS);
