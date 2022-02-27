@@ -5,7 +5,6 @@ import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.*;
-import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
@@ -205,7 +204,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
     private void update(int row) {
 
         Platform.runLater(() -> {
-            TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getSelectedTreeItem();
+            TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getUpwardTreeItemRow();
             treeView.updateView();
             if (tableView == null) {
                 treeView.getSelectionModel().select(row);

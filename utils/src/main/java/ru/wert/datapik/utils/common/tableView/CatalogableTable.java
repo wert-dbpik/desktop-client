@@ -10,9 +10,9 @@ public interface CatalogableTable <T extends CatalogGroup>{
 
     TreeItem<T> getRootItem();
 
-    TreeItem<T> getSelectedTreeItem();
+    TreeItem<T> getUpwardTreeItemRow();
 
-    void setSelectedTreeItem(TreeItem<T> item);
+    void setUpwardTreeItemRow(TreeItem<T> item);
 
     /**
      * Обновляет таблицу независимо от выделения в TreeView

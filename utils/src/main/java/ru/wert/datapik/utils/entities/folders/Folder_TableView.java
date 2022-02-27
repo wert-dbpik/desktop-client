@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -30,7 +29,6 @@ import java.util.List;
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup>, Searchable<Item> {
 
@@ -38,7 +36,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Getter private _Folder_Commands commands;
 
     private FormView_ACCController<Item> accController;
-    @Getter private TreeItem<ProductGroup> selectedTreeItem;
+    @Getter@Setter private TreeItem<ProductGroup> upwardTreeItemRow;//Верхняя строка в таблице
     @Getter private ProductGroup_TreeView<Item> catalogTree;
     @Getter private Folder_Manipulator manipulator;
     @Getter@Setter private Draft_TableView draftTable;
@@ -52,6 +50,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     public Folder_TableView(String prompt, boolean useContextMenu) {
         super(prompt);
         this.useContextMenu = useContextMenu;
+
     }
 
     public List<ProductGroup> findMultipleProductGroups(ProductGroup productGroup){
@@ -68,10 +67,9 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
      */
     public void plugContextMenuAndFolderManipulators(ProductGroup_TreeView catalogTree){
         this.catalogTree = catalogTree;
+        this.upwardTreeItemRow = catalogTree.getRoot();//Инициализируем upwardRow
 
-        if(useContextMenu) {
-            manipulator = new Folder_Manipulator(this, catalogTree);
-        }
+        manipulator = new Folder_Manipulator(this, catalogTree);
 
         commands = new _Folder_Commands(this);
 
@@ -88,13 +86,14 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
             row.setOnMouseClicked(event -> {
                 Item prevRowData = null;
                 Item rowData = row.getItem();
+
                 if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     if(rowData instanceof ProductGroup){
-                        if(rowData == selectedTreeItem.getValue()){ //Верхняя строка
+                        if(rowData.equals(upwardTreeItemRow.getValue())){ //Верхняя строка
                             prevRowData = rowData;
-                            selectedTreeItem = catalogTree.findTreeItemById(((ProductGroup) rowData).getParentId());
+                            upwardTreeItemRow = catalogTree.findTreeItemById(((ProductGroup) rowData).getParentId());
                         } else {
-                            selectedTreeItem = catalogTree.findTreeItemById(rowData.getId());
+                            upwardTreeItemRow = catalogTree.findTreeItemById(rowData.getId());
                         }
                         updateNow((ProductGroup) prevRowData);
                     }
@@ -125,7 +124,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         if(globalOn) updateWithGlobalOn();
         else {
             //Находим выделенный элемент в дереве каталогов
-            selectedTreeItem = catalogTree.getSelectionModel().getSelectedItem();
+            upwardTreeItemRow = catalogTree.getSelectionModel().getSelectedItem();
             updateNow(null);
         }
     }
@@ -146,19 +145,18 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     }
 
     /**
-     * Обновление с учетом выделенного элемента в TREE VIEW
-     * Метод вызывается в этом классе
-     * @param prevGroupToBeSelected группа TreeView - верхняя строка в таблице, указывающая на верхний уровень ProductGroup
+     * Обновление без учета выделенного элемента в TREE VIEW
+     * @param prevGroupToBeSelected группа TreeView - верхняя строка в таблице, учитывается припереходе назад
      */
-    private void updateNow(ProductGroup prevGroupToBeSelected) {
+    public void updateNow(ProductGroup prevGroupToBeSelected) {
         List<Item> items = new ArrayList<>();
-        if (selectedTreeItem == null) selectedTreeItem = catalogTree.getRoot();
-        ProductGroup selectedGroup = selectedTreeItem.getValue();
+        if (upwardTreeItemRow == null) upwardTreeItemRow = catalogTree.getRoot();
+        ProductGroup selectedGroup = upwardTreeItemRow.getValue();
         //Добавим верхнюю строку в список, потом она превратится в троеточие
         //Корневой элемент в список не добавляем
-        if(selectedTreeItem != catalogTree.getRoot())
-            items.add(selectedTreeItem.getValue());
-        List<TreeItem<ProductGroup>> children = selectedTreeItem.getChildren();
+        if(upwardTreeItemRow != catalogTree.getRoot())
+            items.add(upwardTreeItemRow.getValue());
+        List<TreeItem<ProductGroup>> children = upwardTreeItemRow.getChildren();
         for (TreeItem<ProductGroup> ti : children) {
             items.add(ti.getValue());
         }
@@ -182,15 +180,15 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Override
     public void updateOnlyTableView(CatalogGroup selectedProductGroup) {
 
-        selectedTreeItem = catalogTree.findTreeItemById(selectedProductGroup.getId());
+        upwardTreeItemRow = catalogTree.findTreeItemById(selectedProductGroup.getId());
 
         List<Item> items = new ArrayList<>();
-        ProductGroup selectedGroup = selectedTreeItem.getValue();
+        ProductGroup selectedGroup = upwardTreeItemRow.getValue();
         //Добавим верхнюю строку в список, потом она превратится в троеточие
         //Корневой элемент в список не добавляем
-        if(selectedTreeItem != catalogTree.getRoot())
-            items.add(selectedTreeItem.getValue());
-        List<TreeItem<ProductGroup>> children = selectedTreeItem.getChildren();
+        if(upwardTreeItemRow != catalogTree.getRoot())
+            items.add(upwardTreeItemRow.getValue());
+        List<TreeItem<ProductGroup>> children = upwardTreeItemRow.getChildren();
         for (TreeItem<ProductGroup> ti : children) {
             items.add(ti.getValue());
         }
@@ -223,7 +221,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
             Label label = new Label();
             Item item = cd.getValue();
             if(item instanceof ProductGroup) {
-                if(item.equals(selectedTreeItem.getValue())){
+                if(item.equals(upwardTreeItemRow.getValue())){
                     label.setText(UPWARD);
                 }else {
                     label.setText(item.toUsefulString());
@@ -268,11 +266,6 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Override
     public TreeItem<ProductGroup> getRootItem() {
         return catalogTree.getRoot();
-    }
-
-    @Override
-    public void setSelectedTreeItem(TreeItem<ProductGroup> item) {
-
     }
 
     /**

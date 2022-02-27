@@ -54,7 +54,7 @@ public class Catalogs<P extends Item, T extends CatalogGroup> {
                 treeView.getFocusModel().focus(selectedItemIndex + addedTreeItem.getParent().getChildren().indexOf(addedTreeItem) + 1);
             }
             if (catTableView != null) { //Если имеем дело с каталогом, а не только с деревом
-                ((CatalogableTable<T>)catTableView).updateOnlyTableView(((CatalogableTable<T>)catTableView).getSelectedTreeItem().getValue());
+                ((CatalogableTable<T>)catTableView).updateOnlyTableView(((CatalogableTable<T>)catTableView).getUpwardTreeItemRow().getValue());
                 for(Item i : items) {
                     catTableView.getSelectionModel().select(i);
                 }

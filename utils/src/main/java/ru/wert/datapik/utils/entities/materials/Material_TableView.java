@@ -140,12 +140,12 @@ public class Material_TableView extends CatalogTableView<Material, MaterialGroup
     }
 
     @Override
-    public TreeItem<MaterialGroup> getSelectedTreeItem() {
+    public TreeItem<MaterialGroup> getUpwardTreeItemRow() {
         return null;
     }
 
     @Override
-    public void setSelectedTreeItem(TreeItem<MaterialGroup> item) {
+    public void setUpwardTreeItemRow(TreeItem<MaterialGroup> item) {
 
     }
 
