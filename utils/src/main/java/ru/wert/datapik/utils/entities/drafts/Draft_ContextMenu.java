@@ -144,16 +144,16 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         if (extraAddFolder) extraItems.add(addFolder); //ДОБАВИТЬ ПАПКУ
 
-        if (extraCutDrafts || extraPasteDrafts) extraItems.add(new SeparatorMenuItem());//===============
+        if ((extraCutDrafts || extraPasteDrafts) && extraAddFolder) extraItems.add(new SeparatorMenuItem());//===============
         if (extraCutDrafts) extraItems.add(cutDrafts);//ВЫРЕЗАТЬ ЧЕРТЕЖИ
         if (extraPasteDrafts) extraItems.add(pasteDrafts);//ВСТАВИТЬ ЧЕРТЕЖИ
 
-        if (extraRenameDraft || extraReplaceDraft || extraNullifyDraft) extraItems.add(new SeparatorMenuItem());//==================
+        if ((extraRenameDraft || extraReplaceDraft || extraNullifyDraft) && (extraCutDrafts || extraPasteDrafts)) extraItems.add(new SeparatorMenuItem());//==================
         if (extraRenameDraft) extraItems.add(renameDraft);//ПЕРЕИМЕНОВАТЬ
         if (extraReplaceDraft) extraItems.add(replaceDraft);//ЗАМЕНИТЬ
         if (extraNullifyDraft) extraItems.add(nullifyDraft);//АННУЛИРОВАТЬ
 //
-        if (extraOpenInTab || extraAddFolder) extraItems.add(new SeparatorMenuItem());//==================
+        if (extraOpenInTab && (extraRenameDraft || extraReplaceDraft || extraNullifyDraft)) extraItems.add(new SeparatorMenuItem());//==================
         if (extraOpenInTab) extraItems.add(openInTab);//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
 
 

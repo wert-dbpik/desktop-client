@@ -180,7 +180,9 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         if (extraCutItems) extraItems.add(cutItems);
         if (extraPasteItems) extraItems.add(pasteItems);
-        if ((extraCutItems || extraPasteItems) && extraAddProductGroup) extraItems.add(new SeparatorMenuItem());
+        if ((extraAddProductGroup || extraChangeProductGroup || extraDeleteProductGroup)
+               && (extraCutItems || extraPasteItems))
+            extraItems.add(new SeparatorMenuItem());
         if (extraAddProductGroup) extraItems.add(addProductGroup);
         if (extraChangeProductGroup) extraItems.add(changeProductGroup);
         if (extraDeleteProductGroup) extraItems.add(deleteProductGroup);

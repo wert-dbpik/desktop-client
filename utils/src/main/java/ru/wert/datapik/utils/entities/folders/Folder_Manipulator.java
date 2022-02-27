@@ -111,9 +111,6 @@ public class Folder_Manipulator {
                     tableView.updateNow((ProductGroup) prevRowData);
                 }
 
-//
-
-
             }
 
             if (e.getCode() == KeyCode.DELETE) {
