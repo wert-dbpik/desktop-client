@@ -1,19 +1,20 @@
 package ru.wert.datapik.utils.entities.drafts;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import lombok.Getter;
-import ru.wert.datapik.utils.common.components.BtnGlobe;
-import ru.wert.datapik.utils.common.components.BtnMenuDraftsColumns;
-import ru.wert.datapik.utils.common.components.BtnMenuDraftsFilter;
+import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.utils.common.components.*;
+import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 
+import static ru.wert.datapik.utils.images.BtnImages.BTN_GLOBE_IMG;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Draft_PatchController {
@@ -39,7 +40,9 @@ public class Draft_PatchController {
     //Кнопки toolbar
     private boolean useBtnDraftsGlobe; //Показать все чертежи
     private boolean useBtnShowFilter; //Фильтровать список
-    private boolean useBtnShowColumns;
+    private boolean useBtnShowColumns; //Выбор колонок для отображения
+    private boolean useBtnAltSwitcher;//Переключатель Alt для перехода к предпросмотру
+
 
     public void initDraftsTableView(PreviewerPatchController previewerController, Object modifyingClass, SelectionMode mode){
         this.previewerController = previewerController;
@@ -50,10 +53,11 @@ public class Draft_PatchController {
 
     }
 
-    public void initDraftsToolBar(boolean btnDraftsGlobe, boolean btnShowFilter, boolean btnShowColumns){
+    public void initDraftsToolBar(boolean btnAltSwitcher, boolean btnDraftsGlobe, boolean btnShowFilter, boolean btnShowColumns){
         this.useBtnDraftsGlobe = btnDraftsGlobe;
         this.useBtnShowFilter = btnShowFilter;
         this.useBtnShowColumns = btnShowColumns;
+        this.useBtnAltSwitcher = btnAltSwitcher;
 
         createDraftToolBar();
     }
@@ -74,13 +78,28 @@ public class Draft_PatchController {
     private void createDraftToolBar() {
 
         //Кнопка ПОКАЗАТЬ ВСЕ
-        Button btnDraftsGlobe = new BtnGlobe<>(draftsTable);
+        Button btnDraftsGlobe = new Button();
+        btnDraftsGlobe.setGraphic(new ImageView(BTN_GLOBE_IMG));
+        btnDraftsGlobe.setTooltip(new Tooltip("Показать все"));
+
+        btnDraftsGlobe.setId("patchButton");
+        btnDraftsGlobe.setOnAction(e->{
+            draftsTable.setSelectedFoldersForContextMenu(null);
+            draftsTable.setSearchedText("");
+            draftsTable.setModifyingItem(null);
+            draftsTable.updateView();
+            e.consume();
+        });
+
+        Button btnUseAltToPreview = new BtnDoubleAlt<>(draftsTable).create();
+
 
         //Кнопка ПОКАЗАТЬ ФИЛЬТР
         btnShowFilter = new BtnMenuDraftsFilter(draftsTable);
         //Кнопка ПОКАЗАТЬ КОЛОНКИ
         btnShowColumns = new BtnMenuDraftsColumns(draftsTable);
 
+        if(useBtnAltSwitcher) hboxDraftsButtons.getChildren().add(btnUseAltToPreview);
         if(useBtnShowFilter) hboxDraftsButtons.getChildren().add(btnShowFilter);
         if(useBtnShowColumns) hboxDraftsButtons.getChildren().add(btnShowColumns);
         if(useBtnDraftsGlobe) hboxDraftsButtons.getChildren().add(btnDraftsGlobe);

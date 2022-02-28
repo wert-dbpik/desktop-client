@@ -99,7 +99,7 @@ public class DraftsEditorController implements SearchablePane {
         draftsTable.showTableColumns(false, false, true, true, false,
                 false, true);
         //Инструментальную панель инициируем в последнюю очередь
-        draftPatchController.initDraftsToolBar(true, true, true);
+        draftPatchController.initDraftsToolBar(true, true, true, true);
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.4));
 
         //Сообщаем Previewer ссылку на tableView
@@ -119,6 +119,8 @@ public class DraftsEditorController implements SearchablePane {
         folderTableView = catalogPatch.getFolderTableView();
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue instanceof Folder) {
+                draftsTable.setSelectedFolders(Collections.singletonList((Folder) newValue));
+                System.out.println("====" + draftsTable.getSelectedFolders());
                 draftsTable.setSearchedText(""); //обнуляем поисковую строку
                 draftsTable.setModifyingItem(newValue);
                 draftsTable.updateView();
@@ -131,6 +133,7 @@ public class DraftsEditorController implements SearchablePane {
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if(selectedItem instanceof Folder){
                     draftsTable.setSelectedFolders(Collections.singletonList((Folder) selectedItem));
+                    System.out.println("====" + draftsTable.getSelectedFolders());
                     draftsTable.setSearchedText(""); //обнуляем поисковую строку
                     draftsTable.setModifyingItem(selectedItem);
                     draftsTable.updateView();

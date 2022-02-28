@@ -120,7 +120,7 @@ public class ExcelEditorNewController {
         draftsTable.showTableColumns(false, true, true, true, false,
                 false, true);
         //Инструментальную панель инициируем в последнюю очередь
-        draftPatchController.initDraftsToolBar(false, true, true);
+        draftPatchController.initDraftsToolBar(false, false, true, true);
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
         //Для отображения чертежа

@@ -45,7 +45,9 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private Draft_ACCController accController;
     @Getter private Draft_Manipulator manipulator;
 
+
     @Getter@Setter private List<Folder> selectedFolders;
+    @Getter@Setter private List<Folder> selectedFoldersForContextMenu;
 
     @Getter
     ListProperty<Draft> preparedList = new SimpleListProperty<>();
@@ -95,34 +97,44 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         createContextMenu();
 
 
-        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == null || newValue.getId() == null) return;
-            Platform.runLater(()->{
-                AppStatic.openDraftInPreviewer(newValue, previewerController);
-                Label lblDraftInfo = previewerController.getLblDraftInfo();
-                EDraftStatus status = EDraftStatus.getStatusById(newValue.getStatus());
-                lblDraftInfo.setText(
-                        "   " + newValue.toUsefulString() + //Обозначение чертежа
-                                " : " + EDraftType.getDraftTypeById(newValue.getDraftType()).getShortName() + //Тип чертежа
-                                "-" + newValue.getPageNumber() + //страница
-                                " : " + status.getStatusName()); //Статус
-                if(status == EDraftStatus.LEGAL)
-                    lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
-                else
-                    lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
 
-            });
-        });
-
-//        setOnMouseClicked(e->{
-//            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
-//                AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
-//                e.consume();
-//            } else if(e.getButton().equals(MouseButton.SECONDARY) && useContextMenu){
-//                createContextMenu();
-//                e.consume();
-//            }
+//        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//            if(newValue == null || newValue.getId() == null) return;
+//            previewDraft(previewerController, newValue);
 //        });
+
+        setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY) && e.isAltDown()) {
+                if (e.getClickCount() == 2)
+                    AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
+                else
+                    previewDraft(previewerController, getSelectionModel().getSelectedItem());
+                e.consume();
+            }
+        });
+    }
+
+    /**
+     * ПРЕВЬЮ чертежа
+     * @param previewerController PreviewerPatchController previewerController
+     * @param newValue Draft
+     */
+    private void previewDraft(PreviewerPatchController previewerController, Draft newValue) {
+        Platform.runLater(()->{
+            AppStatic.openDraftInPreviewer(newValue, previewerController);
+            Label lblDraftInfo = previewerController.getLblDraftInfo();
+            EDraftStatus status = EDraftStatus.getStatusById(newValue.getStatus());
+            lblDraftInfo.setText(
+                    "   " + newValue.toUsefulString() + //Обозначение чертежа
+                            " : " + EDraftType.getDraftTypeById(newValue.getDraftType()).getShortName() + //Тип чертежа
+                            "-" + newValue.getPageNumber() + //страница
+                            " : " + status.getStatusName()); //Статус
+            if(status == EDraftStatus.LEGAL)
+                lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
+            else
+                lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
+
+        });
     }
 
 
@@ -200,6 +212,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                 for(Folder folder: selectedFolders){
                     list.addAll(CH_QUICK_DRAFTS.findAllByFolder(folder));
                 }
+                selectedFoldersForContextMenu = selectedFolders;
                 selectedFolders = null;
             }
         }

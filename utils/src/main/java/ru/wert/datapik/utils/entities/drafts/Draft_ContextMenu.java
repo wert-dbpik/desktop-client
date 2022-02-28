@@ -32,7 +32,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem openInTab; //Открыть в отдельной вкладке
 
     //Условие, при котором список составлен только для одной папки
-    private final boolean condition;
+    private boolean condition;
 
 
 
@@ -44,8 +44,10 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         editDraftsPermission = CH_CURRENT_USER_GROUP.isEditDrafts();
 
         manipulator = tableView.getManipulator();
+        System.out.println("----" + tableView.getSelectedFoldersForContextMenu());
 
-        condition = !(tableView.getSelectedFolders() == null || tableView.getSelectedFolders().size() == 1);
+        condition = !(tableView.getSelectedFoldersForContextMenu() == null
+                || tableView.getSelectedFoldersForContextMenu().size() != 1);
 
         createMainMenuItems();
 
@@ -58,16 +60,12 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         boolean changeItem = false;
         boolean deleteItem = false;
 
-        if(CH_CURRENT_USER.getUserGroup().isDeleteDrafts()) {
-            deleteItem = true;
-        }
-
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
         if(editDraftsPermission) {
             if(condition) addItem = true;
             if (selectedDrafts.size() != 0) {
-                deleteItem = true;
+                if(CH_CURRENT_USER_GROUP.isDeleteDrafts())deleteItem = true;
                 if (selectedDrafts.size() == 1){
                     Integer itemStatus = selectedDrafts.get(0).getStatus();
                     if (itemStatus.equals(EDraftStatus.LEGAL.getStatusId()))
