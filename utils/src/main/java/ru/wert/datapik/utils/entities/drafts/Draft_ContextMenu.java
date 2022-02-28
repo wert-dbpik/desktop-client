@@ -31,6 +31,9 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem addFolder; //Добавить папку
     private MenuItem openInTab; //Открыть в отдельной вкладке
 
+    //Условие, при котором список не представляет все сразу или пв списке чертежи из более, чем одна папка
+    private final boolean condition;
+
 
 
     public Draft_ContextMenu(Draft_TableView tableView, _Draft_Commands commands, String draftsACCRes) {
@@ -41,6 +44,8 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         editDraftsPermission = CH_CURRENT_USER_GROUP.isEditDrafts();
 
         manipulator = tableView.getManipulator();
+
+        condition = !(tableView.getSelectedFolders() == null || tableView.getSelectedFolders().size() == 1);
 
         createMainMenuItems();
 
@@ -60,7 +65,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
         if(editDraftsPermission) {
-            addItem = true;
+            if(condition) addItem = true;
             if (selectedDrafts.size() != 0) {
                 deleteItem = true;
                 if (selectedDrafts.size() == 1){
@@ -117,11 +122,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                     extraPasteDrafts = true;
 
             } else if (selectedDrafts.size() == 1) {
-                extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
-                extraCutDrafts = true;//ВЫРЕЗАТЬ
                 extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
-                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
-                    extraPasteDrafts = true;
                 //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
                 if (selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId()) && editDraftsPermission) {
                     extraRenameDraft = true; //ПЕРЕИМЕНОВАТЬ
@@ -129,11 +130,21 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                     extraNullifyDraft = true;//АННУЛИРОВАТЬ
                 }
 
+                if (condition) {
+                    extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
+                    extraCutDrafts = true;//ВЫРЕЗАТЬ
+                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
+                        extraPasteDrafts = true;
+
+                }
+
             } else { //selectedDrafts.size() >1
-                extraAddFolder = true; //ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
                 extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
-                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
-                    extraPasteDrafts = true;
+                if (condition) {
+                    extraAddFolder = true; //ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
+                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
+                        extraPasteDrafts = true;
+                }
             }
         } else{
             if(selectedDrafts.size() > 0)
