@@ -48,13 +48,13 @@ public class AppMenuController {
         SEARCH_CONTAINER = hbSearch;
         PANE_WITH_SEARCH = createSearchField();
 
-
     }
 
     /**
      * СОЗДАТЬ МЕНЯ
      */
     private void createMenu() {
+
         menuBar.getMenus().add(createMainMenu());
         //Чертежи
         if(CH_CURRENT_USER_GROUP.isReadDrafts())
@@ -63,8 +63,8 @@ public class AppMenuController {
         if(CH_CURRENT_USER_GROUP.isReadMaterials())
             menuBar.getMenus().add(createMaterialsMenu());
         //Изделия
-        if(CH_CURRENT_USER_GROUP.isReadProductStructures())
-            menuBar.getMenus().add(createEditorMenu());
+//        if(CH_CURRENT_USER_GROUP.isReadProductStructures())
+//            menuBar.getMenus().add(createEditorMenu());
         //Админ
         if(CH_CURRENT_USER_GROUP.isAdministrate())
             menuBar.getMenus().add(createAdminMenu());

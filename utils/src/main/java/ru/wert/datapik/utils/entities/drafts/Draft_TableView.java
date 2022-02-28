@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<Draft> {
@@ -85,7 +86,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         super(promptText);
         this.previewerController = previewerController;
 
-        manipulator = new Draft_Manipulator(this);
+        if(CH_CURRENT_USER_GROUP.isEditDrafts()) manipulator = new Draft_Manipulator(this);
 
         commands = new _Draft_Commands(this);
 

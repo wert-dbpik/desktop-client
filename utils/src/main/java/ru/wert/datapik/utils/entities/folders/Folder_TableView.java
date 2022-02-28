@@ -45,7 +45,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
 
     private Folder_ContextMenu contextMenu;
-    private final boolean useContextMenu;
+    @Getter private boolean useContextMenu;
 
     public Folder_TableView(String prompt, boolean useContextMenu) {
         super(prompt);

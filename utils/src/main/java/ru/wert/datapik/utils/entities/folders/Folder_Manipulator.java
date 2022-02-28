@@ -33,6 +33,7 @@ public class Folder_Manipulator {
         this.tableView = tableView;
         this.treeView = treeView;
 
+
         setOnKeyManipulator(tableView);
     }
 
@@ -113,7 +114,7 @@ public class Folder_Manipulator {
 
             }
 
-            if (e.getCode() == KeyCode.DELETE) {
+            if (e.getCode() == KeyCode.DELETE && tableView.isUseContextMenu()) {
                 List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
                 List<ProductGroup> selectedPG = new ArrayList<>();
                 List<Folder> selectedF = new ArrayList<>();
@@ -128,12 +129,14 @@ public class Folder_Manipulator {
                 if(!selectedPG.isEmpty()) treeView.getItemCommands().delete(e, selectedPG);
             }
 
-            if ((e.getCode() == KeyCode.C && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isControlDown())) {
+            if ((e.getCode() == KeyCode.C && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isControlDown())
+                    && tableView.isUseContextMenu()) {
                 String str = cutItems(); //(CTRL + C) вырезаем
                 ClipboardUtils.copyToClipboardText(str);
             }
 
-            if ((e.getCode() == KeyCode.V && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isShiftDown())) {
+            if ((e.getCode() == KeyCode.V && e.isControlDown()) || (e.getCode() == KeyCode.INSERT && e.isShiftDown())
+                    && tableView.isUseContextMenu()) {
                 String str = ClipboardUtils.getStringFromClipboard();
                 if(pastePossible(str)) pasteItems(str); //(CTRL + V) вставляем
             }
