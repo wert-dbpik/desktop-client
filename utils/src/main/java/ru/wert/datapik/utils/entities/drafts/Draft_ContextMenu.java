@@ -31,7 +31,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem addFolder; //Добавить папку
     private MenuItem openInTab; //Открыть в отдельной вкладке
 
-    //Условие, при котором список не представляет все сразу или пв списке чертежи из более, чем одна папка
+    //Условие, при котором список составлен только для одной папки
     private final boolean condition;
 
 
