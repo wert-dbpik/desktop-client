@@ -120,7 +120,6 @@ public class DraftsEditorController implements SearchablePane {
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue instanceof Folder) {
                 draftsTable.setSelectedFolders(Collections.singletonList((Folder) newValue));
-                System.out.println("====" + draftsTable.getSelectedFolders());
                 draftsTable.setSearchedText(""); //обнуляем поисковую строку
                 draftsTable.setModifyingItem(newValue);
                 draftsTable.updateView();
@@ -133,7 +132,6 @@ public class DraftsEditorController implements SearchablePane {
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if(selectedItem instanceof Folder){
                     draftsTable.setSelectedFolders(Collections.singletonList((Folder) selectedItem));
-                    System.out.println("====" + draftsTable.getSelectedFolders());
                     draftsTable.setSearchedText(""); //обнуляем поисковую строку
                     draftsTable.setModifyingItem(selectedItem);
                     draftsTable.updateView();
