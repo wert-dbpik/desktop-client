@@ -13,6 +13,7 @@ public class BtnDoubleAlt<T extends Item>{
 
     public BtnDoubleAlt(ItemTableView<T> draftTableView) {
         this.draftTableView = draftTableView;
+        draftTableView.setAltOn(false);
     }
 
     public Button create(){
