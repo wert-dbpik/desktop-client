@@ -88,27 +88,27 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         super(promptText);
         this.previewerController = previewerController;
 
+//        setAltOn(false);
+
         if(CH_CURRENT_USER_GROUP.isEditDrafts()) manipulator = new Draft_Manipulator(this);
 
         commands = new _Draft_Commands(this);
 
-        //Создаем изначальное контекстное меню, чтобы оно могло открыться при клике в пустом месте
-
         createContextMenu();
 
-
-
-//        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            if(newValue == null || newValue.getId() == null) return;
-//            previewDraft(previewerController, newValue);
-//        });
+        //Если для предпросмотра Alt не нужен, достаточно только выделения
+        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue == null || newValue.getId() == null) return;
+            if(!isAltOn()) previewDraft(previewerController, newValue);
+        });
 
         setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY) && e.isAltDown()) {
                 if (e.getClickCount() == 2)
                     AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
-                else
-                    previewDraft(previewerController, getSelectionModel().getSelectedItem());
+                else {
+                    if(isAltOn()) previewDraft(previewerController, getSelectionModel().getSelectedItem());
+                }
                 e.consume();
             }
         });

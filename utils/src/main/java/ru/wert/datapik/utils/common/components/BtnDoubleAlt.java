@@ -13,16 +13,19 @@ public class BtnDoubleAlt<T extends Item>{
 
     public BtnDoubleAlt(ItemTableView<T> draftTableView) {
         this.draftTableView = draftTableView;
+        draftTableView.setAltOn(false);
     }
 
     public Button create(){
 
         BtnDouble btnAltSwitcher = new BtnDouble(
-                BTN_ALT_TRUE_IMG, "Использовать ALT",
-                BTN_ALT_FALSE_IMG, "НЕ использовать ALT");
+                BTN_ALT_FALSE_IMG, "НЕ использовать ALT",
+                BTN_ALT_TRUE_IMG,"Использовать ALT");
         btnAltSwitcher.setOnAction(e->{
+
             draftTableView.setAltOn(btnAltSwitcher.getLogicProperty());
         });
+
         return btnAltSwitcher;
     }
 }

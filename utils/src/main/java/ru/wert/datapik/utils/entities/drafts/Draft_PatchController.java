@@ -92,6 +92,7 @@ public class Draft_PatchController {
         });
 
         Button btnUseAltToPreview = new BtnDoubleAlt<>(draftsTable).create();
+//        btnUseAltToPreview.setL
 
 
         //Кнопка ПОКАЗАТЬ ФИЛЬТР
