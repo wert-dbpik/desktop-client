@@ -9,23 +9,24 @@ import static ru.wert.datapik.utils.images.BtnImages.*;
 
 public class BtnDoubleAlt<T extends Item>{
 
-    private final ItemTableView<T> draftTableView;
+    private final ItemTableView<T> tableView;
+    private final boolean initState;
 
-    public BtnDoubleAlt(ItemTableView<T> draftTableView) {
-        this.draftTableView = draftTableView;
-        draftTableView.setAltOn(false);
+    public BtnDoubleAlt(ItemTableView<T> tableView, boolean initState) {
+        this.tableView = tableView;
+        this.initState = initState;
     }
 
     public Button create(){
 
         BtnDouble btnAltSwitcher = new BtnDouble(
-                BTN_ALT_FALSE_IMG, "НЕ использовать ALT",
-                BTN_ALT_TRUE_IMG,"Использовать ALT");
+                BTN_ALT_FALSE_IMG, "Для предпросмотра\nНЕ использовать ALT",
+                BTN_ALT_TRUE_IMG, "Для предпросмотра\nиспользовать ALT",
+                initState);
+
         btnAltSwitcher.setOnAction(e->{
-
-            draftTableView.setAltOn(btnAltSwitcher.getLogicProperty());
+            tableView.setAltOn(btnAltSwitcher.getLogicProperty());
         });
-
         return btnAltSwitcher;
     }
 }

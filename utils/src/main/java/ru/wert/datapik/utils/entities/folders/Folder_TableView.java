@@ -29,6 +29,7 @@ import java.util.List;
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup>, Searchable<Item> {
 
@@ -41,7 +42,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Getter private Folder_Manipulator manipulator;
     @Getter@Setter private Draft_TableView draftTable;
 
-    @Getter@Setter private String searchedText;
+    @Getter@Setter private String searchedText = "";
 
 
     private Folder_ContextMenu contextMenu;
@@ -50,6 +51,13 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     public Folder_TableView(String prompt, boolean useContextMenu) {
         super(prompt);
         this.useContextMenu = useContextMenu;
+
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue){
+                CH_SEARCH_FIELD.setText(searchedText);
+            }
+        });
+
 
     }
 
@@ -121,6 +129,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
      */
     @Override
     public void updateTableView() {
+        searchedText = CH_SEARCH_FIELD.getText();
         if(globalOn) updateWithGlobalOn();
         else {
             //Находим выделенный элемент в дереве каталогов

@@ -267,6 +267,4 @@ public class Folder_Manipulator {
         ClipboardUtils.clear();
     }
 
-
-
 }

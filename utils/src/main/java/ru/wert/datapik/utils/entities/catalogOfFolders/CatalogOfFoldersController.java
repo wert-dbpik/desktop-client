@@ -34,7 +34,6 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class CatalogOfFoldersController {
-
     @FXML
     private VBox vbCatalog;
 
@@ -64,10 +63,6 @@ public class CatalogOfFoldersController {
 
         ClipboardUtils.clear();
 
-        //Создаем панели инструментов
-        createCatalog_ToolBar();
-
-
         //Создаем связанные между собой панели каталога и изделий
         boolean useContextMenu = false;
         if(CH_CURRENT_USER.getUserGroup().isEditDrafts()) useContextMenu = true;
@@ -75,6 +70,9 @@ public class CatalogOfFoldersController {
 
         catalogTreeView.setConnectedForm(folderTableView);
         createFolders_ToolBar();
+
+        //Создаем панели инструментов
+        createCatalog_ToolBar();
 
     }
 
@@ -150,9 +148,12 @@ public class CatalogOfFoldersController {
      */
     private void createFolders_ToolBar(){
 
-        Button btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView).create();
+        Button btnAltOn = new BtnDoubleAlt<Item>(folderTableView, false).create();
 
-        foldersButtons.getChildren().addAll(btnDoubleGlobeVsCatalog);
+        Button btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView, false).create();
+
+
+        foldersButtons.getChildren().addAll(btnAltOn, btnDoubleGlobeVsCatalog);
     }
 
 

@@ -156,7 +156,8 @@ public class ExcelEditorNewController {
     private BtnDouble createInfoOrDraftsTableButton(){
         BtnDouble btnInfoOrTable = new BtnDouble(
                 BTN_INFO_IMG, "Показать информацию",
-                BTN_TABLE_VIEW_IMG, "Показать чертежи");
+                BTN_TABLE_VIEW_IMG, "Показать чертежи",
+                false);
         btnInfoOrTable.setOnAction(e->{
             if(btnInfoOrTable.getLogicProperty()) {
                 stpInfo.getChildren().clear();

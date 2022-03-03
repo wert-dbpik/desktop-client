@@ -5,25 +5,31 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.Getter;
-
+import lombok.Setter;
 
 
 public class BtnDouble extends Button {
 
-    @Getter boolean logic = true;
+    @Getter@Setter
+    boolean logic;
+    private final ImageView imageOFF;
+    private final String textOFF;
+    private final ImageView imageON;
+    private final String textON;
 
-    public BtnDouble(Image image1, String hint1, Image image2, String hint2 ) {
+    public BtnDouble(Image imageOFF, String textOFF, Image imageON, String textON, boolean initState ) {
         super();
+        this.imageOFF = new ImageView(imageOFF);
+        this.textOFF = textOFF;
+        this.imageON = new ImageView(imageON);
+        this.textON = textON;
 
         setId("patchButton");
 
-        switchBtn1(new ImageView(image1), hint1);
+        switchButton(initState);
         //Кнопку нажали
         setOnMousePressed(e->{
-            if(logic)
-                switchBtn2(new ImageView(image2), hint2);
-            else
-                switchBtn1(new ImageView(image1), hint1);
+            switchButton(!logic);
         });
     }
 
@@ -31,27 +37,16 @@ public class BtnDouble extends Button {
         return logic;
     }
 
-    /**
-     * Устанавливаем кнопку №1
-     * @param image1 Изображение
-     * @param text1 Подсказка
-     */
-    private void switchBtn1(ImageView image1, String text1){
-        setGraphic(image1);
-        setTooltip(new Tooltip(text1));
-        logic = true;
-    }
+    private void switchButton(boolean state) {
+        if (state) {
+            setGraphic(imageON);
+            setTooltip(new Tooltip(textON));
+        } else {
+            setGraphic(imageOFF);
+            setTooltip(new Tooltip(textOFF));
+        }
+        logic = state;
 
-    /**
-     * Устанавливаем кнопку №2
-     * @param image2 Изображение
-     * @param text2 Подсказка
-     */
-    private void switchBtn2(ImageView image2, String text2){
-        setGraphic(image2);
-        setTooltip(new Tooltip(text2));
-        logic = false;
     }
-
 
 }

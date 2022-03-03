@@ -17,25 +17,22 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 public class BtnDoubleGlobeVsCatalog{
 
     private ItemTableView<Item> folderTableView;
+    private final boolean initState;
 
-    public BtnDoubleGlobeVsCatalog(ItemTableView<Item> folderTableView) {
+    public BtnDoubleGlobeVsCatalog(ItemTableView<Item> folderTableView, boolean initState) {
         this.folderTableView = folderTableView;
+        this.initState = initState;
     }
 
     public Button create(){
 
         BtnDouble btnGlobalOrCatalog = new BtnDouble(
                 BTN_GLOBE_IMG, "Все комплекты чертежей",
-                BTN_CATALOG_IMG, "Каталог");
+                BTN_CATALOG_IMG, "Каталог",
+                initState);
         btnGlobalOrCatalog.setOnAction(e->{
-            if(btnGlobalOrCatalog.getLogicProperty()) {
-                //Все комплекты чертежей
-                folderTableView.setGlobalOn(false);
-
-            } else {
-                folderTableView.setGlobalOn(true);
-
-            }
+            //Все комплекты чертежей
+            folderTableView.setGlobalOn(!btnGlobalOrCatalog.getLogicProperty());
             folderTableView.updateTableView();
         });
         return btnGlobalOrCatalog;
