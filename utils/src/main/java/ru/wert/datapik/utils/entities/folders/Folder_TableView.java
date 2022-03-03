@@ -9,18 +9,22 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import lombok.Getter;
 import lombok.Setter;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
+import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
+import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.utils.search.SearchFunction;
 import ru.wert.datapik.utils.search.Searchable;
 
 import java.util.ArrayList;
@@ -31,18 +35,19 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
-public class Folder_TableView extends ItemTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup>, Searchable<Item> {
+public class Folder_TableView extends RoutineTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
 
     @Getter private String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
-    @Getter private _Folder_Commands commands;
+    private ItemCommands commands;
 
     private FormView_ACCController<Item> accController;
     @Getter@Setter private TreeItem<ProductGroup> upwardTreeItemRow;//Верхняя строка в таблице
     @Getter private ProductGroup_TreeView<Item> catalogTree;
     @Getter private Folder_Manipulator manipulator;
     @Getter@Setter private Draft_TableView draftTable;
+    private List<Item> currentItemList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
 
-    @Getter@Setter private String searchedText = "";
+//    @Getter@Setter private String searchedText = "";
 
 
     private Folder_ContextMenu contextMenu;
@@ -52,12 +57,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         super(prompt);
         this.useContextMenu = useContextMenu;
 
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue){
-                CH_SEARCH_FIELD.setText(searchedText);
-            }
-        });
-
+        new SearchFunction<>(this, "КОМПЛЕКТ ЧЕРТЕЖЕЙ").mount();
 
     }
 
@@ -129,7 +129,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
      */
     @Override
     public void updateTableView() {
-        searchedText = CH_SEARCH_FIELD.getText();
+//        searchedText = CH_SEARCH_FIELD.getText();
         if(globalOn) updateWithGlobalOn();
         else {
             //Находим выделенный элемент в дереве каталогов
@@ -213,7 +213,7 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
     @Override
     public void createContextMenu() {
         setOnContextMenuRequested(event->{
-            contextMenu = new Folder_ContextMenu(this, catalogTree, commands, accWindowRes);
+            contextMenu = new Folder_ContextMenu(this, catalogTree, (_Folder_Commands) commands, accWindowRes);
             contextMenu.show(this.getScene().getWindow(), event.getScreenX(), event.getSceneY());
         });
     }
@@ -244,6 +244,26 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
 
         getColumns().add(tcFolder);
 
+    }
+
+    @Override
+    public ItemCommands<Item> getCommands() {
+        return commands;
+    }
+
+    @Override
+    public void setModifyingItem(Object item) {
+
+    }
+
+    @Override
+    public void setCurrentItemSearchedList(List<Item> currentItemList) {
+        this.currentItemList = currentItemList;
+    }
+
+    @Override
+    public List<Item> getCurrentItemSearchedList() {
+        return currentItemList;
     }
 
 
@@ -277,32 +297,4 @@ public class Folder_TableView extends ItemTableView<Item> implements IFormView<I
         return catalogTree.getRoot();
     }
 
-    /**
-     * Searchable
-     * Метод вызывается для обновления таблицы
-     */
-    @Override
-    public void updateSearchedView() {
-
-    }
-
-    /**
-     * Searchable
-     * Метод возвращает текущий список таблицы, с этим списком работает поиск
-     * Метод необходим для ускорения работы поиска и вообще апдейта таблиц
-     */
-    @Override
-    public List<Item> getCurrentItemSearchedList() {
-        return null;
-    }
-
-    /**
-     * Searchable
-     * Метод устанавливает текущий список элементов, отображаемых в таблице
-     * Он вызывается, например в Тасках для передачи окончательного списка
-     */
-    @Override
-    public void setCurrentItemSearchedList(List<Item> currentItemList) {
-
-    }
 }

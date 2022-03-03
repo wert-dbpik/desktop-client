@@ -37,7 +37,7 @@ import static ru.wert.datapik.utils.toolpane.ChogoriToolBar.*;
 
 
 @Slf4j
-public class PassportsEditorController implements SearchablePane {
+public class PassportsEditorController implements SearchablePane{
 
 
     @FXML
@@ -181,12 +181,12 @@ public class PassportsEditorController implements SearchablePane {
 
     @Override
     public void tuneSearching() {
-        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
-        String searchedText = passportsTable.getSearchedText();
-        if (searchedText.equals(""))
-            CH_SEARCH_FIELD.setPromptText("ДЕЦИМАЛЬНЫЙ НОМЕР");
-        else
-            CH_SEARCH_FIELD.setSearchedText(passportsTable.getSearchedText());
+//        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
+//        String searchedText = passportsTable.getSearchedText();
+//        if (searchedText.equals(""))
+//            CH_SEARCH_FIELD.setPromptText("ДЕЦИМАЛЬНЫЙ НОМЕР");
+//        else
+//            CH_SEARCH_FIELD.setSearchedText(passportsTable.getSearchedText());
     }
 
 

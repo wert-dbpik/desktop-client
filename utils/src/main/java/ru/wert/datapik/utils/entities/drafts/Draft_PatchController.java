@@ -70,7 +70,7 @@ public class Draft_PatchController {
         VBox.setVgrow(draftsTable, Priority.ALWAYS);
         vboxDrafts.getChildren().add(draftsTable);
 
-        CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
+//        CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
         draftsTable.updateView();
 
     }

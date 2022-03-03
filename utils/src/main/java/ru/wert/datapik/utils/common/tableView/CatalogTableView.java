@@ -169,21 +169,21 @@ public abstract class CatalogTableView<P extends Item, T extends CatalogGroup>  
      * При получении фокуса в поле SearchField появляется подсказка searchName,
      * либо последняя набранная в SearchField строка searchedText
      */
-    private void createFocusListener() {
-        focusedProperty().addListener((observable) -> {
+//    private void createFocusListener() {
+//        focusedProperty().addListener((observable) -> {
+//
+//            CH_SEARCH_FIELD.setSearchableTableController(this);
+//
+//            if (getSearchedText() == null || getSearchedText().equals("")) {
+//                CH_SEARCH_FIELD.setText("");
+//                CH_SEARCH_FIELD.setPromptText(promptItemName);
+//            } else {
+//                CH_SEARCH_FIELD.setText(getSearchedText());
+//            }
+//
+//        });
 
-            CH_SEARCH_FIELD.setSearchableTableController(this);
-
-            if (getSearchedText() == null || getSearchedText().equals("")) {
-                CH_SEARCH_FIELD.setText("");
-                CH_SEARCH_FIELD.setPromptText(promptItemName);
-            } else {
-                CH_SEARCH_FIELD.setText(getSearchedText());
-            }
-
-        });
-
-    }
+//    }
 
 
 

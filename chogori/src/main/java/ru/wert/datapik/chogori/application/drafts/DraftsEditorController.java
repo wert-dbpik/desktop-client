@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori.application.drafts;
 
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -34,7 +35,7 @@ import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 
 @Slf4j
-public class DraftsEditorController implements SearchablePane {
+public class DraftsEditorController implements SearchablePane{
 
 
     @FXML
@@ -170,13 +171,7 @@ public class DraftsEditorController implements SearchablePane {
 
     @Override//SearchablePane
     public void tuneSearching() {
-        CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
-        String searchedText = draftsTable.getSearchedText();
-        CH_SEARCH_FIELD.setSearchedText(searchedText);
-        if (searchedText.equals(""))
-            CH_SEARCH_FIELD.setPromptText("ЧЕРТЕЖ");
-        else
-            CH_SEARCH_FIELD.setSearchedText(draftsTable.getSearchedText());
+        Platform.runLater(()->draftsTable.requestFocus());
     }
 
 }

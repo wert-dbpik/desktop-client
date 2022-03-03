@@ -36,15 +36,15 @@ public abstract class SimpleTableView<T extends Item> extends TableView<T>  impl
      * @param searchedText String - Сохраненое значение поиска
      * @param searchName String - Наименование поиска (чертеж, папка, и т.д.)
      */
-    protected void createFocusListener(String searchedText, String searchName){
-        focusedProperty().addListener(observable -> {
-            if (searchedText == null || searchedText.equals("")) {
-                CH_SEARCH_FIELD.setText("");
-                CH_SEARCH_FIELD.setPromptText(searchName);
-            } else
-                CH_SEARCH_FIELD.setText(searchedText);
-            CH_SEARCH_FIELD.setSearchableTableController(this);
-        });
-
-    }
+//    protected void createFocusListener(String searchedText, String searchName){
+//        focusedProperty().addListener(observable -> {
+//            if (searchedText == null || searchedText.equals("")) {
+//                CH_SEARCH_FIELD.setText("");
+//                CH_SEARCH_FIELD.setPromptText(searchName);
+//            } else
+//                CH_SEARCH_FIELD.setText(searchedText);
+//            CH_SEARCH_FIELD.setSearchableTableController(this);
+//        });
+//
+//    }
 }

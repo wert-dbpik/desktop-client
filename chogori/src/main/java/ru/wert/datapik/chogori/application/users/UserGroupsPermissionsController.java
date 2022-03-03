@@ -105,11 +105,11 @@ public class UserGroupsPermissionsController implements SearchablePane {
 
     @Override
     public void tuneSearching() {
-        CH_SEARCH_FIELD.setSearchableTableController(userGroupTable);
-        String searchedText = userGroupTable.getSearchedText();
-        if (searchedText.equals(""))
-            CH_SEARCH_FIELD.setPromptText("ГРУППА ПОЛЬЗОВАТЕЛЕЙ");
-        else
-            CH_SEARCH_FIELD.setSearchedText(userGroupTable.getSearchedText());
+//        CH_SEARCH_FIELD.setSearchableTableController(userGroupTable);
+//        String searchedText = userGroupTable.getSearchedText();
+//        if (searchedText.equals(""))
+//            CH_SEARCH_FIELD.setPromptText("ГРУППА ПОЛЬЗОВАТЕЛЕЙ");
+//        else
+//            CH_SEARCH_FIELD.setSearchedText(userGroupTable.getSearchedText());
     }
 }

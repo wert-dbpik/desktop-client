@@ -24,10 +24,10 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
     public abstract void setCurrentItemSearchedList(List<P> currentItemList);
     @Override//Searchable
     public abstract List<P> getCurrentItemSearchedList();
-    @Override//Searchable
-    public abstract void setSearchedText(String searchedText);
-    @Override//Searchable
-    public abstract String getSearchedText();
+//    @Override//Searchable
+//    public abstract void setSearchedText(String searchedText);
+//    @Override//Searchable
+//    public abstract String getSearchedText();
 
     public RoutineTableView(String promptText) {
         super(promptText);
@@ -91,19 +91,19 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      * При получении фокуса в поле SearchField появляется подсказка searchName,
      * либо последняя набранная в SearchField строка searchedText
      */
-    private void createFocusListener() {
-        focusedProperty().addListener((observable) -> {
-
-            CH_SEARCH_FIELD.setSearchableTableController(this);
-
-            if (getSearchedText() == null || getSearchedText().equals("")) {
-                CH_SEARCH_FIELD.setText("");
-                CH_SEARCH_FIELD.setPromptText(promptItemName);
-            } else {
-                CH_SEARCH_FIELD.setText(getSearchedText());
-            }
-
-        });
-
-    }
+//    private void createFocusListener() {
+//        focusedProperty().addListener((observable) -> {
+//
+//            CH_SEARCH_FIELD.setSearchableTableController(this);
+//
+//            if (getSearchedText() == null || getSearchedText().equals("")) {
+//                CH_SEARCH_FIELD.setText("");
+//                CH_SEARCH_FIELD.setPromptText(promptItemName);
+//            } else {
+//                CH_SEARCH_FIELD.setText(getSearchedText());
+//            }
+//
+//        });
+//
+//    }
 }

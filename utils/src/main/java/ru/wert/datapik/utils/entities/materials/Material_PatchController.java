@@ -43,7 +43,7 @@ public class Material_PatchController {
         VBox.setVgrow(tableView, Priority.ALWAYS);
         vboxMain.getChildren().add(tableView);
 
-        CH_SEARCH_FIELD.setSearchableTableController(tableView);
+//        CH_SEARCH_FIELD.setSearchableTableController(tableView);
         tableView.updateView();
 
     }

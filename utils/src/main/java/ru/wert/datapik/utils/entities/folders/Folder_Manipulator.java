@@ -13,10 +13,12 @@ import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.Catalogs;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
+import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
@@ -117,12 +119,12 @@ public class Folder_Manipulator {
             if (e.getCode() == KeyCode.DELETE && tableView.isUseContextMenu()) {
                 List<Item> selectedItems = tableView.getSelectionModel().getSelectedItems();
                 List<ProductGroup> selectedPG = new ArrayList<>();
-                List<Folder> selectedF = new ArrayList<>();
+                List<Item> selectedF = new ArrayList<>();
                 for (Item item : selectedItems) {
                     if (item instanceof ProductGroup)
                         selectedPG.add((ProductGroup) item);
                     else
-                        selectedF.add((Folder) item);
+                        selectedF.add(item);
                 }
 
                 if(!selectedF.isEmpty()) tableView.getCommands().delete(e, selectedF);

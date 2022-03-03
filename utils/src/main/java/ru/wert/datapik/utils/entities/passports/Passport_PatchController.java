@@ -64,7 +64,7 @@ public class Passport_PatchController {
         VBox.setVgrow(passportsTable, Priority.ALWAYS);
         vboxPassports.getChildren().add(passportsTable);
 
-        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
+//        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
         passportsTable.updateView();
 
     }

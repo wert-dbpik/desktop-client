@@ -105,12 +105,12 @@ public class UsersPermissionsController implements SearchablePane{
 
     @Override
     public void tuneSearching() {
-        CH_SEARCH_FIELD.setSearchableTableController(userTable);
-        String searchedText = userTable.getSearchedText();
-        if (searchedText.equals(""))
-            CH_SEARCH_FIELD.setPromptText("ПОЛЬЗОВАТЕЛЬ");
-        else
-            CH_SEARCH_FIELD.setSearchedText(userTable.getSearchedText());
+//        CH_SEARCH_FIELD.setSearchableTableController(userTable);
+//        String searchedText = userTable.getSearchedText();
+//        if (searchedText.equals(""))
+//            CH_SEARCH_FIELD.setPromptText("ПОЛЬЗОВАТЕЛЬ");
+//        else
+//            CH_SEARCH_FIELD.setSearchedText(userTable.getSearchedText());
     }
 
 
