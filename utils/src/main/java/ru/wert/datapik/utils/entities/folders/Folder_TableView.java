@@ -9,7 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import lombok.Getter;
 import lombok.Setter;
-import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
@@ -19,13 +18,10 @@ import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.common.tableView.CatalogableTable;
-import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
-import ru.wert.datapik.utils.search.SearchFunction;
-import ru.wert.datapik.utils.search.Searchable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +41,10 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
     @Getter private ProductGroup_TreeView<Item> catalogTree;
     @Getter private Folder_Manipulator manipulator;
     @Getter@Setter private Draft_TableView draftTable;
-    private List<Item> currentItemList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
+    private List<Item> shownList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
+    @Getter@Setter private String searchedText = "";
+
+
 
 //    @Getter@Setter private String searchedText = "";
 
@@ -57,7 +56,9 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         super(prompt);
         this.useContextMenu = useContextMenu;
 
-        new SearchFunction<>(this, "КОМПЛЕКТ ЧЕРТЕЖЕЙ").mount();
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "КОМПЛЕКТ ЧЕРТЕЖЕЙ");
+        });
 
     }
 
@@ -144,13 +145,41 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
     private void updateWithGlobalOn(){
         Platform.runLater(()->{
             ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
-            ObservableList<Item> items = FXCollections.observableArrayList();
+//            ObservableList<Item> items = FXCollections.observableArrayList();
+            shownList = new ArrayList<>();
             for(Folder folder: folders){
-                items.add((Item)folder);
+                shownList.add((Item)folder);
             }
+            ObservableList<Item> items = FXCollections.observableArrayList(shownList);
             getItems().clear();
             setItems(items);
         });
+    }
+
+    /**
+     * Нестандартное обновление таблицы
+     */
+    @Override
+    public void updateSearchedView() {
+        super.updateSearchedView();
+
+        List<Folder> foundFolders = new ArrayList<>();
+
+        List<ProductGroup> groups = catalogTree.findAllGroupChildren(upwardTreeItemRow);
+        groups.add(upwardTreeItemRow.getValue());
+
+        for(ProductGroup gr: groups){
+            foundFolders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(gr.getId()));
+        }
+
+        ObservableList<Item> items = FXCollections.observableArrayList();
+        for(Folder folder: foundFolders){
+            if (folder.toUsefulString().toLowerCase().contains(searchedText.toLowerCase())) {
+                items.add(folder);
+            }
+        }
+        getItems().clear();
+        setItems(items);
     }
 
     /**
@@ -158,24 +187,24 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
      * @param prevGroupToBeSelected группа TreeView - верхняя строка в таблице, учитывается припереходе назад
      */
     public void updateNow(ProductGroup prevGroupToBeSelected) {
-        List<Item> items = new ArrayList<>();
+        shownList = new ArrayList<>();
         if (upwardTreeItemRow == null) upwardTreeItemRow = catalogTree.getRoot();
         ProductGroup selectedGroup = upwardTreeItemRow.getValue();
         //Добавим верхнюю строку в список, потом она превратится в троеточие
         //Корневой элемент в список не добавляем
         if(upwardTreeItemRow != catalogTree.getRoot())
-            items.add(upwardTreeItemRow.getValue());
+            shownList.add(upwardTreeItemRow.getValue());
         List<TreeItem<ProductGroup>> children = upwardTreeItemRow.getChildren();
         for (TreeItem<ProductGroup> ti : children) {
-            items.add(ti.getValue());
+            shownList.add(ti.getValue());
         }
 
         List<Folder> folders = CH_QUICK_FOLDERS.findAllByGroupId(selectedGroup.getId());
-        items.addAll(folders);
+        shownList.addAll(folders);
 
         getItems().clear();
         refresh();
-        getItems().addAll(items);
+        getItems().addAll(shownList);
 
         //TODO:Выделяем родительскую группу
         if(prevGroupToBeSelected != null){
@@ -258,12 +287,12 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
 
     @Override
     public void setCurrentItemSearchedList(List<Item> currentItemList) {
-        this.currentItemList = currentItemList;
+        this.shownList = currentItemList;
     }
 
     @Override
     public List<Item> getCurrentItemSearchedList() {
-        return currentItemList;
+        return shownList;
     }
 
 

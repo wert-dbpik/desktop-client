@@ -13,13 +13,14 @@ import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.Sorting;
+import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.entities.drafts.commands._Draft_Commands;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
-import ru.wert.datapik.utils.search.SearchFunction;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
 import ru.wert.datapik.winform.enums.EDraftStatus;
@@ -40,19 +41,19 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private static final String accWindowRes = "/utils-fxml/drafts/draftACC.fxml";
     private _Draft_Commands commands;
     private PreviewerPatchController previewerController;
-    @Getter@Setter private String searchedText = "";
     @Setter private Object modifyingClass;
     @Getter@Setter private Object modifyingItem; //Product или Folder
     private List<Draft> currentItemList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
     private Draft_ACCController accController;
     @Getter private Draft_Manipulator manipulator;
+    @Getter@Setter private String searchedText = "";
 
 
     @Getter@Setter private List<Folder> selectedFolders;
     @Getter@Setter private List<Folder> selectedFoldersForContextMenu;
 
-    @Getter
-    ListProperty<Draft> preparedList = new SimpleListProperty<>();
+
+    @Getter ListProperty<Draft> preparedList = new SimpleListProperty<>();
 
     //Фильтр
     @Getter@Setter private boolean showValid = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
@@ -113,7 +114,10 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
             }
         });
 
-        new SearchFunction<>(this, "ЧЕРТЕЖ").mount();
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ЧЕРТЕЖ");
+        });
+
     }
 
     /**

@@ -81,7 +81,7 @@ public class AppMenuController {
 
         HBox hbox = new HBox();
 
-        CH_SEARCH_FIELD = new TextField();
+        CH_SEARCH_FIELD = new SearchField();
         CH_SEARCH_FIELD.setPrefWidth(300);
         Button btnClean = new Button();
         btnClean.setOnAction((e)->{
