@@ -30,7 +30,7 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
     @Getter@Setter protected boolean altOn; //Переключение +Alt
     @Getter@Setter protected String searchedText; //Искомый текст
 
-    @Setter protected boolean globalOn; //Режим всеобщего представления вкл
+    @Getter@Setter protected boolean globalOn; //Режим всеобщего представления вкл
 
 
 
