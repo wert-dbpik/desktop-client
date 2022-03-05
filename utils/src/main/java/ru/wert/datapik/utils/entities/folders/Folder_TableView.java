@@ -44,11 +44,6 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
     private List<Item> shownList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
     @Getter@Setter private String searchedText = "";
 
-
-
-//    @Getter@Setter private String searchedText = "";
-
-
     private Folder_ContextMenu contextMenu;
     @Getter private boolean useContextMenu;
 

@@ -100,7 +100,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         //Если для предпросмотра Alt не нужен, достаточно только выделения
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue == null || newValue.getId() == null) return;
-            if(!isAltOn()) previewDraft(previewerController, newValue);
+            if(!getAltOnProperty().get()) previewDraft(previewerController, newValue);
         });
 
         setOnMouseClicked(e -> {
@@ -108,7 +108,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                 if (e.getClickCount() == 2)
                     AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
                 else {
-                    if(isAltOn()) previewDraft(previewerController, getSelectionModel().getSelectedItem());
+                    if(getAltOnProperty().get()) previewDraft(previewerController, getSelectionModel().getSelectedItem());
                 }
                 e.consume();
             }

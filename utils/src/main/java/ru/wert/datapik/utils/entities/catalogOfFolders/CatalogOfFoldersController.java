@@ -148,7 +148,12 @@ public class CatalogOfFoldersController {
      */
     private void createFolders_ToolBar(){
 
-        Button btnAltOn = new BtnDoubleAlt<Item>(folderTableView, false).create();
+        BtnDoubleAlt<Item> btnDoubleAlt = new BtnDoubleAlt<Item>(folderTableView, false);
+        Button btnAltOn = btnDoubleAlt.create();
+        folderTableView.getAltOnProperty().bindBidirectional(btnDoubleAlt.getStateProperty());
+
+        //Устанавливаем начальное значение
+        btnDoubleAlt.getStateProperty().set(true);
 
         Button btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView, false).create();
 

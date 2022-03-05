@@ -91,7 +91,10 @@ public class Draft_PatchController {
             e.consume();
         });
 
-        Button btnUseAltToPreview = new BtnDoubleAlt<>(draftsTable, false).create();
+        BtnDoubleAlt<Draft> btnDoubleAlt =new BtnDoubleAlt<>(draftsTable, false);
+        Button btnAltOn = btnDoubleAlt.create();
+        draftsTable.getAltOnProperty().bindBidirectional(btnDoubleAlt.getStateProperty());
+        btnDoubleAlt.getStateProperty().set(true);
 
 
         //Кнопка ПОКАЗАТЬ ФИЛЬТР
@@ -99,7 +102,7 @@ public class Draft_PatchController {
         //Кнопка ПОКАЗАТЬ КОЛОНКИ
         btnShowColumns = new BtnMenuDraftsColumns(draftsTable);
 
-        if(useBtnAltSwitcher) hboxDraftsButtons.getChildren().add(btnUseAltToPreview);
+        if(useBtnAltSwitcher) hboxDraftsButtons.getChildren().add(btnAltOn);
         if(useBtnShowFilter) hboxDraftsButtons.getChildren().add(btnShowFilter);
         if(useBtnShowColumns) hboxDraftsButtons.getChildren().add(btnShowColumns);
         if(useBtnDraftsGlobe) hboxDraftsButtons.getChildren().add(btnDraftsGlobe);

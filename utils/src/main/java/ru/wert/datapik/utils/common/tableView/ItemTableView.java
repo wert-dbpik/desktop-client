@@ -2,20 +2,17 @@ package ru.wert.datapik.utils.common.tableView;
 
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import com.sun.javafx.scene.control.skin.TableViewSkinBase;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import lombok.Getter;
 import lombok.Setter;
 import ru.wert.datapik.client.interfaces.Item;
-import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.interfaces.ITableView;
-import ru.wert.datapik.utils.search.Searchable;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public abstract class ItemTableView<P extends Item>  extends TableView<P> implements ITableView<P> {
 
@@ -27,7 +24,9 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
     public abstract void createContextMenu();
     public abstract List<P> prepareList();
 
-    @Getter@Setter protected boolean altOn; //Переключение +Alt
+    protected BooleanProperty altOnProperty = new SimpleBooleanProperty(); //Переключение +Alt
+    public BooleanProperty getAltOnProperty(){return altOnProperty;}
+
     @Getter@Setter protected String searchedText; //Искомый текст
 
     @Getter@Setter protected boolean globalOn; //Режим всеобщего представления вкл

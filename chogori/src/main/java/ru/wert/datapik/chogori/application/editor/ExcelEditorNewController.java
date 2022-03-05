@@ -159,7 +159,7 @@ public class ExcelEditorNewController {
                 BTN_TABLE_VIEW_IMG, "Показать чертежи",
                 false);
         btnInfoOrTable.setOnAction(e->{
-            if(btnInfoOrTable.getLogicProperty()) {
+            if(btnInfoOrTable.getStateProperty().get()) {
                 stpInfo.getChildren().clear();
                 stpInfo.getChildren().add(0, draftPatch.getParent());
             } else {

@@ -121,7 +121,7 @@ public class DraftsEditorController implements SearchablePane{
         folderTableView = catalogPatch.getFolderTableView();
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue instanceof Folder) {
-                if(folderTableView.isAltOn()){
+                if(folderTableView.getAltOnProperty().get()){
                     if(CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT)) updateListOfDrafts(newValue);
                 } else
                     updateListOfDrafts(newValue);
@@ -130,17 +130,20 @@ public class DraftsEditorController implements SearchablePane{
         });
 
         folderTableView.setOnMouseClicked(e->{
-            if((CH_CURRENT_USER_GROUP.isEditDrafts() && e.isAltDown() && e.getButton().equals(MouseButton.PRIMARY)) ||
-                    (!CH_CURRENT_USER_GROUP.isEditDrafts() && e.getButton().equals(MouseButton.PRIMARY)) ){
+            //Нажата правая клавиша мыши
+            boolean primaryBtn = e.getButton().equals(MouseButton.PRIMARY);
+            //Есть право редактировать чертежи
+            boolean editRights = CH_CURRENT_USER_GROUP.isEditDrafts();
+
+            if((editRights && primaryBtn && e.isAltDown()) || (!editRights && primaryBtn) ){
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if(selectedItem instanceof Folder){
-                    if(folderTableView.isAltOn()){
+                    if(folderTableView.getAltOnProperty().get()){
                         if(e.isAltDown()) updateListOfDrafts(selectedItem);
                     } else
                         updateListOfDrafts(selectedItem);
                 }
-                if((CH_CURRENT_USER_GROUP.isEditDrafts() && selectedItem instanceof ProductGroup) ||
-                        (!CH_CURRENT_USER_GROUP.isEditDrafts() && selectedItem instanceof ProductGroup && e.isAltDown())){
+                if((editRights && selectedItem instanceof ProductGroup) || (!editRights && selectedItem instanceof ProductGroup && e.isAltDown())){
                     List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
                     List<Folder> folders = new ArrayList<>();
                     for(ProductGroup pg : selectedGroups){

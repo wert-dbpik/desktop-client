@@ -88,7 +88,7 @@ public class PassportsEditorController implements SearchablePane{
                 BTN_TABLE_VIEW_IMG, "Открыть входящие чертежи",
                 false);
         btnCatalogOrTable.setOnAction(e->{
-            if(btnCatalogOrTable.getLogicProperty()) {
+            if(btnCatalogOrTable.getStateProperty().get()) {
                 stpDrafts.getChildren().clear();
                 Parent cat = catalogPatch.getCatalogOfFoldersPatch();
                 stpDrafts.getChildren().add(0, cat);

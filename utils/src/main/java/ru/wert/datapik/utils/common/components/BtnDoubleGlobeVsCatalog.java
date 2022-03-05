@@ -32,7 +32,7 @@ public class BtnDoubleGlobeVsCatalog{
                 initState);
         btnGlobalOrCatalog.setOnAction(e->{
             //Все комплекты чертежей
-            folderTableView.setGlobalOn(!btnGlobalOrCatalog.getLogicProperty());
+            folderTableView.setGlobalOn(!btnGlobalOrCatalog.getStateProperty().get());
             folderTableView.updateTableView();
         });
         return btnGlobalOrCatalog;
