@@ -27,3 +27,4 @@ client/client.iml
 /chogori/target
 /winform/target
 /client/target
+.idea/compiler.xml
