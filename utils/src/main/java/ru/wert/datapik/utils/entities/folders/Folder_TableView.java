@@ -211,7 +211,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
      * Обновляет таблицу независимо от выделения в TreeView
      */
     @Override
-    public void updateOnlyTableView(CatalogGroup selectedProductGroup) {
+    public void updateVisibleLeafOfTableView(CatalogGroup selectedProductGroup) {
 
         upwardTreeItemRow = catalogTree.findTreeItemById(selectedProductGroup.getId());
 

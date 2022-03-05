@@ -155,7 +155,7 @@ public class Material_TableView extends CatalogTableView<Material, MaterialGroup
      * @param selectedCatalogGroup
      */
     @Override
-    public void updateOnlyTableView(CatalogGroup selectedCatalogGroup) {
+    public void updateVisibleLeafOfTableView(CatalogGroup selectedCatalogGroup) {
 
     }
 

@@ -17,7 +17,7 @@ public interface CatalogableTable <T extends CatalogGroup>{
     /**
      * Обновляет таблицу независимо от выделения в TreeView
      */
-    void updateOnlyTableView(CatalogGroup selectedCatalogGroup);
+    void updateVisibleLeafOfTableView(CatalogGroup selectedCatalogGroup);
 
 
 }

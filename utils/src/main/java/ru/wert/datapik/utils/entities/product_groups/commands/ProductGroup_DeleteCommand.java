@@ -213,7 +213,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
                 treeView.getFocusModel().focus(row);
                 treeView.scrollTo(row);
                 int trow = ((ItemTableView<P>) tableView).getSelectionModel().getSelectedIndex();
-                ((CatalogableTable<? extends CatalogGroup>) tableView).updateOnlyTableView(selectedTreeItemInTable.getValue());
+                ((CatalogableTable<? extends CatalogGroup>) tableView).updateVisibleLeafOfTableView(selectedTreeItemInTable.getValue());
                 ((ItemTableView<P>) tableView).getSelectionModel().select(trow);
                 ((ItemTableView<P>) tableView).scrollTo(trow);
             }

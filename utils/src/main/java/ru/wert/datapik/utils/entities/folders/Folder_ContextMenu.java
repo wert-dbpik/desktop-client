@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
-import ru.wert.datapik.utils.common.commands.Catalogs;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
@@ -17,7 +16,6 @@ import ru.wert.datapik.utils.entities.product_groups.commands._ProductGroup_Comm
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
@@ -162,8 +160,12 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                 } else {
 
                     TablePosition<Item, Label> ts = tableView.getSelectionModel().getSelectedCells().get(0);
-
-                    String s = ((ts.getTableColumn().getCellData(0)).getText());
+                    TableColumn<Item, Label> col = ts.getTableColumn();
+                    String s = "";
+                    if(col != null){ //В этом месте выскакивает nullPointException, связанное с верхней строкой таблицы
+                        Label label = ts.getTableColumn().getCellData(0);
+                        s = label.getText();
+                    }
                     //Если строка элемента не является < . . . >
                     if (s.equals(UPWARD)) {
                         extraAddProductGroup = true;
@@ -223,7 +225,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     private void showFolderInCatalog(ActionEvent actionEvent) {
         Folder selectedFolder = (Folder)tableView.getSelectionModel().getSelectedItem();
         CH_SEARCH_FIELD.setText("");
-        tableView.updateOnlyTableView(selectedFolder.getProductGroup());
+        tableView.updateVisibleLeafOfTableView(selectedFolder.getProductGroup());
         int index = tableView.getItems().indexOf(selectedFolder);
 
         tableView.getSelectionModel().select(index);

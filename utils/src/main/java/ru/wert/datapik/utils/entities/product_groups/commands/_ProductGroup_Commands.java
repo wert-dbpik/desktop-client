@@ -104,7 +104,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
                 if(selectedTreeItemInTree != null && selectedTreeItemInTable.getValue().equals(selectedTreeItemInTree.getValue())) {
                     selectedTreeItemInTable = selectedTreeItemInTable.getParent();
                 }
-                catTableView.updateOnlyTableView(selectedTreeItemInTable.getValue());
+                catTableView.updateVisibleLeafOfTableView(selectedTreeItemInTable.getValue());
                 if (rowToBeSelectedAfterDeleting != null) {
                     tableView.getSelectionModel().select(rowToBeSelectedAfterDeleting);
                     tableView.scrollTo(rowToBeSelectedAfterDeleting);

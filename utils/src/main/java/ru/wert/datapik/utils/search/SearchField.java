@@ -2,7 +2,9 @@ package ru.wert.datapik.utils.search;
 
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.popups.PastePopup;
 
@@ -26,7 +28,13 @@ public class SearchField extends TextField {
                 searchedTableView.setSearchedText(newValue);
                 if (newValue.equals("")) {
                     setPromptText(promptText);
-                    searchedTableView.updateTableView();
+                    if(searchedTableView instanceof CatalogableTable){
+                        //При обновлении таблицы - части каталога - нужно учитывать верхний узел видимой
+                        CatalogableTable<? extends Item> catalogableTable = (CatalogableTable<? extends Item>) searchedTableView;
+                        CatalogGroup upwardTreeItemRow = catalogableTable.getUpwardTreeItemRow().getValue();
+                        ((CatalogableTable) searchedTableView).updateVisibleLeafOfTableView(upwardTreeItemRow);
+                    } else
+                        searchedTableView.updateTableView();
                 } else
                     ((Searchable<? extends Item>) searchedTableView).updateSearchedView();
 

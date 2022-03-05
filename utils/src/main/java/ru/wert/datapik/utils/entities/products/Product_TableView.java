@@ -106,7 +106,7 @@ public class Product_TableView extends  CatalogTableView<Product, ProductGroup>{
      * @param selectedCatalogGroup
      */
     @Override
-    public void updateOnlyTableView(CatalogGroup selectedCatalogGroup) {
+    public void updateVisibleLeafOfTableView(CatalogGroup selectedCatalogGroup) {
 
     }
 
