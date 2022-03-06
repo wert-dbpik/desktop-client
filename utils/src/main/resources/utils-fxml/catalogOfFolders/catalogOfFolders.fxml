@@ -51,7 +51,10 @@
                                     <Insets bottom="10.0" top="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label fx:id="lblSetOfDrafts1" text="  (+Alt)" />
+                              <Label fx:id="lblCurrentProductGroup" maxWidth="250.0" textFill="#4207f5">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin></Label>
                               <HBox fx:id="foldersButtons" alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                                  <padding>
                                     <Insets bottom="3.0" top="3.0" />

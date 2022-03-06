@@ -179,14 +179,9 @@ public class PassportsEditorController implements SearchablePane{
 
     }
 
-    @Override
+    @Override//SearchablePane
     public void tuneSearching() {
-//        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
-//        String searchedText = passportsTable.getSearchedText();
-//        if (searchedText.equals(""))
-//            CH_SEARCH_FIELD.setPromptText("ДЕЦИМАЛЬНЫЙ НОМЕР");
-//        else
-//            CH_SEARCH_FIELD.setSearchedText(passportsTable.getSearchedText());
+        Platform.runLater(()->passportsTable.requestFocus());
     }
 
 

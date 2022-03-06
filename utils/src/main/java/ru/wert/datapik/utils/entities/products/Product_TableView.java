@@ -91,12 +91,12 @@ public class Product_TableView extends  CatalogTableView<Product, ProductGroup>{
     }
 
     @Override
-    public TreeItem<ProductGroup> getUpwardTreeItemRow() {
+    public TreeItem<ProductGroup> getUpwardRow() {
         return null;
     }
 
     @Override
-    public void setUpwardTreeItemRow(TreeItem<ProductGroup> item) {
+    public void setUpwardRow(TreeItem<ProductGroup> item) {
 
     }
 

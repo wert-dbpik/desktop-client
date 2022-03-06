@@ -31,7 +31,7 @@ public class SearchField extends TextField {
                     if(searchedTableView instanceof CatalogableTable){
                         //При обновлении таблицы - части каталога - нужно учитывать верхний узел видимой
                         CatalogableTable<? extends Item> catalogableTable = (CatalogableTable<? extends Item>) searchedTableView;
-                        CatalogGroup upwardTreeItemRow = catalogableTable.getUpwardTreeItemRow().getValue();
+                        CatalogGroup upwardTreeItemRow = catalogableTable.getUpwardRow().getValue();
                         ((CatalogableTable) searchedTableView).updateVisibleLeafOfTableView(upwardTreeItemRow);
                     } else
                         searchedTableView.updateTableView();

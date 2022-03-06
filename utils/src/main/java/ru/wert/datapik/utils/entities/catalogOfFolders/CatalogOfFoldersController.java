@@ -1,36 +1,29 @@
 package ru.wert.datapik.utils.entities.catalogOfFolders;
 
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
-import ru.wert.datapik.client.interfaces.CatalogableItem;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.components.*;
-import ru.wert.datapik.utils.common.tableView.CatalogTableView;
-import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch;
-import ru.wert.datapik.utils.search.Searchable;
 
-import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class CatalogOfFoldersController {
@@ -52,6 +45,9 @@ public class CatalogOfFoldersController {
     @FXML
     private Label lblSetOfDrafts;
 
+    @FXML
+    private Label lblCurrentProductGroup;
+
     private ProductGroup_TreeView<Folder> catalogTreeView;
 
     @Getter private ItemTableView<Item> folderTableView;
@@ -69,11 +65,26 @@ public class CatalogOfFoldersController {
         createCatalogForms(useContextMenu);
 
         catalogTreeView.setConnectedForm(folderTableView);
-        createFolders_ToolBar();
-
         //Создаем панели инструментов
+        createFolders_ToolBar();
+        createFolders_Label();
         createCatalog_ToolBar();
 
+    }
+
+    private void createFolders_Label() {
+        lblCurrentProductGroup.setStyle("-fx-text-fill: darkblue; -fx-font-style: oblique;");
+        ObjectProperty<TreeItem<ProductGroup>> upwardProperty = ((Folder_TableView)folderTableView).getUpwardRowProperty();
+        String rootName = catalogTreeView.getRoot().getValue().getName();
+        upwardProperty.addListener((observable) -> {
+            StringBuilder sb = new StringBuilder("...");
+            TreeItem<ProductGroup> lastParent = upwardProperty.get(); // = newValue
+            while(!lastParent.getValue().getName().equals(rootName)){
+                sb.insert(0, lastParent.getValue().getName() + "/");
+                lastParent = lastParent.getParent();
+            }
+            lblCurrentProductGroup.setText(sb.toString());
+        });
     }
 
     public HBox getCatalogButtons() {

@@ -12,6 +12,8 @@ import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.Sorting;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
+import ru.wert.datapik.utils.entities.folders.Folder_ContextMenu;
+import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.passports.commands._Passport_Commands;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 
@@ -24,11 +26,11 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
 
     private static final String accWindowRes = "/utils-fxml/drafts/draftACC.fxml";
     private final _Passport_Commands commands;
-    private PreviewerPatchController previewerController;
+    @Getter private PreviewerPatchController previewerController;
     private String searchedText = "";
     private Object modifyingItem; //Product или Folder
     private List<Passport> currentItemList = new ArrayList<>();
-    private Passport_ACCController accController;
+    @Getter private Passport_ACCController accController;
     @Setter private Object modifyingClass;
 
 
@@ -108,8 +110,7 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
 
     @Override
     public void createContextMenu() {
-//        contextMenu = new Passport_ContextMenu(this, commands, accWindowRes);
-//        setContextMenu(contextMenu);
+        //Контекстного меню не предусмотрено
     }
 
     @Override
@@ -166,11 +167,6 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
         return modifyingItem;
     }
 
-    public PreviewerPatchController getPreviewerController(){
-        return previewerController;
-    }
-
-
     @Override
     public void sortItemList(List<Passport> list) {
         list.sort(draftsComparator());
@@ -212,7 +208,4 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
         this.accController = (Passport_ACCController) accController;
     }
 
-    public Passport_ACCController getAccController(){
-        return accController;
-    }
 }

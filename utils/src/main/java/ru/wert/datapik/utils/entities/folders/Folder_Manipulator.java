@@ -8,21 +8,17 @@ import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
-import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.Catalogs;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
-import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
-import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
 
 public class Folder_Manipulator {
 
@@ -105,11 +101,11 @@ public class Folder_Manipulator {
                 Item clickedItem = tableView.getSelectionModel().getSelectedItem();
 
                 if(clickedItem instanceof ProductGroup){
-                    if(clickedItem == tableView.getUpwardTreeItemRow().getValue()){ //Верхняя строка
+                    if(clickedItem == tableView.getUpwardRow().getValue()){ //Верхняя строка
                         prevRowData = clickedItem;
-                        tableView.setUpwardTreeItemRow(treeView.findTreeItemById(((ProductGroup) clickedItem).getParentId()));
+                        tableView.setUpwardRow(treeView.findTreeItemById(((ProductGroup) clickedItem).getParentId()));
                     } else {
-                        tableView.setUpwardTreeItemRow(treeView.findTreeItemById(clickedItem.getId()));
+                        tableView.setUpwardRow(treeView.findTreeItemById(clickedItem.getId()));
                     }
                     tableView.updateNow((ProductGroup) prevRowData);
                 }
@@ -196,7 +192,7 @@ public class Folder_Manipulator {
 
                 if(selectedItem == null)
                     //Если щелкнули по пустому месту
-                    selectedPG = tableView.getUpwardTreeItemRow().getValue();
+                    selectedPG = tableView.getUpwardRow().getValue();
                 else{
                     if(selectedItem instanceof ProductGroup)
                         selectedPG = (ProductGroup)selectedItem;
@@ -240,7 +236,7 @@ public class Folder_Manipulator {
             Item selectedItem = tableView.getSelectionModel().getSelectedItem();
             if(selectedItem instanceof ProductGroup){
                 ProductGroup selectedGroup = (ProductGroup)selectedItem;
-                if(selectedGroup == null) selectedItem = tableView.getUpwardTreeItemRow().getValue();
+                if(selectedGroup == null) selectedItem = tableView.getUpwardRow().getValue();
 
                 if(clazz.equals("PG")){
                     ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);

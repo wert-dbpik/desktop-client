@@ -100,7 +100,7 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
             treeView.scrollTo(selectedItemIndex - 1);
 
             if (catTableView != null) {
-                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getUpwardTreeItemRow();
+                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getUpwardRow();
                 if(selectedTreeItemInTree != null && selectedTreeItemInTable.getValue().equals(selectedTreeItemInTree.getValue())) {
                     selectedTreeItemInTable = selectedTreeItemInTable.getParent();
                 }

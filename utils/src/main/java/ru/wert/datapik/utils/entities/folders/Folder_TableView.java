@@ -1,7 +1,9 @@
 package ru.wert.datapik.utils.entities.folders;
 
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -33,11 +35,13 @@ import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Folder_TableView extends RoutineTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
 
+    @Getter private final ObjectProperty<TreeItem<ProductGroup>> upwardRowProperty = new SimpleObjectProperty<>();//Верхняя строка в таблице
+    public TreeItem<ProductGroup> getUpwardRow(){return this.upwardRowProperty.get();}
+    public void setUpwardRow(TreeItem<ProductGroup> upwardRowProperty){this.upwardRowProperty.set(upwardRowProperty);}
+
     @Getter private String accWindowRes = "/utils-fxml/folders/folderACC.fxml";
     private ItemCommands commands;
-
     private FormView_ACCController<Item> accController;
-    @Getter@Setter private TreeItem<ProductGroup> upwardTreeItemRow;//Верхняя строка в таблице
     @Getter private ProductGroup_TreeView<Item> catalogTree;
     @Getter private Folder_Manipulator manipulator;
     @Getter@Setter private Draft_TableView draftTable;
@@ -71,7 +75,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
      */
     public void plugContextMenuAndFolderManipulators(ProductGroup_TreeView catalogTree){
         this.catalogTree = catalogTree;
-        this.upwardTreeItemRow = catalogTree.getRoot();//Инициализируем upwardRow
+        this.upwardRowProperty.set(catalogTree.getRoot());//Инициализируем upwardRow
 
         manipulator = new Folder_Manipulator(this, catalogTree);
 
@@ -93,11 +97,11 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
 
                 if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     if(rowData instanceof ProductGroup){
-                        if(rowData.equals(upwardTreeItemRow.getValue())){ //Верхняя строка
+                        if(rowData.equals(upwardRowProperty.get().getValue())){ //Верхняя строка
                             prevRowData = rowData;
-                            upwardTreeItemRow = catalogTree.findTreeItemById(((ProductGroup) rowData).getParentId());
+                            upwardRowProperty.set(catalogTree.findTreeItemById(((ProductGroup) rowData).getParentId()));
                         } else {
-                            upwardTreeItemRow = catalogTree.findTreeItemById(rowData.getId());
+                            upwardRowProperty.set(catalogTree.findTreeItemById(rowData.getId()));
                         }
                         updateNow((ProductGroup) prevRowData);
                     }
@@ -129,7 +133,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         if(globalOn) updateWithGlobalOn();
         else {
             //Находим выделенный элемент в дереве каталогов
-            upwardTreeItemRow = catalogTree.getSelectionModel().getSelectedItem();
+            upwardRowProperty.set(catalogTree.getSelectionModel().getSelectedItem());
             updateNow(null);
         }
     }
@@ -160,8 +164,8 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
 
         List<Folder> foundFolders = new ArrayList<>();
 
-        List<ProductGroup> groups = catalogTree.findAllGroupChildren(upwardTreeItemRow);
-        groups.add(upwardTreeItemRow.getValue());
+        List<ProductGroup> groups = catalogTree.findAllGroupChildren(upwardRowProperty.get());
+        groups.add(upwardRowProperty.get().getValue());
 
         for(ProductGroup gr: groups){
             foundFolders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(gr.getId()));
@@ -183,13 +187,13 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
      */
     public void updateNow(ProductGroup prevGroupToBeSelected) {
         shownList = new ArrayList<>();
-        if (upwardTreeItemRow == null) upwardTreeItemRow = catalogTree.getRoot();
-        ProductGroup selectedGroup = upwardTreeItemRow.getValue();
+        if (upwardRowProperty.get() == null) upwardRowProperty.set(catalogTree.getRoot());
+        ProductGroup selectedGroup = upwardRowProperty.get().getValue();
         //Добавим верхнюю строку в список, потом она превратится в троеточие
         //Корневой элемент в список не добавляем
-        if(upwardTreeItemRow != catalogTree.getRoot())
-            shownList.add(upwardTreeItemRow.getValue());
-        List<TreeItem<ProductGroup>> children = upwardTreeItemRow.getChildren();
+        if(upwardRowProperty.get() != catalogTree.getRoot())
+            shownList.add(upwardRowProperty.get().getValue());
+        List<TreeItem<ProductGroup>> children = upwardRowProperty.get().getChildren();
         for (TreeItem<ProductGroup> ti : children) {
             shownList.add(ti.getValue());
         }
@@ -213,15 +217,15 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
     @Override
     public void updateVisibleLeafOfTableView(CatalogGroup selectedProductGroup) {
 
-        upwardTreeItemRow = catalogTree.findTreeItemById(selectedProductGroup.getId());
+        upwardRowProperty.set(catalogTree.findTreeItemById(selectedProductGroup.getId()));
 
         List<Item> items = new ArrayList<>();
-        ProductGroup selectedGroup = upwardTreeItemRow.getValue();
+        ProductGroup selectedGroup = upwardRowProperty.get().getValue();
         //Добавим верхнюю строку в список, потом она превратится в троеточие
         //Корневой элемент в список не добавляем
-        if(upwardTreeItemRow != catalogTree.getRoot())
-            items.add(upwardTreeItemRow.getValue());
-        List<TreeItem<ProductGroup>> children = upwardTreeItemRow.getChildren();
+        if(upwardRowProperty.get() != catalogTree.getRoot())
+            items.add(upwardRowProperty.get().getValue());
+        List<TreeItem<ProductGroup>> children = upwardRowProperty.get().getChildren();
         for (TreeItem<ProductGroup> ti : children) {
             items.add(ti.getValue());
         }
@@ -254,7 +258,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
             Label label = new Label();
             Item item = cd.getValue();
             if(item instanceof ProductGroup) {
-                if(item.equals(upwardTreeItemRow.getValue())){
+                if(item.equals(upwardRowProperty.get().getValue())){
                     label.setText(UPWARD);
                 }else {
                     label.setText(item.toUsefulString());

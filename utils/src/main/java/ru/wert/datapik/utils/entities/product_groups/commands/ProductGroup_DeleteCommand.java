@@ -204,7 +204,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
     private void update(int row) {
 
         Platform.runLater(() -> {
-            TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getUpwardTreeItemRow();
+            TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getUpwardRow();
             treeView.updateView();
             if (tableView == null) {
                 treeView.getSelectionModel().select(row);
