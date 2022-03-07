@@ -25,7 +25,6 @@ public class BtnDoubleGlobeVsCatalog{
         btnGlobalOrCatalog = new BtnDouble(
                 BTN_CATALOG_IMG, "Каталог",
                 BTN_GLOBE_IMG, "Все комплекты чертежей",
-
                 initState);
 
         btnGlobalOrCatalog.getStateProperty().addListener((observable) -> {

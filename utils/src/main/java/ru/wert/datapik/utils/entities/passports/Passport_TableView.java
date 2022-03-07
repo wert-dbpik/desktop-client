@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.passports;
 
+import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
@@ -12,8 +13,6 @@ import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.Sorting;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
-import ru.wert.datapik.utils.entities.folders.Folder_ContextMenu;
-import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.passports.commands._Passport_Commands;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 
@@ -21,17 +20,22 @@ import java.util.*;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PASSPORTS;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Passport_TableView extends RoutineTableView<Passport> implements Sorting<Passport> {
 
     private static final String accWindowRes = "/utils-fxml/drafts/draftACC.fxml";
     private final _Passport_Commands commands;
     @Getter private PreviewerPatchController previewerController;
-    private String searchedText = "";
+
     private Object modifyingItem; //Product или Folder
-    private List<Passport> currentItemList = new ArrayList<>();
     @Getter private Passport_ACCController accController;
     @Setter private Object modifyingClass;
+
+    private List<Passport> shownList = new ArrayList<>(); //Лист карточек, отображаемых в таблице сейчас
+    @Getter@Setter private String searchedText = "";
+
+    @Getter@Setter private List<Folder> selectedFolders;
 
 
     private TableColumn<Passport, String> tcId;
@@ -63,8 +67,9 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
         //Создаем изначальное контекстное меню, чтобы оно могло открыться при клике в пустом месте
         if(useContextMenu) createContextMenu();
 
-
-
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "КАРТОЧКА");
+        });
     }
 
     /**
@@ -115,31 +120,53 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
 
     @Override
     public List<Passport> prepareList() {
+//        List<Passport> list = new ArrayList<>();
+//        if(modifyingClass instanceof Folder){
+//            if(modifyingItem == null)
+//                list = CH_QUICK_PASSPORTS.findAll();
+//            else {
+//                List<Draft> listOfDrafts = CH_QUICK_DRAFTS.findAllByFolder((Folder)modifyingItem);
+//                Set<Passport> passports = new HashSet<>();
+//                for(Draft d : listOfDrafts){
+//                    passports.add(d.getPassport());
+//                }
+//                list = new ArrayList<>(passports);
+//            }
+//        }
+//
+//        return list;
+
         List<Passport> list = new ArrayList<>();
         if(modifyingClass instanceof Folder){
-            if(modifyingItem == null)
-                list = CH_QUICK_PASSPORTS.findAll();
-            else {
-                List<Draft> listOfDrafts = CH_QUICK_DRAFTS.findAllByFolder((Folder)modifyingItem);
-                Set<Passport> passports = new HashSet<>();
-                for(Draft d : listOfDrafts){
-                    passports.add(d.getPassport());
+            if(selectedFolders == null || selectedFolders.isEmpty()) {
+                if (modifyingItem == null)
+                    list = CH_QUICK_PASSPORTS.findAll();
+                else {
+                    list = new ArrayList<>(findPassportsInFolder((Folder)modifyingItem));
                 }
-                list = new ArrayList<>(passports);
+            } else {
+                for(Folder folder: selectedFolders){
+                    list.addAll(findPassportsInFolder(folder));
+                }
+                selectedFolders = null;
             }
         }
 
         return list;
     }
 
-    @Override
-    public void setSearchedText(String searchedText) {
-        this.searchedText = searchedText;
-    }
-
-    @Override
-    public String getSearchedText() {
-        return searchedText;
+    /**
+     * Метод находит пасспорта в нужной папке, пасспорта не должны повторяться, поэтому используется Set<Passport>
+     * @param folder Folder
+     * @return Set<Passport>
+     */
+    private Set<Passport> findPassportsInFolder(Folder folder){
+        Set<Passport> foundPassports = new HashSet<>();
+        List<Draft> listOfDrafts = CH_QUICK_DRAFTS.findAllByFolder(folder);
+        for(Draft d : listOfDrafts){
+            foundPassports.add(d.getPassport());
+        }
+        return foundPassports;
     }
 
     @Override
@@ -196,12 +223,12 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
 
     @Override //Searchable
     public List<Passport> getCurrentItemSearchedList() {
-        return currentItemList;
+        return shownList;
     }
 
     @Override //Searchable
     public void setCurrentItemSearchedList(List<Passport> currentItemList) {
-        this.currentItemList = currentItemList;
+        this.shownList = currentItemList;
     }
 
     public void setAccController(FormView_ACCController<Passport> accController){

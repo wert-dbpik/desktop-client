@@ -6,11 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
+import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.tabs.SearchablePane;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -29,11 +31,13 @@ import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
-import static ru.wert.datapik.utils.toolpane.ChogoriToolBar.*;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSED;
 
 
 @Slf4j
@@ -68,11 +72,11 @@ public class PassportsEditorController implements SearchablePane{
 
         loadStpPreviewer(); //Предпросмотр инициализируется до Чертежей!
 
-        loadStpDrafts(); //Чертежи
+        loadStackPaneDrafts(); //Чертежи
 
-        loadStpCatalog(); //Каталог
+        loadStackPaneCatalog(); //Каталог
 
-        loadStpPassports(); //Пасспорта
+        loadStackPanePassports(); //Пасспорта
 
     }
 
@@ -103,7 +107,7 @@ public class PassportsEditorController implements SearchablePane{
     /**
      * Создаем таблицу ЧЕРТЕЖЕЙ
      */
-    private void loadStpDrafts() {
+    private void loadStackPaneDrafts() {
 
         draftPatch = new Draft_Patch().create();
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
@@ -134,7 +138,7 @@ public class PassportsEditorController implements SearchablePane{
     /**
      * Создаем таблицу ИДЕНТИФИКАТОРОВ
      */
-    private void loadStpPassports() {
+    private void loadStackPanePassports() {
 
         passportsPatch = new Passport_Patch().create();
         Passport_PatchController passportPatchController = passportsPatch.getPassportPatchController();
@@ -161,22 +165,60 @@ public class PassportsEditorController implements SearchablePane{
     /**
      * Создаем каталог ИЗДЕЛИЙ
      */
-    private void loadStpCatalog() {
+    private void loadStackPaneCatalog() {
         catalogPatch = new CatalogOfFoldersPatch().create();
 
         //Подключаем слушатель
         Folder_TableView folderTableView = catalogPatch.getFolderTableView();
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue instanceof Folder) {
-                passportsTable.setSearchedText(""); //обнуляем поисковую строку
-                passportsTable.setModifyingItem(newValue);
-                passportsTable.updateView();
+            if(newValue instanceof Folder) {
+                if(folderTableView.getAltOnProperty().get()){
+                    if(CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT))
+                        updateListOfPassports(newValue);
+                } else
+                    updateListOfPassports(newValue);
+
+            }
+        });
+
+        folderTableView.setOnMouseClicked(e->{
+            //Нажата правая клавиша мыши
+            boolean primaryBtn = e.getButton().equals(MouseButton.PRIMARY);
+            //Есть право редактировать чертежи
+            boolean editRights = CH_CURRENT_USER_GROUP.isEditDrafts();
+
+            if((editRights && primaryBtn && e.isAltDown()) || (!editRights && primaryBtn) ){
+                Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
+                if(selectedItem instanceof Folder){
+                    if(folderTableView.getAltOnProperty().get()){
+                        if(e.isAltDown()) updateListOfPassports(selectedItem);
+                    } else
+                        updateListOfPassports(selectedItem);
+                }
+                if((editRights && selectedItem instanceof ProductGroup) || (!editRights && selectedItem instanceof ProductGroup && e.isAltDown())){
+                    List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
+                    List<Folder> folders = new ArrayList<>();
+                    for(ProductGroup pg : selectedGroups){
+                        folders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(pg.getId()));
+                    }
+                    if(folders.isEmpty()) return;
+                    passportsTable.setSelectedFolders(folders);
+                    passportsTable.updateRoutineTableView();
+                }
+
             }
         });
 
         catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
 
+    }
+
+    private void updateListOfPassports(Item newValue) {
+        passportsTable.setSelectedFolders(Collections.singletonList((Folder) newValue));
+        passportsTable.setSearchedText(""); //обнуляем поисковую строку
+        passportsTable.setModifyingItem(newValue);
+        passportsTable.updateView();
     }
 
     @Override//SearchablePane

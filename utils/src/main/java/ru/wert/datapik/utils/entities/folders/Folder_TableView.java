@@ -45,11 +45,12 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
     @Getter private ProductGroup_TreeView<Item> catalogTree;
     @Getter private Folder_Manipulator manipulator;
     @Getter@Setter private Draft_TableView draftTable;
+
     private List<Item> shownList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас
     @Getter@Setter private String searchedText = "";
 
     private Folder_ContextMenu contextMenu;
-    @Getter private boolean useContextMenu;
+    @Getter private final boolean useContextMenu;
 
     public Folder_TableView(String prompt, boolean useContextMenu) {
         super(prompt);
@@ -129,7 +130,6 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
      */
     @Override
     public void updateTableView() {
-//        searchedText = CH_SEARCH_FIELD.getText();
         if(globalOnProperty.get()) updateWithGlobalOn();
         else {
             //Находим выделенный элемент в дереве каталогов
@@ -144,7 +144,6 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
     private void updateWithGlobalOn(){
         Platform.runLater(()->{
             ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
-//            ObservableList<Item> items = FXCollections.observableArrayList();
             shownList = new ArrayList<>();
             for(Folder folder: folders){
                 shownList.add((Item)folder);

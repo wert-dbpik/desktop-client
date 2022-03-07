@@ -122,7 +122,8 @@ public class DraftsEditorController implements SearchablePane{
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue instanceof Folder) {
                 if(folderTableView.getAltOnProperty().get()){
-                    if(CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT)) updateListOfDrafts(newValue);
+                    if(CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT))
+                        updateListOfDrafts(newValue);
                 } else
                     updateListOfDrafts(newValue);
 

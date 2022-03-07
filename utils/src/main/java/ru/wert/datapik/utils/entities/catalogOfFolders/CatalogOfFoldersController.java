@@ -158,18 +158,22 @@ public class CatalogOfFoldersController {
      */
     private void createFolders_ToolBar(){
 
+        //Кнопка ALT_ON
         BtnDoubleAlt<Item> btnDoubleAlt = new BtnDoubleAlt<Item>(folderTableView, false);
         Button btnAltOn = btnDoubleAlt.create();
         folderTableView.getAltOnProperty().bindBidirectional(btnDoubleAlt.getStateProperty());
 
-        //Устанавливаем начальное значение
+        //Устанавливаем начальное значение altOn в контроллере
         btnDoubleAlt.getStateProperty().set(true);
 
-        BtnDoubleGlobeVsCatalog btnDouble = new BtnDoubleGlobeVsCatalog(folderTableView, false);
-        Button btnGlobeVsCatalog = btnDouble.create();
-        btnDouble.getStateProperty().bindBidirectional(folderTableView.getGlobalOnProperty());
+        //Кнопка переключения режимов GLOBE/CATALOG
+        BtnDoubleGlobeVsCatalog btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView, false);
+        Button btnGlobeVsCatalog = btnDoubleGlobeVsCatalog.create();
+        btnDoubleGlobeVsCatalog.getStateProperty().bindBidirectional(folderTableView.getGlobalOnProperty());
 
-        btnDouble.getStateProperty().set(true);
+        //Устанавливаем начальное значение globalOn в контроллере
+        //Значение получилось перевернутым true - показывает Каталог
+        btnDoubleGlobeVsCatalog.getStateProperty().set(true);
 
         foldersButtons.getChildren().addAll(btnAltOn, btnGlobeVsCatalog);
     }

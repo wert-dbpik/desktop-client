@@ -9,6 +9,7 @@ import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.search.Searchable;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_GLOBE_IMG;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 /**
  * Класс описывает кнопку при нажатии на которую выводятся все доступные элементы сущности
@@ -24,6 +25,7 @@ public class BtnGlobe<P extends Item> extends Button {
 
         if(view instanceof RoutineTableView) {
             setOnAction((e) -> {
+                CH_SEARCH_FIELD.setText("");
                 view.setSearchedText("");
                 ((RoutineTableView<P>) view).setModifyingItem(null);
                 view.updateView();
