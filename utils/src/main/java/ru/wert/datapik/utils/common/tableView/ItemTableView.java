@@ -29,7 +29,11 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
 
     @Getter@Setter protected String searchedText; //Искомый текст
 
-    @Getter@Setter protected boolean globalOn; //Режим всеобщего представления вкл
+    protected BooleanProperty globalOnProperty = new SimpleBooleanProperty(); //Режим всеобщего представления вкл
+    public BooleanProperty getGlobalOnProperty(){return globalOnProperty;}
+    public boolean isGlobalOn(){return this.globalOnProperty.get();}
+    public void setGlobalOn(boolean globalOn){this.globalOnProperty.set(globalOn);}
+
 
 
 

@@ -51,9 +51,9 @@
                                     <Insets bottom="10.0" top="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label fx:id="lblCurrentProductGroup" maxWidth="250.0" textFill="#4207f5">
+                              <Label fx:id="lblCurrentProductGroup" maxWidth="300.0" text="..." textFill="#4207f5">
                                  <HBox.margin>
-                                    <Insets left="5.0" />
+                                    <Insets left="10.0" />
                                  </HBox.margin></Label>
                               <HBox fx:id="foldersButtons" alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                                  <padding>

@@ -2,7 +2,6 @@ package ru.wert.datapik.utils.entities.catalogOfFolders;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,7 +10,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
@@ -67,9 +65,8 @@ public class CatalogOfFoldersController {
         catalogTreeView.setConnectedForm(folderTableView);
         //Создаем панели инструментов
         createFolders_ToolBar();
-        createFolders_Label();
         createCatalog_ToolBar();
-
+        createFolders_Label();
     }
 
     private void createFolders_Label() {
@@ -77,13 +74,15 @@ public class CatalogOfFoldersController {
         ObjectProperty<TreeItem<ProductGroup>> upwardProperty = ((Folder_TableView)folderTableView).getUpwardRowProperty();
         String rootName = catalogTreeView.getRoot().getValue().getName();
         upwardProperty.addListener((observable) -> {
-            StringBuilder sb = new StringBuilder("...");
-            TreeItem<ProductGroup> lastParent = upwardProperty.get(); // = newValue
-            while(!lastParent.getValue().getName().equals(rootName)){
-                sb.insert(0, lastParent.getValue().getName() + "/");
-                lastParent = lastParent.getParent();
+            if(folderTableView.isGlobalOn() && upwardProperty.get() != null) {
+                StringBuilder sb = new StringBuilder("...");
+                TreeItem<ProductGroup> lastParent = upwardProperty.get(); // = newValue
+                while (!lastParent.getValue().getName().equals(rootName)) {
+                    sb.insert(0, lastParent.getValue().getName() + "/");
+                    lastParent = lastParent.getParent();
+                }
+                lblCurrentProductGroup.setText(sb.toString());
             }
-            lblCurrentProductGroup.setText(sb.toString());
         });
     }
 
@@ -166,10 +165,13 @@ public class CatalogOfFoldersController {
         //Устанавливаем начальное значение
         btnDoubleAlt.getStateProperty().set(true);
 
-        Button btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView, false).create();
+        BtnDoubleGlobeVsCatalog btnDouble = new BtnDoubleGlobeVsCatalog(folderTableView, false);
+        Button btnGlobeVsCatalog = btnDouble.create();
+        btnDouble.getStateProperty().bindBidirectional(folderTableView.getGlobalOnProperty());
 
+        btnDouble.getStateProperty().set(true);
 
-        foldersButtons.getChildren().addAll(btnAltOn, btnDoubleGlobeVsCatalog);
+        foldersButtons.getChildren().addAll(btnAltOn, btnGlobeVsCatalog);
     }
 
 

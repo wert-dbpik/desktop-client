@@ -130,7 +130,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
     @Override
     public void updateTableView() {
 //        searchedText = CH_SEARCH_FIELD.getText();
-        if(globalOn) updateWithGlobalOn();
+        if(globalOnProperty.get()) updateWithGlobalOn();
         else {
             //Находим выделенный элемент в дереве каталогов
             upwardRowProperty.set(catalogTree.getSelectionModel().getSelectedItem());
