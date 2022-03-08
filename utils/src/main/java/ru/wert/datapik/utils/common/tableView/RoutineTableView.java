@@ -24,10 +24,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
     public abstract void setCurrentItemSearchedList(List<P> currentItemList);
     @Override//Searchable
     public abstract List<P> getCurrentItemSearchedList();
-//    @Override//Searchable
-//    public abstract void setSearchedText(String searchedText);
-//    @Override//Searchable
-//    public abstract String getSearchedText();
+
 
     public RoutineTableView(String promptText) {
         super(promptText);
@@ -59,7 +56,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
         List<P> foundList = new ArrayList<>();
         String searchedText = CH_SEARCH_FIELD.getText();
         for(P item : list){
-            if(item.toUsefulString().contains(searchedText))
+            if(item.toUsefulString().toLowerCase().contains(searchedText.toLowerCase()))
                 foundList.add(item);
         }
         updateForm(foundList);
@@ -72,13 +69,10 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
     public void easyUpdate(ItemService<P> service) {
         getItems().clear();
         refresh();
-        String searchedText = getSearchedText();
-//        if (searchedText == null || searchedText.equals(""))
         List<P> list = service.findAll();
         setItems(FXCollections.observableArrayList(list));
         setCurrentItemSearchedList(list);
-//        else
-//            setItems(service.findAllByText(searchedText));
+
     }
 
     @Override //IFormView
@@ -86,24 +80,4 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
         return getSelectionModel().getSelectedItems();
     }
 
-    /**
-     * Устаналивает FocusListener на таблицу
-     * При получении фокуса в поле SearchField появляется подсказка searchName,
-     * либо последняя набранная в SearchField строка searchedText
-     */
-//    private void createFocusListener() {
-//        focusedProperty().addListener((observable) -> {
-//
-//            CH_SEARCH_FIELD.setSearchableTableController(this);
-//
-//            if (getSearchedText() == null || getSearchedText().equals("")) {
-//                CH_SEARCH_FIELD.setText("");
-//                CH_SEARCH_FIELD.setPromptText(promptItemName);
-//            } else {
-//                CH_SEARCH_FIELD.setText(getSearchedText());
-//            }
-//
-//        });
-//
-//    }
 }

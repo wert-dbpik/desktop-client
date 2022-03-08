@@ -34,11 +34,6 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
     public boolean isGlobalOn(){return this.globalOnProperty.get();}
     public void setGlobalOn(boolean globalOn){this.globalOnProperty.set(globalOn);}
 
-
-
-
-
-
     public ItemTableView(String promptText) {
         this.promptItemName = promptText;
 

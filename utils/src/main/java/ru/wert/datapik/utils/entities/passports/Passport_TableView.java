@@ -120,21 +120,6 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
 
     @Override
     public List<Passport> prepareList() {
-//        List<Passport> list = new ArrayList<>();
-//        if(modifyingClass instanceof Folder){
-//            if(modifyingItem == null)
-//                list = CH_QUICK_PASSPORTS.findAll();
-//            else {
-//                List<Draft> listOfDrafts = CH_QUICK_DRAFTS.findAllByFolder((Folder)modifyingItem);
-//                Set<Passport> passports = new HashSet<>();
-//                for(Draft d : listOfDrafts){
-//                    passports.add(d.getPassport());
-//                }
-//                list = new ArrayList<>(passports);
-//            }
-//        }
-//
-//        return list;
 
         List<Passport> list = new ArrayList<>();
         if(modifyingClass instanceof Folder){
