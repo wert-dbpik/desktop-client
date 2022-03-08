@@ -54,6 +54,7 @@ public class DraftsEditorController implements SearchablePane{
     private SplitPane sppHorizontal;
 
     private Draft_TableView draftsTable;
+    private Draft_PatchController draftPatchController;
     private PreviewerPatchController previewerController;
     private Label lblDraftInfo;
     private Folder_TableView folderTableView;
@@ -94,7 +95,7 @@ public class DraftsEditorController implements SearchablePane{
     private void createDraftsTable() {
 
         Draft_Patch draftPatch = new Draft_Patch().create();
-        Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
+        draftPatchController = draftPatch.getDraftPatchController();
 
         draftPatchController.initDraftsTableView(previewerController, new Folder(), SelectionMode.MULTIPLE);
         draftsTable = draftPatchController.getDraftsTable();
@@ -140,11 +141,13 @@ public class DraftsEditorController implements SearchablePane{
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if(selectedItem instanceof Folder){
                     if(folderTableView.getAltOnProperty().get()){
-                        if(e.isAltDown()) updateListOfDrafts(selectedItem);
+                        if(e.isAltDown())
+                            updateListOfDrafts(selectedItem);
                     } else
                         updateListOfDrafts(selectedItem);
                 }
                 if((editRights && selectedItem instanceof ProductGroup) || (!editRights && selectedItem instanceof ProductGroup && e.isAltDown())){
+                    draftPatchController.showSourceOfPassports(selectedItem);
                     List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
                     List<Folder> folders = new ArrayList<>();
                     for(ProductGroup pg : selectedGroups){
@@ -167,6 +170,7 @@ public class DraftsEditorController implements SearchablePane{
     }
 
     private void updateListOfDrafts(Item newValue) {
+        draftPatchController.showSourceOfPassports(newValue);
         draftsTable.setSelectedFolders(Collections.singletonList((Folder) newValue));
         draftsTable.setSearchedText(""); //обнуляем поисковую строку
         draftsTable.setModifyingItem(newValue);

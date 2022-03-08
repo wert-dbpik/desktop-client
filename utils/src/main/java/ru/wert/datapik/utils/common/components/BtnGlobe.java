@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.tableView.CatalogTableView;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
+import ru.wert.datapik.utils.entities.passports.Passport_TableView;
 import ru.wert.datapik.utils.search.Searchable;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_GLOBE_IMG;

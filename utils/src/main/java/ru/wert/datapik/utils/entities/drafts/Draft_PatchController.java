@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.utils.common.components.*;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
@@ -28,6 +30,9 @@ public class Draft_PatchController {
 
     @FXML
     private Label lblShownFolder;
+
+    @FXML
+    private Label lblSourceOfDrafts;
 
 
     @Getter private Draft_TableView draftsTable;
@@ -49,6 +54,8 @@ public class Draft_PatchController {
         this.modifyingClass = modifyingClass;
         this.mode = mode;
 
+        lblSourceOfDrafts.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
+
         createDraftTableView();
 
     }
@@ -60,6 +67,21 @@ public class Draft_PatchController {
         this.useBtnAltSwitcher = btnAltSwitcher;
 
         createDraftToolBar();
+    }
+
+    /**
+     * Выводится папка в каталоге или комплект, куда входят найденные записи
+     * @param source Object
+     */
+    public void showSourceOfPassports(Object source){
+        if(source != null){
+            if(source instanceof Folder)
+                lblSourceOfDrafts.setText(((Folder) source).getName());
+            else if(source instanceof ProductGroup)
+                lblSourceOfDrafts.setText(((ProductGroup) source).getName());
+        } else {
+            lblSourceOfDrafts.setText("");
+        }
     }
 
     private void createDraftTableView() {

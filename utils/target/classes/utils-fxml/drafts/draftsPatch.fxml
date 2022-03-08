@@ -13,13 +13,18 @@
          <children>
             <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
                <children>
-                  <Label fx:id="lblShownFolder" text="ДОСТУПНЫЕ ЧЕРТЕЖИ">
+                  <Label fx:id="lblShownFolder" text="ЧЕРТЕЖИ">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
                      <VBox.margin>
                         <Insets bottom="10.0" top="5.0" />
                      </VBox.margin>
+                  </Label>
+                  <Label fx:id="lblSourceOfDrafts">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
                   </Label>
                   <HBox fx:id="hboxDraftsButtons" alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                      <padding>

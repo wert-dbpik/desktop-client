@@ -57,6 +57,7 @@ public class Draft_Columns {
         });
 
         tcPassport.setMinWidth(150);
+        tcPassport.setMaxWidth(5000);
         return tcPassport;
     };
 
@@ -90,7 +91,8 @@ public class Draft_Columns {
             return new ReadOnlyObjectWrapper<>(lblNumber);
 
         });
-        tcDraftNumber.setMinWidth(150);
+        tcDraftNumber.setMinWidth(100);
+        tcDraftNumber.setMaxWidth(5000);
         return tcDraftNumber;
     }
 
@@ -109,7 +111,8 @@ public class Draft_Columns {
             return new ReadOnlyObjectWrapper<>(lblName);
 
         });
-        tcDraftName.setMinWidth(150);
+        tcDraftName.setMinWidth(120);
+        tcDraftName.setMaxWidth(5000);
         return tcDraftName;
     }
 
@@ -145,6 +148,7 @@ public class Draft_Columns {
         });
         tcStatus.setStyle("-fx-alignment: CENTER;");
         tcStatus.setMinWidth(10);//100
+        tcStatus.setMaxWidth(5000);
         return tcStatus;
     };
 
@@ -156,6 +160,7 @@ public class Draft_Columns {
         tcFolder.setCellValueFactory(new PropertyValueFactory<>("folder"));
         tcFolder.setStyle("-fx-alignment: CENTER;");
         tcFolder.setMinWidth(10);//120
+        tcFolder.setMaxWidth(5000);
         return tcFolder;
     };
 
@@ -167,6 +172,7 @@ public class Draft_Columns {
         tcInitialDraftName.setCellValueFactory(new PropertyValueFactory<>("initialDraftName"));
         tcInitialDraftName.setStyle("-fx-alignment: CENTER;");
         tcInitialDraftName.setMinWidth(10);//120
+        tcInitialDraftName.setMaxWidth(5000);
         return tcInitialDraftName;
     };
 
@@ -185,6 +191,7 @@ public class Draft_Columns {
         });
         tcDraftType.setSortable(false);
         tcDraftType.setMinWidth(10);//80
+        tcDraftType.setMaxWidth(5000);
         tcDraftType.setStyle("-fx-alignment: CENTER;");
         return tcDraftType;
     };
@@ -202,6 +209,7 @@ public class Draft_Columns {
 
         tcCreation.setStyle("-fx-alignment: CENTER;");
         tcCreation.setMinWidth(10);//120
+        tcCreation.setMaxWidth(5000);
         return tcCreation;
     };
 
@@ -214,6 +222,7 @@ public class Draft_Columns {
         TableColumn<Draft, String> tcNote = new TableColumn<>("Примечание");
         tcNote.setCellValueFactory(new PropertyValueFactory<>("note"));
         tcNote.setMinWidth(10);//120
+        tcNote.setMaxWidth(5000);
         tcNote.setSortable(false);
         return tcNote;
     };

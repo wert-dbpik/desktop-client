@@ -4,6 +4,7 @@ package ru.wert.datapik.chogori.application.passports;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.KeyCode;
@@ -58,6 +59,8 @@ public class PassportsEditorController implements SearchablePane{
 
     @FXML
     private StackPane stpDrafts;
+
+    private Label lblSourceOfPassports;
 
     private Passport_TableView passportsTable;
     private PreviewerPatchController previewerPatchController;
@@ -199,11 +202,13 @@ public class PassportsEditorController implements SearchablePane{
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if(selectedItem instanceof Folder){
                     if(folderTableView.getAltOnProperty().get()){
-                        if(e.isAltDown()) updateListOfPassports(selectedItem);
+                        if(e.isAltDown())
+                            updateListOfPassports(selectedItem);
                     } else
                         updateListOfPassports(selectedItem);
                 }
                 if((editRights && selectedItem instanceof ProductGroup) || (!editRights && selectedItem instanceof ProductGroup && e.isAltDown())){
+                    passportsPatch.getPassportPatchController().showSourceOfPassports(selectedItem);
                     List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
                     List<Folder> folders = new ArrayList<>();
                     for(ProductGroup pg : selectedGroups){
@@ -219,10 +224,14 @@ public class PassportsEditorController implements SearchablePane{
 
         catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
-
     }
 
+
+
+
     private void updateListOfPassports(Item newValue) {
+        passportsPatch.getPassportPatchController().showSourceOfPassports(newValue);
+
         passportsTable.setSelectedFolders(Collections.singletonList((Folder) newValue));
         passportsTable.setSearchedText(""); //обнуляем поисковую строку
         passportsTable.setModifyingItem(newValue);

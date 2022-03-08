@@ -1,18 +1,19 @@
 package ru.wert.datapik.utils.entities.passports;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.utils.common.components.BtnGlobe;
+import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.utils.common.components.BtnMenuPassportsColumns;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 
+import static ru.wert.datapik.utils.images.BtnImages.BTN_GLOBE_IMG;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Passport_PatchController {
@@ -23,6 +24,9 @@ public class Passport_PatchController {
 
     @FXML
     private VBox vboxPassports;
+
+    @FXML
+    private Label lblSourceOfPassports;
 
     @Getter private Passport_TableView passportsTable;
     private PreviewerPatchController previewerController;
@@ -44,8 +48,25 @@ public class Passport_PatchController {
         this.mode = mode;
         this.useContextMenu = useContextMenu;
 
+        lblSourceOfPassports.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
+
         createPassportTableView();
 
+    }
+
+    /**
+     * Выводится папка в каталоге или комплект, куда входят найденные записи
+     * @param source Object
+     */
+    public void showSourceOfPassports(Object source){
+        if(source != null){
+            if(source instanceof Folder)
+                lblSourceOfPassports.setText(((Folder) source).getName());
+            else if(source instanceof ProductGroup)
+                lblSourceOfPassports.setText(((ProductGroup) source).getName());
+        } else {
+            lblSourceOfPassports.setText("");
+        }
     }
 
     public void initPassportsToolBar(boolean btnPassportsGlobe, boolean btnShowColumns){
@@ -72,7 +93,17 @@ public class Passport_PatchController {
     private void createPassportToolBar() {
 
         //Кнопка ПОКАЗАТЬ ВСЕ
-        Button btnPassportsGlobe = new BtnGlobe<>(passportsTable);
+        Button btnPassportsGlobe = new Button();
+        btnPassportsGlobe.setId("patchButton");
+        btnPassportsGlobe.setGraphic(new ImageView(BTN_GLOBE_IMG));
+        btnPassportsGlobe.setTooltip(new Tooltip("Показать все"));
+        btnPassportsGlobe.setOnAction((e) -> {
+            lblSourceOfPassports.setText("...");
+            CH_SEARCH_FIELD.setText("");
+            passportsTable.setSearchedText("");
+            passportsTable.setModifyingItem(null);
+            passportsTable.updateView();
+        });
 
         //Кнопка ПОКАЗАТЬ ФИЛЬТР
 //        btnShowFilter = new BtnMenuDraftsFilter(passportsTable);

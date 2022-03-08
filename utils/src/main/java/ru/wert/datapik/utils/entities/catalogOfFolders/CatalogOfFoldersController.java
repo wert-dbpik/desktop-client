@@ -70,7 +70,8 @@ public class CatalogOfFoldersController {
     }
 
     private void createFolders_Label() {
-        lblCurrentProductGroup.setStyle("-fx-text-fill: darkblue; -fx-font-style: oblique;");
+//        lblCurrentProductGroup.setStyle("-fx-text-fill: darkblue; -fx-font-style: oblique;");
+        lblCurrentProductGroup.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
         ObjectProperty<TreeItem<ProductGroup>> upwardProperty = ((Folder_TableView)folderTableView).getUpwardRowProperty();
         String rootName = catalogTreeView.getRoot().getValue().getName();
         upwardProperty.addListener((observable) -> {
