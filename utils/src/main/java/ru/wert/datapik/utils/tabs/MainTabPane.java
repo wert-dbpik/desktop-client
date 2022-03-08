@@ -36,7 +36,7 @@ public class MainTabPane extends TabPane {
             ((AppTab)newValue.getSelectedItem()).update();
         });
         //Наименование вкладки не умещается на ярлыке
-        setTabMaxWidth(100.0);
+        setTabMaxWidth(150.0);
     }
 
 
@@ -117,15 +117,16 @@ public class MainTabPane extends TabPane {
 
         lblTitle.setStyle("-fx-text-fill: black");
 
-        lblTitle.setOnMouseEntered(event ->{
-            hint = new HintPopup(lblTitle ,name, 0.0);
-            hint.showHint();
-        });
-        lblTitle.setOnMouseExited(event ->{
-            if(hint != null){
-                hint.closeHint();
-            }
-        });
+
+//        lblTitle.setOnMouseEntered(event ->{
+//            hint = new HintPopup(lblTitle ,name, 0.0);
+//            hint.showHint();
+//        });
+//        lblTitle.setOnMouseExited(event ->{
+//            if(hint != null){
+//                hint.closeHint();
+//            }
+//        });
 
         lblTitle.setOnMouseClicked(event ->{
             getSelectionModel().select(tab);

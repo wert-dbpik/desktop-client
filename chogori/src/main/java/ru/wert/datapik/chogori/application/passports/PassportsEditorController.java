@@ -111,7 +111,7 @@ public class PassportsEditorController implements SearchablePane{
 
         draftPatch = new Draft_Patch().create();
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
-        draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.SINGLE);
+        draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.MULTIPLE);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, true, true, true, false,
                 false, true);

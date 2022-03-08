@@ -60,7 +60,11 @@ public class PreviewerPatchController {
     void initialize() {
 
         currentDraft.addListener((observable, oldValue, newValue) -> {
-            if(newValue == null) return;
+            if(newValue == null){
+                lblDraftInfo.setText("   ...");
+                lblDraftInfo.setStyle("-fx-font-weight: bold;  -fx-text-fill: black");
+                return;
+            }
             EDraftStatus status = EDraftStatus.getStatusById(newValue.getStatus());
             lblDraftInfo.setText(
                     "   " + newValue.toUsefulString() + //Обозначение чертежа
