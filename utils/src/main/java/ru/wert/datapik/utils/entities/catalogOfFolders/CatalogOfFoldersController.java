@@ -110,8 +110,10 @@ public class CatalogOfFoldersController {
 
         catalogTreeView.setOnMouseClicked((e)->{
             if(e.getButton() == MouseButton.PRIMARY) {
-                if(catalogTreeView.getSelectionModel().getSelectedItem() != null)
-                    folderTableView.updateTableView();
+                TreeItem<ProductGroup> selectedItem = catalogTreeView.getSelectionModel().getSelectedItem();
+                if(selectedItem != null)
+                    ((Folder_TableView) folderTableView).setUpwardRow(selectedItem);
+                    ((Folder_TableView) folderTableView).updateVisibleLeafOfTableView(selectedItem.getValue());
             }
         });
 
