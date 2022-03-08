@@ -100,7 +100,11 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         //Если для предпросмотра Alt не нужен, достаточно только выделения
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue == null || newValue.getId() == null) return;
-            if(!getAltOnProperty().get()) previewDraft(previewerController, newValue);
+            if(!getAltOnProperty().get()) {
+                Platform.runLater(()->{
+                    AppStatic.openDraftInPreviewer(newValue, previewerController);
+                });
+            }
         });
 
         setOnMouseClicked(e -> {
@@ -108,7 +112,11 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                 if (e.getClickCount() == 2)
                     AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
                 else {
-                    if(getAltOnProperty().get()) previewDraft(previewerController, getSelectionModel().getSelectedItem());
+                    if(getAltOnProperty().get()) {
+                        Platform.runLater(()->{
+                            AppStatic.openDraftInPreviewer(getSelectionModel().getSelectedItem(), previewerController);
+                        });
+                    }
                 }
                 e.consume();
             }
@@ -119,30 +127,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         });
 
     }
-
-    /**
-     * ПРЕВЬЮ чертежа
-     * @param previewerController PreviewerPatchController previewerController
-     * @param newValue Draft
-     */
-    private void previewDraft(PreviewerPatchController previewerController, Draft newValue) {
-        Platform.runLater(()->{
-            AppStatic.openDraftInPreviewer(newValue, previewerController);
-            Label lblDraftInfo = previewerController.getLblDraftInfo();
-            EDraftStatus status = EDraftStatus.getStatusById(newValue.getStatus());
-            lblDraftInfo.setText(
-                    "   " + newValue.toUsefulString() + //Обозначение чертежа
-                            " : " + EDraftType.getDraftTypeById(newValue.getDraftType()).getShortName() + //Тип чертежа
-                            "-" + newValue.getPageNumber() + //страница
-                            " : " + status.getStatusName()); //Статус
-            if(status == EDraftStatus.LEGAL)
-                lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
-            else
-                lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
-
-        });
-    }
-
 
     @Override
     public void setTableColumns() {

@@ -1,6 +1,8 @@
 package ru.wert.datapik.utils.previewer;
 
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +24,8 @@ import ru.wert.datapik.utils.views.pdf.PDFReader;
 import ru.wert.datapik.utils.views.pdf.readers.PdfIcepdfReader;
 import ru.wert.datapik.utils.views.pdf.readers.PdfJSNewReader;
 import ru.wert.datapik.utils.views.pdf.readers.PdfJSOldReader;
+import ru.wert.datapik.winform.enums.EDraftStatus;
+import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.enums.EPDFViewer;
 
 import java.io.File;
@@ -41,18 +45,34 @@ public class PreviewerPatchController {
     @Getter private HBox hboxPreviewerButtons;
 
     @FXML
-    @Getter private Label lblDraftInfo;
+    private Label lblDraftInfo;
 
 
     private PDFReader pdfReader; //см enum PDFViewer
     private StackPane pdfStackPane; //панель на которой работает pdfReader
     private boolean useBtnOpenInNewTab;
     @Setter private Draft_TableView draftsTableView;
-    private Draft currentDraft;
+    private ObjectProperty<Draft> currentDraft = new SimpleObjectProperty<>();
+    public Draft getCurrentDraft(){return this.currentDraft.get();};
 
 
     @FXML
     void initialize() {
+
+        currentDraft.addListener((observable, oldValue, newValue) -> {
+            if(newValue == null) return;
+            EDraftStatus status = EDraftStatus.getStatusById(newValue.getStatus());
+            lblDraftInfo.setText(
+                    "   " + newValue.toUsefulString() + //Обозначение чертежа
+                            " : " + EDraftType.getDraftTypeById(newValue.getDraftType()).getShortName() + //Тип чертежа
+                            "-" + newValue.getPageNumber() + //страница
+                            " : " + status.getStatusName()); //Статус
+            if (status == EDraftStatus.LEGAL)
+                lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
+            else
+                lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
+        });
+
     }
 
     /**
@@ -91,7 +111,7 @@ public class PreviewerPatchController {
         btnOpenInNewTab.setTooltip(new Tooltip("Открыть в отдельной вкладке"));
         btnOpenInNewTab.setOnAction(event -> {
             if(currentDraft == null) return;
-            AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft));
+            AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()));
         });
 
         if (useBtnOpenInNewTab) hboxPreviewerButtons.getChildren().add(btnOpenInNewTab);
@@ -141,7 +161,7 @@ public class PreviewerPatchController {
      * @param draftPath File
      */
     public void showDraft(Draft currentDraft, File draftPath){
-        this.currentDraft = currentDraft;
+        this.currentDraft.set(currentDraft);
 
         showDraft(draftPath);
     }

@@ -21,7 +21,7 @@
                         <Insets bottom="10.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Label fx:id="lblDraftInfo" text=" : ПИК.745222.123, Чертеж : ДЕТ-1 : Действует" />
+                  <Label fx:id="lblDraftInfo" text="..." />
                   <HBox fx:id="hboxPreviewerButtons" alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                      <padding>
                         <Insets bottom="3.0" top="3.0" />

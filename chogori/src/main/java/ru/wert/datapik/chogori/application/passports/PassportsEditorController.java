@@ -118,18 +118,26 @@ public class PassportsEditorController implements SearchablePane{
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(false, false, true, true);
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
+        draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
-        //Для отображения чертежа
+        //Для отображения чертежа по умолчанию
         draftsTable.getPreparedList().addListener((observable, oldValue, newValue) -> {
-            List<Draft> drafts = new ArrayList<>(newValue);
-            if (!drafts.isEmpty()) {
-                drafts.sort(Comparators.draftsForPreviewerComparator());
-                AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController);
-            } else {
-                //Отображаем NO_IMAGE
-                AppStatic.openDraftInPreviewer(null, previewerPatchController);
-            }
+                Draft currentlyShownDraft = previewerPatchController.getCurrentDraft();
+                List<Draft> drafts = new ArrayList<>(newValue);
+                if (!drafts.isEmpty()) {
+                    drafts.sort(Comparators.draftsForPreviewerComparator());
+                    Draft defaultShownDraft = drafts.get(0);
+//                    if(currentlyShownDraft != null && !defaultShownDraft.getId().equals(currentlyShownDraft.getId()))
+                        AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController);
+                } else {
+                    //Отображаем NO_IMAGE
+                    if(currentlyShownDraft != null)
+                        AppStatic.openDraftInPreviewer(null, previewerPatchController);
+                }
+
         });
+
+
 
         stpDrafts.getChildren().add(draftPatch.getParent());
 
