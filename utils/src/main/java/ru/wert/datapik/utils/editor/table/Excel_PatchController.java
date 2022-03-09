@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.utils.common.components.BtnGlobe;
+import ru.wert.datapik.utils.editor.model.EditorRow;
 import ru.wert.datapik.utils.editor.poi.POIReader;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 
@@ -31,7 +32,7 @@ public class Excel_PatchController {
     private StackPane stpExcelTable;
 
 
-    @Getter private TableView excelTable;
+    @Getter private Excel_TableView excelTable;
     private PreviewerPatchController previewerController;
     @Getter private MenuButton btnShowFilter;
     @Getter private MenuButton btnShowColumns;

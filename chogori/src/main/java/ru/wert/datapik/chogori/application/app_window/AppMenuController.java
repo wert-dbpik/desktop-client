@@ -59,6 +59,9 @@ public class AppMenuController {
         //Чертежи
         if(CH_CURRENT_USER_GROUP.isReadDrafts())
             menuBar.getMenus().add(createDraftsMenu());
+        //Изделия
+        if(CH_CURRENT_USER_GROUP.isReadProductStructures())
+            menuBar.getMenus().add(createEditorMenu());
         //Материалы
         if(CH_CURRENT_USER_GROUP.isReadMaterials())
             menuBar.getMenus().add(createMaterialsMenu());
@@ -244,13 +247,13 @@ public class AppMenuController {
 
         Menu editorMenu = new Menu("Изделия");
 
-        MenuItem catalogOfProductItem = new MenuItem("Каталог изделий");
-        catalogOfProductItem.setOnAction(this::openCatalogOfProducts);
+//        MenuItem catalogOfProductItem = new MenuItem("Каталог изделий");
+//        catalogOfProductItem.setOnAction(this::openCatalogOfProducts);
 
         MenuItem openExcelItem = new MenuItem("Открыть файл Excel");
-        openExcelItem.setOnAction(this::openCatalogOfProducts);
+        openExcelItem.setOnAction(this::openExcelFile);
 
-        editorMenu.getItems().add(catalogOfProductItem);
+//        editorMenu.getItems().add(catalogOfProductItem);
         if (CH_CURRENT_USER_GROUP.isEditProductStructures())
             editorMenu.getItems().add(openExcelItem);
 
@@ -274,7 +277,7 @@ public class AppMenuController {
     /**
      * -- ОТКРЫТЬ ФАЙЛ EXCEL
      */
-    public void openExcelFile() {
+    public void openExcelFile(ActionEvent event) {
 //        EditorPatch.getInstance().invokeFileChooser();
         File chosenFile = new ExcelChooser().choose();
         if(chosenFile == null) return;

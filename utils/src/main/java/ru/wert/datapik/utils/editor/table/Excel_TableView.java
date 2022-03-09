@@ -11,6 +11,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import lombok.Data;
+import lombok.Getter;
 import ru.wert.datapik.utils.editor.Cursors;
 import ru.wert.datapik.utils.editor.context_menu.Excel_ContextMenu;
 import ru.wert.datapik.utils.editor.context_menu.Excel_ExContextMenu;
@@ -25,19 +26,37 @@ import java.util.List;
 import static ru.wert.datapik.utils.editor.enums.EColName.*;
 import static ru.wert.datapik.utils.editor.table.TableMaster.*;
 
-@Data
-public class Excel_TableView extends TableView {
+
+public class Excel_TableView extends TableView<EditorRow> {
 
     private ObservableList<EditorRow> data;
-    private POIReader poi;
+    @Getter private final POIReader poi;
     private HashMap<Integer, Integer> executions;
     private HashMap<Integer, String> executionNames;
     private HashMap<Integer, String> executionDescriptions;
     private HBox hbox;
-    private TableView<EditorRow> tableView;
+//    @Getter private TableView<EditorRow> tableView;
     private ScrollBar verticalBar;
     private ScrollBar horizontalBar;
     double scrW = 20; //ширина бокового скролла
+    
+    public Excel_TableView getTableView(){
+        return this;
+    }
+
+    //Столбцы
+    @Getter private TableColumn<EditorRow, String> color;
+    @Getter private TableColumn<EditorRow, String> rowNumber;
+    @Getter private TableColumn<EditorRow, String> krp;
+    @Getter private TableColumn<EditorRow, String> decNumber;
+    @Getter private TableColumn<EditorRow, String> name;
+    @Getter private TableColumn<EditorRow, String> coat;
+    @Getter private TableColumn<EditorRow, String> lacquer;
+    @Getter private TableColumn<EditorRow, String> zpc;
+    @Getter private TableColumn<EditorRow, String> folder;
+    @Getter private TableColumn<EditorRow, String> material;
+    @Getter private TableColumn<EditorRow, String> paramA;
+    @Getter private TableColumn<EditorRow, String> paramB;
 
     public Excel_TableView(POIReader poi, HBox hbox) {
         this.poi = poi;
@@ -46,9 +65,9 @@ public class Excel_TableView extends TableView {
         this.executions = poi.getExecutions(); //ключ - порядковый номер исполнения, значение - индекс столбца
 
         createTableView(poi, hbox);
-        setIdToColumns(tableView);
+        setIdToColumns(this);
 
-        for (TableColumn tc : getAllColumns(tableView)) {
+        for (TableColumn tc : getAllColumns(this)) {
             if(tc.getText().equals("(кол)"))
                 tc.setCellFactory(param -> new Excel_TableExCellFactory(this, tc.getParentColumn().getId()));
             else tc.setCellFactory(param -> new Excel_TableCellFactory(this));
@@ -59,24 +78,24 @@ public class Excel_TableView extends TableView {
         restrictColumnReodering();
 
         //Наполняем таблицу данными
-        tableView.setItems(data);
+        setItems(data);
 
-        tableView.setEditable(true);
-        tableView.getSelectionModel().setCellSelectionEnabled(true);
-        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        tableView.setCursor(Cursors.cursorWhiteCross);
+        setEditable(true);
+        getSelectionModel().setCellSelectionEnabled(true);
+        getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        setCursor(Cursors.cursorWhiteCross);
 
         createKeyEvents();
         createMouseEvents();
         createWidthPropertyListener(hbox);
 
         //Устанавливаем первоначальную ширину таблицы и контейнера HBox
-        double tW = countPrefTableWidth(getAllColumns(tableView));
-        tableView.setPrefWidth(tW);
-        tableView.resize(tW, tableView.getHeight());
+        double tW = countPrefTableWidth(getAllColumns(this));
+        setPrefWidth(tW);
+        resize(tW, getHeight());
         hbox.setPrefWidth(tW);
 
-        tableView.setContextMenu(new Excel_ContextMenu(tableView));
+        setContextMenu(new Excel_ContextMenu(this));
         reArrangeExecutionCols();
 //        testShowTableView();
     }
@@ -84,15 +103,15 @@ public class Excel_TableView extends TableView {
 
     public void changeTableWidth() {
         Platform.runLater(() -> {
-            double newWidth = countPrefTableWidth(getAllColumns(tableView));
-            tableView.resize(newWidth, tableView.getHeight());
-            tableView.setPrefWidth(newWidth);
+            double newWidth = countPrefTableWidth(getAllColumns(this));
+            resize(newWidth, getHeight());
+            setPrefWidth(newWidth);
         });
     }
 
     private void restrictColumnReodering() {
-        tableView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
-            final TableHeaderRow header = (TableHeaderRow) tableView.lookup("TableHeaderRow");
+        skinProperty().addListener((obs, oldSkin, newSkin) -> {
+            final TableHeaderRow header = (TableHeaderRow) lookup("TableHeaderRow");
             header.reorderingProperty().addListener((o, oldVal, newVal) -> header.setReordering(false));
         });
     }
@@ -104,34 +123,33 @@ public class Excel_TableView extends TableView {
      * @param hbox
      */
     private void createTableView(POIReader poi, HBox hbox) {
-        tableView = new TableView();
 
         //Цвет
-        TableColumn<EditorRow, String> color = new TableColumn<>(ECOLOR.getColName());
+        color = new TableColumn<>(ECOLOR.getColName());
         color.setCellValueFactory(new PropertyValueFactory<>("color"));
         color.setVisible(false);
 
         //N
-        TableColumn<EditorRow, String> rowNumber = new TableColumn<>(ROW_NUM.getColName());
+        rowNumber = new TableColumn<>(ROW_NUM.getColName());
         rowNumber.setCellValueFactory(new PropertyValueFactory<>("rowNumber"));
         rowNumber.setComparator(createIntegerComparator(rowNumber));
 
         //КРП
-        TableColumn<EditorRow, String> krp = new TableColumn<>(KRP.getColName());
+        krp = new TableColumn<>(KRP.getColName());
         krp.setCellValueFactory(new PropertyValueFactory<>("krp"));
         krp.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow())).setKrp(t.getNewValue());
         });
 
         //Децимальный номер
-        TableColumn<EditorRow, String> decNumber = new TableColumn<>(DEC_NUM.getColName());
+        decNumber = new TableColumn<>(DEC_NUM.getColName());
         decNumber.setCellValueFactory(new PropertyValueFactory<>("decNumber"));
         decNumber.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow())).setDecNumber(t.getNewValue());
         });
 
         //Наименование
-        TableColumn<EditorRow, String> name = new TableColumn<>(NAME.getColName());
+        name = new TableColumn<>(NAME.getColName());
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         name.setCellFactory(param -> new TextFieldTableCell<>());
         name.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
@@ -146,35 +164,35 @@ public class Excel_TableView extends TableView {
         });
 
         //Покрытие
-        TableColumn<EditorRow, String> coat = new TableColumn<>(COAT.getColName());
+        coat = new TableColumn<>(COAT.getColName());
         coat.setCellValueFactory(new PropertyValueFactory<>("coat"));
         coat.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow())).setCoat(t.getNewValue());
         });
 
         //ЦСГ
-        TableColumn<EditorRow, String> zpc = new TableColumn<>(ZCP.getColName());
+        zpc = new TableColumn<>(ZCP.getColName());
         zpc.setCellValueFactory(new PropertyValueFactory<>("zpc"));
         zpc.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow())).setZcp(t.getNewValue());
         });
 
         //Источник
-        TableColumn<EditorRow, String> folder = new TableColumn<>(FOLDER.getColName());
+        folder = new TableColumn<>(FOLDER.getColName());
         folder.setCellValueFactory(new PropertyValueFactory<>("folder"));
         folder.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow())).setFolder(t.getNewValue());
         });
 
         //Материал
-        TableColumn<EditorRow, String> material = new TableColumn<>(MATERIAL.getColName());
+        material = new TableColumn<>(MATERIAL.getColName());
         material.setCellValueFactory(new PropertyValueFactory<>("material"));
         material.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow())).setMaterial(t.getNewValue());
         });
 
         //Параметр А
-        TableColumn<EditorRow, String> paramA = new TableColumn<>(A.getColName());
+        paramA = new TableColumn<>(A.getColName());
         paramA.setCellValueFactory(new PropertyValueFactory<>("paramA"));
         paramA.setComparator(createIntegerComparator(paramA));
         paramA.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
@@ -182,7 +200,7 @@ public class Excel_TableView extends TableView {
         });
 
         //Параметр В
-        TableColumn<EditorRow, String> paramB = new TableColumn<>(B.getColName());
+        paramB = new TableColumn<>(B.getColName());
         paramB.setCellValueFactory(new PropertyValueFactory<>("paramB"));
         paramB.setComparator(createIntegerComparator(paramB));
         paramB.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
@@ -190,14 +208,14 @@ public class Excel_TableView extends TableView {
         });
 
         //Добавляем в таблицу первые столбцы
-        tableView.getColumns().addAll(color, rowNumber, krp, decNumber, name);
+        getColumns().addAll(color, rowNumber, krp, decNumber, name);
 
         //Столлбец с Лаком
-        if (poi.isColLaсquerExist()) tableView.getColumns().add(lacquer);
+        if (poi.isColLaсquerExist()) getColumns().add(lacquer);
         //Столлбец с порошковым покрытием
-        tableView.getColumns().add(coat);
+        getColumns().add(coat);
         //Столлбец с Цинк содержащим грунтом
-        if (poi.isColZpcExist()) tableView.getColumns().add(zpc);
+        if (poi.isColZpcExist()) getColumns().add(zpc);
 
         //Создаем исполнения
         for (int ex : executions.keySet()) {
@@ -205,11 +223,11 @@ public class Excel_TableView extends TableView {
             Excel_ExecutionColumn exCol = new Excel_ExecutionColumn(exName, "", ex, this);
 
             //Добавляем исполнение в таблицу
-            tableView.getColumns().add(exCol);
+            getColumns().add(exCol);
         }
 
         //Добавляем в таблицу оставшиеся столбцы
-        tableView.getColumns().addAll(folder, material, paramA, paramB);
+        getColumns().addAll(folder, material, paramA, paramB);
 
 
     }
@@ -218,10 +236,10 @@ public class Excel_TableView extends TableView {
      * Метод обеспечивает редактирование ячеек по нажатию клавиши
      */
     private void createKeyEvents() {
-        tableView.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+        addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (!event.isControlDown() && !event.getText().equals("")) {
-                if (tableView.getEditingCell() == null) {
-                    TablePosition focusedCellPosition = tableView.getFocusModel().getFocusedCell();
+                if (getEditingCell() == null) {
+                    TablePosition focusedCellPosition = getFocusModel().getFocusedCell();
                     int row = focusedCellPosition.getRow();
                     TableColumn col = focusedCellPosition.getTableColumn();
 
@@ -230,10 +248,10 @@ public class Excel_TableView extends TableView {
                     if (event.isShiftDown()) text = text.toUpperCase();
 
                     if (col.getParentColumn() != null)
-                        tableView.getItems().get(row).changeItemValue(col.getParentColumn().getId(), col.getText(), text);
+                        getItems().get(row).changeItemValue(col.getParentColumn().getId(), col.getText(), text);
                     else
-                        tableView.getItems().get(row).changeItemValue(null, col.getText(), text);
-                    tableView.edit(row, col);
+                        getItems().get(row).changeItemValue(null, col.getText(), text);
+                    edit(row, col);
 
                     event.consume();
                 }
@@ -248,13 +266,13 @@ public class Excel_TableView extends TableView {
     private void createMouseEvents() {
 
         Platform.runLater(() -> {
-            verticalBar = (ScrollBar) tableView.lookup(".scroll-bar:vertical");
-            horizontalBar = (ScrollBar) tableView.lookup(".scroll-bar:horizontal");
+            verticalBar = (ScrollBar) lookup(".scroll-bar:vertical");
+            horizontalBar = (ScrollBar) lookup(".scroll-bar:horizontal");
         });
 
 
-        tableView.addEventFilter(ScrollEvent.ANY, e -> {
-            Platform.runLater(() -> tableView.refresh());
+        addEventFilter(ScrollEvent.ANY, e -> {
+            Platform.runLater(() -> refresh());
         });
     }
 
@@ -264,9 +282,9 @@ public class Excel_TableView extends TableView {
     private void createWidthPropertyListener(HBox hbox) {
         //При изменении размеров контейнера меняется ширина таблицы, без пустой колонки справа
         hbox.widthProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() > tableView.getWidth()) {
-                tableView.setPrefWidth(countPrefTableWidth(getAllColumns(tableView)));
-                tableView.resize(countPrefTableWidth(getAllColumns(tableView)), tableView.getHeight());
+            if (newValue.doubleValue() > getWidth()) {
+                setPrefWidth(countPrefTableWidth(getAllColumns(this)));
+                resize(countPrefTableWidth(getAllColumns(this)), getHeight());
             }
         });
     }
@@ -277,21 +295,21 @@ public class Excel_TableView extends TableView {
     private void addStretchListenerToColumn(TableColumn<List<String>, String> col) {
         col.widthProperty().addListener((observable, oldValue, newValue) -> {
             double dW = newValue.doubleValue() - oldValue.doubleValue();
-            double tW = tableView.getWidth();
+            double tW = getWidth();
             if (tW > 0 && dW > 0) {
                 if (tW + dW + scrW <= hbox.getWidth()) {
-                    tableView.setPrefWidth(tableView.getWidth() + dW);
-                    tableView.resize(tableView.getWidth() + dW, tableView.getHeight());
+                    setPrefWidth(getWidth() + dW);
+                    resize(getWidth() + dW, getHeight());
                 } else {
-                    tableView.setPrefWidth(hbox.getWidth() - scrW);
-                    tableView.resize(hbox.getWidth() - scrW, tableView.getHeight());
+                    setPrefWidth(hbox.getWidth() - scrW);
+                    resize(hbox.getWidth() - scrW, getHeight());
                 }
             }
 
             if (tW > 0 && dW < 0) {
-                if (countPrefTableWidth(getAllColumns(tableView)) + scrW < hbox.getWidth()) {
-                    tableView.setPrefWidth(tableView.getWidth() + dW);
-                    tableView.resize(tableView.getWidth() + dW, tableView.getHeight());
+                if (countPrefTableWidth(getAllColumns(this)) + scrW < hbox.getWidth()) {
+                    setPrefWidth(getWidth() + dW);
+                    resize(getWidth() + dW, getHeight());
                 } else {
 
                 }
@@ -325,8 +343,8 @@ public class Excel_TableView extends TableView {
     public HashMap<Integer, Integer> reArrangeExecutionCols() {
         HashMap<Integer, Integer> executions = new HashMap<>();
         int ex = 0;
-        for (int index = 0; index < tableView.getColumns().size(); index++) {
-            TableColumn<EditorRow, ?> tc = tableView.getColumns().get(index);
+        for (int index = 0; index < getColumns().size(); index++) {
+            TableColumn<EditorRow, ?> tc = getColumns().get(index);
             if (tc.getId().startsWith("ex")) {
                 tc.setId("ex" + ex);
                 ((Excel_ExecutionColumn)tc).currentEx = ex;
@@ -341,7 +359,7 @@ public class Excel_TableView extends TableView {
 
 
     public void reArrangeExecutionRows() {
-        for (EditorRow row : tableView.getItems()) {
+        for (EditorRow row : getItems()) {
             int exId = 0;
             for (EditorRow.Execution ex : row.getExecutions()) {
                 ex.setId("ex" + (exId++));

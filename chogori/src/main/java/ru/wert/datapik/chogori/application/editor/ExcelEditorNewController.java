@@ -1,16 +1,22 @@
 package ru.wert.datapik.chogori.application.editor;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.StackPane;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Passport;
+import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.utils.common.components.BtnDouble;
+import ru.wert.datapik.utils.editor.model.EditorRow;
 import ru.wert.datapik.utils.editor.table.Excel_Patch;
 import ru.wert.datapik.utils.editor.table.Excel_PatchController;
+import ru.wert.datapik.utils.editor.table.Excel_TableView;
 import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
 import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
@@ -23,8 +29,11 @@ import ru.wert.datapik.utils.statics.Comparators;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 
 /**
  * Класс описывает контроллер редактора таблиц Excel
@@ -77,6 +86,7 @@ public class ExcelEditorNewController {
      * Путь отображаемого excel файла
      */
     private File excelFile;
+    private Excel_TableView excelTable;
 
     public void init(File excelFile){
         this.excelFile = excelFile;
@@ -103,9 +113,43 @@ public class ExcelEditorNewController {
         excelPatchController.getHbButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.55));
         //Наименование файла
         excelPatchController.getLblExcelFile().setText(excelFile.getName());
+        excelTable = (Excel_TableView) excelPatchController.getExcelTable();
+
+        setIndividualSettingsOfExcelTable();
+
 
         stpExcel.getChildren().add(excelPatch.getParent());
 
+    }
+
+    private void setIndividualSettingsOfExcelTable(){
+        excelTable.getSelectionModel().setCellSelectionEnabled(false);
+        excelTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        Prefix prefix = CH_QUICK_PREFIXES.findByName("ПИК");
+        excelTable.getRowNumber().setVisible(false);
+        excelTable.getKrp().setVisible(false);
+        excelTable.getMaterial().setVisible(false);
+        excelTable.getParamA().setVisible(false);
+        excelTable.getParamB().setVisible(false);
+
+        ((TableView<EditorRow>)excelTable).getSelectionModel().selectedItemProperty().addListener(observable ->{
+            EditorRow selectedRow = excelTable.getSelectionModel().getSelectedItem();
+            String number = selectedRow.getDecNumber();
+
+            Pattern p = Pattern.compile("\\d{3}.?\\d{3}\\.\\d{3}"); //Децимальный номер xxxxxx.xxx
+            Matcher m = p.matcher(number);
+            String decNumber = "";
+            while(m.find()){
+                decNumber = number.substring(m.start(), m.end());
+            }
+
+            Passport passport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(prefix,decNumber);
+            List<Draft> drafts = CH_QUICK_DRAFTS.findByPassport(passport);
+            Platform.runLater(()->{
+                draftsTable.setModifyingItem(passport);
+                draftsTable.updateView();
+            });
+        });
     }
 
     /**

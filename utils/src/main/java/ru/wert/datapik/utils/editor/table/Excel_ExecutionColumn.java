@@ -27,7 +27,7 @@ public class Excel_ExecutionColumn extends TableColumn<EditorRow, String> {
         this.description = description;
         this.currentEx = ex;
         this.editorTable = excelTable;
-        this.tv = excelTable.getTableView();
+        this.tv = excelTable;
 
         //Присваиваем id сполнению
         setId("ex" + ex);
@@ -51,8 +51,8 @@ public class Excel_ExecutionColumn extends TableColumn<EditorRow, String> {
                 e.consume();
             }
             if(e.isPrimaryButtonDown()) {
-                TableColumn<EditorRow, ?> tcAmount = tv.getColumns().get(excelTable.getExecutions().get(currentEx)).getColumns().get(0);
-                TableColumn<EditorRow, ?> tcAmountPerAssemble = tv.getColumns().get(excelTable.getExecutions().get(currentEx)).getColumns().get(1);
+                TableColumn<EditorRow, ?> tcAmount = tv.getColumns().get(excelTable.getPoi().getExecutions().get(currentEx)).getColumns().get(0);
+                TableColumn<EditorRow, ?> tcAmountPerAssemble = tv.getColumns().get(excelTable.getPoi().getExecutions().get(currentEx)).getColumns().get(1);
                 if(e.isControlDown()){
                     selectExecutionColumn(tcAmount, tcAmountPerAssemble);
                 } else {
