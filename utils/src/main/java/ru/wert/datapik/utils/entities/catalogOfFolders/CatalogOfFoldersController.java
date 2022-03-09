@@ -167,7 +167,7 @@ public class CatalogOfFoldersController {
         folderTableView.getAltOnProperty().bindBidirectional(btnDoubleAlt.getStateProperty());
 
         //Устанавливаем начальное значение altOn в контроллере
-        btnDoubleAlt.getStateProperty().set(true);
+        btnDoubleAlt.getStateProperty().set(false);
 
         //Кнопка переключения режимов GLOBE/CATALOG
         BtnDoubleGlobeVsCatalog btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView, false);

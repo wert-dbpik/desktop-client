@@ -41,5 +41,4 @@ public class _Passport_Commands implements ItemCommands<Passport> {
         command.execute();
     }
 
-    public void kill(Event event){System.out.println("killed");}
 }

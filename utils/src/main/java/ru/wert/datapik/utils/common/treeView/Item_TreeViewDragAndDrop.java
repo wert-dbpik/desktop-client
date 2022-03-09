@@ -169,10 +169,7 @@ public class Item_TreeViewDragAndDrop<P extends Item, T extends CatalogGroup> {
      */
     private void createOnDragDropped(DragEvent event, TreeCell<T> treeCell){
         //Если бросаются строки TableView
-        if (event.getGestureSource() instanceof TableView)
-            System.out.println(); //зАГЛУШКА
-//            pasteTableItems(event, true);
-        else
+        if (!(event.getGestureSource() instanceof TableView))
             pasteTreeItems(null, event,true);
         event.consume();
     }
@@ -203,12 +200,6 @@ public class Item_TreeViewDragAndDrop<P extends Item, T extends CatalogGroup> {
 
         //сохраняем имя папки, чтобы потом к ней вернуться
         backToDraggedSource.set(0, draggedSource.getParent().getValue().getName());
-//        CatalogableItem tableItem = (CatalogableItem) ((Item_TableView<P>)tableView).getItems().get(0);
-        //Если первая строка служебная, то nDeep парамет равен false
-//        if(tableItem != null && tableItem.getName().startsWith(String.valueOf(WinformStatic.TILDA)))
-//            backToDraggedSource.set(1, "false");
-//        else
-//            backToDraggedSource.set(1, "true");
 
         //Преобразуем название treeCell в изображение, чтобы добавить его как сопровождение DnD
         String s = treeCell.getTreeItem().getValue().getName();
@@ -267,8 +258,6 @@ public class Item_TreeViewDragAndDrop<P extends Item, T extends CatalogGroup> {
      * @return true - если перемещение допустимо
      */
     private boolean goodToPaste(TreeItem<T> itemTarget, List<TreeItem<T>> itemsToMove){
-        System.out.println("Куда = " + itemTarget.getValue() + "id = " + itemTarget.getValue().getId());
-        System.out.println("Откуда = " + (draggedSource).getValue() + "id = " + (draggedSource).getValue().getParentId());
         //Копирование не допускается если вырезанный объект не существует
         if( draggedSource == null ||
                 //если вырезанный объект вставляется на старое место

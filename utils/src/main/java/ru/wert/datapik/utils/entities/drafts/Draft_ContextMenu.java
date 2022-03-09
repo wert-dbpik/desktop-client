@@ -44,7 +44,6 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         editDraftsPermission = CH_CURRENT_USER_GROUP.isEditDrafts();
 
         manipulator = tableView.getManipulator();
-        System.out.println("----" + tableView.getSelectedFoldersForContextMenu());
 
         condition = !(tableView.getSelectedFoldersForContextMenu() == null
                 || tableView.getSelectedFoldersForContextMenu().size() != 1);

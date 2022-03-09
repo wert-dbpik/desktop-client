@@ -73,7 +73,6 @@ public abstract class FormView_ACCController<P extends Item>{
         if (operation.equals(CHANGE) || operation.equals(COPY) || operation.equals(EOperation.REPLACE)) {
                 oldItem = getOldItem();
 
-                System.out.println("old Item = " + oldItem.getName());
                 fillFieldsOnTheForm(oldItem);
         }
         if (operation.equals(ADD) || operation.equals(EOperation.ADD_FOLDER)) {

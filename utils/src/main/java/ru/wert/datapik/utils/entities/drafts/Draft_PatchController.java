@@ -116,7 +116,7 @@ public class Draft_PatchController {
         BtnDoubleAlt<Draft> btnDoubleAlt =new BtnDoubleAlt<>(draftsTable, false);
         Button btnAltOn = btnDoubleAlt.create();
         draftsTable.getAltOnProperty().bindBidirectional(btnDoubleAlt.getStateProperty());
-        btnDoubleAlt.getStateProperty().set(true);
+        btnDoubleAlt.getStateProperty().set(false);
 
 
         //Кнопка ПОКАЗАТЬ ФИЛЬТР

@@ -68,17 +68,6 @@ public class MainTabPane extends TabPane {
         createTitle(tab, name);
 
         tab.setContextMenu(tabMenu());
-        //При выделении вкладки настраиваем поиск
-//
-//        tab.setOnSelectionChanged((event)->{
-//            if(searchablePane != null)
-//                searchablePane.tuneSearching();
-//            else {
-//                CH_SEARCH_FIELD.setText("");
-//                CH_SEARCH_FIELD.setPromptText("");
-//                CH_SEARCH_FIELD.setSearchableTableController(null);
-//            }
-//        });
 
         tab.setOnClosed((event)->{
             if(getTabs().isEmpty())

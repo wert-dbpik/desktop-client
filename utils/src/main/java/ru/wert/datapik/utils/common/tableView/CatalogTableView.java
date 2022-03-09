@@ -92,10 +92,6 @@ public abstract class CatalogTableView<P extends Item, T extends CatalogGroup>  
      */
     public void updateFuck(){
         Platform.runLater(()->{
-//            updateCatalogView(catalogTree.getRoot(), true);
-//            catalogTree.getSelectionModel().select(catalogTree.getRoot());
-//            getSelectionModel().select(0);
-
             ObservableList<P> items = FXCollections.observableArrayList(itemService.findAll());
             getItems().clear();
             setItems(items);
@@ -122,9 +118,7 @@ public abstract class CatalogTableView<P extends Item, T extends CatalogGroup>  
             } else
                 group = chosenGroup;
         }
-//        if(operation.equals(EOperation.COPY)){
-//            group = chosenItem.getProductGroup();
-//        }
+
         return group;
     }
 
@@ -163,33 +157,6 @@ public abstract class CatalogTableView<P extends Item, T extends CatalogGroup>  
     public List<P> getAllSelectedItems(){
         return getSelectionModel().getSelectedItems();
     }
-
-    /**
-     * Устаналивает FocusListener на таблицу
-     * При получении фокуса в поле SearchField появляется подсказка searchName,
-     * либо последняя набранная в SearchField строка searchedText
-     */
-//    private void createFocusListener() {
-//        focusedProperty().addListener((observable) -> {
-//
-//            CH_SEARCH_FIELD.setSearchableTableController(this);
-//
-//            if (getSearchedText() == null || getSearchedText().equals("")) {
-//                CH_SEARCH_FIELD.setText("");
-//                CH_SEARCH_FIELD.setPromptText(promptItemName);
-//            } else {
-//                CH_SEARCH_FIELD.setText(getSearchedText());
-//            }
-//
-//        });
-
-//    }
-
-
-
-
-
-
 
 
 }

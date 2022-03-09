@@ -82,17 +82,17 @@ public class ExcelEditorNewController {
         this.excelFile = excelFile;
 
 //        createInfoOrDraftsTableButton();
-        loadStpInfo();
-        loadStpDrafts();
-        loadStpPreviewer();
-        loadStpExcel();
+        loadStackPaneInfo();
+        loadStackPaneDrafts();
+        loadStackPanePreviewer();
+        loadStackPaneExcel();
 
     }
 
     /**
      * Создание левой панели с excel таблицей
      */
-    private void loadStpExcel() {
+    private void loadStackPaneExcel() {
 
         Excel_Patch excelPatch = new Excel_Patch().create();
         excelPatchController = excelPatch.getExcelPatchController();
@@ -111,7 +111,7 @@ public class ExcelEditorNewController {
     /**
      * Создание панели с таблицей доступных чертежей
      */
-    private void loadStpDrafts() {
+    private void loadStackPaneDrafts() {
 
         draftPatch = new Draft_Patch().create();
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
@@ -142,13 +142,13 @@ public class ExcelEditorNewController {
     /**
      * Создание правую панель с информацией
      */
-    private void loadStpInfo() {
+    private void loadStackPaneInfo() {
     }
 
     /**
      * Создание предпросмотрщика
      */
-    private void loadStpPreviewer() {
+    private void loadStackPanePreviewer() {
         previewerPatchController =
                 CommonUnits.loadStpPreviewer(stpPreviewer, sppHorizontal, sppVertical); //Предпросмотр
     }

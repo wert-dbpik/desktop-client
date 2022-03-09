@@ -39,5 +39,4 @@ public class _Folder_Commands implements ItemCommands<Folder> {
         command.execute();
     }
 
-    public void lick(Event event){System.out.println("killed");}
 }

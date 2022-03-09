@@ -5,12 +5,13 @@ import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
+import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.utils.common.interfaces.Sorting;
 
 import java.util.List;
-
+@Slf4j
 public class TaskUpdateItemsInRoutineTableView<P extends Item> extends Task<Void> {
 
     private final RoutineTableView<P> itemView;
@@ -70,9 +71,10 @@ public class TaskUpdateItemsInRoutineTableView<P extends Item> extends Task<Void
     protected void failed() {
         super.succeeded();
         progressIndicator.setVisible(false);
+        log.error("The task TaskUpdateItemsInRoutineTableView failed with the following exception:\n" + System.err);
 
-        System.err.println("The task TaskUpdateItemsInRoutineTableView failed with the following exception:");
-        getException().printStackTrace(System.err);
+//        System.err.println("The task TaskUpdateItemsInRoutineTableView failed with the following exception:");
+//        getException().printStackTrace(System.err);
     }
 
 
