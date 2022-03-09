@@ -64,7 +64,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         //Условие при котором таблица не отображает только папки (globalOn)
         // и в таблице не ведется поиск
-        boolean noSearchAndGlobal = CH_SEARCH_FIELD.getText().isEmpty() && !tableView.isGlobalOn();
+        boolean noSearchAndGlobal = CH_SEARCH_FIELD.getText().isEmpty() && tableView.isGlobalOff();
+        System.out.println(tableView.isGlobalOff());
 
         if (selectedItems.size() == 0) {
             if (noSearchAndGlobal) addItem = true;
@@ -137,7 +138,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         //Условие при котором таблица не отображает только папки (globalOn)
         // и в таблице не ведется поиск
-        boolean noSearchAndGlobal = CH_SEARCH_FIELD.getText().isEmpty() && !tableView.isGlobalOn();
+        boolean noSearchAndGlobal = CH_SEARCH_FIELD.getText().isEmpty() && !tableView.isGlobalOff();
         //Условие при котором вставка допускается
         boolean pastePossible = manipulator.pastePossible(ClipboardUtils.getStringFromClipboard());
 
@@ -146,7 +147,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
             extraAddProductGroup = true;
             if (pastePossible) extraPasteItems = true;
         } else if (selectedItems.size() == 1) {
-            if(!noSearchAndGlobal){
+            if(!noSearchAndGlobal && selectedItems instanceof Folder){
                 extraShowFolderInCatalog = true;
             }
             if (selectedItems.get(0) instanceof ProductGroup) {
@@ -223,12 +224,14 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
      * И ее выделение
      */
     private void showFolderInCatalog(ActionEvent actionEvent) {
-        Folder selectedFolder = (Folder)tableView.getSelectionModel().getSelectedItem();
-        CH_SEARCH_FIELD.setText("");
-        tableView.updateVisibleLeafOfTableView(selectedFolder.getProductGroup());
-        int index = tableView.getItems().indexOf(selectedFolder);
+        Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+        if(selectedItem instanceof Folder) {
+            CH_SEARCH_FIELD.setText("");
+            tableView.updateVisibleLeafOfTableView(((Folder)selectedItem).getProductGroup());
+            int index = tableView.getItems().indexOf(selectedItem);
 
-        tableView.getSelectionModel().select(index);
+            tableView.getSelectionModel().select(index);
+        }
 
     }
 

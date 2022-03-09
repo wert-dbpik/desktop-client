@@ -29,8 +29,8 @@ public class BtnDoubleGlobeVsCatalog{
 
         btnGlobalOrCatalog.getStateProperty().addListener((observable) -> {
             //Меняем значение переменной globalOn на противоположное и апдейтим таблицу
-            tableView.setGlobalOn(!btnGlobalOrCatalog.getStateProperty().get());
-            if(tableView.isGlobalOn())
+            tableView.setGlobalOff(!btnGlobalOrCatalog.getStateProperty().get());
+            if(tableView.isGlobalOff())
                 tableView.updateTableView();
             else
             ((CatalogableTable) tableView).updateVisibleLeafOfTableView(

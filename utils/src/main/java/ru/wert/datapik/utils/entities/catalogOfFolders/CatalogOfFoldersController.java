@@ -75,7 +75,7 @@ public class CatalogOfFoldersController {
         ObjectProperty<TreeItem<ProductGroup>> upwardProperty = ((Folder_TableView)folderTableView).getUpwardRowProperty();
         String rootName = catalogTreeView.getRoot().getValue().getName();
         upwardProperty.addListener((observable) -> {
-            if(folderTableView.isGlobalOn() && upwardProperty.get() != null) {
+            if(folderTableView.isGlobalOff() && upwardProperty.get() != null) {
                 StringBuilder sb = new StringBuilder("...");
                 TreeItem<ProductGroup> lastParent = upwardProperty.get(); // = newValue
                 while (!lastParent.getValue().getName().equals(rootName)) {
@@ -172,7 +172,7 @@ public class CatalogOfFoldersController {
         //Кнопка переключения режимов GLOBE/CATALOG
         BtnDoubleGlobeVsCatalog btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView, false);
         Button btnGlobeVsCatalog = btnDoubleGlobeVsCatalog.create();
-        btnDoubleGlobeVsCatalog.getStateProperty().bindBidirectional(folderTableView.getGlobalOnProperty());
+        btnDoubleGlobeVsCatalog.getStateProperty().bindBidirectional(folderTableView.getGlobalOffProperty());
 
         //Устанавливаем начальное значение globalOn в контроллере
         //Значение получилось перевернутым true - показывает Каталог
