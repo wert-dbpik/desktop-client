@@ -55,8 +55,8 @@ public class DraftsEditorController implements SearchablePane{
 
     private Draft_TableView draftsTable;
     private Draft_PatchController draftPatchController;
-    private PreviewerPatchController previewerController;
-    private Label lblDraftInfo;
+    private PreviewerPatchController previewerPatchController;
+//    private Label lblDraftInfo;
     private Folder_TableView folderTableView;
 
     @FXML
@@ -77,16 +77,8 @@ public class DraftsEditorController implements SearchablePane{
      * ПРЕДПРОСМОТРЩИК
      */
     private void createPreviewer() {
-
-        PreviewerPatch previewerPatch = new PreviewerPatch().create();
-        previewerController = previewerPatch.getController();
-        previewerController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
-        previewerController.initPreviewerToolBar(true);
-        previewerController.getHboxPreviewerButtons().getChildren().add(CommonUnits.createExpandPreviewButton(sppHorizontal, sppVertical));
-        lblDraftInfo = previewerPatch.getLblDraftInfo();
-
-        spPreviewer.getChildren().add(previewerPatch.getParent());
-
+        previewerPatchController =
+                CommonUnits.loadStpPreviewer(spPreviewer, sppHorizontal, sppVertical); //Предпросмотр
     }
 
     /**
@@ -97,7 +89,7 @@ public class DraftsEditorController implements SearchablePane{
         Draft_Patch draftPatch = new Draft_Patch().create();
         draftPatchController = draftPatch.getDraftPatchController();
 
-        draftPatchController.initDraftsTableView(previewerController, new Folder(), SelectionMode.MULTIPLE);
+        draftPatchController.initDraftsTableView(previewerPatchController, new Folder(), SelectionMode.MULTIPLE);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, false, true, true, false,
                 false, true);
@@ -106,7 +98,7 @@ public class DraftsEditorController implements SearchablePane{
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.4));
 
         //Сообщаем Previewer ссылку на tableView
-        previewerController.setDraftsTableView(draftsTable);
+        previewerPatchController.setDraftsTableView(draftsTable);
         //Монтируем
         spDrafts.getChildren().add(draftPatch.getParent());
 

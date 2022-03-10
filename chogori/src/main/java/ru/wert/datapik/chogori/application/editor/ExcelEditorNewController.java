@@ -3,10 +3,7 @@ package ru.wert.datapik.chogori.application.editor;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Draft;
@@ -22,6 +19,7 @@ import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.info.InfoPatch;
 import ru.wert.datapik.utils.info.InfoPatchController;
+import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
@@ -34,6 +32,8 @@ import java.util.regex.Pattern;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
+import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 /**
  * Класс описывает контроллер редактора таблиц Excel
@@ -87,6 +87,8 @@ public class ExcelEditorNewController {
      */
     private File excelFile;
     private Excel_TableView excelTable;
+    private StackPane infoStackPane;
+    private PreviewerPatchController previewerController;
 
     public void init(File excelFile){
         this.excelFile = excelFile;
@@ -110,10 +112,10 @@ public class ExcelEditorNewController {
         excelPatchController.initExcelToolBar(true, true);
         //Добавляем кнопки на панель
         excelPatchController.getHbButtons().getChildren().add(createInfoOrDraftsTableButton());
-        excelPatchController.getHbButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.55));
+        excelPatchController.getHbButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.4));
         //Наименование файла
         excelPatchController.getLblExcelFile().setText(excelFile.getName());
-        excelTable = (Excel_TableView) excelPatchController.getExcelTable();
+        excelTable = excelPatchController.getExcelTable();
 
         setIndividualSettingsOfExcelTable();
 
@@ -144,7 +146,8 @@ public class ExcelEditorNewController {
             }
 
             Passport passport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(prefix,decNumber);
-            List<Draft> drafts = CH_QUICK_DRAFTS.findByPassport(passport);
+
+//            List<Draft> drafts = CH_QUICK_DRAFTS.findByPassport(passport);
             Platform.runLater(()->{
                 draftsTable.setModifyingItem(passport);
                 draftsTable.updateView();
@@ -165,7 +168,7 @@ public class ExcelEditorNewController {
                 false, true);
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(false, false, true, true);
-        draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
+        draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.6));
 
         //Для отображения чертежа
         draftsTable.getPreparedList().addListener((observable, oldValue, newValue) -> {
@@ -187,6 +190,12 @@ public class ExcelEditorNewController {
      * Создание правую панель с информацией
      */
     private void loadStackPaneInfo() {
+        //ЗАГЛУШКА
+        Label info = new Label("НЕТ ИНФОРМАЦИИ");
+        info.setStyle("-fx-font-weight: bold; -fx-font-size: 24px; -fx-font-style: oblique");
+        infoStackPane = new StackPane(info);
+        infoStackPane.setStyle("-fx-alignment: center");
+        stpInfo.getChildren().add(infoStackPane);
     }
 
     /**
@@ -208,8 +217,7 @@ public class ExcelEditorNewController {
                 stpInfo.getChildren().add(0, draftPatch.getParent());
             } else {
                 stpInfo.getChildren().clear();
-                Parent cat = infoPatch.getParent();
-                stpInfo.getChildren().add(0, cat);
+                stpInfo.getChildren().add(0, infoStackPane);
             }
         });
         return btnInfoOrTable;
