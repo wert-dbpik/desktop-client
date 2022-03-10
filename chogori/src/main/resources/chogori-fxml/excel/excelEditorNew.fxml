@@ -8,10 +8,10 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.application.editor.ExcelEditorNewController">
    <children>
-      <SplitPane fx:id="sppHorizontal" dividerPositions="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane fx:id="sppHorizontal" dividerPositions="0.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
             <StackPane fx:id="stpExcel" minHeight="0.0" minWidth="0.0" />
-            <SplitPane fx:id="sppVertical" dividerPositions="0.5" minHeight="0.0" minWidth="0.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+            <SplitPane fx:id="sppVertical" dividerPositions="0.4" minHeight="0.0" minWidth="0.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
               <items>
                   <StackPane fx:id="stpInfo" minHeight="0.0" minWidth="0.0" />
                   <StackPane fx:id="stpPreviewer" minHeight="0.0" minWidth="0.0" prefHeight="150.0" prefWidth="200.0" />

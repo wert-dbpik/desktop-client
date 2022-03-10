@@ -2,7 +2,6 @@ package ru.wert.datapik.chogori.application.editor;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
@@ -19,7 +18,6 @@ import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.info.InfoPatch;
 import ru.wert.datapik.utils.info.InfoPatchController;
-import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
@@ -32,8 +30,6 @@ import java.util.regex.Pattern;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 /**
  * Класс описывает контроллер редактора таблиц Excel
@@ -117,14 +113,13 @@ public class ExcelEditorNewController {
         excelPatchController.getLblExcelFile().setText(excelFile.getName());
         excelTable = excelPatchController.getExcelTable();
 
-        setIndividualSettingsOfExcelTable();
-
+        setNotEditableTableSettings();
 
         stpExcel.getChildren().add(excelPatch.getParent());
 
     }
 
-    private void setIndividualSettingsOfExcelTable(){
+    private void setNotEditableTableSettings(){
         excelTable.getSelectionModel().setCellSelectionEnabled(false);
         excelTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         Prefix prefix = CH_QUICK_PREFIXES.findByName("ПИК");
@@ -134,24 +129,24 @@ public class ExcelEditorNewController {
         excelTable.getParamA().setVisible(false);
         excelTable.getParamB().setVisible(false);
 
-        ((TableView<EditorRow>)excelTable).getSelectionModel().selectedItemProperty().addListener(observable ->{
-            EditorRow selectedRow = excelTable.getSelectionModel().getSelectedItem();
-            String number = selectedRow.getDecNumber();
+        ((TableView<EditorRow>)excelTable).getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->{
+            if(newValue != null && newValue != oldValue) {
+                String number = newValue.getDecNumber();
 
-            Pattern p = Pattern.compile("\\d{3}.?\\d{3}\\.\\d{3}"); //Децимальный номер xxxxxx.xxx
-            Matcher m = p.matcher(number);
-            String decNumber = "";
-            while(m.find()){
-                decNumber = number.substring(m.start(), m.end());
+                Pattern p = Pattern.compile("\\d{3}.?\\d{3}\\.\\d{3}"); //Децимальный номер xxxxxx.xxx
+                Matcher m = p.matcher(number);
+                String decNumber = "";
+                while (m.find()) {
+                    decNumber = number.substring(m.start(), m.end());
+                }
+
+                Passport passport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(prefix, decNumber);
+
+                Platform.runLater(() -> {
+                    draftsTable.setModifyingItem(passport);
+                    draftsTable.updateView();
+                });
             }
-
-            Passport passport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(prefix,decNumber);
-
-//            List<Draft> drafts = CH_QUICK_DRAFTS.findByPassport(passport);
-            Platform.runLater(()->{
-                draftsTable.setModifyingItem(passport);
-                draftsTable.updateView();
-            });
         });
     }
 
@@ -208,9 +203,9 @@ public class ExcelEditorNewController {
 
     private BtnDouble createInfoOrDraftsTableButton(){
         BtnDouble btnInfoOrTable = new BtnDouble(
-                BTN_INFO_IMG, "Показать информацию",
                 BTN_TABLE_VIEW_IMG, "Показать чертежи",
-                false);
+                BTN_INFO_IMG, "Показать информацию",
+                true);
         btnInfoOrTable.setOnAction(e->{
             if(btnInfoOrTable.getStateProperty().get()) {
                 stpInfo.getChildren().clear();
