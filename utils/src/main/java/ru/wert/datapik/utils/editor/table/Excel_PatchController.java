@@ -68,7 +68,7 @@ public class Excel_PatchController {
             poiReader = new POIReader(excelFile);
             HBox hbox = new HBox();
             hbox.setAlignment(Pos.TOP_CENTER);
-            excelTable = new Excel_TableView(poiReader, hbox).getTableView();
+            excelTable = new Excel_TableView(poiReader, hbox, useContextMenu).getTableView();
             excelTable.setEditable(true);
             hbox.getChildren().add(excelTable);
             excelTable.refresh();

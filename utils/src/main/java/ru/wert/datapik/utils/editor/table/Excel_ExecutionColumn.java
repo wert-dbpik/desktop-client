@@ -44,6 +44,7 @@ public class Excel_ExecutionColumn extends TableColumn<EditorRow, String> {
 //        vBox.setStyle("-fx-background-color: grey; -fx-border-color: black; -fx-alignment: center");
         vBox.setStyle("-fx-alignment: center");
 //        exInfo.setStyle("-fx-background-color: grey; -fx-text-fill: white");
+        if(excelTable.isUseContextMenu())
         contextMenuProperty().setValue(new Excel_ExContextMenu(excelTable, this, currentEx));
         vBox.setOnMousePressed( e->{
             if(e.isSecondaryButtonDown()) {

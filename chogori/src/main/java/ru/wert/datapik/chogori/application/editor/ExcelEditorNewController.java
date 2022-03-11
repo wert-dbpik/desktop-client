@@ -114,7 +114,7 @@ public class ExcelEditorNewController {
         Excel_Patch excelPatch = new Excel_Patch().create();
 
         excelPatchController = excelPatch.getExcelPatchController();
-        excelPatchController.initExcelTableView(excelFile, previewerPatchController, true);
+        excelPatchController.initExcelTableView(excelFile, previewerPatchController, false);
         excelPatchController.initExcelToolBar(true, true);
         //Добавляем кнопки на панель
         excelPatchController.getHbButtons().getChildren().add(createInfoOrDraftsTableButton());

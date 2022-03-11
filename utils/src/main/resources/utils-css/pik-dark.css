@@ -284,10 +284,13 @@
     -fx-font-size: 14px;
 }
 
-#excelViewer .table-row-cell:empty{
+#excelViewer .table-cell{
+    -fx-border-color: #f0f0f0;
+}
+
+#excelViewer .table-cell:empty{
+    -fx-border-color: white;
     -fx-background-color:white;
-    -fx-border-color: transparent;
-    -fx-table-cell-border-color: transparent;
 }
 
 #excelViewer .table-row-cell:selected{

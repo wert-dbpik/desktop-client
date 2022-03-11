@@ -31,6 +31,7 @@ public class Excel_TableView extends TableView<EditorRow> {
 
     private ObservableList<EditorRow> data;
     @Getter private final POIReader poi;
+    @Getter private boolean useContextMenu;
     private HashMap<Integer, Integer> executions;
     private HashMap<Integer, String> executionNames;
     private HashMap<Integer, String> executionDescriptions;
@@ -58,9 +59,11 @@ public class Excel_TableView extends TableView<EditorRow> {
     @Getter private TableColumn<EditorRow, String> paramA;
     @Getter private TableColumn<EditorRow, String> paramB;
 
-    public Excel_TableView(POIReader poi, HBox hbox) {
+    public Excel_TableView(POIReader poi, HBox hbox, boolean useContextMenu) {
         this.poi = poi;
         this.hbox = hbox;
+        this.useContextMenu = useContextMenu;
+
         this.data = poi.findModelData();
         this.executions = poi.getExecutions(); //ключ - порядковый номер исполнения, значение - индекс столбца
 
@@ -95,7 +98,8 @@ public class Excel_TableView extends TableView<EditorRow> {
         resize(tW, getHeight());
         hbox.setPrefWidth(tW);
 
-        setContextMenu(new Excel_ContextMenu(this));
+        if (useContextMenu)
+            setContextMenu(new Excel_ContextMenu(this));
         reArrangeExecutionCols();
 //        testShowTableView();
     }
@@ -348,7 +352,8 @@ public class Excel_TableView extends TableView<EditorRow> {
             if (tc.getId().startsWith("ex")) {
                 tc.setId("ex" + ex);
                 ((Excel_ExecutionColumn)tc).currentEx = ex;
-                tc.contextMenuProperty().setValue(new Excel_ExContextMenu(this, tc, ex));
+                if(useContextMenu)
+                    tc.contextMenuProperty().setValue(new Excel_ExContextMenu(this, tc, ex));
                 executions.put(ex, index);
                 ex++;
             }
