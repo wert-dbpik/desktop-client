@@ -74,7 +74,7 @@ public class TaskUpdateItemsInRoutineTableView<P extends Item> extends Task<Void
         log.error("The task TaskUpdateItemsInRoutineTableView failed with the following exception:\n" + System.err);
 
 //        System.err.println("The task TaskUpdateItemsInRoutineTableView failed with the following exception:");
-//        getException().printStackTrace(System.err);
+        getException().printStackTrace(System.err);
     }
 
 

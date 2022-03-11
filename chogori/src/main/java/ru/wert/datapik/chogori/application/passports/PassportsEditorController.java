@@ -137,6 +137,7 @@ public class PassportsEditorController implements SearchablePane{
     private void loadStackPanePassports() {
 
         passportsPatch = new Passport_Patch().create();
+
         Passport_PatchController passportPatchController = passportsPatch.getPassportPatchController();
         passportPatchController.initPassportsTableView(previewerPatchController, new Passport(), SelectionMode.SINGLE, false);
         passportsTable = passportPatchController.getPassportsTable();

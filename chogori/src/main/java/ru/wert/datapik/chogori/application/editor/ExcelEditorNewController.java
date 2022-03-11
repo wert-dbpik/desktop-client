@@ -91,11 +91,11 @@ public class ExcelEditorNewController {
         this.excelFile = excelFile;
 
 //        createInfoOrDraftsTableButton();
+
         loadStackPanePreviewer();
+        loadStackPaneDrafts();
         loadStackPaneExcel();
         loadStackPaneInfo();
-        loadStackPaneDrafts();
-
     }
 
     /**
@@ -180,7 +180,7 @@ public class ExcelEditorNewController {
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.6));
         draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
-        draftPatch.connectWithPreviewer(draftsTable, previewerController);
+        draftPatch.connectWithPreviewer(draftsTable, previewerPatchController);
 
         stpInfo.getChildren().add(draftPatch.getParent());
 
@@ -196,8 +196,10 @@ public class ExcelEditorNewController {
         info.setStyle("-fx-font-weight: bold; -fx-font-size: 24px; -fx-font-style: oblique");
         infoStackPane = new StackPane(info);
         infoStackPane.setStyle("-fx-alignment: center");
-        stpInfo.getChildren().add(infoStackPane);
+//        stpInfo.getChildren().add(infoStackPane);
     }
+
+//    private void createStackPaneInfo
 
 
 
