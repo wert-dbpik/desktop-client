@@ -107,7 +107,7 @@ public class AppStatic {
                     if(previewerController != null)
                     previewerController.showDraft(null, new File(AppStatic.class.getResource("/utils-pics/NO_IMAGE.pdf").toURI()));
                 } catch (URISyntaxException e) {
-                    e.printStackTrace();
+
                 }
             });
 

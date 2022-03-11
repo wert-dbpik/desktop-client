@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori.application.editor;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -90,11 +91,19 @@ public class ExcelEditorNewController {
         this.excelFile = excelFile;
 
 //        createInfoOrDraftsTableButton();
-        loadStackPaneInfo();
-        loadStackPaneDrafts();
         loadStackPanePreviewer();
         loadStackPaneExcel();
+        loadStackPaneInfo();
+        loadStackPaneDrafts();
 
+    }
+
+    /**
+     * Создание предпросмотрщика
+     */
+    private void loadStackPanePreviewer() {
+        previewerPatchController =
+                CommonUnits.loadStpPreviewer(stpPreviewer, sppHorizontal, sppVertical); //Предпросмотр
     }
 
     /**
@@ -103,12 +112,13 @@ public class ExcelEditorNewController {
     private void loadStackPaneExcel() {
 
         Excel_Patch excelPatch = new Excel_Patch().create();
+
         excelPatchController = excelPatch.getExcelPatchController();
         excelPatchController.initExcelTableView(excelFile, previewerPatchController, true);
         excelPatchController.initExcelToolBar(true, true);
         //Добавляем кнопки на панель
         excelPatchController.getHbButtons().getChildren().add(createInfoOrDraftsTableButton());
-        excelPatchController.getHbButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.4));
+        excelPatchController.getHbButtons().getChildren().add(CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.6));
         //Наименование файла
         excelPatchController.getLblExcelFile().setText(excelFile.getName());
         excelTable = excelPatchController.getExcelTable();
@@ -120,8 +130,11 @@ public class ExcelEditorNewController {
     }
 
     private void setNotEditableTableSettings(){
+        excelTable.setId("excelViewer");
+        excelTable.setEditable(false);
         excelTable.getSelectionModel().setCellSelectionEnabled(false);
         excelTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
         Prefix prefix = CH_QUICK_PREFIXES.findByName("ПИК");
         excelTable.getRowNumber().setVisible(false);
         excelTable.getKrp().setVisible(false);
@@ -156,25 +169,18 @@ public class ExcelEditorNewController {
     private void loadStackPaneDrafts() {
 
         draftPatch = new Draft_Patch().create();
+
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
-        draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.SINGLE);
+        draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.MULTIPLE);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, true, true, true, false,
                 false, true);
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(false, false, true, true);
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.6));
+        draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
-        //Для отображения чертежа
-        draftsTable.getPreparedList().addListener((observable, oldValue, newValue) -> {
-            List<Draft> drafts = new ArrayList<>(newValue);
-            if (!drafts.isEmpty()) {
-                drafts.sort(Comparators.draftsForPreviewerComparator());
-                AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController);
-            } else {
-                AppStatic.openDraftInPreviewer(null, previewerPatchController);
-            }
-        });
+        draftPatch.connectWithPreviewer(draftsTable, previewerController);
 
         stpInfo.getChildren().add(draftPatch.getParent());
 
@@ -193,13 +199,7 @@ public class ExcelEditorNewController {
         stpInfo.getChildren().add(infoStackPane);
     }
 
-    /**
-     * Создание предпросмотрщика
-     */
-    private void loadStackPanePreviewer() {
-        previewerPatchController =
-                CommonUnits.loadStpPreviewer(stpPreviewer, sppHorizontal, sppVertical); //Предпросмотр
-    }
+
 
     private BtnDouble createInfoOrDraftsTableButton(){
         BtnDouble btnInfoOrTable = new BtnDouble(

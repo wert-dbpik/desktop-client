@@ -113,6 +113,7 @@ public class PassportsEditorController implements SearchablePane{
     private void loadStackPaneDrafts() {
 
         draftPatch = new Draft_Patch().create();
+
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
         draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.MULTIPLE);
         draftsTable = draftPatchController.getDraftsTable();
@@ -124,23 +125,7 @@ public class PassportsEditorController implements SearchablePane{
         draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
         //Для отображения чертежа по умолчанию
-        draftsTable.getPreparedList().addListener((observable, oldValue, newValue) -> {
-                Draft currentlyShownDraft = previewerPatchController.getCurrentDraft();
-                List<Draft> drafts = new ArrayList<>(newValue);
-                if (!drafts.isEmpty()) {
-                    drafts.sort(Comparators.draftsForPreviewerComparator());
-                    Draft defaultShownDraft = drafts.get(0);
-//                    if(currentlyShownDraft != null && !defaultShownDraft.getId().equals(currentlyShownDraft.getId()))
-                        AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController);
-                } else {
-                    //Отображаем NO_IMAGE
-                    if(currentlyShownDraft != null)
-                        AppStatic.openDraftInPreviewer(null, previewerPatchController);
-                }
-
-        });
-
-
+        draftPatch.connectWithPreviewer(draftsTable, previewerPatchController);
 
         stpDrafts.getChildren().add(draftPatch.getParent());
 
