@@ -284,24 +284,23 @@
     -fx-font-size: 14px;
 }
 
-#excelViewer .table-cell{
-    -fx-border-color: #f0f0f0;
-    /*-fx-table-cell-border-color: #f0f0f0;*/
+.table-row-cell:selected, .tree-view-row-cell:selected{
+    -fx-background-color: #28a3f4;
+    -fx-text-fill: white;
 }
 
+.table-row-cell:selected .table-cell{
+    -fx-text-fill: white;
+}
+
+#excelViewer .table-cell{
+    -fx-border-color: #f0f0f0;
+}
 
 #excelViewer .table-cell:empty{
     -fx-border-color: white;
     -fx-background-color:white;
 }
-
-/*#excelViewer .table-row-cell:empty{*/
-/*    -fx-background-color:white;*/
-/*    -fx-border-color: transparent;*/
-/*    -fx-table-cell-border-color: transparent;*/
-/*}*/
-
-
 
 #excelViewer .table-row-cell:selected{
     -fx-table-cell-border-color: #f0f0f0;
