@@ -284,6 +284,11 @@
     -fx-font-size: 14px;
 }
 
+.tree-view-row-cell:selected{
+    -fx-background-color: #28a3f4;
+    -fx-text-fill: white;
+}
+
 .table-row-cell:selected, .tree-view-row-cell:selected{
     -fx-background-color: #28a3f4;
     -fx-text-fill: white;
