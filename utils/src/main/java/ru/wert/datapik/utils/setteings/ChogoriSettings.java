@@ -12,7 +12,7 @@ import java.util.List;
 public class ChogoriSettings {
 
     //НАСТРАИВАЕМЫЕ ПЕРЕМЕННЫЕ
-    public static int CH_MONITOR;//0 - первый монитор,  1 - второй монитор
+
     public static String CH_DEFAULT_PREFIX = "ПИК"; //Префикс предприятия
     public static String CH_DEFAULT_MAT_TYPE = "Листовой"; //Расчетный тип материала
     public static String CH_DEFAULT_DENSITY = "сталь"; //Плотность стали

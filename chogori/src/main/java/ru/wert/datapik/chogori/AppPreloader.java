@@ -14,8 +14,7 @@ import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.utils.connectionProperties.NoConnection;
 import ru.wert.datapik.utils.statics.AppStatic;
-
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_MONITOR;
+import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 
 public class AppPreloader extends Preloader {
@@ -47,7 +46,7 @@ public class AppPreloader extends Preloader {
         preloaderWindow.getIcons().add(new Image("/utils-pics/Pikovka(256x256).png"));
         preloaderWindow.setTitle("Загрузка данных");
         preloaderWindow.show();
-        AppStatic.centerWindow(preloaderWindow, false, CH_MONITOR);
+        AppStatic.centerWindow(preloaderWindow, false, WinformSettings.CH_MONITOR);
     }
 
     private void showSetConnectionDialog(Stage preloaderWindow) {

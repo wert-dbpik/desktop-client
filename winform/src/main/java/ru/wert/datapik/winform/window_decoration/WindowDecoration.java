@@ -12,6 +12,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 
 import java.io.IOException;
@@ -136,7 +137,11 @@ public class WindowDecoration {
 
         List<Screen> screenList = Screen.getScreens();
         //Если всего один монитор, то открываем на нем
-        int monitor = screenList.size() - 1;
+        int monitor;
+        if(screenList.size() == 1)
+            monitor = 0;
+        else
+            monitor =  WinformSettings.CH_MONITOR;
 
         if(fullScreen) {
             window.setWidth(screenList.get(monitor).getBounds().getWidth());

@@ -27,12 +27,12 @@ import ru.wert.datapik.utils.tempfile.TempDir;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
+import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_MONITOR;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 @Slf4j
@@ -67,7 +67,7 @@ public class StartChogori extends Application {
         while(true) {
             if(defaultSettings != null) {
                 ChogoriSettings.CH_TEMPDIR = tempDir;
-                CH_MONITOR = defaultSettings.getMonitor();
+                WinformSettings.CH_MONITOR = defaultSettings.getMonitor();
                 break;
             }
         }
@@ -137,7 +137,7 @@ public class StartChogori extends Application {
 //            setOnKeysPressedListener();
 
             stage.show();
-            AppStatic.centerWindow(stage, true, CH_MONITOR);
+            AppStatic.centerWindow(stage, true, WinformSettings.CH_MONITOR);
 
 
         }catch (IOException e) {
