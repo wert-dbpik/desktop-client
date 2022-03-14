@@ -87,7 +87,7 @@ public class AppStatic {
                     log.info("createSelectionListener : файл '{}' загружен c сервера во временную папку", String.valueOf(fileId) + "." + ext);
                 } else {
                     log.error("createSelectionListener : файл '{}' не был загружен с сервера", String.valueOf(fileId) + "." + ext);
-                    Warning1.create($ATTENTION, $DRAFT_IS_NOT_AVAILABLE, $MAYBE_IT_IS_CORRUPTED);
+                    Platform.runLater(()->Warning1.create($ATTENTION, $DRAFT_IS_NOT_AVAILABLE, $MAYBE_IT_IS_CORRUPTED));
                     return;
                 }
 

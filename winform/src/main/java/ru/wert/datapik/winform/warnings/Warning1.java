@@ -23,6 +23,7 @@ public class Warning1 extends ModalWindow {
             Stage stage = new Stage();
             FXMLLoader userDialogLoader = new FXMLLoader(Warning1.class.getResource("/winform-fxml/warnings/warning1.fxml"));
             Parent parent = userDialogLoader.load();
+            parent.getStylesheets().add(Warning2.class.getResource("/utils-css/pik-dark.css").toString());
             stage.setScene(new Scene(parent));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
