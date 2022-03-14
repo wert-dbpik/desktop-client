@@ -169,10 +169,53 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="txtAreaNote" maxHeight="1.7976931348623157E308" prefWidth="207.0" VBox.vgrow="ALWAYS">
+                        <TextArea fx:id="txtAreaNote" maxHeight="1.7976931348623157E308" prefHeight="120.0" prefWidth="260.0" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin></TextArea>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="70.0" prefWidth="260.0">
+                     <children>
+                        <Label text="При совпадении:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox>
+                           <children>
+                              <RadioButton fx:id="rbAsk" mnemonicParsing="false" text="Спросить">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="3.0" />
+                                 </HBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="rbChange" mnemonicParsing="false" text="Заменить">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets right="3.0" />
+                                 </padding>
+                              </RadioButton>
+                              <RadioButton fx:id="rbDelete" mnemonicParsing="false" text="Удалить">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </RadioButton>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <Separator prefWidth="200.0" />

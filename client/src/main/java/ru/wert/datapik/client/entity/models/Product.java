@@ -22,6 +22,7 @@ public class Product extends _BaseEntity implements CatalogableItem, Comparable<
     private Passport passport;
     private String variant;
     private Folder folder; //Реальная папка в архиве
+    private String initialExcelName;
     private String note;
 
     @Override

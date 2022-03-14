@@ -2,6 +2,8 @@ package ru.wert.datapik.utils.entities.drafts;
 
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -109,6 +111,15 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private Button btnSearchFolder;
 
     @FXML
+    private RadioButton rbAsk;
+
+    @FXML
+    private RadioButton rbChange;
+
+    @FXML
+    private RadioButton rbDelete;
+
+    @FXML
     private TextArea txtAreaNote;
 
     @FXML
@@ -135,17 +146,127 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     private Draft currentDraft; //Текущий чертеж для которого нажали OK
 
+    private boolean askMe, changeMe, deleteMe;
+
     @FXML
     void initialize(){
+
+        initButtonCancel();
+
+        initRadioGroup();
+
+    }
+
+    /**
+     * Метод инициализирует кнопку Отмена
+     */
+    private void initButtonCancel() {
         btnCancel.setOnAction(event -> {
             // НЕ РАБОТААЕТ!!!!
-            System.out.println("cancel pressed");
             if (manipulation.isRunning()) {
                 manipulation.cancel();
             } else {
                 super.cancelPressed(event);
             }
         });
+    }
+
+    /**
+     * Радио группа определяет действие при сопадении добавляемого чертежа с имеющимся
+     * По умолчанию - полагается спросить, что делать
+     */
+    private void initRadioGroup() {
+        ToggleGroup radioGroup = new ToggleGroup();
+        radioGroup.getToggles().addAll(rbAsk, rbChange, rbDelete);
+        radioGroup.selectedToggleProperty().addListener(observable -> {
+            askMe = rbAsk.isSelected();
+            changeMe = rbChange.isSelected();
+            deleteMe = rbDelete.isSelected();
+        });
+        rbAsk.setSelected(true);
+    }
+
+    /**
+     * Предварительно происходит выбор чертежа или папки с чертежами
+     */
+    @Override
+    public void init(EOperation operation, IFormView<Draft> formView, ItemCommands<Draft> commands) {
+        super.initSuper(operation, formView, commands, CH_QUICK_DRAFTS);
+        this.tableView = (Draft_TableView) formView;
+
+        initOperationProperty(operation);
+
+        if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
+        if(operationProperty.get().equals(EOperation.ADD_FOLDER)) loadFolder();
+        if(operationProperty.get().equals(EOperation.REPLACE)) loadOneDraft();
+
+        //Если ничего не выбрано, выходим без создания окна
+        if((operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)
+                || operationProperty.get().equals(EOperation.REPLACE))
+                && (draftsList == null || draftsList.isEmpty())){
+            FormViewACCWindow.windowCreationAllowed = false;
+            return;
+        }
+
+        new BXPage().create(bxPage); //СТРАНИЦЫ
+        new BXDraftType().create(bxType); //ТИП ЧЕРТЕЖА
+        new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
+        new BXFolder().create(bxFolder); //ИЗДЕЛИЯ
+        new BtnSearchProduct().create(btnSearchFolder); //НАЙТИ/ДОБАВИТЬ изделие
+        new BtnCancel().create(btnCancel); //ОТМЕНА кнопка
+
+        createLabelFileName();
+
+        initLabelDraftStatus();
+
+        createPreviewer();
+
+        btnSearchFolder.setOnAction(this::findFolder);
+
+        //Устанавливаем начальные значения полей в зависимости от operation
+        setInitialValues();
+
+        if(operation.equals(EOperation.ADD) || operation.equals(EOperation.ADD_FOLDER) && currentFile != null){
+            //Показываем изначальное число файлов
+            lblNumFile.setText("Файлов: " + draftsList.size());
+            //Ghb последующей итерации
+            currentFile.addListener((observable, oldValue, newValue) -> {
+                lblNumFile.setText(String.format("Файл %d из %d", newValue.intValue()+1, draftsList.size()));
+            });
+        } else
+            lblNumFile.setText("Файлов: 1");
+
+    }
+
+    /**
+     * Метод инициирует надпись со статусом чертежа - ДЕЙСТВУЕТ, ЗАМЕНЕН, АННУЛИРОВАН
+     */
+    private void initLabelDraftStatus() {
+        if(operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER))
+            setDraftStatus(null);
+        else
+            setDraftStatus(tableView.getAllSelectedItems() == null ? null : tableView.getAllSelectedItems().get(0));
+    }
+
+    /**
+     * Метод содержит слушатель для управлением надписью на кнопке btnOk
+     * @param operation EOperation
+     */
+    private void initOperationProperty(EOperation operation) {
+        operationProperty = new SimpleObjectProperty<>();
+        operationProperty.addListener((observable, oldValue, newValue) -> {
+            if(newValue.equals(EOperation.ADD) || newValue.equals(EOperation.ADD_FOLDER)) {
+                btnOk.setText("ДОБАВИТЬ");
+                btnOk.setStyle("-fx-background-color: #8bc8ff;");
+            }else if(newValue.equals(EOperation.REPLACE)){
+                btnOk.setText("ЗАМЕНИТЬ");
+                btnOk.setStyle("-fx-background-color: #70DB55;");
+            }else {
+                btnOk.setText("ИЗМЕНИТЬ");
+                btnOk.setStyle("-fx-background-color: #ffd4a3;");
+            }
+        });
+        operationProperty.set(operation);
     }
 
     @FXML
@@ -360,88 +481,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         };
     }
 
-    /**
-     * Предварительно происходит выбор чертежа или папки с чертежами
-     */
-    @Override
-    public void init(EOperation operation, IFormView<Draft> formView, ItemCommands<Draft> commands) {
-        super.initSuper(operation, formView, commands, CH_QUICK_DRAFTS);
-        this.tableView = (Draft_TableView) formView;
 
-        initOperationProperty(operation);
-
-        if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
-        if(operationProperty.get().equals(EOperation.ADD_FOLDER)) loadFolder();
-        if(operationProperty.get().equals(EOperation.REPLACE)) loadOneDraft();
-
-        //Если ничего не выбрано, выходим без создания окна
-        if((operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)
-                || operationProperty.get().equals(EOperation.REPLACE))
-                && (draftsList == null || draftsList.isEmpty())){
-            FormViewACCWindow.windowCreationAllowed = false;
-            return;
-        }
-
-        new BXPage().create(bxPage); //СТРАНИЦЫ
-        new BXDraftType().create(bxType); //ТИП ЧЕРТЕЖА
-        new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
-        new BXFolder().create(bxFolder); //ИЗДЕЛИЯ
-        new BtnSearchProduct().create(btnSearchFolder); //НАЙТИ/ДОБАВИТЬ изделие
-        new BtnCancel().create(btnCancel); //ОТМЕНА кнопка
-
-        createLabelFileName();
-
-        initLabelDraftStatus();
-
-        createPreviewer();
-
-        btnSearchFolder.setOnAction(this::findFolder);
-
-        //Устанавливаем начальные значения полей в зависимости от operation
-        setInitialValues();
-
-        if(operation.equals(EOperation.ADD) || operation.equals(EOperation.ADD_FOLDER) && currentFile != null){
-            //Показываем изначальное число файлов
-            lblNumFile.setText("Файлов: " + draftsList.size());
-            //Ghb последующей итерации
-            currentFile.addListener((observable, oldValue, newValue) -> {
-                lblNumFile.setText(String.format("Файл %d из %d", newValue.intValue()+1, draftsList.size()));
-            });
-        } else
-            lblNumFile.setText("Файлов: 1");
-
-    }
-
-    /**
-     * Метод инициирует надпись со статусом чертежа - ДЕЙСТВУЕТ, ЗАМЕНЕН, АННУЛИРОВАН
-     */
-    private void initLabelDraftStatus() {
-        if(operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER))
-            setDraftStatus(null);
-        else
-            setDraftStatus(tableView.getAllSelectedItems() == null ? null : tableView.getAllSelectedItems().get(0));
-    }
-
-    /**
-     * Метод содержит слушатель для управлением надписью на кнопке btnOk
-     * @param operation EOperation
-     */
-    private void initOperationProperty(EOperation operation) {
-        operationProperty = new SimpleObjectProperty<>();
-        operationProperty.addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals(EOperation.ADD) || newValue.equals(EOperation.ADD_FOLDER)) {
-                btnOk.setText("ДОБАВИТЬ");
-                btnOk.setStyle("-fx-background-color: #8bc8ff;");
-            }else if(newValue.equals(EOperation.REPLACE)){
-                btnOk.setText("ЗАМЕНИТЬ");
-                btnOk.setStyle("-fx-background-color: #70DB55;");
-            }else {
-                btnOk.setText("ИЗМЕНИТЬ");
-                btnOk.setStyle("-fx-background-color: #ffd4a3;");
-            }
-        });
-        operationProperty.set(operation);
-    }
 
     /**
      * Метод описывает действие при нажатии на кнопку Добавить пакет
@@ -829,27 +869,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         txtNumber.setText(decNumber);
         txtName.setText(partName);
 
-
-        //Имеем обрезок из номера и наименования
-        //В оставшейся части ищем первый пробел -
-//        int index = initialFileName.indexOf(" ");
-//
-//        if(index > 0 && count == 0){
-//            //Строка с номером - подстрока до первого пробела
-//            String strWithNumber = initialFileName.substring(0, index);
-//
-//            Pattern pattern = Pattern.compile("\\d{3}.?\\d{3}\\.\\d{3}");
-//            //В строке с номером находим сам номер
-//            Matcher matcher = pattern.matcher(strWithNumber);
-//            while (matcher.find()) {
-//                String decNumber = initialFileName.substring(matcher.start(), matcher.end());
-//                txtNumber.setText(decNumber);
-//            }
-//            txtName.setText(initialFileName.substring(index + 1));
-//        } else {
-//            txtNumber.setText("");
-//            txtName.setText(initialFileName);
-//        }
     }
 
 

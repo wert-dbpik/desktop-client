@@ -68,32 +68,6 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 
     }
 
-//    private void findChosenGroup(EOperation operation, IFormView<Product> formView) {
-//        //Find default group for later
-//        defaultGroup = CH_PRODUCT_GROUPS.findByName("Разное");
-//
-//        //Определяем нулевую группу в корне дерева, т.к. она нам нужна при нажатии на кнопку GLOBE
-//        ProductGroup rootGroup = ((Product_TableView) formView).getRootItem().getValue();
-//
-//        //Потом определяем текущую выделенную группу, если она выбрана
-//        ProductGroup chosenGroup = null;
-//        TreeItem<ProductGroup> productGroupTreeItem = ((Product_TableView) formView).getChosenCatalogItem();
-//        if(productGroupTreeItem != null)
-//            chosenGroup = productGroupTreeItem.getValue();
-//
-//        Product chosenProduct = formView.getAllSelectedItems().get(0);
-//        //Depending on an operation we switch bxGroup to proper group
-//        if (operation.equals(EOperation.ADD)) { //When operation is ADD
-//            if (chosenGroup == null || chosenGroup.equals(rootGroup)) {
-//                group = defaultGroup;
-//            } else
-//                group = chosenGroup;
-//        }
-//        if(operation.equals(EOperation.COPY)){
-//            group = chosenProduct.getProductGroup();
-//        }
-//    }
-
     @FXML
     void initialize(){
         AppStatic.createSpIndicator(spIndicator);
@@ -108,7 +82,6 @@ public class Product_ACCController extends FormView_ACCController<Product> {
             this.group = productGroup;
             bxGroup.getSelectionModel().select(group);
         }
-
     }
 
     @FXML
@@ -120,7 +93,6 @@ public class Product_ACCController extends FormView_ACCController<Product> {
     void ok(ActionEvent event) {
         super.okPressed(event, spIndicator, btnOk);
     }
-
 
 
     @Override
@@ -143,6 +115,7 @@ public class Product_ACCController extends FormView_ACCController<Product> {
                 passport,
                 tfVariant.getText().trim(),
                 null,
+                null,
                 taNote.getText()
         );
     }
@@ -161,6 +134,7 @@ public class Product_ACCController extends FormView_ACCController<Product> {
         tfVariant.setText(oldItem.getVariant());
         tfName.setText(oldItem.getName());
         bxGroup.setValue(oldItem.getProductGroup());
+//        tfInitialExcelFile.setValue(oldItem.getInitialExcelName());
         taNote.setText(oldItem.getNote());
     }
 
