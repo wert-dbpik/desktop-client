@@ -38,7 +38,7 @@ public class Passport extends _BaseEntity implements Item  {
 
         return "Passport{" +
                 ", id=" + id +
-                "prefix=" + ((prefix == null) ? null : prefix.getName()) +
+                " prefix=" + ((prefix == null) ? null : prefix.getName()) +
                 ", number='" + number + '\'' +
                 ", name='" + name + '\'' +
                 '}';

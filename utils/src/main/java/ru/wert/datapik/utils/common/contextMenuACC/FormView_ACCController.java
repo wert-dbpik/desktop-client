@@ -45,6 +45,7 @@ public abstract class FormView_ACCController<P extends Item>{
     protected P oldItem;
     private Task<Void> manipulation;
     private StackPane spIndicator;
+    private boolean multiple;
 
 
     public abstract void init(EOperation operation, IFormView<P> formView, ItemCommands<P> commands);
@@ -55,6 +56,7 @@ public abstract class FormView_ACCController<P extends Item>{
     public abstract void fillFieldsOnTheForm(P oldItem);
     public abstract void changeOldItemFields(P oldItem);
     public abstract void showEmptyForm();
+
 
 //    public abstract void setFocusedItem(P focusedItem);
 
@@ -82,6 +84,13 @@ public abstract class FormView_ACCController<P extends Item>{
 
     protected void cancelPressed(Event event){
         closeWindow(event);
+    }
+
+    protected boolean okPressed(Event event, StackPane spIndicator, Button btnOk, boolean multiple){
+
+        okPressed(event, spIndicator, btnOk);
+
+        return true;
     }
 
     protected void okPressed(Event event, StackPane spIndicator, Button btnOk){
@@ -170,7 +179,7 @@ public abstract class FormView_ACCController<P extends Item>{
      * Запись проверяется со списком уже существующих записей
      * Имя изменяемой записи из проверки исключается
      */
-    private boolean isDuplicated(P newItem, P oldItem){
+    protected boolean isDuplicated(P newItem, P oldItem){
 
         //Из листа удаляется выделенная запись (старая)
         ObservableList<P> items = service.findAll();

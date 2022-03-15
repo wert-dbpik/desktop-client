@@ -81,7 +81,8 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
     @Override
     public String toString() {
         return "Draft{" +
-                "passport=" + passport +
+                " id=" + id +
+                " passport=" + passport +
                 ", extension='" + extension + '\'' +
                 ", initialDraftName='" + initialDraftName + '\'' +
                 ", folder=" + folder +
