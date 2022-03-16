@@ -197,7 +197,24 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         super.initSuper(operation, formView, commands, CH_QUICK_DRAFTS);
         this.tableView = (Draft_TableView) formView;
 
+        currentPosition = new SimpleIntegerProperty();
+
         initOperationProperty(operation);
+
+        switch(operationProperty.get()){
+            case REPLACE:
+                btnOk.setText("ЗАМЕНИТЬ");
+                btnOk.setStyle("-fx-background-color: #70DB55;");
+                break;
+            case CHANGE:
+                btnOk.setText("ИЗМЕНИТЬ");
+                btnOk.setStyle("-fx-background-color: #ffd4a3;");
+                break;
+            default: //ADD, ADD_FOLDER
+                btnOk.setText("ДОБАВИТЬ");
+                btnOk.setStyle("-fx-background-color: #8bc8ff;");
+                break;
+        }
 
         if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
         if(operationProperty.get().equals(EOperation.ADD_FOLDER)) loadFolder();
@@ -229,17 +246,26 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         //Устанавливаем начальные значения полей в зависимости от operation
         setInitialValues();
 
-        if(operation.equals(EOperation.ADD_FOLDER) && currentPosition != null){
+
+        if(operation.equals(EOperation.ADD_FOLDER)){
             //Показываем изначальное число файлов
             lblNumFile.setText("Файлов: " + draftsList.size());
             //Ghb последующей итерации
-            currentPosition.addListener((observable, oldValue, newValue) -> {
-                lblNumFile.setText(String.format("Файл %d из %d", newValue.intValue()+1, draftsList.size()));
-                Long id = draftsList.get(newValue.intValue()).draftId;
-                if(id != null) {
-                    operationProperty.set(EOperation.CHANGE);
+            currentPosition.addListener((observable) -> {
+                lblNumFile.setText(String.format("Файл %d из %d", currentPosition.get() +1, draftsList.size()));
+                Long id = draftsList.get(currentPosition.get()).draftId;
+                if(id == null) {
+                    btnOk.setText("ДОБАВИТЬ");
+                    btnOk.setStyle("-fx-background-color: #8bc8ff;");
+                    manipulation = addDraftTask();
+                } else {
+                    btnOk.setText("ИЗМЕНИТЬ");
+                    btnOk.setStyle("-fx-background-color: #ffd4a3;");
+                    manipulation = changeDraftTask();
                 }
             });
+            //Инициируем
+            manipulation = addDraftTask();
         } else
             lblNumFile.setText("Файлов: 1");
 
@@ -261,45 +287,30 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      */
     private void initOperationProperty(EOperation operation) {
         operationProperty = new SimpleObjectProperty<>();
-        operationProperty.addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals(EOperation.ADD) || newValue.equals(EOperation.ADD_FOLDER)) {
-                btnOk.setText("ДОБАВИТЬ");
-                btnOk.setStyle("-fx-background-color: #8bc8ff;");
-            }else if(newValue.equals(EOperation.REPLACE)){
-                btnOk.setText("ЗАМЕНИТЬ");
-                btnOk.setStyle("-fx-background-color: #70DB55;");
-            }else {
-                btnOk.setText("ИЗМЕНИТЬ");
-                btnOk.setStyle("-fx-background-color: #ffd4a3;");
-            }
-        });
         operationProperty.set(operation);
     }
 
     @FXML
     void ok(ActionEvent event) {
-        if(notNullFieldEmpty()) {
+        if (notNullFieldEmpty()) {
             Warning1.create($ATTENTION, "Некоторые поля не заполнены!", "Заполните все поля");
             return;
         }
         //draftsList == null при изменении
-        if (draftsList != null && draftsList.size() > 1) {
-            if (operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)) {
+        if (draftsList != null && !draftsList.isEmpty()) {
+            if (operationProperty.get().equals(EOperation.ADD_FOLDER)) {
                 //При сохранении чертежа, нам нужен id сохраненного чертежа
                 currentDraft = getNewItem();
                 currentCommand = new Draft_MultipleAddCommand(currentDraft, tableView);
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
-
-                manipulation = addDraftTask();
+                new Thread(manipulation).start();
+            } else if (operationProperty.get().equals(EOperation.REPLACE)) {
+                replaceDraft(event);
             } else {
-                //Иначе - замена
-                manipulation = changeDraftTask();
+                super.okPressed(event, spIndicator, btnOk);
             }
-            new Thread(manipulation).start();
-        } else if (operationProperty.get().equals(EOperation.REPLACE)) {
-            replaceDraft(event);
-        } else{
+        } else {
             super.okPressed(event, spIndicator, btnOk);
         }
     }
@@ -309,9 +320,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * Если новый чертеж повторяет имеющийся ДЕЙСТВУЮЩИЙ или АННУЛИРОВАННЫЙ, то пользователю поступит предложение его заменить
      * Предполагается, что метод действует в потоке отличном от главного, поэтому окно с сообщением выводится принудительно
      * в главном потоке. Ожидание ответа от пользователя происходит с помощью класса CountDownLatch и связывания BooleanProperty
-     * @param newDraft
-     * @return
-     * @throws InterruptedException
      */
     public boolean draftIsDuplicated(Draft newDraft){
         //Так как пасспорт нового чертежа еще фактически не существует, то ищем такой же пасспорт в базе по косвенным признакам
@@ -498,9 +506,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         oldDraft.setStatusUser(CH_CURRENT_USER);
         oldDraft.setStatusTime(LocalDateTime.now().toString());
 
-        manipulation = replaceDraftTask(event, oldDraft);
+        currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
+        currentCommand.execute();
 
-        new Thread(manipulation).start();
+        currentCommand = new Draft_AddCommand(getNewItem(), tableView);
+        currentCommand.execute();;
+//        manipulation = replaceDraftTask(event, oldDraft);
+
+//        new Thread(manipulation).start();
     }
 
     @NotNull
@@ -508,6 +521,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
+
                 currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
                 currentCommand.execute();
                 //Сохраняем новый чертеж
@@ -722,7 +736,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             Draft draft = CH_QUICK_DRAFTS.findById(draftsList.get(num).getDraftId());
             fillFieldsOnTheForm(draft);
             //сохраненный чертеж может быть только изменен
-            operationProperty.set(EOperation.CHANGE);
+//            operationProperty.set(EOperation.CHANGE);
 
         }
     }
