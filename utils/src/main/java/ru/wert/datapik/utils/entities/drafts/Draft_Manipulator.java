@@ -8,14 +8,10 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.text.Text;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
-import ru.wert.datapik.client.entity.models.ProductGroup;
-import ru.wert.datapik.client.interfaces.Item;
-import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
-import ru.wert.datapik.utils.entities.drafts.commands._Draft_Commands;
+import ru.wert.datapik.utils.entities.drafts.commands.Draft_DeleteCommand;
 import ru.wert.datapik.winform.warnings.Warning2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,19 +22,14 @@ public class Draft_Manipulator {
 
     private final Draft_TableView tableView;
 
-
     public Draft_Manipulator(Draft_TableView tableView) {
         this.tableView = tableView;
 
         tableView.setOnKeyPressed(e->{
             if (e.getCode() == KeyCode.DELETE) {
-                List<Draft> selectedItems = tableView.getSelectionModel().getSelectedItems();
+                List<Draft> selectedItems = tableView.getAllSelectedItems();
                 if (selectedItems != null && !selectedItems.isEmpty()) {
-                    if(Warning2.create($ATTENTION, "Вы уверены, что хотите удалить чертежи?",
-                            "Их восстановление будет невозможно!")){
-                        ((_Draft_Commands) tableView.getCommands()).delete(e, selectedItems);
-                        tableView.updateRoutineTableView();
-                    };
+                    tableView.getCommands().delete(e, selectedItems);
                 }
             }
 

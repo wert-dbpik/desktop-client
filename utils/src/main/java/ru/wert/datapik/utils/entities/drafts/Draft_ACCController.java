@@ -506,14 +506,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         oldDraft.setStatusUser(CH_CURRENT_USER);
         oldDraft.setStatusTime(LocalDateTime.now().toString());
 
-        currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
-        currentCommand.execute();
+        manipulation = replaceDraftTask(event, oldDraft);
 
-        currentCommand = new Draft_AddCommand(getNewItem(), tableView);
-        currentCommand.execute();;
-//        manipulation = replaceDraftTask(event, oldDraft);
-
-//        new Thread(manipulation).start();
+        new Thread(manipulation).start();
     }
 
     @NotNull

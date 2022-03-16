@@ -18,8 +18,8 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class Draft_DeleteCommand implements ICommand {
 
-    private List<Draft> items;
-    private Draft_TableView tableView;
+    private final List<Draft> items;
+    private final Draft_TableView tableView;
 
     /**
      *

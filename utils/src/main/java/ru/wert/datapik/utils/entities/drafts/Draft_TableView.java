@@ -49,10 +49,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     @Getter private Draft_Manipulator manipulator;
     @Getter@Setter private String searchedText = "";
 
-
     @Getter@Setter private List<Folder> selectedFolders;
     @Getter@Setter private List<Folder> selectedFoldersForContextMenu;
-
 
     @Getter ListProperty<Draft> preparedList = new SimpleListProperty<>();
 
@@ -99,11 +97,12 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         createContextMenu();
 
         //Если для предпросмотра Alt не нужен, достаточно только выделения
-        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == null || newValue.getId() == null) return;
+        getSelectionModel().selectedItemProperty().addListener((observable) -> {
+            Draft selectedDraft = getSelectionModel().getSelectedItem();
+            if(selectedDraft == null || selectedDraft.getId() == null) return;
             if(!getAltOnProperty().get()) {
                 Platform.runLater(()->{
-                    AppStatic.openDraftInPreviewer(newValue, previewerController);
+                    AppStatic.openDraftInPreviewer(selectedDraft, previewerController);
                 });
             }
         });
