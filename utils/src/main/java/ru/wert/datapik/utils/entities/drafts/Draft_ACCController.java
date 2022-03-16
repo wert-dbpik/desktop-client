@@ -188,7 +188,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             changeMe = rbChange.isSelected();
             deleteMe = rbDelete.isSelected();
         });
-        rbAsk.setSelected(true);
+        rbDelete.setSelected(true);
     }
 
     /**
@@ -202,6 +202,74 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         currentPosition = new SimpleIntegerProperty();
 
         initOperationProperty(operation);
+
+        new BXPage().create(bxPage); //СТРАНИЦЫ
+        new BXDraftType().create(bxType); //ТИП ЧЕРТЕЖА
+        new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
+        new BXFolder().create(bxFolder); //ИЗДЕЛИЯ
+        new BtnSearchProduct().create(btnSearchFolder); //НАЙТИ/ДОБАВИТЬ изделие
+        new BtnCancel().create(btnCancel); //ОТМЕНА кнопка
+
+        createLabelFileName();
+
+        initLabelDraftStatus();
+
+        createPreviewer();
+
+        btnSearchFolder.setOnAction(this::findFolder);
+
+        //Устанавливаем начальные значения полей в зависимости от operation
+        setInitialValues();
+
+        if(operation.equals(EOperation.ADD_FOLDER)){
+            setSettingsForOperationAddFolder();
+        } else
+            lblNumFile.setText("Файлов: 1");
+
+    }
+
+    /**
+     * Метод устанавливает начальное значение кнопки ОК, количество файлов в папке
+     * Начальную позицию добавляемых чертежей в папке и вешает слушателя на изменение этой позиции
+     */
+    private void setSettingsForOperationAddFolder() {
+        //Показываем изначальное число файлов
+        lblNumFile.setText("Файлов: " + draftsList.size());
+        //Ghb последующей итерации
+        currentPosition.addListener((observable) -> {
+            lblNumFile.setText(String.format("Файл %d из %d", currentPosition.get() +1, draftsList.size()));
+            Long id = draftsList.get(currentPosition.get()).draftId;
+            if(id == null) {
+                btnOk.setText("ДОБАВИТЬ");
+                btnOk.setStyle("-fx-background-color: #8bc8ff;");
+                manipulation = addDraftTask();
+            } else {
+                btnOk.setText("ИЗМЕНИТЬ");
+                btnOk.setStyle("-fx-background-color: #ffd4a3;");
+                manipulation = changeDraftTask();
+            }
+        });
+        //Инициируем
+        manipulation = addDraftTask();
+    }
+
+    /**
+     * Метод инициирует надпись со статусом чертежа - ДЕЙСТВУЕТ, ЗАМЕНЕН, АННУЛИРОВАН
+     */
+    private void initLabelDraftStatus() {
+        if(operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER))
+            setDraftStatus(null);
+        else
+            setDraftStatus(tableView.getAllSelectedItems() == null ? null : tableView.getAllSelectedItems().get(0));
+    }
+
+    /**
+     * Метод содержит слушатель для управлением надписью на кнопке btnOk
+     * @param operation EOperation
+     */
+    private void initOperationProperty(EOperation operation) {
+        operationProperty = new SimpleObjectProperty<>();
+        operationProperty.set(operation);
 
         switch(operationProperty.get()){
             case REPLACE:
@@ -229,67 +297,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             FormViewACCWindow.windowCreationAllowed = false;
             return;
         }
-
-        new BXPage().create(bxPage); //СТРАНИЦЫ
-        new BXDraftType().create(bxType); //ТИП ЧЕРТЕЖА
-        new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
-        new BXFolder().create(bxFolder); //ИЗДЕЛИЯ
-        new BtnSearchProduct().create(btnSearchFolder); //НАЙТИ/ДОБАВИТЬ изделие
-        new BtnCancel().create(btnCancel); //ОТМЕНА кнопка
-
-        createLabelFileName();
-
-        initLabelDraftStatus();
-
-        createPreviewer();
-
-        btnSearchFolder.setOnAction(this::findFolder);
-
-        //Устанавливаем начальные значения полей в зависимости от operation
-        setInitialValues();
-
-
-        if(operation.equals(EOperation.ADD_FOLDER)){
-            //Показываем изначальное число файлов
-            lblNumFile.setText("Файлов: " + draftsList.size());
-            //Ghb последующей итерации
-            currentPosition.addListener((observable) -> {
-                lblNumFile.setText(String.format("Файл %d из %d", currentPosition.get() +1, draftsList.size()));
-                Long id = draftsList.get(currentPosition.get()).draftId;
-                if(id == null) {
-                    btnOk.setText("ДОБАВИТЬ");
-                    btnOk.setStyle("-fx-background-color: #8bc8ff;");
-                    manipulation = addDraftTask();
-                } else {
-                    btnOk.setText("ИЗМЕНИТЬ");
-                    btnOk.setStyle("-fx-background-color: #ffd4a3;");
-                    manipulation = changeDraftTask();
-                }
-            });
-            //Инициируем
-            manipulation = addDraftTask();
-        } else
-            lblNumFile.setText("Файлов: 1");
-
-    }
-
-    /**
-     * Метод инициирует надпись со статусом чертежа - ДЕЙСТВУЕТ, ЗАМЕНЕН, АННУЛИРОВАН
-     */
-    private void initLabelDraftStatus() {
-        if(operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER))
-            setDraftStatus(null);
-        else
-            setDraftStatus(tableView.getAllSelectedItems() == null ? null : tableView.getAllSelectedItems().get(0));
-    }
-
-    /**
-     * Метод содержит слушатель для управлением надписью на кнопке btnOk
-     * @param operation EOperation
-     */
-    private void initOperationProperty(EOperation operation) {
-        operationProperty = new SimpleObjectProperty<>();
-        operationProperty.set(operation);
     }
 
     @FXML
