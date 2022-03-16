@@ -59,17 +59,18 @@ public class PreviewerPatchController {
     @FXML
     void initialize() {
 
-        currentDraft.addListener((observable, oldValue, newValue) -> {
-            if(newValue == null){
+        currentDraft.addListener((observable) -> {
+            Draft draft = currentDraft.get();
+            if(draft == null){
                 lblDraftInfo.setText("   ...");
                 lblDraftInfo.setStyle("-fx-font-weight: bold;  -fx-text-fill: black");
                 return;
             }
-            EDraftStatus status = EDraftStatus.getStatusById(newValue.getStatus());
+            EDraftStatus status = EDraftStatus.getStatusById(draft.getStatus());
             lblDraftInfo.setText(
-                    "   " + newValue.toUsefulString() + //Обозначение чертежа
-                            " : " + EDraftType.getDraftTypeById(newValue.getDraftType()).getShortName() + //Тип чертежа
-                            "-" + newValue.getPageNumber() + //страница
+                    "   " + draft.toUsefulString() + //Обозначение чертежа
+                            " : " + EDraftType.getDraftTypeById(draft.getDraftType()).getShortName() + //Тип чертежа
+                            "-" + draft.getPageNumber() + //страница
                             " : " + status.getStatusName()); //Статус
             if (status == EDraftStatus.LEGAL)
                 lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");

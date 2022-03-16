@@ -30,6 +30,7 @@ import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_AddCommand;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_ChangeCommand;
+import ru.wert.datapik.utils.entities.drafts.commands.Draft_DeleteCommand;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_MultipleAddCommand;
 import ru.wert.datapik.utils.entities.folders.Folder_Chooser;
 import ru.wert.datapik.utils.popups.HintPopup;
@@ -47,6 +48,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
@@ -446,7 +448,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             @Override
             protected Draft call() throws Exception {
                 if (isDuplicated(getNewItem(), currentDraft)) {
-                    Platform.runLater(() -> Warning1.create($ATTENTION, $ITEM_EXISTS, $USE_ORIGINAL_ITEM));
+                    if(askMe)
+                        Platform.runLater(() -> Warning1.create($ATTENTION, $ITEM_EXISTS, $USE_ORIGINAL_ITEM));
                     return null;
                 }
                 Draft oldDraft = CH_QUICK_DRAFTS.findById(draftsList.get(currentPosition.get()).draftId);
@@ -516,9 +519,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
+                if(deleteMe){
+                    currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
+                    currentCommand.execute();
+                } else{
+                    currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
+                    currentCommand.execute();
+                }
 
-                currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
-                currentCommand.execute();
                 //Сохраняем новый чертеж
                 currentCommand = new Draft_AddCommand(getNewItem(), tableView);
                 currentCommand.execute();
