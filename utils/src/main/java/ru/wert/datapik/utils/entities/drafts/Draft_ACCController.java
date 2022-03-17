@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -116,6 +117,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private RadioButton rbAsk;
 
     @FXML
+    private RadioButton rbSkip;
+
+    @FXML
     private RadioButton rbChange;
 
     @FXML
@@ -135,7 +139,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private Draft_TableView tableView;
     private PreviewerPatchController previewerController;
 
-
+    private Event okEvent;
 
     private Folder currentFolder;
     private HintPopup hintPopup;
@@ -151,10 +155,15 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private String currentFileName;
     private Draft currentDraft; //Текущий чертеж для которого нажали OK - id = null, так как он не сохранен
 
-    private boolean askMe, changeMe, deleteMe;
+    private boolean askMe, skipMe, changeMe, deleteMe;
 
     @FXML
     void initialize(){
+
+        rbAsk.setTooltip(new Tooltip("Действие с чертежом походу добавления"));
+        rbSkip.setTooltip(new Tooltip("Новый чертеж НЕ сохраняется,\nстарый чертеж НЕ меняется"));
+        rbChange.setTooltip(new Tooltip("Новый чертеж становится ДЕЙСТВУЮЩИМ,\nстарый чертеж меняет статус на ЗАМЕНЕННЫЙ"));
+        rbDelete.setTooltip(new Tooltip("Новый чертеж становится ДЕЙСТВУЮЩИМ,\nстарый чертеж УДАЛЯЕТСЯ "));
 
         initButtonCancel();
 
@@ -182,13 +191,15 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      */
     private void initRadioGroup() {
         ToggleGroup radioGroup = new ToggleGroup();
-        radioGroup.getToggles().addAll(rbAsk, rbChange, rbDelete);
+        radioGroup.getToggles().addAll(rbAsk, rbSkip, rbChange, rbDelete);
         radioGroup.selectedToggleProperty().addListener(observable -> {
             askMe = rbAsk.isSelected();
+            skipMe = rbSkip.isSelected();
             changeMe = rbChange.isSelected();
             deleteMe = rbDelete.isSelected();
+
         });
-        rbDelete.setSelected(true);
+        rbAsk.setSelected(true);
     }
 
     /**
@@ -299,8 +310,13 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         }
     }
 
+    /**
+     * Основная развилка класса при нажатии на кнопку ОК.
+     * @param event
+     */
     @FXML
     void ok(ActionEvent event) {
+        this.okEvent = event;
         if (notNullFieldEmpty()) {
             Warning1.create($ATTENTION, "Некоторые поля не заполнены!", "Заполните все поля");
             return;
@@ -315,7 +331,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 spIndicator.setVisible(true);
                 new Thread(manipulation).start();
             } else if (operationProperty.get().equals(EOperation.REPLACE)) {
-                replaceDraft(event);
+                replaceDraft();
             } else {
                 super.okPressed(event, spIndicator, btnOk);
             }
@@ -346,10 +362,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         for (Draft draft : drafts) {
             if (draft.equals(newDraft)) {
                 if (draft.getStatus().equals(EDraftStatus.LEGAL.getStatusId())) {
-                    if (foundDuplicatedLegalDraft(draft)) return true; //Иначе возвращаем на доработку
+                    return foundDuplicatedLegalDraft(draft); //Иначе возвращаем на доработку
 
                 } else if (draft.getStatus().equals(EDraftStatus.ANNULLED.getStatusId())) {
-                    if (foundDuplicatedAnnulledDraft(draft)) return true; //Иначе возвращаем на доработку
+                    return foundDuplicatedAnnulledDraft(draft); //Иначе возвращаем на доработку
                 }
             }
         }
@@ -357,32 +373,59 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         return false;
     }
 
-    private boolean foundDuplicatedAnnulledDraft(Draft draft) {
+    /**
+     * Метод выясняет, хочет ли пользователь восстановить ранее аннулированный чертеж
+     * @param draft Draft
+     * @param answer BooleanProperty
+     */
+    private void askIfAnnulledDraftMustBeSurvied(Draft draft, BooleanProperty answer) {
         CountDownLatch latch = new CountDownLatch(1);
-        BooleanProperty answer = new SimpleBooleanProperty();
         Platform.runLater(() -> {
             answer.set(Warning2.create($ATTENTION,
                     "Существует АННУЛИРОВАННЫЙ чертеж с номером " + draft.getDecimalNumber(),
-                    "Хотите изменить статус чертежа на ЗАМЕННЫЙ?"));
+                    "Хотите изменить статус чертежа на ЗАМЕНЕННЫЙ?"));
 
             latch.countDown();
         });
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Метод выясняет восстанавливает ранее аннулированный чертеж
+     * @param oldDraft Draft
+     * @return true - дублируется
+     */
+    private boolean foundDuplicatedAnnulledDraft(Draft oldDraft) {
+        BooleanProperty answer = new SimpleBooleanProperty();
+        askIfAnnulledDraftMustBeSurvied(oldDraft, answer);
         if (answer.get()) {
-            draft.setStatus(EDraftStatus.CHANGED.getStatusId());
-            draft.setStatusTime(LocalDateTime.now().toString());
-            log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
-            Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(draft, tableView);
-            updateCommand.execute();
+            oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
+            oldDraft.setStatusTime(LocalDateTime.now().toString());
+            log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", oldDraft.toUsefulString());
+            manipulation = replaceDraftTask(oldDraft);
+
+            new Thread(manipulation).start();
+
+//            Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(draft, tableView);
+//            updateCommand.execute();
         } else {
-            log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
+            log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на АННУЛИРОВАННЫЙ", oldDraft.toUsefulString());
             return true;
         }
         return false;
     }
 
-    private boolean foundDuplicatedLegalDraft(Draft draft){
+    /**
+     * Метод выясняет, хочет ли пользователь изменить действующий чертеж на новый чертеж
+     * @param draft Draft
+     * @param changeDraft BooleanProperty
+     */
+    private void askIfLegalDraftMustBeChanged(Draft draft, BooleanProperty changeDraft) {
         CountDownLatch latch = new CountDownLatch(1);
-        BooleanProperty changeDraft = new SimpleBooleanProperty();
         Platform.runLater(() -> {
             changeDraft.set(Warning2.create($ATTENTION,
                     "Существует ДЕЙСТВУЮЩИЙ чертеж\n "
@@ -396,28 +439,56 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Метод выясняет, хочет ли пользователь изменить копию черетежа на новый чертеж
+     * @return boolean, True  - изменение отменено или не произошло,
+     *                  False  - изменение произошло либо необходим переход к следующему
+     */
+    private boolean foundDuplicatedLegalDraft(Draft oldDraft){
+        BooleanProperty changeDraft = new SimpleBooleanProperty();
+       if(askMe) {
+           //Метод меняет переменную changeDraft
+           askIfLegalDraftMustBeChanged(oldDraft, changeDraft);
+       } else {
+           if(deleteMe || changeMe) {
+               manipulation = replaceDraftTask(oldDraft);
+               new Thread(manipulation).start();
+           } else if (skipMe) {
+               draftsList.get(currentPosition.get()).setDraftId(oldDraft.getId());
+               return true;
+           }
+       }
         if (changeDraft.get()) {
-            draft.setStatus(EDraftStatus.CHANGED.getStatusId());
-            draft.setStatusTime(LocalDateTime.now().toString());
-            log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", draft.toUsefulString());
-            Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(draft, tableView);
+            oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
+            oldDraft.setStatusTime(LocalDateTime.now().toString());
+            log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
+            Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(oldDraft, tableView);
             updateCommand.execute();
-//                        CH_QUICK_DRAFTS.update(draft);
         } else {
-            log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", draft.toUsefulString());
+            log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
             return true;
         }
+
         return false;
     }
+
+
 
     @NotNull
     private Task<Draft> addDraftTask() {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
-                if(draftIsDuplicated(currentDraft)) return null;
+                if(draftIsDuplicated(currentDraft)){
+                    if(skipMe)
+                        Platform.runLater(()->showNextDraft());
+                    return null;
+                } else
                 return ((Draft_MultipleAddCommand)currentCommand).addDraft();
             }
+
 
             @Override
             protected void cancelled() {
@@ -429,6 +500,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             @Override
             protected void failed() {
                 super.failed();
+                System.out.println("I am failed!!!!!");
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
                 showNextDraft();
@@ -462,10 +534,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 Draft oldDraft = CH_QUICK_DRAFTS.findById(draftsList.get(currentPosition.get()).draftId);
 
                 changeOldItemFields(oldDraft);
-//                ((Draft_ChangeCommand)currentCommand).;
                 commands.change(null, oldDraft);
                 return oldDraft;
-
             }
 
             @Override
@@ -510,19 +580,19 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     /**
      * ЗАМЕНИТЬ ЧЕРТЕЖ
      */
-    private void replaceDraft(ActionEvent event) {
+    private void replaceDraft() {
         Draft oldDraft = tableView.getSelectionModel().getSelectedItem();
         oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
         oldDraft.setStatusUser(CH_CURRENT_USER);
         oldDraft.setStatusTime(LocalDateTime.now().toString());
 
-        manipulation = replaceDraftTask(event, oldDraft);
+        manipulation = replaceDraftTask(oldDraft);
 
         new Thread(manipulation).start();
     }
 
     @NotNull
-    private Task<Draft> replaceDraftTask(ActionEvent event, Draft oldDraft) {
+    private Task<Draft> replaceDraftTask(Draft oldDraft) {
         return new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
@@ -530,38 +600,52 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
                     currentCommand.execute();
                 } else{
+                    oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
+                    oldDraft.setStatusTime(LocalDateTime.now().toString());
                     currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
                     currentCommand.execute();
                 }
 
                 //Сохраняем новый чертеж
-                currentCommand = new Draft_AddCommand(getNewItem(), tableView);
-                currentCommand.execute();
-
-                return null;
+                currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
+                return ((Draft_MultipleAddCommand)currentCommand).addDraft();
             }
 
             @Override
             protected void cancelled() {
                 super.cancelled();
-                closeWindow(event);
+                if (!operationProperty.get().equals(EOperation.ADD_FOLDER))
+                    closeWindow(okEvent);
+                else
+                    showNextDraft();
             }
 
             @Override
             protected void failed() {
                 super.failed();
-                closeWindow(event);
+                log.error("При замене чертежа произошла ошибка:\n");
+                getException().printStackTrace();
+                Warning1.create($ATTENTION, "При замене чертежа произошла ошибка",
+                        "Повторите операцию позже \nили обратитесь к администратору");
+                if (!operationProperty.get().equals(EOperation.ADD_FOLDER))
+                    closeWindow(okEvent);
+                else
+                    showNextDraft();
+
             }
 
             @Override
             protected void succeeded() {
                 super.succeeded();
-                closeWindow(event);
+                if(!operationProperty.get().equals(EOperation.ADD_FOLDER))
+                    closeWindow(okEvent);
+                else {
+                    draftsList.get(currentPosition.get()).setDraftId(getValue().getId());
+                    showNextDraft();
+                }
             }
         };
     }
-
-
 
     /**
      * Метод описывает действие при нажатии на кнопку Добавить пакет
@@ -596,7 +680,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 lblStatus.setStyle("-fx-background-color: white; -fx-font-weight: bold;-fx-text-fill: black; "); break;//НЕОПРЕДЕЛЕН
         }
     }
-
 
     /**
      * Загружаем папку с чертежами
@@ -738,16 +821,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             lblFileName.setText(currentFileName);
             bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
             txtAreaNote.setText("");//Комментарий пустой
-            //В случае если мы пришли сюда из EOperation.ADD_FOLDER, то мы будем теперь только добавлять
-//            operationProperty.set(EOperation.ADD);
             setDraftStatus(null);
         } else {
             //Если документ уже сохранен, то форму заполняем значениями БД
             Draft draft = CH_QUICK_DRAFTS.findById(draftsList.get(num).getDraftId());
             fillFieldsOnTheForm(draft);
-            //сохраненный чертеж может быть только изменен
-//            operationProperty.set(EOperation.CHANGE);
-
         }
     }
 
