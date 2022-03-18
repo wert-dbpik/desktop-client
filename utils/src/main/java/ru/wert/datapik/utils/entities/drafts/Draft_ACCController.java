@@ -2,6 +2,8 @@ package ru.wert.datapik.utils.entities.drafts;
 
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -148,12 +150,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private StackPane spIndicator;//Панель с расположенным на ней индикатором прогресса, опявляется при длительных процессах
     private ICommand currentCommand; //Команда исполняемая в текущее время.
     private Task<?> manipulation;//Текущая выполняемая задача
+    private Thread addThread;
 
     private List<DraftFileAndId> draftsList; //Список чертежей <Файл - ID>
     private IntegerProperty currentPosition; //Порядковый номер файла в draftsList
     private File currentFilePath; //Текущий путь к файлу, хранящийся в draftsList
     private String currentFileName;
     private Draft currentDraft; //Текущий чертеж для которого нажали OK - id = null, так как он не сохранен
+    private ChangeListener<Number> currentPosListener;
 
     private boolean askMe, skipMe, changeMe, deleteMe;
 
@@ -242,12 +246,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     /**
      * Метод устанавливает начальное значение кнопки ОК, количество файлов в папке
      * Начальную позицию добавляемых чертежей в папке и вешает слушателя на изменение этой позиции
+     * Метод не срабатывает только на последней позиции, когда нет смены значерния currentPosition
      */
     private void setSettingsForOperationAddFolder() {
         //Показываем изначальное число файлов
         lblNumFile.setText("Файлов: " + draftsList.size());
         //Ghb последующей итерации
-        currentPosition.addListener((observable) -> {
+
+        currentPosListener = (observable, oldValue, newValue) -> {
             lblNumFile.setText(String.format("Файл %d из %d", currentPosition.get() +1, draftsList.size()));
             Long id = draftsList.get(currentPosition.get()).draftId;
             if(id == null) {
@@ -259,7 +265,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 btnOk.setStyle("-fx-background-color: #ffd4a3;");
                 manipulation = changeDraftTask();
             }
-        });
+        };
+
+        currentPosition.addListener(currentPosListener);
+
         //Инициируем
         manipulation = addDraftTask();
     }
@@ -329,7 +338,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 currentCommand = new Draft_MultipleAddCommand(currentDraft, tableView);
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
-                new Thread(manipulation).start();
+
+                addThread = new Thread(manipulation);
+                addThread.setDaemon(true);
+                addThread.start();
             } else if (operationProperty.get().equals(EOperation.REPLACE)) {
                 replaceDraft();
             } else {
@@ -403,12 +415,18 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         BooleanProperty answer = new SimpleBooleanProperty();
         askIfAnnulledDraftMustBeSurvied(oldDraft, answer);
         if (answer.get()) {
-            oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
-            oldDraft.setStatusTime(LocalDateTime.now().toString());
-            log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", oldDraft.toUsefulString());
+            //Так как аннулируется не одна страница, а весь документ, то собираем с базы все записи относящиеся к данному чертежу
+            //и меняем их статус на замененный, таким образом их реанимировав
+            List<Draft> annulledDrafts = CH_QUICK_DRAFTS.findByPassport(oldDraft.getPassport());
+            for(Draft annulledDraft : annulledDrafts){
+                annulledDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
+                annulledDraft.setStatusTime(LocalDateTime.now().toString());
+                log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", oldDraft.toUsefulString());
+                CH_QUICK_DRAFTS.update(annulledDraft);
+            }
             manipulation = replaceDraftTask(oldDraft);
-
             new Thread(manipulation).start();
+
 
 //            Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(draft, tableView);
 //            updateCommand.execute();
@@ -478,17 +496,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     @NotNull
     private Task<Draft> addDraftTask() {
-        return new Task<Draft>() {
+        Task<Draft> task = new Task<Draft>() {
             @Override
             protected Draft call() throws Exception {
                 if(draftIsDuplicated(currentDraft)){
-                    if(skipMe)
-                        Platform.runLater(()->showNextDraft());
                     return null;
-                } else
+                }
                 return ((Draft_MultipleAddCommand)currentCommand).addDraft();
             }
-
 
             @Override
             protected void cancelled() {
@@ -517,9 +532,22 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     draftsList.get(currentPosition.get()).setDraftId(saveDraftId);
                     showNextDraft();
                 }
+                else{
+                    showNextDraft();
+
+                     // Нерешенная задача: хочется остаться на том же чертеже, но
+                     // при последующем нажатии добавить происходит зависание
+                     // помогает только переход.
+
+                }
             }
+
         };
+
+        return task;
+
     }
+
 
     @NotNull
     private Task<Draft> changeDraftTask() {
@@ -571,9 +599,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         //Если мы дошли до конца списка (кнопка активна)
         if (!btnNext.isDisable())
             btnNext.fire(); //Эмулируем нажатие кнопки
-        else
+        else {
             //Иначе перезаполняем форму с обновленными данными
             fillForm(currentPosition.get());
+            currentPosListener.changed(currentPosition, currentPosition.get(), currentPosition.get());
+        }
     }
 
 
