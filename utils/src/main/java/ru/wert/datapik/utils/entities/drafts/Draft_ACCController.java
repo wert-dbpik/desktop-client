@@ -176,6 +176,57 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     }
 
     /**
+     * Предварительно происходит выбор чертежа или папки с чертежами
+     */
+    @Override
+    public void init(EOperation operation, IFormView<Draft> formView, ItemCommands<Draft> commands) {
+        super.initSuper(operation, formView, commands, CH_QUICK_DRAFTS);
+        this.tableView = (Draft_TableView) formView;
+
+        currentPosition = new SimpleIntegerProperty();
+
+        initOperationProperty(operation);
+
+        if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
+        if(operationProperty.get().equals(EOperation.ADD_FOLDER)) loadFolder();
+        if(operationProperty.get().equals(EOperation.REPLACE)) loadOneDraft();
+
+        //Если ничего не выбрано, выходим без создания окна
+        if((operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)
+                || operationProperty.get().equals(EOperation.REPLACE))
+                && (draftsList == null || draftsList.isEmpty())){
+            FormViewACCWindow.windowCreationAllowed = false;
+            return;
+        }
+
+
+
+        new BXPage().create(bxPage); //СТРАНИЦЫ
+        new BXDraftType().create(bxType); //ТИП ЧЕРТЕЖА
+        new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
+        new BXFolder().create(bxFolder); //ИЗДЕЛИЯ
+        new BtnSearchProduct().create(btnSearchFolder); //НАЙТИ/ДОБАВИТЬ изделие
+        new BtnCancel().create(btnCancel); //ОТМЕНА кнопка
+
+        createLabelFileName();
+
+        initLabelDraftStatus();
+
+        createPreviewer();
+
+        btnSearchFolder.setOnAction(this::findFolder);
+
+        //Устанавливаем начальные значения полей в зависимости от operation
+        setInitialValues();
+
+        if(operation.equals(EOperation.ADD_FOLDER)){
+            setSettingsForOperationAddFolder();
+        } else
+            lblNumFile.setText("Файлов: 1");
+
+    }
+
+    /**
      * Метод инициализирует кнопку Отмена
      */
     private void initButtonCancel() {
@@ -204,43 +255,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         });
         rbAsk.setSelected(true);
-    }
-
-    /**
-     * Предварительно происходит выбор чертежа или папки с чертежами
-     */
-    @Override
-    public void init(EOperation operation, IFormView<Draft> formView, ItemCommands<Draft> commands) {
-        super.initSuper(operation, formView, commands, CH_QUICK_DRAFTS);
-        this.tableView = (Draft_TableView) formView;
-
-        currentPosition = new SimpleIntegerProperty();
-
-        initOperationProperty(operation);
-
-        new BXPage().create(bxPage); //СТРАНИЦЫ
-        new BXDraftType().create(bxType); //ТИП ЧЕРТЕЖА
-        new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
-        new BXFolder().create(bxFolder); //ИЗДЕЛИЯ
-        new BtnSearchProduct().create(btnSearchFolder); //НАЙТИ/ДОБАВИТЬ изделие
-        new BtnCancel().create(btnCancel); //ОТМЕНА кнопка
-
-        createLabelFileName();
-
-        initLabelDraftStatus();
-
-        createPreviewer();
-
-        btnSearchFolder.setOnAction(this::findFolder);
-
-        //Устанавливаем начальные значения полей в зависимости от operation
-        setInitialValues();
-
-        if(operation.equals(EOperation.ADD_FOLDER)){
-            setSettingsForOperationAddFolder();
-        } else
-            lblNumFile.setText("Файлов: 1");
-
     }
 
     /**
@@ -306,17 +320,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 break;
         }
 
-        if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
-        if(operationProperty.get().equals(EOperation.ADD_FOLDER)) loadFolder();
-        if(operationProperty.get().equals(EOperation.REPLACE)) loadOneDraft();
 
-        //Если ничего не выбрано, выходим без создания окна
-        if((operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)
-                || operationProperty.get().equals(EOperation.REPLACE))
-                && (draftsList == null || draftsList.isEmpty())){
-            FormViewACCWindow.windowCreationAllowed = false;
-            return;
-        }
     }
 
     /**
@@ -415,26 +419,31 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         BooleanProperty answer = new SimpleBooleanProperty();
         askIfAnnulledDraftMustBeSurvied(oldDraft, answer);
         if (answer.get()) {
+            changeStatusForAnnulledDraft(oldDraft);
+            manipulation = replaceDraftTask(oldDraft);
+            new Thread(manipulation).start();
             //Так как аннулируется не одна страница, а весь документ, то собираем с базы все записи относящиеся к данному чертежу
             //и меняем их статус на замененный, таким образом их реанимировав
             List<Draft> annulledDrafts = CH_QUICK_DRAFTS.findByPassport(oldDraft.getPassport());
             for(Draft annulledDraft : annulledDrafts){
-                annulledDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
-                annulledDraft.setStatusTime(LocalDateTime.now().toString());
-                log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", oldDraft.toUsefulString());
-                CH_QUICK_DRAFTS.update(annulledDraft);
+                if(annulledDraft.getStatus().equals(EDraftStatus.ANNULLED.getStatusId())) {
+                    changeStatusForAnnulledDraft(annulledDraft);
+                    CH_QUICK_DRAFTS.update(annulledDraft);
+                }
             }
-            manipulation = replaceDraftTask(oldDraft);
-            new Thread(manipulation).start();
 
-
-//            Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(draft, tableView);
-//            updateCommand.execute();
         } else {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на АННУЛИРОВАННЫЙ", oldDraft.toUsefulString());
             return true;
         }
         return false;
+    }
+
+    private void changeStatusForAnnulledDraft(Draft draft) {
+        draft.setStatus(EDraftStatus.LEGAL.getStatusId());
+        draft.setStatusTime(LocalDateTime.now().toString());
+        draft.setStatusUser(CH_CURRENT_USER);
+        log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
     }
 
     /**
@@ -518,7 +527,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 System.out.println("I am failed!!!!!");
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
-                showNextDraft();
+//                showNextDraft();
             }
 
             @Override
