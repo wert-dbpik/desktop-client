@@ -527,7 +527,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 System.out.println("I am failed!!!!!");
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
-//                showNextDraft();
             }
 
             @Override
@@ -541,14 +540,13 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     draftsList.get(currentPosition.get()).setDraftId(saveDraftId);
                     showNextDraft();
                 }
-                else{
-                    showNextDraft();
+
 
                      // Нерешенная задача: хочется остаться на том же чертеже, но
                      // при последующем нажатии добавить происходит зависание
                      // помогает только переход.
 
-                }
+
             }
 
         };
@@ -587,7 +585,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 super.failed();
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
-                showNextDraft();
             }
 
             @Override
@@ -595,7 +592,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 super.succeeded();
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
-                showNextDraft();
+                if(getValue() != null)
+                    showNextDraft();
             }
         };
     }
