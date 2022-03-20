@@ -103,9 +103,14 @@ public class POIReader {
      */
     private int findLastRowInTable(){
         for(lastRowIndex = headRowIndex;  ; lastRowIndex++){
-            Cell cell = sheet.getRow(lastRowIndex).getCell(0);
-            if (cell == null || cell.getCellType() == CellType.BLANK)
+            Row row = sheet.getRow(lastRowIndex);
+            if(row == null)
                 return lastRowIndex;
+            else{
+                Cell cell = row.getCell(0);
+                if (cell == null || cell.getCellType() == CellType.BLANK)
+                    return lastRowIndex;
+            }
         }
     }
 

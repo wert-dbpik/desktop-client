@@ -217,7 +217,7 @@ public abstract class FormView_ACCController<P extends Item>{
 
         //Потом определяем текущую выделенную группу, если она выбрана
         ProductGroup chosenGroup = null;
-        TreeItem<ProductGroup> productGroupTreeItem = ((CatalogableTable<ProductGroup>)formView).getChosenCatalogItem();
+        TreeItem<ProductGroup> productGroupTreeItem = ((CatalogableTable<ProductGroup>)formView).getUpwardRow();
         if(productGroupTreeItem != null)
             chosenGroup = productGroupTreeItem.getValue();
 

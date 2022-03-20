@@ -58,7 +58,7 @@
             </VBox>
             <VBox>
                <children>
-                  <Label text="Пакет изделия">
+                  <Label text="Комплект">
                      <font>
                         <Font size="14.0" />
                      </font>
