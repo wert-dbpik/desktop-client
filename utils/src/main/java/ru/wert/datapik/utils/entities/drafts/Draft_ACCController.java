@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -149,7 +150,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     private StackPane spIndicator;//Панель с расположенным на ней индикатором прогресса, опявляется при длительных процессах
     private ICommand currentCommand; //Команда исполняемая в текущее время.
-    private Task<?> manipulation;//Текущая выполняемая задача
+    private Service<?> manipulation;//Текущая выполняемая задача
     private Thread addThread;
 
     private List<DraftFileAndId> draftsList; //Список чертежей <Файл - ID>
@@ -343,9 +344,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
 
-                addThread = new Thread(manipulation);
-                addThread.setDaemon(true);
-                addThread.start();
+                manipulation.restart();
+
             } else if (operationProperty.get().equals(EOperation.REPLACE)) {
                 replaceDraft();
             } else {
@@ -378,10 +378,18 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         for (Draft draft : drafts) {
             if (draft.equals(newDraft)) {
                 if (draft.getStatus().equals(EDraftStatus.LEGAL.getStatusId())) {
-                    return foundDuplicatedLegalDraft(draft); //Иначе возвращаем на доработку
+                    if(skipMe) {
+                        Platform.runLater(this::showNextDraft);
+                        return true;
+                    }
+                    else return foundDuplicatedLegalDraft(draft); //Иначе возвращаем на доработку
 
                 } else if (draft.getStatus().equals(EDraftStatus.ANNULLED.getStatusId())) {
-                    return foundDuplicatedAnnulledDraft(draft); //Иначе возвращаем на доработку
+                    if(skipMe) {
+                        Platform.runLater(this::showNextDraft);
+                        return true;
+                    }
+                    else return foundDuplicatedAnnulledDraft(draft); //Иначе возвращаем на доработку
                 }
             }
         }
@@ -421,7 +429,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         if (answer.get()) {
             changeStatusForAnnulledDraft(oldDraft);
             manipulation = replaceDraftTask(oldDraft);
-            new Thread(manipulation).start();
+            manipulation.restart();
             //Так как аннулируется не одна страница, а весь документ, то собираем с базы все записи относящиеся к данному чертежу
             //и меняем их статус на замененный, таким образом их реанимировав
             List<Draft> annulledDrafts = CH_QUICK_DRAFTS.findByPassport(oldDraft.getPassport());
@@ -481,7 +489,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
        } else {
            if(deleteMe || changeMe) {
                manipulation = replaceDraftTask(oldDraft);
-               new Thread(manipulation).start();
+               manipulation.restart();
            } else if (skipMe) {
                draftsList.get(currentPosition.get()).setDraftId(oldDraft.getId());
                return true;
@@ -495,6 +503,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             updateCommand.execute();
         } else {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
+            manipulation.cancel();
             return true;
         }
 
@@ -502,16 +511,21 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     }
 
 
-
     @NotNull
-    private Task<Draft> addDraftTask() {
-        Task<Draft> task = new Task<Draft>() {
+    private Service<Draft> addDraftTask() {
+        Service<Draft> task = new Service<Draft>() {
+
             @Override
-            protected Draft call() throws Exception {
-                if(draftIsDuplicated(currentDraft)){
-                    return null;
-                }
-                return ((Draft_MultipleAddCommand)currentCommand).addDraft();
+            protected Task<Draft> createTask() {
+                return new Task<Draft>() {
+                    @Override
+                    protected Draft call() throws Exception {
+                        if (draftIsDuplicated(currentDraft)) {
+                            return null;
+                        }
+                        return ((Draft_MultipleAddCommand) currentCommand).addDraft();
+                    }
+                };
             }
 
             @Override
@@ -535,19 +549,17 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
                 Draft savedDraft = this.getValue();
-                if(savedDraft != null) {
+                if (savedDraft != null) {
                     Long saveDraftId = savedDraft.getId();
                     draftsList.get(currentPosition.get()).setDraftId(saveDraftId);
                     showNextDraft();
                 }
+            }
 
 
                      // Нерешенная задача: хочется остаться на том же чертеже, но
                      // при последующем нажатии добавить происходит зависание
                      // помогает только переход.
-
-
-            }
 
         };
 
@@ -557,20 +569,26 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
 
     @NotNull
-    private Task<Draft> changeDraftTask() {
-        return new Task<Draft>() {
-            @Override
-            protected Draft call() throws Exception {
-                if (isDuplicated(getNewItem(), currentDraft)) {
-                    if(askMe)
-                        Platform.runLater(() -> Warning1.create($ATTENTION, $ITEM_EXISTS, $USE_ORIGINAL_ITEM));
-                    return null;
-                }
-                Draft oldDraft = CH_QUICK_DRAFTS.findById(draftsList.get(currentPosition.get()).draftId);
+    private Service<Draft> changeDraftTask() {
+        return new Service<Draft>() {
 
-                changeOldItemFields(oldDraft);
-                commands.change(null, oldDraft);
-                return oldDraft;
+            @Override
+            protected Task<Draft> createTask() {
+                return new Task<Draft>() {
+                    @Override
+                    protected Draft call() throws Exception {
+                        if (isDuplicated(getNewItem(), currentDraft)) {
+                            if (askMe)
+                                Platform.runLater(() -> Warning1.create($ATTENTION, $ITEM_EXISTS, $USE_ORIGINAL_ITEM));
+                            return null;
+                        }
+                        Draft oldDraft = CH_QUICK_DRAFTS.findById(draftsList.get(currentPosition.get()).draftId);
+
+                        changeOldItemFields(oldDraft);
+                        commands.change(null, oldDraft);
+                        return oldDraft;
+                    }
+                };
             }
 
             @Override
@@ -625,27 +643,33 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         manipulation = replaceDraftTask(oldDraft);
 
-        new Thread(manipulation).start();
+        manipulation.restart();
     }
 
     @NotNull
-    private Task<Draft> replaceDraftTask(Draft oldDraft) {
-        return new Task<Draft>() {
+    private Service<Draft> replaceDraftTask(Draft oldDraft) {
+        return new Service<Draft>() {
             @Override
-            protected Draft call() throws Exception {
-                if(deleteMe){
-                    currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
-                    currentCommand.execute();
-                } else{
-                    oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
-                    oldDraft.setStatusTime(LocalDateTime.now().toString());
-                    currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
-                    currentCommand.execute();
-                }
+            protected Task<Draft> createTask() {
+                return new Task<Draft>() {
+                    @Override
+                    protected Draft call() throws Exception {
+                        if (deleteMe) {
+                            currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
+                            currentCommand.execute();
+                        } else {
+                            oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
+                            oldDraft.setStatusTime(LocalDateTime.now().toString());
+                            currentCommand = new Draft_ChangeCommand(oldDraft, tableView);
+                            currentCommand.execute();
+                        }
 
-                //Сохраняем новый чертеж
-                currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
-                return ((Draft_MultipleAddCommand)currentCommand).addDraft();
+                        //Сохраняем новый чертеж
+                        currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
+                        return ((Draft_MultipleAddCommand) currentCommand).addDraft();
+                    }
+
+                };
             }
 
             @Override
