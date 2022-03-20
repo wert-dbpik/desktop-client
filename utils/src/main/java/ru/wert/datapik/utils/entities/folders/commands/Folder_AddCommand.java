@@ -44,7 +44,7 @@ public class Folder_AddCommand implements ICommand {
         }
 
         Platform.runLater(()->{
-            tableView.updateTableView();
+            tableView.updateVisibleLeafOfTableView(tableView.getUpwardRow().getValue());
             tableView.scrollTo(newItem);
             tableView.getSelectionModel().select(newItem);
         });

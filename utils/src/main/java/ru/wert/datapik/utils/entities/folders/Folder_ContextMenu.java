@@ -1,8 +1,11 @@
 package ru.wert.datapik.utils.entities.folders;
 
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import org.w3c.dom.ls.LSOutput;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -49,7 +52,6 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         manipulator = tableView.getManipulator();
 
         createMainMenuItems();
-
     }
 
 

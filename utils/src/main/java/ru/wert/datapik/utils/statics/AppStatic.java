@@ -84,9 +84,9 @@ public class AppStatic {
                         "." + ext, //расширение скачиваемого файла
                         CH_TEMPDIR.toString()); //временная папка, куда необходимо скачать файл
                 if(res) {
-                    log.info("createSelectionListener : файл '{}' загружен c сервера во временную папку", String.valueOf(fileId) + "." + ext);
+                    log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", String.valueOf(fileId) + "." + ext);
                 } else {
-                    log.error("createSelectionListener : файл '{}' не был загружен с сервера", String.valueOf(fileId) + "." + ext);
+                    log.error("openDraftInPreviewer : файл '{}' не был загружен с сервера", String.valueOf(fileId) + "." + ext);
                     Platform.runLater(()->Warning1.create($ATTENTION, $DRAFT_IS_NOT_AVAILABLE, $MAYBE_IT_IS_CORRUPTED));
                     return;
                 }
@@ -96,7 +96,7 @@ public class AppStatic {
             Platform.runLater(()->{
 //                if(previewerController != null)
                 previewerController.showDraft(draft, new FileFwdSlash(CH_TEMPDIR.toString() + "/" + fileId + "." + ext));
-                log.debug("createSelectionListener : " +
+                log.debug("openDraftInPreviewer : " +
                                 "Из временной папки загружен файл {}",
                         new FileFwdSlash(CH_TEMPDIR.toString() + "/" + fileId + "." + ext).toStrong());
             });

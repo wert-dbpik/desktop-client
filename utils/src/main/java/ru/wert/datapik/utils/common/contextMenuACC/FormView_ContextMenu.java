@@ -5,6 +5,7 @@ import javafx.event.Event;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import lombok.Getter;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
@@ -20,10 +21,10 @@ public abstract class FormView_ContextMenu<P extends Item> extends ContextMenu {
     protected FormViewACCWindow<P> accWindow;
 
     //нельзя делать FINAL
-    private MenuItem ADD;
-    private MenuItem COPY;
-    private MenuItem CHANGE;
-    private MenuItem DELETE;
+    @Getter private MenuItem ADD;
+    @Getter private MenuItem COPY;
+    @Getter private MenuItem CHANGE;
+    @Getter private MenuItem DELETE;
 
     public abstract List<MenuItem> createExtraItems();
     public abstract void createMainMenuItems();

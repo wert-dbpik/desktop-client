@@ -1,13 +1,20 @@
 package ru.wert.datapik.utils.entities.folders.commands;
 
+import javafx.application.Platform;
+import javafx.concurrent.Service;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.utils.entities.drafts.commands.ServiceDeleteDrafts;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.winform.warnings.Warning1;
+import ru.wert.datapik.winform.warnings.Warning2;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
@@ -29,25 +36,42 @@ public class Folder_DeleteCommand implements ICommand {
 
     @Override
     public void execute() {
+
         //После удаления таблица "подтянется вверх" и поэтому нужна позиция первого из удаляемых элементов
         int row = tableView.getItems().lastIndexOf(items.get(0));
-
+        //Собираем по папкам чертежи
+        List<Draft> draftsToDelete = new ArrayList<>();
         for(Folder item : items){
-            try {
-                CH_QUICK_FOLDERS.delete(item);
-                log.info("Удален пакет {}", item.toUsefulString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
-                log.error("При удалении пакета {} произошла ошибка {}", item.toUsefulString(),  e.getMessage());
-            }
+            draftsToDelete.addAll(CH_QUICK_DRAFTS.findAllByFolder(item));
         }
 
-        tableView.updateTableView();
+        boolean decision = Warning2.create("ВНИМАНИЕ!",
+                "При удалении папки удаляется ее содержимое",
+                String.format("Будут удалены %s чертежей!", draftsToDelete.size()));
+        if(!decision) return;
 
-//            tableView.updateView();
-        tableView.scrollTo(row);
-        tableView.getSelectionModel().select(row);
+        Service<Void> deleteDrafts = new ServiceDeleteDrafts(draftsToDelete, tableView.getDraftTable());
+
+        deleteDrafts.setOnSucceeded(e->{
+            for (Folder item : items) {
+                try {
+                    CH_QUICK_FOLDERS.delete(item);
+                    log.info("Удален пакет {}", item.toUsefulString());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
+                    log.error("При удалении пакета {} произошла ошибка {}", item.toUsefulString(), ex.getMessage());
+                }
+            }
+
+            Platform.runLater(() -> {
+                tableView.updateVisibleLeafOfTableView(tableView.getUpwardRow().getValue());
+                tableView.scrollTo(row);
+                tableView.getSelectionModel().select(row);
+            });
+        });
+
+        deleteDrafts.restart();
 
     }
 }
