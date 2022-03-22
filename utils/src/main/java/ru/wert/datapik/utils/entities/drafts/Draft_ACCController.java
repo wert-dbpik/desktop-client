@@ -41,8 +41,10 @@ import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.enums.EOperation;
+import ru.wert.datapik.winform.enums.ESolution;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.warnings.Warning2;
+import ru.wert.datapik.winform.warnings.WarningDuplicateDraftFound;
 
 import java.io.File;
 import java.io.IOException;
@@ -173,8 +175,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         initButtonCancel();
 
         initRadioGroup();
-
-
 
     }
 
@@ -472,14 +472,24 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param draft Draft
      * @param changeDraft BooleanProperty
      */
-    private void askIfLegalDraftMustBeChanged(Draft draft, BooleanProperty changeDraft) {
+    private void askIfLegalDraftMustBeChanged(Draft draft, ObjectProperty<ESolution> changeDraft) {
         CountDownLatch latch = new CountDownLatch(1);
+//        Platform.runLater(() -> {
+//            changeDraft.set(Warning2.create($ATTENTION,
+//                    "Существует ДЕЙСТВУЮЩИЙ чертеж\n "
+//                            + "\"" + draft.toUsefulString() + "\",\n"
+//                            + "Статус: " + EDraftStatus.getStatusById(draft.getStatus()).getStatusName() + "-" + draft.getPageNumber(),
+//                    "Хотите заменить чертеж?"));
+//            latch.countDown();
+//        });
+
         Platform.runLater(() -> {
-            changeDraft.set(Warning2.create($ATTENTION,
-                    "Существует ДЕЙСТВУЮЩИЙ чертеж\n "
-                            + "\"" + draft.toUsefulString() + "\",\n"
-                            + "Статус: " + EDraftStatus.getStatusById(draft.getStatus()).getStatusName() + "-" + draft.getPageNumber(),
-                    "Хотите заменить чертеж?"));
+            changeDraft.set(new WarningDuplicateDraftFound().create(draft.getId(), draft.toUsefulString()));
+//            changeDraft.set(Warning2.create($ATTENTION,
+//                    "Существует ДЕЙСТВУЮЩИЙ чертеж\n "
+//                            + "\"" + draft.toUsefulString() + "\",\n"
+//                            + "Статус: " + EDraftStatus.getStatusById(draft.getStatus()).getStatusName() + "-" + draft.getPageNumber(),
+//                    "Хотите заменить чертеж?"));
             latch.countDown();
         });
         try {
@@ -495,7 +505,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      *                  False  - изменение произошло либо необходим переход к следующему
      */
     private boolean foundDuplicatedLegalDraft(Draft oldDraft){
-        BooleanProperty changeDraft = new SimpleBooleanProperty();
+        ObjectProperty<ESolution> changeDraft = new SimpleObjectProperty<>();
        if(askMe) {
            //Метод меняет переменную changeDraft
            askIfLegalDraftMustBeChanged(oldDraft, changeDraft);
@@ -508,12 +518,16 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                return true;
            }
        }
-        if (changeDraft.get()) {
+        if (changeDraft.getValue().equals(ESolution.CHANGE)) {
             oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
             oldDraft.setStatusTime(LocalDateTime.now().toString());
             log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
             Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(oldDraft, tableView);
             updateCommand.execute();
+        }
+        else if (changeDraft.getValue().equals(ESolution.DELETE)) {
+            manipulation = replaceDraftTask(oldDraft);
+            manipulation.restart();
         } else {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
             manipulation.cancel();

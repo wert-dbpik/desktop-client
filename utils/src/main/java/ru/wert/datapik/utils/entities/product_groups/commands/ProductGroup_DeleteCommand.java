@@ -52,7 +52,6 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
 
     @Override
     public void execute() {
-        System.out.println("itemService === " + itemService);
         if(items.isEmpty()) return;
 
         //TODO: Находим элементы, выделяемые после завершения операции
