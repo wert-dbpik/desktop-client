@@ -316,8 +316,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 btnOk.setStyle("-fx-background-color: #8bc8ff;");
                 break;
         }
-
-
     }
 
     /**
@@ -342,7 +340,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
 
-                manipulation.restart();
+//                if(!draftIsDuplicated(getNewItem()))
+                    manipulation.restart();
 
             } else if (operationProperty.get().equals(EOperation.REPLACE)) {
                 replaceDraft();
@@ -400,7 +399,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param draft Draft
      * @param answer BooleanProperty
      */
-    private void askIfAnnulledDraftMustBeSurvied(Draft draft, BooleanProperty answer) {
+    private void askIfAnnulledDraftMustBeSurvived(Draft draft, BooleanProperty answer) {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             answer.set(Warning2.create($ATTENTION,
@@ -423,7 +422,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      */
     private boolean foundDuplicatedAnnulledDraft(Draft oldDraft) {
         BooleanProperty answer = new SimpleBooleanProperty();
-        askIfAnnulledDraftMustBeSurvied(oldDraft, answer);
+        askIfAnnulledDraftMustBeSurvived(oldDraft, answer);
         if (answer.get()) {
             changeStatusForAnnulledDraft(oldDraft);
             manipulation = replaceDraftTask(oldDraft);
@@ -536,7 +535,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             @Override
             protected void failed() {
                 super.failed();
-                System.out.println("I am failed!!!!!");
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
             }
@@ -569,7 +567,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 return new Task<Draft>() {
                     @Override
                     protected Draft call() throws Exception {
-                        if (isDuplicated(getNewItem(), currentDraft)) {
+                        if(draftIsDuplicated(getNewItem())){
                             if (askMe)
                                 Platform.runLater(() -> Warning1.create($ATTENTION, $ITEM_EXISTS, $USE_ORIGINAL_ITEM));
                             return null;
