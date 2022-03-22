@@ -981,8 +981,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         //При выборе единственного чертежа для изменения
         if (draftsList == null || draftsList.size() == 1) {
             //Кнопки далее и предыдущее нужно загасить
-            btnNext.setDisable(true);
-            btnPrevious.setDisable(true);
+            if(!btnNext.isDisable()) btnNext.setDisable(true);
+            if(!btnPrevious.isDisable())  btnPrevious.setDisable(true);
         }
 //        AppStatic.openDraftInPreviewer(oldItem, previewerController);
         lblFileName.setText(oldItem.getInitialDraftName());
