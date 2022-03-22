@@ -90,6 +90,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private Button btnPrevious;
 
     @FXML
+    private Slider sliderCurrentPosition;
+
+    @FXML
     private StackPane spPreviewer;
 
     @FXML
@@ -171,6 +174,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         initRadioGroup();
 
+
+
     }
 
     /**
@@ -189,6 +194,18 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         else if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
         else if(operationProperty.get().equals(EOperation.ADD_FOLDER))loadFolder();
 
+        sliderCurrentPosition.setMin(0);
+        sliderCurrentPosition.setMax(draftsList.size()-1);
+        sliderCurrentPosition.setValue(0);
+//        sliderCurrentPosition.setBlockIncrement(1);
+//        sliderCurrentPosition.snapToTicksProperty();
+        sliderCurrentPosition.valueProperty().addListener((observable) -> {
+            double newPos = Math.round(sliderCurrentPosition.getValue());
+            sliderCurrentPosition.setValue(newPos);
+            currentPosition.set((int)newPos);
+            fillForm((int)newPos);
+        });
+//        currentPosition.bindBidirectional(sliderCurrentPosition.valueProperty());
 
         //Если ничего не выбрано, выходим без создания окна
         if((operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)
@@ -340,8 +357,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
 
-//                if(!draftIsDuplicated(getNewItem()))
-                    manipulation.restart();
+                manipulation.restart();
 
             } else if (operationProperty.get().equals(EOperation.REPLACE)) {
                 replaceDraft();
@@ -848,6 +864,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             if (prev >= 0) {
                 currentPosition.set(prev);
                 fillForm(prev);
+                sliderCurrentPosition.setValue(prev);
             }
         });
 
@@ -857,6 +874,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             if (next < draftsList.size()) {
                 currentPosition.set(next);
                 fillForm(next);
+                sliderCurrentPosition.setValue(next);
             }
         });
 
@@ -867,20 +885,23 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param num int - порядковый номер файла в списке выбранных файлов
      */
     private void fillForm(int num) {
-        //Если документ #num еще не сохранен, то форму заполняем из файла
-        if (draftsList.get(num).getDraftId() == null) {
-            currentFilePath = draftsList.get(currentPosition.get()).getDraftFile(); //File
-            previewerController.showDraft(null, currentFilePath);
-            currentFileName = draftsList.get(currentPosition.get()).getDraftFile().getName(); //String
-            lblFileName.setText(currentFileName);
-            bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
-            txtAreaNote.setText("");//Комментарий пустой
-            setDraftStatus(null);
-        } else {
-            //Если документ уже сохранен, то форму заполняем значениями БД
-            Draft draft = CH_QUICK_DRAFTS.findById(draftsList.get(num).getDraftId());
-            fillFieldsOnTheForm(draft);
-        }
+        Platform.runLater(()->{
+            //Если документ #num еще не сохранен, то форму заполняем из файла
+            if (draftsList.get(num).getDraftId() == null) {
+                currentFilePath = draftsList.get(currentPosition.get()).getDraftFile(); //File
+                previewerController.showDraft(null, currentFilePath);
+                currentFileName = draftsList.get(currentPosition.get()).getDraftFile().getName(); //String
+                lblFileName.setText(currentFileName);
+                bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
+                txtAreaNote.setText("");//Комментарий пустой
+                setDraftStatus(null);
+            } else {
+                //Если документ уже сохранен, то форму заполняем значениями БД
+                Draft draft = CH_QUICK_DRAFTS.findById(draftsList.get(num).getDraftId());
+                fillFieldsOnTheForm(draft);
+            }
+        });
+
     }
 
     /**
