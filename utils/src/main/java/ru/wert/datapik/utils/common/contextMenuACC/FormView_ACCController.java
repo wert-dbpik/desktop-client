@@ -31,6 +31,7 @@ import java.util.List;
 import static ru.wert.datapik.utils.common.components.BXPrefix.LAST_PREFIX;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CHECK_ENTERED_NUMBER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 import static ru.wert.datapik.winform.enums.EOperation.*;
@@ -56,6 +57,7 @@ public abstract class FormView_ACCController<P extends Item>{
     public abstract void fillFieldsOnTheForm(P oldItem);
     public abstract void changeOldItemFields(P oldItem);
     public abstract void showEmptyForm();
+    public abstract boolean enteredDataCorrect();
 
 
 //    public abstract void setFocusedItem(P focusedItem);
@@ -94,12 +96,16 @@ public abstract class FormView_ACCController<P extends Item>{
     }
 
     protected void okPressed(Event event, StackPane spIndicator, Button btnOk){
-
+        P newItem;
         if(notNullFieldEmpty()) {
             Warning1.create($ATTENTION, "Некоторые поля не заполнены!", "Заполните все поля");
             return;
         }
-        P newItem = getNewItem();
+
+        if(CHECK_ENTERED_NUMBER && enteredDataCorrect()){
+            newItem = getNewItem();
+        } else
+            return;
 
         manipulation = manipulationTask(operation, event, spIndicator, btnOk, newItem);
         if(spIndicator != null) spIndicator.setVisible(true);

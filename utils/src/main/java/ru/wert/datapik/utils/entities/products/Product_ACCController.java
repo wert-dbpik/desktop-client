@@ -173,6 +173,11 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
     /**
      * Создает AnyPart для изделия
      */

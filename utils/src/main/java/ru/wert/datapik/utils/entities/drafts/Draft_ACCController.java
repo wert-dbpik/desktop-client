@@ -3,7 +3,6 @@ package ru.wert.datapik.utils.entities.drafts;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -32,7 +31,6 @@ import ru.wert.datapik.utils.common.components.*;
 import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
-import ru.wert.datapik.utils.entities.drafts.commands.Draft_AddCommand;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_ChangeCommand;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_DeleteCommand;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_MultipleAddCommand;
@@ -60,9 +58,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
-import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
+import static ru.wert.datapik.utils.statics.AppStatic.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
@@ -190,7 +187,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         if(operationProperty.get().equals(EOperation.REPLACE)) loadOneDraft();
         else if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
-        else loadFolder();//if(operationProperty.get().equals(EOperation.ADD_FOLDER))
+        else if(operationProperty.get().equals(EOperation.ADD_FOLDER))loadFolder();
 
 
         //Если ничего не выбрано, выходим без создания окна
@@ -200,8 +197,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             FormViewACCWindow.windowCreationAllowed = false;
             return;
         }
-
-
 
         new BXPage().create(bxPage); //СТРАНИЦЫ
         new BXDraftType().create(bxType); //ТИП ЧЕРТЕЖА
@@ -336,6 +331,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             Warning1.create($ATTENTION, "Некоторые поля не заполнены!", "Заполните все поля");
             return;
         }
+        if(CHECK_ENTERED_NUMBER && !enteredDataCorrect()) return;
+
         //draftsList == null при изменении
         if (draftsList != null && !draftsList.isEmpty()) {
             if (operationProperty.get().equals(EOperation.ADD_FOLDER)) {
@@ -556,12 +553,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     showNextDraft();
                 }
             }
-
-
-                     // Нерешенная задача: хочется остаться на том же чертеже, но
-                     // при последующем нажатии добавить происходит зависание
-                     // помогает только переход.
-
         };
 
         return task;
@@ -1048,6 +1039,21 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         bxFolder.setValue((Folder) tableView.getModifyingItem());
 
         setDecNumberAndName();
+
+    }
+
+    @Override
+    public boolean enteredDataCorrect() {
+        String enteredNumber = txtNumber.getText().trim();
+        List<String> patterns = Arrays.asList(DEC_NUMBER, SKETCH_NUMBER);
+
+        for (String pat : patterns) {
+            if (enteredNumber.matches(pat))
+                return true;
+        }
+        return Warning2.create("ВНИМАНИЕ!",
+                String.format("Введенный номер %s не типичен.", enteredNumber),
+                "Желаете его оставить?"); //ОК, true - оставить
 
     }
 

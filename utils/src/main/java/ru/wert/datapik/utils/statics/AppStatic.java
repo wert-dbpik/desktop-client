@@ -46,9 +46,14 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class AppStatic {
 
+    public static final String DEC_NUMBER = "\\d{6}[.]\\d{3}";// XXXXXX.XXX
+    public static final String DEC_NUMBER_WITH_EXT = "\\d{6}[.]\\d{3}[-]\\d{2,3}";// XXXXXX.XXX-ХХ(Х)
+    public static final String SKETCH_NUMBER = "Э\\d{5}";// ЭХХХХХ
+    public static final String SKETCH_NUM_WITH_EXT = "[Э]\\d{5}[-]\\d{2}";// ЭХХХХХ-ХХ
+
     public static final String UPWARD = "< . . . >";
     public static final char TILDA = '\u02F7';
-    public static String CURRENT_ROJECT_VERSION;
+    public static String CURRENT_PROJECT_VERSION;
     public static String NEWER_PROJECT_VERSION;
 
     public static void closeWindow(Event event){

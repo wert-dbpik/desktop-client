@@ -11,6 +11,8 @@ import java.util.List;
 
 public class ChogoriSettings {
 
+    public static boolean CHECK_ENTERED_NUMBER = true; //Проверять правильность введенных номеров
+
     //НАСТРАИВАЕМЫЕ ПЕРЕМЕННЫЕ
 
     public static String CH_DEFAULT_PREFIX = "ПИК"; //Префикс предприятия

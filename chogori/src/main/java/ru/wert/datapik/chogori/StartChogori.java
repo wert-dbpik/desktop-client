@@ -10,9 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.chogori.application.app_window.AppMenuController;
 import ru.wert.datapik.client.entity.models.VersionDesktop;
 import ru.wert.datapik.utils.help.About;
@@ -78,9 +76,9 @@ public class StartChogori extends Application {
      */
     private void findVersions() {
         Package aPackage = About.class.getPackage();
-        AppStatic.CURRENT_ROJECT_VERSION = aPackage.getImplementationVersion();
-        if(AppStatic.CURRENT_ROJECT_VERSION != null) {
-            VersionDesktop currentVersion = CH_VERSIONS_DESKTOP.findByName(AppStatic.CURRENT_ROJECT_VERSION);
+        AppStatic.CURRENT_PROJECT_VERSION = aPackage.getImplementationVersion();
+        if(AppStatic.CURRENT_PROJECT_VERSION != null) {
+            VersionDesktop currentVersion = CH_VERSIONS_DESKTOP.findByName(AppStatic.CURRENT_PROJECT_VERSION);
             List<VersionDesktop> versions = CH_VERSIONS_DESKTOP.findAll();
             VersionDesktop lastVersion = versions.get(versions.size() - 1);
             int comp = currentVersion.compareTo(lastVersion);

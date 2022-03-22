@@ -148,6 +148,11 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
 
     private String combineDecNumber(){
         String decNumber;

@@ -189,4 +189,9 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
         chbDeleteMaterials.setSelected(false);
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
 }

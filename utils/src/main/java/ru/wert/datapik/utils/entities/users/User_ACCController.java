@@ -118,4 +118,9 @@ public class User_ACCController extends FormView_ACCController<User> {
         cmbxGroup.setValue(null);
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
 }

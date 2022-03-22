@@ -180,4 +180,9 @@ public class MaterialProfileController extends MaterialCommonTypeController {
         tfMassMetre.setText("");
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
 }

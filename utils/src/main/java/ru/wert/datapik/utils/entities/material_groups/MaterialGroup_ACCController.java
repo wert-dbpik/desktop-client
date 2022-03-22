@@ -122,4 +122,9 @@ public class MaterialGroup_ACCController extends FormView_ACCController<Material
 
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
 }

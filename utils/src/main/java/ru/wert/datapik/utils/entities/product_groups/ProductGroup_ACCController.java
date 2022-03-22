@@ -142,4 +142,9 @@ public class ProductGroup_ACCController extends FormView_ACCController<ProductGr
     public void showEmptyForm() {
 
     }
+
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
 }

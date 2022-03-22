@@ -173,5 +173,10 @@ public class Material_ACCController extends FormView_ACCController<Material> {
         matComTypeController.showEmptyForm();
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
 
 }

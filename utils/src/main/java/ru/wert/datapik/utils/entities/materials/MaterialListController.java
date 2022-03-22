@@ -136,6 +136,11 @@ public class MaterialListController extends MaterialCommonTypeController {
         bxDensity.getSelectionModel().select(CH_DENSITIES.findByName("сталь"));
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
     /**
      * Расчет массы
      *

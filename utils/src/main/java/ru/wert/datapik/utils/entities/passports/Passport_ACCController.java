@@ -81,5 +81,10 @@ public class Passport_ACCController extends FormView_ACCController<Passport> {
 
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
 
 }

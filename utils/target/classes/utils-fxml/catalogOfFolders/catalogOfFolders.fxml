@@ -15,7 +15,7 @@
                      <children>
                         <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
                            <children>
-                              <Label fx:id="lblCatalog" text="КАТАЛОГ">
+                              <Label fx:id="lblCatalog" text="ГРУППЫ ИЗДЕЛИЙ">
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>

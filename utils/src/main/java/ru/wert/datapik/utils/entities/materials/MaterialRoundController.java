@@ -183,4 +183,9 @@ public class MaterialRoundController extends MaterialCommonTypeController {
         txtFldMassMetre.setText("");
     }
 
+    @Override
+    public boolean enteredDataCorrect() {
+        return true;
+    }
+
 }
