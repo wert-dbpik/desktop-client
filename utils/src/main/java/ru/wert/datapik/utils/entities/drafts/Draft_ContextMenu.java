@@ -76,7 +76,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         createMenu(addItem, copyItem, changeItem, deleteItem);
 
-        setAddMenuName("Добавить чертеж");
+        setAddMenuName("Добавить отдельные чертежи");
     }
 
     @Override

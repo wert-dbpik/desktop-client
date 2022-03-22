@@ -188,9 +188,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         initOperationProperty(operation);
 
-        if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
-        if(operationProperty.get().equals(EOperation.ADD_FOLDER)) loadFolder();
         if(operationProperty.get().equals(EOperation.REPLACE)) loadOneDraft();
+        else if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
+        else loadFolder();//if(operationProperty.get().equals(EOperation.ADD_FOLDER))
+
 
         //Если ничего не выбрано, выходим без создания окна
         if((operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)
@@ -220,7 +221,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         //Устанавливаем начальные значения полей в зависимости от operation
         setInitialValues();
 
-        if(operation.equals(EOperation.ADD_FOLDER)){
+        if(operationProperty.get().equals(EOperation.ADD_FOLDER)){
             setSettingsForOperationAddFolder();
         } else
             lblNumFile.setText("Файлов: 1");
@@ -789,10 +790,13 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         for(File file: chosenList){
             draftsList.add(new DraftFileAndId(file, null));
         }
+
         //За текущий файл берем самый первый в списке
         currentFilePath = draftsList.get(0).getDraftFile();
 
-
+        //Если чертежей для добавления больше одного, считаем, что добавляется папка
+        if(draftsList.size() > 1)
+            operationProperty.set(EOperation.ADD_FOLDER);
     }
 
     /**
