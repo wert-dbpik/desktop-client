@@ -102,7 +102,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         createMenu(addItem, copyItem, changeItem, deleteItem);
 
-        setAddMenuName("Добавить пакет");
+        setAddMenuName("Добавить комплект чертежей");
     }
 
 
@@ -121,10 +121,10 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         cutItems = new MenuItem("Вырезать");
         pasteItems = new MenuItem("Вставить");
 
-        addProductGroup = new MenuItem("Добавить директорию");
+        addProductGroup = new MenuItem("Добавить группу изделий");
         changeProductGroup = new MenuItem("Изменить");
         deleteProductGroup = new MenuItem("Удалить");
-        showFolderInCatalog = new MenuItem("Показать комплект в каталоге");
+        showFolderInCatalog = new MenuItem("Открыть комплект в группе");
 
         productGroup_commands = new _ProductGroup_Commands(treeView, tableView, CH_FOLDERS);
 

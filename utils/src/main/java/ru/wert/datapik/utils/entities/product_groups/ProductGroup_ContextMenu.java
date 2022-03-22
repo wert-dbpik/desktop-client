@@ -55,7 +55,7 @@ public class ProductGroup_ContextMenu extends FormView_ContextMenu<ProductGroup>
 
         createMenu(addItem, copyItem, changeItem, deleteItem);
 
-        setAddMenuName("Добавить директорию");
+        setAddMenuName("Добавить группу изделий");
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ProductGroup_ContextMenu extends FormView_ContextMenu<ProductGroup>
         List<MenuItem> extraItems = new ArrayList<>();
         cutItems = new MenuItem("Вырезать");
         pasteItems = new MenuItem("Вставить");
-        addPack = new MenuItem("Добавить пакет");
+        addPack = new MenuItem("Добавить комплект чертежей");
 
         cutItems.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
         pasteItems.setOnAction(e-> manipulator.pasteItems(ClipboardUtils.getStringFromClipboard()));
