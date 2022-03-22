@@ -1,34 +1,41 @@
-package ru.wert.datapik.winform.warnings;
+package ru.wert.datapik.utils.entities.drafts;
 
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.winform.enums.ESolution;
 import ru.wert.datapik.winform.modal.ModalWindow;
 import ru.wert.datapik.winform.statics.WinformStatic;
 
+import java.io.File;
 import java.io.IOException;
+
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_TEMPDIR;
+import static ru.wert.datapik.utils.statics.AppStatic.openDraftInPreviewer;
 
 public class WarningDuplicateDraftFound extends ModalWindow {
 
     public static ObjectProperty<ESolution> solution = new SimpleObjectProperty<>();
 
 
-    public ESolution create(Long draftId, String draftName){
+    public ESolution create(Draft draft) {
 
-       try {
+        try {
             Stage stage = new Stage();
-            FXMLLoader userDialogLoader = new FXMLLoader(WarningDuplicateDraftFound.class.getResource("/winform-fxml/warnings/warningDuplicateDraftFound.fxml"));
+            stage.getIcons().add(new Image("/utils-pics/Pikovka(256x256).png"));
+            stage.setTitle("Внимание!");
+            FXMLLoader userDialogLoader = new FXMLLoader(WarningDuplicateDraftFound.class.getResource("/utils-fxml/drafts/warningDuplicateDraftFound.fxml"));
             Parent parent = userDialogLoader.load();
             parent.getStylesheets().add(WarningDuplicateDraftFound.class.getResource("/utils-css/pik-dark.css").toString());
             stage.setScene(new Scene(parent));
@@ -36,43 +43,51 @@ public class WarningDuplicateDraftFound extends ModalWindow {
             stage.setResizable(false);
             stage.initStyle(StageStyle.UNDECORATED);
 
-            Button btnDelete = (Button)parent.lookup("#btnDelete");
+            Button btnShowDraft = (Button) parent.lookup("#btnShowDraft");
+            btnShowDraft.setOnAction((event -> {
+                Platform.runLater(()->{
+                    new Draft_OutstandingPreviewer().create(stage, draft);
+                });
+
+            }));
+
+            Button btnDelete = (Button) parent.lookup("#btnDelete");
             btnDelete.setOnAction((event -> {
                 solution.set(ESolution.DELETE);
                 WinformStatic.closeWindow(event);
 
             }));
 
-           Button btnChange = (Button) parent.lookup("#btnChange");
-           btnChange.setOnAction((event -> {
-               solution.set(ESolution.CHANGE);
-               WinformStatic.closeWindow(event);
+            Button btnChange = (Button) parent.lookup("#btnChange");
+            btnChange.setOnAction((event -> {
+                solution.set(ESolution.CHANGE);
+                WinformStatic.closeWindow(event);
 
             }));
 
-            Button btnCancel = (Button)parent.lookup("#btnCancel");
+            Button btnCancel = (Button) parent.lookup("#btnCancel");
             btnCancel.setOnAction((event -> {
                 solution.set(ESolution.CANCEL);
                 WinformStatic.closeWindow(event);
 
             }));
 
-            Label lblTitle = (Label)parent.lookup("#lblWarningTitle");
-            lblTitle.setText("ВИМАНИЕ!");
+            Label lblTitle = (Label) parent.lookup("#lblWarningTitle");
+            lblTitle.setText("ВНИМАНИЕ!");
             lblTitle.setStyle("-fx-text-fill: #fcce45");
 
-            Label lblProblem = (Label)parent.lookup("#lblProblem");
-            lblProblem.setText("Обнаружен ДЕЙСТВУЮЩИЙ чертеж\n" + draftName);
+            Label lblProblem = (Label) parent.lookup("#lblProblem");
+            lblProblem.setText("Обнаружен ДЕЙСТВУЮЩИЙ чертеж\n" +
+                    draft.toUsefulString() + ",\n" +
+                    "из комплекта " + draft.getFolder().toUsefulString());
             lblProblem.setStyle("-fx-text-fill: #fcce45");
 
-            Label lblDecision = (Label)parent.lookup("#lblDecision");
+            Label lblDecision = (Label) parent.lookup("#lblDecision");
             lblDecision.setText("Что с ним делать?");
-
-
 
             ModalWindow.setMovingPane(parent);
 
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 ModalWindow.centerWindow(stage);
             });
 
@@ -81,7 +96,7 @@ public class WarningDuplicateDraftFound extends ModalWindow {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return solution.get();
 
     }

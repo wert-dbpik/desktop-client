@@ -36,12 +36,11 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </Label>
-                  <Separator prefWidth="200.0" />
                   <VBox alignment="CENTER">
                      <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Посмотреть что за чертеж">
+                        <Button fx:id="btnShowDraft" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Посмотреть что за чертеж">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="System Bold" size="14.0" />
                            </font>
                         </Button>
                      </children>
@@ -68,7 +67,7 @@
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="btnCancel" mnemonicParsing="false" prefWidth="135.0" text="ОТМЕНА">
+                        <Button fx:id="btnCancel" defaultButton="true" mnemonicParsing="false" prefWidth="135.0" text="ОТМЕНА">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

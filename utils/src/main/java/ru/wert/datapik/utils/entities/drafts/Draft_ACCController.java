@@ -44,7 +44,6 @@ import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.winform.enums.ESolution;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.warnings.Warning2;
-import ru.wert.datapik.winform.warnings.WarningDuplicateDraftFound;
 
 import java.io.File;
 import java.io.IOException;
@@ -279,7 +278,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private void setSettingsForOperationAddFolder() {
         //Показываем изначальное число файлов
         lblNumFile.setText("Файлов: " + draftsList.size());
-        //Ghb последующей итерации
 
         currentPosListener = (observable, oldValue, newValue) -> {
             lblNumFile.setText(String.format("Файл %d из %d", currentPosition.get() +1, draftsList.size()));
@@ -474,22 +472,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      */
     private void askIfLegalDraftMustBeChanged(Draft draft, ObjectProperty<ESolution> changeDraft) {
         CountDownLatch latch = new CountDownLatch(1);
-//        Platform.runLater(() -> {
-//            changeDraft.set(Warning2.create($ATTENTION,
-//                    "Существует ДЕЙСТВУЮЩИЙ чертеж\n "
-//                            + "\"" + draft.toUsefulString() + "\",\n"
-//                            + "Статус: " + EDraftStatus.getStatusById(draft.getStatus()).getStatusName() + "-" + draft.getPageNumber(),
-//                    "Хотите заменить чертеж?"));
-//            latch.countDown();
-//        });
-
         Platform.runLater(() -> {
-            changeDraft.set(new WarningDuplicateDraftFound().create(draft.getId(), draft.toUsefulString()));
-//            changeDraft.set(Warning2.create($ATTENTION,
-//                    "Существует ДЕЙСТВУЮЩИЙ чертеж\n "
-//                            + "\"" + draft.toUsefulString() + "\",\n"
-//                            + "Статус: " + EDraftStatus.getStatusById(draft.getStatus()).getStatusName() + "-" + draft.getPageNumber(),
-//                    "Хотите заменить чертеж?"));
+            changeDraft.set(new WarningDuplicateDraftFound().create(draft));
             latch.countDown();
         });
         try {
@@ -514,6 +498,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                manipulation = replaceDraftTask(oldDraft);
                manipulation.restart();
            } else if (skipMe) {
+               //Установим draftId соответственно от старого чертежа
                draftsList.get(currentPosition.get()).setDraftId(oldDraft.getId());
                return true;
            }
@@ -526,8 +511,16 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             updateCommand.execute();
         }
         else if (changeDraft.getValue().equals(ESolution.DELETE)) {
-            manipulation = replaceDraftTask(oldDraft);
-            manipulation.restart();
+                //Удаляем старый чертеж
+            currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
+            currentCommand.execute();
+            //Сохраняем новый чертеж
+
+            currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
+            Draft savedDraft =  ((Draft_MultipleAddCommand) currentCommand).addDraft();
+            draftsList.get(currentPosition.get()).setDraftId(savedDraft.getId());
+            showNextDraft();
+            return true;
         } else {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
             manipulation.cancel();
@@ -547,6 +540,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 return new Task<Draft>() {
                     @Override
                     protected Draft call() throws Exception {
+
                         if (draftIsDuplicated(currentDraft)) {
                             return null;
                         }
