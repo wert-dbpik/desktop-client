@@ -494,53 +494,54 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
            //Метод меняет переменную changeDraft
            askIfLegalDraftMustBeChanged(oldDraft, changeDraft);
        } else {
-           if(deleteMe || changeMe) {
-               manipulation = replaceDraftTask(oldDraft);
-               manipulation.restart();
-           } else if (skipMe) {
-               //Установим draftId соответственно от старого чертежа
-               draftsList.get(currentPosition.get()).setDraftId(oldDraft.getId());
-               return true;
-           }
+           if(deleteMe)
+               Platform.runLater(()->deleteOldDraft(oldDraft));
+           else if(changeMe)
+               Platform.runLater(()->changeOldDraft(oldDraft));
        }
-        if (changeDraft.getValue().equals(ESolution.CHANGE)) {
-            oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
-            oldDraft.setStatusTime(LocalDateTime.now().toString());
-            log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
-            Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(oldDraft, tableView);
-            updateCommand.execute();
-        }
-        else if (changeDraft.getValue().equals(ESolution.DELETE)) {
-                //Удаляем старый чертеж
-            currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
-            currentCommand.execute();
-            //Сохраняем новый чертеж
+        if (changeDraft.getValue().equals(ESolution.CHANGE))
+            Platform.runLater(()->changeOldDraft(oldDraft));
 
-            currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
-            Draft savedDraft =  ((Draft_MultipleAddCommand) currentCommand).addDraft();
-            draftsList.get(currentPosition.get()).setDraftId(savedDraft.getId());
-            showNextDraft();
-            return true;
-        } else {
+        else if (changeDraft.getValue().equals(ESolution.DELETE))
+            Platform.runLater(()->deleteOldDraft(oldDraft));
+        else {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
             manipulation.cancel();
             return true;
         }
-
         return false;
+    }
+
+    /**
+     * Метод удаляет старый чертеж из БД перед сохранением нового
+     * @param oldDraft Draft
+     */
+    private void deleteOldDraft(Draft oldDraft) {
+        currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
+        currentCommand.execute();
+    }
+
+    /**
+     * Метод изменяет старый чертеж в БД перед сохранением нового
+     * @param oldDraft Draft
+     */
+    private void changeOldDraft(Draft oldDraft) {
+        oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
+        oldDraft.setStatusTime(LocalDateTime.now().toString());
+        log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
+        Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(oldDraft, tableView);
+        updateCommand.execute();
     }
 
 
     @NotNull
     private Service<Draft> addDraftTask() {
         Service<Draft> task = new Service<Draft>() {
-
             @Override
             protected Task<Draft> createTask() {
                 return new Task<Draft>() {
                     @Override
                     protected Draft call() throws Exception {
-
                         if (draftIsDuplicated(currentDraft)) {
                             return null;
                         }
