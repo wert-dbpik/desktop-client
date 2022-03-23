@@ -45,33 +45,44 @@ public class Folder_DeleteCommand implements ICommand {
             draftsToDelete.addAll(CH_QUICK_DRAFTS.findAllByFolder(item));
         }
 
+        //Для пустой папки все просто
+        if(draftsToDelete.isEmpty()){
+            deleteFolder(row);
+            return;
+        }
+
         boolean decision = Warning2.create("ВНИМАНИЕ!",
                 "При удалении папки удаляется ее содержимое",
                 String.format("Будут удалены %s чертежей!", draftsToDelete.size()));
         if(!decision) return;
 
+
         Service<Void> deleteDrafts = new ServiceDeleteDrafts(draftsToDelete, tableView.getDraftTable());
 
         deleteDrafts.setOnSucceeded(e->{
-            for (Folder item : items) {
-                try {
-                    CH_QUICK_FOLDERS.delete(item);
-                    log.info("Удален пакет {}", item.toUsefulString());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
-                    log.error("При удалении пакета {} произошла ошибка {}", item.toUsefulString(), ex.getMessage());
-                }
-            }
-
-            Platform.runLater(() -> {
-                tableView.updateVisibleLeafOfTableView(tableView.getUpwardRow().getValue());
-                tableView.scrollTo(row);
-                tableView.getSelectionModel().select(row);
-            });
+            deleteFolder(row);
         });
 
         deleteDrafts.restart();
 
+    }
+
+    private void deleteFolder(int row) {
+        for (Folder item : items) {
+            try {
+                CH_QUICK_FOLDERS.delete(item);
+                log.info("Удален пакет {}", item.toUsefulString());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
+                log.error("При удалении пакета {} произошла ошибка {}", item.toUsefulString(), ex.getMessage());
+            }
+        }
+
+        Platform.runLater(() -> {
+            tableView.updateVisibleLeafOfTableView(tableView.getUpwardRow().getValue());
+            tableView.scrollTo(row);
+            tableView.getSelectionModel().select(row);
+        });
     }
 }

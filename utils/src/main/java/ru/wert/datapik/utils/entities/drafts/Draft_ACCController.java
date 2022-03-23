@@ -157,9 +157,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private StackPane spIndicator;//Панель с расположенным на ней индикатором прогресса, опявляется при длительных процессах
     private ICommand currentCommand; //Команда исполняемая в текущее время.
     private Service<?> manipulation;//Текущая выполняемая задача
-    private Thread addThread;
 
-    private List<DraftFileAndId> draftsList; //Список чертежей <Файл - ID>
+    private List<DraftFileAndId> draftsList = new ArrayList<>(); //Список чертежей <Файл - ID>
     private IntegerProperty currentPosition; //Порядковый номер файла в draftsList
     private File currentFilePath; //Текущий путь к файлу, хранящийся в draftsList
     private String currentFileName;
@@ -201,18 +200,20 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         else if(operationProperty.get().equals(EOperation.ADD)) loadManyDrafts();
         else if(operationProperty.get().equals(EOperation.ADD_FOLDER))loadFolder();
 
+
+        if(operationProperty.get().equals(EOperation.CHANGE)){
+            draftsList.add(new DraftFileAndId(null, getOldItem().getId()));
+        }
+
         sliderCurrentPosition.setMin(0);
         sliderCurrentPosition.setMax(draftsList.size()-1);
         sliderCurrentPosition.setValue(0);
-//        sliderCurrentPosition.setBlockIncrement(1);
-//        sliderCurrentPosition.snapToTicksProperty();
         sliderCurrentPosition.valueProperty().addListener((observable) -> {
             double newPos = Math.round(sliderCurrentPosition.getValue());
             sliderCurrentPosition.setValue(newPos);
             currentPosition.set((int)newPos);
             fillForm((int)newPos);
         });
-//        currentPosition.bindBidirectional(sliderCurrentPosition.valueProperty());
 
         //Если ничего не выбрано, выходим без создания окна
         if((operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER)
@@ -274,8 +275,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         lblDraftNameInDB.setOnMousePressed(event->{
             if(hintPopup != null)
-                hintPopup.closeHint();
-        });
+                hintPopup.closeHint();       });
     }
 
     private void createTxtNumber() {
@@ -829,7 +829,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private void loadFolder(){
 
         try {
-            draftsList = new ArrayList<>();
+//            draftsList = new ArrayList<>();
 
             DirectoryChooser dirChooser = new DirectoryChooser();
             dirChooser.setInitialDirectory(lastFile);
@@ -857,7 +857,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * Загружаем несколько выбранных чертежей
      */
     private void loadManyDrafts() {
-        draftsList = new ArrayList<>();
+//        draftsList = new ArrayList<>();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(lastFile);
         fileChooser.setTitle("Выберите чертежи...");
@@ -883,7 +883,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * Метод для замены одного чертежа другим
      */
     private void loadOneDraft(){
-        draftsList = new ArrayList<>();
+//        draftsList = new ArrayList<>();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(lastFile);
         fileChooser.setTitle("Выберите чертеж...");
