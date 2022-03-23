@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -34,6 +35,7 @@ import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_ChangeCommand;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_DeleteCommand;
 import ru.wert.datapik.utils.entities.drafts.commands.Draft_MultipleAddCommand;
+import ru.wert.datapik.utils.entities.drafts.commands.Draft_RenameCommand;
 import ru.wert.datapik.utils.entities.folders.Folder_Chooser;
 import ru.wert.datapik.utils.popups.HintPopup;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
@@ -103,6 +105,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private TextField txtNumber;
 
     @FXML
+    private Label lblDraftNameInDB;
+
+    @FXML
     private TextField txtName;
 
     @FXML
@@ -159,6 +164,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private File currentFilePath; //Текущий путь к файлу, хранящийся в draftsList
     private String currentFileName;
     private Draft currentDraft; //Текущий чертеж для которого нажали OK - id = null, так как он не сохранен
+    private Passport currentPassport; //Пасспорт найденный для омера чертежа в txtNumber
     private ChangeListener<Number> currentPosListener;
 
     private boolean askMe, skipMe, changeMe, deleteMe;
@@ -170,6 +176,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         rbSkip.setTooltip(new Tooltip("Новый чертеж НЕ сохраняется,\nстарый чертеж НЕ меняется"));
         rbChange.setTooltip(new Tooltip("Новый чертеж становится ДЕЙСТВУЮЩИМ,\nстарый чертеж меняет статус на ЗАМЕНЕННЫЙ"));
         rbDelete.setTooltip(new Tooltip("Новый чертеж становится ДЕЙСТВУЮЩИМ,\nстарый чертеж УДАЛЯЕТСЯ "));
+
+        lblDraftNameInDB.setStyle("-fx-text-fill: #FFFF99");
 
         initButtonCancel();
 
@@ -227,6 +235,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         createPreviewer();
 
+        createTxtNumber();
+
+        createLblDraftNameInDB();
+
         btnSearchFolder.setOnAction(this::findFolder);
 
         //Устанавливаем начальные значения полей в зависимости от operation
@@ -237,6 +249,47 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         } else
             lblNumFile.setText("Файлов: 1");
 
+    }
+
+    private void createLblDraftNameInDB() {
+        lblDraftNameInDB.setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
+                Draft_RenameCommand command = new Draft_RenameCommand(tableView, currentPassport);
+                command.execute();
+                if (currentPassport != null)
+                    lblDraftNameInDB.setText(currentPassport.getName());
+            }
+        });
+
+        lblDraftNameInDB.setOnMouseEntered(event ->{
+            String hint = currentPassport.getName();
+            hintPopup = new HintPopup(lblDraftNameInDB, hint, 0.0);
+            hintPopup.showHint();
+        });
+
+        lblDraftNameInDB.setOnMouseExited(event ->{
+            if(hintPopup != null)
+                hintPopup.closeHint();
+        });
+
+        lblDraftNameInDB.setOnMousePressed(event->{
+            if(hintPopup != null)
+                hintPopup.closeHint();
+        });
+    }
+
+    private void createTxtNumber() {
+        txtNumber.textProperty().addListener(observable -> {
+            String name = txtNumber.getText().trim();
+            Platform.runLater(()->{
+                currentPassport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(bxPrefix.getValue(), name);
+                if(currentPassport != null)
+                    lblDraftNameInDB.setText("=> " + currentPassport.getName());
+                else
+                    lblDraftNameInDB.setText("");
+            });
+
+        });
     }
 
     /**
@@ -415,7 +468,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      */
     private void askIfAnnulledDraftMustBeSurvived(Draft draft, ObjectProperty<ESolution> changeDraft) {
         CountDownLatch latch = new CountDownLatch(1);
-
         Platform.runLater(() -> {
             changeDraft.set(new Draft_DuplicateDraftFound().create(draft, "'АННУЛИРОВАННЫЙ'"));
             latch.countDown();

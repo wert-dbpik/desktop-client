@@ -34,13 +34,23 @@ public class Draft_RenameController {
 
     private Draft_TableView tableView;
     private Passport passport;
-    private Draft selectedDraft;
+    private Draft selectedDraft = null;
 
-    public void init(Draft_TableView tableView, Draft selectedDraft){
+    /**
+     *
+     * @param tableView Draft_TableView
+     * @param object object, либо Draft либо Passport
+     */
+    public void init(Draft_TableView tableView, Object object){
         this.tableView = tableView;
-        this.selectedDraft = selectedDraft;
+        if(object instanceof Draft){
+            this.selectedDraft = (Draft)object;
+            passport = this.selectedDraft.getPassport();
+        }
+        else if(object instanceof Passport){
+            this.passport = (Passport)object;
+        }
 
-        passport = selectedDraft.getPassport();
         String oldName = passport.getName();
         tfName.setText(oldName);
     }
@@ -74,8 +84,10 @@ public class Draft_RenameController {
                 //А теперь обновляем
                 Platform.runLater(()->{
                     tableView.updateView();
-                    tableView.scrollTo(selectedDraft);
-                    tableView.getSelectionModel().select(selectedDraft);
+                    if(selectedDraft != null) {
+                        tableView.scrollTo(selectedDraft);
+                        tableView.getSelectionModel().select(selectedDraft);
+                    }
                 });
                 AppStatic.closeWindow(event);
             }
