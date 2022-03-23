@@ -411,15 +411,13 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     /**
      * Метод выясняет, хочет ли пользователь восстановить ранее аннулированный чертеж
      * @param draft Draft
-     * @param answer BooleanProperty
+     * @param changeDraft BooleanProperty
      */
-    private void askIfAnnulledDraftMustBeSurvived(Draft draft, BooleanProperty answer) {
+    private void askIfAnnulledDraftMustBeSurvived(Draft draft, ObjectProperty<ESolution> changeDraft) {
         CountDownLatch latch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            answer.set(Warning2.create($ATTENTION,
-                    "Существует АННУЛИРОВАННЫЙ чертеж с номером " + draft.getDecimalNumber(),
-                    "Хотите изменить статус чертежа на ЗАМЕНЕННЫЙ?"));
 
+        Platform.runLater(() -> {
+            changeDraft.set(new Draft_DuplicateDraftFound().create(draft, "'АННУЛИРОВАННЫЙ'"));
             latch.countDown();
         });
         try {
@@ -435,34 +433,51 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @return true - дублируется
      */
     private boolean foundDuplicatedAnnulledDraft(Draft oldDraft) {
-        BooleanProperty answer = new SimpleBooleanProperty();
-        askIfAnnulledDraftMustBeSurvived(oldDraft, answer);
-        if (answer.get()) {
-            changeStatusForAnnulledDraft(oldDraft);
-            manipulation = replaceDraftTask(oldDraft);
-            manipulation.restart();
-            //Так как аннулируется не одна страница, а весь документ, то собираем с базы все записи относящиеся к данному чертежу
-            //и меняем их статус на замененный, таким образом их реанимировав
-            List<Draft> annulledDrafts = CH_QUICK_DRAFTS.findByPassport(oldDraft.getPassport());
-            for(Draft annulledDraft : annulledDrafts){
-                if(annulledDraft.getStatus().equals(EDraftStatus.ANNULLED.getStatusId())) {
-                    changeStatusForAnnulledDraft(annulledDraft);
-                    CH_QUICK_DRAFTS.update(annulledDraft);
-                }
-            }
+        ObjectProperty<ESolution> changeDraft = new SimpleObjectProperty<>();
+        askIfAnnulledDraftMustBeSurvived(oldDraft, changeDraft);
 
-        } else {
+        if (changeDraft.getValue().equals(ESolution.CHANGE)) {
+            Platform.runLater(()->changeStatusForAnnulledDraft(oldDraft));
+        }
+        else if (changeDraft.getValue().equals(ESolution.DELETE))
+            Platform.runLater(()->{
+                deleteAnnulledDraft(oldDraft);
+            });
+        else {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на АННУЛИРОВАННЫЙ", oldDraft.toUsefulString());
             return true;
         }
         return false;
     }
 
+    /**
+     * Метод пакетом меняет статус аннулированный на ЗАМЕННЕННЫЙ
+     * @param draft Draft
+     */
     private void changeStatusForAnnulledDraft(Draft draft) {
-        draft.setStatus(EDraftStatus.LEGAL.getStatusId());
-        draft.setStatusTime(LocalDateTime.now().toString());
-        draft.setStatusUser(CH_CURRENT_USER);
-        log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
+        //Так как аннулируется не одна страница, а весь документ, то собираем с базы все записи относящиеся к данному чертежу
+        //и меняем их статус на замененный, таким образом их реанимировав
+        List<Draft> annulledDrafts = CH_QUICK_DRAFTS.findByPassport(draft.getPassport());
+        for (Draft annulledDraft : annulledDrafts) {
+            draft.setStatus(EDraftStatus.LEGAL.getStatusId());
+            draft.setStatusTime(LocalDateTime.now().toString());
+            draft.setStatusUser(CH_CURRENT_USER);
+            log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
+            CH_QUICK_DRAFTS.update(annulledDraft);
+        }
+    }
+
+    /**
+     * Метод пакетом удаляет все аннулированные чертежи
+     * @param draft Draft
+     */
+    private void deleteAnnulledDraft(Draft draft) {
+        //Так как аннулируется не одна страница, а весь документ, то собираем с базы все записи относящиеся к данному чертежу
+        //и меняем их статус на замененный, таким образом их реанимировав
+        List<Draft> annulledDrafts = CH_QUICK_DRAFTS.findByPassport(draft.getPassport());
+        currentCommand = new Draft_DeleteCommand(annulledDrafts, tableView);
+        currentCommand.execute();
+
     }
 
     /**
@@ -473,7 +488,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private void askIfLegalDraftMustBeChanged(Draft draft, ObjectProperty<ESolution> changeDraft) {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
-            changeDraft.set(new WarningDuplicateDraftFound().create(draft));
+            changeDraft.set(new Draft_DuplicateDraftFound().create(draft, "'ДЕЙСТВУЮЩИЙ'"));
             latch.countDown();
         });
         try {
@@ -506,7 +521,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             Platform.runLater(()->deleteOldDraft(oldDraft));
         else {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
-            manipulation.cancel();
             return true;
         }
         return false;

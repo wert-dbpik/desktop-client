@@ -20,7 +20,7 @@ public class Draft_OutstandingPreviewer {
 
         StackPane rootPane = new StackPane();
         rootPane.setPrefWidth(800);
-        rootPane.setPrefHeight(600);
+        rootPane.setPrefHeight(550);
         rootPane.getStylesheets().add(Warning2.class.getResource("/utils-css/pik-dark.css").toString());
 
         PreviewerPatch previewerPatch = new PreviewerPatch().create();

@@ -18,7 +18,7 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_PASSPORTS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PASSPORTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
-public class RenameDraftController {
+public class Draft_RenameController {
 
     @FXML
     private Button btnCancel;

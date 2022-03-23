@@ -4,11 +4,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.common.commands.ICommand;
-import ru.wert.datapik.utils.common.contextMenuACC.FormViewACCWindow;
-import ru.wert.datapik.utils.entities.drafts.Draft_ACCController;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
-import ru.wert.datapik.utils.entities.drafts.RenameDraftController;
-import ru.wert.datapik.winform.enums.EOperation;
+import ru.wert.datapik.utils.entities.drafts.Draft_RenameController;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.IOException;
@@ -33,7 +30,7 @@ public class Draft_RenameCommand implements ICommand {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/drafts/renameDraft.fxml"));
             Parent parent = loader.load();
-            RenameDraftController controller = loader.getController();
+            Draft_RenameController controller = loader.getController();
 
 
             Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
