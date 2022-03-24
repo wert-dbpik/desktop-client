@@ -2,7 +2,6 @@ package ru.wert.datapik.utils.entities.drafts;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableView;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
@@ -12,7 +11,6 @@ import ru.wert.datapik.winform.enums.EDraftStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 
 public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
@@ -45,8 +43,8 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         manipulator = tableView.getManipulator();
 
-        condition = !(tableView.getSelectedFoldersForContextMenu() == null
-                || tableView.getSelectedFoldersForContextMenu().size() != 1);
+        condition = !(tableView.getSelectedFolders() == null
+                || tableView.getSelectedFolders().size() != 1);
 
         createMainMenuItems();
 

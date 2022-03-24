@@ -3,21 +3,17 @@ package ru.wert.datapik.utils.entities.drafts;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.utils.common.components.*;
-import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_GLOBE_IMG;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Draft_PatchController {
 
@@ -106,7 +102,7 @@ public class Draft_PatchController {
 
         btnDraftsGlobe.setId("patchButton");
         btnDraftsGlobe.setOnAction(e->{
-            draftsTable.setSelectedFoldersForContextMenu(null);
+            draftsTable.setSelectedFolders(null);
             draftsTable.setSearchedText("");
             draftsTable.setModifyingItem(null);
             draftsTable.updateView();

@@ -30,16 +30,7 @@ public class Draft_ChangeCommand implements ICommand {
 
         try {
             CH_QUICK_DRAFTS.update(item);
-
-//            tableView.easyUpdate(CH_QUICK_DRAFTS);
-
-            Platform.runLater(()->{
-
-                tableView.updateView();
-                tableView.scrollTo(item);
-                tableView.getSelectionModel().select(item);
-            });
-
+            tableView.updateDraftTableView(item);
             log.info("Изменение параметров чертежа {}", item.toUsefulString());
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);

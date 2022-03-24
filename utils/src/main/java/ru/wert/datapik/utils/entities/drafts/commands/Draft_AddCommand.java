@@ -63,11 +63,7 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
             e.printStackTrace();
         }
 
-        Platform.runLater(()->{
-            tableView.updateView();
-            tableView.scrollTo(newItem);
-            tableView.getSelectionModel().select(newItem);
-        });
+        tableView.updateDraftTableView(newItem);
 
     }
 

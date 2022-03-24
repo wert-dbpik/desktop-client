@@ -9,14 +9,11 @@ import javafx.scene.text.Text;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
-import ru.wert.datapik.utils.entities.drafts.commands.Draft_DeleteCommand;
-import ru.wert.datapik.winform.warnings.Warning2;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
-import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 public class Draft_Manipulator {
 
@@ -80,7 +77,7 @@ public class Draft_Manipulator {
         for(String s : pasteData) {
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
             List<Folder> selectedFolders = tableView.getSelectedFolders();
-            if (!clazz.equals("PG") || selectedFolders == null || selectedFolders.size() > 1)
+            if (!clazz.equals("DR") || selectedFolders == null || selectedFolders.size() > 1)
                 return false;
         }
 
@@ -96,6 +93,7 @@ public class Draft_Manipulator {
             Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
             draft.setFolder(selectedFolder);
             CH_QUICK_DRAFTS.update(draft);
+            tableView.updateDraftTableView(draft);
         }
 
     }

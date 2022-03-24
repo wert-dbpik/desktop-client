@@ -18,21 +18,16 @@ import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.catalogOfFolders.CatalogOfFoldersPatch;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
-import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.AppStatic.clearCash;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 
 @Slf4j
@@ -155,7 +150,7 @@ public class DraftsEditorController implements SearchablePane{
                     for(ProductGroup pg : selectedGroups){
                         folders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(pg.getId()));
                     }
-                    draftsTable.setSelectedFolders(folders);
+                    draftsTable.setTempSelectedFolders(folders);
                     draftsTable.updateView();
                 }
 
@@ -173,7 +168,7 @@ public class DraftsEditorController implements SearchablePane{
 
     private void updateListOfDrafts(Item newValue) {
         draftPatchController.showSourceOfPassports(newValue);
-        draftsTable.setSelectedFolders(Collections.singletonList((Folder) newValue));
+        draftsTable.setTempSelectedFolders(Collections.singletonList((Folder) newValue));
         draftsTable.setSearchedText(""); //обнуляем поисковую строку
         draftsTable.setModifyingItem(newValue);
         draftsTable.updateView();

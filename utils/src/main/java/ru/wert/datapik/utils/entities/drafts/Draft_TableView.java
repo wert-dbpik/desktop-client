@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -14,19 +13,15 @@ import lombok.Setter;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
-import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.Sorting;
-import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.entities.drafts.commands._Draft_Commands;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.Comparators;
 import ru.wert.datapik.winform.enums.EDraftStatus;
-import ru.wert.datapik.winform.enums.EDraftType;
-import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,7 +30,6 @@ import java.util.List;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
 public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<Draft> {
 
@@ -49,8 +43,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     @Getter private Draft_Manipulator manipulator;
     @Getter@Setter private String searchedText = "";
 
-    @Getter@Setter private List<Folder> selectedFolders;
-    @Getter@Setter private List<Folder> selectedFoldersForContextMenu;
+    @Getter@Setter private List<Folder> tempSelectedFolders; //Обнуляется после расчетов
+    @Getter@Setter private List<Folder> selectedFolders;//ForContextMenu и не только
 
     @Getter ListProperty<Draft> preparedList = new SimpleListProperty<>();
 
@@ -195,18 +189,18 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     public List<Draft> prepareList() {
         List<Draft> list = new ArrayList<>();
         if(modifyingClass instanceof Folder){
-            if(selectedFolders == null || selectedFolders.isEmpty()) {
+            if(tempSelectedFolders == null || tempSelectedFolders.isEmpty()) {
                 if (modifyingItem == null)
                     list = CH_QUICK_DRAFTS.findAll();
                 else {
                     list = CH_QUICK_DRAFTS.findAllByFolder((Folder) modifyingItem);
                 }
             } else {
-                for(Folder folder: selectedFolders){
+                for(Folder folder: tempSelectedFolders){
                     list.addAll(CH_QUICK_DRAFTS.findAllByFolder(folder));
                 }
-                selectedFoldersForContextMenu = selectedFolders;
-                selectedFolders = null;
+                selectedFolders = tempSelectedFolders;
+                tempSelectedFolders = null;
             }
         }
 
@@ -244,6 +238,18 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         }
     }
 
+    /**
+     * Обновляет таблицу из других мест
+     * @param item
+     */
+    public void updateDraftTableView(Draft item) {
+        Platform.runLater(() -> {
+            updateView();
+            scrollTo(item);
+            getSelectionModel().select(item);
+        });
+    }
+    
     @Override
     public ItemCommands<Draft> getCommands() {
         return commands;
