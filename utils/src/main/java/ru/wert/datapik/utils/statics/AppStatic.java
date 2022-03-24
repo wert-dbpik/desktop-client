@@ -35,8 +35,7 @@ import java.util.stream.Collectors;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_TEMPDIR;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
@@ -238,6 +237,29 @@ public class AppStatic {
         progressIndicator.setMaxSize(35.0, 35.0);
         spIndicator.getChildren().addAll(progressIndicator);
         spIndicator.setVisible(false);
+    }
+
+    /**
+     * Метод удаляет все файлы из папки, где кэшируются данные
+     */
+    public static void clearCash() {
+        if (CH_TEMPDIR.exists()) {
+            for (File file : CH_TEMPDIR.listFiles()) {
+                if (file.isFile())
+                    file.delete();
+            }
+            log.debug("AppStatic : folder with cash has been cleared");
+        }
+    }
+
+    /**
+     * Метод удаляет все файлы из папки, где кэшируются данные
+     * при условии, что количество файлов в папке превышает допустимое
+     */
+    public static void clearCashIfNeeded(){
+        File[] filesInFolder = CH_TEMPDIR.listFiles();
+        if(CH_TEMPDIR.listFiles().length > MAX_COUNT_TEMP_FILES)
+            clearCash();
     }
 
 }

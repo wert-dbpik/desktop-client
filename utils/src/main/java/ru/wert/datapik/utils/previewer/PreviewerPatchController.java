@@ -47,6 +47,8 @@ public class PreviewerPatchController {
     @FXML
     private Label lblDraftInfo;
 
+    ImageView imageView;
+
 
     private PDFReader pdfReader; //см enum PDFViewer
     private StackPane pdfStackPane; //панель на которой работает pdfReader
@@ -86,6 +88,8 @@ public class PreviewerPatchController {
      * @param scene Scene
      */
     public void initPreviewer(EPDFViewer viewer, Scene scene){
+        imageView = new ImageView();
+
 //        this.draftsTableView = draftsTableView;
         pdfStackPane = new StackPane();
         switch(viewer){
@@ -145,9 +149,10 @@ public class PreviewerPatchController {
      * @param draftPath File
      */
     private void showImage(File draftPath) {
+
         try {
             Image imageDraft = new Image(draftPath.toURI().toURL().toString());
-            ImageView imageView = new ImageView(imageDraft);
+            imageView.setImage(imageDraft);
             imageView.setFitWidth(imageDraft.getWidth());
             imageView.setFitHeight(imageDraft.getHeight());
 

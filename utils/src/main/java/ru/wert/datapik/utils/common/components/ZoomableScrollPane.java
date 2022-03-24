@@ -9,12 +9,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 
 
 public class ZoomableScrollPane extends ScrollPane{
     private double scaleValue = 0.7;
     private double zoomIntensity = 0.02;
-    private Node target;
+    @Getter private Node target;
     private Node zoomNode;
 
 

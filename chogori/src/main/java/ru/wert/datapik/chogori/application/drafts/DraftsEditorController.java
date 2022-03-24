@@ -30,6 +30,7 @@ import java.util.List;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
+import static ru.wert.datapik.utils.statics.AppStatic.clearCash;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
 
@@ -115,28 +116,37 @@ public class DraftsEditorController implements SearchablePane{
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue instanceof Folder) {
                 if(folderTableView.getAltOnProperty().get()){
-                    if(CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT))
+                    if(CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT)) {
+                        clearCash();
                         updateListOfDrafts(newValue);
-                } else
+                    }
+                } else {
+                    clearCash();
                     updateListOfDrafts(newValue);
+                }
 
             }
         });
 
         folderTableView.setOnMouseClicked(e->{
-            //Нажата правая клавиша мыши
+            //Нажата левая клавиша мыши
             boolean primaryBtn = e.getButton().equals(MouseButton.PRIMARY);
             //Есть право редактировать чертежи
             boolean editRights = CH_CURRENT_USER_GROUP.isEditDrafts();
 
+            //Обновляет список чертежей
             if((editRights && primaryBtn && e.isAltDown()) || (!editRights && primaryBtn) ){
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if(selectedItem instanceof Folder){
                     if(folderTableView.getAltOnProperty().get()){
-                        if(e.isAltDown())
+                        if(e.isAltDown()) {
+                            clearCash();
                             updateListOfDrafts(selectedItem);
-                    } else
+                        }
+                    } else {
+                        clearCash();
                         updateListOfDrafts(selectedItem);
+                    }
                 }
                 if((editRights && selectedItem instanceof ProductGroup) || (!editRights && selectedItem instanceof ProductGroup && e.isAltDown())){
                     draftPatchController.showSourceOfPassports(selectedItem);

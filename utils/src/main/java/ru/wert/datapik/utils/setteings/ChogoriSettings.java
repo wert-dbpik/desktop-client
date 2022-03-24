@@ -20,6 +20,8 @@ public class ChogoriSettings {
     public static String CH_DEFAULT_DENSITY = "сталь"; //Плотность стали
     public static String CH_DEFAULT_PRODUCT_GROUP = "Разное"; //Префикс предприятия
     public static EPDFViewer CH_PDF_VIEWER = EPDFViewer.ICE_PDF; //Просмотрщик PDF файлов
+    public static int MAX_COUNT_TEMP_FILES = 20; //Просмотрщик PDF файлов
+
 
     //ПЕРЕМЕННЫЕ ПРОГРАММЫ
     public static final String CH_DEV_PASS = "888"; //пароль разработчика

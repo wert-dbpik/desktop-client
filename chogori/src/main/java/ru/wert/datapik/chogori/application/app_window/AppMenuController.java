@@ -26,6 +26,7 @@ import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
+import static ru.wert.datapik.utils.statics.AppStatic.clearCash;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
@@ -127,6 +128,7 @@ public class AppMenuController {
      * -- ЗАВЕРШЕНИЕ ПРОГРАММЫ
      */
     private void exit(Event e){
+        clearCash();
         System.exit(0);
     }
 
