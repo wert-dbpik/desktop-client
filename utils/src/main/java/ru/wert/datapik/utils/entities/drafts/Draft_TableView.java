@@ -90,16 +90,26 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
         createContextMenu();
 
-        //Если для предпросмотра Alt не нужен, достаточно только выделения
-        getSelectionModel().selectedItemProperty().addListener((observable) -> {
-            Draft selectedDraft = getSelectionModel().getSelectedItem();
-            if(selectedDraft == null || selectedDraft.getId() == null)
-                return;
-            if(!getAltOnProperty().get()) {
-                Platform.runLater(()->{
-                    AppStatic.openDraftInPreviewer(selectedDraft, previewerController);
-                });
-            }
+        //Слушатель работает с задержкой 0,5 сек
+        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            new Thread(()->{
+                try {
+                    Thread.sleep(500);
+                    if (newValue == getSelectionModel().getSelectedItem()) {
+                        System.out.println(newValue + "" + getSelectionModel().getSelectedItem());
+                        if (newValue == null || newValue.getId() == null)
+                            return;
+                        Platform.runLater(() -> {
+                            if (!getAltOnProperty().get()) {
+                                AppStatic.openDraftInPreviewer(newValue, previewerController);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
         });
 
         setOnMouseClicked(e -> {
