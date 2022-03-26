@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -57,8 +58,8 @@ public class Warning2 extends ModalWindow {
             lblProblem.setStyle("-fx-text-fill: #fcce45");
 
             Label lblDecision = (Label)parent.lookup("#lblDecision");
-            lblDecision.setText(decision);
-
+            if(decision != null) lblDecision.setText(decision);
+            else ((AnchorPane)parent).getChildren().remove(lblDecision);
 
 
             ModalWindow.setMovingPane(parent);

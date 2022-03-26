@@ -64,7 +64,7 @@ public class StartChogori extends Application {
         AppSettings defaultSettings = ChogoriServices.CH_SETTINGS.findByName("default");
         while(true) {
             if(defaultSettings != null) {
-                ChogoriSettings.CH_TEMPDIR = tempDir;
+                WinformStatic.CH_TEMPDIR = tempDir;
                 WinformSettings.CH_MONITOR = defaultSettings.getMonitor();
                 break;
             }

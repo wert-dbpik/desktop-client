@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.client.entity.serviceQUICK.FolderQuickService.DEFAULT_FOLDER;
+import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
@@ -53,6 +55,9 @@ public class SettingsController {
 
     @FXML
     private TextField tfPathToNormyMK;
+
+    @FXML
+    private Button btnPathToNormyMK;
 
     @FXML
     private CheckBox chbShowPrefixes;
@@ -86,6 +91,8 @@ public class SettingsController {
         cmbPDFViewerChooser.getSelectionModel().select(EPDFViewer.values()[CH_CURRENT_USER_SETTINGS.getPdfViewer()]);
         //НОРМЫ МК
         tfPathToNormyMK.setText(CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
+        btnPathToNormyMK.setText("");
+        btnPathToNormyMK.setGraphic(new ImageView(TREE_NODE_IMG));
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         chbShowPrefixes.setSelected(CH_CURRENT_USER_SETTINGS.isShowPrefixes());
         //ПРЕФИКС ПО УМОЛЧАНИЮ

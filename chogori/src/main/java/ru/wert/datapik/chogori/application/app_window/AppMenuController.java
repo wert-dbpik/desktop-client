@@ -18,6 +18,8 @@ import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.search.SearchField;
 import ru.wert.datapik.utils.setteings.SettingsWindow;
+import ru.wert.datapik.winform.statics.WinformStatic;
+import ru.wert.datapik.winform.warnings.Warning2;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.File;
@@ -27,9 +29,10 @@ import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
-import static ru.wert.datapik.utils.statics.AppStatic.clearCash;
+import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 public class AppMenuController {
 
@@ -133,9 +136,9 @@ public class AppMenuController {
     /**
      * -- ЗАВЕРШЕНИЕ ПРОГРАММЫ
      */
-    private void exit(Event e){
-        clearCash();
-        System.exit(0);
+    private void exit(Event e) {
+        WinformStatic.exitApplication(e);
+
     }
 
     /**

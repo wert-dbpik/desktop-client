@@ -29,7 +29,7 @@ public class ChogoriSettings {
     public static User CH_CURRENT_USER; //текущий пользователь
     public static UserGroup CH_CURRENT_USER_GROUP;//группа текущего пользователя
     public static AppSettings CH_CURRENT_USER_SETTINGS;//группа текущего пользователя
-    public static File CH_TEMPDIR; //Директория временного хранения
+//    public static File CH_TEMPDIR; //Директория временного хранения
     public static List<KeyCode> CH_KEYS_NOW_PRESSED; //Массив хранения нажатых клавиш
 
     //ПОСЛЕДНИЕ ВЫБРАННЫЕ ДАННЫЕ

@@ -38,7 +38,7 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 //import ru.wert.datapik.utils.views.pdf.readers.temp.PdfIcepdfReader;
@@ -240,18 +240,18 @@ public class AppStatic {
         spIndicator.setVisible(false);
     }
 
-    /**
-     * Метод удаляет все файлы из папки, где кэшируются данные
-     */
-    public static void clearCash() {
-        if (CH_TEMPDIR.exists()) {
-            for (File file : CH_TEMPDIR.listFiles()) {
-                if (file.isFile())
-                    file.delete();
-            }
-            log.debug("AppStatic : folder with cash has been cleared");
-        }
-    }
+//    /**
+//     * Метод удаляет все файлы из папки, где кэшируются данные
+//     */
+//    public static void clearCash() {
+//        if (CH_TEMPDIR.exists()) {
+//            for (File file : CH_TEMPDIR.listFiles()) {
+//                if (file.isFile())
+//                    file.delete();
+//            }
+//            log.debug("AppStatic : folder with cash has been cleared");
+//        }
+//    }
 
     /**
      * Метод удаляет все файлы из папки, где кэшируются данные

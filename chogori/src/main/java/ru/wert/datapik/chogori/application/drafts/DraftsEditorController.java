@@ -27,7 +27,7 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
-import static ru.wert.datapik.utils.statics.AppStatic.clearCash;
+import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 
 @Slf4j

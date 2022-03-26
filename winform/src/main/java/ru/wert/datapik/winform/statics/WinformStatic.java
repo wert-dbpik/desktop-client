@@ -6,8 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.winform.warnings.Warning2;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -17,15 +20,35 @@ import java.util.List;
 public class WinformStatic {
 
     public static Stage CH_MAIN_STAGE;
+    public static File CH_TEMPDIR; //Директория временного хранения
 
-    public static void closeWindow(Event event){
-        ((Node) event.getSource()).getScene().getWindow().hide();
-        if(((Node) event.getSource()).getScene().getWindow().equals(WinformStatic.CH_MAIN_STAGE)){
-            Platform.exit();
+    public static void closeWindow(Event event) {
+        Window window = ((Node) event.getSource()).getScene().getWindow();
+        if (window.equals(WinformStatic.CH_MAIN_STAGE)) {
+            exitApplication(event);
+        } else
+            window.hide();
+    }
+
+    public static void exitApplication(Event event){
+        if(Warning2.create("ОДУМАЙТЕСЬ!", "Вы близки к выходу из программы?", "А поработать?")) {
+            clearCash();
             System.exit(0);
         }
     }
 
+    /**
+     * Метод удаляет все файлы из папки, где кэшируются данные
+     */
+    public static void clearCash() {
+        if (CH_TEMPDIR.exists()) {
+            for (File file : CH_TEMPDIR.listFiles()) {
+                if (file.isFile())
+                    file.delete();
+            }
+            log.debug("AppStatic : folder with cash has been cleared");
+        }
+    }
 
     public static void centerWindow(Stage window, Boolean fullScreen, int mainMonitor){
 
