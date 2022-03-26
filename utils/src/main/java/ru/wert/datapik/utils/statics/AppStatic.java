@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
@@ -260,6 +261,21 @@ public class AppStatic {
         File[] filesInFolder = CH_TEMPDIR.listFiles();
         if(CH_TEMPDIR.listFiles().length > MAX_COUNT_TEMP_FILES)
             clearCash();
+    }
+
+    public static File chooseDirectory(Event event, File initialDirectory){
+        File newDirectory = new File("C:/");
+        if(initialDirectory.exists() && initialDirectory.isDirectory()) {
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setInitialDirectory(initialDirectory);
+            try {
+                newDirectory = chooser.showDialog(CH_MAIN_STAGE);
+            } catch (Exception e) {
+                chooser.setInitialDirectory(new File("C:/"));
+                newDirectory = chooser.showDialog(CH_MAIN_STAGE);
+            }
+        }
+        return newDirectory;
     }
 
 }

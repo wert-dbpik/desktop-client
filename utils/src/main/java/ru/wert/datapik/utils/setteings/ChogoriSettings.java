@@ -1,6 +1,7 @@
 package ru.wert.datapik.utils.setteings;
 
 import javafx.scene.input.KeyCode;
+import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.entity.models.UserGroup;
@@ -27,6 +28,7 @@ public class ChogoriSettings {
     public static final String CH_DEV_PASS = "888"; //пароль разработчика
     public static User CH_CURRENT_USER; //текущий пользователь
     public static UserGroup CH_CURRENT_USER_GROUP;//группа текущего пользователя
+    public static AppSettings CH_CURRENT_USER_SETTINGS;//группа текущего пользователя
     public static File CH_TEMPDIR; //Директория временного хранения
     public static List<KeyCode> CH_KEYS_NOW_PRESSED; //Массив хранения нажатых клавиш
 

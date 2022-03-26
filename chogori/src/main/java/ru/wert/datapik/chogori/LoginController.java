@@ -8,11 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.control.PasswordField;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.StartChogori;
+import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.IOException;
 
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
@@ -51,6 +53,13 @@ public class LoginController {
         if(pass.equals(CH_DEV_PASS)){
             CH_CURRENT_USER = CH_USERS.findById(1L);
             CH_CURRENT_USER_GROUP = CH_CURRENT_USER.getUserGroup();
+            CH_CURRENT_USER_SETTINGS = CH_SETTINGS.findByName(CH_CURRENT_USER.getName());
+            if(CH_CURRENT_USER_SETTINGS == null){
+                AppSettings newSettings = CH_SETTINGS.findByName("default");
+                newSettings.setName(CH_CURRENT_USER.getName());
+                newSettings.setUser(CH_CURRENT_USER);
+                CH_CURRENT_USER_SETTINGS = CH_SETTINGS.save(newSettings);
+            }
             showTabPaneWindow();
         }
         //Вход с регистрацией личности

@@ -17,6 +17,7 @@ import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.search.SearchField;
+import ru.wert.datapik.utils.setteings.SettingsWindow;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public class AppMenuController {
     }
 
     /**
-     * СОЗДАТЬ МЕНЯ
+     * СОЗДАТЬ МЕНЮ
      */
     private void createMenu() {
 
@@ -111,13 +112,18 @@ public class AppMenuController {
 
         Menu mainMenu = new Menu("Общее");
 
+        MenuItem settings = new MenuItem("Настройки");
+        settings.setOnAction(this::openSettings);
+
         MenuItem changeUserItem = new MenuItem("Сменить пользователя");
         changeUserItem.setOnAction(this::changeUser);
 
         MenuItem exitItem = new MenuItem("Выйти");
         exitItem.setOnAction(this::exit);
 
+
         mainMenu.getItems().add(changeUserItem);
+        mainMenu.getItems().add(settings);
         mainMenu.getItems().add(exitItem);
 
         return mainMenu;
@@ -130,6 +136,13 @@ public class AppMenuController {
     private void exit(Event e){
         clearCash();
         System.exit(0);
+    }
+
+    /**
+     * НАСТРОЙКИ
+     */
+    private void openSettings(Event e){
+        new SettingsWindow().show();
     }
 
     /**

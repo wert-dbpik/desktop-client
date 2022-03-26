@@ -17,6 +17,9 @@ public interface AppSettingsApiInterface {
     @GET("settings/all")
     Call<List<AppSettings>> getAll();
 
+    @GET("settings/all-by/user-id/{id}")
+    Call<List<AppSettings>> getAllByUserId(@Path("id") Long id);
+
     @GET("settings/all-by-text/{text}")
     Call<List<AppSettings>> getAllByText(@Path("text") String text);
 
