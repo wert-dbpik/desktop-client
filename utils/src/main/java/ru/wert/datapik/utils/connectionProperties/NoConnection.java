@@ -34,14 +34,9 @@ public class NoConnection extends ModalWindow{
     public boolean create(){
         AtomicBoolean answer = new AtomicBoolean(false);
         try {
-//            stage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/connectionProperties/noConnection.fxml"));
             Parent parent = loader.load();
             stage.setScene(new Scene(parent));
-
-
-
-//            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
 
             tfAddressIP = ((TextField) parent.lookup("#tfAddressIP"));

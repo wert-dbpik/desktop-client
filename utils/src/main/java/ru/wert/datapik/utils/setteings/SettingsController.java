@@ -15,6 +15,7 @@ import javafx.util.StringConverter;
 import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Prefix;
+import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.utils.common.components.BXMonitor;
 import ru.wert.datapik.utils.common.components.BXPrefix;
 import ru.wert.datapik.utils.statics.AppStatic;
@@ -85,7 +86,7 @@ public class SettingsController {
 
         //МОНИТОР
         List<String> screens = new BXMonitor().create(cmbMonitorChooser);
-        cmbMonitorChooser.getSelectionModel().select(screens.get(CH_CURRENT_USER_SETTINGS.getMonitor()));
+        cmbMonitorChooser.getSelectionModel().select(AppProperties.getInstance().getMonitor());
         //PDF просмотрщик
         cmbPDFViewerChooser.getItems().addAll(EPDFViewer.values());
         cmbPDFViewerChooser.getSelectionModel().select(EPDFViewer.values()[CH_CURRENT_USER_SETTINGS.getPdfViewer()]);
@@ -112,7 +113,7 @@ public class SettingsController {
         AppSettings defSettings = CH_SETTINGS.findByName("default");
 
         List<String> cmbItems = cmbMonitorChooser.getItems();
-        cmbMonitorChooser.getSelectionModel().select(cmbItems.get(defSettings.getMonitor()));
+        cmbMonitorChooser.getSelectionModel().select(0);
         //PDF просмотрщик
         cmbPDFViewerChooser.getSelectionModel().select(EPDFViewer.values()[defSettings.getPdfViewer()]);
         //НОРМЫ МК
@@ -130,7 +131,7 @@ public class SettingsController {
     void saveSettings(Event event) {
 
         //МОНИТОР
-        CH_CURRENT_USER_SETTINGS.setMonitor(cmbMonitorChooser.getSelectionModel().getSelectedIndex());
+        AppProperties.getInstance().setMonitor(cmbMonitorChooser.getSelectionModel().getSelectedIndex());
         //PDF просмотрщик
         CH_CURRENT_USER_SETTINGS.setPdfViewer(cmbPDFViewerChooser.getSelectionModel().getSelectedIndex());
         //НОРМЫ МК

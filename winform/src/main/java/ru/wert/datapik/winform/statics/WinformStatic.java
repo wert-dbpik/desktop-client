@@ -22,6 +22,10 @@ public class WinformStatic {
     public static Stage CH_MAIN_STAGE;
     public static File CH_TEMPDIR; //Директория временного хранения
 
+    /**
+     * Метод обеспечивает закрытие любого окна
+     * В случае, если это окно главного приложения, то осуществляется выход из приложения
+     */
     public static void closeWindow(Event event) {
         Window window = ((Node) event.getSource()).getScene().getWindow();
         if (window.equals(WinformStatic.CH_MAIN_STAGE)) {
@@ -30,6 +34,9 @@ public class WinformStatic {
             window.hide();
     }
 
+    /**
+     * Метод обеспечивает выход из приложения
+     */
     public static void exitApplication(Event event){
         if(Warning2.create("ОДУМАЙТЕСЬ!", "Вы близки к выходу из программы?", "А поработать?")) {
             clearCash();

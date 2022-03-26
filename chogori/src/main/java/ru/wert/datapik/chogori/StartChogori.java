@@ -2,6 +2,7 @@ package ru.wert.datapik.chogori;
 
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.app_window.AppMenuController;
 import ru.wert.datapik.client.entity.models.VersionDesktop;
+import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.statics.UtilStaticNodes;
 import ru.wert.datapik.utils.services.ChogoriServices;
@@ -31,6 +33,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 @Slf4j
@@ -58,17 +62,12 @@ public class StartChogori extends Application {
 
         new ChogoriToolBar();
         //Создадим папку временного хранения файлов чертежей
-        FileFwdSlash tempDir = TempDir.createTempDirectory("bddrafts");
+        FileFwdSlash tempDir = TempDir.createTempDirectory("temp-baza-pik");
         log.info("Cоздана временная папка : {}", tempDir.toString());
-        //Зашружаем свойства программы
-        AppSettings defaultSettings = ChogoriServices.CH_SETTINGS.findByName("default");
-        while(true) {
-            if(defaultSettings != null) {
-                WinformStatic.CH_TEMPDIR = tempDir;
-                WinformSettings.CH_MONITOR = defaultSettings.getMonitor();
-                break;
-            }
-        }
+
+        WinformStatic.CH_TEMPDIR = tempDir;
+        WinformSettings.CH_MONITOR = AppProperties.getInstance().getMonitor();
+
     }
 
     /**

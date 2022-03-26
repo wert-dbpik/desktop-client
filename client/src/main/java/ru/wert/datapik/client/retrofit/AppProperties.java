@@ -55,8 +55,9 @@ public class AppProperties {
             File props = new File(appConfigPath);
             props.createNewFile();
             FileWriter writer = new FileWriter (props);
-            writer.write("IP_ADDRESS = 192.168.1.83\n");
+            writer.write("IP_ADDRESS=192.168.1.83\n");
             writer.write("PORT = 8080");
+            writer.write("MONITOR=0");
             writer.close();
         } catch (IOException e) {
             if(++attempt < 3) new AppProperties();
@@ -79,7 +80,11 @@ public class AppProperties {
         return connectionProps.getProperty("PORT");
     }
 
-    public void setIpAddress(String ipAddress){
+    public int getMonitor(){
+        return Integer.parseInt(connectionProps.getProperty("MONITOR"));
+    }
+
+    public void setIpAddress(final String ipAddress){
         try {
             FileOutputStream fos = new FileOutputStream(appConfigPath);
             connectionProps.setProperty("IP_ADDRESS", ipAddress);
@@ -89,10 +94,20 @@ public class AppProperties {
         }
     }
 
-    public void setPort(String port){
+    public void setPort(final String port){
         try {
             FileOutputStream fos = new FileOutputStream(appConfigPath);
             connectionProps.setProperty("PORT", port);
+            connectionProps.store(fos, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setMonitor(final int monitor){
+        try {
+            FileOutputStream fos = new FileOutputStream(appConfigPath);
+            connectionProps.setProperty("MONITOR", String.valueOf(monitor));
             connectionProps.store(fos, null);
         } catch (IOException e) {
             e.printStackTrace();
