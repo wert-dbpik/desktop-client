@@ -4,7 +4,8 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class ExcelChooser {
 
@@ -14,8 +15,17 @@ public class ExcelChooser {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("exel", "*.xlsx")
         );
-        fileChooser.setInitialDirectory(new File("C:/test"));
+        fileChooser.setInitialDirectory(new File(CH_CURRENT_USER_SETTINGS.getPathToNormyMK()));
 
-        return fileChooser.showOpenDialog(CH_MAIN_STAGE);
+        File chosenFile = new File("");
+        try {
+            chosenFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
+        } catch (Exception e) {
+            fileChooser.setInitialDirectory(new File("C:/"));
+            chosenFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
+            e.printStackTrace();
+        }
+
+        return chosenFile;
     }
 }

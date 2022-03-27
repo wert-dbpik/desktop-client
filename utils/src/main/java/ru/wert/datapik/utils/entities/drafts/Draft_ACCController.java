@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.AppStatic.*;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 /**
@@ -834,7 +834,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             DirectoryChooser dirChooser = new DirectoryChooser();
             dirChooser.setInitialDirectory(lastFile);
             dirChooser.setTitle("Выберите папку...");
-            File folder = dirChooser.showDialog(CH_MAIN_STAGE);
+            File folder = dirChooser.showDialog(WF_MAIN_STAGE);
             if(folder == null || !folder.isDirectory()) return;
 
             List<Path> filesInFolder = Files.walk(folder.toPath())
@@ -863,7 +863,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         fileChooser.setTitle("Выберите чертежи...");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF, PNG, JPEG", "*.pdf", "*.png", "*.jpg"));
 
-        List<File> chosenList = fileChooser.showOpenMultipleDialog(CH_MAIN_STAGE);
+        List<File> chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
         if(chosenList == null) return;
         lastFile = chosenList.get(0).getParentFile();
         //Формируем список файлов из выбранных чертежей
@@ -889,7 +889,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         fileChooser.setTitle("Выберите чертеж...");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF, PNG, JPEG", "*.pdf", "*.png", "*.jpg"));
 
-        File chosenFile = fileChooser.showOpenDialog(CH_MAIN_STAGE);
+        File chosenFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
         if(chosenFile == null) return;
         lastFile = chosenFile.getParentFile();
         //Формируем список файлов из выбранных чертежей
@@ -991,7 +991,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             Parent previewer = loader.load();
             //Помещаем панель с previewer в шаблонное окно WindowDecoration
             previewerController = loader.getController();
-            previewerController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
+            previewerController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
 
             //Создаем прозрачную панель с индикатором
             spIndicator = new StackPane();

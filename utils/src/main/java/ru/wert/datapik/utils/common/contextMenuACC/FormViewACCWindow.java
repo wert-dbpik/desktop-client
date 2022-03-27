@@ -13,7 +13,7 @@ import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.IOException;
 
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 
 /**
@@ -65,7 +65,7 @@ public class FormViewACCWindow<P extends Item> {
             if(windowCreationAllowed){
                 boolean resizable = false;
                 if(formView instanceof Draft_TableView) resizable = true;  //Окно добавления чертежей на весь экран
-                new WindowDecoration(op.getName(), parent, resizable, CH_MAIN_STAGE);
+                new WindowDecoration(op.getName(), parent, resizable, WF_MAIN_STAGE);
             }
 
 

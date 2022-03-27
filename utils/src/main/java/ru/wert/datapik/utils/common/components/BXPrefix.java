@@ -24,7 +24,7 @@ public class BXPrefix {
         createConverter();
 
         if(LAST_PREFIX == null)
-            LAST_PREFIX = CH_QUICK_PREFIXES.findByName(CH_DEFAULT_PREFIX);
+            LAST_PREFIX = CH_DEFAULT_PREFIX;
         bxPrefix.setValue(LAST_PREFIX);
 
     }

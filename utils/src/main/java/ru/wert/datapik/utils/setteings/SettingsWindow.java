@@ -6,7 +6,7 @@ import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.IOException;
 
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class SettingsWindow {
 
@@ -15,7 +15,7 @@ public class SettingsWindow {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/settings/settings.fxml"));
             Parent parent = loader.load();
 
-            new WindowDecoration("Настройки", parent, false, CH_MAIN_STAGE, true);
+            new WindowDecoration("Настройки", parent, false, WF_MAIN_STAGE, true);
         } catch (IOException e) {
             e.printStackTrace();
         }

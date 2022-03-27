@@ -1,9 +1,7 @@
 package ru.wert.datapik.winform.statics;
 
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -19,8 +17,8 @@ import java.util.List;
 @Slf4j
 public class WinformStatic {
 
-    public static Stage CH_MAIN_STAGE;
-    public static File CH_TEMPDIR; //Директория временного хранения
+    public static Stage WF_MAIN_STAGE;
+    public static File WF_TEMPDIR; //Директория временного хранения
 
     /**
      * Метод обеспечивает закрытие любого окна
@@ -28,7 +26,7 @@ public class WinformStatic {
      */
     public static void closeWindow(Event event) {
         Window window = ((Node) event.getSource()).getScene().getWindow();
-        if (window.equals(WinformStatic.CH_MAIN_STAGE)) {
+        if (window.equals(WinformStatic.WF_MAIN_STAGE)) {
             exitApplication(event);
         } else
             window.hide();
@@ -48,8 +46,8 @@ public class WinformStatic {
      * Метод удаляет все файлы из папки, где кэшируются данные
      */
     public static void clearCash() {
-        if (CH_TEMPDIR.exists()) {
-            for (File file : CH_TEMPDIR.listFiles()) {
+        if (WF_TEMPDIR.exists()) {
+            for (File file : WF_TEMPDIR.listFiles()) {
                 if (file.isFile())
                     file.delete();
             }

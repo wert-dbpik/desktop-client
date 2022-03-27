@@ -1,6 +1,5 @@
 package ru.wert.datapik.utils.entities.drafts;
 
-import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import ru.wert.datapik.client.entity.models.Draft;
@@ -11,7 +10,7 @@ import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.utils.statics.AppStatic.openDraftInPreviewer;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class Draft_OutstandingPreviewer {
 
@@ -25,7 +24,7 @@ public class Draft_OutstandingPreviewer {
 
         PreviewerPatch previewerPatch = new PreviewerPatch().create();
         PreviewerPatchController previewerPatchController = previewerPatch.getController();
-        previewerPatchController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
+        previewerPatchController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
 
         rootPane.getChildren().add(previewerPatch.getParent());
         openDraftInPreviewer(draft, previewerPatchController);

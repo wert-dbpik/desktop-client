@@ -10,7 +10,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 
 //import static ru.wert.datapik.utils._patches.common.components.Nodes.MAIN_WINDOW;
@@ -49,7 +49,7 @@ public class ModalWindow {
      */
     public static void centerWindow(Stage stage){
 
-        WindowDecoration.centerWindow(stage, CH_MAIN_STAGE, false);
+        WindowDecoration.centerWindow(stage, WF_MAIN_STAGE, false);
 
 //        ObservableList<Screen> screens = Screen.getScreens();
 //        double mainX = stage.getScene().getWindow().getX() + stage.getScene().getWidth()/2.0; //MAIN_WINDOW = stage

@@ -264,7 +264,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
                     label.setGraphic(new ImageView(TREE_NODE_IMG));
                 }
             } else {
-                label.setText(item.toUsefulString());
+                label.setText(Folder_Columns.getFolderFullName((Folder) item));
             }
             return new ReadOnlyObjectWrapper<>(label);
         });

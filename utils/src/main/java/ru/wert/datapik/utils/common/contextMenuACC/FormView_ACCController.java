@@ -211,8 +211,7 @@ public abstract class FormView_ACCController<P extends Item>{
     }
 
     protected void setComboboxPrefixValue(ComboBox<Prefix> bxPrefix){
-        Prefix defaultPrefix = CH_QUICK_PREFIXES.findByName(CH_DEFAULT_PREFIX);
-        bxPrefix.setValue(LAST_PREFIX == null ? defaultPrefix : LAST_PREFIX);
+        bxPrefix.setValue(LAST_PREFIX == null ? CH_DEFAULT_PREFIX : LAST_PREFIX);
     }
 
     protected void setComboboxProductGroupValue(ComboBox<ProductGroup> bxGroup){

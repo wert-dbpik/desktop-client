@@ -6,14 +6,18 @@ import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.utils.popups.CopyPopup;
 
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
+
 public class VBoxPassport extends VBox {
-    CopyPopup copyPopupControl = new CopyPopup();
+    private final CopyPopup copyPopupControl = new CopyPopup();
 
     public VBoxPassport(Passport passport, String variant) {
         String decNumber = passport.getNumber();
         if(!variant.equals("00")) decNumber += variant;
         String prefix = passport.getPrefix().getName();
-        if(!prefix.equals("-"))
+        if(!passport.getPrefix().equals(CH_DEFAULT_PREFIX) ||
+                !prefix.equals("-") || CH_CURRENT_USER_SETTINGS.isShowPrefixes())
             decNumber = prefix + "." + decNumber;
 
         setSpacing(0.0);

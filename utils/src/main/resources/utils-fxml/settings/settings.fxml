@@ -55,12 +55,13 @@
                           </columnConstraints>
                           <rowConstraints>
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Нормы МК" GridPane.rowIndex="2">
+                              <Label text="Нормы МК" GridPane.rowIndex="4">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -68,7 +69,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
                                     <TextField fx:id="tfPathToNormyMK" GridPane.columnIndex="1" HBox.hgrow="ALWAYS">
                                        <font>
@@ -85,7 +86,7 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <Label text="Префиксы" GridPane.rowIndex="3">
+                              <Label text="Префиксы">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -93,8 +94,20 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox fx:id="cmbMonitorChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="265.0" GridPane.columnIndex="1" />
-                              <Label text="PDF просмотрщик" GridPane.rowIndex="1">
+                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <children>
+                                    <ComboBox fx:id="cmbMonitorChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1" />
+                                    <Label text="(Нужна перезагрузка)">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <Label text="PDF просмотрщик" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -102,8 +115,8 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox fx:id="cmbPDFViewerChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="264.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Монитор">
+                              <ComboBox fx:id="cmbPDFViewerChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Монитор" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -111,11 +124,17 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <CheckBox fx:id="chbShowPrefixes" mnemonicParsing="false" text="Показывать  префиксы" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <CheckBox fx:id="chbShowPrefixes" mnemonicParsing="false" text="Показывать  префиксы" GridPane.columnIndex="1">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </CheckBox>
+                              <ComboBox fx:id="cmbPrefixChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Префикс по умолчанию" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -127,18 +146,12 @@
                      <content>
                         <GridPane BorderPane.alignment="CENTER">
                            <children>
-                              <Label text="Префикс по умолчанию">
+                              <Label text="Проверять">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cmbPrefixChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="100.0" GridPane.columnIndex="1" />
-                              <Label text="Проверять" GridPane.rowIndex="1">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <CheckBox fx:id="chbValidateDecNumbersEntering" mnemonicParsing="false" text="Введенные децимальные номера" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <CheckBox fx:id="chbValidateDecNumbersEntering" mnemonicParsing="false" text="Введенные децимальные номера" GridPane.columnIndex="1">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -152,7 +165,6 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <rowConstraints>
-                              <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>

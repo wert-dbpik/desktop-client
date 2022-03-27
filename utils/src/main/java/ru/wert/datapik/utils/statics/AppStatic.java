@@ -87,7 +87,7 @@ public class AppStatic {
                 boolean res = CH_QUICK_DRAFTS.download("drafts", //Постоянная папка в каталоге для чертежей
                         String.valueOf(fileId), //название скачиваемого файла
                         "." + ext, //расширение скачиваемого файла
-                        CH_TEMPDIR.toString()); //временная папка, куда необходимо скачать файл
+                        WF_TEMPDIR.toString()); //временная папка, куда необходимо скачать файл
                 if(res) {
                     log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", String.valueOf(fileId) + "." + ext);
                 } else {
@@ -100,10 +100,10 @@ public class AppStatic {
             //В итоге, загружаем файл из временной папки
             Platform.runLater(()->{
 //                if(previewerController != null)
-                previewerController.showDraft(draft, new FileFwdSlash(CH_TEMPDIR.toString() + "/" + fileId + "." + ext));
+                previewerController.showDraft(draft, new FileFwdSlash(WF_TEMPDIR.toString() + "/" + fileId + "." + ext));
                 log.debug("openDraftInPreviewer : " +
                                 "Из временной папки загружен файл {}",
-                        new FileFwdSlash(CH_TEMPDIR.toString() + "/" + fileId + "." + ext).toStrong());
+                        new FileFwdSlash(WF_TEMPDIR.toString() + "/" + fileId + "." + ext).toStrong());
             });
 
         } else { //Если чертежа нет, показываем NO IMAGE заглушку
@@ -130,7 +130,7 @@ public class AppStatic {
         for(Draft d : chosenDrafts){
             PreviewerPatch previewerPatch = new PreviewerPatch().create();
             PreviewerPatchController previewerController = previewerPatch.getController();
-            previewerController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
+            previewerController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
 
             String tabName = d.toUsefulString() +
                     " (" + EDraftType.getDraftTypeById(d.getDraftType()) + "-" + d.getPageNumber() + ")";
@@ -154,7 +154,7 @@ public class AppStatic {
         String searchedFileName = fileId.toString() + "." + ext;
         log.debug("draftInTempDir: проверяем наличие чертежа {} во временной папке", searchedFileName);
         try {
-            Path drafts = CH_TEMPDIR.toPath();
+            Path drafts = WF_TEMPDIR.toPath();
             List<Path> filesInFolder = Files.walk(drafts)
                     .filter(Files::isRegularFile).collect(Collectors.toList());
 
@@ -240,41 +240,19 @@ public class AppStatic {
         spIndicator.setVisible(false);
     }
 
-//    /**
-//     * Метод удаляет все файлы из папки, где кэшируются данные
-//     */
-//    public static void clearCash() {
-//        if (CH_TEMPDIR.exists()) {
-//            for (File file : CH_TEMPDIR.listFiles()) {
-//                if (file.isFile())
-//                    file.delete();
-//            }
-//            log.debug("AppStatic : folder with cash has been cleared");
-//        }
-//    }
-
-    /**
-     * Метод удаляет все файлы из папки, где кэшируются данные
-     * при условии, что количество файлов в папке превышает допустимое
-     */
-    public static void clearCashIfNeeded(){
-        File[] filesInFolder = CH_TEMPDIR.listFiles();
-        if(CH_TEMPDIR.listFiles().length > MAX_COUNT_TEMP_FILES)
-            clearCash();
-    }
-
     public static File chooseDirectory(Event event, File initialDirectory){
-        File newDirectory = new File("C:/");
+        File newDirectory = new File("C:\\");
         if(initialDirectory.exists() && initialDirectory.isDirectory()) {
             DirectoryChooser chooser = new DirectoryChooser();
             chooser.setInitialDirectory(initialDirectory);
             try {
-                newDirectory = chooser.showDialog(CH_MAIN_STAGE);
+                newDirectory = chooser.showDialog(WF_MAIN_STAGE);
             } catch (Exception e) {
-                chooser.setInitialDirectory(new File("C:/"));
-                newDirectory = chooser.showDialog(CH_MAIN_STAGE);
+                chooser.setInitialDirectory(new File("C:\\"));
+                newDirectory = chooser.showDialog(WF_MAIN_STAGE);
             }
         }
+
         return newDirectory;
     }
 

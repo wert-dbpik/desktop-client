@@ -6,7 +6,7 @@ import ru.wert.datapik.utils.editor.poi.POIReader;
 import java.io.File;
 import java.io.IOException;
 
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class ExcelOpener {
 
@@ -18,7 +18,7 @@ public class ExcelOpener {
                 new FileChooser.ExtensionFilter("exel", "*.xlsx")
         );
         fileChooser.setInitialDirectory(new File("C:/test"));
-        File selectedFile = fileChooser.showOpenDialog(CH_MAIN_STAGE);
+        File selectedFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
         if (selectedFile == null) return;
         try {
             poiReader = new POIReader(selectedFile);

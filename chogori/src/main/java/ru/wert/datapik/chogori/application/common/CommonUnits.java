@@ -1,9 +1,7 @@
 package ru.wert.datapik.chogori.application.common;
 
-import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
-import ru.wert.datapik.utils.common.components.BtnDouble;
 import ru.wert.datapik.utils.common.components.ChevronButton;
 import ru.wert.datapik.utils.common.components.ExpandButton;
 import ru.wert.datapik.utils.previewer.PreviewerPatch;
@@ -12,7 +10,7 @@ import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_UP_IMG;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class CommonUnits {
 
@@ -52,7 +50,7 @@ public class CommonUnits {
     public static PreviewerPatchController loadStpPreviewer(StackPane stpPreviewer, SplitPane sppHorizontal, SplitPane sppVertical) {
         PreviewerPatch previewerPatch = new PreviewerPatch().create();
         PreviewerPatchController previewerPatchController = previewerPatch.getController();
-        previewerPatchController.initPreviewer(CH_PDF_VIEWER, CH_MAIN_STAGE.getScene());
+        previewerPatchController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
         previewerPatchController.initPreviewerToolBar(true);
         previewerPatchController.getHboxPreviewerButtons().getChildren().add(CommonUnits.createExpandPreviewButton(sppHorizontal, sppVertical));
 

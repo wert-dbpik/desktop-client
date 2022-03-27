@@ -11,7 +11,7 @@ import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.IOException;
 
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class Draft_RenameCommand implements ICommand {
 
@@ -55,7 +55,7 @@ public class Draft_RenameCommand implements ICommand {
             }
 
             new WindowDecoration("Переимнование " + title,
-                    parent, false, CH_MAIN_STAGE, true);
+                    parent, false, WF_MAIN_STAGE, true);
 
         } catch (IOException e) {
             e.printStackTrace();

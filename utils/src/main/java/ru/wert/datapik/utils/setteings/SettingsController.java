@@ -1,19 +1,10 @@
 package ru.wert.datapik.utils.setteings;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Screen;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 import ru.wert.datapik.client.entity.models.AppSettings;
-import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.utils.common.components.BXMonitor;
@@ -21,18 +12,12 @@ import ru.wert.datapik.utils.common.components.BXPrefix;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EPDFViewer;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.client.entity.serviceQUICK.FolderQuickService.DEFAULT_FOLDER;
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;
 
 public class SettingsController {
@@ -134,14 +119,21 @@ public class SettingsController {
         AppProperties.getInstance().setMonitor(cmbMonitorChooser.getSelectionModel().getSelectedIndex());
         //PDF просмотрщик
         CH_CURRENT_USER_SETTINGS.setPdfViewer(cmbPDFViewerChooser.getSelectionModel().getSelectedIndex());
+        CH_PDF_VIEWER = cmbPDFViewerChooser.getSelectionModel().getSelectedItem();
         //НОРМЫ МК
+        CH_DEFAULT_PATH_TO_NORMY_MK = new File(tfPathToNormyMK.getText().trim());
         CH_CURRENT_USER_SETTINGS.setPathToNormyMK(tfPathToNormyMK.getText().trim());
+
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         CH_CURRENT_USER_SETTINGS.setShowPrefixes(chbShowPrefixes.isSelected());
+        CH_SHOW_PREFIX = chbShowPrefixes.isSelected(); //для моментального применения
         //ПРЕФИКС ПО УМОЛЧАНИЮ
-        CH_CURRENT_USER_SETTINGS.setDefaultPrefix(cmbPrefixChooser.getSelectionModel().getSelectedIndex());
+        Prefix newPrefix = cmbPrefixChooser.getSelectionModel().getSelectedItem();
+        CH_DEFAULT_PREFIX = newPrefix;
+        CH_CURRENT_USER_SETTINGS.setDefaultPrefix(newPrefix);
         //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
         CH_CURRENT_USER_SETTINGS.setValidateDecNumbers(chbValidateDecNumbersEntering.isSelected());
+        CH_VALIDATE_DEC_NUMBERS = chbValidateDecNumbersEntering.isSelected();
         CH_SETTINGS.update(CH_CURRENT_USER_SETTINGS);
         closeWindow(event);
     }

@@ -1,32 +1,25 @@
 package ru.wert.datapik.chogori.application.app_window;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import ru.wert.datapik.chogori.StartChogori;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.tabs.MainTabPane;
-import ru.wert.datapik.utils.toolpane.ChogoriToolBar;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
-import static ru.wert.datapik.winform.statics.WinformStatic.CH_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class ApplicationController {
 
@@ -85,11 +78,11 @@ public class ApplicationController {
     private void createButtonInterceptor() {
         CH_KEYS_NOW_PRESSED = new ArrayList<>();
 
-        CH_MAIN_STAGE.getScene().setOnKeyPressed((e)->{
+        WF_MAIN_STAGE.getScene().setOnKeyPressed((e)->{
             CH_KEYS_NOW_PRESSED.add(e.getCode());
         });
 
-        CH_MAIN_STAGE.getScene().setOnKeyReleased((e)->{
+        WF_MAIN_STAGE.getScene().setOnKeyReleased((e)->{
             CH_KEYS_NOW_PRESSED.remove(e.getCode());
         });
     }

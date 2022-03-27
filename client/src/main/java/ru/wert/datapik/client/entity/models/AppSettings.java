@@ -20,7 +20,7 @@ public class AppSettings extends _BaseEntity implements Item {
     private Integer pdfViewer; //просмотрщик
     private String pathToNormyMK; //путь до папки НормыМК
     private boolean showPrefixes; //показывать префиксы
-    private Integer defaultPrefix; //Префикс по умолчанию
+    private Prefix defaultPrefix; //Префикс по умолчанию
     private boolean validateDecNumbers; //Проверять вводимый децимальный номер
     private String lastPathToDrafts; //Последний использованный путь до папки с чертежами
 
