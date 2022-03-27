@@ -4,10 +4,10 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.entity.models.Passport;
+import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.utils.popups.CopyPopup;
 
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 
 public class VBoxPassport extends VBox {
     private final CopyPopup copyPopupControl = new CopyPopup();
@@ -15,10 +15,12 @@ public class VBoxPassport extends VBox {
     public VBoxPassport(Passport passport, String variant) {
         String decNumber = passport.getNumber();
         if(!variant.equals("00")) decNumber += variant;
-        String prefix = passport.getPrefix().getName();
-        if(!passport.getPrefix().equals(CH_DEFAULT_PREFIX) ||
-                !prefix.equals("-") || CH_CURRENT_USER_SETTINGS.isShowPrefixes())
-            decNumber = prefix + "." + decNumber;
+        Prefix prefix = passport.getPrefix();
+        if(CH_SHOW_PREFIX)
+            if(!prefix.equals(CH_DEFAULT_PREFIX) || !prefix.getName().equals("-"))
+                decNumber = prefix.getName() + "." + decNumber;
+
+
 
         setSpacing(0.0);
         Label lbDecNumber = new Label(decNumber);

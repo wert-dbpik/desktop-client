@@ -96,7 +96,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                 try {
                     Thread.sleep(500);
                     if (newValue == getSelectionModel().getSelectedItem()) {
-                        System.out.println(newValue + "" + getSelectionModel().getSelectedItem());
                         if (newValue == null || newValue.getId() == null)
                             return;
                         Platform.runLater(() -> {

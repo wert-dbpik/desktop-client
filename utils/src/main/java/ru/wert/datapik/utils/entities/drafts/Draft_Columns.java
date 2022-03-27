@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_SHOW_PREFIX;
 import static ru.wert.datapik.winform.statics.WinformStatic.parseLDTtoNormalDate;
 
@@ -71,7 +72,8 @@ public class Draft_Columns {
         tcDraftNumber.setCellValueFactory(cd -> {
             Passport passport = cd.getValue().getPassport();
             String prefix = passport.getPrefix().getName().equals("-") ? "" : passport.getPrefix().getName() + ".";
-            if(!CH_SHOW_PREFIX) prefix = "";
+
+            if(!CH_SHOW_PREFIX && passport.getPrefix().equals(CH_DEFAULT_PREFIX)) prefix = "";
             String decNumber = prefix + passport.getNumber();
 
             Label lblNumber = new Label(decNumber);

@@ -149,10 +149,19 @@ public class PassportsEditorController implements SearchablePane{
                 CommonUnits.createHorizontalDividerButton(sppHorizontal, 0.8, 0.4));
 
         passportsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Platform.runLater(()->{
-                draftsTable.setModifyingItem(newValue);
-                draftsTable.updateView();
-            });
+            new Thread(()->{
+                try {
+                    Thread.sleep(500);
+                    if (newValue == passportsTable.getSelectionModel().getSelectedItem()) {
+                        Platform.runLater(()->{
+                            draftsTable.setModifyingItem(newValue);
+                            draftsTable.updateView();
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         });
 
         stpPassports.getChildren().add(passportsPatch.getParent());
