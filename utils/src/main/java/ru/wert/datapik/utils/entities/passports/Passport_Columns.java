@@ -6,10 +6,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
+import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.utils.common.components.VBoxPassport;
 
 import java.util.Comparator;
+
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_SHOW_PREFIX;
 
 public class Passport_Columns {
 
@@ -59,8 +65,12 @@ public class Passport_Columns {
 
         tcPassportNumber.setCellValueFactory(cd -> {
             Passport passport = cd.getValue();
-            String prefix = passport.getPrefix().getName().equals("-") ? "" : passport.getPrefix().getName() + ".";
-            String decNumber = prefix + passport.getNumber();
+            Prefix prefix = passport.getPrefix();
+            String decNumber = passport.getNumber();
+            if(CH_SHOW_PREFIX)
+                if(!prefix.equals(CH_DEFAULT_PREFIX) && !prefix.getName().equals("-"))
+                    decNumber = prefix.getName() + "." + decNumber;
+//            String prefix = passport.getPrefix().getName().equals("-") ? "" : passport.getPrefix().getName() + ".";
 
             Label lblNumber = new Label(decNumber);
 
@@ -103,5 +113,32 @@ public class Passport_Columns {
         tcPassportName.setMinWidth(150);
         return tcPassportName;
     }
+
+//    /**
+//     * Если CH_SHOW_PREFIX = false, то дефолтный префикс отсекается, остальные остаются
+//     */
+//    public static String getDecNumber(Passport passport) {
+//        if(passport == null || passport.getNumber() == null) return "";
+//        String decNumber = passport.getNumber();
+//        if(!CH_SHOW_PREFIX){
+//            String prefix = decNumber.split("\\.", -1)[0];
+//            if(prefix != null && !prefix.equals("-") && !prefix.equals("")){
+//                Prefix foundPrefix = CH_QUICK_PREFIXES.findByName(prefix);
+//                if(foundPrefix != null && foundPrefix != CH_DEFAULT_PREFIX)
+//                    decNumber = decNumber.substring(prefix.length()+1);
+//            }
+//        }
+//        return decNumber;
+//    }
+//
+//    public static String getFolderFullName(Passport passport){
+//        if(passport == null) return "";
+//        if (passport.getNumber() == null ||
+//                passport.getNumber().equals("-") ||
+//                passport.getNumber().equals("")
+//        )
+//            return passport.getName();
+//        return getDecNumber(passport) + ", " + passport.getName();
+//    }
 
 }
