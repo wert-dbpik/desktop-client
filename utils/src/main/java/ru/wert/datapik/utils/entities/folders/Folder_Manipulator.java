@@ -50,7 +50,7 @@ public class Folder_Manipulator {
             db.setDragViewOffsetY(25.0f);
             db.setDragView(image);
 
-            event.consume();
+//            event.consume();
         });
 
     }
@@ -68,7 +68,7 @@ public class Folder_Manipulator {
             } else{
                 event.acceptTransferModes(TransferMode.NONE);
             }
-            event.consume();
+//            event.consume();
         });
 
     }

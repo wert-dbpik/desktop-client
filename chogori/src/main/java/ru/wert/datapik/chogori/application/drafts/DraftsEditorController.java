@@ -108,53 +108,38 @@ public class DraftsEditorController implements SearchablePane{
 
         //Подключаем слушатель
         folderTableView = catalogPatch.getFolderTableView();
-        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue instanceof Folder) {
-                if(folderTableView.getAltOnProperty().get()){
-                    if(CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT)) {
-                        clearCash();
-                        updateListOfDrafts(newValue);
-                    }
-                } else {
-                    clearCash();
-                    updateListOfDrafts(newValue);
-                }
-
-            }
-        });
-
-        folderTableView.setOnMouseClicked(e->{
-            //Нажата левая клавиша мыши
-            boolean primaryBtn = e.getButton().equals(MouseButton.PRIMARY);
+        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable) -> {
             //Есть право редактировать чертежи
             boolean editRights = CH_CURRENT_USER_GROUP.isEditDrafts();
+            //Нажата клавиша Alt
+            boolean altBtnPressed = CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT);
 
-            //Обновляет список чертежей
-            if((editRights && primaryBtn && e.isAltDown()) || (!editRights && primaryBtn) ){
-                Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
-                if(selectedItem instanceof Folder){
-                    if(folderTableView.getAltOnProperty().get()){
-                        if(e.isAltDown()) {
-                            clearCash();
-                            updateListOfDrafts(selectedItem);
-                        }
-                    } else {
+            Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
+            //Если выделяется папка
+            if (selectedItem instanceof Folder) {
+                //Если требуется нажатие Alt
+                if (folderTableView.getAltOnProperty().get()) {
+                    if (altBtnPressed) {
                         clearCash();
                         updateListOfDrafts(selectedItem);
                     }
+                } else {
+                    clearCash();
+                    updateListOfDrafts(selectedItem);
                 }
-                if((editRights && selectedItem instanceof ProductGroup) || (!editRights && selectedItem instanceof ProductGroup && e.isAltDown())){
-                    draftPatchController.showSourceOfPassports(selectedItem);
-                    List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
-                    List<Folder> folders = new ArrayList<>();
-                    for(ProductGroup pg : selectedGroups){
-                        folders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(pg.getId()));
-                    }
-                    draftsTable.setTempSelectedFolders(folders);
-                    draftsTable.updateView();
-                }
-
             }
+            //Состав папки раскрывается только при нажатой alt
+            if (selectedItem instanceof ProductGroup && altBtnPressed){
+                draftPatchController.showSourceOfPassports(selectedItem);
+                List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
+                List<Folder> folders = new ArrayList<>();
+                for (ProductGroup pg : selectedGroups) {
+                    folders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(pg.getId()));
+                }
+                draftsTable.setTempSelectedFolders(folders);
+                draftsTable.updateView();
+            }
+
         });
 
         catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));

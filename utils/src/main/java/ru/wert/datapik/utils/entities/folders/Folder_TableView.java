@@ -111,6 +111,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
                 if (row.isEmpty()) {
                     getSelectionModel().clearSelection();
                 }
+
             });
 
             if(useContextMenu) {
