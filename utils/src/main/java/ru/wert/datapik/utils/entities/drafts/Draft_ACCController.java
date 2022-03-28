@@ -551,26 +551,30 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     }
 
     /**
-     * Метод выясняет, хочет ли пользователь изменить копию черетежа на новый чертеж
+     * Метод после выяснения , хочет ли пользователь изменить копию черетежа на новый чертеж
      * @return boolean, True  - изменение отменено или не произошло,
      *                  False  - изменение произошло либо необходим переход к следующему
      */
-    private boolean foundDuplicatedLegalDraft(Draft oldDraft){
+    private boolean foundDuplicatedLegalDraft(Draft oldDraft) {
         ObjectProperty<ESolution> changeDraft = new SimpleObjectProperty<>();
-       if(askMe) {
-           //Метод меняет переменную changeDraft
-           askIfLegalDraftMustBeChanged(oldDraft, changeDraft);
-       } else {
-           if(deleteMe)
-               Platform.runLater(()->deleteOldDraft(oldDraft));
-           else if(changeMe)
-               Platform.runLater(()->changeOldDraft(oldDraft));
-       }
+        if (askMe) {
+            //Метод меняет переменную changeDraft
+            askIfLegalDraftMustBeChanged(oldDraft, changeDraft);
+        } else {
+            if (deleteMe)
+                Platform.runLater(() -> deleteOldDraft(oldDraft));
+            else if (changeMe)
+                Platform.runLater(() -> changeOldDraft(oldDraft));
+
+            return false;
+        }
+
+        //Переменная changeDraft изменилась, пора действовать
         if (changeDraft.getValue().equals(ESolution.CHANGE))
-            Platform.runLater(()->changeOldDraft(oldDraft));
+            Platform.runLater(() -> changeOldDraft(oldDraft));
 
         else if (changeDraft.getValue().equals(ESolution.DELETE))
-            Platform.runLater(()->deleteOldDraft(oldDraft));
+            Platform.runLater(() -> deleteOldDraft(oldDraft));
         else {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
             return true;
@@ -609,8 +613,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     @Override
                     protected Draft call() throws Exception {
                         if (draftIsDuplicated(currentDraft)) {
+                            //TRUE -->
                             return null;
                         }
+                        //FALSE -->
                         return ((Draft_MultipleAddCommand) currentCommand).addDraft();
                     }
                 };
