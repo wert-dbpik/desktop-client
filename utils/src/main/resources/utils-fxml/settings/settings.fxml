@@ -124,7 +124,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <CheckBox fx:id="chbShowPrefixes" mnemonicParsing="false" text="Показывать  префиксы" GridPane.columnIndex="1">
+                              <CheckBox fx:id="chbShowPrefixes" mnemonicParsing="false" text="Показывать  префиксы (по умолчанию)" GridPane.columnIndex="1">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

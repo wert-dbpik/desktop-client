@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
+import static ru.wert.datapik.utils.images.BtnImages.BTN_HOME_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;
@@ -68,13 +69,16 @@ public class SettingsController {
 
         //Отключаем вкладку с настройками Редактирования чертежей
         if(!CH_CURRENT_USER_GROUP.isEditDrafts()) tabDraftsSettings.setDisable(true);
-
+        //КНОПКА СБРОС В ЗНАЧЕНИЯ ПО УМОЛЧАНИЮ
+        btnReset.setText("");
+        btnReset.setGraphic(new ImageView(BTN_HOME_IMG));
         //МОНИТОР
         List<String> screens = new BXMonitor().create(cmbMonitorChooser);
         cmbMonitorChooser.getSelectionModel().select(AppProperties.getInstance().getMonitor());
         //PDF просмотрщик
         cmbPDFViewerChooser.getItems().addAll(EPDFViewer.values());
         cmbPDFViewerChooser.getSelectionModel().select(EPDFViewer.values()[CH_CURRENT_USER_SETTINGS.getPdfViewer()]);
+        cmbPDFViewerChooser.setDisable(true);
         //НОРМЫ МК
         tfPathToNormyMK.setText(CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
         btnPathToNormyMK.setText("");
@@ -86,6 +90,7 @@ public class SettingsController {
         cmbPrefixChooser.getSelectionModel().select(CH_CURRENT_USER_SETTINGS.getDefaultPrefix());
         //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
         chbValidateDecNumbersEntering.setSelected(CH_CURRENT_USER_SETTINGS.isValidateDecNumbers());
+
     }
 
     @FXML
