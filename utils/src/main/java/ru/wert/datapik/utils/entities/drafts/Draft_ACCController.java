@@ -564,15 +564,16 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             if (deleteMe)
                 Platform.runLater(() -> deleteOldDraft(oldDraft));
             else if (changeMe)
-                Platform.runLater(() -> changeOldDraft(oldDraft));
+//                if(draftIsDuplicated(getNewItem()))
+                    Platform.runLater(() -> changeOldDraft(oldDraft));
 
             return false;
         }
 
         //Переменная changeDraft изменилась, пора действовать
         if (changeDraft.getValue().equals(ESolution.CHANGE))
-            Platform.runLater(() -> changeOldDraft(oldDraft));
-
+//            if(draftIsDuplicated(getNewItem()))
+                Platform.runLater(() -> changeOldDraft(oldDraft));
         else if (changeDraft.getValue().equals(ESolution.DELETE))
             Platform.runLater(() -> deleteOldDraft(oldDraft));
         else {
@@ -596,6 +597,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param oldDraft Draft
      */
     private void changeOldDraft(Draft oldDraft) {
+
         oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
         oldDraft.setStatusTime(LocalDateTime.now().toString());
         log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
