@@ -234,9 +234,10 @@ public class Folder_Manipulator {
             Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
 
             Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+            if(selectedItem == null) selectedItem = tableView.getUpwardRow().getValue();
             if(selectedItem instanceof ProductGroup){
                 ProductGroup selectedGroup = (ProductGroup)selectedItem;
-                if(selectedGroup == null) selectedItem = tableView.getUpwardRow().getValue();
+//                if(selectedGroup == null) selectedGroup = tableView.getUpwardRow().getValue();
 
                 if(clazz.equals("PG")){
                     ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);
