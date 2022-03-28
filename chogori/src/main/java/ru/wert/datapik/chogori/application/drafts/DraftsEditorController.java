@@ -105,45 +105,52 @@ public class DraftsEditorController implements SearchablePane{
      */
     private void createCatalogOfFolders() {
         CatalogOfFoldersPatch catalogPatch = new CatalogOfFoldersPatch().create();
-
         //Подключаем слушатель
         folderTableView = catalogPatch.getFolderTableView();
-        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable) -> {
-            //Есть право редактировать чертежи
-            boolean editRights = CH_CURRENT_USER_GROUP.isEditDrafts();
-            //Нажата клавиша Alt
-            boolean altBtnPressed = CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT);
 
-            Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
-            //Если выделяется папка
-            if (selectedItem instanceof Folder) {
-                //Если требуется нажатие Alt
-                if (folderTableView.getAltOnProperty().get()) {
-                    if (altBtnPressed) {
-                        clearCash();
-                        updateListOfDrafts(selectedItem);
+        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            new Thread(()->{
+                try {
+                    Thread.sleep(500);
+                    Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
+                    if(selectedItem == newValue) {
+                        //Нажата клавиша Alt
+                        boolean altBtnPressed = CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT);
+                        //Если выделяется папка
+                        if (selectedItem instanceof Folder) {
+                            //Если требуется нажатие Alt
+                            if (folderTableView.getAltOnProperty().get()) {
+                                if (altBtnPressed) {
+                                    clearCash();
+                                    Platform.runLater(()->updateListOfDrafts(selectedItem));
+                                }
+                            } else {
+                                clearCash();
+                                Platform.runLater(()->updateListOfDrafts(selectedItem));
+                            }
+                        }
+                        //Состав папки раскрывается только при нажатой alt
+                        if (selectedItem instanceof ProductGroup && altBtnPressed) {
+                            draftPatchController.showSourceOfPassports(selectedItem);
+                            List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
+                            List<Folder> folders = new ArrayList<>();
+                            for (ProductGroup pg : selectedGroups) {
+                                folders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(pg.getId()));
+                            }
+                            draftsTable.setTempSelectedFolders(folders);
+                            Platform.runLater(()->draftsTable.updateView());
+                        }
                     }
-                } else {
-                    clearCash();
-                    updateListOfDrafts(selectedItem);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            }
-            //Состав папки раскрывается только при нажатой alt
-            if (selectedItem instanceof ProductGroup && altBtnPressed){
-                draftPatchController.showSourceOfPassports(selectedItem);
-                List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
-                List<Folder> folders = new ArrayList<>();
-                for (ProductGroup pg : selectedGroups) {
-                    folders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(pg.getId()));
-                }
-                draftsTable.setTempSelectedFolders(folders);
-                draftsTable.updateView();
-            }
+            }).start();
 
         });
 
         catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
-
 
         //Монтируем каталог в панель
         Parent cat = catalogPatch.getCatalogOfFoldersPatch();

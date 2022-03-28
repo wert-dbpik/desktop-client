@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.folders;
 
+import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
@@ -32,51 +33,49 @@ public class Folder_Manipulator {
         this.treeView = treeView;
 
 
+
         setOnKeyManipulator(tableView);
     }
 
-    public void createOnDragDetected(TableRow<Item> row){
-        row.setOnDragDetected(event -> {
-            Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
+    public void createOnDragDetected(Event event) {
+        Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
 
-            ClipboardContent content = new ClipboardContent();
-            content.putString(cutItems());
-            db.setContent(content);
+        ClipboardContent content = new ClipboardContent();
+        content.putString(cutItems());
+        db.setContent(content);
 
-            String shownString = "Комплекты чертежей";
-            Text t = new Text(shownString);
-            WritableImage image = t.snapshot(null, null);
+        String shownString = "Комплекты чертежей";
+        Text t = new Text(shownString);
+        WritableImage image = t.snapshot(null, null);
 
-            db.setDragViewOffsetY(25.0f);
-            db.setDragView(image);
+        db.setDragViewOffsetY(25.0f);
+        db.setDragView(image);
 
-//            event.consume();
-        });
-
+        event.consume();
     }
 
     /**
      * Обработка события OnDragOver
      */
-    public void createOnDragOver(TableRow<Item> row){
-        row.setOnDragOver(event -> {
-            Dragboard db = event.getDragboard();
-            tableView.getSelectionModel().clearAndSelect(row.getIndex());
+    public void createOnDragOver(DragEvent event, TableRow<Item> row) {
 
-            if (pastePossible(db.getString())) {
-                event.acceptTransferModes(TransferMode.MOVE);
-            } else{
-                event.acceptTransferModes(TransferMode.NONE);
-            }
-//            event.consume();
-        });
+        Dragboard db = event.getDragboard();
+        tableView.getSelectionModel().clearAndSelect(row.getIndex());
+
+        if (pastePossible(db.getString())) {
+            event.acceptTransferModes(TransferMode.MOVE);
+        } else {
+            event.acceptTransferModes(TransferMode.NONE);
+        }
+
+        event.consume();
 
     }
 
     /**
      * Обработка события OnDragDropped
      */
-    public void createOnDragDropped(DragEvent event, TableRow<Item> row){
+    public void createOnDragDropped(DragEvent event){
         Dragboard db = event.getDragboard();
         if(db.hasString()) {
             String str = db.getString();
