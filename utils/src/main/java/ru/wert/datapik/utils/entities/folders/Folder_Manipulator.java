@@ -237,7 +237,6 @@ public class Folder_Manipulator {
             if(selectedItem == null) selectedItem = tableView.getUpwardRow().getValue();
             if(selectedItem instanceof ProductGroup){
                 ProductGroup selectedGroup = (ProductGroup)selectedItem;
-//                if(selectedGroup == null) selectedGroup = tableView.getUpwardRow().getValue();
 
                 if(clazz.equals("PG")){
                     ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);
