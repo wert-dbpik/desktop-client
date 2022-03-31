@@ -28,6 +28,8 @@ public class BtnImages {
     public static Image BTN_ALT_TRUE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/alt-white(32x32).png"), 24, 24, true, true);
     public static Image BTN_ALT_FALSE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/alt-black(32x32).png"), 24, 24, true, true);
     public static Image BTN_HOME_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/home(32x32).png"), 24, 24, true, true);
+    public static Image BTN_EYE_OPEN_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/eye_open(32x32).png"), 24, 24, true, true);
+    public static Image BTN_EYE_CLOSE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/eye_close(32x32).png"), 24, 24, true, true);
 
 
 }

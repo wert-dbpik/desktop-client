@@ -16,8 +16,8 @@ import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.help.About;
+import ru.wert.datapik.utils.password.ChangePassword;
 import ru.wert.datapik.utils.search.SearchField;
-import ru.wert.datapik.utils.setteings.SettingsWindow;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning2;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
@@ -32,6 +32,7 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 public class AppMenuController {
@@ -118,6 +119,9 @@ public class AppMenuController {
         MenuItem settings = new MenuItem("Настройки");
         settings.setOnAction(this::openSettings);
 
+        MenuItem changePassword = new MenuItem("Сменить пароль");
+        changePassword.setOnAction(this::changePassword);
+
         MenuItem changeUserItem = new MenuItem("Сменить пользователя");
         changeUserItem.setOnAction(this::changeUser);
 
@@ -126,10 +130,25 @@ public class AppMenuController {
 
 
         mainMenu.getItems().add(changeUserItem);
+        mainMenu.getItems().add(changePassword);
         mainMenu.getItems().add(settings);
         mainMenu.getItems().add(exitItem);
 
         return mainMenu;
+    }
+
+    /**
+     * СМЕНИТЬ ПАРОЛЬ
+     */
+    private void changePassword(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/password/changePassword.fxml"));
+            Parent parent = loader.load();
+
+            new WindowDecoration("Смена пароля", parent, false, WF_MAIN_STAGE, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -145,7 +164,14 @@ public class AppMenuController {
      * НАСТРОЙКИ
      */
     private void openSettings(Event e){
-        new SettingsWindow().show();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/settings/settings.fxml"));
+            Parent parent = loader.load();
+
+            new WindowDecoration("Настройки", parent, false, WF_MAIN_STAGE, true);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -408,7 +434,7 @@ public class AppMenuController {
         test.setOnAction(this::makeTest);
 
         helpMenu.getItems().add(aboutItem);
-        helpMenu.getItems().add(test);
+//        helpMenu.getItems().add(test);
 
         return helpMenu;
     }
