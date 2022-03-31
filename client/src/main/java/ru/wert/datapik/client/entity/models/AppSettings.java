@@ -12,7 +12,7 @@ import ru.wert.datapik.client.interfaces.Item;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"name"}, callSuper = false)
-public class AppSettings extends _BaseEntity implements Item {
+public class AppSettings extends _BaseEntity implements Item{
 
     private String name; //Наименование группы настроек
     private User user;   //Пользователь, к которому относятся эти настройки
@@ -28,5 +28,21 @@ public class AppSettings extends _BaseEntity implements Item {
     @Override
     public String toUsefulString() {
         return null; //Пока нет применения
+    }
+
+    public AppSettings makeCopy(){
+        AppSettings newSettings = new AppSettings();
+
+        newSettings.setName("");
+        newSettings.setUser(null);
+        newSettings.setMonitor(getMonitor());
+        newSettings.setPdfViewer(getPdfViewer());
+        newSettings.setPathToNormyMK(getPathToNormyMK());
+        newSettings.setShowPrefixes(isShowPrefixes());
+        newSettings.setDefaultPrefix(getDefaultPrefix());
+        newSettings.setValidateDecNumbers(isValidateDecNumbers());
+        newSettings.setLastPathToDrafts(getLastPathToDrafts());
+
+        return newSettings;
     }
 }

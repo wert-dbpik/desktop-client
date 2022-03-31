@@ -12,7 +12,7 @@ public interface AppSettingsApiInterface {
     Call<AppSettings> getById(@Path("id") Long id);
 
     @GET("settings/name/{name}")
-    Call<AppSettings> getByName(@Path("name") String name);
+    Call<AppSettings> getAllByName(@Path("name") String name);
 
     @GET("settings/all")
     Call<List<AppSettings>> getAll();

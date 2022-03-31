@@ -3,6 +3,7 @@ package ru.wert.datapik.client.entity.serviceREST;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import retrofit2.Call;
+import retrofit2.Response;
 import ru.wert.datapik.client.entity.api_interfaces.AppSettingsApiInterface;
 import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.User;
@@ -48,12 +49,11 @@ public class AppSettingsService implements IAppSettingsService, ItemService<AppS
 
     public AppSettings findByName(String name) {
         try {
-            Call<AppSettings> call = api.getByName(name);
+            Call<AppSettings> call = api.getAllByName(name);
             return call.execute().body();
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
     @Override
     public List<AppSettings> findAllByUser(User user) {

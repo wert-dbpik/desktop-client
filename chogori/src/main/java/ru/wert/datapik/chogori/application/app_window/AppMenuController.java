@@ -27,8 +27,8 @@ import java.io.IOException;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
@@ -272,8 +272,7 @@ public class AppMenuController {
         openExcelItem.setOnAction(this::openExcelFile);
 
 //        editorMenu.getItems().add(catalogOfProductItem);
-        if (CH_CURRENT_USER_GROUP.isEditProductStructures())
-            editorMenu.getItems().add(openExcelItem);
+        editorMenu.getItems().add(openExcelItem);
 
         return editorMenu;
     }
@@ -332,10 +331,15 @@ public class AppMenuController {
         MenuItem catalogOfFolders = new MenuItem("Каталог папок");
         catalogOfFolders.setOnAction(this::openCatalogOfFolders);
 
+        MenuItem test = new MenuItem("ТЕСТ");
+        test.setOnAction(this::makeTest);
+
         adminMenu.getItems().add(usersItem);
         adminMenu.getItems().add(userGroupsItem);
         adminMenu.getItems().add(new SeparatorMenuItem());
         adminMenu.getItems().add(catalogOfFolders);
+        adminMenu.getItems().add(test);
+
 
         return adminMenu;
     }
@@ -383,6 +387,11 @@ public class AppMenuController {
         }
     }
 
+    void makeTest(ActionEvent event){
+        System.out.println("ИМЯ = " + CH_CURRENT_USER.getName());
+        CH_CURRENT_USER_SETTINGS = CH_SETTINGS.findByName("defau");
+    }
+
     //########################   ПОМОЩЬ    ###########################
 
     /**
@@ -395,7 +404,11 @@ public class AppMenuController {
         MenuItem aboutItem = new MenuItem("О программе...");
         aboutItem.setOnAction(this::openAbout);
 
+        MenuItem test = new MenuItem("ТЕСТ");
+        test.setOnAction(this::makeTest);
+
         helpMenu.getItems().add(aboutItem);
+        helpMenu.getItems().add(test);
 
         return helpMenu;
     }

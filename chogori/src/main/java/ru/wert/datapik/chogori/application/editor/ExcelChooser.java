@@ -15,7 +15,8 @@ public class ExcelChooser {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("exel", "*.xlsx")
         );
-        fileChooser.setInitialDirectory(new File(CH_CURRENT_USER_SETTINGS.getPathToNormyMK()));
+        File normyMKDirectory = new File(CH_CURRENT_USER_SETTINGS == null ? "C:/" : CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
+        fileChooser.setInitialDirectory(normyMKDirectory.exists() ? normyMKDirectory : new File("C:/"));
 
         File chosenFile = new File("");
         try {
