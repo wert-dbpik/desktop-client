@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_COLUMNS_IMG;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 
 /**
  * Класс описывает кнопку, при нажатии на которую на экране рядом с кнопкой появляется всплывающее окно
@@ -74,7 +75,8 @@ public class BtnMenuDraftsColumns extends MenuButton {
         useNote.setContent(cbUseNote);
         useNote.setHideOnClick(false);
 
-        getItems().addAll(useId, useIdentity, useDraftType, useStatus, useInitialName, useCreationTime, useNote);
+        if(CH_CURRENT_USER_GROUP.isAdministrate()) getItems().add(useId);
+        getItems().addAll(useIdentity, useDraftType, useStatus, useInitialName, useCreationTime, useNote);
 
         showingProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue) {

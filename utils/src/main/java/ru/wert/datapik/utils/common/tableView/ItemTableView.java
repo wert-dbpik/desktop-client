@@ -46,6 +46,19 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
         if(getColumns().size() <= 1) hideHeader();
 
         createRowFactory();
+
+        //Запрет на реодеринг столбцов
+        restrictColumnReodering();
+    }
+
+    /**
+     * Запрет на перемещение столбцов
+     */
+    private void restrictColumnReodering() {
+        skinProperty().addListener((obs, oldSkin, newSkin) -> {
+            final TableHeaderRow header = (TableHeaderRow) lookup("TableHeaderRow");
+            header.reorderingProperty().addListener((o, oldVal, newVal) -> header.setReordering(false));
+        });
     }
 
     /**

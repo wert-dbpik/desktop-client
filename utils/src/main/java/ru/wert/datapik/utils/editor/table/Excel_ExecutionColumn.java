@@ -10,6 +10,8 @@ import ru.wert.datapik.utils.editor.model.EditorRow;
 
 import java.util.ArrayList;
 
+import static ru.wert.datapik.utils.statics.Comparators.createIntegerComparatorForStringColumn;
+
 public class Excel_ExecutionColumn extends TableColumn<EditorRow, String> {
 
     private String name = "";
@@ -67,7 +69,7 @@ public class Excel_ExecutionColumn extends TableColumn<EditorRow, String> {
         //Кол
         TableColumn<EditorRow, String> totalAmount = new TableColumn<>("Кол");
         totalAmount.setPrefWidth(initialWidth);
-        totalAmount.setComparator(excelTable.createIntegerComparator(totalAmount));
+        totalAmount.setComparator(createIntegerComparatorForStringColumn(totalAmount));
         totalAmount.setCellValueFactory(val->{
             ArrayList<EditorRow.Execution> exx = val.getValue().getExecutions();
             exx.get(ex).setId("ex" + ex); //Присваиваем текущему исполнению id

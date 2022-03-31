@@ -13,12 +13,12 @@ import ru.wert.datapik.utils.popups.HintPopup;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 import ru.wert.datapik.winform.enums.EDraftType;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_SHOW_PREFIX;
+import static ru.wert.datapik.utils.statics.Comparators.createIntegerComparatorForStringColumn;
+import static ru.wert.datapik.utils.statics.Comparators.createLabelComparator;
 import static ru.wert.datapik.winform.statics.WinformStatic.parseLDTtoNormalDate;
 
 public class Draft_Columns {
@@ -31,6 +31,7 @@ public class Draft_Columns {
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tcId.setStyle("-fx-alignment: CENTER;");
         tcId.setMinWidth(0);//40
+//        tcId.setComparator(createIntegerComparator(tcId));
         return tcId;
     };
 
@@ -48,14 +49,11 @@ public class Draft_Columns {
 
         });
 
-        tcPassport.setComparator(new Comparator<VBox>() {
-            @Override
-            public int compare(VBox o1, VBox o2) {
-                String num1 = ((Label)o1.lookup("#number")).getText();
-                String num2 = ((Label)o2.lookup("#number")).getText();
+        tcPassport.setComparator((o1, o2) -> {
+            String num1 = ((Label)o1.lookup("#number")).getText();
+            String num2 = ((Label)o2.lookup("#number")).getText();
 
-                return num1.compareTo(num2);
-            }
+            return num1.compareTo(num2);
         });
 
         tcPassport.setMinWidth(150);
@@ -95,6 +93,9 @@ public class Draft_Columns {
             return new ReadOnlyObjectWrapper<>(lblNumber);
 
         });
+
+        tcDraftNumber.setComparator(createLabelComparator(tcDraftNumber));
+
         tcDraftNumber.setMinWidth(100);
         tcDraftNumber.setMaxWidth(5000);
         return tcDraftNumber;
@@ -115,6 +116,7 @@ public class Draft_Columns {
             return new ReadOnlyObjectWrapper<>(lblName);
 
         });
+        tcDraftName.setComparator(createLabelComparator(tcDraftName));
         tcDraftName.setMinWidth(120);
         tcDraftName.setMaxWidth(5000);
         return tcDraftName;
@@ -150,6 +152,7 @@ public class Draft_Columns {
             }
             return new ReadOnlyObjectWrapper<>(lblStatus);
         });
+        tcStatus.setComparator(createLabelComparator(tcStatus));
         tcStatus.setStyle("-fx-alignment: CENTER;");
         tcStatus.setMinWidth(10);//100
         tcStatus.setMaxWidth(5000);

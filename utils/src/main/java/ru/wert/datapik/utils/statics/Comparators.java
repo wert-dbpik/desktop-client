@@ -1,11 +1,49 @@
 package ru.wert.datapik.utils.statics;
 
+import com.sun.javafx.scene.control.TableColumnSortTypeWrapper;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.utils.editor.model.EditorRow;
 
 import java.util.Comparator;
 
 public class Comparators {
+    /**
+     * Компаратор сравнивает две надписи. Берет из них текст и сравнивает как две строки
+     */
+    public static Comparator<Label> createLabelComparator(TableColumn<?, Label> col) {
+        return (o1, o2) -> {
+            String n1 = o1.getText();
+            String n2 = o2.getText();
+
+            return n1.compareTo(n2);
+        };
+    }
+
+    /**
+     * Компаратор для строковых значений Id, ParentId и т.д
+     */
+    public static Comparator<String> createIntegerComparatorForStringColumn(TableColumn<?, String> col) {
+
+        return (o1, o2) -> {
+
+            //Для того, чтобы пустые строки были всегда внизу
+            if (TableColumnSortTypeWrapper.isAscending(col)) {
+                if (o1.isEmpty()) o1 = String.valueOf(Integer.MAX_VALUE);
+                if (o2.isEmpty()) o2 = String.valueOf(Integer.MAX_VALUE);
+            } else {
+                if (o1.isEmpty()) o1 = String.valueOf(Integer.MIN_VALUE);
+                if (o2.isEmpty()) o2 = String.valueOf(Integer.MIN_VALUE);
+            }
+
+            Integer i1 = Integer.parseInt(o1);
+            Integer i2 = Integer.parseInt(o2);
+
+            return i1.compareTo(i2);
+        };
+    }
 
     /**
      * Компаратор сравнивает чертеж по НОМЕРУ -> ТИПУ -> СТРАНИЦЕ

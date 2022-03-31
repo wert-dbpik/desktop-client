@@ -16,6 +16,8 @@ import java.util.Comparator;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_SHOW_PREFIX;
+import static ru.wert.datapik.utils.statics.Comparators.createIntegerComparatorForStringColumn;
+import static ru.wert.datapik.utils.statics.Comparators.createLabelComparator;
 
 public class Passport_Columns {
 
@@ -26,6 +28,7 @@ public class Passport_Columns {
         TableColumn<Passport, String> tcId = new TableColumn<>("ID");
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tcId.setStyle("-fx-alignment: CENTER;");
+        tcId.setComparator(createIntegerComparatorForStringColumn(tcId));
         return tcId;
     };
 
@@ -43,14 +46,11 @@ public class Passport_Columns {
 
         });
 
-        tcPassport.setComparator(new Comparator<VBox>() {
-            @Override
-            public int compare(VBox o1, VBox o2) {
-                String num1 = ((Label)o1.lookup("#number")).getText();
-                String num2 = ((Label)o2.lookup("#number")).getText();
+        tcPassport.setComparator((o1, o2) -> {
+            String num1 = ((Label)o1.lookup("#number")).getText();
+            String num2 = ((Label)o2.lookup("#number")).getText();
 
-                return num1.compareTo(num2);
-            }
+            return num1.compareTo(num2);
         });
 
         tcPassport.setMinWidth(150);
@@ -91,6 +91,7 @@ public class Passport_Columns {
             return new ReadOnlyObjectWrapper<>(lblNumber);
 
         });
+        tcPassportNumber.setComparator(createLabelComparator(tcPassportNumber));
         tcPassportNumber.setMinWidth(150);
         return tcPassportNumber;
     }
@@ -110,6 +111,7 @@ public class Passport_Columns {
             return new ReadOnlyObjectWrapper<>(lblName);
 
         });
+        tcPassportName.setComparator(createLabelComparator(tcPassportName));
         tcPassportName.setMinWidth(150);
         return tcPassportName;
     }

@@ -1,6 +1,5 @@
 package ru.wert.datapik.utils.editor.table;
 
-import com.sun.javafx.scene.control.TableColumnSortTypeWrapper;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -10,21 +9,19 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
-import lombok.Data;
 import lombok.Getter;
 import ru.wert.datapik.utils.editor.Cursors;
 import ru.wert.datapik.utils.editor.context_menu.Excel_ContextMenu;
 import ru.wert.datapik.utils.editor.context_menu.Excel_ExContextMenu;
 import ru.wert.datapik.utils.editor.model.EditorRow;
 import ru.wert.datapik.utils.editor.poi.POIReader;
-import ru.wert.datapik.utils.search.Searchable;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 import static ru.wert.datapik.utils.editor.enums.EColName.*;
 import static ru.wert.datapik.utils.editor.table.TableMaster.*;
+import static ru.wert.datapik.utils.statics.Comparators.createIntegerComparatorForStringColumn;
 
 
 public class Excel_TableView extends TableView<EditorRow> {
@@ -136,7 +133,7 @@ public class Excel_TableView extends TableView<EditorRow> {
         //N
         rowNumber = new TableColumn<>(ROW_NUM.getColName());
         rowNumber.setCellValueFactory(new PropertyValueFactory<>("rowNumber"));
-        rowNumber.setComparator(createIntegerComparator(rowNumber));
+        rowNumber.setComparator(createIntegerComparatorForStringColumn(rowNumber));
 
         //КРП
         krp = new TableColumn<>(KRP.getColName());
@@ -198,7 +195,7 @@ public class Excel_TableView extends TableView<EditorRow> {
         //Параметр А
         paramA = new TableColumn<>(A.getColName());
         paramA.setCellValueFactory(new PropertyValueFactory<>("paramA"));
-        paramA.setComparator(createIntegerComparator(paramA));
+        paramA.setComparator(createIntegerComparatorForStringColumn(paramA));
         paramA.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow())).setParamA(t.getNewValue());
         });
@@ -206,7 +203,7 @@ public class Excel_TableView extends TableView<EditorRow> {
         //Параметр В
         paramB = new TableColumn<>(B.getColName());
         paramB.setCellValueFactory(new PropertyValueFactory<>("paramB"));
-        paramB.setComparator(createIntegerComparator(paramB));
+        paramB.setComparator(createIntegerComparatorForStringColumn(paramB));
         paramB.setOnEditCommit((TableColumn.CellEditEvent<EditorRow, String> t) -> {
             (t.getTableView().getItems().get(t.getTablePosition().getRow())).setParamB(t.getNewValue());
         });
@@ -321,28 +318,6 @@ public class Excel_TableView extends TableView<EditorRow> {
         });
     }
 
-    /**
-     * Компаратор для строковых значений Id, ParentId и т.д
-     */
-    public Comparator<String> createIntegerComparator(TableColumn<EditorRow, String> col) {
-
-        return (o1, o2) -> {
-
-            //Для того, чтобы пустые строки были всегда внизу
-            if (TableColumnSortTypeWrapper.isAscending(col)) {
-                if (o1.isEmpty()) o1 = String.valueOf(Integer.MAX_VALUE);
-                if (o2.isEmpty()) o2 = String.valueOf(Integer.MAX_VALUE);
-            } else {
-                if (o1.isEmpty()) o1 = String.valueOf(Integer.MIN_VALUE);
-                if (o2.isEmpty()) o2 = String.valueOf(Integer.MIN_VALUE);
-            }
-
-            Integer i1 = Integer.parseInt(o1);
-            Integer i2 = Integer.parseInt(o2);
-
-            return i1.compareTo(i2);
-        };
-    }
 
     public HashMap<Integer, Integer> reArrangeExecutionCols() {
         HashMap<Integer, Integer> executions = new HashMap<>();
