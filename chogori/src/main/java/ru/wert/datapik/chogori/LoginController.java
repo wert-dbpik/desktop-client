@@ -1,17 +1,16 @@
 package ru.wert.datapik.chogori;
 
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.datapik.chogori.StartChogori;
 import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.User;
+import ru.wert.datapik.client.retrofit.AppProperties;
+import ru.wert.datapik.utils.common.components.BXUsers;
 import ru.wert.datapik.winform.enums.EPDFViewer;
-import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
@@ -20,12 +19,15 @@ import java.io.IOException;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_DECORATION_ROOT_PANEL;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 
 @Slf4j
 public class LoginController {
+
+    @FXML
+    private ComboBox<User> bxUsers;
 
     //Поле ввода пароля
     @FXML
@@ -34,6 +36,12 @@ public class LoginController {
 
     @FXML
     void initialize() {
+
+        new BXUsers(bxUsers);
+
+        long userId = AppProperties.getInstance().getLastUser();
+        User lastUser = userId == 0L ? null : CH_USERS.findById(userId);
+        bxUsers.setValue(lastUser);
 
         CH_CURRENT_USER = null;
         CH_CURRENT_USER_GROUP = null;
@@ -45,6 +53,7 @@ public class LoginController {
                 exception.printStackTrace();
             }
         });
+        passwordField.requestFocus();
     }
 
     private void welcomeUser() throws NoSuchFieldException{
@@ -115,5 +124,6 @@ public class LoginController {
             ioException.printStackTrace();
         }
     }
+
 
 }

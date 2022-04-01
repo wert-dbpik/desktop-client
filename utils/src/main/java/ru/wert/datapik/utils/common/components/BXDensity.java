@@ -50,9 +50,9 @@ public class BXDensity {
     private void createConverter() {
         bxDensity.setConverter(new StringConverter<Density>() {
             @Override
-            public String toString(Density prefix) {
-                LAST_DENSITY = prefix; //последний выбранный префикс становится префиксом по умолчанию
-                return prefix.getName();
+            public String toString(Density density) {
+                LAST_DENSITY = density; //последний выбранный префикс становится префиксом по умолчанию
+                return density.getName();
             }
 
             @Override

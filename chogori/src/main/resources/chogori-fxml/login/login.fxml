@@ -12,6 +12,11 @@
    <children>
       <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
+            <ComboBox fx:id="bxUsers" editable="true" maxWidth="500.0" prefHeight="51.0">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </ComboBox>
             <PasswordField fx:id="passwordField" maxWidth="500.0">
                <font>
                   <Font size="24.0" />

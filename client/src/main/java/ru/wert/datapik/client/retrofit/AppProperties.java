@@ -58,6 +58,7 @@ public class AppProperties {
             writer.write("IP_ADDRESS=192.168.1.83\n");
             writer.write("PORT = 8080");
             writer.write("MONITOR=0");
+            writer.write("LAST_USER=0");
             writer.close();
         } catch (IOException e) {
             if(++attempt < 3) new AppProperties();
@@ -84,6 +85,10 @@ public class AppProperties {
         return Integer.parseInt(connectionProps.getProperty("MONITOR"));
     }
 
+    public long getLastUser(){
+        return Integer.parseInt(connectionProps.getProperty("LAST_USER"));
+    }
+
     public void setIpAddress(final String ipAddress){
         try {
             FileOutputStream fos = new FileOutputStream(appConfigPath);
@@ -108,6 +113,16 @@ public class AppProperties {
         try {
             FileOutputStream fos = new FileOutputStream(appConfigPath);
             connectionProps.setProperty("MONITOR", String.valueOf(monitor));
+            connectionProps.store(fos, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setUser(final long userId){
+        try {
+            FileOutputStream fos = new FileOutputStream(appConfigPath);
+            connectionProps.setProperty("LAST_USER", String.valueOf(userId));
             connectionProps.store(fos, null);
         } catch (IOException e) {
             e.printStackTrace();
