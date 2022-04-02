@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.client.interfaces.UpdatableTab;
+import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.tabs.SearchablePane;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -42,7 +44,7 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSE
 
 
 @Slf4j
-public class PassportsEditorController implements SearchablePane{
+public class PassportsEditorController implements SearchablePane, UpdatableTab {
 
 
     @FXML
@@ -68,6 +70,9 @@ public class PassportsEditorController implements SearchablePane{
     private Draft_Patch draftPatch;
     private Passport_Patch passportsPatch;
     private CatalogOfFoldersPatch catalogPatch;
+
+    private Folder_TableView folderTableView;
+    private ProductGroup_TreeView<Folder> productGroupsTreeView;
 
 
     @FXML
@@ -174,8 +179,11 @@ public class PassportsEditorController implements SearchablePane{
     private void loadStackPaneCatalog() {
         catalogPatch = new CatalogOfFoldersPatch().create();
 
+        productGroupsTreeView = catalogPatch.getProductGroupsTreeView();
+
         //Подключаем слушатель
-        Folder_TableView folderTableView = catalogPatch.getFolderTableView();
+        folderTableView = catalogPatch.getFolderTableView();
+
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue instanceof Folder) {
                 if(folderTableView.getAltOnProperty().get()){
@@ -239,4 +247,11 @@ public class PassportsEditorController implements SearchablePane{
     }
 
 
+    @Override
+    public void updateTab() {
+        productGroupsTreeView.updateView();
+        folderTableView.updateVisibleLeafOfTableView(folderTableView.getUpwardRow().getValue());
+        draftsTable.updateTableView();
+        passportsTable.updateTableView();
+    }
 }

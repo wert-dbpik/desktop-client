@@ -42,7 +42,6 @@ public class ServiceDeleteDrafts extends Service<Void> {
                 });
                 updateProgress(progress += 0.2, max); //Для затравочки
 
-
                 for(Draft item : items){
                     //Удаляем запись чертежа из БД
                     try {

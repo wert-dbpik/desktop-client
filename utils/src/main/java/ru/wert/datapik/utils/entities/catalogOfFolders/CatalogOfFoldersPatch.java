@@ -3,7 +3,9 @@ package ru.wert.datapik.utils.entities.catalogOfFolders;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
+import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
+import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 
 import java.io.IOException;
 
@@ -35,6 +37,10 @@ public class CatalogOfFoldersPatch {
 
     public Folder_TableView getFolderTableView() {
         return (Folder_TableView) catalogOfFoldersController.getFolderTableView();
+    }
+
+    public ProductGroup_TreeView<Folder> getProductGroupsTreeView() {
+        return catalogOfFoldersController.getProductGroupsTreeView();
     }
 
     public HBox getCatalogButtons() {

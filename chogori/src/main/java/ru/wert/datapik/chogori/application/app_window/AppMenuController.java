@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.application.app_window;
 
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -15,9 +16,12 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
 import ru.wert.datapik.client.entity.models.User;
+import ru.wert.datapik.client.entity.serviceQUICK.*;
+import ru.wert.datapik.client.interfaces.UpdatableTab;
 import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.password.ChangePassword;
 import ru.wert.datapik.utils.search.SearchField;
+import ru.wert.datapik.utils.tabs.AppTab;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning2;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
@@ -27,7 +31,7 @@ import java.io.IOException;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
@@ -125,6 +129,9 @@ public class AppMenuController {
         MenuItem changeUserItem = new MenuItem("Сменить пользователя");
         changeUserItem.setOnAction(this::changeUser);
 
+        MenuItem updateData = new MenuItem("Обновить данные");
+        updateData.setOnAction(this::updateData);
+
         MenuItem exitItem = new MenuItem("Выйти");
         exitItem.setOnAction(this::exit);
 
@@ -132,9 +139,21 @@ public class AppMenuController {
         mainMenu.getItems().add(changeUserItem);
         mainMenu.getItems().add(changePassword);
         mainMenu.getItems().add(settings);
+        mainMenu.getItems().add(updateData);
         mainMenu.getItems().add(exitItem);
 
         return mainMenu;
+    }
+
+    /**
+     * ОБНОВИТЬ ДАННЫЕ
+     */
+    private void updateData(ActionEvent actionEvent) {
+
+        Task<Void> updateTask = new TaskUpdateData();
+        Thread t = new Thread(updateTask);
+        t.setDaemon(true);
+        t.start();
     }
 
     /**

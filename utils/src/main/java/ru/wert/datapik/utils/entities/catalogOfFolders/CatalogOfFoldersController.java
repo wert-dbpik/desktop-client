@@ -46,7 +46,7 @@ public class CatalogOfFoldersController {
     @FXML
     private Label lblCurrentProductGroup;
 
-    private ProductGroup_TreeView<Folder> catalogTreeView;
+    @Getter private ProductGroup_TreeView<Folder> productGroupsTreeView;
 
     @Getter private ItemTableView<Item> folderTableView;
 
@@ -62,7 +62,7 @@ public class CatalogOfFoldersController {
         if(CH_CURRENT_USER.getUserGroup().isEditDrafts()) useContextMenu = true;
         createCatalogForms(useContextMenu);
 
-        catalogTreeView.setConnectedForm(folderTableView);
+        productGroupsTreeView.setConnectedForm(folderTableView);
         //Создаем панели инструментов
         createFolders_ToolBar();
         createCatalog_ToolBar();
@@ -73,7 +73,7 @@ public class CatalogOfFoldersController {
 //        lblCurrentProductGroup.setStyle("-fx-text-fill: darkblue; -fx-font-style: oblique;");
         lblCurrentProductGroup.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
         ObjectProperty<TreeItem<ProductGroup>> upwardProperty = ((Folder_TableView)folderTableView).getUpwardRowProperty();
-        String rootName = catalogTreeView.getRoot().getValue().getName();
+        String rootName = productGroupsTreeView.getRoot().getValue().getName();
         upwardProperty.addListener((observable) -> {
             if(folderTableView.isGlobalOff() && upwardProperty.get() != null) {
                 StringBuilder sb = new StringBuilder("...");
@@ -105,13 +105,13 @@ public class CatalogOfFoldersController {
 
         folderTableView = new Folder_TableView("ПАКЕТЫ ИЗДЕЛИЙ", useContextMenu);
 
-        catalogTreeView = catalogPatch.createProductTreeView(folderTableView);
+        productGroupsTreeView = catalogPatch.createProductTreeView(folderTableView);
 
-        ((Folder_TableView)folderTableView).plugContextMenuAndFolderManipulators(catalogTreeView);
+        ((Folder_TableView)folderTableView).plugContextMenuAndFolderManipulators(productGroupsTreeView);
 
-        catalogTreeView.setOnMouseClicked((e)->{
+        productGroupsTreeView.setOnMouseClicked((e)->{
             if(e.getButton() == MouseButton.PRIMARY) {
-                TreeItem<ProductGroup> selectedItem = catalogTreeView.getSelectionModel().getSelectedItem();
+                TreeItem<ProductGroup> selectedItem = productGroupsTreeView.getSelectionModel().getSelectedItem();
                 if(selectedItem != null)
                     ((Folder_TableView) folderTableView).setUpwardRow(selectedItem);
                     ((Folder_TableView) folderTableView).updateVisibleLeafOfTableView(selectedItem.getValue());
@@ -122,7 +122,7 @@ public class CatalogOfFoldersController {
 
         folderTableView.setMinHeight(0.0);
 
-        vbCatalog.getChildren().add(catalogTreeView);
+        vbCatalog.getChildren().add(productGroupsTreeView);
         spFolderTableView.getChildren().add(folderTableView);
 
     }
@@ -135,21 +135,21 @@ public class CatalogOfFoldersController {
         //Кнопка "Свернуть каталог"
         Button btnCatalogRollUp = new BtnRollUp();
         btnCatalogRollUp.setOnAction((e)->{
-            catalogTreeView.foldTreeView();
+            productGroupsTreeView.foldTreeView();
         });
 
         //Кнопка "Развернуть каталог"
         Button btnCatalogRollDown = new BtnRollDown();
         btnCatalogRollDown.setOnAction((e)->{
-            catalogTreeView.unfoldTreeView();
+            productGroupsTreeView.unfoldTreeView();
         });
 
 
         //При клике правой кнопкой на надписи "КАТАЛОГ" открывается меню "Добавить" в корень
         lblCatalog.setOnMouseClicked(e -> {
             if(e.getButton().equals(MouseButton.SECONDARY)) {
-                catalogTreeView.getSelectionModel().clearSelection();
-                catalogTreeView.getContextMenu().show(lblCatalog, Side.BOTTOM, 0.0, 5.0);
+                productGroupsTreeView.getSelectionModel().clearSelection();
+                productGroupsTreeView.getContextMenu().show(lblCatalog, Side.BOTTOM, 0.0, 5.0);
             }
         });
 

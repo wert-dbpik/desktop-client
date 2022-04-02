@@ -13,11 +13,13 @@ import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.client.interfaces.UpdatableTab;
 import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
 import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.catalogOfFolders.CatalogOfFoldersPatch;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
+import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.tabs.SearchablePane;
 
@@ -31,7 +33,7 @@ import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 
 @Slf4j
-public class DraftsEditorController implements SearchablePane{
+public class DraftsEditorController implements SearchablePane, UpdatableTab {
 
 
     @FXML
@@ -54,6 +56,7 @@ public class DraftsEditorController implements SearchablePane{
     private PreviewerPatchController previewerPatchController;
 //    private Label lblDraftInfo;
     private Folder_TableView folderTableView;
+    private ProductGroup_TreeView<Folder> productGroupsTreeView;
 
     @FXML
     void initialize() {
@@ -107,6 +110,7 @@ public class DraftsEditorController implements SearchablePane{
         CatalogOfFoldersPatch catalogPatch = new CatalogOfFoldersPatch().create();
         //Подключаем слушатель
         folderTableView = catalogPatch.getFolderTableView();
+        productGroupsTreeView = catalogPatch.getProductGroupsTreeView();
 
         folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -171,4 +175,10 @@ public class DraftsEditorController implements SearchablePane{
         Platform.runLater(()->draftsTable.requestFocus());
     }
 
+    @Override
+    public void updateTab() {
+        productGroupsTreeView.updateView();
+        folderTableView.updateVisibleLeafOfTableView(folderTableView.getUpwardRow().getValue());
+        draftsTable.updateTableView();
+    }
 }
