@@ -199,6 +199,8 @@ public class AppMenuController {
     private void changeUser(Event event) {
         //Сохраняем пользователя на случай, если он передумает
         tempUser = CH_CURRENT_USER;
+
+
         //Загружаем loginWindow
         try {
             FXMLLoader loginWindowLoader = new FXMLLoader(getClass().getResource("/chogori-fxml/login/login.fxml"));
@@ -212,6 +214,7 @@ public class AppMenuController {
                 if(event1.getCode().equals(KeyCode.ESCAPE)){
                     CH_DECORATION_ROOT_PANEL.getChildren().removeAll(loginWindow);
                     CH_CURRENT_USER = tempUser;
+                    CH_CURRENT_USER_GROUP = CH_CURRENT_USER.getUserGroup();
                     createMenu();
                 }
             }));
@@ -426,7 +429,7 @@ public class AppMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfFolders/catalogOfFolders.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Пакеты", parent, true, null, null);
+            CH_TAB_PANE.createNewTab("Пакеты", parent, true, null, loader.getController());
         } catch (IOException e) {
             e.printStackTrace();
         }

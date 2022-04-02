@@ -23,7 +23,8 @@ public class TaskUpdateItemsInRoutineTableView<P extends Item> extends Task<Void
 
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(90, 90);
-        itemView.setPlaceholder(new StackPane(progressIndicator));
+        Platform.runLater(()->itemView.setPlaceholder(new StackPane(progressIndicator)));
+
 
     }
 

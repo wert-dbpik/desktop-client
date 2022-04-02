@@ -182,6 +182,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         initRadioGroup();
 
+        Platform.runLater(()->txtNumber.requestFocus());
+
     }
 
     /**

@@ -7,22 +7,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import lombok.Getter;
-import lombok.Setter;
+import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.utils.entities.users.PermissionsController;
 import ru.wert.datapik.utils.entities.users.User_Controller;
 import ru.wert.datapik.utils.entities.users.User_TableView;
 import ru.wert.datapik.utils.entities.users._UserPatch;
 import ru.wert.datapik.utils.common.components.ChevronButton;
 import ru.wert.datapik.utils.statics.AppStatic;
-import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import java.io.IOException;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
-public class UsersPermissionsController implements SearchablePane{
+public class UsersPermissionsController implements SearchableTab {
 
     @FXML
     private AnchorPane apUsers;

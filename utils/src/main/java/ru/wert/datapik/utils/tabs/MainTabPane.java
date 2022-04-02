@@ -4,17 +4,14 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import lombok.Getter;
-import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.interfaces.ITabController;
+import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.utils.popups.HintPopup;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import static ru.wert.datapik.client.utils.BLConst.RAZLOZHENO;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 
 /**
@@ -24,7 +21,7 @@ import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 public class MainTabPane extends TabPane {
 
     private HintPopup hint; //Подсказка, дублирующая наименование вкладки
-    private SearchablePane searchablePane;
+    private ITabController searchablePane;
 
     /**
      * Конструктор
@@ -33,9 +30,9 @@ public class MainTabPane extends TabPane {
         setSide(Side.BOTTOM);
         setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
 
-        selectionModelProperty().addListener((observable, oldValue, newValue)->{
-            ((AppTab)newValue.getSelectedItem()).update();
-        });
+//        selectionModelProperty().addListener((observable, oldValue, newValue)->{
+//            ((AppTab)newValue.getSelectedItem()).update();
+//        });
         //Наименование вкладки не умещается на ярлыке
         setTabMaxWidth(150.0);
     }
@@ -49,17 +46,17 @@ public class MainTabPane extends TabPane {
      * @param showTab boolean, опциональное - открывать созданную вкладку или не открывать
      * @param updateTask Task<Void>, задача на обновление вкладки
      */
-    public void createNewTab(String name, Node content, boolean showTab, Task<Void> updateTask, SearchablePane searchablePane){
-        this.searchablePane = searchablePane;
+    public void createNewTab(String name, Node content, boolean showTab, Task<Void> updateTask, ITabController tabController){
+        this.searchablePane = tabController;
 
-        if(searchablePane != null)
+        if(tabController instanceof SearchableTab)
             showSearchPane();
 
 
         AppTab tab = tabIsAvailable(name);
         if(tab == null){
 
-                tab = new AppTab(name, content, updateTask);
+                tab = new AppTab(name, content, tabController);
 
                 getTabs().add(tab);//вкладку добавляем к TabPane
                 setContextMenu(createContextMenu());
@@ -80,8 +77,8 @@ public class MainTabPane extends TabPane {
             //ОТКРЫВАЕМ созданную вкладку
             getSelectionModel().select(tab);
             //Создаем поле поиска
-            if(searchablePane != null)
-                searchablePane.tuneSearching();
+            if(tabController instanceof SearchableTab)
+                ((SearchableTab)tabController).tuneSearching();
         }
 
     }

@@ -14,10 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.client.interfaces.UpdatableTab;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
-import ru.wert.datapik.utils.tabs.SearchablePane;
-import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.utils.common.components.BtnDouble;
@@ -30,8 +29,6 @@ import ru.wert.datapik.utils.entities.passports.Passport_Patch;
 import ru.wert.datapik.utils.entities.passports.Passport_PatchController;
 import ru.wert.datapik.utils.entities.passports.Passport_TableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
-import ru.wert.datapik.utils.statics.AppStatic;
-import ru.wert.datapik.utils.statics.Comparators;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +41,7 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSE
 
 
 @Slf4j
-public class PassportsEditorController implements SearchablePane, UpdatableTab {
+public class PassportsEditorController implements SearchableTab, UpdatableTab {
 
 
     @FXML
@@ -241,7 +238,7 @@ public class PassportsEditorController implements SearchablePane, UpdatableTab {
         passportsTable.updateView();
     }
 
-    @Override//SearchablePane
+    @Override//SearchableTab
     public void tuneSearching() {
         Platform.runLater(()->passportsTable.requestFocus());
     }

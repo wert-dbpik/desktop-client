@@ -5,21 +5,35 @@ import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.serviceQUICK.*;
+import ru.wert.datapik.client.interfaces.UpdatableTab;
+import ru.wert.datapik.utils.tabs.AppTab;
 import ru.wert.datapik.winform.modal.LongProcess;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
 
 @Slf4j
 public class TaskUpdateData extends Task<Void> {
 
     private final double max;
     private double progress;
+    private List<UpdatableTab> updatableTabList;
 
     public TaskUpdateData() {
-
-        this.max = 8.0;
         this.progress = 0.0;
 
+        updatableTabList = new ArrayList<>();
+
+        for(Tab tab: CH_TAB_PANE.getTabs()){
+            if(((AppTab)tab).getTabController() instanceof UpdatableTab)
+                updatableTabList.add((UpdatableTab)((AppTab) tab).getTabController());
+        }
+        this.max = 7.0 + updatableTabList.size();
     }
 
     @Override
@@ -31,29 +45,30 @@ public class TaskUpdateData extends Task<Void> {
         updateProgress(progress += 0.2, max); //Для затравочки
 
         PrefixQuickService.reload();
-        updateProgress(1.0, max);
+        updateProgress(progress = 1.0, max);
 
         AnyPartQuickService.reload();
-        updateProgress(2.0, max);
+        updateProgress(progress += 1.0, max);
 
         PassportQuickService.reload();
-        updateProgress(3.0, max);
+        updateProgress(progress += 1.0, max);
 
         FolderQuickService.reload();
-        updateProgress(4.0, max);
+        updateProgress(progress += 1.0, max);
 
         DraftQuickService.reload();
-        updateProgress(5.0, max);
+        updateProgress(progress += 1.0, max);
 
         MaterialQuickService.reload();
-        updateProgress(6.0, max);
+        updateProgress(progress += 1.0, max);
 
         DetailQuickService.reload();
-        updateProgress(7.0, max);
+        updateProgress(progress += 1.0, max);
 
-//        for(Tab tab: CH_TAB_PANE.getTabs()){
-//            if(tab.get instanceof UpdatableTab) taupdateTab();
-//        }
+        for(UpdatableTab tab: updatableTabList){
+            Platform.runLater(tab::updateTab);
+            updateProgress(progress += 1.0, max);
+        }
 
         return null;
     }

@@ -6,13 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
+import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.client.interfaces.UpdatableTab;
 import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
 import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
@@ -21,7 +21,6 @@ import ru.wert.datapik.utils.entities.catalogOfFolders.CatalogOfFoldersPatch;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
-import ru.wert.datapik.utils.tabs.SearchablePane;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +32,7 @@ import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 
 @Slf4j
-public class DraftsEditorController implements SearchablePane, UpdatableTab {
+public class DraftsEditorController implements SearchableTab, UpdatableTab {
 
 
     @FXML
@@ -170,7 +169,7 @@ public class DraftsEditorController implements SearchablePane, UpdatableTab {
         draftsTable.updateView();
     }
 
-    @Override//SearchablePane
+    @Override//SearchableTab
     public void tuneSearching() {
         Platform.runLater(()->draftsTable.requestFocus());
     }

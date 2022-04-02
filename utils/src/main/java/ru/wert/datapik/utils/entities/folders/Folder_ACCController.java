@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.folders;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -77,6 +78,8 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     @FXML
     void initialize() {
         AppStatic.createSpIndicator(spIndicator);
+
+        Platform.runLater(()->tfNumber.requestFocus());
     }
 
     @FXML

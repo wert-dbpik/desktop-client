@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -54,7 +55,9 @@ public class LoginController {
                 exception.printStackTrace();
             }
         });
-        passwordField.requestFocus();
+
+        Platform.runLater(()->passwordField.requestFocus());
+
     }
 
     private void welcomeUser() throws NoSuchFieldException{

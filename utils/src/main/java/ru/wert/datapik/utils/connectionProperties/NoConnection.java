@@ -41,6 +41,7 @@ public class NoConnection extends ModalWindow{
 
             tfAddressIP = ((TextField) parent.lookup("#tfAddressIP"));
             tfAddressIP.setText(AppProperties.getInstance().getIpAddress());
+            Platform.runLater(()->tfAddressIP.requestFocus());
 
             tfPort = ((TextField) parent.lookup("#tfPort"));
             tfPort.setText(AppProperties.getInstance().getPort());

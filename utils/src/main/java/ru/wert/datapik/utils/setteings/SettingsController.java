@@ -147,6 +147,7 @@ public class SettingsController {
     void choosePathToNormyMK(Event event) {
         File initialDirectory = new File(tfPathToNormyMK.getText().trim());
         File newDirectory = AppStatic.chooseDirectory(event, initialDirectory);
-        tfPathToNormyMK.setText(newDirectory.toString());
+        if(newDirectory != null && newDirectory.exists())
+            tfPathToNormyMK.setText(newDirectory.toString());
     }
 }
