@@ -13,6 +13,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import okhttp3.internal.cache.DiskLruCache;
 import ru.wert.datapik.client.entity.models.Density;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.User;
@@ -25,28 +26,16 @@ public class BXUsers {
 
     public BXUsers(ComboBox<User> bxUsers) {
 
+        //!!!!!!!!!!!!!!!!!!!
+        bxUsers.setEditable(false);
+
         bxUsers.setStyle("-fx-font-size: 24; -fx-background-color: white");
         ObservableList<User> allUsers = FXCollections.observableArrayList(CH_USERS.findAll());
-        bxUsers.getItems().setAll(allUsers);
-
-        bxUsers.setCellFactory(i ->
-                new ListCell<User>() {
-                    @Override
-                    protected void updateItem(User item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setText(null);
-                        } else {
-                            setText(item.getName());
-                        }
-                    }
-
-                });
+        bxUsers.setItems(allUsers);
 
         bxUsers.setConverter(new StringConverter<User>() {
             @Override
             public String toString(User user) {
-                if (user == null) return null;
                 return user.getName();
             }
 

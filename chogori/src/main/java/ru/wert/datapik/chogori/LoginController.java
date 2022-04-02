@@ -33,6 +33,7 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
+    public static final User admin =CH_USERS.findById(1L);
 
     @FXML
     void initialize() {
@@ -41,7 +42,7 @@ public class LoginController {
 
         long userId = AppProperties.getInstance().getLastUser();
         User lastUser = userId == 0L ? null : CH_USERS.findById(userId);
-        bxUsers.setValue(lastUser);
+        bxUsers.getSelectionModel().select(lastUser);
 
         CH_CURRENT_USER = null;
         CH_CURRENT_USER_GROUP = null;
@@ -57,19 +58,21 @@ public class LoginController {
     }
 
     private void welcomeUser() throws NoSuchFieldException{
+        User user = bxUsers.getValue();
+        if(user == null) user = admin;
+
         String pass = passwordField.getText();
         //Вход без регистрации личности
         // 1 - Используется зарезервированный пароль разработчика
-        if(pass.equals(CH_DEV_PASS)){
-            CH_CURRENT_USER = CH_USERS.findById(1L);
+        if(user == admin & pass.equals(CH_DEV_PASS)){
+            CH_CURRENT_USER = admin;
             loadApplicationSettings();
             showTabPaneWindow();
             openTestWindow();
         }
         //Вход с регистрацией личности
         else {
-            User user = CH_USERS.findByPassword(pass);
-            if(user != null){
+            if(user.getPassword().equals(pass)){
                 CH_CURRENT_USER = user;
                 loadApplicationSettings();
                 showTabPaneWindow();
