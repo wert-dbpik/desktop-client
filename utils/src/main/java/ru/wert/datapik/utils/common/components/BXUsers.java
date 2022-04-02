@@ -18,6 +18,7 @@ import ru.wert.datapik.client.entity.models.Density;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.User;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
@@ -31,6 +32,7 @@ public class BXUsers {
 
         bxUsers.setStyle("-fx-font-size: 24; -fx-background-color: white");
         ObservableList<User> allUsers = FXCollections.observableArrayList(CH_USERS.findAll());
+        allUsers.sort(Comparator.comparing(User::getName));
         bxUsers.setItems(allUsers);
 
         bxUsers.setConverter(new StringConverter<User>() {

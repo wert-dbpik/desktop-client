@@ -119,7 +119,7 @@ public class AppProperties {
         }
     }
 
-    public void setUser(final long userId){
+    public void setLastUser(final long userId){
         try {
             FileOutputStream fos = new FileOutputStream(appConfigPath);
             connectionProps.setProperty("LAST_USER", String.valueOf(userId));

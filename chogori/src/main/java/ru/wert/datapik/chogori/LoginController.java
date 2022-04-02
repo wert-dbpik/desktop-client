@@ -80,6 +80,7 @@ public class LoginController {
             } else
                 Warning1.create($ATTENTION, $NO_SUCH_USER, $TRY_MORE);
         }
+        AppProperties.getInstance().setLastUser(user.getId());
     }
 
     private void loadApplicationSettings() {
