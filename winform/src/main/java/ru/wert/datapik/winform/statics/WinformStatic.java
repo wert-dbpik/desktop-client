@@ -19,6 +19,7 @@ public class WinformStatic {
 
     public static Stage WF_MAIN_STAGE;
     public static File WF_TEMPDIR; //Директория временного хранения
+    public static File HOME_BAZA_PIK; //Папка в домашней директории пользователя
 
     /**
      * Метод обеспечивает закрытие любого окна

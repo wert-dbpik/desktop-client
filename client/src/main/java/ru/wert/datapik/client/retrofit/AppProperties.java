@@ -1,11 +1,15 @@
 package ru.wert.datapik.client.retrofit;
 
 import javafx.scene.control.Dialog;
+import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.*;
 import java.util.Properties;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+import static ru.wert.datapik.winform.statics.WinformStatic.HOME_BAZA_PIK;
+@Slf4j
 public class AppProperties {
 
     static AppProperties instance;
@@ -19,7 +23,9 @@ public class AppProperties {
 
     private int attempt = 0;
     private Properties connectionProps;
-    private String appConfigPath = "connectionSettings.properties";
+    private String homeDir = System.getProperty("user.home") + File.separator + "AppData" + File.separator + "Local" + File.separator + "BazaPIK";
+    private String appConfigPath = homeDir + File.separator + "connectionSettings.properties";
+
 
     /**
      * Конструктор
@@ -27,9 +33,6 @@ public class AppProperties {
      * если файла не существует, то он создается и в файл записываются данные по умолчанию
      */
     private AppProperties() {
-//        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-//        String rootPath = this.getClass().getClassLoader().getResource("").getPath();
-
         File propsFile = new File(appConfigPath);
         if (!propsFile.exists())
             createFileOfConnectionSettings(appConfigPath);
@@ -52,13 +55,19 @@ public class AppProperties {
      */
     private void createFileOfConnectionSettings(String appConfigPath) {
         try {
+
+            File dir = new File(homeDir);
+            dir.mkdirs();
+
             File props = new File(appConfigPath);
             props.createNewFile();
+            log.info("Создана папка свойств приложения: {}", props.toString());
+
             FileWriter writer = new FileWriter (props);
-            writer.write("IP_ADDRESS=192.168.1.83\n");
-            writer.write("PORT = 8080");
-            writer.write("MONITOR=0");
-            writer.write("LAST_USER=0");
+            writer.write("IP_ADDRESS=192.168.2.132\n");
+            writer.write("PORT = 8080\n");
+            writer.write("MONITOR=0\n");
+            writer.write("LAST_USER=0\n");
             writer.close();
         } catch (IOException e) {
             if(++attempt < 3) new AppProperties();

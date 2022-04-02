@@ -25,10 +25,12 @@ import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
+import static ru.wert.datapik.winform.statics.WinformStatic.HOME_BAZA_PIK;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 @Slf4j
@@ -58,6 +60,13 @@ public class StartChogori extends Application {
         //Создадим папку временного хранения файлов чертежей
         FileFwdSlash tempDir = TempDir.createTempDirectory("temp-baza-pik");
         log.info("Cоздана временная папка : {}", tempDir.toString());
+
+//        HOME_BAZA_PIK = new File(System.getProperty("user.home") + "\\AppData\\Local\\BazaPIK\\");
+//        HOME_BAZA_PIK.mkdir();
+//        if(HOME_BAZA_PIK.exists())
+//            log.info("Cоздана папка в домашней директории пользователя: {}", HOME_BAZA_PIK.toString());
+//        else
+//            log.error("При создании папки '{}' в домашней директории пользователя произошла ошибка!", HOME_BAZA_PIK.toString());
 
         WinformStatic.WF_TEMPDIR = tempDir;
         WinformSettings.CH_MONITOR = AppProperties.getInstance().getMonitor();

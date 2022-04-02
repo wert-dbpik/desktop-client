@@ -436,8 +436,7 @@ public class AppMenuController {
     }
 
     void makeTest(ActionEvent event){
-        System.out.println("ИМЯ = " + CH_CURRENT_USER.getName());
-        CH_CURRENT_USER_SETTINGS = CH_SETTINGS.findByName("defau");
+        System.out.println("Файл = " + System.getProperty("user.home") + "\\AppData\\Local\\BazaPIK\\");
     }
 
     //########################   ПОМОЩЬ    ###########################
