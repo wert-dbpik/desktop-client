@@ -34,11 +34,12 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    public static final User admin =CH_USERS.findById(1L);
+    public static final User admin = CH_USERS.findById(1L);
 
     @FXML
     void initialize() {
 
+        log.debug("initialize : login window is initializing ...");
         new BXUsers(bxUsers);
 
         long userId = AppProperties.getInstance().getLastUser();
@@ -57,6 +58,8 @@ public class LoginController {
         });
 
         Platform.runLater(()->passwordField.requestFocus());
+
+        log.debug("initialize : login window has been initialized well!");
 
     }
 
@@ -87,6 +90,7 @@ public class LoginController {
     }
 
     private void loadApplicationSettings() {
+        log.debug("loadApplicationSettings : application settings are going to be load");
         CH_CURRENT_USER_GROUP = CH_CURRENT_USER.getUserGroup();
 
         CH_CURRENT_USER_SETTINGS = CH_SETTINGS.findByName(CH_CURRENT_USER.getName());

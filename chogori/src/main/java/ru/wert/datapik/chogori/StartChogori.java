@@ -43,12 +43,12 @@ public class StartChogori extends Application {
     @Override
     public void init(){
 
-
         try {
             initServices();
             initQuickServices();
+            log.debug("init : DATA from server got well!");
         } catch (Exception e) {
-            log.error("init : не удалось загрузить данные с сервера");
+            log.error("init : couldn't get DATA from server");
             initStatus = false;
 
         }
@@ -59,7 +59,7 @@ public class StartChogori extends Application {
         new ChogoriToolBar();
         //Создадим папку временного хранения файлов чертежей
         FileFwdSlash tempDir = TempDir.createTempDirectory("temp-baza-pik");
-        log.info("Cоздана временная папка : {}", tempDir.toString());
+        log.info("Temp folder has been created : {}", tempDir.toString());
 
 //        HOME_BAZA_PIK = new File(System.getProperty("user.home") + "\\AppData\\Local\\BazaPIK\\");
 //        HOME_BAZA_PIK.mkdir();
@@ -69,26 +69,39 @@ public class StartChogori extends Application {
 //            log.error("При создании папки '{}' в домашней директории пользователя произошла ошибка!", HOME_BAZA_PIK.toString());
 
         WinformStatic.WF_TEMPDIR = tempDir;
+        log.info("WinformStatic.WF_TEMPDIR = tempDir; passed" );
         WinformSettings.CH_MONITOR = AppProperties.getInstance().getMonitor();
+        log.info("AppProperties.getInstance().getMonitor() passed");
 
     }
 
     /**
      * Метод определяет текущую и последние версии
+     * Выдает ошибку, если версия новее того, который в БД
      */
     private void findVersions() {
-        Package aPackage = About.class.getPackage();
-        AppStatic.CURRENT_PROJECT_VERSION = aPackage.getImplementationVersion();
-        if(AppStatic.CURRENT_PROJECT_VERSION != null) {
-            VersionDesktop currentVersion = CH_VERSIONS_DESKTOP.findByName(AppStatic.CURRENT_PROJECT_VERSION);
-            List<VersionDesktop> versions = CH_VERSIONS_DESKTOP.findAll();
-            VersionDesktop lastVersion = versions.get(versions.size() - 1);
-            int comp = currentVersion.compareTo(lastVersion);
-            if(comp < 0)
-                AppStatic.NEWER_PROJECT_VERSION = lastVersion.getName();
-            else
-                AppStatic.NEWER_PROJECT_VERSION = null;
+        VersionDesktop lastVersion = null;
+        log.debug("findVersions : finding of current project version is staring");
+
+        try {
+            Package aPackage = About.class.getPackage();
+            AppStatic.CURRENT_PROJECT_VERSION = aPackage.getImplementationVersion();
+            if(AppStatic.CURRENT_PROJECT_VERSION != null) {
+                VersionDesktop currentVersion = CH_VERSIONS_DESKTOP.findByName(AppStatic.CURRENT_PROJECT_VERSION);
+                List<VersionDesktop> versions = CH_VERSIONS_DESKTOP.findAll();
+                lastVersion = versions.get(versions.size() - 1);
+                int comp = currentVersion.compareTo(lastVersion);
+                if (comp < 0)
+                    AppStatic.NEWER_PROJECT_VERSION = lastVersion.getName();
+                else
+                    AppStatic.NEWER_PROJECT_VERSION = null;
+            }
+        } catch (Exception e) {
+            log.error("findVersions : couldn't get version of project from MANIFEST");
+            e.printStackTrace();
         }
+        log.debug("findVersions : current project version has been found '{}'",
+                lastVersion == null? null:lastVersion.getName());
     }
 
     @Override

@@ -9,6 +9,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import retrofit2.Retrofit;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
@@ -16,13 +18,14 @@ import ru.wert.datapik.utils.connectionProperties.NoConnection;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
-
+@Slf4j
 public class AppPreloader extends Preloader {
 
     private Stage preloaderWindow = null;
 
     @Override
     public void start(Stage preloaderWindow) {
+        log.debug("start : preloaderWindow is starting ...");
         this.preloaderWindow = preloaderWindow;
         preloaderWindow.initStyle(StageStyle.UNDECORATED);
         try {
@@ -44,9 +47,13 @@ public class AppPreloader extends Preloader {
         preloaderWindow.setScene(scene);
 
         preloaderWindow.getIcons().add(new Image("/utils-pics/Pikovka(256x256).png"));
+        log.debug("start : preloaderWindow icon has been loaded");
+
         preloaderWindow.setTitle("Загрузка данных");
         preloaderWindow.show();
         AppStatic.centerWindow(preloaderWindow, false, WinformSettings.CH_MONITOR);
+
+        log.debug("start : preloaderWindow has been deployed and centered well!");
     }
 
     private void showSetConnectionDialog(Stage preloaderWindow) {

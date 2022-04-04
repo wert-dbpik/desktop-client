@@ -12,7 +12,7 @@
 
     <artifactId>chogori</artifactId>
     <packaging>jar</packaging>
-    <version>${project.version}</version>
+    <version>1.1.02</version>
 
     <name>DataPIK :: Chogori</name>
     <description>
@@ -31,20 +31,20 @@
         <dependency>
             <groupId>ru.wert.datapik</groupId>
             <artifactId>winform</artifactId>
-            <version>${project.version}</version>
+            <version>1.1.02</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>ru.wert.datapik</groupId>
             <artifactId>client</artifactId>
-            <version>${project.version}</version>
+            <version>1.1.02</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ru.wert.datapik</groupId>
             <artifactId>utils</artifactId>
-            <version>${project.version}</version>
+            <version>1.1.02</version>
             <scope>compile</scope>
         </dependency>
 
@@ -118,7 +118,7 @@
                             <mainClass>ru.wert.datapik.chogori.StartChogori</mainClass>
                         </manifest>
                     </archive>
-                    <appendAssemblyId>false</appendAssemblyId>
+                    <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
 
                 <executions>

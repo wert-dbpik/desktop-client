@@ -33,6 +33,7 @@ public class AppProperties {
      * если файла не существует, то он создается и в файл записываются данные по умолчанию
      */
     private AppProperties() {
+        log.debug("AppProperties : propsFile is creating ...");
         File propsFile = new File(appConfigPath);
         if (!propsFile.exists())
             createFileOfConnectionSettings(appConfigPath);
@@ -55,13 +56,13 @@ public class AppProperties {
      */
     private void createFileOfConnectionSettings(String appConfigPath) {
         try {
-
+            log.debug("File of application settings is creating...");
             File dir = new File(homeDir);
             dir.mkdirs();
 
             File props = new File(appConfigPath);
             props.createNewFile();
-            log.info("Создана папка свойств приложения: {}", props.toString());
+            log.info("File of application settings is created: {}", props.toString());
 
             FileWriter writer = new FileWriter (props);
             writer.write("IP_ADDRESS=192.168.2.132\n");
@@ -83,18 +84,22 @@ public class AppProperties {
     }
 
     public String getIpAddress(){
+        log.debug("IP_ADDRESS returns...{}", connectionProps.getProperty("IP_ADDRESS"));
         return connectionProps.getProperty("IP_ADDRESS");
     }
 
     public String getPort(){
+        log.debug("PORT returns... {}", connectionProps.getProperty("PORT"));
         return connectionProps.getProperty("PORT");
     }
 
     public int getMonitor(){
+        log.debug("MONITOR returns...{}", connectionProps.getProperty("MONITOR"));
         return Integer.parseInt(connectionProps.getProperty("MONITOR"));
     }
 
     public long getLastUser(){
+        log.debug("LAST_USER returns...{}", connectionProps.getProperty("LAST_USER"));
         return Integer.parseInt(connectionProps.getProperty("LAST_USER"));
     }
 

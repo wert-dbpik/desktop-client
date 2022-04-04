@@ -1,10 +1,7 @@
 package ru.wert.datapik.chogori.application.app_window;
 
-import com.sun.jmx.snmp.tasks.TaskServer;
 import javafx.application.Platform;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.serviceQUICK.*;

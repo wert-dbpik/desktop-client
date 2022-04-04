@@ -3,6 +3,7 @@ package ru.wert.datapik.client.retrofit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 
-@Log
+@Slf4j
 public class RetrofitClient{
     private static final String TAG = "RetrofitClient";
 
@@ -93,6 +94,7 @@ public class RetrofitClient{
      * Если найдется пользователь с id = 1, то ретрофит и соединение настроены
      */
     public static boolean checkUpConnection(){
+        log.debug("checkUpConnection : is starting ...");
         CheckUpConnectionInterface api = RetrofitClient.getInstance().getRetrofit().create(CheckUpConnectionInterface.class);
         try {
             Call<User> call = api.getById(1L);
@@ -100,6 +102,7 @@ public class RetrofitClient{
         } catch (IOException e) {
             return false;
         }
+        log.info("checkUpConnection : connection to Data Base is OK");
         return true;
     }
 

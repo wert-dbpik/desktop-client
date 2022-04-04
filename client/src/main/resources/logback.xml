@@ -4,12 +4,12 @@
     <contextName>BazaPIK</contextName>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/mainLog.log</file>
+        <file>${user.home}/AppData/Local/BazaPIK/logs/mainLog.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <FileNamePattern>logs/mainLog.%i.log.zip</FileNamePattern>
+            <FileNamePattern>${user.home}/AppData/Local/BazaPIK/logs/mainLog.%i.log.zip</FileNamePattern>
             <MinIndex>1</MinIndex>
             <MaxIndex>5</MaxIndex>
         </rollingPolicy>
