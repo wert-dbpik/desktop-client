@@ -28,6 +28,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem nullifyDraft; //Аннулировать
     private MenuItem addFolder; //Добавить папку
     private MenuItem openInTab; //Открыть в отдельной вкладке
+    private MenuItem openInOuterApp; //Открыть во внешнем приложении
 
     //Условие, при котором список составлен только для одной папки
     private boolean condition;
@@ -89,6 +90,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         boolean extraNullifyDraft = false;
         //=============================
         boolean extraOpenInTab = false;
+        boolean extraOpenInOuterApp = false;
 
         addFolder = new MenuItem("Добавить папку с чертежами");
         cutDrafts = new MenuItem("Вырезать");
@@ -97,6 +99,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         replaceDraft = new MenuItem("Заменить");
         nullifyDraft = new MenuItem("Аннулировать");
         openInTab = new MenuItem("Открыть в отдельной вкладке" );
+        openInOuterApp = new MenuItem("Открыть во внешней программе" );
 
 
         addFolder.setOnAction(commands::addFromFolder);
@@ -106,6 +109,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         replaceDraft.setOnAction(commands::replaceDraft);
         nullifyDraft.setOnAction(commands::nullifyDraft);
         openInTab.setOnAction(commands::openInTab);
+        openInOuterApp.setOnAction(commands::openInOuterApp);
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
@@ -118,6 +122,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
             } else if (selectedDrafts.size() == 1) {
                 extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
+                extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
                 //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
                 if (selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId()) && editDraftsPermission) {
                     extraRenameDraft = true; //ПЕРЕИМЕНОВАТЬ
@@ -161,6 +166,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 //
         if (extraOpenInTab && (extraRenameDraft || extraReplaceDraft || extraNullifyDraft)) extraItems.add(new SeparatorMenuItem());//==================
         if (extraOpenInTab) extraItems.add(openInTab);//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
+        if (extraOpenInOuterApp) extraItems.add(openInOuterApp);//ОТКРЫТЬ ВО ВНЕШНЕЙ ПРОГРАММЕ
 
 
         return extraItems;

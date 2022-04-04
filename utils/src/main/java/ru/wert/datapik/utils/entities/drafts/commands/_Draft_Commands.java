@@ -6,7 +6,11 @@ import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.winform.statics.WinformStatic;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class _Draft_Commands implements ItemCommands<Draft> {
@@ -63,4 +67,17 @@ public class _Draft_Commands implements ItemCommands<Draft> {
     public void openInTab(Event event){
         AppStatic.openDraftsInNewTabs(tableView.getSelectionModel().getSelectedItems());
     }
+
+    public void openInOuterApp(Event event){
+        if (Desktop.isDesktopSupported()) {
+            Draft draft = tableView.getSelectionModel().getSelectedItem();
+
+            try {
+                File myFile = new File(WinformStatic.WF_TEMPDIR + File.separator + draft.getId() + "." + draft.getExtension());
+                Desktop.getDesktop().open(myFile);
+            } catch (IOException ex) {
+            }
+        }
+    }
+
 }
