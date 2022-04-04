@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -17,6 +18,7 @@ import ru.wert.datapik.utils.entities.users.PermissionsController;
 import ru.wert.datapik.utils.statics.AppStatic;
 
 import java.io.IOException;
+import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_LEFT_IMG;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_RIGHT_IMG;
@@ -44,6 +46,8 @@ public class UserGroupsPermissionsController implements SearchableTab {
     private UserGroup_TableView userGroupTable;
     private User selectedUser;
 
+    private Button btnOK = new Button("Сохранить");
+
     @FXML
     void initialize(){
 
@@ -62,10 +66,15 @@ public class UserGroupsPermissionsController implements SearchableTab {
             apPermissions.getChildren().add(permissionsParent);
             permissionsController = loader.getController();
 
+            permissionsController.setTableView(userGroupTable);
+            permissionsController.createSaveButton(btnOK, permissionsParent);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     private void createUserGroupPane() {
         _UserGroupPatch usersGroupPatch = new _UserGroupPatch();
@@ -77,6 +86,8 @@ public class UserGroupsPermissionsController implements SearchableTab {
             if(newValue != oldValue)
             permissionsController.init(newValue);
         });
+
+
 
         AnchorPane userAnchorPane = userGroupController.getApUserGroupsPatch();
         AppStatic.setNodeInAnchorPane(userAnchorPane);

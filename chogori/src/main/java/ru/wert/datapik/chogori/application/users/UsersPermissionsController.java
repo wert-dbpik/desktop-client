@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -16,6 +17,7 @@ import ru.wert.datapik.utils.common.components.ChevronButton;
 import ru.wert.datapik.utils.statics.AppStatic;
 
 import java.io.IOException;
+import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
 
@@ -41,6 +43,8 @@ public class UsersPermissionsController implements SearchableTab {
 
     private User_TableView userTable;
 
+    Button btnOK = new Button("СОХРАНИТЬ");
+
     @FXML
     void initialize(){
 
@@ -60,10 +64,16 @@ public class UsersPermissionsController implements SearchableTab {
             apPermissions.getChildren().add(permissionsParent);
             permissionsController = loader.getController();
 
+            permissionsController.setTableView(userTable);
+            permissionsController.createSaveButton(btnOK, permissionsParent);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+
 
     private void createUserPane() {
         _UserPatch usersPatch = new _UserPatch();
@@ -75,8 +85,6 @@ public class UsersPermissionsController implements SearchableTab {
             if(newValue != null && newValue != oldValue)
             permissionsController.init(newValue.getUserGroup());
         });
-
-
 
         AnchorPane userAnchorPane = userController.getApUsersPatch();
         AppStatic.setNodeInAnchorPane(userAnchorPane);
