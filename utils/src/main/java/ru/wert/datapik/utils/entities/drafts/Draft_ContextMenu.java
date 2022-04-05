@@ -140,6 +140,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
             } else { //selectedDrafts.size() >1
                 extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
+                extraCutDrafts = true; //ВЫРЕЗАТЬ чертежи
                 if (condition) {
                     extraAddFolder = true; //ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
                     if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))

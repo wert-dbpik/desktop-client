@@ -26,11 +26,13 @@ import ru.wert.datapik.utils.entities.folders.commands._Folder_Commands;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.statics.AppStatic.UPWARD;
+import static ru.wert.datapik.utils.statics.Comparators.usefulStringComparator;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Folder_TableView extends RoutineTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
@@ -200,6 +202,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         }
 
         List<Folder> folders = CH_QUICK_FOLDERS.findAllByGroupId(selectedGroup.getId());
+        folders.sort(usefulStringComparator());
         shownList.addAll(folders);
 
         getItems().clear();
@@ -232,12 +235,15 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         }
 
         List<Folder> folders = CH_QUICK_FOLDERS.findAllByGroupId(selectedGroup.getId());
+        folders.sort(usefulStringComparator());
         items.addAll(folders);
 
         getItems().clear();
         refresh();
         getItems().addAll(items);
+
     }
+
 
     @Override
     public void createContextMenu() {
@@ -261,12 +267,15 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
             if(item instanceof ProductGroup) {
                 if(item.equals(upwardRowProperty.get().getValue())){
                     label.setText(UPWARD);
+                    label.setId("upward"); //На случай применения компаратора
                 }else {
                     label.setText(item.toUsefulString());
                     label.setGraphic(new ImageView(TREE_NODE_IMG));
+                    label.setId("pg");//На случай применения компаратора
                 }
             } else {
                 label.setText(Folder_Columns.getFolderFullName((Folder) item));
+                label.setId("f");//На случай применения компаратора
             }
             return new ReadOnlyObjectWrapper<>(label);
         });
