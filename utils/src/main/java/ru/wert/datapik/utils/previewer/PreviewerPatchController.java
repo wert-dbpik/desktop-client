@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.common.components.ZoomableScrollPane;
@@ -32,10 +33,11 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Collections;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_OPEN_IN_NEW_TAB_IMG;
 
 //import ru.wert.datapik.client.entity.models.Draft;
-
+@Slf4j
 public class PreviewerPatchController {
 
     @FXML
@@ -138,9 +140,19 @@ public class PreviewerPatchController {
 
         if (ext.equals("pdf")) {
             paneViewer.getChildren().set(0,pdfStackPane);
-            pdfReader.showPDF(draftPath);
+            try {
+                pdfReader.showPDF(draftPath);
+            } catch (Exception e) {
+                log.error("showDraft : something went wrong with showing pdf!");
+                e.printStackTrace();
+            }
         } else {
-            showImage(draftPath);
+            try {
+                showImage(draftPath);
+            }catch(Exception ex){
+                log.error("showDraft : something went wrong with showing image!");
+                ex.printStackTrace();
+            }
         }
     }
 
