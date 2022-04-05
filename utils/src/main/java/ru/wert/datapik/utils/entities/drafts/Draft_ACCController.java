@@ -841,10 +841,19 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         try {
 //            draftsList = new ArrayList<>();
 
+
+            File folder = null;
             DirectoryChooser dirChooser = new DirectoryChooser();
             dirChooser.setInitialDirectory(lastFile);
             dirChooser.setTitle("Выберите папку...");
-            File folder = dirChooser.showDialog(WF_MAIN_STAGE);
+            try { //Хак для
+                folder = dirChooser.showDialog(WF_MAIN_STAGE);
+            } catch (Exception e) {
+                lastFile = new File("C:/");
+                dirChooser.setInitialDirectory(lastFile);
+                folder = dirChooser.showDialog(WF_MAIN_STAGE);
+                log.debug("loadFolder : Hack has been successfully used!");
+            }
             if(folder == null || !folder.isDirectory()) return;
 
             List<Path> filesInFolder = Files.walk(folder.toPath())
@@ -873,7 +882,15 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         fileChooser.setTitle("Выберите чертежи...");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF, PNG, JPEG", "*.pdf", "*.png", "*.jpg"));
 
-        List<File> chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
+        List<File> chosenList = null;
+        try {
+            chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
+        } catch (Exception e) {
+            lastFile = new File("C:/");
+            fileChooser.setInitialDirectory(lastFile);
+            chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
+            log.debug("loadManyDrafts : Hack has been successfully used!");
+        }
         if(chosenList == null) return;
         lastFile = chosenList.get(0).getParentFile();
         //Формируем список файлов из выбранных чертежей
@@ -899,7 +916,15 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         fileChooser.setTitle("Выберите чертеж...");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF, PNG, JPEG", "*.pdf", "*.png", "*.jpg"));
 
-        File chosenFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
+        File chosenFile = null;
+        try {
+            chosenFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
+        } catch (Exception e) {
+            lastFile = new File("C:/");
+            fileChooser.setInitialDirectory(lastFile);
+            chosenFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
+            log.debug("loadOneDraft : Hack has been successfully used!");
+        }
         if(chosenFile == null) return;
         lastFile = chosenFile.getParentFile();
         //Формируем список файлов из выбранных чертежей

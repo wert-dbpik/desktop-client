@@ -71,8 +71,8 @@ public class PermissionsController<P extends Item> {
     @Setter
     RoutineTableView<P> tableView;
     @Getter private List<CheckBox> boxes;
-    Map<CheckBox, Boolean> oldMap = new HashMap<>();
-    Map<CheckBox, Boolean> newMap = new HashMap<>();
+    private Map<CheckBox, Boolean> oldMap = new HashMap<>();
+    private Map<CheckBox, Boolean> newMap = new HashMap<>();
 
     @FXML
     void initialize(){
@@ -155,10 +155,10 @@ public class PermissionsController<P extends Item> {
 
         if(tableView instanceof User_TableView) {
 
-            P selectedItem = tableView.getSelectionModel().getSelectedItem();
-            int focusedItem = tableView.getFocusModel().getFocusedIndex();
-
             Platform.runLater(() -> {
+                P selectedItem = tableView.getSelectionModel().getSelectedItem();
+                int focusedItem = tableView.getFocusModel().getFocusedIndex();
+
                 tableView.updateRoutineTableView();
                 tableView.getSelectionModel().select(selectedItem);
                 tableView.getFocusModel().focus(focusedItem);
