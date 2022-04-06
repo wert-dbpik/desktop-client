@@ -98,7 +98,9 @@ public class ModalWindow {
     public static int findCurrentMonitorByMainStage(Stage window) {
         int monitor = 0;
         List<Screen> screenList = Screen.getScreens();
-        double stageMiddleX = window.getX() + window.getWidth() / 2.0;
+        double stageMiddleX = screenList.get(0).getBounds().getWidth()/2.0;
+        if(window != null)
+            stageMiddleX = window.getX() + window.getWidth() / 2.0;
         for (int n = 0; n < screenList.size(); n++) {
             Screen screen = screenList.get(n);
             if (screen.getBounds().getMinX() < stageMiddleX &&
