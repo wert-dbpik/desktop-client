@@ -3,22 +3,17 @@ package ru.wert.datapik.utils.entities.folders;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.*;
-import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.components.BXPrefix;
 import ru.wert.datapik.utils.common.components.BXProductGroup;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
-import ru.wert.datapik.utils.common.tableView.CatalogTableView;
-import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
-import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_Chooser;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
@@ -30,13 +25,6 @@ import static ru.wert.datapik.utils.statics.AppStatic.*;
 
 @Slf4j
 public class Folder_ACCController extends FormView_ACCController<Folder> {
-
-
-    @FXML
-    private ComboBox<Prefix> bxPrefix;
-
-    @FXML
-    private TextField tfNumber;
 
     @FXML
     private TextField tfName;
@@ -67,7 +55,6 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
         super.initSuper(operation, formView, commands, CH_QUICK_FOLDERS);
 
         //Создаем комбобоксы
-        new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
         new BXProductGroup().create(bxGroup); //ГРУППА ИЗДЕЛИЙ
 
         //Устанавливаем начальные значения полей в зависимости от operation
@@ -79,7 +66,7 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     void initialize() {
         AppStatic.createSpIndicator(spIndicator);
 
-        Platform.runLater(()->tfNumber.requestFocus());
+        Platform.runLater(()->tfName.requestFocus());
     }
 
     @FXML
@@ -106,7 +93,6 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     @Override
     public ArrayList<String> getNotNullFields() {
         ArrayList<String> notNullFields = new ArrayList<>();
-        notNullFields.add(tfNumber.getText());
         notNullFields.add(tfName.getText());
         return notNullFields;
     }
@@ -115,7 +101,6 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     public Folder getNewItem() {
         return new Folder(
                 bxGroup.getValue(),
-                combineDecNumber(),
                 tfName.getText().trim(),
                 taNote.getText().trim()
         );
@@ -128,8 +113,6 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     @Override
     public void fillFieldsOnTheForm(Folder oldItem) {
-        bxPrefix.setValue(getPrefixInDecNumber(oldItem.getDecNumber()));
-        tfNumber.setText(getShortDecNumber(oldItem.getDecNumber()));
         tfName.setText(oldItem.getName());
         bxGroup.setValue(oldItem.getProductGroup());
         taNote.setText(oldItem.getNote());
@@ -138,7 +121,6 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     @Override
     public void changeOldItemFields(Folder oldItem) {
         oldItem.setProductGroup(bxGroup.getValue());
-        oldItem.setDecNumber(combineDecNumber());
         oldItem.setName(tfName.getText().trim());
         oldItem.setNote(taNote.getText().trim());
     }
@@ -146,7 +128,6 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     @Override
     public void showEmptyForm() {
 
-        setComboboxPrefixValue(bxPrefix);
         setComboboxProductGroupValue(bxGroup);
 
     }
@@ -157,14 +138,15 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     }
 
 
-    private String combineDecNumber(){
-        String decNumber;
-        Prefix prefix =  bxPrefix.getValue();
-        if(prefix == null || prefix.getName().equals("-")){
-            decNumber = tfNumber.getText().trim();
-        } else {
-            decNumber = bxPrefix.getValue().getName() + "." + tfNumber.getText().trim();
-        }
-        return decNumber;
-    }
+//    private String combineDecNumberAndName(){
+//        String decNumber;
+//        Prefix prefix =  bxPrefix.getValue();
+//        if(prefix == null || prefix.getName().equals("-")){
+//            decNumber = tfNumber.getText().trim();
+//        } else {
+//            decNumber = bxPrefix.getValue().getName() + "." + tfNumber.getText().trim();
+//        }
+//
+//        return decNumber + ", " + tfName.getText().trim();
+//    }
 }

@@ -438,11 +438,7 @@ public class AppMenuController {
     }
 
     void makeTest(ActionEvent event){
-        List<Folder> folders = CH_QUICK_FOLDERS.findAll();
-        for(Folder f : folders){
-            f.setName(f.getDecNumber() + ", " + f.getName());
-            CH_QUICK_FOLDERS.update(f);
-        }
+
     }
 
     //########################   ПОМОЩЬ    ###########################

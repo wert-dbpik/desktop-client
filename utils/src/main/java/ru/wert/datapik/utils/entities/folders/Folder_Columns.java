@@ -23,19 +23,6 @@ public class Folder_Columns {
         return tcId;
     };
 
-    /**
-     * ДЕЦИМАЛЬНЫЙ НОМЕР
-     */
-    public static TableColumn<Folder, String> createTcDecNumber(){
-        TableColumn<Folder, String> tcDecNumber = new TableColumn<>("Децимальный\nномер");
-        tcDecNumber.setCellValueFactory(cd->{
-            Folder folder = cd.getValue();
-            String decNumber = getDecNumber(folder);
-            return new ReadOnlyStringWrapper(decNumber);
-        });
-        tcDecNumber.setMinWidth(120);
-        return tcDecNumber;
-    }
 
     /**
      * ПОЛНОЕ НАИМЕНОВАНИЕ НОМЕР
@@ -73,25 +60,4 @@ public class Folder_Columns {
         return tcNote;
     };
 
-    /**
-     * Если CH_SHOW_PREFIX = false, то дефолтный префикс отсекается, остальные остаются
-     */
-    public static String getDecNumber(Folder folder) {
-        if(folder == null || folder.getDecNumber() == null) return "";
-        String decNumber = folder.getDecNumber();
-        if(!CH_SHOW_PREFIX){
-            String prefix = decNumber.split("\\.", -1)[0];
-            if(prefix != null && !prefix.equals("-") && !prefix.equals("")){
-                Prefix foundPrefix = CH_QUICK_PREFIXES.findByName(prefix);
-                if(foundPrefix != null && foundPrefix != CH_DEFAULT_PREFIX)
-                    decNumber = decNumber.substring(prefix.length()+1);
-            }
-        }
-        return decNumber;
-    }
-
-    public static String getFolderFullName(Folder folder){
-        if(folder == null) return "";
-        return folder.getName();
-    }
 }

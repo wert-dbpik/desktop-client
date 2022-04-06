@@ -31,7 +31,7 @@ public class Folder_AddCommand implements ICommand {
     @Override
     public void execute() {
         //Сохраняем последний используемый префикс
-        BXPrefix.LAST_PREFIX = AppStatic.getPrefixInDecNumber(newItem.getDecNumber());
+//        BXPrefix.LAST_PREFIX = AppStatic.getPrefixInDecNumber(newItem.getName()); //????
         //Сохраняем новое изделие
         Folder folder = CH_QUICK_FOLDERS.save(newItem);
 

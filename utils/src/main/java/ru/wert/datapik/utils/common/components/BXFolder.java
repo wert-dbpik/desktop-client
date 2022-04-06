@@ -58,8 +58,7 @@ public class BXFolder {
                 } else {
                     Label name = new Label(item.getName());
                     name.setStyle("-fx-text-fill: darkgreen; -fx-font-weight: bold");
-                    Label number = new Label((item.getDecNumber()));
-                    setGraphic(new VBox(name, number));
+                    setGraphic(name);
                 }
             }
 
@@ -124,9 +123,8 @@ public class BXFolder {
             Folder folder = bxFolder.getValue();
             if(folder != null) {
                 name = folder.getName();
-                decNumber = folder.getDecNumber();
-                if(decNumber == null || decNumber.equals("") || name.equals(RAZLOZHENO)) return;
-                folderHint = new HintPopup(bxFolder, decNumber, 0.0);
+                if(name.equals(RAZLOZHENO)) return;
+                folderHint = new HintPopup(bxFolder, name, 0.0);
                 folderHint.showHint();
             }
         });

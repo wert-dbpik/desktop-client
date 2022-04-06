@@ -10,38 +10,6 @@
    <children>
       <VBox prefWidth="100.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="0.0" spacing="5.0">
-               <children>
-                  <VBox prefHeight="200.0" spacing="3.0" HBox.hgrow="NEVER">
-                     <children>
-                        <Label text="Префикс">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="bxPrefix" maxHeight="32.0" maxWidth="75.0" minHeight="30.0" minWidth="75.0" prefHeight="32.0" prefWidth="75.0">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                        </ComboBox>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="3.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label text="Дец.номер">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="tfNumber" maxHeight="32.0" maxWidth="1.7976931348623157E308" minHeight="32.0" prefHeight="32.0">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </TextField>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
             <VBox prefHeight="0.0" spacing="3.0">
                <children>
                   <Label text="Наименование">
