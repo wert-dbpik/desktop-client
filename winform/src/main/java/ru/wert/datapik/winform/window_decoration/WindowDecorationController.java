@@ -6,7 +6,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -16,10 +15,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import lombok.Setter;
 import ru.wert.datapik.winform.modal.ModalWindow;
 import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.util.List;
+
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 //@Slf4j
 public class WindowDecorationController {
@@ -37,7 +39,7 @@ public class WindowDecorationController {
     private Stage window;
     private double dragOffsetX;
     private double dragOffsetY;
-    private boolean isExpanded;
+    @Setter private boolean isExpanded;
 
     private double windowCurrentWidth;
     private double windowCurrentHeight;
@@ -69,9 +71,9 @@ public class WindowDecorationController {
      * или сворчивание окна до предыдущего состояния
      */
     @FXML
-    void maximizeWindow(Event e){
+    void maximizeWindow(MouseEvent e){
         window = (Stage) ((Node)e.getSource()).getScene().getWindow();
-        changeSizeOfWindow();
+        changeSizeOfWindow(window, e);
     }
 
     /**
@@ -81,14 +83,10 @@ public class WindowDecorationController {
      */
     @FXML
     public void closeWindow(Event event){
-//        if(((Node)e.getSource()).getScene().getWindow().equals(AppWindow.appStage))
-//            AppStart.closeApp();
-//        else
-//            ((Node)e.getSource()).getScene().getWindow().hide();
+
         WinformStatic.closeWindow(event);
 
     }
-
 
 //===========================================    СОБЫТИЯ МЫШИ     =====================================================
 
@@ -107,24 +105,37 @@ public class WindowDecorationController {
         if (window.isFocused() &&
                 window.isResizable() &&
                 mouseEvent.getClickCount() == 2)
-                    changeSizeOfWindow();
+                    changeSizeOfWindow(window, mouseEvent);
     }
 
     /**
      * Разворачивание или сворачивание окна
      * Условием является состояние флага isExpanded (развернут на весь экран)
      */
-    private void changeSizeOfWindow(){
+    private void changeSizeOfWindow(Stage window, MouseEvent e){
+        List<Screen> screenList = Screen.getScreens();
+//        int monitor = ModalWindow.findCurrentMonitorByMousePointer(e);
+        int monitor = ModalWindow.findCurrentMonitorByMainStage((Stage)((Node)e.getSource()).getScene().getWindow());
+
+        ((Node)e.getSource()).getScene().getWindow();
 
         Rectangle2D visualBounds = findVisualBounds();
 
         if (isExpanded) {
+            if(window.equals(WF_MAIN_STAGE)){
+                //Меняем ширину и высоту окна, если она равна или чуть меньше размеров самого экрана
+                if (windowCurrentWidth < 0.9 * screenList.get(monitor).getBounds().getWidth())
+                    windowCurrentWidth = 0.5 * screenList.get(monitor).getBounds().getWidth();
+
+                if (windowCurrentHeight < 0.9 * screenList.get(monitor).getBounds().getHeight())
+                    windowCurrentWidth = 0.5 * screenList.get(monitor).getBounds().getHeight();
+            }
 
             window.setWidth(windowCurrentWidth);
             window.setHeight(windowCurrentHeight);
             window.setY((visualBounds.getHeight() - windowCurrentHeight)/2);
 
-            ModalWindow.centerWindow(window);
+            ModalWindow.centerWindow(window, WF_MAIN_STAGE, e);
             isExpanded = false;
         } else {
             this.windowCurrentWidth = window.getWidth();
@@ -242,6 +253,21 @@ public class WindowDecorationController {
         window.toFront();
         window.setX(mouseEvent.getScreenX() - this.dragOffsetX);
         window.setY(mouseEvent.getScreenY() - this.dragOffsetY);
+    }
+
+    public void centerInitialWindow(Stage window, Boolean fullScreen, int mainMonitor){
+
+        List<Screen> screenList = Screen.getScreens();
+        //Если всего один монитор, то открываем на нем
+        int monitor = Math.min(mainMonitor, screenList.size() - 1);
+
+        if(fullScreen) {
+            window.setWidth(screenList.get(monitor).getBounds().getWidth());
+            window.setHeight(screenList.get(monitor).getBounds().getHeight());
+            setExpanded(true);
+        }
+        ModalWindow.mountStage(window, monitor);
+
     }
 
 

@@ -19,6 +19,8 @@ import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.io.IOException;
 
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
+
 public class Warning2 extends ModalWindow {
 
     private static BooleanProperty agreevation = new SimpleBooleanProperty();
@@ -65,7 +67,7 @@ public class Warning2 extends ModalWindow {
             ModalWindow.setMovingPane(parent);
 
             Platform.runLater(()->{
-                ModalWindow.centerWindow(stage);
+                ModalWindow.centerWindow(stage, WF_MAIN_STAGE, null);
             });
 
             stage.showAndWait();

@@ -19,6 +19,8 @@ import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.io.IOException;
 
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
+
 public class Draft_DuplicateDraftFound extends ModalWindow {
 
     public static ObjectProperty<ESolution> solution = new SimpleObjectProperty<>();
@@ -83,7 +85,7 @@ public class Draft_DuplicateDraftFound extends ModalWindow {
             ModalWindow.setMovingPane(parent);
 
             Platform.runLater(() -> {
-                ModalWindow.centerWindow(stage);
+                ModalWindow.centerWindow(stage, WF_MAIN_STAGE, null);
             });
 
             stage.showAndWait();

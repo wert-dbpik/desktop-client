@@ -10,11 +10,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
+import java.util.List;
+
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
-
-
-//import static ru.wert.datapik.utils._patches.common.components.Nodes.MAIN_WINDOW;
-
 
 public class ModalWindow {
 
@@ -43,38 +41,73 @@ public class ModalWindow {
         anchorPane.setOnMouseDragged((ModalWindow::onMouseDragged));
     }
 
+
+
     /**
      * Метод центрирует модальное окно относительно главного окна приложения
      * @param stage сцена модального окна
+     * @param mainStage сцена окна, относительного которогро происходит размещение модального окна
      */
-    public static void centerWindow(Stage stage){
+    public static void centerWindow(Stage stage, Stage mainStage, MouseEvent event){
+        int monitor;
+        if (event != null) {
 
-        WindowDecoration.centerWindow(stage, WF_MAIN_STAGE, false);
+            monitor = findCurrentMonitorByMousePointer(event);
+        } else {
+            monitor = findCurrentMonitorByMainStage(mainStage);
+        }
 
-//        ObservableList<Screen> screens = Screen.getScreens();
-//        double mainX = stage.getScene().getWindow().getX() + stage.getScene().getWidth()/2.0; //MAIN_WINDOW = stage
-//        for(Screen s : screens){
-//            Rectangle2D screenRec = s.getBounds();
-//            if(mainX >= screenRec.getMinX() && mainX <= screenRec.getMaxX()){
-//                double modWidth = stage.getScene().getWindow().getWidth();
-//                //Устанавливаем положение модального окна по вычисленной координате Х
-//                stage.setX(s.getVisualBounds().getMinX() + (s.getVisualBounds().getWidth() - modWidth)/2.0);
-//            }
-//        }
+        ModalWindow.mountStage(stage, monitor);
     }
 
-    protected static void center2Window(Stage stage){
-        ObservableList<Screen> screens = Screen.getScreens();
-        double mainX = stage.getScene().getWindow().getX() + stage.getScene().getWidth()/2.0; //MAIN_WINDOW = stage
-        for(Screen s : screens){
-            Rectangle2D screenRec = s.getBounds();
-            if(mainX >= screenRec.getMinX() && mainX <= screenRec.getMaxX()){
-                double modWidth = stage.getScene().getWindow().getWidth();
-                //Устанавливаем положение модального окна по вычисленной координате Х
-                stage.setX(s.getVisualBounds().getMinX() + (s.getVisualBounds().getWidth() - modWidth)/2.0);
-            }
+    /**
+     * Метод задает расположение окна на мониторе
+     */
+    public static void mountStage(Stage window, int monitor) {
+        List<Screen> screenList = Screen.getScreens();
+        double screenMinX = screenList.get(monitor).getBounds().getMinX();
+        double screenMinY = screenList.get(monitor).getBounds().getMinY();
+        double screenWidth = screenList.get(monitor).getBounds().getWidth();
+        double screenHeight = screenList.get(monitor).getBounds().getHeight();
 
+        window.setX(screenMinX + ((screenWidth - window.getWidth()) / 2));
+        window.setY(screenMinY + ((screenHeight - window.getHeight()) / 2));
+    }
+
+    /**
+     * Метод определяет в каком из мониторов произошел клик мышки
+     */
+    public static int findCurrentMonitorByMousePointer(MouseEvent event) {
+        int monitor = 0;
+        List<Screen> screenList = Screen.getScreens();
+        double pointerX = event.getScreenX();
+        for (int n = 0; n < screenList.size(); n++) {
+            Screen screen = screenList.get(n);
+            if (screen.getBounds().getMinX() < pointerX &&
+                    pointerX < screen.getBounds().getMaxX() ) {
+                monitor = n;
+                break;
+            }
         }
+        return monitor;
+    }
+
+    /**
+     * Метод определяет на каком из мониторов размещается окно программы
+     */
+    public static int findCurrentMonitorByMainStage(Stage window) {
+        int monitor = 0;
+        List<Screen> screenList = Screen.getScreens();
+        double stageMiddleX = window.getX() + window.getWidth() / 2.0;
+        for (int n = 0; n < screenList.size(); n++) {
+            Screen screen = screenList.get(n);
+            if (screen.getBounds().getMinX() < stageMiddleX &&
+                    screen.getBounds().getMaxX() > stageMiddleX) {
+                monitor = n;
+                break;
+            }
+        }
+        return monitor;
     }
 
 }

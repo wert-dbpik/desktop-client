@@ -13,9 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.extern.slf4j.XSlf4j;
 import retrofit2.Retrofit;
 import ru.wert.datapik.client.entity.models.User;
+import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.utils.connectionProperties.NoConnection;
 import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.winform.modal.ModalWindow;
+import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 @Slf4j
@@ -51,7 +54,8 @@ public class AppPreloader extends Preloader {
 
         preloaderWindow.setTitle("Загрузка данных");
         preloaderWindow.show();
-        AppStatic.centerWindow(preloaderWindow, false, WinformSettings.CH_MONITOR);
+
+        ModalWindow.mountStage(preloaderWindow, AppProperties.getInstance().getMonitor());
 
         log.debug("start : preloaderWindow has been deployed and centered well!");
     }

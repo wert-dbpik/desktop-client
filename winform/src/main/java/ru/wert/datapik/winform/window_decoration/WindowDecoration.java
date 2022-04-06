@@ -12,11 +12,15 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.winform.modal.ModalWindow;
 import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 
 import java.io.IOException;
 import java.util.List;
+
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
+import static ru.wert.datapik.winform.winform_settings.WinformSettings.CH_MONITOR;
 
 @Slf4j
 public class WindowDecoration {
@@ -28,7 +32,7 @@ public class WindowDecoration {
     private Label windowName;
     private final boolean resizable;
     private boolean waiting = false;
-
+    private WindowDecorationController windowDecorationController;
 
 //=============================================    НАЧАЛО    =========================================================
     /**
@@ -76,6 +80,7 @@ public class WindowDecoration {
         try {
             decorationLoader = new FXMLLoader(getClass().getResource("/winform-fxml/window_decoration/window_decoration.fxml"));
             decoration = decorationLoader.load();
+            windowDecorationController = decorationLoader.getController();
 
             StackPane pane = (StackPane)decoration.lookup("#mainPane");
             pane.getChildren().add(rootPane);
@@ -133,43 +138,21 @@ public class WindowDecoration {
      * Так как штатное центрирование задирает окно на 1/3, то используется собственный способ
      * размещения окна на видимой части экрана. Панель задач внизу экрана вычитается.
      */
-    public static void centerWindow(Stage window, Stage mainWindow, Boolean fullScreen){
-
+    public static void centerWindow(Stage window, Stage mainStage, Boolean fullScreen){
         List<Screen> screenList = Screen.getScreens();
-        //Если всего один монитор, то открываем на нем
-        int monitor;
-        if(screenList.size() == 1)
-            monitor = 0;
-        else
-            monitor =  WinformSettings.CH_MONITOR;
+        if(mainStage == null) mainStage = WF_MAIN_STAGE;
+
+        int monitor = ModalWindow.findCurrentMonitorByMainStage(mainStage);
 
         if(fullScreen) {
             window.setWidth(screenList.get(monitor).getBounds().getWidth());
             window.setHeight(screenList.get(monitor).getBounds().getHeight());
         }
-        double screenMinX = screenList.get(monitor).getBounds().getMinX();
-        double screenMinY = screenList.get(monitor).getBounds().getMinY();
-        double screenWidth = screenList.get(monitor).getBounds().getWidth();
-        double screenHeight = screenList.get(monitor).getBounds().getHeight();
 
-        window.setX(screenMinX + ((screenWidth - window.getWidth()) / 2));
-        window.setY(screenMinY + ((screenHeight - window.getHeight()) / 2));
+        ModalWindow.mountStage(window, monitor);
 
     }
 
-/*    *//**
-     * Центрирование окна
-     * Так как штатное центрирование задирает окно на 1/3, то используется собственный способ
-     * размещения окна на видимой части экрана. Панель задач внизу экрана вычитается.
-     *//*
-    public void centerWindow(Stage window){
-
-        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-        double x = bounds.getMinX() + (bounds.getWidth() - window.getWidth())/2.0;
-        double y = bounds.getMinY() + (bounds.getHeight() - window.getHeight())/2.0;
-        window.setX(x);
-        window.setY(y);
-    }*/
 
     public FXMLLoader getDecorationLoader(){
         return decorationLoader;

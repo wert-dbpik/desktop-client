@@ -171,26 +171,6 @@ public class AppStatic {
         return false;
     }
 
-    public static void centerWindow(Stage window, Boolean fullScreen, int mainMonitor){
-
-        List<Screen> screenList = Screen.getScreens();
-        //Если всего один монитор, то открываем на нем
-        int monitor = Math.min(mainMonitor, screenList.size() - 1);
-
-        if(fullScreen) {
-            window.setWidth(screenList.get(monitor).getBounds().getWidth());
-            window.setHeight(screenList.get(monitor).getBounds().getHeight());
-        }
-        double screenMinX = screenList.get(monitor).getBounds().getMinX();
-        double screenMinY = screenList.get(monitor).getBounds().getMinY();
-        double screenWidth = screenList.get(monitor).getBounds().getWidth();
-        double screenHeight = screenList.get(monitor).getBounds().getHeight();
-
-        window.setX(screenMinX + ((screenWidth - window.getWidth()) / 2));
-        window.setY(screenMinY + ((screenHeight - window.getHeight()) / 2));
-
-    }
-
     public static void setNodeInAnchorPane(Node node){
         AnchorPane.setBottomAnchor(node, 0.0);
         AnchorPane.setRightAnchor(node, 0.0);

@@ -14,6 +14,8 @@ import ru.wert.datapik.winform.modal.ModalWindow;
 
 import java.io.IOException;
 
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
+
 public class Warning1 extends ModalWindow {
 
     public static void create(String title, String problem, String decision){
@@ -47,7 +49,7 @@ public class Warning1 extends ModalWindow {
             ModalWindow.setMovingPane(parent);
 
             Platform.runLater(()->{
-                ModalWindow.centerWindow(stage);
+                ModalWindow.centerWindow(stage, WF_MAIN_STAGE, null);
             });
             stage.isAlwaysOnTop();
             stage.showAndWait();

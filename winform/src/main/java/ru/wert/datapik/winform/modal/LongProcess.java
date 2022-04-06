@@ -14,6 +14,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;
 
 public class LongProcess extends ModalWindow{
@@ -50,7 +51,7 @@ public class LongProcess extends ModalWindow{
             setMovingPane(parent);
 
             Platform.runLater(()->{
-                centerWindow(stage);
+                centerWindow(stage, WF_MAIN_STAGE, null);
             });
 
             stage.showAndWait();

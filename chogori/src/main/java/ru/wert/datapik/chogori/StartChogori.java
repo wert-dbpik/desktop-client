@@ -20,9 +20,11 @@ import ru.wert.datapik.utils.toolpane.ChogoriToolBar;
 import ru.wert.datapik.utils.common.components.FileFwdSlash;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.tempfile.TempDir;
+import ru.wert.datapik.winform.modal.ModalWindow;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
+import ru.wert.datapik.winform.window_decoration.WindowDecorationController;
 import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 import java.io.File;
@@ -117,6 +119,7 @@ public class StartChogori extends Application {
             //Загружаем WindowDecoration
             FXMLLoader decorationLoader = new FXMLLoader(WindowDecoration.class.getResource("/winform-fxml/window_decoration/window_decoration.fxml"));
             Parent decoration = decorationLoader.load();
+            WindowDecorationController controller = decorationLoader.getController();
 
             //Загружаем loginWindow
             FXMLLoader loginWindowLoader = new FXMLLoader(getClass().getResource("/chogori-fxml/login/login.fxml"));
@@ -150,7 +153,7 @@ public class StartChogori extends Application {
 //            setOnKeysPressedListener();
 
             stage.show();
-            AppStatic.centerWindow(stage, true, WinformSettings.CH_MONITOR);
+            controller.centerInitialWindow(stage, true, WinformSettings.CH_MONITOR);
 
 
         }catch (IOException e) {
