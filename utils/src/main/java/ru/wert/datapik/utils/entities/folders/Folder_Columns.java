@@ -44,7 +44,7 @@ public class Folder_Columns {
         TableColumn<Folder, String> tcFullName = new TableColumn<>("Полное\nНаименование");
         tcFullName.setCellValueFactory(cd->{
             Folder folder = cd.getValue();
-            String fullName = getFolderFullName(folder);
+            String fullName = folder.getName();
             return new ReadOnlyStringWrapper(fullName);
         });
         tcFullName.setMinWidth(120);
@@ -92,11 +92,6 @@ public class Folder_Columns {
 
     public static String getFolderFullName(Folder folder){
         if(folder == null) return "";
-        if (folder.getDecNumber() == null ||
-                folder.getDecNumber().equals("-") ||
-                folder.getDecNumber().equals("")
-                )
-            return folder.getName();
-        return getDecNumber(folder) + ", " + folder.getName();
+        return folder.getName();
     }
 }

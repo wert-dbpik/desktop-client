@@ -274,7 +274,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
                     label.setId("pg");//На случай применения компаратора
                 }
             } else {
-                label.setText(Folder_Columns.getFolderFullName((Folder) item));
+                label.setText(item.getName());
                 label.setId("f");//На случай применения компаратора
             }
             return new ReadOnlyObjectWrapper<>(label);

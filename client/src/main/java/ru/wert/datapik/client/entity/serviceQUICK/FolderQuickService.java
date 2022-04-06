@@ -55,16 +55,6 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
         return foundFolder;
     }
 
-    public Folder findByDecNumber(String number) {
-        Folder foundFolder = null;
-        for(Folder folder : folders){
-            if(folder.getDecNumber() != null && folder.getDecNumber().equals(number)) {
-                foundFolder = folder;
-                break;
-            }
-        }
-        return foundFolder;
-    }
 
     @Override //CatalogService
     public List<Folder> findAllByGroupId(Long id) {
@@ -117,8 +107,8 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
         ObservableList<Folder> foundFolders = FXCollections.observableArrayList();
         for(Folder folder : folders){
             String name = folder.getName();
-            String decNumber = folder.getDecNumber();
-            if((name != null && name.contains(text)) || (decNumber != null && decNumber.contains(text))) {
+
+            if(name != null && name.contains(text)) {
                 foundFolders.add(folder);
             }
         }

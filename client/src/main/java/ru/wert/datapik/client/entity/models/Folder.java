@@ -16,11 +16,10 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"decNumber"}, callSuper = false)
+@EqualsAndHashCode(of = {"productGroup", "name"}, callSuper = false)
 public class Folder extends _BaseEntity implements Item, Comparable<Folder>, Serializable {
 
     private ProductGroup productGroup;
-    private String decNumber;
     private String name;
     private String note;
 
@@ -35,6 +34,6 @@ public class Folder extends _BaseEntity implements Item, Comparable<Folder>, Ser
 
     @Override
     public String toUsefulString() {
-        return decNumber + ", " + name;
+        return name;
     }
 }

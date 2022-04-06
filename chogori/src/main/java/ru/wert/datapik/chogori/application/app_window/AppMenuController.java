@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
+import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.entity.serviceQUICK.*;
 import ru.wert.datapik.client.interfaces.UpdatableTab;
@@ -28,6 +29,7 @@ import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
@@ -436,7 +438,11 @@ public class AppMenuController {
     }
 
     void makeTest(ActionEvent event){
-        System.out.println("Файл = " + System.getProperty("user.home") + "\\AppData\\Local\\BazaPIK\\");
+        List<Folder> folders = CH_QUICK_FOLDERS.findAll();
+        for(Folder f : folders){
+            f.setName(f.getDecNumber() + ", " + f.getName());
+            CH_QUICK_FOLDERS.update(f);
+        }
     }
 
     //########################   ПОМОЩЬ    ###########################

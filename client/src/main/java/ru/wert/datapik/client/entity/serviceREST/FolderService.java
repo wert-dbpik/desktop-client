@@ -58,17 +58,6 @@ public class FolderService implements IFolderService, ItemService<Folder> {
     }
 
     @Override
-    public Folder findByDecNumber(String number) {
-        try {
-            Call<Folder> call = api.getByDecNumber(number);
-            return call.execute().body();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
     public ObservableList<Folder> findAll() {
         try {
             Call<List<Folder>> call = api.getAll();

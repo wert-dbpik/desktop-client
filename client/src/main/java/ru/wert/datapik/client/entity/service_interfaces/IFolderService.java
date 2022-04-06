@@ -12,8 +12,6 @@ public interface IFolderService extends GroupedItemService<Folder> {
 
     Folder findByName(String name);
 
-    Folder findByDecNumber(String number);
-
     List<Folder> findAllByGroupId(Long id);
 
 }
