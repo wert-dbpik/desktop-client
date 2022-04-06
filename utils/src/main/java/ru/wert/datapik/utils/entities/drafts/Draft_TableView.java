@@ -57,7 +57,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private TableColumn<Draft, VBox> tcPassport; //Колонка Идентификатор
     private TableColumn<Draft, Label> tcDraftNumber; //Номер чертежа
     private TableColumn<Draft, Label> tcDraftName; //Наименование чертежа
-    private TableColumn<Draft, String> tcDraftType; //Тип чертежа
+    private TableColumn<Draft, Label> tcDraftType; //Тип чертежа
     private TableColumn<Draft, Label> tcStatus; //Статус
     private TableColumn<Draft, String> tcInitialName; //Наименование файла
     private TableColumn<Draft, String> tcCreationTime; //Дата создания

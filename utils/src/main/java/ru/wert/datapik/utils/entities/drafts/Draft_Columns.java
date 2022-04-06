@@ -149,7 +149,16 @@ public class Draft_Columns {
                 lblStatus.setOnMouseExited(e->{
                     hint.closeHint();
                 });
+
+                switch(status){
+                    case LEGAL:lblStatus.setStyle("-fx-text-fill: darkblue"); break;
+                    case CHANGED:lblStatus.setStyle("-fx-text-fill: saddlebrown");break;
+                    case ANNULLED:lblStatus.setStyle("-fx-text-fill: darkred");break;
+                    default:lblStatus.setStyle("-fx-text-fill: black");
+                }
+
             }
+
             return new ReadOnlyObjectWrapper<>(lblStatus);
         });
         tcStatus.setComparator(createLabelComparator(tcStatus));
@@ -186,15 +195,23 @@ public class Draft_Columns {
     /**
      * ТИП ДОКУМЕНТА И СТРАНИЦА
      */
-    public static TableColumn<Draft, String> createTcDraftType(){
-        TableColumn<Draft, String> tcDraftType = new TableColumn<>("Тип/стр");
+    public static TableColumn<Draft, Label> createTcDraftType(){
+        TableColumn<Draft, Label> tcDraftType = new TableColumn<>("Тип/стр");
         tcDraftType.setCellValueFactory(cd->{
             Draft draft = cd.getValue();
             EDraftType type = EDraftType.getDraftTypeById(draft.getDraftType());
             assert type != null;
             String str = type.getShortName() + "-" + draft.getPageNumber();
+            Label label = new Label(str);
+            switch(type){
+                case DETAIL: label.setStyle("-fx-text-fill: green"); break;
+                case ASSEMBLE: label.setStyle("-fx-text-fill: darkblue"); break;
+                case SPECIFICATION: label.setStyle("-fx-text-fill: brown"); break;
+                default: label.setStyle("-fx-text-fill: black");
+            }
 
-            return new ReadOnlyStringWrapper(str);
+
+            return new ReadOnlyObjectWrapper<>(label);
         });
         tcDraftType.setSortable(false);
         tcDraftType.setMinWidth(10);//80
