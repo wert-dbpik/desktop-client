@@ -114,8 +114,7 @@ public class WindowDecorationController {
      */
     private void changeSizeOfWindow(Stage window, MouseEvent e){
         List<Screen> screenList = Screen.getScreens();
-//        int monitor = ModalWindow.findCurrentMonitorByMousePointer(e);
-        int monitor = ModalWindow.findCurrentMonitorByMainStage((Stage)((Node)e.getSource()).getScene().getWindow());
+        int monitor = ModalWindow.findCurrentMonitorByMousePointer(e);
 
         ((Node)e.getSource()).getScene().getWindow();
 
@@ -124,11 +123,11 @@ public class WindowDecorationController {
         if (isExpanded) {
             if(window.equals(WF_MAIN_STAGE)){
                 //Меняем ширину и высоту окна, если она равна или чуть меньше размеров самого экрана
-                if (windowCurrentWidth < 0.9 * screenList.get(monitor).getBounds().getWidth())
-                    windowCurrentWidth = 0.5 * screenList.get(monitor).getBounds().getWidth();
+                if (windowCurrentWidth < 0.95 * screenList.get(monitor).getBounds().getWidth())
+                    windowCurrentWidth = 0.7 * screenList.get(monitor).getBounds().getWidth();
 
-                if (windowCurrentHeight < 0.9 * screenList.get(monitor).getBounds().getHeight())
-                    windowCurrentWidth = 0.5 * screenList.get(monitor).getBounds().getHeight();
+                if (windowCurrentHeight < 0.95 * screenList.get(monitor).getBounds().getHeight())
+                    windowCurrentHeight = 0.7 * screenList.get(monitor).getBounds().getHeight();
             }
 
             window.setWidth(windowCurrentWidth);
@@ -141,7 +140,7 @@ public class WindowDecorationController {
             this.windowCurrentWidth = window.getWidth();
             this.windowCurrentHeight = window.getHeight();
 
-            setWindowToFullScreen();
+            setWindowToFullScreen(window);
             isExpanded = true;
         }
     }
@@ -149,8 +148,11 @@ public class WindowDecorationController {
     /**
      * Разворачивает окно на весь экран с учетом видимой области
      */
-    private void setWindowToFullScreen(){
-        Rectangle2D visualBounds = findVisualBounds();
+    private void setWindowToFullScreen(Stage window){
+
+        List<Screen> screenList = Screen.getScreens();
+        int monitor = ModalWindow.findCurrentMonitorByMainStage(window);
+        Rectangle2D visualBounds = screenList.get(monitor).getVisualBounds();
 
         window.setX(visualBounds.getMinX());
         window.setY(visualBounds.getMinY());
