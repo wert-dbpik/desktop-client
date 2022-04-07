@@ -117,7 +117,13 @@ public class SettingsController {
         VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
         tfLastVersion.setText(lastVersion.getName());
         tfPathToLastVersion.setText(lastVersion.getPath() == null ? "" : lastVersion.getPath());
-        taLastVersionNote.setText(lastVersion.getNote() == null? "" : lastVersion.getNote());
+        taLastVersionNote.setText(lastVersion.getNote() == null ? "" : lastVersion.getNote());
+        if (!CH_CURRENT_USER_GROUP.isAdministrate()) {
+            tfLastVersion.setDisable(true);
+            tfPathToLastVersion.setDisable(true);
+            taLastVersionNote.setDisable(true);
+            btnPathToLastVersion.setDisable(true);
+        }
 
     }
 
