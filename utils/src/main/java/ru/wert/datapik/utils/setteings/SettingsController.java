@@ -216,7 +216,7 @@ public class SettingsController {
     @FXML
     void choosePathToLastVersion(Event event) {
         FileChooser chooser = new FileChooser();
-        File initFile = new File("\"\\\\\\\\serverhp.ntcpik.com\\\\ntcpik\\\\BazaPIK\\\\\"");
+        File initFile = new File("\\\\\\\\serverhp.ntcpik.com\\\\ntcpik\\\\BazaPIK\\\\");
         chooser.setInitialDirectory(initFile.exists()? initFile : new File("C:\\"));
         File newFile = chooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
         if(newFile == null) return;
