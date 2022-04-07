@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.utils.common.components.FileFwdSlash;
+import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatch;
 import ru.wert.datapik.utils.previewer.PreviewerPatchController;
 import ru.wert.datapik.utils.views.pdf.PDFReader;
@@ -124,7 +125,7 @@ public class AppStatic {
      * Метод открывает список чертежей каждый в отдельной вкладке
      * Допукается список, состоящий из одного чертежа
      */
-    public static void openDraftsInNewTabs(List<Draft> chosenDrafts){
+    public static void openDraftsInNewTabs(List<Draft> chosenDrafts, Draft_TableView tableView){
 
         if(chosenDrafts.isEmpty()) return;
         for(Draft d : chosenDrafts){

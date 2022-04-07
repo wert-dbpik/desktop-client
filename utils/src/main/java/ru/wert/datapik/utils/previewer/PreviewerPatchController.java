@@ -5,10 +5,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -20,6 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.common.components.ZoomableScrollPane;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
+import ru.wert.datapik.utils.entities.drafts.commands._Draft_Commands;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.views.pdf.PDFReader;
 import ru.wert.datapik.utils.views.pdf.readers.PdfIcepdfReader;
@@ -28,8 +30,11 @@ import ru.wert.datapik.utils.views.pdf.readers.PdfJSOldReader;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.enums.EPDFViewer;
+import ru.wert.datapik.winform.statics.WinformStatic;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collections;
 
@@ -55,7 +60,7 @@ public class PreviewerPatchController {
     private PDFReader pdfReader; //см enum PDFViewer
     private StackPane pdfStackPane; //панель на которой работает pdfReader
     private boolean useBtnOpenInNewTab;
-    @Setter private Draft_TableView draftsTableView;
+    @Setter@Getter private Draft_TableView draftsTableView;
     private ObjectProperty<Draft> currentDraft = new SimpleObjectProperty<>();
     public Draft getCurrentDraft(){return this.currentDraft.get();};
 
@@ -82,6 +87,33 @@ public class PreviewerPatchController {
                 lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
         });
 
+        mountContextMenu();
+
+    }
+
+    private void mountContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setAutoHide(true);
+        contextMenu.setHideOnEscape(true);
+
+        MenuItem openInOuterApp = new MenuItem("Открыть в сторонней программе");
+        openInOuterApp.setOnAction(e->{
+            try {
+                File myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
+                        currentDraft.get().getId() + "." + currentDraft.get().getExtension());
+                Desktop.getDesktop().open(myFile);
+            } catch (IOException ex) {
+            }
+        });
+        contextMenu.getItems().add(openInOuterApp);
+
+        paneViewer.setOnContextMenuRequested(event->{
+            contextMenu.show(paneViewer, event.getScreenX(), event.getScreenY());
+        });
+        paneViewer.setOnMousePressed(e->{
+            if(contextMenu.isShowing())
+                contextMenu.hide();
+        });
     }
 
     /**
@@ -90,6 +122,7 @@ public class PreviewerPatchController {
      * @param scene Scene
      */
     public void initPreviewer(EPDFViewer viewer, Scene scene){
+
         imageView = new ImageView();
 
 //        this.draftsTableView = draftsTableView;
@@ -122,7 +155,7 @@ public class PreviewerPatchController {
         btnOpenInNewTab.setTooltip(new Tooltip("Открыть в отдельной вкладке"));
         btnOpenInNewTab.setOnAction(event -> {
             if(currentDraft == null) return;
-            AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()));
+            AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()), draftsTableView);
         });
 
         if (useBtnOpenInNewTab) hboxPreviewerButtons.getChildren().add(btnOpenInNewTab);

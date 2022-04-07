@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import lombok.Getter;
+import ru.wert.datapik.client.entity.models.Draft;
 
 import java.io.IOException;
 
@@ -26,6 +27,10 @@ public class PreviewerPatch {
         }
 
         return this;
+    }
+
+    public Draft getCurrentDraft(){
+        return controller.getCurrentDraft();
     }
 
 }

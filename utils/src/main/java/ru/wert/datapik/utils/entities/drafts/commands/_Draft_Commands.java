@@ -65,7 +65,7 @@ public class _Draft_Commands implements ItemCommands<Draft> {
     }
 
     public void openInTab(Event event){
-        AppStatic.openDraftsInNewTabs(tableView.getSelectionModel().getSelectedItems());
+        AppStatic.openDraftsInNewTabs(tableView.getSelectionModel().getSelectedItems(), tableView);
     }
 
     public void openInOuterApp(Event event){
