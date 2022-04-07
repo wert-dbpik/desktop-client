@@ -50,9 +50,10 @@ public class VersionDesktopService implements IVersionDesktopService, ItemServic
     public VersionDesktop findByName(String name) {
         try {
             Call<VersionDesktop> call = api.getByName(name);
-            return call.execute().body();
+            VersionDesktop res = call.execute().body();
+                if(res != null) return res;
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
         return null;
     }

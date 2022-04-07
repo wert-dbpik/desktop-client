@@ -2,22 +2,28 @@ package ru.wert.datapik.utils.setteings;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.Prefix;
+import ru.wert.datapik.client.entity.models.VersionDesktop;
 import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.utils.common.components.BXMonitor;
 import ru.wert.datapik.utils.common.components.BXPrefix;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EPDFViewer;
+import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_HOME_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_VERSIONS_DESKTOP;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;
 
@@ -63,6 +69,23 @@ public class SettingsController {
     @FXML
     private CheckBox chbValidateDecNumbersEntering;
 
+    // Admin Settings =======================================
+
+    @FXML
+    private Tab tabAdminSettings;
+
+    @FXML
+    private TextField tfLastVersion;
+
+    @FXML
+    private TextField tfPathToLastVersion;
+
+    @FXML
+    private Button btnPathToLastVersion;
+
+    @FXML
+    private TextArea taLastVersionNote;
+
 
     @FXML
     void initialize() {
@@ -90,6 +113,11 @@ public class SettingsController {
         cmbPrefixChooser.getSelectionModel().select(CH_CURRENT_USER_SETTINGS.getDefaultPrefix());
         //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
         chbValidateDecNumbersEntering.setSelected(CH_CURRENT_USER_SETTINGS.isValidateDecNumbers());
+        //ПОСЛЕДНЯЯ ВЕРСИЯ
+        VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
+        tfLastVersion.setText(lastVersion.getName());
+        tfPathToLastVersion.setText(lastVersion.getPath() == null ? "" : lastVersion.getPath());
+        taLastVersionNote.setText(lastVersion.getNote() == null? "" : lastVersion.getNote());
 
     }
 
@@ -114,6 +142,11 @@ public class SettingsController {
         cmbPrefixChooser.getSelectionModel().select(defSettings.getDefaultPrefix());
         //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
         chbValidateDecNumbersEntering.setSelected(defSettings.isValidateDecNumbers());
+        //ПОСЛЕДНЯЯ ВЕРСИЯ
+        VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
+        tfLastVersion.setText(lastVersion.getName());
+        tfPathToLastVersion.setText(lastVersion.getPath() == null ? "" : lastVersion.getPath());
+        taLastVersionNote.setText(lastVersion.getNote() == null? "" : lastVersion.getNote());
 
     }
 
@@ -140,6 +173,29 @@ public class SettingsController {
         CH_CURRENT_USER_SETTINGS.setValidateDecNumbers(chbValidateDecNumbersEntering.isSelected());
         CH_VALIDATE_DEC_NUMBERS = chbValidateDecNumbersEntering.isSelected();
         CH_SETTINGS.update(CH_CURRENT_USER_SETTINGS);
+        //ПОСЛЕДНЯЯ ВЕРСИЯ ПРОГРАММЫ
+        VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
+        VersionDesktop versionDesktop = CH_VERSIONS_DESKTOP.findByName(tfLastVersion.getText().trim());
+        if(versionDesktop != null){
+            versionDesktop.setPath(tfPathToLastVersion.getText().trim());
+            versionDesktop.setNote(taLastVersionNote.getText());
+            CH_VERSIONS_DESKTOP.update(versionDesktop);
+        } else {
+            VersionDesktop version = new VersionDesktop();
+            version.setName(tfLastVersion.getText().trim());
+            if(version.compareTo(AppStatic.findCurrentLastAppVersion()) < 0){
+                Warning1.create("Внимание!",
+                        "Наименование версии не прошло проверку",
+                        "Последняя версия программы " + lastVersion.getName());
+                return;
+            } else {
+                version.setData(LocalDateTime.now().toString());
+                version.setPath(tfPathToLastVersion.getText().trim());
+                version.setNote(taLastVersionNote.getText());
+                CH_VERSIONS_DESKTOP.save(version);
+            }
+        }
+
         closeWindow(event);
     }
 
@@ -150,4 +206,15 @@ public class SettingsController {
         if(newDirectory != null && newDirectory.exists())
             tfPathToNormyMK.setText(newDirectory.toString());
     }
+
+    @FXML
+    void choosePathToLastVersion(Event event) {
+        FileChooser chooser = new FileChooser();
+        File initFile = new File("\"\\\\\\\\serverhp.ntcpik.com\\\\ntcpik\\\\BazaPIK\\\\\"");
+        chooser.setInitialDirectory(initFile.exists()? initFile : new File("C:\\"));
+        File newFile = chooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
+        if(newFile == null) return;
+        tfPathToLastVersion.setText(newFile.toString());
+    }
+
 }

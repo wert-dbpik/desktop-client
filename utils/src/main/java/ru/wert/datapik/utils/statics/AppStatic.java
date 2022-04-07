@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Prefix;
+import ru.wert.datapik.client.entity.models.VersionDesktop;
 import ru.wert.datapik.utils.common.components.FileFwdSlash;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.previewer.PreviewerPatch;
@@ -35,8 +36,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_PREFIXES;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.datapik.winform.statics.WinformStatic.*;
@@ -59,6 +59,11 @@ public class AppStatic {
 
     public static void closeWindow(Event event){
         ((Node) event.getSource()).getScene().getWindow().hide();
+    }
+
+    public static VersionDesktop findCurrentLastAppVersion(){
+        List<VersionDesktop> versions = CH_VERSIONS_DESKTOP.findAll();
+        return versions.get(versions.size() - 1);
     }
 
     public static PDFReader createPDFViewer(StackPane stackPanePreviewer, Scene scene, EPDFViewer viewer){

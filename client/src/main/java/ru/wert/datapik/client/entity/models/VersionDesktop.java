@@ -19,6 +19,7 @@ public class VersionDesktop extends _BaseEntity implements Item, Comparable<Vers
 
     private String data;
     private String name;
+    private String path;
     private String note;
 
     @Override
@@ -26,13 +27,10 @@ public class VersionDesktop extends _BaseEntity implements Item, Comparable<Vers
         return name;
     }
 
-
     @Override
     public int compareTo(@NotNull VersionDesktop o) {
         String[] nn1 = getName().split("\\.", -1);
-        System.out.println(Arrays.toString(nn1));
         String[] nn2 = o.getName().split("\\.", -1);
-        System.out.println(Arrays.toString(nn2));
         for(int i = 0; i < nn1.length; i ++){
             int res = nn1[i].compareTo(nn2[i]);
             if(res != 0)

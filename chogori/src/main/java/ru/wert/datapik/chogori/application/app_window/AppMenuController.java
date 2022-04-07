@@ -8,38 +8,39 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import lombok.Getter;
 import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
-import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.User;
-import ru.wert.datapik.client.entity.serviceQUICK.*;
-import ru.wert.datapik.client.interfaces.UpdatableTab;
 import ru.wert.datapik.utils.help.About;
-import ru.wert.datapik.utils.password.ChangePassword;
 import ru.wert.datapik.utils.search.SearchField;
-import ru.wert.datapik.utils.tabs.AppTab;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.statics.WinformStatic;
-import ru.wert.datapik.winform.warnings.Warning2;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
-import static ru.wert.datapik.utils.statics.AppStatic.closeWindow;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
-import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 public class AppMenuController {
 
@@ -450,16 +451,43 @@ public class AppMenuController {
 
         Menu helpMenu = new Menu("Помощь");
 
+        MenuItem downloadLastVersion = new MenuItem("Скачать последнюю версию");
+        downloadLastVersion.setOnAction(this::downloadLastVersion);
+
         MenuItem aboutItem = new MenuItem("О программе...");
         aboutItem.setOnAction(this::openAbout);
 
         MenuItem test = new MenuItem("ТЕСТ");
         test.setOnAction(this::makeTest);
 
-        helpMenu.getItems().add(aboutItem);
+        helpMenu.getItems().addAll(downloadLastVersion, aboutItem);
 //        helpMenu.getItems().add(test);
 
         return helpMenu;
+    }
+
+    /**
+     * Метод сохраняет файл новой версии программы в выбранную директори
+     * В качествое исходной директории предлагается использовать Рабочиц стол
+     */
+    private void downloadLastVersion(ActionEvent actionEvent){
+
+        try {
+            File sourceFile = new File(AppStatic.findCurrentLastAppVersion().getPath());
+            FileChooser chooser = new FileChooser();
+            chooser.setInitialFileName(sourceFile.toString());
+            File initDir = new File(System.getProperty("user.home") + "/Desktop");
+            if(!initDir.exists()) initDir = new File("C:\\");
+            chooser.setInitialDirectory(initDir);
+            chooser.setTitle("Выберите директорию для сохранения");
+            File destDir = chooser.showSaveDialog(WF_MAIN_STAGE);
+            if(destDir == null) return;
+            File destFile = new File(destDir + File.separator + sourceFile.getName());
+            Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
