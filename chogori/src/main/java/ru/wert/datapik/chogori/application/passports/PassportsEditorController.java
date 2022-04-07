@@ -15,7 +15,7 @@ import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.SearchableTab;
-import ru.wert.datapik.client.interfaces.UpdatableTab;
+import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
@@ -41,7 +41,7 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSE
 
 
 @Slf4j
-public class PassportsEditorController implements SearchableTab, UpdatableTab {
+public class PassportsEditorController implements SearchableTab, UpdatableTabController {
 
 
     @FXML

@@ -65,12 +65,10 @@ public class Passport_Columns {
 
         tcPassportNumber.setCellValueFactory(cd -> {
             Passport passport = cd.getValue();
-            Prefix prefix = passport.getPrefix();
-            String decNumber = passport.getNumber();
-            if(CH_SHOW_PREFIX)
-                if(!prefix.equals(CH_DEFAULT_PREFIX) && !prefix.getName().equals("-"))
-                    decNumber = prefix.getName() + "." + decNumber;
-//            String prefix = passport.getPrefix().getName().equals("-") ? "" : passport.getPrefix().getName() + ".";
+            String prefix = passport.getPrefix().getName().equals("-") ? "" : passport.getPrefix().getName() + ".";
+            if(!CH_SHOW_PREFIX && passport.getPrefix().equals(CH_DEFAULT_PREFIX)) prefix = "";
+            String decNumber = prefix + passport.getNumber();
+
 
             Label lblNumber = new Label(decNumber);
 

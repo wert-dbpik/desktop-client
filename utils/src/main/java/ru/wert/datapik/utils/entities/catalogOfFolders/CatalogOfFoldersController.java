@@ -14,7 +14,7 @@ import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
-import ru.wert.datapik.client.interfaces.UpdatableTab;
+import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import ru.wert.datapik.utils.common.components.*;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
@@ -25,7 +25,7 @@ import ru.wert.datapik.utils.entities.product_groups._ProductGroup_TreeViewPatch
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
-public class CatalogOfFoldersController implements UpdatableTab {
+public class CatalogOfFoldersController implements UpdatableTabController {
     @FXML
     private VBox vbCatalog;
 

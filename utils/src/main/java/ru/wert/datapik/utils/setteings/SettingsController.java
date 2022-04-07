@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.setteings;
 
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -9,15 +10,18 @@ import javafx.stage.FileChooser;
 import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.entity.models.VersionDesktop;
+import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.utils.common.components.BXMonitor;
 import ru.wert.datapik.utils.common.components.BXPrefix;
 import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.utils.tabs.AppTab;
 import ru.wert.datapik.winform.enums.EPDFViewer;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
@@ -25,6 +29,7 @@ import static ru.wert.datapik.utils.images.BtnImages.BTN_HOME_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_VERSIONS_DESKTOP;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;
 
 public class SettingsController {
@@ -202,6 +207,11 @@ public class SettingsController {
             }
         }
 
+        //Обновляем внешний вид табов
+        for(Tab tab: CH_TAB_PANE.getTabs()){
+            if(((AppTab)tab).getTabController() instanceof UpdatableTabController)
+                Platform.runLater(()->((UpdatableTabController) ((AppTab)tab).getTabController()).updateTab());
+        }
         closeWindow(event);
     }
 

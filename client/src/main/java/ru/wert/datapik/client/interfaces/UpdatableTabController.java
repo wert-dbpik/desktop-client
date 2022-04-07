@@ -1,6 +1,6 @@
 package ru.wert.datapik.client.interfaces;
 
-public interface UpdatableTab extends ITabController {
+public interface UpdatableTabController extends ITabController {
 
     void updateTab();
 }

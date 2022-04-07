@@ -1,11 +1,10 @@
 package ru.wert.datapik.utils.tabs;
 
-import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import lombok.Getter;
 import ru.wert.datapik.client.interfaces.ITabController;
-import ru.wert.datapik.client.interfaces.UpdatableTab;
+import ru.wert.datapik.client.interfaces.UpdatableTabController;
 
 public class AppTab extends Tab {
 
@@ -22,8 +21,8 @@ public class AppTab extends Tab {
 
         //Обновление вкладки всякий раз при открытии
         setOnSelectionChanged(event ->{
-            if(tabController instanceof UpdatableTab){
-                ((UpdatableTab)tabController).updateTab();
+            if(tabController instanceof UpdatableTabController){
+                ((UpdatableTabController)tabController).updateTab();
             }
         });
     }

@@ -13,7 +13,7 @@ import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.SearchableTab;
-import ru.wert.datapik.client.interfaces.UpdatableTab;
+import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
 import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
@@ -32,7 +32,7 @@ import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 
 @Slf4j
-public class DraftsEditorController implements SearchableTab, UpdatableTab {
+public class DraftsEditorController implements SearchableTab, UpdatableTabController {
 
 
     @FXML

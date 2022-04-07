@@ -5,7 +5,7 @@ import javafx.concurrent.Task;
 import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.serviceQUICK.*;
-import ru.wert.datapik.client.interfaces.UpdatableTab;
+import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import ru.wert.datapik.utils.tabs.AppTab;
 import ru.wert.datapik.winform.modal.LongProcess;
 
@@ -19,18 +19,18 @@ public class TaskUpdateData extends Task<Void> {
 
     private final double max;
     private double progress;
-    private List<UpdatableTab> updatableTabList;
+    private List<UpdatableTabController> updatableTabControllerList;
 
     public TaskUpdateData() {
         this.progress = 0.0;
 
-        updatableTabList = new ArrayList<>();
+        updatableTabControllerList = new ArrayList<>();
 
         for(Tab tab: CH_TAB_PANE.getTabs()){
-            if(((AppTab)tab).getTabController() instanceof UpdatableTab)
-                updatableTabList.add((UpdatableTab)((AppTab) tab).getTabController());
+            if(((AppTab)tab).getTabController() instanceof UpdatableTabController)
+                updatableTabControllerList.add((UpdatableTabController)((AppTab) tab).getTabController());
         }
-        this.max = 7.0 + updatableTabList.size();
+        this.max = 7.0 + updatableTabControllerList.size();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class TaskUpdateData extends Task<Void> {
         DetailQuickService.reload();
         updateProgress(progress += 1.0, max);
 
-        for(UpdatableTab tab: updatableTabList){
+        for(UpdatableTabController tab: updatableTabControllerList){
             Platform.runLater(tab::updateTab);
             updateProgress(progress += 1.0, max);
         }
