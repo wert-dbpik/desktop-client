@@ -96,8 +96,6 @@ public class ApplicationController {
 
     private void createUserLabel(){
         if (CH_CURRENT_USER_GROUP != null)
-            lblUser.setText(CH_CURRENT_USER.getName() + ", " + CH_CURRENT_USER_GROUP.getName());
-        else
             lblUser.setText(CH_CURRENT_USER.getName());
     }
 
