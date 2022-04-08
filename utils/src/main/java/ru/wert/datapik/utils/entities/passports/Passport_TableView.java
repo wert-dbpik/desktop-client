@@ -3,6 +3,7 @@ package ru.wert.datapik.utils.entities.passports;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,7 +71,10 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
         focusedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "КАРТОЧКА");
         });
+
     }
+
+
 
     /**
      * Конструктор для таблицы без предпросмотра

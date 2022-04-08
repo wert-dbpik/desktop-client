@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Draft;
@@ -160,6 +161,11 @@ public class ExcelEditorNewController {
                     draftsTable.updateView();
                 });
             }
+        });
+
+        excelTable.setOnKeyPressed(e->{
+            if(e.getCode().equals(KeyCode.RIGHT)) draftsTable.getManipulator().goDraftsForward();
+            else if(e.getCode().equals(KeyCode.LEFT)) draftsTable.getManipulator().goDraftsBackward();
         });
     }
 

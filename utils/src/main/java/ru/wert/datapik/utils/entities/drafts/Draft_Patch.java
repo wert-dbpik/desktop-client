@@ -1,5 +1,10 @@
 package ru.wert.datapik.utils.entities.drafts;
 
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.SelectionMode;
@@ -32,24 +37,24 @@ public class Draft_Patch {
         return this;
     }
 
+    /**
+     * В методе отображается самый первый чертеж из списка
+     */
     public void connectWithPreviewer(Draft_TableView draftsTable, PreviewerPatchController previewerPatchController){
-
-        //Для отображения чертежа по умолчанию
         draftsTable.getPreparedList().addListener((observable, oldValue, newValue) -> {
             Draft currentlyShownDraft = previewerPatchController.getCurrentDraft();
             List<Draft> drafts = new ArrayList<>(newValue);
             if (!drafts.isEmpty()) {
                 drafts.sort(Comparators.draftsForPreviewerComparator());
-                Draft defaultShownDraft = drafts.get(0);
-//                    if(currentlyShownDraft != null && !defaultShownDraft.getId().equals(currentlyShownDraft.getId()))
                 AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController);
             } else {
                 //Отображаем NO_IMAGE
                 if(currentlyShownDraft != null)
                     AppStatic.openDraftInPreviewer(null, previewerPatchController);
             }
-
         });
     }
+
+
 
 }

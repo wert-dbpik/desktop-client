@@ -2,6 +2,9 @@ package ru.wert.datapik.chogori.application.passports;
 
 
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -12,6 +15,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.SearchableTab;
@@ -126,6 +130,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
         draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
+
         //Для отображения чертежа по умолчанию
         draftPatch.connectWithPreviewer(draftsTable, previewerPatchController);
 
@@ -164,6 +169,11 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
                     e.printStackTrace();
                 }
             }).start();
+        });
+
+        passportsTable.setOnKeyPressed(e->{
+            if(e.getCode().equals(KeyCode.RIGHT)) draftsTable.getManipulator().goDraftsForward();
+            else if(e.getCode().equals(KeyCode.LEFT)) draftsTable.getManipulator().goDraftsBackward();
         });
 
         stpPassports.getChildren().add(passportsPatch.getParent());

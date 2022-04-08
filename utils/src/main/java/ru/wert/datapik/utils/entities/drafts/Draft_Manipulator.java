@@ -97,4 +97,31 @@ public class Draft_Manipulator {
         }
 
     }
+
+    public void goDraftsForward() {
+        int index = tableView.getSelectionModel().getSelectedIndex();
+        int rows = tableView.getItems().size();
+        tableView.getSelectionModel().clearSelection(index);
+        if(index == -1) {
+            if (rows == 1)
+                tableView.getSelectionModel().selectFirst();
+            else
+                tableView.getSelectionModel().select(1);
+        }else {
+            if(index == rows-1) index=-1;
+            tableView.getSelectionModel().select(index + 1);
+        }
+    }
+
+    public void goDraftsBackward() {
+        int index = tableView.getSelectionModel().getSelectedIndex();
+        int rows = tableView.getItems().size();
+        tableView.getSelectionModel().clearSelection(index);
+        if(index == -1)
+            tableView.getSelectionModel().select(rows-1);
+        else {
+            if(index == 0) index=rows;
+            tableView.getSelectionModel().select(index - 1);
+        }
+    }
 }
