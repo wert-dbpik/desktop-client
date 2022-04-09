@@ -43,6 +43,9 @@ public class SettingsController {
     @FXML
     private Button btnCancel;
 
+    @FXML
+    private TabPane tabPane;
+
     // Common Settings ========================================
 
     @FXML
@@ -96,7 +99,11 @@ public class SettingsController {
     void initialize() {
 
         //Отключаем вкладку с настройками Редактирования чертежей
-        if(!CH_CURRENT_USER_GROUP.isEditDrafts()) tabDraftsSettings.setDisable(true);
+        if(!CH_CURRENT_USER_GROUP.isEditDrafts()) tabPane.getTabs().remove(tabDraftsSettings);
+        else{
+            //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
+            chbValidateDecNumbersEntering.setSelected(CH_CURRENT_USER_SETTINGS.isValidateDecNumbers());
+        }
         //КНОПКА СБРОС В ЗНАЧЕНИЯ ПО УМОЛЧАНИЮ
         btnReset.setText("");
         btnReset.setGraphic(new ImageView(BTN_HOME_IMG));
@@ -116,8 +123,6 @@ public class SettingsController {
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         new BXPrefix().create(cmbPrefixChooser);
         cmbPrefixChooser.getSelectionModel().select(CH_CURRENT_USER_SETTINGS.getDefaultPrefix());
-        //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
-        chbValidateDecNumbersEntering.setSelected(CH_CURRENT_USER_SETTINGS.isValidateDecNumbers());
         //ПОСЛЕДНЯЯ ВЕРСИЯ
         VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
         tfLastVersion.setText(lastVersion.getName());
