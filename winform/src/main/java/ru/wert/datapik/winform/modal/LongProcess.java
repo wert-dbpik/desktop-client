@@ -11,6 +11,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.Getter;
 
 import java.io.IOException;
 
@@ -19,6 +20,7 @@ import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;
 
 public class LongProcess extends ModalWindow{
     private static Stage stage;
+    public static ProgressBar progressBar;
 
     public static void create(String title, Task<Void> task){
 
@@ -45,7 +47,8 @@ public class LongProcess extends ModalWindow{
                 closeWindow(event);
             }));
 
-            ProgressBar progressBar = (ProgressBar)parent.lookup("#progressBar");
+
+            progressBar = (ProgressBar)parent.lookup("#progressBar");
             progressBar.progressProperty().bind(task.progressProperty());
 
             setMovingPane(parent);

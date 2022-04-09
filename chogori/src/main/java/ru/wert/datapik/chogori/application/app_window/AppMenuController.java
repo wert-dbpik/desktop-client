@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.application.app_window;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -20,7 +21,9 @@ import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.search.SearchField;
 import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.winform.modal.LongProcess;
 import ru.wert.datapik.winform.statics.WinformStatic;
+import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.File;
@@ -346,22 +349,13 @@ public class AppMenuController {
      * -- ОТКРЫТЬ ФАЙЛ EXCEL
      */
     public void openExcelFile(ActionEvent event) {
-//        EditorPatch.getInstance().invokeFileChooser();
         File chosenFile = new ExcelChooser().choose();
         if(chosenFile == null) return;
+        Task<Void> openExcelFile = new TaskOpenExcelFile(chosenFile);
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/excel/excelEditorNew.fxml"));
-            Parent parent = loader.load();
-            ExcelEditorNewController controller = loader.getController();
-            controller.init(chosenFile);
-//            String fileName = controller.getFileName();
-
-            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-            CH_TAB_PANE.createNewTab(chosenFile.getName(), parent, true, null, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Thread t = new Thread(openExcelFile);
+        t.setDaemon(true);
+        t.start();
     }
 
     //########################   АДМИН    ###########################
