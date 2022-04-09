@@ -45,6 +45,15 @@ import static ru.wert.datapik.utils.images.BtnImages.BTN_OPEN_IN_NEW_TAB_IMG;
 @Slf4j
 public class PreviewerPatchController {
 
+    @Getter@FXML
+    private HBox patchHeader;
+
+    @FXML
+    private Label bracket1;
+
+    @FXML
+    private Label bracket2;
+
     @FXML
     private StackPane paneViewer;
 
@@ -53,6 +62,9 @@ public class PreviewerPatchController {
 
     @FXML
     private Label lblDraftInfo;
+
+    @Getter@FXML
+    private Label lblCount;
 
     ImageView imageView;
 
@@ -121,7 +133,8 @@ public class PreviewerPatchController {
      * @param viewer PDFViewer конкретный движок, с помощью которого открывается PDF
      * @param scene Scene
      */
-    public void initPreviewer(EPDFViewer viewer, Scene scene){
+    public void initPreviewer(EPDFViewer viewer, Scene scene, boolean useBrackets){
+        showBrackets(useBrackets);
 
         imageView = new ImageView();
 
@@ -138,10 +151,17 @@ public class PreviewerPatchController {
 
     }
 
-    public void initPreviewerToolBar(boolean useBtnOpenInNewTab){
+    public void initPreviewerToolBar(boolean useBtnOpenInNewTab, boolean useBrackets){
         this.useBtnOpenInNewTab = useBtnOpenInNewTab;
-
+        showBrackets(useBrackets);
         createPreviewerToolBar();
+    }
+
+    private void showBrackets(boolean useBrackets) {
+        if(!useBrackets) {
+            patchHeader.getChildren().remove(bracket1);
+            patchHeader.getChildren().remove(bracket2);
+        }
     }
 
     /**

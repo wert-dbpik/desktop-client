@@ -2,6 +2,7 @@ package ru.wert.datapik.chogori.application.passports;
 
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -69,6 +70,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
     private PreviewerPatchController previewerPatchController;
     private Draft_TableView draftsTable;
     private Draft_Patch draftPatch;
+    private Draft_PatchController draftPatchController;
     private Passport_Patch passportsPatch;
     private CatalogOfFoldersPatch catalogPatch;
 
@@ -91,7 +93,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
 
     private void loadStpPreviewer() {
         previewerPatchController =
-                CommonUnits.loadStpPreviewer(stpPreviewer, sppHorizontal, sppVertical); //Предпросмотр
+                CommonUnits.loadStpPreviewer(stpPreviewer, sppHorizontal, sppVertical, true); //Предпросмотр
     }
 
 
@@ -120,7 +122,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
 
         draftPatch = new Draft_Patch().create();
 
-        Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
+        draftPatchController = draftPatch.getDraftPatchController();
         draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.MULTIPLE);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, true, true, true, false,
@@ -130,6 +132,8 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
         draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
+        previewerPatchController.getLblCount().textProperty().bind(
+                Bindings.convert(draftsTable.getPreparedList().sizeProperty()));
 
         //Для отображения чертежа по умолчанию
         draftPatch.connectWithPreviewer(draftsTable, previewerPatchController);

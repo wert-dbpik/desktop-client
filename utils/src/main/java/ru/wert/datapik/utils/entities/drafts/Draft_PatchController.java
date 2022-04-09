@@ -27,7 +27,7 @@ public class Draft_PatchController {
     @FXML
     private Label lblShownFolder;
 
-    @FXML
+    @Getter @FXML
     private Label lblSourceOfDrafts;
 
 

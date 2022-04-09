@@ -2,6 +2,7 @@ package ru.wert.datapik.chogori.application.drafts;
 
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -76,7 +77,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
      */
     private void createPreviewer() {
         previewerPatchController =
-                CommonUnits.loadStpPreviewer(spPreviewer, sppHorizontal, sppVertical); //Предпросмотр
+                CommonUnits.loadStpPreviewer(spPreviewer, sppHorizontal, sppVertical, false); //Предпросмотр
     }
 
     /**
@@ -97,6 +98,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
 
         //Сообщаем Previewer ссылку на tableView
         previewerPatchController.setDraftsTableView(draftsTable);
+
         //Монтируем
         spDrafts.getChildren().add(draftPatch.getParent());
 

@@ -21,6 +21,13 @@
                         <Insets bottom="10.0" top="5.0" />
                      </VBox.margin>
                   </Label>
+                  <Label fx:id="bracket1" text="(всего: ">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="lblCount" />
+                  <Label fx:id="bracket2" text=")" />
                   <Label fx:id="lblDraftInfo" text="..." />
                   <HBox fx:id="hboxPreviewerButtons" alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                      <padding>

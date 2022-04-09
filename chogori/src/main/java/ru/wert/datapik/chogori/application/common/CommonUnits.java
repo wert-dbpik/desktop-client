@@ -47,11 +47,11 @@ public class CommonUnits {
     /**
      * ПРЕДПРОСМОТРЩИК
      */
-    public static PreviewerPatchController loadStpPreviewer(StackPane stpPreviewer, SplitPane sppHorizontal, SplitPane sppVertical) {
+    public static PreviewerPatchController loadStpPreviewer(StackPane stpPreviewer, SplitPane sppHorizontal, SplitPane sppVertical, boolean useBrackets) {
         PreviewerPatch previewerPatch = new PreviewerPatch().create();
         PreviewerPatchController previewerPatchController = previewerPatch.getController();
-        previewerPatchController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
-        previewerPatchController.initPreviewerToolBar(true);
+        previewerPatchController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene(), useBrackets);
+        previewerPatchController.initPreviewerToolBar(true, useBrackets);
         previewerPatchController.getHboxPreviewerButtons().getChildren().add(CommonUnits.createExpandPreviewButton(sppHorizontal, sppVertical));
 
         stpPreviewer.getChildren().add(previewerPatch.getParent());

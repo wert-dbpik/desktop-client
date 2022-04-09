@@ -136,7 +136,7 @@ public class AppStatic {
         for(Draft d : chosenDrafts){
             PreviewerPatch previewerPatch = new PreviewerPatch().create();
             PreviewerPatchController previewerController = previewerPatch.getController();
-            previewerController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
+            previewerController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene(), false);
 
             String tabName = d.toUsefulString() +
                     " (" + EDraftType.getDraftTypeById(d.getDraftType()) + "-" + d.getPageNumber() + ")";

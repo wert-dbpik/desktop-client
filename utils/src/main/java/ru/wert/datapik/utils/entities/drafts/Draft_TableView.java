@@ -222,7 +222,11 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         }
 
         filterList(list);
-        preparedList.set(FXCollections.observableArrayList(list));
+        List<Draft> finalList = list;
+        Platform.runLater(()->{
+            preparedList.set(FXCollections.observableArrayList(finalList));
+        });
+
 
         return list;
     }

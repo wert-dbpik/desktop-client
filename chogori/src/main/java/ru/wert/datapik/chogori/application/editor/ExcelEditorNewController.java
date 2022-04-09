@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori.application.editor;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -97,6 +98,7 @@ public class ExcelEditorNewController {
         loadStackPaneDrafts();
         loadStackPaneExcel();
         loadStackPaneInfo();
+
     }
 
     /**
@@ -104,7 +106,7 @@ public class ExcelEditorNewController {
      */
     private void loadStackPanePreviewer() {
         previewerPatchController =
-                CommonUnits.loadStpPreviewer(stpPreviewer, sppHorizontal, sppVertical); //Предпросмотр
+                CommonUnits.loadStpPreviewer(stpPreviewer, sppHorizontal, sppVertical, true); //Предпросмотр
     }
 
     /**
@@ -187,6 +189,9 @@ public class ExcelEditorNewController {
         draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
         draftPatch.connectWithPreviewer(draftsTable, previewerPatchController);
+
+        previewerPatchController.getLblCount().textProperty().bind(
+                Bindings.convert(draftsTable.getPreparedList().sizeProperty()));
 
         stpInfo.getChildren().add(draftPatch.getParent());
 
