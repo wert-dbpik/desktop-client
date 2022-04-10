@@ -10,6 +10,7 @@ public class BtnImages {
     public static Image BTN_ROLLUP_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/rollup(32x32).png"), size, size, true, true);
     public static Image BTN_ROLLDOWN_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/rolldown(32x32).png"), size, size, true, true);
     public static Image BTN_OPEN_IN_NEW_TAB_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/open-in-window(32x32).png"), size, size, true, true);
+    public static Image BTN_OPEN_IN_OUTER_APP_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/openInApp2(32x32).png"), size, size, true, true);
     public static Image BTN_CLEAN_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/clear(32x32).png"), size, size, true, true);
     public static Image BTN_CLEAN_IMG_W = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/clear(32x32)w.png"), size, size, true, true);
     public static Image BTN_CHEVRON_UP_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/chevron-up(32x32).png"), size, size, true, true);

@@ -3,7 +3,9 @@ package ru.wert.datapik.utils.previewer;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -33,13 +35,15 @@ import ru.wert.datapik.winform.enums.EPDFViewer;
 import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collections;
+import java.util.List;
 
 import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
-import static ru.wert.datapik.utils.images.BtnImages.BTN_OPEN_IN_NEW_TAB_IMG;
+import static ru.wert.datapik.utils.images.BtnImages.*;
 
 //import ru.wert.datapik.client.entity.models.Draft;
 @Slf4j
@@ -68,10 +72,12 @@ public class PreviewerPatchController {
 
     ImageView imageView;
 
-
+    ContextMenu contextMenu;
     private PDFReader pdfReader; //см enum PDFViewer
     private StackPane pdfStackPane; //панель на которой работает pdfReader
     private boolean useBtnOpenInNewTab;
+    private boolean useBtnOpenInOuterApp;
+    private boolean useBtnShowInfo;
     @Setter@Getter private Draft_TableView draftsTableView;
     private ObjectProperty<Draft> currentDraft = new SimpleObjectProperty<>();
     public Draft getCurrentDraft(){return this.currentDraft.get();};
@@ -101,31 +107,31 @@ public class PreviewerPatchController {
 
         mountContextMenu();
 
+
     }
 
     private void mountContextMenu() {
-        ContextMenu contextMenu = new ContextMenu();
-        contextMenu.setAutoHide(true);
-        contextMenu.setHideOnEscape(true);
+        contextMenu = new ContextMenu();
+//        contextMenu.setAutoHide(true);
+//        contextMenu.setHideOnEscape(true);
 
         MenuItem openInOuterApp = new MenuItem("Открыть в сторонней программе");
         openInOuterApp.setOnAction(e->{
-            try {
-                File myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
-                        currentDraft.get().getId() + "." + currentDraft.get().getExtension());
-                Desktop.getDesktop().open(myFile);
-            } catch (IOException ex) {
-            }
+
         });
         contextMenu.getItems().add(openInOuterApp);
+
 
         paneViewer.setOnContextMenuRequested(event->{
             contextMenu.show(paneViewer, event.getScreenX(), event.getScreenY());
         });
-        paneViewer.setOnMousePressed(e->{
-            if(contextMenu.isShowing())
+
+        paneViewer.setOnMouseReleased(e->{
+            if (contextMenu.isShowing())
                 contextMenu.hide();
         });
+
+
     }
 
     /**
@@ -133,12 +139,10 @@ public class PreviewerPatchController {
      * @param viewer PDFViewer конкретный движок, с помощью которого открывается PDF
      * @param scene Scene
      */
-    public void initPreviewer(EPDFViewer viewer, Scene scene, boolean useBrackets){
-        showBrackets(useBrackets);
+    public void initPreviewer(EPDFViewer viewer, Scene scene){
 
         imageView = new ImageView();
 
-//        this.draftsTableView = draftsTableView;
         pdfStackPane = new StackPane();
         switch(viewer){
             case NEW_PDF_JS: pdfReader = new PdfJSNewReader(pdfStackPane); break; //Просмотр новым pdf.js
@@ -151,8 +155,10 @@ public class PreviewerPatchController {
 
     }
 
-    public void initPreviewerToolBar(boolean useBtnOpenInNewTab, boolean useBrackets){
+    public void initPreviewerToolBar(boolean useBtnOpenInNewTab, boolean useBtnOpenInOuterApp, boolean useBtnShowInfo, boolean useBrackets){
         this.useBtnOpenInNewTab = useBtnOpenInNewTab;
+        this.useBtnOpenInOuterApp = useBtnOpenInOuterApp;
+        this.useBtnShowInfo = useBtnShowInfo;
         showBrackets(useBrackets);
         createPreviewerToolBar();
     }
@@ -178,6 +184,32 @@ public class PreviewerPatchController {
             AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()), draftsTableView);
         });
 
+        //ОТКРЫТЬ В СТОРОННЕМ ПРИЛОЖЕНИИ
+        Button openInOuterApp = new Button();
+        openInOuterApp.setId("patchButton");
+        openInOuterApp.setGraphic(new ImageView(BTN_OPEN_IN_OUTER_APP_IMG));
+        openInOuterApp.setTooltip(new Tooltip("Открыть в отдельном приложении"));
+        openInOuterApp.setOnAction(event -> {
+            if(currentDraft == null) return;
+            try {
+                File myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
+                        currentDraft.get().getId() + "." + currentDraft.get().getExtension());
+                Desktop.getDesktop().open(myFile);
+            } catch (IOException ex) {
+            }
+        });
+
+        Button btnShowInfo = new Button();
+        btnShowInfo.setId("patchButton");
+        btnShowInfo.setGraphic(new ImageView(BTN_INFO_IMG));
+        btnShowInfo.setTooltip(new Tooltip("Показать информацию"));
+        btnShowInfo.setOnAction(event -> {
+            if(currentDraft == null) return;
+            AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()), draftsTableView);
+        });
+
+        if (useBtnShowInfo) hboxPreviewerButtons.getChildren().add(btnShowInfo);
+        if (useBtnOpenInOuterApp) hboxPreviewerButtons.getChildren().add(openInOuterApp);
         if (useBtnOpenInNewTab) hboxPreviewerButtons.getChildren().add(btnOpenInNewTab);
 
     }
