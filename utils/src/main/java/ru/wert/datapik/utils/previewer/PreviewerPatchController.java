@@ -106,33 +106,6 @@ public class PreviewerPatchController {
                 lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
         });
 
-        mountContextMenu();
-
-
-    }
-
-    private void mountContextMenu() {
-        contextMenu = new ContextMenu();
-//        contextMenu.setAutoHide(true);
-//        contextMenu.setHideOnEscape(true);
-
-        MenuItem openInOuterApp = new MenuItem("Открыть в сторонней программе");
-        openInOuterApp.setOnAction(e->{
-
-        });
-        contextMenu.getItems().add(openInOuterApp);
-
-
-        paneViewer.setOnContextMenuRequested(event->{
-            contextMenu.show(paneViewer, event.getScreenX(), event.getScreenY());
-        });
-
-        paneViewer.setOnMouseReleased(e->{
-            if (contextMenu.isShowing())
-                contextMenu.hide();
-        });
-
-
     }
 
     /**

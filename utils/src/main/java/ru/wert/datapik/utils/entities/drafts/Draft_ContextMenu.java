@@ -29,6 +29,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem addFolder; //Добавить папку
     private MenuItem openInTab; //Открыть в отдельной вкладке
     private MenuItem openInOuterApp; //Открыть во внешнем приложении
+    private MenuItem showInfo; //Открыть информацию о чертеже
 
     //Условие, при котором список составлен только для одной папки
     private boolean condition;
@@ -91,6 +92,8 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         //=============================
         boolean extraOpenInTab = false;
         boolean extraOpenInOuterApp = false;
+        //================================
+        boolean extraShowInfo = false;
 
         addFolder = new MenuItem("Добавить папку с чертежами");
         cutDrafts = new MenuItem("Вырезать");
@@ -100,7 +103,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         nullifyDraft = new MenuItem("Аннулировать");
         openInTab = new MenuItem("Открыть в отдельной вкладке" );
         openInOuterApp = new MenuItem("Открыть во внешней программе" );
-
+        showInfo = new MenuItem("Инфо");
 
         addFolder.setOnAction(commands::addFromFolder);
         cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
@@ -110,6 +113,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         nullifyDraft.setOnAction(commands::nullifyDraft);
         openInTab.setOnAction(commands::openInTab);
         openInOuterApp.setOnAction(commands::openInOuterApp);
+        showInfo.setOnAction(commands::showInfo);
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
@@ -121,6 +125,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                     extraPasteDrafts = true;
 
             } else if (selectedDrafts.size() == 1) {
+                extraShowInfo = true;//ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
                 extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
                 extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
                 //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
@@ -165,10 +170,12 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if (extraReplaceDraft) extraItems.add(replaceDraft);//ЗАМЕНИТЬ
         if (extraNullifyDraft) extraItems.add(nullifyDraft);//АННУЛИРОВАТЬ
 //
-        if (extraOpenInTab && (extraRenameDraft || extraReplaceDraft || extraNullifyDraft)) extraItems.add(new SeparatorMenuItem());//==================
+        if ((extraOpenInTab || extraOpenInOuterApp) && (extraRenameDraft || extraReplaceDraft || extraNullifyDraft)) extraItems.add(new SeparatorMenuItem());//==================
         if (extraOpenInTab) extraItems.add(openInTab);//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         if (extraOpenInOuterApp) extraItems.add(openInOuterApp);//ОТКРЫТЬ ВО ВНЕШНЕЙ ПРОГРАММЕ
 
+        if (extraShowInfo) extraItems.add(new SeparatorMenuItem());//==================
+        if (extraShowInfo) extraItems.add(showInfo); //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
 
         return extraItems;
     }

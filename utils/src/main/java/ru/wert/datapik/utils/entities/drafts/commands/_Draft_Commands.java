@@ -1,10 +1,12 @@
 package ru.wert.datapik.utils.entities.drafts.commands;
 
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
+import ru.wert.datapik.utils.entities.drafts.info.DraftInfoPatch;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.statics.WinformStatic;
 
@@ -80,4 +82,8 @@ public class _Draft_Commands implements ItemCommands<Draft> {
         }
     }
 
+    public void showInfo(Event event) {
+        Draft draft = tableView.getSelectionModel().getSelectedItem();
+        new DraftInfoPatch().create(draft, null);
+    }
 }
