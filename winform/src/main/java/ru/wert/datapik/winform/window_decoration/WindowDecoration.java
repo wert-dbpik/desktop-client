@@ -63,8 +63,6 @@ public class WindowDecoration {
         this.resizable = resizable;
         log.debug("{} создан", this.getClass().getSimpleName());
         createWindow(owner);
-        mountResizeButtons();
-
     }
 
 
@@ -101,6 +99,7 @@ public class WindowDecoration {
             window.sizeToScene();
             window.setResizable(this.resizable);
 
+            mountResizeButtons();
 
             if(!waiting) window.show();
 
