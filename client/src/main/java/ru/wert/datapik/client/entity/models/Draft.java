@@ -49,7 +49,8 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
     }
 
     public String getDecimalNumber(){
-        return "";
+        String prefix = passport.getPrefix().getName().equals("-") ? "" : passport.getPrefix().getName() + ".";
+        return prefix + passport.getNumber();
     }
 
     @Override

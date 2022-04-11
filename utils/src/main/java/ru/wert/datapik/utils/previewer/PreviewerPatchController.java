@@ -24,6 +24,7 @@ import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.common.components.ZoomableScrollPane;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.drafts.commands._Draft_Commands;
+import ru.wert.datapik.utils.entities.drafts.info.DraftInfoPatch;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.views.pdf.PDFReader;
 import ru.wert.datapik.utils.views.pdf.readers.PdfIcepdfReader;
@@ -180,7 +181,7 @@ public class PreviewerPatchController {
         btnOpenInNewTab.setGraphic(new ImageView(BTN_OPEN_IN_NEW_TAB_IMG));
         btnOpenInNewTab.setTooltip(new Tooltip("Открыть в отдельной вкладке"));
         btnOpenInNewTab.setOnAction(event -> {
-            if(currentDraft == null) return;
+            if(currentDraft.get() == null) return;
             AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()), draftsTableView);
         });
 
@@ -190,7 +191,7 @@ public class PreviewerPatchController {
         openInOuterApp.setGraphic(new ImageView(BTN_OPEN_IN_OUTER_APP_IMG));
         openInOuterApp.setTooltip(new Tooltip("Открыть в отдельном приложении"));
         openInOuterApp.setOnAction(event -> {
-            if(currentDraft == null) return;
+            if(currentDraft.get() == null) return;
             try {
                 File myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
                         currentDraft.get().getId() + "." + currentDraft.get().getExtension());
@@ -204,8 +205,8 @@ public class PreviewerPatchController {
         btnShowInfo.setGraphic(new ImageView(BTN_INFO_IMG));
         btnShowInfo.setTooltip(new Tooltip("Показать информацию"));
         btnShowInfo.setOnAction(event -> {
-            if(currentDraft == null) return;
-            AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()), draftsTableView);
+            if(currentDraft.get() == null) return;
+            new DraftInfoPatch().create(currentDraft.get(), event);
         });
 
         if (useBtnShowInfo) hboxPreviewerButtons.getChildren().add(btnShowInfo);

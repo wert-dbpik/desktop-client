@@ -361,5 +361,27 @@
 }
 
 
+#apInfo .text-area {
+    -fx-background-insets: 0;
+    -fx-background-color: transparent, -fx-my-black, transparent, -fx-my-black;
+}
+
+#apInfo .text-area .content {
+    -fx-background-color: transparent, -fx-my-black, transparent, -fx-my-black;
+}
+
+#apInfo .text-area:focused .content {
+    -fx-background-color: transparent, -fx-my-black, transparent, -fx-my-black;
+}
+
+#apInfo .text-area:focused {
+    -fx-highlight-fill: #7ecfff;
+}
+
+#apInfo .text-area .content {
+    -fx-text-fill: white;
+    /*-fx-highlight-fill: #7ecfff;*/
+}
+
 
 /*############################################################################################*/
