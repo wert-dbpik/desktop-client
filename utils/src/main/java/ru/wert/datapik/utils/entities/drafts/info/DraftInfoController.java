@@ -67,13 +67,4 @@ public class DraftInfoController {
 
     }
 
-
-
-
-
-
-
-
-
-
 }
