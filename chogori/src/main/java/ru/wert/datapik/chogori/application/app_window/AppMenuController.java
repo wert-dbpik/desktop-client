@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.editor.ExcelChooser;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
 import ru.wert.datapik.client.entity.models.User;
@@ -44,7 +45,7 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
-
+@Slf4j
 public class AppMenuController {
 
     @FXML
@@ -465,22 +466,28 @@ public class AppMenuController {
      * В качествое исходной директории предлагается использовать Рабочиц стол
      */
     private void downloadLastVersion(ActionEvent actionEvent){
-
-        try {
-            File sourceFile = new File(AppStatic.findCurrentLastAppVersion().getPath());
-            FileChooser chooser = new FileChooser();
-            chooser.setInitialFileName(sourceFile.toString());
-            File initDir = new File(System.getProperty("user.home") + "/Desktop");
-            if(!initDir.exists()) initDir = new File("C:\\");
-            chooser.setInitialDirectory(initDir);
-            chooser.setTitle("Выберите директорию для сохранения");
-            File destDir = chooser.showSaveDialog(WF_MAIN_STAGE);
-            if(destDir == null) return;
-            File destFile = new File(destDir + File.separator + sourceFile.getName());
-            Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
+        File sourceFile = new File(AppStatic.findCurrentLastAppVersion().getPath());
+        if (!sourceFile.exists()) {
+            Warning1.create("ОШИБКА!", "Не удалось скачать новую версию!", "Файл в репозитории отсутствует");
+            log.error("File of new version doesn't exist in repository '{}'", sourceFile);
+            return;
         }
+        FileChooser chooser = new FileChooser();
+        chooser.setInitialFileName(sourceFile.getName());
+        File initDir = new File(System.getProperty("user.home") + "/Desktop");
+        if (!initDir.exists()) initDir = new File("C:\\");
+        chooser.setInitialDirectory(initDir);
+        chooser.setTitle("Выберите директорию для сохранения");
+        File destFile = chooser.showSaveDialog(WF_MAIN_STAGE);
+        if (destFile == null) return;
+        log.debug("downloadLastVersion : sourceFile = " + sourceFile);
+        log.debug("downloadLastVersion : sourceFile = " + destFile);
+
+
+        Task<Void> downloadTask = new TaskDownloadNewVersion(sourceFile, destFile);
+        Thread t = new Thread(downloadTask);
+        t.setDaemon(true);
+        t.start();
 
     }
 
