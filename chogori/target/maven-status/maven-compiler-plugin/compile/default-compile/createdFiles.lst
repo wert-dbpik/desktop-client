@@ -12,4 +12,5 @@ ru\wert\datapik\chogori\LoginController.class
 ru\wert\datapik\chogori\application\common\CommonUnits.class
 ru\wert\datapik\chogori\AppPreloader.class
 ru\wert\datapik\chogori\application\app_window\TaskUpdateData.class
+ru\wert\datapik\chogori\application\app_window\TaskOpenExcelFile.class
 ru\wert\datapik\chogori\application\app_window\ApplicationController$1.class

@@ -153,8 +153,8 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                 }
             }
         } else{
-            if(selectedDrafts.size() > 0)
-                extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
+            if(selectedDrafts.size() == 1) extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
+            if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         }
 
         List<MenuItem> extraItems = new ArrayList<>();

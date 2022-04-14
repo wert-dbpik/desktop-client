@@ -84,7 +84,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         super(promptText);
         this.previewerController = previewerController;
 
-        if(CH_CURRENT_USER_GROUP.isEditDrafts()) manipulator = new Draft_Manipulator(this);
+        manipulator = new Draft_Manipulator(this);
 
         commands = new _Draft_Commands(this);
 
