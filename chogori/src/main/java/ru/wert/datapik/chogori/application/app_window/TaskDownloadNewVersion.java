@@ -28,7 +28,7 @@ public class TaskDownloadNewVersion extends Task<Void> {
     protected Void call() throws Exception {
 
         Platform.runLater(()->{
-            LongProcess.create("ЗАГРУЗКА НОВОЙ ВЕРСИИ", this);
+            LongProcess.create("СКАЧИВАНИЕ НОВОЙ ВЕРСИИ", this);
         });
 
         Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);

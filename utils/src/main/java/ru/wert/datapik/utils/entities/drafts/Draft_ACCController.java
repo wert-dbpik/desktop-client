@@ -393,7 +393,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param event
      */
     @FXML
-    void ok(ActionEvent event) {
+    void ok(Event event) {
         this.okEvent = event;
         if (notNullFieldEmpty()) {
             Warning1.create($ATTENTION, "Некоторые поля не заполнены!", "Заполните все поля");
@@ -1139,14 +1139,20 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     public void changeOldItemFields(Draft oldItem) {
         if (!oldItem.getPassport().getPrefix().equals(bxPrefix.getValue()) ||
                 !oldItem.getPassport().getNumber().equals(txtNumber.getText()) ||
-                !oldItem.getPassport().getName().equals(txtName.getText()))
-
-            oldItem.setPassport(new Passport(
-                    bxPrefix.getValue(),
-                    txtNumber.getText().trim(),
-                    txtName.getText().trim(),
-                    new ArrayList<>())
-            );
+                !oldItem.getPassport().getName().equals(txtName.getText())) {
+            //Проверяем наличие готового пасспорта в базе
+            Passport p = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(bxPrefix.getValue(), txtNumber.getText().trim());
+            if(p == null) {
+                oldItem.setPassport(new Passport(
+                        bxPrefix.getValue(),
+                        txtNumber.getText().trim(),
+                        txtName.getText().trim(),
+                        new ArrayList<>())
+                );
+            } else {
+                oldItem.setPassport(p);
+            }
+        }
 
         oldItem.setDraftType(bxType.getValue().getTypeId());
         oldItem.setPageNumber(bxPage.getValue());

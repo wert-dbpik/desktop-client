@@ -49,10 +49,13 @@ public class TaskOpenExcelFile extends Task<Void> {
     @Override
     protected void failed() {
         super.failed();
-        Warning1.create("ОШИБКА!",
-                "Не удалось загрузить файл",
-                "Скорее всего файл не соответствует \nстандарту оформления");
         LongProcess.close();
+        Platform.runLater(()->{
+            Warning1.create("ОШИБКА!",
+                    "Не удалось загрузить файл",
+                    "Возможно, файл не соответствует стандарту оформления\n" +
+                            "или произошел конфликт с версией установленного Excel");
+        });
 
     }
 
