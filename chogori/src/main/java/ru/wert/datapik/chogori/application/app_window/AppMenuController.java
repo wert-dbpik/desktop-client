@@ -9,6 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -27,11 +31,13 @@ import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -449,13 +455,16 @@ public class AppMenuController {
         MenuItem downloadLastVersion = new MenuItem("Скачать последнюю версию");
         downloadLastVersion.setOnAction(this::downloadLastVersion);
 
+        MenuItem helpVideosOnline = new MenuItem("Обучающее видео");
+        helpVideosOnline.setOnAction(this::openHelpVideosOnline);
+
         MenuItem aboutItem = new MenuItem("О программе...");
         aboutItem.setOnAction(this::openAbout);
 
         MenuItem test = new MenuItem("ТЕСТ");
         test.setOnAction(this::makeTest);
 
-        helpMenu.getItems().addAll(downloadLastVersion, aboutItem);
+        helpMenu.getItems().addAll(downloadLastVersion, helpVideosOnline, aboutItem);
 //        helpMenu.getItems().add(test);
 
         return helpMenu;
@@ -477,5 +486,21 @@ public class AppMenuController {
         new About().create();
 
     }
+
+    /**
+     * ОБУЧАЮЩЕЕ ВИДЕО ОНЛАЙН
+     */
+    private void openHelpVideosOnline(ActionEvent event) {
+        try {
+            URI uri = new URI("https://www.youtube.com/playlist?list=PLlXRdu_fwDGUorUERVsuC1JTjQXAeNp0E");
+            Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+            if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
+                desktop.browse(uri);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
