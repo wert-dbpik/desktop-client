@@ -133,6 +133,7 @@ public class ApplicationController {
         spAdvert.getChildren().add(lblNewVersion);
         spAdvert.setOnMouseClicked((event)->{
             spAdvert.getChildren().clear();
+            new TaskDownloadNewVersion();
         });
 
     }

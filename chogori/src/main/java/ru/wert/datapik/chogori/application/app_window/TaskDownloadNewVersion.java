@@ -19,9 +19,29 @@ public class TaskDownloadNewVersion extends Task<Void> {
 
     private File sourceFile, destFile;
 
-    public TaskDownloadNewVersion( File sourceFile, File destFile) {
-        this.sourceFile = sourceFile;
-        this.destFile = destFile;
+    public TaskDownloadNewVersion() {
+
+        sourceFile = new File(AppStatic.findCurrentLastAppVersion().getPath());
+        if (!sourceFile.exists()) {
+            Warning1.create("ОШИБКА!", "Не удалось скачать новую версию!", "Файл в репозитории отсутствует");
+            log.error("File of new version doesn't exist in repository '{}'", sourceFile);
+            return;
+        }
+        FileChooser chooser = new FileChooser();
+        chooser.setInitialFileName(sourceFile.getName());
+        File initDir = new File(System.getProperty("user.home") + "/Desktop");
+        if (!initDir.exists()) initDir = new File("C:\\");
+        chooser.setInitialDirectory(initDir);
+        chooser.setTitle("Выберите директорию для сохранения");
+        destFile = chooser.showSaveDialog(WF_MAIN_STAGE);
+        if (destFile == null) return;
+        log.debug("downloadLastVersion : sourceFile = " + sourceFile);
+        log.debug("downloadLastVersion : sourceFile = " + destFile);
+
+
+        Thread t = new Thread(this);
+        t.setDaemon(true);
+        t.start();
     }
 
     @Override

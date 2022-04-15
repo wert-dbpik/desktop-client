@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
 import ru.wert.datapik.winform.modal.LongProcess;
 import ru.wert.datapik.winform.warnings.Warning1;
@@ -11,13 +12,15 @@ import ru.wert.datapik.winform.warnings.Warning1;
 import java.io.File;
 
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
-
+@Slf4j
 public class TaskOpenExcelFile extends Task<Void> {
 
     private File chosenFile;
 
     public TaskOpenExcelFile(File chosenFile) {
         this.chosenFile = chosenFile;
+
+
     }
 
     @Override
@@ -43,6 +46,7 @@ public class TaskOpenExcelFile extends Task<Void> {
     @Override
     protected void cancelled() {
         super.cancelled();
+        log.debug("Downloading of Excel-file {} has been cancelled", chosenFile.getName());
         LongProcess.close();
     }
 
@@ -50,6 +54,7 @@ public class TaskOpenExcelFile extends Task<Void> {
     protected void failed() {
         super.failed();
         LongProcess.close();
+        log.error("Excel-file Loading failed with an error \n{}", getException().getMessage());
         Platform.runLater(()->{
             Warning1.create("ОШИБКА!",
                     "Не удалось загрузить файл",
@@ -62,6 +67,7 @@ public class TaskOpenExcelFile extends Task<Void> {
     @Override
     protected void succeeded() {
         super.succeeded();
+        log.debug("Excel-file {} has been downloaded successfully", chosenFile.getName());
         LongProcess.close();
     }
 }

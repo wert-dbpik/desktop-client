@@ -466,29 +466,8 @@ public class AppMenuController {
      * В качествое исходной директории предлагается использовать Рабочиц стол
      */
     private void downloadLastVersion(ActionEvent actionEvent){
-        File sourceFile = new File(AppStatic.findCurrentLastAppVersion().getPath());
-        if (!sourceFile.exists()) {
-            Warning1.create("ОШИБКА!", "Не удалось скачать новую версию!", "Файл в репозитории отсутствует");
-            log.error("File of new version doesn't exist in repository '{}'", sourceFile);
-            return;
-        }
-        FileChooser chooser = new FileChooser();
-        chooser.setInitialFileName(sourceFile.getName());
-        File initDir = new File(System.getProperty("user.home") + "/Desktop");
-        if (!initDir.exists()) initDir = new File("C:\\");
-        chooser.setInitialDirectory(initDir);
-        chooser.setTitle("Выберите директорию для сохранения");
-        File destFile = chooser.showSaveDialog(WF_MAIN_STAGE);
-        if (destFile == null) return;
-        log.debug("downloadLastVersion : sourceFile = " + sourceFile);
-        log.debug("downloadLastVersion : sourceFile = " + destFile);
 
-
-        Task<Void> downloadTask = new TaskDownloadNewVersion(sourceFile, destFile);
-        Thread t = new Thread(downloadTask);
-        t.setDaemon(true);
-        t.start();
-
+        new TaskDownloadNewVersion();
     }
 
     /**
