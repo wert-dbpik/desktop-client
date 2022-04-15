@@ -79,17 +79,13 @@ public class WinformStatic {
 
     }
 
-//    public static void setNodeInAnchorPane(Node node){
-//        AnchorPane.setBottomAnchor(node, 0.0);
-//        AnchorPane.setRightAnchor(node, 0.0);
-//        AnchorPane.setLeftAnchor(node, 0.0);
-//        AnchorPane.setTopAnchor(node, 0.0);
-//    }
-
-public static String parseLDTtoNormalDate(String localDateTime){
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-    LocalDateTime ldt = LocalDateTime.parse(localDateTime);
-    return ldt.format(formatter);
-}
+    /**
+     * Метод парсит LocalDateTime к читаемому виду
+     */
+    public static String parseLDTtoNormalDate(String localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        LocalDateTime ldt = LocalDateTime.parse(localDateTime);
+        return ldt.format(formatter);
+    }
 
 }

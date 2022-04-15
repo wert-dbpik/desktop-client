@@ -49,8 +49,7 @@ public class Draft_Patch {
                 AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController);
             } else {
                 //Отображаем NO_IMAGE
-                if(currentlyShownDraft != null)
-                    AppStatic.openDraftInPreviewer(null, previewerPatchController);
+                AppStatic.openDraftInPreviewer(null, previewerPatchController);
             }
         });
     }
