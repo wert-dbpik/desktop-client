@@ -112,33 +112,22 @@ public class WindowDecorationController {
      * Разворачивание или сворачивание окна
      * Условием является состояние флага isExpanded (развернут на весь экран)
      */
-    private void changeSizeOfWindow(Stage window, MouseEvent e){
+    private void changeSizeOfWindow(Stage window, MouseEvent e) {
         List<Screen> screenList = Screen.getScreens();
         int monitor = ModalWindow.findCurrentMonitorByMousePointer(e);
 
-        ((Node)e.getSource()).getScene().getWindow();
-
-        Rectangle2D visualBounds = findVisualBounds();
-
         if (isExpanded) {
-            if(window.equals(WF_MAIN_STAGE)){
-                //Меняем ширину и высоту окна, если она равна или чуть меньше размеров самого экрана
-                if (windowCurrentWidth < 0.95 * screenList.get(monitor).getBounds().getWidth())
-                    windowCurrentWidth = 0.7 * screenList.get(monitor).getBounds().getWidth();
+            if (window.getWidth() > 0.95 * screenList.get(monitor).getBounds().getWidth())
+                window.setWidth(0.7 * screenList.get(monitor).getBounds().getWidth());
 
-                if (windowCurrentHeight < 0.95 * screenList.get(monitor).getBounds().getHeight())
-                    windowCurrentHeight = 0.7 * screenList.get(monitor).getBounds().getHeight();
-            }
+            if (window.getHeight() > 0.95 * screenList.get(monitor).getBounds().getHeight())
+                window.setHeight(0.7 * screenList.get(monitor).getBounds().getHeight());
 
-            window.setWidth(windowCurrentWidth);
-            window.setHeight(windowCurrentHeight);
-            window.setY((visualBounds.getHeight() - windowCurrentHeight)/2);
+            window.setY((screenList.get(monitor).getBounds().getHeight() - window.getHeight()) / 2);
 
             ModalWindow.centerWindow(window, WF_MAIN_STAGE, e);
             isExpanded = false;
         } else {
-            this.windowCurrentWidth = window.getWidth();
-            this.windowCurrentHeight = window.getHeight();
 
             setWindowToFullScreen(window);
             isExpanded = true;
@@ -152,29 +141,13 @@ public class WindowDecorationController {
 
         List<Screen> screenList = Screen.getScreens();
         int monitor = ModalWindow.findCurrentMonitorByMainStage(window);
-        Rectangle2D visualBounds = screenList.get(monitor).getVisualBounds();
 
-        window.setX(visualBounds.getMinX());
-        window.setY(visualBounds.getMinY());
-        window.setWidth(visualBounds.getWidth());
-        window.setHeight(visualBounds.getHeight());
+        window.setX(screenList.get(monitor).getVisualBounds().getMinX());
+        window.setY(screenList.get(monitor).getVisualBounds().getMinY());
+        window.setWidth(screenList.get(monitor).getVisualBounds().getWidth());
+        window.setHeight(screenList.get(monitor).getVisualBounds().getHeight());
     }
 
-    /**
-     * Определяет видимые границы экрана
-     * @return Rectangle2D
-     */
-    private Rectangle2D findVisualBounds() {
-        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-
-        List<Screen> screenList = Screen.getScreens();
-        for (Screen screen : screenList) {
-            double x = window.getX();
-            if ((x >= screen.getBounds().getMinX()) && (x < screen.getBounds().getMaxX() - 1))
-                visualBounds = screen.getVisualBounds();
-        }
-        return visualBounds;
-    }
 //===========================================  РАСТЯГИВАЕМ ОКНО   =================================================
 
     /**
@@ -257,6 +230,9 @@ public class WindowDecorationController {
         window.setY(mouseEvent.getScreenY() - this.dragOffsetY);
     }
 
+    /**
+     * Метод вызывается только из StartChogori, когда наличие укаханного в настройках монитора еще не известно
+     */
     public void centerInitialWindow(Stage window, Boolean fullScreen, int mainMonitor){
 
         List<Screen> screenList = Screen.getScreens();
@@ -264,11 +240,13 @@ public class WindowDecorationController {
         int monitor = Math.min(mainMonitor, screenList.size() - 1);
 
         if(fullScreen) {
-            window.setWidth(screenList.get(monitor).getBounds().getWidth());
-            window.setHeight(screenList.get(monitor).getBounds().getHeight());
+            window.setWidth(screenList.get(monitor).getVisualBounds().getWidth());
+            window.setHeight(screenList.get(monitor).getVisualBounds().getHeight());
+            window.setX(screenList.get(monitor).getVisualBounds().getMinX());
+            window.setY(screenList.get(monitor).getVisualBounds().getMinY());
             setExpanded(true);
         }
-        ModalWindow.mountStage(window, monitor);
+//        ModalWindow.mountStage(window, monitor);
 
     }
 

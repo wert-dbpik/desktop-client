@@ -63,16 +63,19 @@ public class WinformStatic {
         int monitor = Math.min(mainMonitor, screenList.size() - 1);
 
         if(fullScreen) {
-            window.setWidth(screenList.get(monitor).getBounds().getWidth());
-            window.setHeight(screenList.get(monitor).getBounds().getHeight());
-        }
-        double screenMinX = screenList.get(monitor).getBounds().getMinX();
-        double screenMinY = screenList.get(monitor).getBounds().getMinY();
-        double screenWidth = screenList.get(monitor).getBounds().getWidth();
-        double screenHeight = screenList.get(monitor).getBounds().getHeight();
+            window.setWidth(screenList.get(monitor).getVisualBounds().getWidth());
+            window.setHeight(screenList.get(monitor).getVisualBounds().getHeight());
+            window.setX(screenList.get(monitor).getVisualBounds().getMinX());
+            window.setY(screenList.get(monitor).getVisualBounds().getMinY());
+        } else {
+            double screenMinX = screenList.get(monitor).getVisualBounds().getMinX();
+            double screenMinY = screenList.get(monitor).getVisualBounds().getMinY();
+            double screenWidth = screenList.get(monitor).getVisualBounds().getWidth();
+            double screenHeight = screenList.get(monitor).getVisualBounds().getHeight();
 
-        window.setX(screenMinX + ((screenWidth - window.getWidth()) / 2));
-        window.setY(screenMinY + ((screenHeight - window.getHeight()) / 2));
+            window.setX(screenMinX + ((screenWidth - window.getWidth()) / 2));
+            window.setY(screenMinY + ((screenHeight - window.getHeight()) / 2));
+        }
 
     }
 

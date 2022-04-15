@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.winform.modal.ModalWindow;
+import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 
@@ -106,7 +107,8 @@ public class WindowDecoration {
             Platform.runLater(()->{
                 window.setMinWidth(window.getWidth());
                 window.setMinHeight(window.getHeight());
-                centerWindow(window, owner, false);
+                int monitor = ModalWindow.findCurrentMonitorByMainStage(owner);
+                WinformStatic.centerWindow(window, false, monitor);
                 window.toFront();
             });
 
@@ -137,20 +139,22 @@ public class WindowDecoration {
      * Так как штатное центрирование задирает окно на 1/3, то используется собственный способ
      * размещения окна на видимой части экрана. Панель задач внизу экрана вычитается.
      */
-    public static void centerWindow(Stage window, Stage mainStage, Boolean fullScreen){
-        List<Screen> screenList = Screen.getScreens();
-        if(mainStage == null) mainStage = WF_MAIN_STAGE;
-
-        int monitor = ModalWindow.findCurrentMonitorByMainStage(mainStage);
-
-        if(fullScreen) {
-            window.setWidth(screenList.get(monitor).getBounds().getWidth());
-            window.setHeight(screenList.get(monitor).getBounds().getHeight());
-        }
-
-        ModalWindow.mountStage(window, monitor);
-
-    }
+//    public static void centerWindow(Stage window, Stage mainStage, Boolean fullScreen){
+//        List<Screen> screenList = Screen.getScreens();
+//        if(mainStage == null) mainStage = WF_MAIN_STAGE;
+//
+//        int monitor = ModalWindow.findCurrentMonitorByMainStage(mainStage);
+//
+//        if(fullScreen) {
+//            window.setWidth(screenList.get(monitor).getVisualBounds().getWidth());
+//            window.setHeight(screenList.get(monitor).getVisualBounds().getHeight());
+//            window.setX(screenList.get(monitor).getVisualBounds().getMinX());
+//            window.setY(screenList.get(monitor).getVisualBounds().getMinY());
+//        }
+//            else
+//        ModalWindow.mountStage(window, monitor);
+//
+//    }
 
 
     public FXMLLoader getDecorationLoader(){
