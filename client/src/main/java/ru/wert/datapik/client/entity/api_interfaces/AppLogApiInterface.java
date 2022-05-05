@@ -18,6 +18,9 @@ public interface AppLogApiInterface {
     @GET("logs/all_by_user_id/{id}")
     Call<List<AppLog>> getAllByUserId(Long id);
 
+    @GET("logs/all_by_application/{app}")
+    Call<List<AppLog>> getAllByApplication(Integer app);
+
     @GET("logs/all_by_time_between/{startTime}/{finishTime}")
     Call<List<AppLog>> getAllByTimeBetween(@Path("firstTime") LocalDateTime startTime, @Path("finishTime") LocalDateTime finishTime);
 

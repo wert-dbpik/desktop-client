@@ -53,7 +53,17 @@ public class AppLogService implements IAppLogService, ItemService<AppLog> {
             Call<List<AppLog>> call = api.getAllByUserId(user.getId());
             return call.execute().body();
         } catch (IOException e) {
-            log.info("");
+            log.error("findAllByUser does wrong");
+        }
+        return null;
+    }
+
+    public List<AppLog> findAllByApplication(Integer app) {
+        try {
+            Call<List<AppLog>> call = api.getAllByApplication(app);
+            return call.execute().body();
+        } catch (IOException e) {
+            log.error("findAllByApplication does wrong");
         }
         return null;
     }

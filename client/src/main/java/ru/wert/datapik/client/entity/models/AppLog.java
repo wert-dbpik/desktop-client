@@ -16,6 +16,8 @@ public class AppLog extends _BaseEntity implements Item {
 
     private String time;
     private User user;
+    private Integer application;
+    private String version;
     private String text;
 
     @Override
