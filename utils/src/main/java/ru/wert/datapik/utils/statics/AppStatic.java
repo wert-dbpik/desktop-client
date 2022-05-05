@@ -253,14 +253,16 @@ public class AppStatic {
      */
     public static void createLog(boolean forAdminOnly, String text){
 
-        CH_LOGS.save(new AppLog(
-                LocalDateTime.now().toString(),
-                forAdminOnly,
-                CH_CURRENT_USER,
-                0,
-                CURRENT_PROJECT_VERSION == null? PROTOTYPE_VERSION : CURRENT_PROJECT_VERSION,
-                text
-        ));
+        if(CH_CURRENT_USER.isLogging()) {
+            CH_LOGS.save(new AppLog(
+                    LocalDateTime.now().toString(),
+                    forAdminOnly,
+                    CH_CURRENT_USER,
+                    0,
+                    CURRENT_PROJECT_VERSION == null ? PROTOTYPE_VERSION : CURRENT_PROJECT_VERSION,
+                    text
+            ));
+        }
     }
 
 }
