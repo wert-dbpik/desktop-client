@@ -95,6 +95,23 @@
                         <Font size="14.0" />
                      </font>
                   </CheckBox>
+                  <VBox fx:id="vbUserPermissions">
+                     <children>
+                        <Label text="РАЗРЕШЕНИЯ ПОЛЬЗОВАТЕЛЯ">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="25.0" />
+                           </VBox.margin>
+                        </Label>
+                        <CheckBox fx:id="chbLogging" mnemonicParsing="false" text="Логировать пользователя">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </CheckBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </VBox>
                </children>
                <VBox.margin>
                   <Insets left="15.0" right="15.0" top="30.0" />

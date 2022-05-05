@@ -10,8 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UpdatePositions {
 
-    private ScrollBar vertScroll; //Вертикальный сколл
-    private ScrollBar horScroll; //Горизонтальный сколл
+    private ScrollBar vertScroll; //Вертикальный скролл
+    private ScrollBar horScroll; //Горизонтальный скролл
     private double vertPos; //Вертикальная позиция скролла
     private double horPos; //Горизонтальная позиция скролла
 

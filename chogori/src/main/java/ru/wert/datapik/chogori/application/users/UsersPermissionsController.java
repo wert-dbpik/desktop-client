@@ -8,7 +8,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import ru.wert.datapik.client.entity.models.User;
+import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.client.interfaces.SearchableTab;
+import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import ru.wert.datapik.utils.entities.users.PermissionsController;
 import ru.wert.datapik.utils.entities.users.User_Controller;
 import ru.wert.datapik.utils.entities.users.User_TableView;
@@ -20,8 +23,10 @@ import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_USER_GROUPS;
 
-public class UsersPermissionsController implements SearchableTab {
+public class UsersPermissionsController implements SearchableTab, UpdatableTabController {
 
     @FXML
     private AnchorPane apUsers;
@@ -119,4 +124,12 @@ public class UsersPermissionsController implements SearchableTab {
     }
 
 
+    @Override
+    public void updateTab() {
+        User user = userTable.getSelectionModel().getSelectedItem();
+        userTable.setItems(CH_USERS.findAll());
+        if(user != null)
+            userTable.getSelectionModel().select(user);
+        userTable.refresh();
+    }
 }

@@ -8,8 +8,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.entity.models.User;
+import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.client.interfaces.SearchableTab;
+import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import ru.wert.datapik.utils.common.components.ChevronButton;
 import ru.wert.datapik.utils.entities.user_groups.UserGroup_Controller;
 import ru.wert.datapik.utils.entities.user_groups.UserGroup_TableView;
@@ -22,8 +25,9 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_LEFT_IMG;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_RIGHT_IMG;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_USER_GROUPS;
 
-public class UserGroupsPermissionsController implements SearchableTab {
+public class UserGroupsPermissionsController implements SearchableTab, UpdatableTabController {
 
     @FXML
     private AnchorPane apUsers;
@@ -69,6 +73,8 @@ public class UserGroupsPermissionsController implements SearchableTab {
             permissionsController.setTableView(userGroupTable);
             permissionsController.createSaveButton(btnOK, permissionsParent);
 
+            ((VBox)permissionsParent.lookup("#vbUserPermissions")).setVisible(false);
+            ((VBox)permissionsParent.lookup("#vbUserPermissions")).setDisable(true);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,5 +125,14 @@ public class UserGroupsPermissionsController implements SearchableTab {
 //            CH_SEARCH_FIELD.setPromptText("ГРУППА ПОЛЬЗОВАТЕЛЕЙ");
 //        else
 //            CH_SEARCH_FIELD.setSearchedText(userGroupTable.getSearchedText());
+    }
+
+    @Override
+    public void updateTab() {
+        UserGroup group = userGroupTable.getSelectionModel().getSelectedItem();
+        userGroupTable.setItems(CH_USER_GROUPS.findAll());
+        if(group != null)
+            userGroupTable.getSelectionModel().select(group);
+        userGroupTable.refresh();
     }
 }

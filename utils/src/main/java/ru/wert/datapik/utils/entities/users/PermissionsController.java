@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.Setter;
+import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USER_GROUPS;
 
 public class PermissionsController<P extends Item> {
@@ -66,13 +68,18 @@ public class PermissionsController<P extends Item> {
     @FXML
     private CheckBox chbDeleteMaterials;
 
+    @FXML
+    private CheckBox chbLogging;
+
     @Getter private UserGroup userGroup;
 
     @Setter
-    RoutineTableView<P> tableView;
+    RoutineTableView<User> tableView;
     @Getter private List<CheckBox> boxes;
     private Map<CheckBox, Boolean> oldMap = new HashMap<>();
     private Map<CheckBox, Boolean> newMap = new HashMap<>();
+
+    private Item selectedItem;
 
     @FXML
     void initialize(){
@@ -85,7 +92,8 @@ public class PermissionsController<P extends Item> {
                 chbAdministrate,chbEditUsers,
                 chbReadDrafts,chbEditDrafts,chbDeleteDrafts,chbCommentDrafts,
                 chbReadProductStructure,chbEditProductStructure,chbDeleteProductStructure,
-                chbReadMaterials,chbEditMaterials,chbDeleteMaterials
+                chbReadMaterials,chbEditMaterials,chbDeleteMaterials,
+                chbLogging
         );
 
     }
@@ -111,6 +119,9 @@ public class PermissionsController<P extends Item> {
                 ch.setSelected(false);
         }
 
+        if(tableView instanceof User_TableView)
+            chbLogging.setSelected(tableView.getSelectionModel().getSelectedItem().isLogging());
+
         savePermissions(oldMap);
 
     }
@@ -129,6 +140,7 @@ public class PermissionsController<P extends Item> {
         map.put(chbReadMaterials, chbReadMaterials.isSelected());
         map.put(chbEditMaterials, chbEditMaterials.isSelected());
         map.put(chbDeleteMaterials, chbDeleteMaterials.isSelected());
+        map.put(chbLogging, chbLogging.isSelected());
 
     }
 
@@ -153,16 +165,13 @@ public class PermissionsController<P extends Item> {
 
         CH_USER_GROUPS.update(userGroup);
 
-        if(tableView instanceof User_TableView) {
+        if(tableView instanceof User_TableView){
+            User user = tableView.getSelectionModel().getSelectedItem();
+            user.setLogging(chbLogging.isSelected());
+            CH_USERS.update(user);
 
-            Platform.runLater(() -> {
-                P selectedItem = tableView.getSelectionModel().getSelectedItem();
-                int focusedItem = tableView.getFocusModel().getFocusedIndex();
-
-                tableView.updateRoutineTableView();
-                tableView.getSelectionModel().select(selectedItem);
-                tableView.getFocusModel().focus(focusedItem);
-            });
+            tableView.setItems(CH_USERS.findAll());
+            tableView.getSelectionModel().select(user);
         }
 
         savePermissions(oldMap); //Восстанавливаем
