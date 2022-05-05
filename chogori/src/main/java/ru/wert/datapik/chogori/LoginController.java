@@ -7,18 +7,20 @@ import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.client.entity.models.AppLog;
 import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.utils.common.components.BXUsers;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EPDFViewer;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_DECORATION_ROOT_PANEL;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
@@ -87,6 +89,7 @@ public class LoginController {
                 Warning1.create($ATTENTION, $NO_SUCH_USER, $TRY_MORE);
         }
         AppProperties.getInstance().setLastUser(user.getId());
+        AppStatic.createLog("Подключился к серверу");
     }
 
     private void loadApplicationSettings() {

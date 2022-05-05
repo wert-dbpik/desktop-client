@@ -6,6 +6,7 @@ import ru.wert.datapik.client.entity.serviceREST.*;
 public class BLlinks {
 
     public static UserService userService;
+    public static AppLogService appLogService;
     public static VersionDesktopService versionDesktopService;
     public static VersionAndroidService versionAndroidService;
     public static VersionServerService versionServerService;

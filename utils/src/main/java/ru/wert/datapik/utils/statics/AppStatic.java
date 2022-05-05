@@ -13,6 +13,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.client.entity.models.AppLog;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.entity.models.VersionDesktop;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -241,6 +243,13 @@ public class AppStatic {
         }
 
         return newDirectory;
+    }
+
+    /**
+     * Метод создает запись лога в базе данных
+     */
+    public static void createLog(String text){
+        CH_LOGS.save(new AppLog(LocalDateTime.now().toString(), CH_CURRENT_USER, text));
     }
 
 }

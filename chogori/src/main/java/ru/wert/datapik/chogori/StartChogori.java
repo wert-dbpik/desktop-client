@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.app_window.AppMenuController;
+import ru.wert.datapik.client.entity.models.AppLog;
 import ru.wert.datapik.client.entity.models.VersionDesktop;
 import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.utils.help.About;
@@ -29,9 +30,11 @@ import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.winform.statics.WinformStatic.HOME_BAZA_PIK;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
@@ -108,6 +111,7 @@ public class StartChogori extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
         if (!initStatus) {
             Warning1.create($ATTENTION, "Не удалось загрузить чертежи с сервера", "Работа программы будет прекращена" +
                     "\nдля перезагрузки сервера обратитесь к администратору");
