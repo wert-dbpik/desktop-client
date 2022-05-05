@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.products.Product_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class Product_DeleteCommand implements ICommand {
             try {
                 CH_QUICK_PRODUCTS.delete(item);
                 log.info("Удалено изделие {}", item.toUsefulString());
+                AppStatic.createLog(false, String.format("Удалил изделие '%s'", item.getPassport().toUsefulString()));
             } catch (Exception e) {
                 e.printStackTrace();
                 Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);

@@ -89,7 +89,7 @@ public class LoginController {
                 Warning1.create($ATTENTION, $NO_SUCH_USER, $TRY_MORE);
         }
         AppProperties.getInstance().setLastUser(user.getId());
-        AppStatic.createLog("Подключился к серверу");
+        AppStatic.createLog(true, "Подключился к серверу");
     }
 
     private void loadApplicationSettings() {

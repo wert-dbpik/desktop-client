@@ -7,6 +7,7 @@ import ru.wert.datapik.utils.common.commands.Catalogs;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.common.commands.ICommand;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class ProductGroup_ChangeCommand<P extends Item> implements ICommand {
             boolean res = CH_PRODUCT_GROUPS.update(item);
             if(res){
                 log.info("Изменена группа изделий {}", item.getName());
+                AppStatic.createLog(false, String.format("Изменил группу изделий '%s'", item.getName()));
                 List<Item> items = Collections.singletonList(item);
                 Catalogs.updateFormsWhenAddedOrChanged(commands.getTreeView(), commands.getTableView(), items);
 

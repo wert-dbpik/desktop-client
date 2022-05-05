@@ -92,6 +92,17 @@ public class AppLogService implements IAppLogService, ItemService<AppLog> {
     }
 
     @Override
+    public ObservableList<AppLog> findAllByAdminOnlyFalse() {
+        try {
+            Call<List<AppLog>> call = api.getAllAdminOnlyFalse();
+            return FXCollections.observableArrayList(call.execute().body());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public ObservableList<AppLog> findAllByText(String text) {
         //НЕ ИСПОЛЬЗУЕТСЯ
         return null;

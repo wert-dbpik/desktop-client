@@ -251,10 +251,11 @@ public class AppStatic {
      * Метод создает запись лога в базе данных
      * CURRENT_PROJECT_VERSION не определяется при запуске приложения из-под IDE
      */
-    public static void createLog(String text){
+    public static void createLog(boolean forAdminOnly, String text){
 
         CH_LOGS.save(new AppLog(
                 LocalDateTime.now().toString(),
+                forAdminOnly,
                 CH_CURRENT_USER,
                 0,
                 CURRENT_PROJECT_VERSION == null? PROTOTYPE_VERSION : CURRENT_PROJECT_VERSION,

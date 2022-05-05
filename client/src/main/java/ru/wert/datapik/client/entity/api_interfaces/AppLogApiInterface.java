@@ -27,6 +27,9 @@ public interface AppLogApiInterface {
     @GET("logs/all")
     Call<List<AppLog>> getAll();
 
+    @GET("logs/all_admin_only_false")
+    Call<List<AppLog>> getAllAdminOnlyFalse();
+
     @DELETE("logs/delete/{id}")
     Call<Void> deleteById(@Path("id") Long id);
 

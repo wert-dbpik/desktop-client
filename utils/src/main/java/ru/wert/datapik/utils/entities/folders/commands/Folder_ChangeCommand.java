@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.common.commands.ICommand;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
@@ -37,7 +38,8 @@ public class Folder_ChangeCommand implements ICommand {
                     tableView.updateVisibleLeafOfTableView(tableView.getUpwardRow().getValue());
                     tableView.scrollTo(item);
                     tableView.getSelectionModel().select(item);
-                    log.info("Изменен пакет {} ", item.toUsefulString());
+                    log.info("Изменен комплект {} ", item.toUsefulString());
+                    AppStatic.createLog(false, String.format("Изменил комплект '%s'", item.toUsefulString()));
                 });
             });
 

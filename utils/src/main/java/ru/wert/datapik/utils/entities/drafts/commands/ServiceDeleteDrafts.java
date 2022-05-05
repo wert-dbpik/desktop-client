@@ -6,6 +6,8 @@ import javafx.concurrent.Task;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.modal.LongProcess;
 import ru.wert.datapik.winform.warnings.Warning1;
 
@@ -47,6 +49,10 @@ public class ServiceDeleteDrafts extends Service<Void> {
                     try {
                         CH_QUICK_DRAFTS.delete(item);
                         log.info("Удалена запись о чертеже {}", item.toUsefulString());
+                        AppStatic.createLog(false, String.format("Удалил чертеж '%s' (%s) из комплекта '%s'",
+                                item.getPassport().toUsefulString(),
+                                        EDraftType.getDraftTypeById(item.getDraftType()).getShortName() + "-" + item.getPageNumber(),
+                                item.getFolder().toUsefulString()));
                     } catch (Exception e) {
                         e.printStackTrace();
                         Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);

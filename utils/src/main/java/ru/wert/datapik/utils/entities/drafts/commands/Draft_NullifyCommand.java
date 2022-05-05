@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.warnings.Warning1;
@@ -59,6 +60,10 @@ public class Draft_NullifyCommand implements ICommand {
                 CH_QUICK_DRAFTS.update(draft);
 
                 log.info("Аннулирован чертеж {}", item.toUsefulString());
+                AppStatic.createLog(false, String.format("Аннулировал чертеж '%s' (%s) в комплекте '%s'",
+                        item.getPassport().toUsefulString(),
+                                EDraftType.getDraftTypeById(item.getDraftType()).getShortName() + "-" + item.getPageNumber(),
+                        item.getFolder().toUsefulString()));
             }
         else return;
 

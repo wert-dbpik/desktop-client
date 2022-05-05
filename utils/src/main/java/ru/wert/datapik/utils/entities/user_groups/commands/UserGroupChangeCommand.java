@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.user_groups.UserGroup_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USER_GROUPS;
@@ -40,6 +41,7 @@ public class UserGroupChangeCommand implements ICommand {
 
 
             log.info("Обновлены разрешения для группы пользователей {}", item.getName());
+            AppStatic.createLog(true, String.format("Изменил группу пользователей '%s'", item.getName()));
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
             log.error("При обновлении разрешений для группы пользователей {} произошла ошибка {}", item.getName(), e.getMessage());

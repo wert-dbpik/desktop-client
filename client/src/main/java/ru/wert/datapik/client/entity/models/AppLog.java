@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class AppLog extends _BaseEntity implements Item {
 
     private String time;
+    private boolean adminOnly;
     private User user;
     private Integer application;
     private String version;

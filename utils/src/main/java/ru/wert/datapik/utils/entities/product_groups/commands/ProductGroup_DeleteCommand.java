@@ -9,6 +9,7 @@ import ru.wert.datapik.utils.common.tableView.CatalogableTable;
 import ru.wert.datapik.utils.common.tableView.ItemTableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.common.commands.ICommand;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.warnings.Warning2;
 
@@ -168,6 +169,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
             boolean res = CH_PRODUCT_GROUPS.delete(pg);
             if(res){
                 log.info("Удалена группа изделий {}", pg.getName());
+                AppStatic.createLog(false, String.format("Удалил группу изделий '%s'", pg.getName()));
             } else {
                 log.info("Не удалось удалить группу изделий {}", pg.getName());
                 notDeletedProductGroups.add(pg);

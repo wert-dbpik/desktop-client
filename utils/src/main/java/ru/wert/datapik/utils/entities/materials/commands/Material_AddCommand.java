@@ -9,6 +9,7 @@ import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.materials.Material_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
@@ -42,6 +43,7 @@ public class Material_AddCommand implements ICommand {
 
         if(savedMaterial != null){ //Если сохранение произошло
             log.info("Добавлен материал '{}' ", savedMaterial.getName());
+            AppStatic.createLog(false, String.format("Добавил материал '%s'", savedMaterial.getName()));
         } else{//Если сохранение НЕ произошло
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
             log.error("При добавлении материала '{}' произошла ошибка",

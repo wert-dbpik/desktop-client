@@ -8,6 +8,7 @@ import ru.wert.datapik.utils.common.commands.Catalogs;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.utils.common.commands.ICommand;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.util.Collections;
@@ -34,6 +35,7 @@ public class ProductGroup_AddCommand<P extends Item> implements ICommand {
             ProductGroup newGroup = CH_PRODUCT_GROUPS.save(newItem);
             if(newGroup != null){
                 log.info("Добавлена группа изделий {}", newGroup.getName());
+                AppStatic.createLog(false, String.format("Добавил группу изделий '%s'", newGroup.getName()));
                 List<Item> items = Collections.singletonList(newGroup);
                 Catalogs.updateFormsWhenAddedOrChanged(commands.getTreeView(), commands.getTableView(), items);
             }

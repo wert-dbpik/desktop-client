@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.user_groups.UserGroup_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.util.List;
@@ -36,9 +37,11 @@ public class UserGroupDeleteCommand implements ICommand {
             try {
                 CH_USER_GROUPS.delete(item);
                 log.info("Удалена группа пользователей {}", item.getName());
+                AppStatic.createLog(true, String.format("Удалил группу пользователей '%s'", item.getName()));
             } catch (Exception e) {
                 Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
                 log.error("При удалении группы пользователей {} произошла ошибка {}", item.getName(), e.getMessage());
+
             }
         }
 

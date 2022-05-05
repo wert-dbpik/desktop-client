@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.users.User_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
@@ -39,6 +40,7 @@ public class UserChangeCommand implements ICommand {
             });
 
             log.info("Обновлен пользователь {}", item.getName());
+            AppStatic.createLog(true, String.format("Изменил пользователя '%s'", item.getName()));
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
             log.error("При обновлении пользователя {} произошла ошибка {} по причине {}", item.getName(), e.getMessage(), e.getCause());

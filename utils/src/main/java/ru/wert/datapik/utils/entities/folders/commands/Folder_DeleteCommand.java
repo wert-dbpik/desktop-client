@@ -8,6 +8,7 @@ import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.entities.drafts.commands.ServiceDeleteDrafts;
 import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.common.commands.ICommand;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.warnings.Warning2;
 
@@ -72,6 +73,7 @@ public class Folder_DeleteCommand implements ICommand {
             try {
                 CH_QUICK_FOLDERS.delete(item);
                 log.info("Удален пакет {}", item.toUsefulString());
+                AppStatic.createLog(false, String.format("Удалил комплект '%s'", item.toUsefulString()));
             } catch (Exception ex) {
                 ex.printStackTrace();
                 Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);

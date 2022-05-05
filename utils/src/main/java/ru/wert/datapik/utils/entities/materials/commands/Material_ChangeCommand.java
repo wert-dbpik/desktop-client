@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Material;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.materials.Material_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_MATERIALS;
@@ -38,6 +39,7 @@ public class Material_ChangeCommand implements ICommand {
                 tableView.getSelectionModel().select(item);
 
                 log.info("Обновлен материал {}", item.getName());
+                AppStatic.createLog(false, String.format("Изменил материал '%s'", item.getName()));
             });
 
         } catch (Exception e) {

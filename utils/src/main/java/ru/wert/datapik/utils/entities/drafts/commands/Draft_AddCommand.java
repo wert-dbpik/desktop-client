@@ -8,6 +8,8 @@ import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
@@ -44,6 +46,10 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
 
         if (savedDraft != null) { //Если сохранение произошло
             log.info("Добавлен чертеж {} ", savedDraft.getPassport().toUsefulString());
+            AppStatic.createLog(false, String.format("Добавил чертеж '%s' (%s) в комплект '%s'",
+                    savedDraft.getPassport().toUsefulString(),
+                            EDraftType.getDraftTypeById(savedDraft.getDraftType()).getShortName() + "-" + savedDraft.getPageNumber(),
+                    savedDraft.getFolder().toUsefulString()));
         } else {//Если сохранение НЕ произошло
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
             log.error("При добавлении чертежа {} произошла ошибка",

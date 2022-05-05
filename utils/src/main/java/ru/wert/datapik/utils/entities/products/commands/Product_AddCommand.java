@@ -8,6 +8,7 @@ import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.entities.products.Product_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
@@ -43,6 +44,7 @@ public class Product_AddCommand implements ICommand {
 
         if (savedProduct != null) { //Если сохранение произошло
             log.info("Добавлено изделие {} исп. {}", savedProduct.getPassport().toUsefulString(), savedProduct.getVariant());
+            AppStatic.createLog(false, String.format("Добавил изделие '%s' исп.'%s'", savedProduct.getPassport().toUsefulString(), savedProduct.getVariant()));
         } else {//Если сохранение НЕ произошло
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
             log.error("При добавлении изделия {} произошла ошибка",

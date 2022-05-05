@@ -36,7 +36,8 @@ public class Folder_AddCommand implements ICommand {
         Folder folder = CH_QUICK_FOLDERS.save(newItem);
 
         if (folder != null) { //Если сохранение произошло
-            log.info("Добавлен пакет {} ", folder.toUsefulString());
+            log.info("Добавлен комплект {} ", folder.toUsefulString());
+            AppStatic.createLog(false, String.format("Добавил комплект '%s'", folder.toUsefulString()));
         } else {//Если сохранение НЕ произошло
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
             log.error("При добавлении изделия {} произошла ошибка", newItem.toUsefulString());

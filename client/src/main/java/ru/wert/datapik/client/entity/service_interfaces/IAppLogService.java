@@ -14,5 +14,6 @@ public interface IAppLogService extends ItemService<AppLog> {
     List<AppLog> findAllByTimeBetween(LocalDateTime startTime, LocalDateTime finishTime);
     List<AppLog> findAllByUser(User user);
     List<AppLog> findAllByApplication(Integer app);
+    List<AppLog> findAllByAdminOnlyFalse();
 
 }
