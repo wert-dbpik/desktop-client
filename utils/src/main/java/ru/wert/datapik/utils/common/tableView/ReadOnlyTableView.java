@@ -2,9 +2,7 @@ package ru.wert.datapik.utils.common.tableView;
 import javafx.collections.FXCollections;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
-import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
-import ru.wert.datapik.utils.common.interfaces.IFormView;
 import ru.wert.datapik.utils.search.Searchable;
 
 import java.util.ArrayList;
@@ -12,14 +10,11 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
-public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> implements Searchable<P> {
+public abstract class ReadOnlyTableView<P extends Item> extends ItemTableView<P> implements Searchable<P> {
 
     protected FormView_ContextMenu<P> contextMenu;
 
     public abstract void setTableColumns();
-    public abstract ItemCommands<P> getCommands();
-    public abstract String getAccWindowRes();
-    public abstract void setModifyingItem(Object item);
 
     @Override//Searchable
     public abstract void setCurrentItemSearchedList(List<P> currentItemList);
@@ -27,7 +22,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
     public abstract List<P> getCurrentItemSearchedList();
 
 
-    public RoutineTableView(String promptText) {
+    public ReadOnlyTableView(String promptText) {
         super(promptText);
     }
 
@@ -35,14 +30,14 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      * Обновляет данные формы
      */
     public void updateTableView() {
-        updateRoutineTableView();
+        updateReadOnlyTableView();
     }
 
     /**
      * Обновляет данные формы
      */
-    public void updateRoutineTableView() {
-        TaskUpdateItemsInRoutineTableView<P> taskUpdate = new TaskUpdateItemsInRoutineTableView<>(this);
+    public void updateReadOnlyTableView() {
+        TaskUpdateItemsInReadOnlyTableView<P> taskUpdate = new TaskUpdateItemsInReadOnlyTableView<>(this);
         Thread t = new Thread(taskUpdate);
         t.setDaemon(true);
         t.start();

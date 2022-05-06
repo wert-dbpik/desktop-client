@@ -252,10 +252,29 @@ public class AppMenuController {
         MenuItem draftsItem = new MenuItem("Чертежи");
         draftsItem.setOnAction(this::openDrafts);
 
+        MenuItem changeHistoryItem = new MenuItem("История изменений");
+        changeHistoryItem.setOnAction(this::openChangeHistory);
+
         draftsMenu.getItems().add(draftsCabinetItem);
         draftsMenu.getItems().add(draftsItem);
+        draftsMenu.getItems().add(new SeparatorMenuItem());
+        draftsMenu.getItems().add(changeHistoryItem);
 
         return draftsMenu;
+    }
+
+    /**
+     * -- ИСТОРИЯ ИЗМЕНЕНИЙ
+     */
+    private void openChangeHistory(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/logging/changeHistory.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("История изменений", parent, true, null, loader.getController());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -380,6 +399,9 @@ public class AppMenuController {
         MenuItem userGroupsItem = new MenuItem("Группы Пользователей");
         userGroupsItem.setOnAction(this::openUserGroups);
 
+        MenuItem logsItem = new MenuItem("Логирование");
+        logsItem.setOnAction(this::openLogs);
+
         MenuItem catalogOfFolders = new MenuItem("Каталог папок");
         catalogOfFolders.setOnAction(this::openCatalogOfFolders);
 
@@ -388,12 +410,27 @@ public class AppMenuController {
 
         adminMenu.getItems().add(usersItem);
         adminMenu.getItems().add(userGroupsItem);
+        adminMenu.getItems().add(logsItem);
         adminMenu.getItems().add(new SeparatorMenuItem());
         adminMenu.getItems().add(catalogOfFolders);
         adminMenu.getItems().add(test);
 
 
         return adminMenu;
+    }
+
+    /**
+     * -- ЛОГИ
+     */
+    private void openLogs(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/logging/logging.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Логирование", parent, true, null, loader.getController());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

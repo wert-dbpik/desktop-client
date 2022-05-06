@@ -49,7 +49,7 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class AppStatic {
 
-    public static String PROTOTYPE_VERSION = "1.1.06 PROTOTYPE";//Текущая разрабатываемая версия
+    public static String PROTOTYPE_VERSION = "1.1.06 temp";//Текущая разрабатываемая версия
 
     public static final String DEC_NUMBER = "\\d{6}[.]\\d{3}";// XXXXXX.XXX
     public static final String DEC_NUMBER_WITH_EXT = "\\d{6}[.]\\d{3}[-]\\d{2,3}";// XXXXXX.XXX-ХХ(Х)
@@ -251,18 +251,19 @@ public class AppStatic {
      * Метод создает запись лога в базе данных
      * CURRENT_PROJECT_VERSION не определяется при запуске приложения из-под IDE
      */
-    public static void createLog(boolean forAdminOnly, String text){
+    public static void createLog(boolean forAdminOnly, String text) {
 
-        if(CH_CURRENT_USER.isLogging()) {
-            CH_LOGS.save(new AppLog(
-                    LocalDateTime.now().toString(),
-                    forAdminOnly,
-                    CH_CURRENT_USER,
-                    0,
-                    CURRENT_PROJECT_VERSION == null ? PROTOTYPE_VERSION : CURRENT_PROJECT_VERSION,
-                    text
-            ));
-        }
+        if (forAdminOnly && !CH_CURRENT_USER.isLogging()) return;
+
+        CH_LOGS.save(new AppLog(
+                LocalDateTime.now().toString(),
+                forAdminOnly,
+                CH_CURRENT_USER,
+                0,
+                CURRENT_PROJECT_VERSION == null ? PROTOTYPE_VERSION : CURRENT_PROJECT_VERSION,
+                text
+        ));
+
     }
 
 }
