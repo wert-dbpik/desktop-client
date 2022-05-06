@@ -58,6 +58,16 @@ public class AppLogService implements IAppLogService, ItemService<AppLog> {
         return null;
     }
 
+    public List<AppLog> findAllByUserAndAdminOnlyFalse(User user) {
+        try {
+            Call<List<AppLog>> call = api.getAllByUserIdAndAdminOnlyFalse(user.getId());
+            return call.execute().body();
+        } catch (IOException e) {
+            log.error("findAllByUserAndAdminOnlyFalse does wrong");
+        }
+        return null;
+    }
+
     public List<AppLog> findAllByApplication(Integer app) {
         try {
             Call<List<AppLog>> call = api.getAllByApplication(app);
@@ -68,10 +78,31 @@ public class AppLogService implements IAppLogService, ItemService<AppLog> {
         return null;
     }
 
+    public List<AppLog> findAllByApplicationAndAdminOnlyFalse(Integer app) {
+        try {
+            Call<List<AppLog>> call = api.getAllByApplicationAndAdminOnlyFalse(app);
+            return call.execute().body();
+        } catch (IOException e) {
+            log.error("findAllByApplicationAndAdminOnlyFalse does wrong");
+        }
+        return null;
+    }
+
     @Override
     public List<AppLog> findAllByTimeBetween(LocalDateTime startTime, LocalDateTime finishTime) {
         try {
             Call<List<AppLog>> call = api.getAllByTimeBetween(startTime, finishTime);
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<AppLog> findAllByTimeBetweenAndAdminOnlyFalse(LocalDateTime startTime, LocalDateTime finishTime) {
+        try {
+            Call<List<AppLog>> call = api.getAllByTimeBetweenAndAdminOnlyFalse(startTime, finishTime);
             return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();

@@ -18,11 +18,20 @@ public interface AppLogApiInterface {
     @GET("logs/all_by_user_id/{id}")
     Call<List<AppLog>> getAllByUserId(Long id);
 
+    @GET("logs/all_by_user_id_and_admin_only_false/{id}")
+    Call<List<AppLog>> getAllByUserIdAndAdminOnlyFalse(Long id);
+
     @GET("logs/all_by_application/{app}")
     Call<List<AppLog>> getAllByApplication(Integer app);
 
+    @GET("logs/all_by_application_and_admin_only_false/{app}")
+    Call<List<AppLog>> getAllByApplicationAndAdminOnlyFalse(Integer app);
+
     @GET("logs/all_by_time_between/{startTime}/{finishTime}")
     Call<List<AppLog>> getAllByTimeBetween(@Path("firstTime") LocalDateTime startTime, @Path("finishTime") LocalDateTime finishTime);
+
+    @GET("logs/all_by_time_between_and_admin_only_false/{startTime}/{finishTime}")
+    Call<List<AppLog>> getAllByTimeBetweenAndAdminOnlyFalse(@Path("firstTime") LocalDateTime startTime, @Path("finishTime") LocalDateTime finishTime);
 
     @GET("logs/all")
     Call<List<AppLog>> getAll();
