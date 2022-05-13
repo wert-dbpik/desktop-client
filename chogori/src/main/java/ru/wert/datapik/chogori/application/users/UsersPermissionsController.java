@@ -77,9 +77,6 @@ public class UsersPermissionsController implements SearchableTab, UpdatableTabCo
         }
     }
 
-
-
-
     private void createUserPane() {
         _UserPatch usersPatch = new _UserPatch();
         usersParent = usersPatch.getUsersPatch();

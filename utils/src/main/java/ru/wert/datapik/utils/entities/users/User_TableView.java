@@ -3,18 +3,21 @@ package ru.wert.datapik.utils.entities.users;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
 import lombok.Setter;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
+import ru.wert.datapik.utils.common.interfaces.Sorting;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.entities.users.commands._UserCommands;
+import ru.wert.datapik.utils.statics.Comparators;
 
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
-public class User_TableView extends RoutineTableView<User> {
+public class User_TableView extends RoutineTableView<User> implements Sorting<User> {
 
     private static final String accWindowRes = "/utils-fxml/users/usersACC.fxml";
     private final _UserCommands commands;
@@ -92,5 +95,15 @@ public class User_TableView extends RoutineTableView<User> {
     @Override
     public FormView_ACCController<User> getAccController() {
         return null;
+    }
+
+    /**
+     * Метод сортирует предложенный лист
+     *
+     * @param list List<P>
+     */
+    @Override
+    public void sortItemList(List<User> list) {
+        list.sort(Comparators.usefulStringComparator());
     }
 }

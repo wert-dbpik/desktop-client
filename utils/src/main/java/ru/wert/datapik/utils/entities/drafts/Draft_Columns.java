@@ -134,6 +134,7 @@ public class Draft_Columns {
             EDraftStatus status = EDraftStatus.getStatusById(statusId);
             String str = "";
             Label lblStatus = new Label();
+            lblStatus.setMouseTransparent(true); //Подсказка не работает
             if(status != null){
 //                if(status.equals(EDraftStatus.LEGAL)){
 

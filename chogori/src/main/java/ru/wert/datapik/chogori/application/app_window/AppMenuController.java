@@ -396,10 +396,10 @@ public class AppMenuController {
         MenuItem usersItem = new MenuItem("Пользователи");
         usersItem.setOnAction(this::openUsers);
 
-        MenuItem userGroupsItem = new MenuItem("Группы Пользователей");
+        MenuItem userGroupsItem = new MenuItem("Группы пользователей");
         userGroupsItem.setOnAction(this::openUserGroups);
 
-        MenuItem logsItem = new MenuItem("Логирование");
+        MenuItem logsItem = new MenuItem("Логи");
         logsItem.setOnAction(this::openLogs);
 
         MenuItem catalogOfFolders = new MenuItem("Каталог папок");

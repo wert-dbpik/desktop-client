@@ -3,11 +3,14 @@ package ru.wert.datapik.utils.entities.user_groups;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
 import lombok.Setter;
+import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
+import ru.wert.datapik.utils.common.interfaces.Sorting;
 import ru.wert.datapik.utils.common.tableView.RoutineTableView;
 import ru.wert.datapik.utils.entities.user_groups.commands._UserGroupCommands;
+import ru.wert.datapik.utils.statics.Comparators;
 
 
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.List;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USER_GROUPS;
 
-public class UserGroup_TableView extends RoutineTableView<UserGroup> {
+public class UserGroup_TableView extends RoutineTableView<UserGroup> implements Sorting<UserGroup> {
 
     private static final String accWindowRes = "/utils-fxml/user_group/userGroupACC.fxml";
     private final _UserGroupCommands commands;
@@ -91,5 +94,15 @@ public class UserGroup_TableView extends RoutineTableView<UserGroup> {
     @Override
     public FormView_ACCController<UserGroup> getAccController() {
         return null;
+    }
+
+    /**
+     * Метод сортирует предложенный лист
+     *
+     * @param list List<P>
+     */
+    @Override
+    public void sortItemList(List<UserGroup> list) {
+        list.sort(Comparators.usefulStringComparator());
     }
 }
