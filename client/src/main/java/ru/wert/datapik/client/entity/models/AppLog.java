@@ -28,6 +28,6 @@ public class AppLog extends _BaseEntity implements Item {
 
     @Override
     public String toUsefulString() {
-        return text;
+        return user.getName() + ": " + text;
     }
 }

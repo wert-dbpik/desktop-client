@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.application.users;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -94,6 +95,8 @@ public class UsersPermissionsController implements SearchableTab, UpdatableTabCo
         usersButtons.getChildren().add(dividerButton);
 
         apUsers.getChildren().add(usersParent);
+
+        Platform.runLater(()->userTable.requestFocus());
     }
 
     /**
@@ -112,12 +115,7 @@ public class UsersPermissionsController implements SearchableTab, UpdatableTabCo
 
     @Override
     public void tuneSearching() {
-//        CH_SEARCH_FIELD.setSearchableTableController(userTable);
-//        String searchedText = userTable.getSearchedText();
-//        if (searchedText.equals(""))
-//            CH_SEARCH_FIELD.setPromptText("ПОЛЬЗОВАТЕЛЬ");
-//        else
-//            CH_SEARCH_FIELD.setSearchedText(userTable.getSearchedText());
+        Platform.runLater(()->userTable.requestFocus());
     }
 
 

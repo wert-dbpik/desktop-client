@@ -48,6 +48,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
     @Getter ListProperty<Draft> preparedList = new SimpleListProperty<>();
 
+
+
     //Фильтр
     @Getter@Setter private boolean showValid = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
     @Getter@Setter private boolean showChanged = true; //ЗАМЕНЕНННЫЕ
@@ -226,7 +228,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         Platform.runLater(()->{
             preparedList.set(FXCollections.observableArrayList(finalList));
         });
-
 
         return list;
     }

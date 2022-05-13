@@ -30,12 +30,13 @@ public class ChangeHistoryController implements SearchableTab, UpdatableTabContr
         vbChangeHistory.getChildren().add(tableView);
     }
 
-    @Override
+    @Override //UpdatableTabController
     public void updateTab() {
         tableView.updateTableView();
+
     }
 
-    @Override
+    @Override //SearchableTab
     public void tuneSearching() {
         Platform.runLater(()->tableView.requestFocus());
     }

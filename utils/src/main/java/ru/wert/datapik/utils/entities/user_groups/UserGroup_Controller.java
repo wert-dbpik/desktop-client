@@ -45,7 +45,7 @@ public class UserGroup_Controller {
 
         boolean useContextMenu = CH_CURRENT_USER.getUserGroup().isEditUsers();
         userGroupTableView = new UserGroup_TableView("ГРУППЫ ПОЛЬЗОВАТЕЛЕЙ", useContextMenu);
-        userGroupTableView.updateView();
+//        userGroupTableView.updateView();
         VBox.setVgrow(userGroupTableView, Priority.ALWAYS);
         vbUserGroups.getChildren().add(userGroupTableView);
 

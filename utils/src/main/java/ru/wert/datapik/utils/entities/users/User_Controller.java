@@ -43,7 +43,7 @@ public class User_Controller {
     private void createUsers_TableView() {
         boolean useContextMenu = CH_CURRENT_USER.getUserGroup().isEditUsers();
         userTableView = new User_TableView("ПОЛЬЗОВАТЕЛЬ", useContextMenu);
-        userTableView.updateView();
+//        userTableView.updateView();
         VBox.setVgrow(userTableView, Priority.ALWAYS);
         vbUsers.getChildren().add(userTableView);
 

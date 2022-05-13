@@ -1,5 +1,9 @@
 package ru.wert.datapik.utils.entities.user_groups;
 
+import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +21,7 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USER_GROUPS;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class UserGroup_TableView extends RoutineTableView<UserGroup> implements Sorting<UserGroup> {
 
@@ -32,6 +37,10 @@ public class UserGroup_TableView extends RoutineTableView<UserGroup> implements 
         super(itemName);
 
         commands = new _UserGroupCommands(this);
+
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ГРУППА ПОЛЬЗОВАТЕЛЕЙ");
+        });
 
         if (useContextMenu)
             createContextMenu();

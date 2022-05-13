@@ -1,5 +1,9 @@
 package ru.wert.datapik.utils.entities.users;
 
+import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +20,7 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class User_TableView extends RoutineTableView<User> implements Sorting<User> {
 
@@ -25,12 +30,17 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
     private List<User> currentItemList;
     @Getter@Setter private Object modifyingItem;
 
+
     private String searchedText = "";
 
     public User_TableView(String itemName, boolean useContextMenu) {
         super(itemName);
 
         commands = new _UserCommands(this);
+
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ПОЛЬЗОВАТЕЛЬ");
+        });
 
         if (useContextMenu)
             createContextMenu();

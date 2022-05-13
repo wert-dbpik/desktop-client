@@ -176,7 +176,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
         Platform.runLater(()->draftsTable.requestFocus());
     }
 
-    @Override
+    @Override //UpdatableTabController
     public void updateTab() {
         productGroupsTreeView.updateView();
         folderTableView.updateVisibleLeafOfTableView(folderTableView.getUpwardRow().getValue());

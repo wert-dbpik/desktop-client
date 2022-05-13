@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.client.interfaces.UpdatableTabController;
 
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+
 public class LoggingController implements SearchableTab, UpdatableTabController {
 
     @FXML
@@ -30,12 +32,12 @@ public class LoggingController implements SearchableTab, UpdatableTabController 
         vbChangeHistory.getChildren().add(tableView);
     }
 
-    @Override
+    @Override //UpdatableTabController
     public void updateTab() {
         tableView.updateTableView();
     }
 
-    @Override
+    @Override //SearchableTab
     public void tuneSearching() {
         Platform.runLater(()->tableView.requestFocus());
     }

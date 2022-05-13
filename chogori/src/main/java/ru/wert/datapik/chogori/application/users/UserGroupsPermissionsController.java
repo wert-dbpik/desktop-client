@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.application.users;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -93,14 +94,14 @@ public class UserGroupsPermissionsController implements SearchableTab, Updatable
             permissionsController.init(newValue);
         });
 
-
-
         AnchorPane userAnchorPane = userGroupController.getApUserGroupsPatch();
         AppStatic.setNodeInAnchorPane(userAnchorPane);
 
         userGroupsButtons.getChildren().add(dividerButton);
 
         apUsers.getChildren().add(userGroupsParent);
+
+        Platform.runLater(()->userGroupTable.requestFocus());
     }
 
     /**
@@ -119,12 +120,7 @@ public class UserGroupsPermissionsController implements SearchableTab, Updatable
 
     @Override
     public void tuneSearching() {
-//        CH_SEARCH_FIELD.setSearchableTableController(userGroupTable);
-//        String searchedText = userGroupTable.getSearchedText();
-//        if (searchedText.equals(""))
-//            CH_SEARCH_FIELD.setPromptText("ГРУППА ПОЛЬЗОВАТЕЛЕЙ");
-//        else
-//            CH_SEARCH_FIELD.setSearchedText(userGroupTable.getSearchedText());
+        Platform.runLater(()->userGroupTable.requestFocus());
     }
 
     @Override

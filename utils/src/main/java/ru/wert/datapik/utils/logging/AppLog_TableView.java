@@ -11,6 +11,7 @@ import java.util.List;
 
 import static java.util.Collections.reverse;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_LOGS;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class AppLog_TableView extends ReadOnlyTableView<AppLog> {
 
@@ -22,6 +23,10 @@ public class AppLog_TableView extends ReadOnlyTableView<AppLog> {
     public AppLog_TableView(String itemName, boolean adminOnly, boolean useContextMenu) {
         super(itemName);
         this.adminOnly = adminOnly;
+
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            CH_SEARCH_FIELD.changeSearchedTableView(this, "ЛОГ");
+        });
 
         if (useContextMenu)
             createContextMenu();
