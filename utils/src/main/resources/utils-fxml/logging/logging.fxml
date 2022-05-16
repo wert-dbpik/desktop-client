@@ -23,8 +23,14 @@
                      <padding>
                         <Insets bottom="3.0" top="3.0" />
                      </padding>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                   </HBox>
                </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
             </HBox>
          </children>
       </VBox>

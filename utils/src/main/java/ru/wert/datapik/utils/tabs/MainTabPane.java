@@ -51,6 +51,8 @@ public class MainTabPane extends TabPane {
 
         if(tabController instanceof SearchableTab)
             showSearchPane();
+        else
+            hideSearchPane();
 
 
         AppTab tab = tabIsAvailable(name);
@@ -72,13 +74,23 @@ public class MainTabPane extends TabPane {
                 hideSearchPane();
         });
 
+        tab.setOnSelectionChanged(e->{
+            if(tabController instanceof SearchableTab) {
+                ((SearchableTab) tabController).tuneSearching();
+                showSearchPane();
+            } else
+                hideSearchPane();
+        });
 
         if (showTab) {
             //ОТКРЫВАЕМ созданную вкладку
             getSelectionModel().select(tab);
             //Создаем поле поиска
-            if(tabController instanceof SearchableTab)
-                ((SearchableTab)tabController).tuneSearching();
+            if(tabController instanceof SearchableTab) {
+                ((SearchableTab) tabController).tuneSearching();
+                showSearchPane();
+            } else
+                hideSearchPane();
         }
 
     }

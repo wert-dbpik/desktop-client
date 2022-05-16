@@ -142,6 +142,9 @@ public class AppMenuController {
         MenuItem changeUserItem = new MenuItem("Сменить пользователя");
         changeUserItem.setOnAction(this::changeUser);
 
+        MenuItem chatItem = new MenuItem("Чат");
+        chatItem.setOnAction(this::openChat);
+
         MenuItem updateData = new MenuItem("Обновить данные");
         updateData.setOnAction(this::updateData);
 
@@ -152,11 +155,28 @@ public class AppMenuController {
         mainMenu.getItems().add(changeUserItem);
         mainMenu.getItems().add(changePassword);
         mainMenu.getItems().add(settings);
+        if(!CH_CURRENT_USER.getName().equals("Гость"))
+            mainMenu.getItems().add(chatItem);
         mainMenu.getItems().add(updateData);
         mainMenu.getItems().add(exitItem);
 
         return mainMenu;
     }
+
+    /**
+     * ОТКРЫТЬ ЧАТ
+     */
+    private void openChat(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/chat/chat.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Чат", parent, true, null, loader.getController());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * ОБНОВИТЬ ДАННЫЕ
