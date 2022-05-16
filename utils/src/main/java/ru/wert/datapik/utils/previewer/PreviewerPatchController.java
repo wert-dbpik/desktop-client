@@ -45,6 +45,7 @@ import java.util.List;
 
 import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.statics.AppStatic.openDraftInPreviewer;
 
 //import ru.wert.datapik.client.entity.models.Draft;
 @Slf4j
@@ -76,6 +77,7 @@ public class PreviewerPatchController {
     ContextMenu contextMenu;
     private PDFReader pdfReader; //см enum PDFViewer
     private StackPane pdfStackPane; //панель на которой работает pdfReader
+    private boolean useBtnUpdateDraftView;
     private boolean useBtnOpenInNewTab;
     private boolean useBtnOpenInOuterApp;
     private boolean useBtnShowInfo;
@@ -129,7 +131,8 @@ public class PreviewerPatchController {
 
     }
 
-    public void initPreviewerToolBar(boolean useBtnOpenInNewTab, boolean useBtnOpenInOuterApp, boolean useBtnShowInfo, boolean useBrackets){
+    public void initPreviewerToolBar(boolean useBtnUpdateDraftView, boolean useBtnOpenInNewTab, boolean useBtnOpenInOuterApp, boolean useBtnShowInfo, boolean useBrackets){
+        this.useBtnUpdateDraftView = useBtnUpdateDraftView;
         this.useBtnOpenInNewTab = useBtnOpenInNewTab;
         this.useBtnOpenInOuterApp = useBtnOpenInOuterApp;
         this.useBtnShowInfo = useBtnShowInfo;
@@ -182,6 +185,16 @@ public class PreviewerPatchController {
             new DraftInfoPatch().create(currentDraft.get(), event);
         });
 
+        Button updateDraftView = new Button();
+        updateDraftView.setId("patchButton");
+        updateDraftView.setGraphic(new ImageView(BTN_UPDATE_IMG));
+        updateDraftView.setTooltip(new Tooltip("Обновить изображение"));
+        updateDraftView.setOnAction(event -> {
+            Draft selectedDraft = draftsTableView.getSelectionModel().getSelectedItem();
+            openDraftInPreviewer(selectedDraft, this);
+        });
+
+        if (useBtnUpdateDraftView) hboxPreviewerButtons.getChildren().add(updateDraftView);
         if (useBtnShowInfo) hboxPreviewerButtons.getChildren().add(btnShowInfo);
         if (useBtnOpenInOuterApp) hboxPreviewerButtons.getChildren().add(openInOuterApp);
         if (useBtnOpenInNewTab) hboxPreviewerButtons.getChildren().add(btnOpenInNewTab);

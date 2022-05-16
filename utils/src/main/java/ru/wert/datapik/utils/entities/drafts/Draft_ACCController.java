@@ -1027,7 +1027,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             //Помещаем панель с previewer в шаблонное окно WindowDecoration
             previewerController = loader.getController();
             previewerController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
-            previewerController.initPreviewerToolBar(false, false, false, false);
+            previewerController.initPreviewerToolBar(false, false, false, false, false);
 
             //Создаем прозрачную панель с индикатором
             spIndicator = new StackPane();

@@ -33,6 +33,7 @@ public class BtnImages {
     public static Image BTN_EYE_CLOSE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/eye_close(32x32).png"), 24, 24, true, true);
     public static Image BTN_DESKTOP_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/desktop(32x32).png"), 24, 24, true, true);
     public static Image BTN_ANDROID_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/android(32x32).png"), 24, 24, true, true);
+    public static Image BTN_UPDATE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/update(32x32).png"), size, size, true, true);
 
 
 
