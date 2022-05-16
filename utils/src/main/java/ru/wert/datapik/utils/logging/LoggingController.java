@@ -2,13 +2,19 @@ package ru.wert.datapik.utils.logging;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.client.interfaces.UpdatableTabController;
 
+import static ru.wert.datapik.utils.images.BtnImages.BTN_UPDATE_IMG;
+import static ru.wert.datapik.utils.statics.AppStatic.openDraftInPreviewer;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class LoggingController implements SearchableTab, UpdatableTabController {
@@ -30,6 +36,15 @@ public class LoggingController implements SearchableTab, UpdatableTabController 
         tableView.updateView();
         VBox.setVgrow(tableView, Priority.ALWAYS);
         vbChangeHistory.getChildren().add(tableView);
+
+        Button btnUpdate = new Button();
+        btnUpdate.setId("patchButton");
+        btnUpdate.setGraphic(new ImageView(BTN_UPDATE_IMG));
+        btnUpdate.setTooltip(new Tooltip("Обновить логи"));
+        btnUpdate.setOnAction(event -> {
+            tableView.updateTableView();
+        });
+        changeHistoryButtons.getChildren().add(btnUpdate);
     }
 
     @Override //UpdatableTabController
