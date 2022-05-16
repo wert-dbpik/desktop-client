@@ -17,6 +17,7 @@ import ru.wert.datapik.utils.entities.user_groups.commands._UserGroupCommands;
 import ru.wert.datapik.utils.statics.Comparators;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
@@ -28,7 +29,7 @@ public class UserGroup_TableView extends RoutineTableView<UserGroup> implements 
     private static final String accWindowRes = "/utils-fxml/user_group/userGroupACC.fxml";
     private final _UserGroupCommands commands;
     private UserGroup_ContextMenu contextMenu;
-    private List<UserGroup> currentItemList;
+    private List<UserGroup> currentItemList = new ArrayList<>();
     @Getter@Setter private Object modifyingItem;
 
     private String searchedText = "";
