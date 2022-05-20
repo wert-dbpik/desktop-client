@@ -48,8 +48,8 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
 public class AppStatic {
-
-    public static String PROTOTYPE_VERSION = "1.1.06 temp";//Текущая разрабатываемая версия
+    public static String CURRENT_PROJECT_VERSION = "1.2"; //Версия приложения обновляется вручную
+    public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
 
     public static final String DEC_NUMBER = "\\d{6}[.]\\d{3}";// XXXXXX.XXX
     public static final String DEC_NUMBER_WITH_EXT = "\\d{6}[.]\\d{3}[-]\\d{2,3}";// XXXXXX.XXX-ХХ(Х)
@@ -58,8 +58,7 @@ public class AppStatic {
 
     public static final String UPWARD = "< . . . >";
     public static final char TILDA = '\u02F7';
-    public static String CURRENT_PROJECT_VERSION;
-    public static String NEWER_PROJECT_VERSION;
+
 
     public static void closeWindow(Event event){
         ((Node) event.getSource()).getScene().getWindow().hide();
@@ -260,7 +259,7 @@ public class AppStatic {
                 forAdminOnly,
                 CH_CURRENT_USER,
                 0,
-                CURRENT_PROJECT_VERSION == null ? PROTOTYPE_VERSION : CURRENT_PROJECT_VERSION,
+                CURRENT_PROJECT_VERSION,
                 text
         ));
 

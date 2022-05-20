@@ -56,7 +56,7 @@ public class ApplicationController {
         createTabPane();
         createButtonInterceptor();
 
-        if(AppStatic.NEWER_PROJECT_VERSION != null)
+        if(Float.parseFloat(AppStatic.CURRENT_PROJECT_VERSION) < Float.parseFloat(AppStatic.LAST_VERSION_IN_DB))
             createAdvertLabel();
 
         try {
@@ -118,7 +118,7 @@ public class ApplicationController {
     private void createAdvertLabel(){
         Label lblNewVersion = new Label();
         lblNewVersion.setStyle("-fx-text-fill: #FFFF99; -fx-background-color: -fx-my-black;");
-        lblNewVersion.setText("Доступна новая версия v." + AppStatic.NEWER_PROJECT_VERSION);
+        lblNewVersion.setText("Доступна новая версия v." + AppStatic.LAST_VERSION_IN_DB);
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {

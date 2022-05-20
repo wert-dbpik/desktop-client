@@ -39,8 +39,8 @@ public class About extends ModalWindow {
 
             Label versionInfo = (Label)parent.lookup("#lblVersionInfo");
             versionInfo.setStyle("-fx-text-fill: #FFFF99");
-            if(AppStatic.NEWER_PROJECT_VERSION != null)
-                versionInfo.setText("доступна новая версия " + AppStatic.NEWER_PROJECT_VERSION);
+            if(Float.parseFloat(AppStatic.CURRENT_PROJECT_VERSION) < Float.parseFloat(AppStatic.LAST_VERSION_IN_DB))
+                versionInfo.setText("доступна новая версия " + AppStatic.LAST_VERSION_IN_DB);
             else
                 versionInfo.setText("(это последняя версия)");
 

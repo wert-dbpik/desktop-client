@@ -96,6 +96,8 @@ public class UsersPermissionsController implements SearchableTab, UpdatableTabCo
 
         apUsers.getChildren().add(usersParent);
 
+        userTable.updateTableView();
+
         Platform.runLater(()->userTable.requestFocus());
     }
 

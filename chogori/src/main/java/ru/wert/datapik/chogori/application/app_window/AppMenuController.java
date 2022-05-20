@@ -155,8 +155,8 @@ public class AppMenuController {
         mainMenu.getItems().add(changeUserItem);
         mainMenu.getItems().add(changePassword);
         mainMenu.getItems().add(settings);
-        if(!CH_CURRENT_USER.getName().equals("Гость"))
-            mainMenu.getItems().add(chatItem);
+//        if(!CH_CURRENT_USER.getName().equals("Гость"))
+//            mainMenu.getItems().add(chatItem);
         mainMenu.getItems().add(updateData);
         mainMenu.getItems().add(exitItem);
 

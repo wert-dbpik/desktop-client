@@ -101,6 +101,8 @@ public class UserGroupsPermissionsController implements SearchableTab, Updatable
 
         apUsers.getChildren().add(userGroupsParent);
 
+        userGroupTable.updateTableView();
+
         Platform.runLater(()->userGroupTable.requestFocus());
     }
 
