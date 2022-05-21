@@ -56,7 +56,7 @@ public class ApplicationController {
         createTabPane();
         createButtonInterceptor();
 
-        if(Float.parseFloat(AppStatic.CURRENT_PROJECT_VERSION) < Float.parseFloat(AppStatic.LAST_VERSION_IN_DB))
+        if(AppStatic.CURRENT_PROJECT_VERSION.compareTo(AppStatic.LAST_VERSION_IN_DB) < 0)
             createAdvertLabel();
 
         try {

@@ -40,11 +40,11 @@ public class About extends ModalWindow {
             //ВЕРСИЯ
             Label versionInfo = (Label)parent.lookup("#lblVersionInfo");
             versionInfo.setStyle("-fx-text-fill: #FFFF99");
-            float currentVersion = Float.parseFloat(AppStatic.CURRENT_PROJECT_VERSION);
-            float inDataBaseVersion = Float.parseFloat(AppStatic.LAST_VERSION_IN_DB);
-            if(currentVersion == inDataBaseVersion)
+            String currentVersion = AppStatic.CURRENT_PROJECT_VERSION;
+            String inDataBaseVersion = AppStatic.LAST_VERSION_IN_DB;
+            if(currentVersion.compareTo(inDataBaseVersion) == 0)
                 versionInfo.setText("(это последняя версия)");
-            else if(currentVersion < inDataBaseVersion)
+            else if(currentVersion.compareTo(inDataBaseVersion) < 0)
                 versionInfo.setText("доступна новая версия " + AppStatic.LAST_VERSION_IN_DB);
             else
                 versionInfo.setText("Это beta версия");
