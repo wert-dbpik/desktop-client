@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.users;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -58,7 +59,7 @@ public class User_ACCController extends FormView_ACCController<User> {
         AppStatic.createSpIndicator(spIndicator);
 
         //Инициализация комбобокса с группами юзеров
-        ObservableList<UserGroup> list = CH_USER_GROUPS.findAll();
+        ObservableList<UserGroup> list = FXCollections.observableArrayList(CH_USER_GROUPS.findAll());
         cmbxGroup.setItems(list);
 
     }

@@ -1,8 +1,5 @@
 package ru.wert.datapik.client.entity.serviceQUICK;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.models.ProductGroup;
@@ -66,7 +63,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
     }
 
     public List<Product> findAllByFolderId(Long id) {
-        ObservableList<Product> foundProducts = FXCollections.observableArrayList();
+        List<Product> foundProducts = new ArrayList<>();
         for(Product product : products){
             if(product.getFolder().getId().equals(id)) {
                 foundProducts.add(product);
@@ -77,7 +74,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
 
     @Override //CatalogService
     public List<Product> findAllByGroupId(Long id) {
-        ObservableList<Product> foundProducts = FXCollections.observableArrayList();
+        List<Product> foundProducts = new ArrayList<>();
         for(Product product : products){
             if(product.getProductGroup().getId().equals(id)) {
                 foundProducts.add(product);
@@ -121,12 +118,12 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
         return res;
     }
 
-    public ObservableList<Product> findAll() {
-        return FXCollections.observableArrayList(products);
+    public List<Product> findAll() {
+        return products;
     }
 
-    public ObservableList<Product> findAllByText(String text) {
-        ObservableList<Product> foundProducts = FXCollections.observableArrayList();
+    public List<Product> findAllByText(String text) {
+        List<Product> foundProducts = new ArrayList<>();
         for(Product product : products){
             String name = product.getPassport().getName();
             String decNumber = product.getPassport().getNumber();

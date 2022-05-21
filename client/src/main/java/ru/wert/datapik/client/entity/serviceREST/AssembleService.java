@@ -1,7 +1,6 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.models.Assemble;
 import ru.wert.datapik.client.entity.models.Detail;
@@ -71,10 +70,10 @@ public class AssembleService implements IAssembleService, ItemService<Assemble> 
     }
 
     @Override
-    public ObservableList<Assemble> findAll() {
+    public List<Assemble> findAll() {
         try {
             Call<List<Assemble>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,10 +81,10 @@ public class AssembleService implements IAssembleService, ItemService<Assemble> 
     }
 
     @Override
-    public ObservableList<Assemble> findAllByText(String text) {
+    public List<Assemble> findAllByText(String text) {
         try {
             Call<List<Assemble>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,10 +92,10 @@ public class AssembleService implements IAssembleService, ItemService<Assemble> 
     }
 
     @Override
-    public ObservableList<Assemble> findAllByDraftId(Long id) {
+    public List<Assemble> findAllByDraftId(Long id) {
         try {
             Call<List<Assemble>> call = api.getAllByDraftId(id);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

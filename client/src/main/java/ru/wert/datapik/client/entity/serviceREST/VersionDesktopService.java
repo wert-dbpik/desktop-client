@@ -59,10 +59,10 @@ public class VersionDesktopService implements IVersionDesktopService, ItemServic
     }
     
     @Override
-    public ObservableList<VersionDesktop> findAll() {
+    public List<VersionDesktop> findAll() {
         try {
             Call<List<VersionDesktop>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,7 +70,7 @@ public class VersionDesktopService implements IVersionDesktopService, ItemServic
     }
 
     @Override
-    public ObservableList<VersionDesktop> findAllByText(String text) {
+    public List<VersionDesktop> findAllByText(String text) {
         //не используется
         return null;
     }

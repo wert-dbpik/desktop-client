@@ -188,7 +188,7 @@ public abstract class FormView_ACCController<P extends Item>{
     protected boolean isDuplicated(P newItem, P oldItem){
 
         //Из листа удаляется выделенная запись (старая)
-        ObservableList<P> items = service.findAll();
+        List<P> items = service.findAll();
         if(oldItem != null)items.remove(oldItem);
 
         //Теперь новая запись сравнивается только с оставшимися записями

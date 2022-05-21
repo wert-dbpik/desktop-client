@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.MatTypeApiInterface;
 import ru.wert.datapik.client.entity.models.MatType;
@@ -56,10 +54,10 @@ public class MatTypeService implements IMatTypeService, ItemService<MatType> {
     }
 
     @Override
-    public ObservableList<MatType> findAll() {
+    public List<MatType> findAll() {
         try {
             Call<List<MatType>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,10 +65,10 @@ public class MatTypeService implements IMatTypeService, ItemService<MatType> {
     }
 
     @Override
-    public ObservableList<MatType> findAllByText(String text) {
+    public List<MatType> findAllByText(String text) {
         try {
             Call<List<MatType>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -58,10 +58,10 @@ public class VersionAndroidService implements IVersionAndroidService, ItemServic
     }
     
     @Override
-    public ObservableList<VersionAndroid> findAll() {
+    public List<VersionAndroid> findAll() {
         try {
             Call<List<VersionAndroid>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,7 +69,7 @@ public class VersionAndroidService implements IVersionAndroidService, ItemServic
     }
 
     @Override
-    public ObservableList<VersionAndroid> findAllByText(String text) {
+    public List<VersionAndroid> findAllByText(String text) {
         //не используется
         return null;
     }

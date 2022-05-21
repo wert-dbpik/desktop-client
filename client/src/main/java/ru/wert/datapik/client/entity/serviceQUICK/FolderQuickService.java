@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceQUICK;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.serviceREST.FolderService;
@@ -58,7 +56,7 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
 
     @Override //CatalogService
     public List<Folder> findAllByGroupId(Long id) {
-        ObservableList<Folder> foundFolders = FXCollections.observableArrayList();
+        List<Folder> foundFolders = new ArrayList<>();
         for(Folder folder : folders){
             if(folder.getProductGroup().getId().equals(id)) {
                 foundFolders.add(folder);
@@ -99,12 +97,12 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
         return res;
     }
 
-    public ObservableList<Folder> findAll() {
-        return FXCollections.observableArrayList(folders);
+    public List<Folder> findAll() {
+        return folders;
     }
 
-    public ObservableList<Folder> findAllByText(String text) {
-        ObservableList<Folder> foundFolders = FXCollections.observableArrayList();
+    public List<Folder> findAllByText(String text) {
+        List<Folder> foundFolders = new ArrayList<>();
         for(Folder folder : folders){
             String name = folder.getName();
 

@@ -1,7 +1,6 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.AnyPartApiInterface;
 import ru.wert.datapik.client.entity.models.AnyPart;
@@ -57,10 +56,10 @@ public class AnyPartService implements IAnyPartService, ItemService<AnyPart> {
     }
 
     @Override
-    public ObservableList<AnyPart> findAll() {
+    public List<AnyPart> findAll() {
         try {
             Call<List<AnyPart>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,10 +67,10 @@ public class AnyPartService implements IAnyPartService, ItemService<AnyPart> {
     }
 
     @Override
-    public ObservableList<AnyPart> findAllByText(String text) {
+    public List<AnyPart> findAllByText(String text) {
         try {
             Call<List<AnyPart>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -128,47 +127,6 @@ public class AnyPartService implements IAnyPartService, ItemService<AnyPart> {
         }
         return part;
     }
-    
-    //ЧЕРТЕЖИ 
-
-//    @Override
-//    public ObservableSet<Draft> findDrafts(AnyPart part) {
-//        try {
-//            Call<Set<Draft>> call = api.getDraft(part.getId());
-//            Set<Draft> res = call.execute().body();
-//            if(res != null)
-//                return FXCollections.observableSet(res);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public ObservableSet<Draft> addDrafts(AnyPart part, Draft draft) {
-//        try {
-//            Call<Set<Draft>> call = api.addDraft(part.getId(), draft.getId());
-//            Set<Draft> res = call.execute().body();
-//            if(res != null)
-//                return FXCollections.observableSet(res);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public ObservableSet<Draft> removeDrafts(AnyPart part, Draft draft) {
-//        try {
-//            Call<Set<Draft>> call = api.removeDraft(part.getId(), draft.getId());
-//            Set<Draft> res = call.execute().body();
-//            if(res != null)
-//                return FXCollections.observableSet(res);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
 
 }

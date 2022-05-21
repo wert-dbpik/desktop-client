@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.components;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -20,7 +21,7 @@ public class BXMatType {
         this.bxMatType = bxMatType;
 
 
-        ObservableList<MatType> matTypes = CH_MAT_TYPES.findAll();
+        ObservableList<MatType> matTypes = FXCollections.observableArrayList(CH_MAT_TYPES.findAll());
         bxMatType.setItems(matTypes);
 
         createCellFactory();

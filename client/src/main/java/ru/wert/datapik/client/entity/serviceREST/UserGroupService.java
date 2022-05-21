@@ -1,12 +1,9 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.UserGroupApiInterface;
 import ru.wert.datapik.client.entity.models.UserGroup;
 import ru.wert.datapik.client.entity.service_interfaces.IUserGroupService;
-import ru.wert.datapik.client.exceptions.ItemIsBusyException;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.client.utils.BLlinks;
@@ -57,10 +54,10 @@ public class UserGroupService implements IUserGroupService, ItemService<UserGrou
     }
 
     @Override
-    public ObservableList<UserGroup> findAll() {
+    public List<UserGroup> findAll() {
         try {
             Call<List<UserGroup>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,10 +65,10 @@ public class UserGroupService implements IUserGroupService, ItemService<UserGrou
     }
 
     @Override
-    public ObservableList<UserGroup> findAllByText(String text) {
+    public List<UserGroup> findAllByText(String text) {
         try {
             Call<List<UserGroup>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

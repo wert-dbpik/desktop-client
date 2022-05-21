@@ -195,7 +195,7 @@ public class AppStatic {
     public static Prefix getPrefixInDecNumber(String fullDecNumber){
         if(fullDecNumber.contains(".")){
             String[] str = fullDecNumber.split(Pattern.quote("."), 2);
-            ObservableList<Prefix> list = CH_QUICK_PREFIXES.findAll();
+            List<Prefix> list = CH_QUICK_PREFIXES.findAll();
             for(Prefix p : list)
                 if(p.getName().equals(str[0]))
                     return p;

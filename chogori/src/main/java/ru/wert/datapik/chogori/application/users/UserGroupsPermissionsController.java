@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori.application.users;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -128,7 +129,7 @@ public class UserGroupsPermissionsController implements SearchableTab, Updatable
     @Override
     public void updateTab() {
         UserGroup group = userGroupTable.getSelectionModel().getSelectedItem();
-        userGroupTable.setItems(CH_USER_GROUPS.findAll());
+        userGroupTable.setItems(FXCollections.observableArrayList(CH_USER_GROUPS.findAll()));
         if(group != null)
             userGroupTable.getSelectionModel().select(group);
         userGroupTable.refresh();

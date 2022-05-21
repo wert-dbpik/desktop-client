@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceQUICK;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ru.wert.datapik.client.entity.models.Detail;
 import ru.wert.datapik.client.entity.serviceREST.DetailService;
 import ru.wert.datapik.client.entity.service_interfaces.IDetailService;
@@ -45,8 +43,8 @@ public class DetailQuickService implements IDetailService {
         return foundDetail;
     }
 
-    public ObservableList<Detail> findAllByText(String text) {
-        ObservableList<Detail> foundDetails = FXCollections.observableArrayList();
+    public List<Detail> findAllByText(String text) {
+        List<Detail> foundDetails = new ArrayList<>();
         for(Detail detail : details){
             String name = detail.getPassport().getName();
             String decNumber = detail.getPassport().getNumber();
@@ -89,8 +87,8 @@ public class DetailQuickService implements IDetailService {
         return res;
     }
 
-    public ObservableList<Detail> findAll() {
-        return FXCollections.observableArrayList(details);
+    public List<Detail> findAll() {
+        return details;
     }
 
     @Override

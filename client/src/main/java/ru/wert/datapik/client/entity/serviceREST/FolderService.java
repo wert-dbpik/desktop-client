@@ -1,16 +1,12 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.FolderApiInterface;
 import ru.wert.datapik.client.entity.models.Folder;
-import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.client.entity.service_interfaces.IFolderService;
-import ru.wert.datapik.client.interfaces.CatalogService;
-import ru.wert.datapik.client.utils.BLlinks;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
+import ru.wert.datapik.client.utils.BLlinks;
 
 import java.io.IOException;
 import java.util.List;
@@ -58,10 +54,10 @@ public class FolderService implements IFolderService, ItemService<Folder> {
     }
 
     @Override
-    public ObservableList<Folder> findAll() {
+    public List<Folder> findAll() {
         try {
             Call<List<Folder>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,10 +76,10 @@ public class FolderService implements IFolderService, ItemService<Folder> {
     }
 
     @Override
-    public ObservableList<Folder> findAllByText(String text) {
+    public List<Folder> findAllByText(String text) {
         try {
             Call<List<Folder>> call = api.getAllByText(text);;
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

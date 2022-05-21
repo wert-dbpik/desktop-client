@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.UserApiInterface;
@@ -68,10 +66,10 @@ public class UserService implements IUserService, ItemService<User> {
     }
 
     @Override
-    public ObservableList<User> findAll() {
+    public List<User> findAll() {
         try {
             Call<List<User>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,10 +77,10 @@ public class UserService implements IUserService, ItemService<User> {
     }
 
     @Override
-    public ObservableList<User> findAllByText(String text) {
+    public List<User> findAllByText(String text) {
         try {
             Call<List<User>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

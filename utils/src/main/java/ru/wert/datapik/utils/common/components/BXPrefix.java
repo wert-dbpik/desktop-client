@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.components;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -16,7 +17,7 @@ public class BXPrefix {
 
     public void create(ComboBox<Prefix> bxPrefix){
         this.bxPrefix = bxPrefix;
-        ObservableList<Prefix> prefixes = CH_QUICK_PREFIXES.findAll();
+        ObservableList<Prefix> prefixes = FXCollections.observableArrayList(CH_QUICK_PREFIXES.findAll());
         bxPrefix.setItems(prefixes);
 
         createCellFactory();

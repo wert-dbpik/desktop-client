@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.DetailApiInterface;
 import ru.wert.datapik.client.entity.models.Detail;
@@ -71,10 +69,10 @@ public class DetailService implements IDetailService, ItemService<Detail>, PartI
     }
 
     @Override
-    public ObservableList<Detail> findAll() {
+    public List<Detail> findAll() {
         try {
             Call<List<Detail>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,10 +80,10 @@ public class DetailService implements IDetailService, ItemService<Detail>, PartI
     }
 
     @Override
-    public ObservableList<Detail> findAllByText(String text) {
+    public List<Detail> findAllByText(String text) {
         try {
             Call<List<Detail>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,10 +91,10 @@ public class DetailService implements IDetailService, ItemService<Detail>, PartI
     }
 
     @Override
-    public ObservableList<Detail> findAllByDraftId(Long id) {
+    public List<Detail> findAllByDraftId(Long id) {
         try {
             Call<List<Detail>> call = api.getAllByDraftId(id);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

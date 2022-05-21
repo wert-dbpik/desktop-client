@@ -57,7 +57,7 @@ public class AppLog_TableView extends ReadOnlyTableView<AppLog> {
         List<AppLog> logs;
         if(adminOnly) logs = CH_LOGS.findAllByAdminOnlyFalse();
         else logs = CH_LOGS.findAll();
-        reverse(logs);
+        if(logs != null) reverse(logs);
         return logs;
     }
 

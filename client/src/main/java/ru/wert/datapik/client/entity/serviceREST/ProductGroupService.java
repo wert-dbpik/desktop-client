@@ -1,11 +1,9 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.ProductGroupApiInterface;
-import ru.wert.datapik.client.entity.service_interfaces.IProductGroupService;
 import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.entity.service_interfaces.IProductGroupService;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.client.utils.BLlinks;
@@ -56,10 +54,10 @@ public class ProductGroupService implements IProductGroupService, ItemService<Pr
     }
 
     @Override
-    public ObservableList<ProductGroup> findAll() {
+    public List<ProductGroup> findAll() {
         try {
             Call<List<ProductGroup>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,10 +65,10 @@ public class ProductGroupService implements IProductGroupService, ItemService<Pr
     }
 
     @Override
-    public ObservableList<ProductGroup> findAllByText(String text) {
+    public List<ProductGroup> findAllByText(String text) {
         try {
             Call<List<ProductGroup>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

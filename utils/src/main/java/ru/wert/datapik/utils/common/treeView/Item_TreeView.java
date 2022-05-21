@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.treeView;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -80,7 +81,7 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
         log.debug("Нормализация дерева {} проведена успешно", rootItem.getClass().getSimpleName());
 
         //Получаем копию таблицы элементов из БД
-        ObservableList<T> elements = itemService.findAll();
+        ObservableList<T> elements = FXCollections.observableArrayList(itemService.findAll());
         elements.sort(createTreeViewComparator());
 
         root = new TreeItem<T>(rootItem);
@@ -138,7 +139,7 @@ public abstract class Item_TreeView<P extends Item, T extends CatalogGroup> exte
      */
     private void normalizeTreeView(){
         //Создаем копию элементов из БД
-        ObservableList<T> Ts = itemService.findAll();
+        List<T> Ts = itemService.findAll();
         //Создаем для коллекции итератор
         //Пробегаем по коллекции
         for (T tg1 : Ts) {

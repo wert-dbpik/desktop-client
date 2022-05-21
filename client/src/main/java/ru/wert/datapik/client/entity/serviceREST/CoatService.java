@@ -1,7 +1,6 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.CoatApiInterface;
 import ru.wert.datapik.client.entity.models.Coat;
@@ -56,10 +55,10 @@ public class CoatService implements ICoatService, ItemService<Coat> {
     }
 
     @Override
-    public ObservableList<Coat> findAll() {
+    public List<Coat> findAll() {
         try {
             Call<List<Coat>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,10 +66,10 @@ public class CoatService implements ICoatService, ItemService<Coat> {
     }
 
     @Override
-    public ObservableList<Coat> findAllByText(String text) {
+    public List<Coat> findAllByText(String text) {
         try {
             Call<List<Coat>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

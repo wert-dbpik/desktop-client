@@ -33,7 +33,7 @@ public class TaskUpdateItemsInReadOnlyTableView<P extends Item> extends Task<Voi
 
         List<P> items = itemView.prepareList();
 
-        if (items.isEmpty()) {
+        if (items == null || items.isEmpty()) {
             showEmptyTable();
         } else {
 

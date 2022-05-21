@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceQUICK;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.entity.serviceREST.PrefixService;
 import ru.wert.datapik.client.entity.service_interfaces.IPrefixService;
@@ -82,12 +80,12 @@ public class PrefixQuickService implements IPrefixService {
         return res;
     }
 
-    public ObservableList<Prefix> findAll() {
-        return FXCollections.observableArrayList(prefixes);
+    public List<Prefix> findAll() {
+        return prefixes;
     }
 
-    public ObservableList<Prefix> findAllByText(String text) {
-        ObservableList<Prefix> foundPrefixes = FXCollections.observableArrayList();
+    public List<Prefix> findAllByText(String text) {
+        List<Prefix> foundPrefixes = new ArrayList<>();
         for(Prefix prefix : prefixes){
             String name = prefix.getName();
             if((name != null && name.contains(text))) {

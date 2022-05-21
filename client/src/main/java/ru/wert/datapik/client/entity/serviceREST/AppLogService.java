@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.AppLogApiInterface;
@@ -112,10 +110,10 @@ public class AppLogService implements IAppLogService, ItemService<AppLog> {
 
 
     @Override
-    public ObservableList<AppLog> findAll() {
+    public List<AppLog> findAll() {
         try {
             Call<List<AppLog>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,10 +121,10 @@ public class AppLogService implements IAppLogService, ItemService<AppLog> {
     }
 
     @Override
-    public ObservableList<AppLog> findAllByAdminOnlyFalse() {
+    public List<AppLog> findAllByAdminOnlyFalse() {
         try {
             Call<List<AppLog>> call = api.getAllAdminOnlyFalse();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -134,7 +132,7 @@ public class AppLogService implements IAppLogService, ItemService<AppLog> {
     }
 
     @Override
-    public ObservableList<AppLog> findAllByText(String text) {
+    public List<AppLog> findAllByText(String text) {
         //НЕ ИСПОЛЬЗУЕТСЯ
         return null;
     }

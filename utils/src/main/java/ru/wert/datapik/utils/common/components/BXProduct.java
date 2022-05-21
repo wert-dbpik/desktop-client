@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.components;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -9,6 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import ru.wert.datapik.client.entity.models.Product;
 import ru.wert.datapik.utils.popups.HintPopup;
+
+import java.util.List;
 
 import static ru.wert.datapik.client.entity.serviceQUICK.ProductQuickService.DEFAULT_PRODUCT;
 import static ru.wert.datapik.client.utils.BLConst.RAZNOE;
@@ -27,7 +30,7 @@ public class BXProduct {
 
         bxProduct.setEditable(true);
 
-        ObservableList<Product> products = CH_QUICK_PRODUCTS.findAll();
+        ObservableList<Product> products = FXCollections.observableArrayList(CH_QUICK_PRODUCTS.findAll());
         bxProduct.setItems(products);
 
         createCellFactory();
@@ -97,7 +100,7 @@ public class BXProduct {
                 if (!newVal.equals(newProduct.getPassport().getName())) {
 
                     //Находим подходящие изделия
-                    ObservableList<Product> products = CH_QUICK_PRODUCTS.findAllByText(newVal);
+                    List<Product> products = CH_QUICK_PRODUCTS.findAllByText(newVal);
 
 
                     bxProduct.getItems().clear();

@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.ProcessApiInterface;
 import ru.wert.datapik.client.entity.models.TechProcess;
@@ -57,10 +55,10 @@ public class ProcessService implements IProcessService, ItemService<TechProcess>
     }
 
     @Override
-    public ObservableList<TechProcess> findAll() {
+    public List<TechProcess> findAll() {
         try {
             Call<List<TechProcess>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,10 +66,10 @@ public class ProcessService implements IProcessService, ItemService<TechProcess>
     }
 
     @Override
-    public ObservableList<TechProcess> findAllByText(String text) {
+    public List<TechProcess> findAllByText(String text) {
         try {
             Call<List<TechProcess>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

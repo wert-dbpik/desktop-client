@@ -1,7 +1,6 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.AnyPartGroupApiInterface;
 import ru.wert.datapik.client.entity.models.AnyPartGroup;
@@ -58,10 +57,10 @@ public class AnyPartGroupService implements IAnyPartGroupService, ItemService<An
     }
 
     @Override
-    public ObservableList<AnyPartGroup> findAll() {
+    public List<AnyPartGroup> findAll() {
         try {
             Call<List<AnyPartGroup>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,10 +68,10 @@ public class AnyPartGroupService implements IAnyPartGroupService, ItemService<An
     }
 
     @Override
-    public ObservableList<AnyPartGroup> findAllByText(String text) {
+    public List<AnyPartGroup> findAllByText(String text) {
         try {
             Call<List<AnyPartGroup>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

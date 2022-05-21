@@ -88,10 +88,10 @@ public class ProductService implements IProductService, PartItem {
 
 
     @Override
-    public ObservableList<Product> findAll() {
+    public List<Product> findAll() {
         try {
             Call<List<Product>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,10 +99,10 @@ public class ProductService implements IProductService, PartItem {
     }
 
     @Override
-    public ObservableList<Product> findAllByText(String text) {
+    public List<Product> findAllByText(String text) {
         try {
             Call<List<Product>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

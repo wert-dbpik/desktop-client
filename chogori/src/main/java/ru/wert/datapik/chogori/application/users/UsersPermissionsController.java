@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori.application.users;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -124,7 +125,7 @@ public class UsersPermissionsController implements SearchableTab, UpdatableTabCo
     @Override
     public void updateTab() {
         User user = userTable.getSelectionModel().getSelectedItem();
-        userTable.setItems(CH_USERS.findAll());
+        userTable.setItems(FXCollections.observableArrayList(CH_USERS.findAll()));
         if(user != null)
             userTable.getSelectionModel().select(user);
         userTable.refresh();

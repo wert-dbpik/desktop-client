@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.components;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -17,7 +18,7 @@ public class BXDensity {
 
     public ComboBox<Density> create(ComboBox<Density> bxDensity){
         this.bxDensity = bxDensity;
-        ObservableList<Density> prefixes = CH_DENSITIES.findAll();
+        ObservableList<Density> prefixes = FXCollections.observableArrayList(CH_DENSITIES.findAll());
         bxDensity.setItems(prefixes);
 
         createCellFactory();

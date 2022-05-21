@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.AsmItemApiInterface;
 import ru.wert.datapik.client.entity.models.AsmItem;
@@ -56,10 +54,10 @@ public class AsmItemService implements IAsmItemService, ItemService<AsmItem> {
     }
 
     @Override
-    public ObservableList<AsmItem> findAll() {
+    public List<AsmItem> findAll() {
         try {
             Call<List<AsmItem>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,10 +68,10 @@ public class AsmItemService implements IAsmItemService, ItemService<AsmItem> {
      * Метод заглушка - поиск по тексту не работает
      */
     @Override
-    public ObservableList<AsmItem> findAllByText(String text) {
+    public List<AsmItem> findAllByText(String text) {
         try {
             Call<List<AsmItem>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

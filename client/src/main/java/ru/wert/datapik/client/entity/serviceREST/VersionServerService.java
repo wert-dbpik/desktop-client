@@ -58,10 +58,10 @@ public class VersionServerService implements IVersionServerService, ItemService<
     }
     
     @Override
-    public ObservableList<VersionServer> findAll() {
+    public List<VersionServer> findAll() {
         try {
             Call<List<VersionServer>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,7 +69,7 @@ public class VersionServerService implements IVersionServerService, ItemService<
     }
 
     @Override
-    public ObservableList<VersionServer> findAllByText(String text) {
+    public List<VersionServer> findAllByText(String text) {
         //не используется
         return null;
     }

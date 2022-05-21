@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceQUICK;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Prefix;
 import ru.wert.datapik.client.entity.serviceREST.PassportService;
@@ -109,12 +107,12 @@ public class PassportQuickService implements IPassportService {
 
 
 
-    public ObservableList<Passport> findAll() {
-        return FXCollections.observableArrayList(passports);
+    public List<Passport> findAll() {
+        return passports;
     }
 
-    public ObservableList<Passport> findAllByText(String text) {
-        ObservableList<Passport> foundPassports = FXCollections.observableArrayList();
+    public List<Passport> findAllByText(String text) {
+        List<Passport> foundPassports = new ArrayList<>();
         for(Passport passport : passports){
             String name = passport.getName();
             String decNumber = passport.getPrefix().getName() + "." + passport.getNumber();

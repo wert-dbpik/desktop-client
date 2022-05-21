@@ -1,8 +1,5 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.DensityApiInterface;
 import ru.wert.datapik.client.entity.models.Density;
@@ -67,10 +64,10 @@ public class DensityService implements IDensityService, ItemService<Density> {
     }
 
     @Override
-    public ObservableList<Density> findAll() {
+    public List<Density> findAll() {
         try {
             Call<List<Density>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,10 +75,10 @@ public class DensityService implements IDensityService, ItemService<Density> {
     }
 
     @Override
-    public ObservableList<Density> findAllByText(String text) {
+    public List<Density> findAllByText(String text) {
         try {
             Call<List<Density>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceQUICK;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ru.wert.datapik.client.entity.models.AnyPart;
 import ru.wert.datapik.client.entity.serviceREST.AnyPartService;
 import ru.wert.datapik.client.entity.service_interfaces.IAnyPartService;
@@ -99,12 +97,12 @@ public class AnyPartQuickService implements IAnyPartService {
         return res;
     }
 
-    public ObservableList<AnyPart> findAll() {
-        return FXCollections.observableArrayList(parts);
+    public List<AnyPart> findAll() {
+        return parts;
     }
 
-    public ObservableList<AnyPart> findAllByText(String text) {
-        ObservableList<AnyPart> foundAnyParts = FXCollections.observableArrayList();
+    public List<AnyPart> findAllByText(String text) {
+        List<AnyPart> foundAnyParts = new ArrayList<>();
         for(AnyPart part : parts){
             String name = part.getName() + part.getSecondName();
             if(name != null && name.contains(text)) {

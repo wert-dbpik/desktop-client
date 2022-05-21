@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceQUICK;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
@@ -121,12 +119,12 @@ public class DraftQuickService implements IDraftService {
         return res;
     }
 
-    public ObservableList<Draft> findAll() {
-        return FXCollections.observableArrayList(drafts);
+    public List<Draft> findAll() {
+        return drafts;
     }
     
-    public ObservableList<Draft> findAllByText(String text) {
-        ObservableList<Draft> foundDrafts = FXCollections.observableArrayList();
+    public List<Draft> findAllByText(String text) {
+        List<Draft> foundDrafts = new ArrayList<>();
         for(Draft draft : drafts){
             String name = draft.getPassport().getName();
             String decNumber = draft.getPassport().getNumber();

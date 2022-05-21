@@ -1,11 +1,9 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
-import ru.wert.datapik.client.entity.service_interfaces.IPrefixService;
 import ru.wert.datapik.client.entity.api_interfaces.PrefixApiInterface;
 import ru.wert.datapik.client.entity.models.Prefix;
+import ru.wert.datapik.client.entity.service_interfaces.IPrefixService;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.client.utils.BLlinks;
@@ -56,10 +54,10 @@ public class PrefixService implements IPrefixService, ItemService<Prefix> {
     }
 
     @Override
-    public ObservableList<Prefix> findAll() {
+    public List<Prefix> findAll() {
         try {
             Call<List<Prefix>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,10 +65,10 @@ public class PrefixService implements IPrefixService, ItemService<Prefix> {
     }
 
     @Override
-    public ObservableList<Prefix> findAllByText(String text) {
+    public List<Prefix> findAllByText(String text) {
         try {
             Call<List<Prefix>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

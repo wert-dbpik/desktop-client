@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceQUICK;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ru.wert.datapik.client.entity.models.Material;
 import ru.wert.datapik.client.entity.serviceREST.MaterialService;
 import ru.wert.datapik.client.entity.service_interfaces.IMaterialService;
@@ -50,7 +48,7 @@ public class MaterialQuickService implements IMaterialService , CatalogService<M
 
     @Override //CatalogService
     public List<Material> findAllByGroupId(Long id) {
-        ObservableList<Material> foundMaterials = FXCollections.observableArrayList();
+        List<Material> foundMaterials = new ArrayList<>();
         for(Material material : materials){
             if(material.getCatalogGroup().getId().equals(id)) {
                 foundMaterials.add(material);
@@ -94,12 +92,12 @@ public class MaterialQuickService implements IMaterialService , CatalogService<M
         return res;
     }
 
-    public ObservableList<Material> findAll() {
-        return FXCollections.observableArrayList(materials);
+    public List<Material> findAll() {
+        return materials;
     }
 
-    public ObservableList<Material> findAllByText(String text) {
-        ObservableList<Material> foundMaterials = FXCollections.observableArrayList();
+    public List<Material> findAllByText(String text) {
+        List<Material> foundMaterials = new ArrayList<>();
         for(Material material : materials){
             String name = material.getName();
             if(name != null && name.contains(text)) {

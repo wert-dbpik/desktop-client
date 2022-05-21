@@ -1,9 +1,7 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
-import retrofit2.Response;
 import ru.wert.datapik.client.entity.api_interfaces.AppSettingsApiInterface;
 import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.User;
@@ -68,10 +66,10 @@ public class AppSettingsService implements IAppSettingsService, ItemService<AppS
     }
 
     @Override
-    public ObservableList<AppSettings> findAll() {
+    public List<AppSettings> findAll() {
         try {
             Call<List<AppSettings>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,10 +77,10 @@ public class AppSettingsService implements IAppSettingsService, ItemService<AppS
     }
 
     @Override
-    public ObservableList<AppSettings> findAllByText(String text) {
+    public List<AppSettings> findAllByText(String text) {
         try {
             Call<List<AppSettings>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

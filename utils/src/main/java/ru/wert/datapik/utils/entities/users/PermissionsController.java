@@ -1,6 +1,7 @@
 package ru.wert.datapik.utils.entities.users;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -170,7 +171,7 @@ public class PermissionsController<P extends Item> {
             user.setLogging(chbLogging.isSelected());
             CH_USERS.update(user);
 
-            tableView.setItems(CH_USERS.findAll());
+            tableView.setItems(FXCollections.observableArrayList(CH_USERS.findAll()));
             tableView.getSelectionModel().select(user);
         }
 

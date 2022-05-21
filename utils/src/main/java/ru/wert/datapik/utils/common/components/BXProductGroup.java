@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.components;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -18,7 +19,7 @@ public class BXProductGroup {
 
     public void create(ComboBox<ProductGroup> bxProductGroup){
         this.bxProductGroup = bxProductGroup;
-        ObservableList<ProductGroup> groups = CH_PRODUCT_GROUPS.findAll();
+        ObservableList<ProductGroup> groups = FXCollections.observableArrayList(CH_PRODUCT_GROUPS.findAll());
         bxProductGroup.setItems(groups);
 
         createCellFactory();

@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.components;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -16,7 +17,7 @@ public class BXMaterial {
 
     public void create(ComboBox<Material> bxMaterial){
         this.bxMaterial = bxMaterial;
-        ObservableList<Material> materials = CH_QUICK_MATERIALS.findAll();
+        ObservableList<Material> materials = FXCollections.observableArrayList(CH_QUICK_MATERIALS.findAll());
         bxMaterial.setItems(materials);
 
         createCellFactory();

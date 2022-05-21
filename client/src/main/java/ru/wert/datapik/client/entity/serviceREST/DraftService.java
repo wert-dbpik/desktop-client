@@ -2,7 +2,6 @@ package ru.wert.datapik.client.entity.serviceREST;
 
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
@@ -197,10 +196,10 @@ public class DraftService implements IDraftService {
 
 
     @Override
-    public ObservableList<Draft> findAll() {
+    public List<Draft> findAll() {
         try {
             Call<List<Draft>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             log.error("getAll : не удалось загрузить чертежи с сервера");
         }
@@ -208,10 +207,10 @@ public class DraftService implements IDraftService {
     }
 
     @Override
-    public ObservableList<Draft> findAllByText(String text) {
+    public List<Draft> findAllByText(String text) {
         try {
             Call<List<Draft>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

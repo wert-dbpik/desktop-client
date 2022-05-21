@@ -19,8 +19,8 @@ public interface ItemService<T extends Item> {
 
     boolean delete(T t);
 
-    ObservableList<T> findAll();
+    List<T> findAll();
 
-    ObservableList<T> findAllByText(String text);
+    List<T> findAllByText(String text);
 
 }

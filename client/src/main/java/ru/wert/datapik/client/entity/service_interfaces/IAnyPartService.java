@@ -9,12 +9,4 @@ import ru.wert.datapik.client.interfaces.ItemService;
 public interface IAnyPartService extends ItemService<AnyPart> {
 
     AnyPart findByName(String name);
-    
-    //ЧЕРТЕЖИ
-
-//    ObservableSet<Draft> findDrafts(AnyPart part);
-//
-//    ObservableSet<Draft> addDrafts(AnyPart part, Draft draft);
-//
-//    ObservableSet<Draft> removeDrafts(AnyPart part, Draft draft);
 }

@@ -1,8 +1,6 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.MaterialApiInterface;
 import ru.wert.datapik.client.entity.models.Material;
@@ -59,10 +57,10 @@ public class MaterialService implements IMaterialService, ItemService<Material>,
     }
 
     @Override
-    public ObservableList<Material> findAll() {
+    public List<Material> findAll() {
         try {
             Call<List<Material>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,10 +68,10 @@ public class MaterialService implements IMaterialService, ItemService<Material>,
     }
 
     @Override
-    public ObservableList<Material> findAllByText(String text) {
+    public List<Material> findAllByText(String text) {
         try {
             Call<List<Material>> call = api.getAllByText(text);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }

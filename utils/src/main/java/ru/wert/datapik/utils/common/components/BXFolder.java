@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.common.components;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -9,6 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.popups.HintPopup;
+
+import java.util.List;
 
 import static ru.wert.datapik.client.entity.serviceQUICK.FolderQuickService.DEFAULT_FOLDER;
 import static ru.wert.datapik.client.utils.BLConst.RAZLOZHENO;
@@ -27,7 +30,7 @@ public class BXFolder {
 
         bxFolder.setEditable(true);
 
-        ObservableList<Folder> folders = CH_QUICK_FOLDERS.findAll();
+        ObservableList<Folder> folders = FXCollections.observableArrayList(CH_QUICK_FOLDERS.findAll());
         bxFolder.setItems(folders);
 
         createCellFactory();
@@ -96,7 +99,7 @@ public class BXFolder {
                 if (!newVal.equals(newFolder.getName())) {
 
                     //Находим подходящие изделия
-                    ObservableList<Folder> folders = CH_QUICK_FOLDERS.findAllByText(newVal);
+                    List<Folder> folders = CH_QUICK_FOLDERS.findAllByText(newVal);
 
 
                     bxFolder.getItems().clear();

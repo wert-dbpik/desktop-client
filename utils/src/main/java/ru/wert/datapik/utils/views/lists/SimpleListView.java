@@ -55,7 +55,7 @@ public class SimpleListView<P extends Item> extends ListView<P> implements Searc
             protected Void call() {
 
                 searchedText = CH_SEARCH_FIELD.getText();
-                ObservableList<P> items;
+                List<P> items;
                 if(searchedText.equals(""))
                     items = itemService.findAll();
                 else

@@ -1,7 +1,5 @@
 package ru.wert.datapik.client.entity.serviceREST;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.PassportApiInterface;
 import ru.wert.datapik.client.entity.models.Passport;
@@ -46,10 +44,10 @@ public class PassportService implements IPassportService, ItemService<Passport> 
     }
 
     @Override
-    public ObservableList<Passport> findAll() {
+    public List<Passport> findAll() {
         try {
             Call<List<Passport>> call = api.getAll();
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,7 +70,7 @@ public class PassportService implements IPassportService, ItemService<Passport> 
     public List<Passport> findAllByName(String name) {
         try {
             Call<List<Passport>> call = api.getAllByName(name);
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,10 +78,10 @@ public class PassportService implements IPassportService, ItemService<Passport> 
     }
 
     @Override
-    public ObservableList<Passport> findAllByText(String text) {
+    public List<Passport> findAllByText(String text) {
         try {
             Call<List<Passport>> call = api.getAllByText(text);;
-            return FXCollections.observableArrayList(call.execute().body());
+            return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
