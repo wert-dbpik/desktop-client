@@ -106,6 +106,7 @@ public class Draft_PatchController {
             draftsTable.setSearchedText("");
             draftsTable.setModifyingItem(null);
             draftsTable.updateView();
+            showSourceOfPassports(null);
             e.consume();
         });
 
