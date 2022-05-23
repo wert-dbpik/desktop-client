@@ -34,6 +34,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,6 +59,9 @@ public class AppStatic {
 
     public static final String UPWARD = "< . . . >";
     public static final char TILDA = '\u02F7';
+
+    public static List<String> IMAGE_EXTENSIONS = Arrays.asList("pdf", "jpg", "jpeg", "png");
+    public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm");
 
 
     public static void closeWindow(Event event){

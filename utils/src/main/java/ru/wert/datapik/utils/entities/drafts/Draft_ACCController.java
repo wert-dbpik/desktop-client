@@ -167,6 +167,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private ChangeListener<Number> currentPosListener;
 
     private boolean askMe, skipMe, changeMe, deleteMe;
+    private List<File> droppedFiles;
 
     @FXML
     void initialize(){
@@ -185,6 +186,13 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         Platform.runLater(()->txtNumber.requestFocus());
 
     }
+
+    public void addDroppedFiles(EOperation operation, IFormView<Draft> formView, ItemCommands<Draft> commands, List<File> droppedFiles){
+        this.droppedFiles = droppedFiles;
+        init(operation, formView, commands);
+
+    }
+
 
     /**
      * Предварительно происходит выбор чертежа или папки с чертежами
@@ -877,24 +885,27 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      */
     private void loadManyDrafts() {
 //        draftsList = new ArrayList<>();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(lastFile);
-        fileChooser.setTitle("Выберите чертежи...");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF, PNG, JPEG", "*.pdf", "*.png", "*.jpg"));
-
         List<File> chosenList = null;
-        try {
-            chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
-        } catch (Exception e) {
-            lastFile = new File("C:/");
+        if(droppedFiles == null) {
+            FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(lastFile);
-            chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
-            log.debug("loadManyDrafts : Hack has been successfully used!");
-        }
-        if(chosenList == null) return;
+            fileChooser.setTitle("Выберите чертежи...");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF, PNG, JPEG", "*.pdf", "*.png", "*.jpg"));
+
+            try {
+                chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
+            } catch (Exception e) {
+                lastFile = new File("C:/");
+                fileChooser.setInitialDirectory(lastFile);
+                chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
+                log.debug("loadManyDrafts : Hack has been successfully used!");
+            }
+            if (chosenList == null) return;
+        } else
+            chosenList = droppedFiles;
         lastFile = chosenList.get(0).getParentFile();
         //Формируем список файлов из выбранных чертежей
-        for(File file: chosenList){
+        for (File file : chosenList) {
             draftsList.add(new DraftFileAndId(file, null));
         }
 

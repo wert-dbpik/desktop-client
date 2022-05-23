@@ -1,19 +1,30 @@
 package ru.wert.datapik.utils.entities.drafts;
 
+import com.twelvemonkeys.io.FileUtil;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.text.Text;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.utils.common.utils.ClipboardUtils;
+import ru.wert.datapik.winform.enums.EOperation;
+import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.utils.statics.AppStatic.IMAGE_EXTENSIONS;
+import static ru.wert.datapik.utils.statics.AppStatic.SOLID_EXTENSIONS;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class Draft_Manipulator {
 
@@ -52,6 +63,83 @@ public class Draft_Manipulator {
             db.setDragView(image);
 
             event.consume();
+        });
+
+        //Допускается добавление директории, где хотя б один файл соответствует списку
+        tableView.setOnDragOver(event -> {
+            Dragboard db = event.getDragboard();
+             //Если один из форматов не является FILES, то перетаскивание не допускается
+            if(db.hasFiles()) {
+                List<File> allFiles = new ArrayList<>();
+                List<File> content = (List<File>) db.getContent(DataFormat.FILES);
+                for (File f : content) {
+                    try {
+                        if (f.isDirectory()) {
+                            List<Path> filesInFolder = Files.walk(f.toPath()).collect(Collectors.toList());
+                            for (Path p : filesInFolder) allFiles.add(p.toFile());
+                        } else if (f.isFile())
+                            allFiles.add(f);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                for(File file: allFiles){
+                    if(IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
+//                       || SOLID_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
+                    ){
+                        event.acceptTransferModes(TransferMode.MOVE);
+                        event.consume();
+                        return;
+                    }
+                    event.acceptTransferModes(TransferMode.NONE);
+                }
+            }
+            else
+                event.acceptTransferModes(TransferMode.NONE);
+            event.consume();
+        });
+
+        //
+        tableView.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            if(db.hasFiles()){
+                List<File> acceptedFiles = new ArrayList<>();
+                List<File> content = (List<File>) db.getContent(DataFormat.FILES);
+                for (File f : content) {
+                    try {
+                        if (f.isDirectory()) {
+                            List<Path> filesInFolder = Files.walk(f.toPath())
+                                    .filter(file ->
+                                            IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
+//                                            || SOLID_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
+                                    )
+                                    .collect(Collectors.toList());
+                            for (Path p : filesInFolder)
+                                acceptedFiles.add(p.toFile());
+                        } else if (f.isFile()) {
+                            if (IMAGE_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
+//                            || SOLID_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
+                            ){
+                                acceptedFiles.add(f);
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if(!acceptedFiles.isEmpty()) {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/drafts/draftACC.fxml"));
+                        Parent parent = loader.load();
+                        Draft_ACCController controller = loader.getController();
+                        controller.addDroppedFiles(EOperation.ADD, tableView, tableView.getCommands(), acceptedFiles);
+                        new WindowDecoration(EOperation.ADD.getName(), parent, true, WF_MAIN_STAGE);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         });
     }
 
