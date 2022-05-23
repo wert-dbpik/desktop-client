@@ -5,7 +5,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.datapik.chogori.application.editor.ExcelEditorNewController;
+import ru.wert.datapik.chogori.application.excel.ExcelEditorNewController;
 import ru.wert.datapik.winform.modal.LongProcess;
 import ru.wert.datapik.winform.warnings.Warning1;
 

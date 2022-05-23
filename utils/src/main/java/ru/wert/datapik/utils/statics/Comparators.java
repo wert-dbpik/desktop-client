@@ -5,7 +5,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.interfaces.Item;
-import ru.wert.datapik.utils.editor.model.EditorRow;
 
 import java.util.Comparator;
 

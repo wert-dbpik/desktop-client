@@ -3,12 +3,11 @@ package ru.wert.datapik.utils.common.tableView;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import ru.wert.datapik.client.interfaces.Item;
 
-import static ru.wert.datapik.utils.editor.table.TableMaster.countPrefTableWidth;
-import static ru.wert.datapik.utils.editor.table.TableMaster.getAllColumns;
+import static ru.wert.datapik.utils.excel.table.TableMaster.countPrefTableWidth;
+import static ru.wert.datapik.utils.excel.table.TableMaster.getAllColumns;
 
 public class TableViewElasticStyle<P extends Item> {
 
