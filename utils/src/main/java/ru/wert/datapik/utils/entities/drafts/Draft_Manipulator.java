@@ -12,6 +12,7 @@ import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSED;
 import static ru.wert.datapik.utils.statics.AppStatic.IMAGE_EXTENSIONS;
 import static ru.wert.datapik.utils.statics.AppStatic.SOLID_EXTENSIONS;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
@@ -66,10 +68,11 @@ public class Draft_Manipulator {
         });
 
         //Допускается добавление директории, где хотя б один файл соответствует списку
+        //Если не выделено ни одной папки, то добавление файлов не допускается
         tableView.setOnDragOver(event -> {
             Dragboard db = event.getDragboard();
-             //Если один из форматов не является FILES, то перетаскивание не допускается
-            if(db.hasFiles()) {
+            //Если один из форматов не является FILES, то перетаскивание не допускается
+            if (db.hasFiles()) {
                 List<File> allFiles = new ArrayList<>();
                 List<File> content = (List<File>) db.getContent(DataFormat.FILES);
                 for (File f : content) {
@@ -83,26 +86,27 @@ public class Draft_Manipulator {
                         e.printStackTrace();
                     }
                 }
-                for(File file: allFiles){
-                    if(IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
+                for (File file : allFiles) {
+                    if (IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
 //                       || SOLID_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
-                    ){
-                        event.acceptTransferModes(TransferMode.MOVE);
-                        event.consume();
-                        return;
+                    ) {
+                        if(tableView.getModifyingItem() == null){
+                            event.acceptTransferModes(TransferMode.NONE);
+                        } else {
+                            event.acceptTransferModes(TransferMode.MOVE);
+                            event.consume();
+                            return;
+                        }
                     }
                     event.acceptTransferModes(TransferMode.NONE);
                 }
-            }
-            else
+            } else
                 event.acceptTransferModes(TransferMode.NONE);
-            event.consume();
         });
 
-        //
         tableView.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
-            if(db.hasFiles()){
+            if (db.hasFiles()) {
                 List<File> acceptedFiles = new ArrayList<>();
                 List<File> content = (List<File>) db.getContent(DataFormat.FILES);
                 for (File f : content) {
@@ -110,7 +114,7 @@ public class Draft_Manipulator {
                         if (f.isDirectory()) {
                             List<Path> filesInFolder = Files.walk(f.toPath())
                                     .filter(file ->
-                                            IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
+                                                    IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
 //                                            || SOLID_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
                                     )
                                     .collect(Collectors.toList());
@@ -119,7 +123,7 @@ public class Draft_Manipulator {
                         } else if (f.isFile()) {
                             if (IMAGE_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
 //                            || SOLID_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
-                            ){
+                            ) {
                                 acceptedFiles.add(f);
                             }
                         }
@@ -128,13 +132,14 @@ public class Draft_Manipulator {
                     }
                 }
 
-                if(!acceptedFiles.isEmpty()) {
+                if (!acceptedFiles.isEmpty()) {
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/drafts/draftACC.fxml"));
                         Parent parent = loader.load();
                         Draft_ACCController controller = loader.getController();
                         controller.addDroppedFiles(EOperation.ADD, tableView, tableView.getCommands(), acceptedFiles);
                         new WindowDecoration(EOperation.ADD.getName(), parent, true, WF_MAIN_STAGE);
+                        event.consume();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -143,12 +148,12 @@ public class Draft_Manipulator {
         });
     }
 
-    public String cutItems(){
+    public String cutItems() {
         StringBuilder sb = new StringBuilder();
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
         sb.append("pik!");
-        for(Draft draft: selectedDrafts){
+        for (Draft draft : selectedDrafts) {
             sb.append(" DR#");
             sb.append(draft.getId());
         }
@@ -157,12 +162,12 @@ public class Draft_Manipulator {
 
     }
 
-    public boolean pastePossible(String str){
-        if(str == null || !str.startsWith("pik!")) return false;
+    public boolean pastePossible(String str) {
+        if (str == null || !str.startsWith("pik!")) return false;
         str = str.replace("pik!", "");
         str = str.trim();
         String[] pasteData = str.split(" ", -1);
-        for(String s : pasteData) {
+        for (String s : pasteData) {
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
             List<Folder> selectedFolders = tableView.getSelectedFolders();
             if (!clazz.equals("DR") || selectedFolders == null || selectedFolders.size() > 1)
@@ -173,10 +178,10 @@ public class Draft_Manipulator {
     }
 
 
-    public void pasteItems(String str){
+    public void pasteItems(String str) {
         String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
         Folder selectedFolder = tableView.getSelectedFolders().get(0);
-        for(String s : pasteData) {
+        for (String s : pasteData) {
             Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
             Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
             draft.setFolder(selectedFolder);

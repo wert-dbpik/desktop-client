@@ -105,11 +105,12 @@ public class ProductGroup_Manipulator {
             expandIfNeeded(target);
             if (pastePossible(target, db.getString())) {
                 e.acceptTransferModes(TransferMode.MOVE);
+                e.consume();
             } else {
                 e.acceptTransferModes(TransferMode.NONE);
             }
         }
-        e.consume();
+
     }
 
     /**
@@ -120,9 +121,9 @@ public class ProductGroup_Manipulator {
         if(db.hasString() && db.getString().contains("pik!")) {
             if (event.getTransferMode().equals(TransferMode.MOVE)) {
                 pasteItems(db.getString());
+                event.consume();
             }
         }
-        event.consume();
     }
 
     private void expandIfNeeded(TreeItem<ProductGroup> targetItem){

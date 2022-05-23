@@ -32,8 +32,6 @@ public class Folder_Manipulator {
         this.tableView = tableView;
         this.treeView = treeView;
 
-
-
         setOnKeyManipulator(tableView);
     }
 
@@ -64,11 +62,10 @@ public class Folder_Manipulator {
 
         if (pastePossible(db.getString())) {
             event.acceptTransferModes(TransferMode.MOVE);
+            event.consume();
         } else {
             event.acceptTransferModes(TransferMode.NONE);
         }
-
-        event.consume();
 
     }
 
@@ -82,10 +79,11 @@ public class Folder_Manipulator {
             if (pastePossible(str)) {
                 if (event.getTransferMode().equals(TransferMode.MOVE)) {
                     pasteItems(str);
+                    event.consume();
                 }
             }
         }
-        event.consume();
+
     }
 
     /**
@@ -94,7 +92,6 @@ public class Folder_Manipulator {
      */
     private void setOnKeyManipulator(Folder_TableView tableView) {
         tableView.setOnKeyPressed(e->{
-
             if(e.getCode() == KeyCode.ENTER){
                 Item prevRowData = null;
                 Item clickedItem = tableView.getSelectionModel().getSelectedItem();

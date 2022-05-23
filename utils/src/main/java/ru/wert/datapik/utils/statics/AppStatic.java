@@ -62,6 +62,7 @@ public class AppStatic {
 
     public static List<String> IMAGE_EXTENSIONS = Arrays.asList("pdf", "jpg", "jpeg", "png");
     public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm");
+    public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
 
 
     public static void closeWindow(Event event){
