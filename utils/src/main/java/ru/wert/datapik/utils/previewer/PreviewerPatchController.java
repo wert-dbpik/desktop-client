@@ -5,6 +5,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,7 +15,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +48,7 @@ import java.util.List;
 
 import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.statics.AppStatic.SOLID_VIEWER_EXTENSIONS;
 import static ru.wert.datapik.utils.statics.AppStatic.openDraftInPreviewer;
 
 //import ru.wert.datapik.client.entity.models.Draft;
@@ -84,6 +88,8 @@ public class PreviewerPatchController {
     @Setter@Getter private Draft_TableView draftsTableView;
     private ObjectProperty<Draft> currentDraft = new SimpleObjectProperty<>();
     public Draft getCurrentDraft(){return this.currentDraft.get();};
+
+    private File currentDraftPath;
 
 
     @FXML
@@ -167,13 +173,19 @@ public class PreviewerPatchController {
         openInOuterApp.setGraphic(new ImageView(BTN_OPEN_IN_OUTER_APP_IMG));
         openInOuterApp.setTooltip(new Tooltip("Открыть в отдельном приложении"));
         openInOuterApp.setOnAction(event -> {
-            if(currentDraft.get() == null) return;
-            try {
-                File myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
-                        currentDraft.get().getId() + "." + currentDraft.get().getExtension());
-                Desktop.getDesktop().open(myFile);
-            } catch (IOException ex) {
-            }
+            File myFile;
+
+            if (currentDraft.get() == null)
+                myFile = currentDraftPath;
+            else
+                myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
+                    currentDraft.get().getId() + "." + currentDraft.get().getExtension());
+
+            if (myFile.exists() && myFile.isFile())
+                try {
+                    Desktop.getDesktop().open(myFile);
+                } catch (IOException ex) {
+                }
         });
 
         Button btnShowInfo = new Button();
@@ -207,18 +219,22 @@ public class PreviewerPatchController {
      * @param draftPath File
      */
     public void showDraft(File draftPath){
+        this.currentDraftPath = draftPath;
         //Вилка решений зависит от расширения файла
         String ext = FilenameUtils.getExtension(draftPath.getName()).toLowerCase();
 
         if (ext.equals("pdf")) {
-            paneViewer.getChildren().set(0,pdfStackPane);
+            paneViewer.getChildren().set(0, pdfStackPane);
             try {
                 pdfReader.showPDF(draftPath);
             } catch (Exception e) {
                 log.error("showDraft : something went wrong with showing pdf!");
                 e.printStackTrace();
             }
+        } else if (SOLID_VIEWER_EXTENSIONS.contains(ext)) {
+            showPlaceholder(SOLID_3D_IMG);
         } else {
+            paneViewer.getChildren().clear();
             try {
                 showImage(draftPath);
             }catch(Exception ex){
@@ -226,6 +242,20 @@ public class PreviewerPatchController {
                 ex.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Метод отображает соответствующее информационное изображение
+     */
+    private void showPlaceholder(Image image) {
+        paneViewer.getChildren().clear();
+        imageView.setImage(image);
+        imageView.setFitWidth(image.getWidth());
+        imageView.setFitHeight(image.getHeight());
+        StackPane pane = new StackPane(imageView);
+        pane.setAlignment(Pos.CENTER);
+        pane.setStyle("-fx-background-color: white");
+        paneViewer.getChildren().add(0, pane);
     }
 
     /**
@@ -252,12 +282,14 @@ public class PreviewerPatchController {
      * Метод дополнительно передает объект Draft? который используется для открытия файла в отдельной вкладке
      * Передаем null, чтобы купировать попытку открыть NO_IMAGE.pdf файла
      * @param currentDraft Draft
-     * @param draftPath File
+     * @param currentDraftPath File
      */
-    public void showDraft(Draft currentDraft, File draftPath){
+    public void showDraft(Draft currentDraft, File currentDraftPath){
         this.currentDraft.set(currentDraft);
+        this.currentDraftPath = currentDraftPath;
 
-        showDraft(draftPath);
+
+        showDraft(currentDraftPath);
     }
 
 }

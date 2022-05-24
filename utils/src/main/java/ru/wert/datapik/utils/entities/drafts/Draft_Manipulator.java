@@ -12,7 +12,6 @@ import ru.wert.datapik.utils.common.utils.ClipboardUtils;
 import ru.wert.datapik.winform.enums.EOperation;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,9 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSED;
 import static ru.wert.datapik.utils.statics.AppStatic.IMAGE_EXTENSIONS;
-import static ru.wert.datapik.utils.statics.AppStatic.SOLID_EXTENSIONS;
+import static ru.wert.datapik.utils.statics.AppStatic.SOLID_VIEWER_EXTENSIONS;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class Draft_Manipulator {
@@ -88,7 +86,7 @@ public class Draft_Manipulator {
                 }
                 for (File file : allFiles) {
                     if (IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
-//                       || SOLID_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
+                       || SOLID_VIEWER_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
                     ) {
                         if(tableView.getModifyingItem() == null){
                             event.acceptTransferModes(TransferMode.NONE);
@@ -115,14 +113,14 @@ public class Draft_Manipulator {
                             List<Path> filesInFolder = Files.walk(f.toPath())
                                     .filter(file ->
                                                     IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
-//                                            || SOLID_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
+                                            || SOLID_VIEWER_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
                                     )
                                     .collect(Collectors.toList());
                             for (Path p : filesInFolder)
                                 acceptedFiles.add(p.toFile());
                         } else if (f.isFile()) {
                             if (IMAGE_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
-//                            || SOLID_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
+                            || SOLID_VIEWER_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
                             ) {
                                 acceptedFiles.add(f);
                             }

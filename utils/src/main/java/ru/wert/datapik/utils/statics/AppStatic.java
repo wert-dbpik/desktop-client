@@ -10,6 +10,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
@@ -60,8 +61,11 @@ public class AppStatic {
     public static final String UPWARD = "< . . . >";
     public static final char TILDA = '\u02F7';
 
+    public static FileChooser.ExtensionFilter ALLOWED_EXTENSIONS = new FileChooser.ExtensionFilter(
+            "PDF, PNG, JPEG, EASM",
+            "*.pdf", "*.png", "*.jpg", "*.eprt", "*.easm");
     public static List<String> IMAGE_EXTENSIONS = Arrays.asList("pdf", "jpg", "jpeg", "png");
-    public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm");
+    public static List<String> SOLID_VIEWER_EXTENSIONS = Arrays.asList("eprt", "easm");
     public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
 
 

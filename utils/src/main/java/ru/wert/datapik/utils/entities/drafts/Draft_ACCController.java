@@ -890,7 +890,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(lastFile);
             fileChooser.setTitle("Выберите чертежи...");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF, PNG, JPEG", "*.pdf", "*.png", "*.jpg"));
+            fileChooser.getExtensionFilters().add(ALLOWED_EXTENSIONS);
 
             try {
                 chosenList = fileChooser.showOpenMultipleDialog(WF_MAIN_STAGE);
@@ -925,7 +925,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(lastFile);
         fileChooser.setTitle("Выберите чертеж...");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF, PNG, JPEG", "*.pdf", "*.png", "*.jpg"));
+        fileChooser.getExtensionFilters().add(ALLOWED_EXTENSIONS);
 
         File chosenFile = null;
         try {
@@ -1038,7 +1038,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             //Помещаем панель с previewer в шаблонное окно WindowDecoration
             previewerController = loader.getController();
             previewerController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
-            previewerController.initPreviewerToolBar(false, false, false, false, false);
+            previewerController.initPreviewerToolBar(false, false, true, false, false);
 
             //Создаем прозрачную панель с индикатором
             spIndicator = new StackPane();
