@@ -21,6 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.Draft;
@@ -174,10 +175,11 @@ public class PreviewerPatchController {
         openInOuterApp.setTooltip(new Tooltip("Открыть в отдельном приложении"));
         openInOuterApp.setOnAction(event -> {
             File myFile;
-
+            //Если отображается чертеж из БД
             if (currentDraft.get() == null)
                 myFile = currentDraftPath;
             else
+                //Если отображается вновь добавляемый файл
                 myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
                     currentDraft.get().getId() + "." + currentDraft.get().getExtension());
 
@@ -185,6 +187,7 @@ public class PreviewerPatchController {
                 try {
                     Desktop.getDesktop().open(myFile);
                 } catch (IOException ex) {
+                    log.error("createPreviewerToolBar : couldn'n load file '{}'", myFile);
                 }
         });
 
