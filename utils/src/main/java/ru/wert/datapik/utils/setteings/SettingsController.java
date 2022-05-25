@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.setteings;
 
+import com.twelvemonkeys.io.FileUtil;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -21,7 +22,6 @@ import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
@@ -77,6 +77,24 @@ public class SettingsController {
     @FXML
     private CheckBox chbValidateDecNumbersEntering;
 
+    @FXML
+    private TextField tfPathToOpenPDFWith;
+
+    @FXML
+    private Button btnPathToOpenPDFWith;
+
+    @FXML
+    private TextField tfPathToOpenImageWith;
+
+    @FXML
+    private Button btnPathToOpenImageWith;
+
+    @FXML
+    private TextField tfPathToOpenSolidWith;
+
+    @FXML
+    private Button btnPathToOpenSolidWith;
+
     // Admin Settings =======================================
 
     @FXML
@@ -94,6 +112,7 @@ public class SettingsController {
     @FXML
     private TextArea taLastVersionNote;
 
+    public static String USE_SYSTEM_SETTINGS = "СИСТЕМНЫЕ НАСТРОЙКИ";
 
     @FXML
     void initialize() {
@@ -107,6 +126,7 @@ public class SettingsController {
         //КНОПКА СБРОС В ЗНАЧЕНИЯ ПО УМОЛЧАНИЮ
         btnReset.setText("");
         btnReset.setGraphic(new ImageView(BTN_HOME_IMG));
+        btnReset.setTooltip(new Tooltip("Загрузить настройки по умолчанию"));
         //МОНИТОР
         List<String> screens = new BXMonitor().create(cmbMonitorChooser);
         cmbMonitorChooser.getSelectionModel().select(AppProperties.getInstance().getMonitor());
@@ -118,11 +138,30 @@ public class SettingsController {
         tfPathToNormyMK.setText(CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
         btnPathToNormyMK.setText("");
         btnPathToNormyMK.setGraphic(new ImageView(TREE_NODE_IMG));
+        btnPathToNormyMK.setTooltip(new Tooltip("Выберите директорию"));
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         chbShowPrefixes.setSelected(CH_CURRENT_USER_SETTINGS.isShowPrefixes());
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         new BXPrefix().create(cmbPrefixChooser);
         cmbPrefixChooser.getSelectionModel().select(CH_CURRENT_USER_SETTINGS.getDefaultPrefix());
+        //ПОКАЗЫАТЬ PDF В ПРОГРАММЕ
+        String openPDFWith = CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith();
+        tfPathToOpenPDFWith.setText(openPDFWith.equals("") ? USE_SYSTEM_SETTINGS : openPDFWith);
+        btnPathToOpenPDFWith.setText("");
+        btnPathToOpenPDFWith.setGraphic(new ImageView(TREE_NODE_IMG));
+        btnPathToOpenPDFWith.setTooltip(new Tooltip("Выберите исполняемый файл(.ехе)"));
+        //ПОКАЗЫАТЬ ФОТО В ПРОГРАММЕ
+        String openImageWith = CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith();
+        tfPathToOpenImageWith.setText(openImageWith.equals("") ? USE_SYSTEM_SETTINGS : openImageWith);
+        btnPathToOpenImageWith.setText("");
+        btnPathToOpenImageWith.setGraphic(new ImageView(TREE_NODE_IMG));
+        btnPathToOpenImageWith.setTooltip(new Tooltip("Выберите исполняемый файл(.ехе)"));
+        //ПОКАЗЫАТЬ 3D ИЗОБРАЖЕНИЯ В ПРОГРАММЕ
+        String openSolidWith = CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith();
+        tfPathToOpenSolidWith.setText(openSolidWith.equals("") ? USE_SYSTEM_SETTINGS : openSolidWith);
+        btnPathToOpenSolidWith.setText("");
+        btnPathToOpenSolidWith.setGraphic(new ImageView(TREE_NODE_IMG));
+        btnPathToOpenSolidWith.setTooltip(new Tooltip("Выберите исполняемый файл(.ехе)"));
         //ПОСЛЕДНЯЯ ВЕРСИЯ
         VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
         tfLastVersion.setText(lastVersion.getName());
@@ -134,6 +173,7 @@ public class SettingsController {
             taLastVersionNote.setDisable(true);
             btnPathToLastVersion.setDisable(true);
         }
+        btnPathToLastVersion.setTooltip(new Tooltip("Выберите исполняемый файл(ехе/jar)"));
 
     }
 
@@ -152,6 +192,12 @@ public class SettingsController {
         cmbPDFViewerChooser.getSelectionModel().select(EPDFViewer.values()[defSettings.getPdfViewer()]);
         //НОРМЫ МК
         tfPathToNormyMK.setText(defSettings.getPathToNormyMK());
+        //ПОКАЗЫАТЬ PDF В ПРОГРАММЕ
+        tfPathToOpenPDFWith.setText(USE_SYSTEM_SETTINGS);
+        //ПОКАЗЫАТЬ IMAGE В ПРОГРАММЕ
+        tfPathToOpenImageWith.setText(USE_SYSTEM_SETTINGS);
+        //ПОКАЗЫАТЬ SOLID  В ПРОГРАММЕ
+        tfPathToOpenSolidWith.setText(USE_SYSTEM_SETTINGS);
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         chbShowPrefixes.setSelected(defSettings.isShowPrefixes());
         //ПРЕФИКС ПО УМОЛЧАНИЮ
@@ -168,6 +214,22 @@ public class SettingsController {
 
     @FXML
     void saveSettings(Event event) {
+        //ПОКАЗЫАТЬ PDF В ПРОГРАММЕ
+        String pathToPDFOpener = tfPathToOpenPDFWith.getText().trim();
+        if(!pathToPDFOpener.equals(USE_SYSTEM_SETTINGS) && !pathToPDFOpener.equals("") && !checkPath(pathToPDFOpener, "PDF")) return;
+
+        String pathToImageOpener = tfPathToOpenImageWith.getText().trim();
+        if(!pathToImageOpener.equals(USE_SYSTEM_SETTINGS) && !pathToImageOpener.equals("") && !checkPath(pathToImageOpener, "PICTURE")) return;
+
+        String pathToSolidOpener = tfPathToOpenSolidWith.getText().trim();
+        if(!pathToSolidOpener.equals(USE_SYSTEM_SETTINGS) && !pathToSolidOpener.equals("") && !checkPath(pathToSolidOpener, "SOLID"))  return;
+
+        //ПОКАЗЫВАТЬ PDF В ПРОГРАММЕ
+        CH_CURRENT_USER_SETTINGS.setPathToOpenPDFWith(pathToPDFOpener.equals(USE_SYSTEM_SETTINGS) ? "" : pathToPDFOpener);
+        //ПОКАЗЫАТЬ IMAGE В ПРОГРАММЕ
+        CH_CURRENT_USER_SETTINGS.setPathToOpenImageWith(pathToImageOpener.equals(USE_SYSTEM_SETTINGS) ? "" : pathToImageOpener);
+        //ПОКАЗЫАТЬ SOLID В ПРОГРАММЕ
+        CH_CURRENT_USER_SETTINGS.setPathToOpenSolidWith(pathToSolidOpener.equals(USE_SYSTEM_SETTINGS) ? "" : pathToSolidOpener);
 
         //МОНИТОР
         AppProperties.getInstance().setMonitor(cmbMonitorChooser.getSelectionModel().getSelectedIndex());
@@ -177,7 +239,6 @@ public class SettingsController {
         //НОРМЫ МК
         CH_DEFAULT_PATH_TO_NORMY_MK = new File(tfPathToNormyMK.getText().trim());
         CH_CURRENT_USER_SETTINGS.setPathToNormyMK(tfPathToNormyMK.getText().trim());
-
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         CH_CURRENT_USER_SETTINGS.setShowPrefixes(chbShowPrefixes.isSelected());
         CH_SHOW_PREFIX = chbShowPrefixes.isSelected(); //для моментального применения
@@ -220,6 +281,27 @@ public class SettingsController {
         closeWindow(event);
     }
 
+    /**
+     * Проверяется указанный файл
+     */
+    private boolean checkPath(String pathToApp, String txt) {
+        File pdfOpener = new File(pathToApp);
+        if (!pdfOpener.exists()){
+            Warning1.create("ОШИБКА",
+                    String.format("Файл открытия %s не существует", txt),
+                    "Укажите другой файл или оставьте пустую строку");
+            return false;
+        }
+        if (!FileUtil.getExtension(pdfOpener.getName()).equals("exe")) {
+            Warning1.create("ОШИБКА",
+                    String.format("Файл открытия %s не является исполняемым(.exe)", txt),
+                    "Укажите другой файл или оставьте пустую строку");
+            return false;
+        }
+
+        return true;
+    }
+
     @FXML
     void choosePathToNormyMK(Event event) {
         File initialDirectory = new File(tfPathToNormyMK.getText().trim());
@@ -227,6 +309,37 @@ public class SettingsController {
         if(newDirectory != null && newDirectory.exists())
             tfPathToNormyMK.setText(newDirectory.toString());
     }
+
+    @FXML
+    void choosePathToOpenPDFWith(Event event) {
+        File initialDirectory = new File("C:\\");
+        File newFileOpener = AppStatic.chooseFile(event, initialDirectory);
+        if(newFileOpener != null && newFileOpener.exists())
+            tfPathToOpenPDFWith.setText(newFileOpener.toString());
+        else
+            tfPathToOpenPDFWith.setText("");
+    }
+
+    @FXML
+    void choosePathToOpenImageWith(Event event) {
+        File initialDirectory = new File("C:\\");
+        File newFileOpener = AppStatic.chooseFile(event, initialDirectory);
+        if(newFileOpener != null && newFileOpener.exists())
+            tfPathToOpenImageWith.setText(newFileOpener.toString());
+        else
+            tfPathToOpenImageWith.setText("");
+    }
+
+    @FXML
+    void choosePathToOpenSolidWith(Event event) {
+        File initialDirectory = new File("C:\\");
+        File newFileOpener = AppStatic.chooseFile(event, initialDirectory);
+        if(newFileOpener != null && newFileOpener.exists())
+            tfPathToOpenSolidWith.setText(newFileOpener.toString());
+        else
+            tfPathToOpenSolidWith.setText("");
+    }
+
 
     @FXML
     void choosePathToLastVersion(Event event) {

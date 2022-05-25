@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_DRAFTS;
-import static ru.wert.datapik.utils.statics.AppStatic.IMAGE_EXTENSIONS;
-import static ru.wert.datapik.utils.statics.AppStatic.SOLID_VIEWER_EXTENSIONS;
+import static ru.wert.datapik.utils.statics.AppStatic.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class Draft_Manipulator {
@@ -85,9 +84,8 @@ public class Draft_Manipulator {
                     }
                 }
                 for (File file : allFiles) {
-                    if (IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
-                       || SOLID_VIEWER_EXTENSIONS.contains(FileUtil.getExtension(file.getName().toLowerCase()))
-                    ) {
+                    String ext = FileUtil.getExtension(file.getName().toLowerCase());
+                    if (PDF_EXTENSIONS.contains(ext) || IMAGE_EXTENSIONS.contains(ext) || SOLID_EXTENSIONS.contains(ext)) {
                         if(tableView.getModifyingItem() == null){
                             event.acceptTransferModes(TransferMode.NONE);
                         } else {
@@ -110,18 +108,19 @@ public class Draft_Manipulator {
                 for (File f : content) {
                     try {
                         if (f.isDirectory()) {
+
                             List<Path> filesInFolder = Files.walk(f.toPath())
-                                    .filter(file ->
-                                                    IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
-                                            || SOLID_VIEWER_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
+                                    .filter(file -> PDF_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase())) ||
+                                                    IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase())) ||
+                                            SOLID_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
                                     )
                                     .collect(Collectors.toList());
                             for (Path p : filesInFolder)
                                 acceptedFiles.add(p.toFile());
                         } else if (f.isFile()) {
-                            if (IMAGE_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
-                            || SOLID_VIEWER_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
-                            ) {
+                            if (PDF_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
+                            || IMAGE_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
+                            || SOLID_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))) {
                                 acceptedFiles.add(f);
                             }
                         }

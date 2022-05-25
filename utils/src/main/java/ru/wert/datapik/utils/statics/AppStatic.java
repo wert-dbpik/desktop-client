@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.statics;
 
+import com.twelvemonkeys.io.FileUtil;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -29,6 +30,7 @@ import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.enums.EPDFViewer;
 import ru.wert.datapik.winform.warnings.Warning1;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -36,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -50,7 +53,7 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
 public class AppStatic {
-    public static String CURRENT_PROJECT_VERSION = "1.3"; //Версия приложения обновляется вручную
+    public static String CURRENT_PROJECT_VERSION = "1.4"; //Версия приложения обновляется вручную
     public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
 
     public static final String DEC_NUMBER = "\\d{6}[.]\\d{3}";// XXXXXX.XXX
@@ -64,8 +67,10 @@ public class AppStatic {
     public static FileChooser.ExtensionFilter ALLOWED_EXTENSIONS = new FileChooser.ExtensionFilter(
             "PDF, PNG, JPEG, EASM",
             "*.pdf", "*.png", "*.jpg", "*.eprt", "*.easm");
-    public static List<String> IMAGE_EXTENSIONS = Arrays.asList("pdf", "jpg", "jpeg", "png");
-    public static List<String> SOLID_VIEWER_EXTENSIONS = Arrays.asList("eprt", "easm");
+
+    public static List<String> PDF_EXTENSIONS = Collections.singletonList("pdf");
+    public static List<String> IMAGE_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
+    public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm");
     public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
 
 
@@ -255,6 +260,22 @@ public class AppStatic {
         return newDirectory;
     }
 
+    public static File chooseFile(Event event, File initialDirectory){
+        File newFile = null;
+        if(initialDirectory.exists() && initialDirectory.isDirectory()) {
+            FileChooser chooser = new FileChooser();
+            chooser.setInitialDirectory(initialDirectory);
+            try {
+                newFile = chooser.showOpenDialog(WF_MAIN_STAGE);
+            } catch (Exception e) {
+                chooser.setInitialDirectory(new File("C:\\"));
+                newFile = chooser.showOpenDialog(WF_MAIN_STAGE);
+            }
+        }
+
+        return newFile;
+    }
+
     /**
      * Метод создает запись лога в базе данных
      * CURRENT_PROJECT_VERSION не определяется при запуске приложения из-под IDE
@@ -272,6 +293,47 @@ public class AppStatic {
                 text
         ));
 
+    }
+
+    /**
+     * Метод открывает файл во внешнем приложении
+     * @param myFile
+     */
+    public static void openInOuterApplication(File myFile) {
+        String executingFile = null;
+        String ext = FileUtil.getExtension(myFile);
+        if (PDF_EXTENSIONS.contains(ext) && !CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith().equals(""))
+            executingFile = CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith();
+        else if (IMAGE_EXTENSIONS.contains(ext) && !CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith().equals(""))
+            executingFile = CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith();
+        else if (SOLID_EXTENSIONS.contains(ext) && !CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith().equals(""))
+            executingFile = CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith();
+
+        if (executingFile != null)
+            try {
+                Runtime.getRuntime().exec(executingFile + " " + myFile.getAbsolutePath());
+            } catch (IOException e) {
+                log.error("openInOuterApp : не удалось открыть файл '{}' во внешнем приложении '{}'", myFile.getAbsolutePath(), executingFile);
+                Warning1.create("Ошибка",
+                        "Не удалось открыть файл во внешнем приложении",
+                        "Возможно, программа не предназначена для открытия\n" +
+                                "подобного файла, или файл поврежден");
+                e.printStackTrace();
+            }
+        else {
+            //Открываем в стандартном приложении
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    Desktop.getDesktop().open(myFile);
+                } catch (IOException ex) {
+                    log.error("openInOuterApp : не удалось открыть файл '{}' в стандартном приложении", myFile.getAbsolutePath());
+                    Warning1.create("Ошибка",
+                            "Не удалось открыть файл в стандартном приложении",
+                            "Возможно файл поврежден");
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
 }

@@ -1,33 +1,25 @@
 package ru.wert.datapik.utils.previewer;
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.utils.common.components.ZoomableScrollPane;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
-import ru.wert.datapik.utils.entities.drafts.commands._Draft_Commands;
 import ru.wert.datapik.utils.entities.drafts.info.DraftInfoPatch;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.views.pdf.PDFReader;
@@ -40,16 +32,13 @@ import ru.wert.datapik.winform.enums.EPDFViewer;
 import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collections;
-import java.util.List;
 
-import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.statics.AppStatic.SOLID_VIEWER_EXTENSIONS;
+import static ru.wert.datapik.utils.statics.AppStatic.SOLID_EXTENSIONS;
 import static ru.wert.datapik.utils.statics.AppStatic.openDraftInPreviewer;
 
 //import ru.wert.datapik.client.entity.models.Draft;
@@ -138,7 +127,8 @@ public class PreviewerPatchController {
 
     }
 
-    public void initPreviewerToolBar(boolean useBtnUpdateDraftView, boolean useBtnOpenInNewTab, boolean useBtnOpenInOuterApp, boolean useBtnShowInfo, boolean useBrackets){
+    public void initPreviewerToolBar(boolean useBtnUpdateDraftView, boolean useBtnOpenInNewTab, boolean useBtnOpenInOuterApp,
+                                     boolean useBtnShowInfo, boolean useBrackets){
         this.useBtnUpdateDraftView = useBtnUpdateDraftView;
         this.useBtnOpenInNewTab = useBtnOpenInNewTab;
         this.useBtnOpenInOuterApp = useBtnOpenInOuterApp;
@@ -184,11 +174,7 @@ public class PreviewerPatchController {
                     currentDraft.get().getId() + "." + currentDraft.get().getExtension());
 
             if (myFile.exists() && myFile.isFile())
-                try {
-                    Desktop.getDesktop().open(myFile);
-                } catch (IOException ex) {
-                    log.error("createPreviewerToolBar : couldn'n load file '{}'", myFile);
-                }
+                AppStatic.openInOuterApplication(myFile);
         });
 
         Button btnShowInfo = new Button();
@@ -234,10 +220,9 @@ public class PreviewerPatchController {
                 log.error("showDraft : something went wrong with showing pdf!");
                 e.printStackTrace();
             }
-        } else if (SOLID_VIEWER_EXTENSIONS.contains(ext)) {
+        } else if (SOLID_EXTENSIONS.contains(ext)) {
             showPlaceholder(SOLID_3D_IMG);
         } else {
-            paneViewer.getChildren().clear();
             try {
                 showImage(draftPath);
             }catch(Exception ex){
@@ -251,14 +236,14 @@ public class PreviewerPatchController {
      * Метод отображает соответствующее информационное изображение
      */
     private void showPlaceholder(Image image) {
-        paneViewer.getChildren().clear();
+//        paneViewer.getChildren().clear();
         imageView.setImage(image);
         imageView.setFitWidth(image.getWidth());
         imageView.setFitHeight(image.getHeight());
         StackPane pane = new StackPane(imageView);
         pane.setAlignment(Pos.CENTER);
         pane.setStyle("-fx-background-color: white");
-        paneViewer.getChildren().add(0, pane);
+        paneViewer.getChildren().set(0, pane);
     }
 
     /**

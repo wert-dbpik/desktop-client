@@ -19,6 +19,9 @@ public class AppSettings extends _BaseEntity implements Item{
     private Integer monitor; //монитор
     private Integer pdfViewer; //просмотрщик
     private String pathToNormyMK; //путь до папки НормыМК
+    private String pathToOpenPDFWith; //путь до папки НормыМК
+    private String pathToOpenImageWith; //путь до папки НормыМК
+    private String pathToOpenSolidWith; //путь до папки НормыМК
     private boolean showPrefixes; //показывать префиксы
     private Prefix defaultPrefix; //Префикс по умолчанию
     private boolean validateDecNumbers; //Проверять вводимый децимальный номер
@@ -38,6 +41,9 @@ public class AppSettings extends _BaseEntity implements Item{
         newSettings.setMonitor(getMonitor());
         newSettings.setPdfViewer(getPdfViewer());
         newSettings.setPathToNormyMK(getPathToNormyMK());
+        newSettings.setPathToOpenPDFWith(getPathToOpenPDFWith());
+        newSettings.setPathToOpenImageWith(getPathToOpenImageWith());
+        newSettings.setPathToOpenSolidWith(getPathToOpenSolidWith());
         newSettings.setShowPrefixes(isShowPrefixes());
         newSettings.setDefaultPrefix(getDefaultPrefix());
         newSettings.setValidateDecNumbers(isValidateDecNumbers());
