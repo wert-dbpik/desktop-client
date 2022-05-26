@@ -18,5 +18,6 @@ public class UtilStaticNodes {
     public static StackPane CH_TOOL_STACK_PANE;
     public static HBox PANE_WITH_SEARCH;
     public static HBox SEARCH_CONTAINER;
+    public static StackPane SP_CHAT;
 
 }

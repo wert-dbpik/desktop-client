@@ -5,10 +5,10 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class ApplicationController {
@@ -52,11 +52,15 @@ public class ApplicationController {
     @FXML
     private StackPane spAppMenu;
 
+    @FXML
+    private StackPane spChat;
+
 
     @FXML
     void initialize() {
 //        CH_APPLICATION_ROOT_PANEL = rootPanel;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
+        SP_CHAT = spChat;
 
 //        createToolPanel();
         createUserLabel();

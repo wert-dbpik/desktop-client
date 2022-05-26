@@ -23,6 +23,11 @@
       <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
             <StackPane fx:id="rootPanel" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+            <HBox>
+               <children>
+                  <StackPane fx:id="spChat" />
+               </children>
+            </HBox>
          </children>
       </HBox>
       <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

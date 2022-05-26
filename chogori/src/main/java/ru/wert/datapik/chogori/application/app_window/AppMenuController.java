@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
 import ru.wert.datapik.client.entity.models.User;
+import ru.wert.datapik.utils.chat.SideChat;
 import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.search.SearchField;
 import ru.wert.datapik.winform.statics.WinformStatic;
@@ -44,6 +45,9 @@ public class AppMenuController {
     @FXML @Getter
     public HBox hbSearch;
 
+    @FXML
+    Button btnChat;
+
     private User tempUser;
 
     @FXML
@@ -55,6 +59,15 @@ public class AppMenuController {
         SEARCH_CONTAINER = hbSearch;
         PANE_WITH_SEARCH = createSearchField();
 
+
+        SideChat sideChat = new SideChat();
+
+        btnChat.setOnAction(event -> {
+            if(SP_CHAT.getChildren().isEmpty())
+                SP_CHAT.getChildren().clear();
+            else
+                SP_CHAT.getChildren().add(sideChat.getChatMainPane());
+        });
     }
 
     /**
