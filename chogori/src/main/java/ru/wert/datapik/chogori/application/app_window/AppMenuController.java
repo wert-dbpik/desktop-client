@@ -63,9 +63,9 @@ public class AppMenuController {
         SideChat sideChat = new SideChat();
 
         btnChat.setOnAction(event -> {
-            if(SP_CHAT.getChildren().isEmpty())
-                SP_CHAT.getChildren().clear();
-            else
+//            if(SP_CHAT.getChildren().isEmpty())
+//                SP_CHAT.getChildren().clear();
+//            else
                 SP_CHAT.getChildren().add(sideChat.getChatMainPane());
         });
     }
