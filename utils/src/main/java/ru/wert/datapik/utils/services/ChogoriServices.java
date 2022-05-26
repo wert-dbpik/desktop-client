@@ -1,11 +1,16 @@
 package ru.wert.datapik.utils.services;
 
 
+import ru.wert.datapik.client.entity.models.ChatGroup;
 import ru.wert.datapik.client.entity.serviceQUICK.*;
 import ru.wert.datapik.client.entity.serviceREST.*;
 import ru.wert.datapik.client.entity.service_interfaces.*;
 
 public class ChogoriServices {
+
+    public static IChatGroupService CH_CHAT_GROUP;
+    public static IChatMessageService CH_CHAT_MESSAGE;
+    public static IChatMessageStatusService CH_CHAT_MESSAGE_STATUS;
 
     public static IAppSettingsService CH_SETTINGS;
     public static IUserService CH_USERS;
@@ -38,6 +43,10 @@ public class ChogoriServices {
     public static MaterialQuickService CH_QUICK_MATERIALS;
 
     public static void initServices(){
+        ChogoriServices.CH_CHAT_GROUP = ChatGroupService.getInstance();
+        ChogoriServices.CH_CHAT_MESSAGE = ChatMessageService.getInstance();
+        ChogoriServices.CH_CHAT_MESSAGE_STATUS = ChatMessageStatusService.getInstance();
+
         ChogoriServices.CH_USERS = UserService.getInstance();
         ChogoriServices.CH_LOGS = AppLogService.getInstance();
 
