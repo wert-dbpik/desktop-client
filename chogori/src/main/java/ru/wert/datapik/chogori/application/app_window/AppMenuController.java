@@ -30,8 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
-import static ru.wert.datapik.utils.images.BtnImages.BTN_CLEAN_IMG_W;
-import static ru.wert.datapik.utils.images.BtnImages.BTN_SEARCH_IMG;
+import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
@@ -49,6 +48,7 @@ public class AppMenuController {
     Button btnChat;
 
     private User tempUser;
+    private boolean open;
 
     @FXML
     void initialize(){
@@ -62,11 +62,23 @@ public class AppMenuController {
 
         SideChat sideChat = new SideChat();
 
+        btnChat.setText("чат");
+        btnChat.setGraphic(new ImageView(CHAT_WHITE_IMG));
         btnChat.setOnAction(event -> {
-//            if(SP_CHAT.getChildren().isEmpty())
-//                SP_CHAT.getChildren().clear();
-//            else
-                SP_CHAT.getChildren().add(sideChat.getChatMainPane());
+            open = !open;
+            if(open) {
+                SP_CHAT.setPrefWidth(250.0);
+                SP_CHAT.setMinWidth(250.0);
+                SP_CHAT.setMaxWidth(250.0);
+                SP_CHAT.getChildren().add(sideChat.getChatVBox());
+            }else {
+                for(double width = SP_CHAT.getWidth(); width >= 0; width--){
+                    SP_CHAT.setPrefWidth(width);
+                    SP_CHAT.setMinWidth(width);
+                    SP_CHAT.setMaxWidth(width);
+                                    }
+                SP_CHAT.getChildren().clear();
+            }
         });
     }
 

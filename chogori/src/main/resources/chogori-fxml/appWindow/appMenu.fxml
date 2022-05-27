@@ -30,7 +30,7 @@
                   </HBox>
                   <Button fx:id="btnChat" mnemonicParsing="false" text="ЧАТ">
                      <HBox.margin>
-                        <Insets left="10.0" right="10.0" />
+                        <Insets />
                      </HBox.margin>
                   </Button>
                </children>

@@ -24,8 +24,17 @@ public class SideChatTalkController {
 
     @FXML
     private Button btnSend;
+    private SideChat chat;
 
-    void init(){
+    @FXML
+    void initialize(){
 
+        btnChatGroups.setOnAction(e->{
+            chat.showChatGroups();
+        });
+    }
+
+    public void init(SideChat chat){
+        this.chat = chat;
     }
 }
