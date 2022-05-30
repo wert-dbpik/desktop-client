@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
+import ru.wert.datapik.client.entity.models.ChatGroup;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.utils.chat.SideChat;
 import ru.wert.datapik.utils.help.About;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_CHAT_GROUPS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
@@ -506,7 +508,11 @@ public class AppMenuController {
     }
 
     void makeTest(ActionEvent event){
+        ChatGroup group = new ChatGroup();
+        group.setName("#1#96");
+        group.setUser(CH_CURRENT_USER);
 
+        ChatGroup newGroup = CH_CHAT_GROUPS.save(group);
     }
 
     //########################   ПОМОЩЬ    ###########################

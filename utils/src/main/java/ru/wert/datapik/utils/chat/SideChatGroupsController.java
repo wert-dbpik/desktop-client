@@ -1,10 +1,10 @@
 package ru.wert.datapik.utils.chat;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.util.Callback;
 import ru.wert.datapik.client.entity.models.ChatGroup;
 import ru.wert.datapik.client.entity.models.User;
@@ -45,10 +45,6 @@ public class SideChatGroupsController {
         updateListOfUsers();
         updateListOfGroups();
 
-        //Временно
-        btnAddNewChatGroup.setOnAction(e->{
-            chat.showChatTalk();
-        });
     }
 
     public void init(SideChat chat){
@@ -111,6 +107,14 @@ public class SideChatGroupsController {
                                 userLabel.setText("Написать себе");
                             else
                                 userLabel.setText(item.getName());
+
+                            userLabel.setContextMenu(createContextMenu());
+                            userLabel.setOnMouseClicked(e->{
+                                if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
+                                    openChat(userLabel);
+                                    e.consume();
+                                }
+                            });
                             userLabel.setStyle("-fx-font-size:14; -fx-text-fill:black; -fx-font-style: italic");
                             setGraphic(userLabel);
                         }
@@ -120,6 +124,43 @@ public class SideChatGroupsController {
             }
         });
     }
+
+    private void openChat(Label userLabel){
+        Long user1 = CH_CURRENT_USER.getId();
+        Long user2 = CH_USERS.findByName(userLabel.getText()).getId();
+        String groupName = "#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
+        ChatGroup chatGroup = createNewChatGroupIfNeeded(groupName);
+        chat.showChatTalk(chatGroup);
+    }
+
+    private ContextMenu createContextMenu(){
+        ContextMenu chatGroupContextMenu = new ContextMenu();
+        MenuItem openChat = new MenuItem("Написать сообщение");
+        openChat.setOnAction(e->{
+            Label userLabel = (Label) ((MenuItem)e.getSource()).getParentPopup().getUserData();
+            openChat(userLabel);
+        });
+        chatGroupContextMenu.getItems().add(openChat);
+
+        return chatGroupContextMenu;
+    }
+
+    /**
+     *
+     */
+    private ChatGroup createNewChatGroupIfNeeded(String groupName) {
+        ChatGroup group = null;
+        group = CH_CHAT_GROUPS.findByName(groupName);
+        if (group == null) {
+            ChatGroup newGroup = new ChatGroup();
+            newGroup.setName(groupName);
+            newGroup.setUser(CH_CURRENT_USER);
+
+            group = CH_CHAT_GROUPS.save(newGroup);
+        }
+        return group;
+    }
+
 
     private void createListOfChatGroups() {
         tabPaneChats.setGraphic(new ImageView(CHATS_IMG));

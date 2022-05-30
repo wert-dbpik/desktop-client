@@ -1,11 +1,16 @@
 package ru.wert.datapik.utils.chat;
 
+import com.sun.prism.Image;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+import lombok.Getter;
 import ru.wert.datapik.client.entity.models.ChatMessage;
+
+import static ru.wert.datapik.utils.images.BtnImages.SEND_MESSAGE_IMG;
 
 public class SideChatTalkController {
 
@@ -14,6 +19,7 @@ public class SideChatTalkController {
     private Button btnChatGroups;
 
     @FXML
+    @Getter
     private Label lblChatGroup;
 
     @FXML
@@ -28,6 +34,8 @@ public class SideChatTalkController {
 
     @FXML
     void initialize(){
+        btnSend.setText(null);
+        btnSend.setGraphic(new ImageView(SEND_MESSAGE_IMG));
 
         btnChatGroups.setOnAction(e->{
             chat.showChatGroups();

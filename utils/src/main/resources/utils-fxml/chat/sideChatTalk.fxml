@@ -10,56 +10,51 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.chat.SideChatTalkController">
    <children>
-      <HBox maxHeight="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox maxHeight="1.7976931348623157E308" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="btnChatGroups" mnemonicParsing="false" text="&lt;">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Label fx:id="lblChatGroup" text="Симонов Алексей">
-                           <font>
-                              <Font name="System Bold Italic" size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <Separator prefWidth="200.0" />
-                  <SplitPane dividerPositions="0.9" maxHeight="1.7976931348623157E308" orientation="VERTICAL" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                    <items>
-                      <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefWidth="200.0">
-                           <children>
-                              <ListView fx:id="listOfMessages" maxHeight="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <padding>
-                                    <Insets left="5.0" right="5.0" />
-                                 </padding>
-                              </ListView>
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                           <children>
-                              <TextArea fx:id="taMessageText" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                    </items>
-                  </SplitPane>
-                  <HBox alignment="CENTER_RIGHT" VBox.vgrow="NEVER">
-                     <children>
-                        <Button fx:id="btnSend" mnemonicParsing="false" text="пуск">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
+                  <Button fx:id="btnChatGroups" mnemonicParsing="false" text="&lt;">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Label fx:id="lblChatGroup" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Симонов Алексей" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                     </font>
+                  </Label>
                </children>
-            </VBox>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <SplitPane dividerPositions="0.9" maxHeight="1.7976931348623157E308" orientation="VERTICAL" prefWidth="200.0" VBox.vgrow="ALWAYS">
+              <items>
+                <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="listOfMessages" maxHeight="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                        </ListView>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <TextArea fx:id="taMessageText" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+            <HBox alignment="CENTER_RIGHT" VBox.vgrow="NEVER">
+               <children>
+                  <Button fx:id="btnSend" mnemonicParsing="false" text="пуск">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </AnchorPane>
