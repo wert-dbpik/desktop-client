@@ -33,6 +33,7 @@ public class BLlinks {
     public static AsmItemService asmItemService;
     public static DraftService draftService;
     public static PassportService passportService;
+    public static FilesService filesService;
 
 
 }

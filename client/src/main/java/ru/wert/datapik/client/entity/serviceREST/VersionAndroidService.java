@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Call;
+import retrofit2.Response;
 import ru.wert.datapik.client.entity.api_interfaces.VersionAndroidApiInterface;
 import ru.wert.datapik.client.entity.models.VersionAndroid;
 import ru.wert.datapik.client.entity.service_interfaces.IVersionAndroidService;
@@ -50,7 +51,9 @@ public class VersionAndroidService implements IVersionAndroidService, ItemServic
     public VersionAndroid findByName(String name) {
         try {
             Call<VersionAndroid> call = api.getByName(name);
-            return call.execute().body();
+            Response<VersionAndroid> res = call.execute();
+            if(res.isSuccessful())
+                 return res.body();
         } catch (IOException e) {
             e.printStackTrace();
         }

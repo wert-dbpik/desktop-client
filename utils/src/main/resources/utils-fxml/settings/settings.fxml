@@ -273,7 +273,7 @@
                         </GridPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="tabAdminSettings" closable="false" text="Версия">
+                  <Tab fx:id="tabVersionEXE" closable="false" text="Версия EXE">
                      <content>
                         <GridPane BorderPane.alignment="CENTER">
                            <children>
@@ -314,6 +314,64 @@
                                     <TextArea fx:id="taLastVersionNote" prefHeight="114.0" prefWidth="412.0" GridPane.columnIndex="1" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="165.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="427.0" minWidth="10.0" prefWidth="417.0" />
+                           </columnConstraints>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="209.0" minHeight="40.0" prefHeight="209.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="164.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="tabVersionAPK" closable="false" text="Версия APK">
+                     <content>
+                        <GridPane BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Загрузить APK в базу" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="tfLastVersionAPK" maxWidth="139.0" prefHeight="30.0" prefWidth="139.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <Button fx:id="btnUploadNewAPKToDB" mnemonicParsing="false" onAction="#uploadNewAPKToDB" text="ЗАГРУЗИТЬ НОВУЮ ВЕРСИЮ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Что нового:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextArea fx:id="taLastVersionNoteAPK" prefHeight="114.0" prefWidth="412.0" GridPane.columnIndex="1" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                              <Label text="Последняя версия">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
                            </children>
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="165.0" />

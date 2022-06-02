@@ -73,6 +73,7 @@ public class RetrofitClient{
 
         mRetrofit = new Retrofit.Builder()
                 .baseUrl("http://"+ip +":"+ port)
+                .addConverterFactory(new NullOnEmptyConverterFactory()) //Исправляет исключение на null, когда приходит пустое тело
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient.build()) //борьба с readTimeout
 //                .client(client.build()) // логгирование ответа

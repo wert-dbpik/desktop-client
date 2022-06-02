@@ -10,7 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import ru.wert.datapik.client.entity.models.AppSettings;
 import ru.wert.datapik.client.entity.models.Prefix;
+import ru.wert.datapik.client.entity.models.VersionAndroid;
 import ru.wert.datapik.client.entity.models.VersionDesktop;
+import ru.wert.datapik.client.entity.serviceREST.VersionAndroidService;
 import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.utils.common.components.BXMonitor;
@@ -26,8 +28,7 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.utils.images.BtnImages.BTN_HOME_IMG;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_SETTINGS;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_VERSIONS_DESKTOP;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;
@@ -95,10 +96,10 @@ public class SettingsController {
     @FXML
     private Button btnPathToOpenSolidWith;
 
-    // Admin Settings =======================================
+    // ВЕРСИЯ ЕХЕ =======================================
 
     @FXML
-    private Tab tabAdminSettings;
+    private Tab tabVersionEXE;
 
     @FXML
     private TextField tfLastVersion;
@@ -111,6 +112,20 @@ public class SettingsController {
 
     @FXML
     private TextArea taLastVersionNote;
+
+    // ВЕРСИЯ APK  =======================================
+
+    @FXML
+    private Tab tabVersionAPK;
+
+    @FXML
+    private TextField tfLastVersionAPK;
+
+    @FXML
+    private Button btnUploadNewAPKToDB;
+
+    @FXML
+    private TextArea taLastVersionNoteAPK;
 
     public static String USE_SYSTEM_SETTINGS = "СИСТЕМНЫЕ НАСТРОЙКИ";
 
@@ -162,19 +177,33 @@ public class SettingsController {
         btnPathToOpenSolidWith.setText("");
         btnPathToOpenSolidWith.setGraphic(new ImageView(TREE_NODE_IMG));
         btnPathToOpenSolidWith.setTooltip(new Tooltip("Выберите исполняемый файл(.ехе)"));
-        //ПОСЛЕДНЯЯ ВЕРСИЯ
-        VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
-        tfLastVersion.setText(lastVersion.getName());
-        tfPathToLastVersion.setText(lastVersion.getPath() == null ? "" : lastVersion.getPath());
-        taLastVersionNote.setText(lastVersion.getNote() == null ? "" : lastVersion.getNote());
+        //ПОСЛЕДНЯЯ ВЕРСИЯ EXE
         if (!CH_CURRENT_USER_GROUP.isAdministrate()) {
-            tfLastVersion.setDisable(true);
-            tfPathToLastVersion.setDisable(true);
-            taLastVersionNote.setDisable(true);
-            btnPathToLastVersion.setDisable(true);
+            tabPane.getTabs().removeAll(tabVersionEXE);
+        } else {
+            VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
+            tfLastVersion.setText(lastVersion.getName());
+            tfPathToLastVersion.setText(lastVersion.getPath() == null ? "" : lastVersion.getPath());
+            taLastVersionNote.setText(lastVersion.getNote() == null ? "" : lastVersion.getNote());
+            btnPathToLastVersion.setTooltip(new Tooltip("Выберите исполняемый файл(ехе/jar)"));
         }
-        btnPathToLastVersion.setTooltip(new Tooltip("Выберите исполняемый файл(ехе/jar)"));
 
+        //ПОСЛЕДНЯЯ ВЕРСИЯ APK
+        if (!CH_CURRENT_USER_GROUP.isAdministrate()) {
+            tabPane.getTabs().removeAll(tabVersionAPK);
+        } else {
+            List<VersionAndroid> versionsAPK = CH_VERSIONS_ANDROID.findAll();
+            VersionAndroid lastVersionAPK = versionsAPK.get(versionsAPK.size() - 1);
+            tfLastVersionAPK.setText(lastVersionAPK.getName());
+            taLastVersionNoteAPK.setText(lastVersionAPK.getNote() == null ? "" : lastVersionAPK.getNote());
+
+            btnUploadNewAPKToDB.setTooltip(new Tooltip("Выберите файл apk"));
+        }
+    }
+
+    @FXML
+    void uploadNewAPKToDB(Event event) {
+        closeWindow(event);
     }
 
     @FXML
@@ -250,27 +279,53 @@ public class SettingsController {
         CH_CURRENT_USER_SETTINGS.setValidateDecNumbers(chbValidateDecNumbersEntering.isSelected());
         CH_VALIDATE_DEC_NUMBERS = chbValidateDecNumbersEntering.isSelected();
         CH_SETTINGS.update(CH_CURRENT_USER_SETTINGS);
-        //ПОСЛЕДНЯЯ ВЕРСИЯ ПРОГРАММЫ
-        VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
-        VersionDesktop versionDesktop = CH_VERSIONS_DESKTOP.findByName(tfLastVersion.getText().trim());
-        if(versionDesktop != null){
-            versionDesktop.setPath(tfPathToLastVersion.getText().trim());
-            versionDesktop.setNote(taLastVersionNote.getText());
-            CH_VERSIONS_DESKTOP.update(versionDesktop);
-        } else {
-            VersionDesktop version = new VersionDesktop();
-            version.setName(tfLastVersion.getText().trim());
-            if(version.compareTo(AppStatic.findCurrentLastAppVersion()) < 0){
-                Warning1.create("Внимание!",
-                        "Наименование версии не прошло проверку",
-                        "Последняя версия программы " + lastVersion.getName());
-                return;
+
+        if (CH_CURRENT_USER_GROUP.isAdministrate()) {
+            //ПОСЛЕДНЯЯ ВЕРСИЯ ПРОГРАММЫ EXE
+            VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
+            VersionDesktop versionDesktop = CH_VERSIONS_DESKTOP.findByName(tfLastVersion.getText().trim());
+            if (versionDesktop != null) {
+                versionDesktop.setPath(tfPathToLastVersion.getText().trim());
+                versionDesktop.setNote(taLastVersionNote.getText());
+                CH_VERSIONS_DESKTOP.update(versionDesktop);
             } else {
-                version.setData(LocalDateTime.now().toString());
-                version.setPath(tfPathToLastVersion.getText().trim());
-                version.setNote(taLastVersionNote.getText());
-                CH_VERSIONS_DESKTOP.save(version);
+                VersionDesktop version = new VersionDesktop();
+                version.setName(tfLastVersion.getText().trim());
+                if (version.compareTo(AppStatic.findCurrentLastAppVersion()) < 0) {
+                    Warning1.create("Внимание!",
+                            "Наименование версии не прошло проверку",
+                            "Последняя версия программы " + lastVersion.getName());
+                    return;
+                } else {
+                    version.setData(LocalDateTime.now().toString());
+                    version.setPath(tfPathToLastVersion.getText().trim());
+                    version.setNote(taLastVersionNote.getText());
+                    CH_VERSIONS_DESKTOP.save(version);
+                }
             }
+
+            //ПОСЛЕДНЯЯ ВЕРСИЯ ПРОГРАММЫ APK
+            List<VersionAndroid> versionsAPK = CH_VERSIONS_ANDROID.findAll();
+            VersionAndroid lastVersionAPKinDB = versionsAPK.get(versionsAPK.size() - 1);
+            VersionAndroid versionAPK = CH_VERSIONS_ANDROID.findByName(tfLastVersionAPK.getText().trim());
+            if (versionAPK != null) {
+                versionAPK.setNote(taLastVersionNoteAPK.getText());
+                CH_VERSIONS_ANDROID.update(versionAPK);
+            } else {
+                VersionAndroid versionAndroid = new VersionAndroid();
+                versionAndroid.setName(tfLastVersionAPK.getText().trim());
+                if (versionAndroid.compareTo(lastVersionAPKinDB) < 0) {
+                    Warning1.create("Внимание!",
+                            "Наименование версии не прошло проверку",
+                            "Последняя версия программы " + lastVersionAPKinDB.getName());
+                    return;
+                } else {
+                    versionAndroid.setData(LocalDateTime.now().toString());
+                    versionAndroid.setNote(taLastVersionNoteAPK.getText());
+                    CH_VERSIONS_ANDROID.save(versionAndroid);
+                }
+            }
+
         }
 
         //Обновляем внешний вид табов
