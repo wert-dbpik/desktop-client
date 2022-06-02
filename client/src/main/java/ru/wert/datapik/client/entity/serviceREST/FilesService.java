@@ -77,13 +77,13 @@ public class FilesService implements IFilesService {
 
 
     @Override
-    public boolean upload(String fileNewName, String folder, File draft) throws IOException {
-        log.debug("upload : Загружаем в БД чертеж {}", fileNewName);
-        byte[] draftBytes = Files.readAllBytes(draft.toPath());
+    public boolean upload(String fileNameForSaving, String directoryName, File initialFile) throws IOException {
+        log.debug("upload : Загружаем в БД чертеж {}", fileNameForSaving);
+        byte[] draftBytes = Files.readAllBytes(initialFile.toPath());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/pdf"), draftBytes);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", fileNewName, requestBody);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", fileNameForSaving, requestBody);
         try {
-            Call<Void> call = api.upload(folder, body);
+            Call<Void> call = api.upload(directoryName, body);
             return call.execute().isSuccessful();
         } catch (IOException e) {
             e.printStackTrace();

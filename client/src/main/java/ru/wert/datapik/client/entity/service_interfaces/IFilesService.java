@@ -16,6 +16,6 @@ public interface IFilesService{
 
     boolean download(String path, String fileName, String extension, String tempDir);
 
-    boolean upload(String fileName, String path, File draft) throws IOException;
+    boolean upload(String fileNameForSaving, String directoryName, File initialFile) throws IOException;
 
 }

@@ -23,6 +23,7 @@ import ru.wert.datapik.winform.enums.EPDFViewer;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -203,7 +204,23 @@ public class SettingsController {
 
     @FXML
     void uploadNewAPKToDB(Event event) {
-        closeWindow(event);
+        FileChooser chooser = new FileChooser();
+        chooser.setInitialDirectory(new File("C:\\"));
+        File file = chooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
+        if(file == null) return;
+        String ext = FileUtil.getExtension(file);
+        if(ext.equals("apk")){
+            try {
+                CH_FILES.upload(file.getName(), "apk", file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            Warning1.create("Ошибка!",
+                    String.format("Невозможно загрузить файл с расширением %s", ext),
+                    "Загрузите файл с расширением .apk");
+        }
     }
 
     @FXML
