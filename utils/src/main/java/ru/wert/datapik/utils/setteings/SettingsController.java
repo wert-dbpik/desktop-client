@@ -308,7 +308,7 @@ public class SettingsController {
             } else {
                 VersionDesktop version = new VersionDesktop();
                 version.setName(tfLastVersion.getText().trim());
-                if (version.compareTo(AppStatic.findCurrentLastAppVersion()) < 0) {
+                if (version.getName().compareTo(AppStatic.findCurrentLastAppVersion().getName()) < 0) {
                     Warning1.create("Внимание!",
                             "Наименование версии не прошло проверку",
                             "Последняя версия программы " + lastVersion.getName());
@@ -331,7 +331,7 @@ public class SettingsController {
             } else {
                 VersionAndroid versionAndroid = new VersionAndroid();
                 versionAndroid.setName(tfLastVersionAPK.getText().trim());
-                if (versionAndroid.compareTo(lastVersionAPKinDB) < 0) {
+                if (versionAndroid.getName().compareTo(lastVersionAPKinDB.getName()) < 0) {
                     Warning1.create("Внимание!",
                             "Наименование версии не прошло проверку",
                             "Последняя версия программы " + lastVersionAPKinDB.getName());

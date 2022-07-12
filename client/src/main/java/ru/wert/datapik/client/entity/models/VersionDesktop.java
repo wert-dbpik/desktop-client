@@ -15,7 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"name"}, callSuper = false)
-public class VersionDesktop extends _BaseEntity implements Item, Comparable<VersionDesktop> {
+public class VersionDesktop extends _BaseEntity implements Item {
 
     private String data;
     private String name;
@@ -27,15 +27,4 @@ public class VersionDesktop extends _BaseEntity implements Item, Comparable<Vers
         return name;
     }
 
-    @Override
-    public int compareTo(@NotNull VersionDesktop o) {
-        String[] nn1 = getName().split("\\.", -1);
-        String[] nn2 = o.getName().split("\\.", -1);
-        for(int i = 0; i < nn1.length; i ++){
-            int res = nn1[i].compareTo(nn2[i]);
-            if(res != 0)
-                return res;
-        }
-        return 0;
-    }
 }
