@@ -125,7 +125,7 @@ public abstract class FormView_ACCController<P extends Item>{
                 if(operation.equals(ADD)){
                     //Проверка чертежей сложнее и вынесена отдельно
                     if(formView instanceof Draft_TableView){
-                        if(((Draft_TableView) formView).getAccController().draftIsDuplicated((Draft) newItem))
+                        if(((Draft_TableView) formView).getAccController().draftIsDuplicated((Draft) newItem, null))
                             return null;
                     }
                     else if(isDuplicated(newItem, null)){

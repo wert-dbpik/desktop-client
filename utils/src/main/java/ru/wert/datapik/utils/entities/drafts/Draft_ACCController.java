@@ -436,7 +436,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * Предполагается, что метод действует в потоке отличном от главного, поэтому окно с сообщением выводится принудительно
      * в главном потоке. Ожидание ответа от пользователя происходит с помощью класса CountDownLatch и связывания BooleanProperty
      */
-    public boolean draftIsDuplicated(Draft newDraft){
+    public boolean draftIsDuplicated(Draft newDraft, Draft oldDraft){
         //Так как пасспорт нового чертежа еще фактически не существует, то ищем такой же пасспорт в базе по косвенным признакам
         Passport passport = CH_QUICK_PASSPORTS.findByPrefixIdAndNumber(newDraft.getPassport().getPrefix(), newDraft.getPassport().getNumber());
         if (passport == null) {
@@ -446,20 +446,20 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             log.debug("draftIsDuplicated : найден пасспорт {}", passport.toUsefulString());
 
         List<Draft> drafts = CH_QUICK_DRAFTS.findByPassport(passport);
+        drafts.remove(oldDraft);
         log.debug("draftIsDuplicated : найдено {} чертежей с пасспортом {}", drafts.size(), passport.toUsefulString());
         if (drafts.isEmpty()) return false;
 
         for (Draft draft : drafts) {
             if (draft.equals(newDraft)) {
                 if (draft.getStatus().equals(EDraftStatus.LEGAL.getStatusId())) {
-                    if(skipMe) {
+                    if (skipMe) {
                         Platform.runLater(this::showNextDraft);
                         return true;
-                    }
-                    else return foundDuplicatedLegalDraft(draft); //Иначе возвращаем на доработку
-
+                    } else
+                        return foundDuplicatedLegalDraft(draft); //Иначе возвращаем на доработку
                 } else if (draft.getStatus().equals(EDraftStatus.ANNULLED.getStatusId())) {
-                    if(skipMe) {
+                    if (skipMe) {
                         Platform.runLater(this::showNextDraft);
                         return true;
                     }
@@ -624,7 +624,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 return new Task<Draft>() {
                     @Override
                     protected Draft call() throws Exception {
-                        if (draftIsDuplicated(currentDraft)) {
+                        if (draftIsDuplicated(currentDraft, null)) {
                             //TRUE -->
                             return null;
                         }
@@ -676,7 +676,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 return new Task<Draft>() {
                     @Override
                     protected Draft call() throws Exception {
-                        if(draftIsDuplicated(getNewItem())){
+                        if(draftIsDuplicated(getNewItem(), currentDraft)){
                             if (askMe)
                                 Platform.runLater(() -> Warning1.create($ATTENTION, $ITEM_EXISTS, $USE_ORIGINAL_ITEM));
                             return null;
