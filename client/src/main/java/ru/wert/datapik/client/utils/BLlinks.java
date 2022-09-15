@@ -5,6 +5,9 @@ import ru.wert.datapik.client.entity.serviceREST.*;
 
 public class BLlinks {
 
+    public static PicService picService;
+    public static RemarkService remarkService;
+
     public static ChatGroupService chatGroupService;
     public static ChatMessageService chatMessageService;
     public static ChatMessageStatusService chatMessageStatusService;

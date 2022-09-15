@@ -7,6 +7,9 @@ import ru.wert.datapik.client.entity.service_interfaces.*;
 
 public class ChogoriServices {
 
+    public static IPicService CH_PICS;
+    public static IRemarkService CH_REMARKS;
+
     public static IFilesService CH_FILES;
 
     public static IChatGroupService CH_CHAT_GROUPS;
@@ -44,6 +47,9 @@ public class ChogoriServices {
     public static MaterialQuickService CH_QUICK_MATERIALS;
 
     public static void initServices(){
+        ChogoriServices.CH_PICS = PicService.getInstance();
+        ChogoriServices.CH_REMARKS = RemarkService.getInstance();
+
         ChogoriServices.CH_FILES = FilesService.getInstance();
 
         ChogoriServices.CH_CHAT_GROUPS = ChatGroupService.getInstance();
