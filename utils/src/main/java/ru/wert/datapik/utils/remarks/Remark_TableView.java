@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
 import lombok.Setter;
+import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
@@ -27,11 +28,13 @@ public class Remark_TableView extends RoutineTableView<Remark>{
     private List<Remark> currentItemList = new ArrayList<>();
     @Getter@Setter private Object modifyingItem;
     private Remark_ACCController accController;
+    private Passport passport;
 
     private String searchedText = "";
 
-    public Remark_TableView(String promptText, boolean useContextMenu) {
+    public Remark_TableView(String promptText, boolean useContextMenu, Passport passport) {
         super(promptText);
+        this.passport = passport;
 
         commands = new _RemarkCommands(this);
 
@@ -82,7 +85,7 @@ public class Remark_TableView extends RoutineTableView<Remark>{
 
     @Override
     public List<Remark> prepareList() {
-        return CH_REMARKS.findAll();
+        return CH_REMARKS.findAllByPassport(passport);
     }
 
     @Override

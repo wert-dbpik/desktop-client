@@ -26,6 +26,7 @@ public class BtnImages {
     public static Image BTN_TABLE_VIEW_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/view(32x32).png"), size16, size16, true, true);
     public static Image BTN_CATALOG_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/catalog(32x32).png"), size16, size16, true, true);
     public static Image BTN_INFO_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/info(32x32).png"), size16, size16, true, true);
+    public static Image BTN_REMARKS_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/remarks(32x32).png"), size16, size16, true, true);
     public static Image BTN_SEARCH_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/search(24x24).png"), size24, size24, true, true);
     public static Image BTN_ALT_TRUE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/alt-white(32x32).png"), size24, size24, true, true);
     public static Image BTN_ALT_FALSE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/alt-black(32x32).png"), size24, size24, true, true);

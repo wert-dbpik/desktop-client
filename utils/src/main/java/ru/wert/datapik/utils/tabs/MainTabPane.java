@@ -46,10 +46,10 @@ public class MainTabPane extends TabPane {
      * @param showTab boolean, опциональное - открывать созданную вкладку или не открывать
      * @param updateTask Task<Void>, задача на обновление вкладки
      */
-    public void createNewTab(String name, Node content, boolean showTab, Task<Void> updateTask, ITabController tabController){
-        this.searchablePane = tabController;
+    public void createNewTab(String name, Node content, boolean showTab, Task<Void> updateTask, ITabController searchableTabController){
+        this.searchablePane = searchableTabController;
 
-        if(tabController instanceof SearchableTab)
+        if(searchableTabController instanceof SearchableTab)
             showSearchPane();
         else
             hideSearchPane();
@@ -58,7 +58,7 @@ public class MainTabPane extends TabPane {
         AppTab tab = tabIsAvailable(name);
         if(tab == null){
 
-                tab = new AppTab(name, content, tabController);
+                tab = new AppTab(name, content, searchableTabController);
 
                 getTabs().add(tab);//вкладку добавляем к TabPane
                 setContextMenu(createContextMenu());
@@ -75,8 +75,8 @@ public class MainTabPane extends TabPane {
         });
 
         tab.setOnSelectionChanged(e->{
-            if(tabController instanceof SearchableTab) {
-                ((SearchableTab) tabController).tuneSearching();
+            if(searchableTabController instanceof SearchableTab) {
+                ((SearchableTab) searchableTabController).tuneSearching();
                 showSearchPane();
             } else
                 hideSearchPane();
@@ -86,8 +86,8 @@ public class MainTabPane extends TabPane {
             //ОТКРЫВАЕМ созданную вкладку
             getSelectionModel().select(tab);
             //Создаем поле поиска
-            if(tabController instanceof SearchableTab) {
-                ((SearchableTab) tabController).tuneSearching();
+            if(searchableTabController instanceof SearchableTab) {
+                ((SearchableTab) searchableTabController).tuneSearching();
                 showSearchPane();
             } else
                 hideSearchPane();

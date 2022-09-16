@@ -2,6 +2,7 @@ package ru.wert.datapik.client.entity.serviceREST;
 
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.RemarkApiInterface;
+import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.client.entity.service_interfaces.IRemarkService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
@@ -45,6 +46,17 @@ public class RemarkService implements IRemarkService{
     public List<Remark> findAll() {
         try {
             Call<List<Remark>> call = api.getAll();
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Remark> findAllByPassport(Passport passport) {
+        try {
+            Call<List<Remark>> call = api.getAllByPassportId(passport.getId());
             return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();

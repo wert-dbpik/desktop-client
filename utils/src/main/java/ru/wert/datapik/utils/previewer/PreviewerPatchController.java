@@ -3,7 +3,9 @@ package ru.wert.datapik.utils.previewer;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -18,9 +20,11 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.utils.common.components.ZoomableScrollPane;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.drafts.info.DraftInfoPatch;
+import ru.wert.datapik.utils.remarks.RemarksController;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.views.pdf.PDFReader;
 import ru.wert.datapik.utils.views.pdf.readers.PdfIcepdfReader;
@@ -40,6 +44,7 @@ import java.util.Collections;
 import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.statics.AppStatic.SOLID_EXTENSIONS;
 import static ru.wert.datapik.utils.statics.AppStatic.openDraftInPreviewer;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
 
 //import ru.wert.datapik.client.entity.models.Draft;
 @Slf4j
@@ -186,6 +191,25 @@ public class PreviewerPatchController {
             new DraftInfoPatch().create(currentDraft.get(), event);
         });
 
+        Button btnShowRemarks = new Button();
+        btnShowRemarks.setId("patchButton");
+        btnShowRemarks.setGraphic(new ImageView(BTN_REMARKS_IMG));
+        btnShowRemarks.setTooltip(new Tooltip("Показать комментарии"));
+        btnShowRemarks.setOnAction(event -> {
+            if(currentDraft.get() == null) return;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/remarks/remarks.fxml"));
+                Parent parent = loader.load();
+                parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+                Passport draftPassport = currentDraft.get().getPassport();
+                RemarksController controller = loader.getController();
+                controller.init(draftPassport);
+                CH_TAB_PANE.createNewTab("> " + draftPassport.toUsefulString(), parent, true, null, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
         Button updateDraftView = new Button();
         updateDraftView.setId("patchButton");
         updateDraftView.setGraphic(new ImageView(BTN_UPDATE_IMG));
@@ -195,6 +219,7 @@ public class PreviewerPatchController {
             openDraftInPreviewer(selectedDraft, this);
         });
 
+        hboxPreviewerButtons.getChildren().add(btnShowRemarks);
         if (useBtnUpdateDraftView) hboxPreviewerButtons.getChildren().add(updateDraftView);
         if (useBtnShowInfo) hboxPreviewerButtons.getChildren().add(btnShowInfo);
         if (useBtnOpenInOuterApp) hboxPreviewerButtons.getChildren().add(openInOuterApp);
