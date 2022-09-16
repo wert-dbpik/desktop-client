@@ -2,7 +2,6 @@ package ru.wert.datapik.client.retrofit;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -11,8 +10,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import ru.wert.datapik.client.entity.api_interfaces.FolderApiInterface;
-import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.User;
 
 import java.io.IOException;
@@ -23,7 +20,8 @@ import java.util.concurrent.TimeUnit;
 public class RetrofitClient{
     private static final String TAG = "RetrofitClient";
 
-    static String BASE_URL = "http://localhost:8080";
+    public static String baseUrl = "http://localhost:8080";
+
     private static RetrofitClient mInstance;
     private static Retrofit mRetrofit;
     private Gson gson;
@@ -70,9 +68,9 @@ public class RetrofitClient{
 
         String ip = AppProperties.getInstance().getIpAddress();
         String port = AppProperties.getInstance().getPort();
-
+        baseUrl = "http://"+ip +":"+ port;
         mRetrofit = new Retrofit.Builder()
-                .baseUrl("http://"+ip +":"+ port)
+                .baseUrl(baseUrl)
                 .addConverterFactory(new NullOnEmptyConverterFactory()) //Исправляет исключение на null, когда приходит пустое тело
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient.build()) //борьба с readTimeout

@@ -4,6 +4,7 @@ package ru.wert.datapik.utils.services;
 import ru.wert.datapik.client.entity.serviceQUICK.*;
 import ru.wert.datapik.client.entity.serviceREST.*;
 import ru.wert.datapik.client.entity.service_interfaces.*;
+import ru.wert.datapik.client.retrofit.RetrofitClient;
 
 public class ChogoriServices {
 
@@ -47,6 +48,7 @@ public class ChogoriServices {
     public static MaterialQuickService CH_QUICK_MATERIALS;
 
     public static void initServices(){
+
         ChogoriServices.CH_PICS = PicService.getInstance();
         ChogoriServices.CH_REMARKS = RemarkService.getInstance();
 

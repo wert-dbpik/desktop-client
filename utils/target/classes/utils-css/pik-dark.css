@@ -383,5 +383,30 @@
     /*-fx-highlight-fill: #7ecfff;*/
 }
 
+/* blobTextArea  =======================================================*/
+
+#blobTextArea {
+    -fx-background-insets: 0;
+    -fx-background-color: transparent, white, transparent, white;
+}
+
+#blobTextArea .content {
+    -fx-background-color: transparent, white, transparent, white;
+}
+
+#blobTextArea:focused .content {
+    -fx-background-color: transparent, white, transparent, white;
+}
+
+#blobTextArea:focused {
+    -fx-highlight-fill: #7ecfff;
+}
+
+#blobTextArea .content {
+    -fx-padding: 10px;
+    -fx-text-fill: gray;
+    -fx-highlight-fill: #7ecfff;
+}
+
 
 /*############################################################################################*/

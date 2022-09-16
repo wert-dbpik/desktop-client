@@ -7,7 +7,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.remarks.RemarkEntryController">
    <children>
       <VBox fx:id="vbRemarksEntryContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -30,11 +29,7 @@
                   <Insets left="25.0" />
                </VBox.margin>
             </HBox>
-            <TextArea fx:id="taRemarksText" prefRowCount="1" VBox.vgrow="NEVER">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </TextArea>
+            <Label fx:id="lblRemarksText" text="Label" />
          </children>
          <padding>
             <Insets top="10.0" />

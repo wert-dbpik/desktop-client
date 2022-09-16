@@ -3,13 +3,17 @@ package ru.wert.datapik.client.entity.serviceREST;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.RemarkApiInterface;
 import ru.wert.datapik.client.entity.models.Passport;
+import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.client.entity.service_interfaces.IRemarkService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.client.utils.BLlinks;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class RemarkService implements IRemarkService{
 
@@ -58,6 +62,17 @@ public class RemarkService implements IRemarkService{
         try {
             Call<List<Remark>> call = api.getAllByPassportId(passport.getId());
             return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Pic> getPics(Remark remark) {
+        try {
+            Call<Set<Pic>> call = api.getPics(remark.getId());
+            return new ArrayList<>(Objects.requireNonNull(call.execute().body()));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -64,6 +64,8 @@ public class Remark_TableView extends RoutineTableView<Remark>{
         });
 
 
+
+
         getColumns().addAll(tcRemark);
     }
 
