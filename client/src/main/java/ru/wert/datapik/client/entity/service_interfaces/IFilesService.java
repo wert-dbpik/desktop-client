@@ -14,7 +14,7 @@ import java.util.Set;
 
 public interface IFilesService{
 
-    boolean download(String path, String fileName, String extension, String tempDir);
+    boolean download(String path, String fileName, String extension, String tempDir, String prefix);
 
     boolean upload(String fileNameForSaving, String directoryName, File initialFile) throws IOException;
 

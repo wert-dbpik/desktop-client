@@ -59,30 +59,30 @@ public class DraftService implements IDraftService {
         return new ArrayList<String>();
     }
 
-    @Override
-    public boolean download(String path, String fileName, String ext, String tempDir) {
-        //ext уже с точкой
-        String file = fileName + ext;
-        try {
-            Call<ResponseBody> call = api.download(path, file);
-            Response<ResponseBody> r = call.execute();
-            if (r.isSuccessful()) {
-
-//                if (ext.toLowerCase().equals(".pdf")) {
-                    InputStream inputStream = r.body().byteStream();
-                    try (OutputStream outputStream = new FileOutputStream(tempDir + "/" + fileName  + ext)) {
-                        IOUtils.copy(inputStream, outputStream);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-//                }
-                return true;
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return false;
-    }
+//    @Override
+//    public boolean download(String path, String fileName, String ext, String tempDir) {
+//        //ext уже с точкой
+//        String file = fileName + ext;
+//        try {
+//            Call<ResponseBody> call = api.download(path, file);
+//            Response<ResponseBody> r = call.execute();
+//            if (r.isSuccessful()) {
+//
+////                if (ext.toLowerCase().equals(".pdf")) {
+//                    InputStream inputStream = r.body().byteStream();
+//                    try (OutputStream outputStream = new FileOutputStream(tempDir + "/" + fileName  + ext)) {
+//                        IOUtils.copy(inputStream, outputStream);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+////                }
+//                return true;
+//            }
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//        return false;
+//    }
 
 /* Вариант при котором используется библиотека PDFbox, на выходе Image
 @Override

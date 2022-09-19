@@ -112,10 +112,11 @@ public class AppStatic {
 
             //Если файл отсутствует в папке temp/bddrafts, то файл туда загружается из БД
             if(!draftInTempDir(fileId, ext)) {
-                boolean res = CH_QUICK_DRAFTS.download("drafts", //Постоянная папка в каталоге для чертежей
+                boolean res = CH_FILES.download("drafts", //Постоянная папка в каталоге для чертежей
                         String.valueOf(fileId), //название скачиваемого файла
                         "." + ext, //расширение скачиваемого файла
-                        WF_TEMPDIR.toString()); //временная папка, куда необходимо скачать файл
+                        WF_TEMPDIR.toString(),  //временная папка, куда необходимо скачать файл
+                        null); //префикс
                 if(res) {
                     log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", String.valueOf(fileId) + "." + ext);
                 } else {

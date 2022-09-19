@@ -44,10 +44,10 @@ public class DraftQuickService implements IDraftService {
         return service.findDraftsByMask(folder, mask);
     }
 
-    @Override
-    public boolean download(String path, String fileName, String extension, String tempDir) {
-        return service.download(path, fileName, extension,tempDir);
-    }
+//    @Override
+//    public boolean download(String path, String fileName, String extension, String tempDir) {
+//        return service.download(path, fileName, extension,tempDir);
+//    }
 
     @Override
     public boolean upload(String fileNewName, String folder, File draft) throws IOException {

@@ -55,10 +55,11 @@ public class RemarkEntryController {
         List<Pic> pics = CH_REMARKS.getPics(remark);
         for(Pic p : pics){
             String tempFileName = p.getId() + "." + p.getExtension();
-            boolean res = CH_QUICK_DRAFTS.download("pics", //Постоянная папка в каталоге для чертежей
+            boolean res = CH_FILES.download("pics", //Постоянная папка в каталоге для чертежей
                     String.valueOf(p.getId()), //название скачиваемого файла
                     ".jpg", //расширение скачиваемого файла
-                    WF_TEMPDIR.toString()); //временная папка, куда необходимо скачать файл
+                    WF_TEMPDIR.toString(),//временная папка, куда необходимо скачать фай
+                    "remark"); //префикс
 
             String path = WF_TEMPDIR.toString() + "\\" + tempFileName;
 

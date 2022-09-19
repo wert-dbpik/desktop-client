@@ -51,9 +51,11 @@ public class FilesService implements IFilesService {
 
 
     @Override
-    public boolean download(String path, String fileName, String ext, String tempDir) {
+    public boolean download(String path, String fileName, String ext, String tempDir, String prefix) {
         //ext уже с точкой
         String file = fileName + ext;
+        String destFileName = file;
+        if(prefix != null) destFileName = prefix + "-" + file;
         try {
             Call<ResponseBody> call = api.download(path, file);
             Response<ResponseBody> r = call.execute();
@@ -61,7 +63,7 @@ public class FilesService implements IFilesService {
 
 //                if (ext.toLowerCase().equals(".pdf")) {
                     InputStream inputStream = r.body().byteStream();
-                    try (OutputStream outputStream = new FileOutputStream(tempDir + "/" + fileName  + ext)) {
+                    try (OutputStream outputStream = new FileOutputStream(tempDir + "/" + destFileName)) {
                         IOUtils.copy(inputStream, outputStream);
                     } catch (IOException e) {
                         e.printStackTrace();

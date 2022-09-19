@@ -15,7 +15,7 @@ public interface IDraftService extends ItemService<Draft> {
 
     List<String> findDraftsByMask(String folder, String mask);
 
-    boolean download(String path, String fileName, String extension, String tempDir);
+//    boolean download(String path, String fileName, String extension, String tempDir);
 
     boolean upload(String fileName, String path, File draft) throws IOException;
 
