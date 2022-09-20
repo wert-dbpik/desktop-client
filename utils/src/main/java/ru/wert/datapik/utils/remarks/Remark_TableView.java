@@ -16,6 +16,7 @@ import ru.wert.datapik.utils.remarks.commands._RemarkCommands;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
@@ -87,7 +88,15 @@ public class Remark_TableView extends RoutineTableView<Remark>{
 
     @Override
     public List<Remark> prepareList() {
-        return CH_REMARKS.findAllByPassport(passport);
+        List<Remark> foundRemarks = CH_REMARKS.findAllByPassport(passport);
+        if (foundRemarks.size() > 1) {
+            foundRemarks =
+                    new ArrayList<>(foundRemarks.stream()
+                            .sorted((o1, o2) -> o2.getCreationTime().compareTo(o1.getCreationTime()))
+                            .collect(Collectors.toList()));
+        }
+
+        return foundRemarks;
     }
 
     @Override

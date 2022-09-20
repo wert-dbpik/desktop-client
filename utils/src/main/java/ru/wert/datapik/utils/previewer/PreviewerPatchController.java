@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Passport;
+import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.utils.common.components.ZoomableScrollPane;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.drafts.info.DraftInfoPatch;
@@ -39,9 +40,13 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.wert.datapik.utils.images.BtnImages.*;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.datapik.utils.statics.AppStatic.SOLID_EXTENSIONS;
 import static ru.wert.datapik.utils.statics.AppStatic.openDraftInPreviewer;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
@@ -71,7 +76,9 @@ public class PreviewerPatchController {
     @Getter@FXML
     private Label lblCount;
 
-    ImageView imageView;
+    private Button btnShowRemarks;
+
+    private ImageView imageView;
 
     ContextMenu contextMenu;
     private PDFReader pdfReader; //см enum PDFViewer
@@ -193,7 +200,7 @@ public class PreviewerPatchController {
         });
 
         //ПОКАЗАТЬ ПРИМЕЧАНИЯ
-        Button btnShowRemarks = new Button();
+        btnShowRemarks = new Button();
         btnShowRemarks.setId("patchButton");
         btnShowRemarks.setGraphic(new ImageView(BTN_REMARKS_IMG));
         btnShowRemarks.setTooltip(new Tooltip("Показать комментарии"));
@@ -222,7 +229,6 @@ public class PreviewerPatchController {
             openDraftInPreviewer(selectedDraft, this);
         });
 
-        hboxPreviewerButtons.getChildren().add(btnShowRemarks);
         if (useBtnUpdateDraftView) hboxPreviewerButtons.getChildren().add(updateDraftView);
         if (useBtnShowInfo) hboxPreviewerButtons.getChildren().add(btnShowInfo);
         if (useBtnOpenInOuterApp) hboxPreviewerButtons.getChildren().add(openInOuterApp);
@@ -237,6 +243,16 @@ public class PreviewerPatchController {
      */
     public void showDraft(File draftPath){
         this.currentDraftPath = draftPath;
+
+        if(currentDraft.getValue() != null){
+            List<Remark> foundRemarks = CH_REMARKS.findAllByPassport(currentDraft.getValue().getPassport());
+            if(foundRemarks != null && !foundRemarks.isEmpty())
+                hboxPreviewerButtons.getChildren().add(0, btnShowRemarks);
+            else
+                if(hboxPreviewerButtons.getChildren().contains(btnShowRemarks))
+                    hboxPreviewerButtons.getChildren().removeAll(btnShowRemarks);
+        }
+
         //Вилка решений зависит от расширения файла
         String ext = FilenameUtils.getExtension(draftPath.getName()).toLowerCase();
 

@@ -53,15 +53,16 @@ public class RemarkEntryController {
     void init(Remark remark){
         //Автор
         lblRemarksAuthor.setText(remark.getUser().getName());
-        lblRemarksAuthor.setStyle("-fx-text-fill: royalblue");
+        lblRemarksAuthor.setStyle("-fx-text-fill: saddlebrown");
         //Дата
         String date = AppStatic.parseStringToDate(remark.getCreationTime());
         lblRemarksDate.setText(date);
-        lblRemarksDate.setStyle("-fx-text-fill: royalblue; -fx-font-style: italic");
+        lblRemarksDate.setStyle("-fx-text-fill: saddlebrown; -fx-font-style: italic");
         //Текст
         lblRemarksText.setText(remark.getText());
         //Изображения
         List<Pic> pics = CH_REMARKS.getPics(remark);
+
         for(Pic p : pics){
             String tempFileName = "remark" + "-" + p.getId() + "." + p.getExtension();
             boolean res = CH_FILES.download("pics", //Постоянная папка в каталоге для чертежей
