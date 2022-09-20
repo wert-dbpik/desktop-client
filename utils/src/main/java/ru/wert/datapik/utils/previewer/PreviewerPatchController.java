@@ -199,7 +199,7 @@ public class PreviewerPatchController {
             new DraftInfoPatch().create(currentDraft.get(), event);
         });
 
-        //ПОКАЗАТЬ ПРИМЕЧАНИЯ
+        //ПОКАЗАТЬ КОММЕНТАРИИ
         btnShowRemarks = new Button();
         btnShowRemarks.setId("patchButton");
         btnShowRemarks.setGraphic(new ImageView(BTN_REMARKS_IMG));

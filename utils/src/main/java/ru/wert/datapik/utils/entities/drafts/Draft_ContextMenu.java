@@ -29,6 +29,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem addFolder; //Добавить папку
     private MenuItem openInTab; //Открыть в отдельной вкладке
     private MenuItem openInOuterApp; //Открыть во внешнем приложении
+    private MenuItem showRemarks; //Открыть комментарии
     private MenuItem showInfo; //Открыть информацию о чертеже
 
     //Условие, при котором список составлен только для одной папки
@@ -93,6 +94,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         boolean extraOpenInTab = false;
         boolean extraOpenInOuterApp = false;
         //================================
+        boolean extraShowRemarks = false;
         boolean extraShowInfo = false;
 
         addFolder = new MenuItem("Добавить папку с чертежами");
@@ -103,6 +105,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         nullifyDraft = new MenuItem("Аннулировать");
         openInTab = new MenuItem("Открыть в отдельной вкладке" );
         openInOuterApp = new MenuItem("Открыть во внешней программе" );
+        showRemarks = new MenuItem("Комментарии");
         showInfo = new MenuItem("Инфо");
 
         addFolder.setOnAction(commands::addFromFolder);
@@ -113,6 +116,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         nullifyDraft.setOnAction(commands::nullifyDraft);
         openInTab.setOnAction(commands::openInTab);
         openInOuterApp.setOnAction(commands::openInOuterApp);
+        showRemarks.setOnAction(commands::showRemarks);
         showInfo.setOnAction(commands::showInfo);
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
@@ -128,6 +132,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                 extraShowInfo = true;//ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
                 extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
                 extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
+                extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
                 //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
                 if (selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId()) && editDraftsPermission) {
                     extraRenameDraft = true; //ПЕРЕИМЕНОВАТЬ
@@ -175,6 +180,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if (extraOpenInOuterApp) extraItems.add(openInOuterApp);//ОТКРЫТЬ ВО ВНЕШНЕЙ ПРОГРАММЕ
 
         if (extraShowInfo) extraItems.add(new SeparatorMenuItem());//==================
+        if (extraShowInfo) extraItems.add(showRemarks); //ПОКАЗАТЬ КОММЕНТАРИИ
         if (extraShowInfo) extraItems.add(showInfo); //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
 
         return extraItems;

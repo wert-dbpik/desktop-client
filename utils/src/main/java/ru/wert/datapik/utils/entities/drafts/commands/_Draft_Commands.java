@@ -3,12 +3,16 @@ package ru.wert.datapik.utils.entities.drafts.commands;
 import com.twelvemonkeys.io.FileUtil;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
 import ru.wert.datapik.utils.entities.drafts.info.DraftInfoPatch;
+import ru.wert.datapik.utils.remarks.RemarksController;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
@@ -20,6 +24,7 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
 import static ru.wert.datapik.utils.statics.AppStatic.*;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
 
 @Slf4j
 public class _Draft_Commands implements ItemCommands<Draft> {
@@ -103,4 +108,18 @@ public class _Draft_Commands implements ItemCommands<Draft> {
     }
 
 
+    public void showRemarks(ActionEvent actionEvent) {
+        Passport draftPassport = tableView.getSelectionModel().getSelectedItem().getPassport();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/remarks/remarks.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            RemarksController controller = loader.getController();
+            controller.init(draftPassport);
+            CH_TAB_PANE.createNewTab("> " + draftPassport.toUsefulString(), parent, true, null, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
