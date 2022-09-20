@@ -182,6 +182,7 @@ public class PreviewerPatchController {
                 AppStatic.openInOuterApplication(myFile);
         });
 
+        //ПОКАЗАТЬ ИНФОРМАЦИЮ
         Button btnShowInfo = new Button();
         btnShowInfo.setId("patchButton");
         btnShowInfo.setGraphic(new ImageView(BTN_INFO_IMG));
@@ -191,6 +192,7 @@ public class PreviewerPatchController {
             new DraftInfoPatch().create(currentDraft.get(), event);
         });
 
+        //ПОКАЗАТЬ ПРИМЕЧАНИЯ
         Button btnShowRemarks = new Button();
         btnShowRemarks.setId("patchButton");
         btnShowRemarks.setGraphic(new ImageView(BTN_REMARKS_IMG));
@@ -210,6 +212,7 @@ public class PreviewerPatchController {
             }
         });
 
+        //ОБНОВИТЬ ИЗОБРАЖЕНИЕ
         Button updateDraftView = new Button();
         updateDraftView.setId("patchButton");
         updateDraftView.setGraphic(new ImageView(BTN_UPDATE_IMG));

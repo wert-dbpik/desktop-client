@@ -37,9 +37,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -77,6 +78,20 @@ public class AppStatic {
     public static List<String> IMAGE_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
     public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm");
     public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
+
+    /**
+     * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в необходимый фотрмат
+     */
+    public static  String parseStringToDate(String dateString){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+        try {
+            Date date = format.parse(dateString);
+            SimpleDateFormat myFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+            return myFormat.format(date);
+        } catch (ParseException e) {
+            return dateString;
+        }
+    }
 
 
     public static void closeWindow(Event event){
@@ -173,6 +188,8 @@ public class AppStatic {
 
         }
     }
+
+
 
     /**
      * Проверяет наличие файла во временной папке
