@@ -1,6 +1,7 @@
 package ru.wert.datapik.utils.remarks;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.datapik.utils.remarks.commands._RemarkCommands;
@@ -13,6 +14,8 @@ public class Remark_ContextMenu extends FormView_ContextMenu<Remark> {
 
     private final _RemarkCommands commands;
     private Remark_TableView tableView;
+
+    private MenuItem pushUp; //Поднять наверх
     
     public Remark_ContextMenu(Remark_TableView tableView, _RemarkCommands commands, String usersACCRes) {
         super(tableView, commands, usersACCRes);
@@ -46,8 +49,12 @@ public class Remark_ContextMenu extends FormView_ContextMenu<Remark> {
     @Override
     public List<MenuItem> createExtraItems() {
 
+        pushUp = new MenuItem("Поднять наверх");
+        pushUp.setOnAction(commands::pushRemarkUp);
+
         List<MenuItem> extraItems = new ArrayList<>();
-        //НИЧЕГО НЕТ
+        extraItems.add(pushUp);
+
         return extraItems;
     }
 

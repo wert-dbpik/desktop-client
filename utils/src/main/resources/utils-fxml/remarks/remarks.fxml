@@ -13,7 +13,7 @@
          <children>
             <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
                <children>
-                  <Label text="КОММЕНТАРИИ К ">
+                  <Label text="КОММЕНТАРИИ :  ">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

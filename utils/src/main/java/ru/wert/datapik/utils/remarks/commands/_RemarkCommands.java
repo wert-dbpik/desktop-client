@@ -1,13 +1,18 @@
 package ru.wert.datapik.utils.remarks.commands;
 
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.remarks.Remark_TableView;
+import ru.wert.datapik.utils.statics.AppStatic;
 
 
 import java.util.List;
+
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_REMARKS;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class _RemarkCommands implements ItemCommands<Remark> {
 
@@ -41,4 +46,12 @@ public class _RemarkCommands implements ItemCommands<Remark> {
         command.execute();
     }
 
+    public void pushRemarkUp(ActionEvent actionEvent) {
+        Remark selectedRemark = tableView.getSelectionModel().getSelectedItem();
+        if(selectedRemark == null) return;
+        selectedRemark.setUser(CH_CURRENT_USER);
+        selectedRemark.setCreationTime(AppStatic.getCurrentTime());
+        CH_REMARKS.update(selectedRemark);
+        tableView.updateTableView();
+    }
 }

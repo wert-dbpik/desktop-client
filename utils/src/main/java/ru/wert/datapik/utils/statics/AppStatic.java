@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -91,6 +92,15 @@ public class AppStatic {
         } catch (ParseException e) {
             return dateString;
         }
+    }
+
+    /**
+     * Возвращает текущее время
+     */
+    public static String getCurrentTime(){
+        Date date = Calendar.getInstance().getTime();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        return df.format(date);
     }
 
 

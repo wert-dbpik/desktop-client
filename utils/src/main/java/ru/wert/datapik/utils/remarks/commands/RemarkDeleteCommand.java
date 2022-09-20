@@ -37,15 +37,15 @@ public class RemarkDeleteCommand implements ICommand {
         for(Remark item : items){
             try {
                 CH_REMARKS.delete(item);
-                log.info("Удален пользователь {}", item.getName());
-                AppStatic.createLog(true, String.format("Удалил пользователя '%s'", item.getName()));
+                log.info("Удален комментарий {}", item.getName());
+                AppStatic.createLog(true, String.format("Удалил комментарий '%s' для '%s'", item.getId(), item.getPassport().toUsefulString()));
             } catch (Exception e) {
                 Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
-                log.error("При удалении пользователя {} произошла ошибка {}", item.getName(), e.getMessage());
+                log.error("При удалении комментария {} для {} произошла ошибка {}", item.getId(), item.getPassport().toUsefulString(), e.getMessage());
             }
         }
 
-        tableView.easyUpdate(CH_REMARKS);
+        tableView.updateTableView();
 
         tableView.getSelectionModel().select(row);
 

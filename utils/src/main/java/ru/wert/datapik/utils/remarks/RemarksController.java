@@ -23,6 +23,9 @@ public class RemarksController  implements UpdatableTabController {
         tableView.updateView();
         VBox.setVgrow(tableView, Priority.ALWAYS);
         vbRemarksContainer.getChildren().add(tableView);
+
+        lblPassportsData.setText(passport.toUsefulString());
+        lblPassportsData.setStyle("-fx-text-fill: royalblue");
     }
 
 

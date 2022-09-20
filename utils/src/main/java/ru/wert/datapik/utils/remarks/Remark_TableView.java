@@ -23,7 +23,7 @@ import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Remark_TableView extends RoutineTableView<Remark>{
 
-    private static final String accWindowRes = "/utils-fxml/users/usersACC.fxml";
+    private static final String accWindowRes = "/utils-fxml/remarks/remarkACC.fxml";
     private final _RemarkCommands commands;
     private Remark_ContextMenu contextMenu;
     private List<Remark> currentItemList = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Remark_TableView extends RoutineTableView<Remark>{
         commands = new _RemarkCommands(this);
 
         focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ПОЛЬЗОВАТЕЛЬ");
+            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "КОММЕНТАРИИ");
         });
 
         if (useContextMenu)
