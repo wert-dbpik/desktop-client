@@ -14,6 +14,7 @@ public class Remark_ContextMenu extends FormView_ContextMenu<Remark> {
 
     private final _RemarkCommands commands;
     private Remark_TableView tableView;
+    private List<Remark> selectedRemarks;
 
     private MenuItem pushUp; //Поднять наверх
     
@@ -32,7 +33,7 @@ public class Remark_ContextMenu extends FormView_ContextMenu<Remark> {
         boolean changeItem = true;
         boolean deleteItem = true;
 
-        List<Remark> selectedRemarks = tableView.getSelectionModel().getSelectedItems();
+        selectedRemarks = tableView.getSelectionModel().getSelectedItems();
 
         if(selectedRemarks.size() == 0){
             copyItem = false;
@@ -53,7 +54,8 @@ public class Remark_ContextMenu extends FormView_ContextMenu<Remark> {
         pushUp.setOnAction(commands::pushRemarkUp);
 
         List<MenuItem> extraItems = new ArrayList<>();
-        extraItems.add(pushUp);
+        if(selectedRemarks.size() == 1)
+         extraItems.add(pushUp);
 
         return extraItems;
     }

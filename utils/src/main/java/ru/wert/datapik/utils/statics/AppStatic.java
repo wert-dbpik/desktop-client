@@ -294,19 +294,38 @@ public class AppStatic {
     }
 
     public static File chooseFile(Event event, File initialDirectory){
-        File newFile = null;
+        File file = null;
         if(initialDirectory.exists() && initialDirectory.isDirectory()) {
             FileChooser chooser = new FileChooser();
+            chooser.setTitle("Выберите файл");
             chooser.setInitialDirectory(initialDirectory);
             try {
-                newFile = chooser.showOpenDialog(WF_MAIN_STAGE);
+                file = chooser.showOpenDialog(WF_MAIN_STAGE);
             } catch (Exception e) {
                 chooser.setInitialDirectory(new File("C:\\"));
-                newFile = chooser.showOpenDialog(WF_MAIN_STAGE);
+                file = chooser.showOpenDialog(WF_MAIN_STAGE);
             }
         }
 
-        return newFile;
+        return file;
+    }
+
+    public static List<File> chooseManyFile(Event event, File initialDirectory, FileChooser.ExtensionFilter filter){
+        List<File> chosenList = new ArrayList<>();
+        if(initialDirectory.exists() && initialDirectory.isDirectory()) {
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Выберите файлы");
+            chooser.setInitialDirectory(initialDirectory);
+            chooser.setSelectedExtensionFilter(filter);
+            try {
+                chosenList = chooser.showOpenMultipleDialog(WF_MAIN_STAGE);
+            } catch (Exception e) {
+                chooser.setInitialDirectory(new File("C:\\"));
+                chosenList = chooser.showOpenMultipleDialog(WF_MAIN_STAGE);
+            }
+        }
+
+        return chosenList;
     }
 
     /**

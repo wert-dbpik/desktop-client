@@ -383,7 +383,7 @@
     /*-fx-highlight-fill: #7ecfff;*/
 }
 
-/* blobTextArea  =======================================================*/
+/*==============      blobTextArea    =========================================*/
 
 #blobTextArea {
     -fx-background-insets: 0;
@@ -408,5 +408,15 @@
     -fx-highlight-fill: #7ecfff;
 }
 
+/*убираем скрол*/
+#blobTextArea .scroll-bar:vertical {
+    -fx-pref-width: 1;
+    -fx-opacity: 0;
+}
 
-/*############################################################################################*/
+
+/*##########  awaiting ##################################################################################*/
+
+#awaiting {
+    -fx-background-color: lightgrey;
+}
