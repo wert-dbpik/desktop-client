@@ -30,7 +30,7 @@
                                     <HBox VBox.vgrow="ALWAYS">
                                        <children>
                                           <VBox fx:id="vbRemarksEntryContainer" spacing="5.0" HBox.hgrow="ALWAYS" StackPane.alignment="TOP_LEFT" />
-                                          <Button fx:id="btnAddPhoto" mnemonicParsing="false" onAction="#addPhoto" text="+ Фото">
+                                          <Button fx:id="btnAddPhoto" mnemonicParsing="false" onAction="#addPicture" text="+ Фото">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>

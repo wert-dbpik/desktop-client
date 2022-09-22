@@ -59,7 +59,7 @@ public class AppStatic {
 
     public static String BASE_URL = RetrofitClient.baseUrl;
 
-    public static String CURRENT_PROJECT_VERSION = "1.4.1"; //Версия приложения обновляется вручную
+    public static String CURRENT_PROJECT_VERSION = "6.0"; //Версия приложения обновляется вручную
 
     public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
 
@@ -95,11 +95,11 @@ public class AppStatic {
     }
 
     /**
-     * Возвращает текущее время
+     * Возвращает текущее время с миллисекундами
      */
     public static String getCurrentTime(){
         Date date = Calendar.getInstance().getTime();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         return df.format(date);
     }
 

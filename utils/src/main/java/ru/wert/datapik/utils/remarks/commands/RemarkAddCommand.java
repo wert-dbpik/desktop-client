@@ -29,22 +29,22 @@ public class RemarkAddCommand implements ICommand {
 
     @Override
     public void execute() {
-
+        Remark remark = null;
         try {
-            CH_REMARKS.save(newItem);
+            remark = CH_REMARKS.save(newItem);
 
-//            tableView.updateView();
+            Remark finalRemark = remark;
             Platform.runLater(()->{
-                tableView.easyUpdate(CH_REMARKS);
+                tableView.updateTableView();
                 tableView.scrollTo(newItem);
                 tableView.getSelectionModel().select(newItem);
-                log.info("Добавлен пользователь {}", newItem.getName());
-                AppStatic.createLog(true, String.format("Добавил пользователя '%s'", newItem.getName()));
+                log.info("Добавлен комментарий {} для {}", finalRemark.getId(), finalRemark.getPassport().toUsefulString());
+                AppStatic.createLog(true, String.format("Добавил комментарий '%s' для '%s'", finalRemark.getId(), finalRemark.getPassport().toUsefulString()));
             });
 
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
-            log.error("При добавление пользователя {} произошла ошибка {} по причине {}", newItem.getName(), e.getMessage(), e.getCause());
+            log.error("При добавление комментария {} для {} произошла ошибка {}", remark.getId(), remark.getPassport().toUsefulString(), e.getMessage());
         }
 
     }

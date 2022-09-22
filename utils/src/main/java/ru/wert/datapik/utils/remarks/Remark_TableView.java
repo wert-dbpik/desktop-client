@@ -29,7 +29,7 @@ public class Remark_TableView extends RoutineTableView<Remark>{
     private List<Remark> currentItemList = new ArrayList<>();
     @Getter@Setter private Object modifyingItem;
     private Remark_ACCController accController;
-    private Passport passport;
+    @Getter private Passport passport;
 
     private String searchedText = "";
 
@@ -63,8 +63,6 @@ public class Remark_TableView extends RoutineTableView<Remark>{
             }
             return new ReadOnlyObjectWrapper<>(parent);
         });
-
-
 
 
         getColumns().addAll(tcRemark);

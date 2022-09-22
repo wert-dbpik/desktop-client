@@ -27,6 +27,7 @@ import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.awt.*;
 import java.io.File;
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.*;
@@ -62,7 +63,8 @@ public class RemarkEntryController {
         lblRemarksText.setText(remark.getText());
         //Изображения
         List<Pic> pics = CH_REMARKS.getPics(remark);
-
+        //Сортируем список, чтобы последние добавленные(новые) оказались внизу
+        pics.sort(Comparator.comparing(Pic::getTime));
         for(Pic p : pics){
             String tempFileName = "remark" + "-" + p.getId() + "." + p.getExtension();
             boolean res = CH_FILES.download("pics", //Постоянная папка в каталоге для чертежей

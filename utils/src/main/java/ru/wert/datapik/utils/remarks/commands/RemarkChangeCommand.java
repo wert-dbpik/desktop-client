@@ -30,20 +30,21 @@ public class RemarkChangeCommand implements ICommand {
     @Override
     public void execute() {
 
+
         try {
             CH_REMARKS.update(item);
 
             Platform.runLater(() -> {
-                tableView.easyUpdate(CH_REMARKS);
+                tableView.updateTableView();
                 tableView.scrollTo(item);
                 tableView.getSelectionModel().select(item);
             });
 
-            log.info("Обновлен пользователь {}", item.getName());
+            log.info("Обновлен комментарий {} для {}", item.getId(), item.getPassport().toUsefulString());
             AppStatic.createLog(true, String.format("Изменил пользователя '%s'", item.getName()));
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
-            log.error("При обновлении пользователя {} произошла ошибка {} по причине {}", item.getName(), e.getMessage(), e.getCause());
+            log.error("При обновлении комментария {} для {} произошла ошибка {}", item.getId(), item.getPassport().toUsefulString(), e.getMessage());
         }
 
     }

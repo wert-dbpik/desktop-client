@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.io.FilenameUtils;
+import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
@@ -30,6 +31,7 @@ import ru.wert.datapik.winform.enums.EOperation;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_ADD_PHOTO_IMG;
@@ -48,9 +50,6 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
 
     @FXML
     private TextArea taRemarksText;
-    //Переменные для taRemarksText
-    private Text textHolder = new Text();
-    private double oldHeight = 0;
 
     @FXML
     private VBox vbRemarksEntryContainer;
@@ -67,78 +66,40 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
     @FXML
     private Button btnCancel;
 
+    //Переменные для taRemarksText
+    private Text textHolder = new Text();
+    private double oldHeight = 0;
 
+    private EOperation operation;
+    private Remark changingRemark;
+    private ItemCommands<Remark> commands;
+    private Passport passport;
     private List<FileImage> picturesInRemark;
     private List<Pic> initialPics; //Картинки, бывшие изначально
-    private List<File> allPicFiles;
-
-    @FXML
-    void cancel(ActionEvent event) {
-        closeWindow(event);
-    }
-
-    @FXML
-    void ok(ActionEvent event) {
-        if(operation.equals(EOperation.ADD)) {
-            Remark newRemark = new Remark();
-
-        }
-    }
-
-    private List<Pic> addNewRemark(){
-        List<Pic> newPics = new ArrayList<>();
-        for(File f : allPicFiles){
-            Pic pic = createPicFromFileAndSaveItToDB(f);
-
-
-
-        }
-
-    }
-
-    private Pic createPicFromFileAndSaveItToDB(File file){
-        Image picture = picturesInRemark.stream().filter(i->i.file.equals(file)).findFirst().get().image;
-        Pic newPic = new Pic();
-        newPic.setUser(CH_CURRENT_USER);
-        newPic.setTime(AppStatic.getCurrentTime());
-        newPic.setWidth((int) picture.getWidth());
-        newPic.setHeight((int) picture.getHeight());
-        newPic.setExtension(FilenameUtils.getExtension(file.toString()));
-        Pic savedPic = CH_PICS.save(newPic);
-        //Загружаем изображение в БД
-        File compressedFile = ImageUtil.compressImageToFile(file, null);
-        String fileName = String.valueOf(savedPic.getId()) + "." + FilenameUtils.getExtension(compressedFile.toString());
-        try {
-            CH_FILES.upload(fileName, "pics", compressedFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @FXML
     void initialize(){
         vbMain.setVisible(false);
         btnAddPhoto.setText("");
         btnAddPhoto.setGraphic(new ImageView(BTN_ADD_PHOTO_IMG));
+        btnAddPhoto.setTooltip(new Tooltip("Добавить изображение"));
     }
 
-
-    @FXML
-    void addPhoto(ActionEvent event) {
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Изображения", "*.png", "*.jpg");
-        List<File> chosenFiles = AppStatic.chooseManyFile(event, new File("C:\\"), filter);
-        if(chosenFiles == null || chosenFiles.isEmpty()) return;
-        for(File f : chosenFiles){
-            allPicFiles.add(f);
-            addNewImageToTheForm(f);
-        }
-    }
 
     @Override
     public void init(EOperation operation, IFormView<Remark> formView, ItemCommands<Remark> commands) {
-        taRemarksText.setId("blobTextArea");
+        this.commands = commands;
+        this.operation = operation;
 
+        passport = ((Remark_TableView)formView).getPassport();
+
+//      Изменим текст на кнопке ОК согласно типу выполняемой операции
+        if(operation.equals(EOperation.ADD)) btnOk.setText("ДОБАВИТЬ");
+        else btnOk.setText("ИЗМЕНИТЬ");
+
+        //Применим CSS стили к TextArea
+        taRemarksText.setId("blobTextArea");
+        //Сделаем из стандартного TextArea раздуваемый
         textHolder.textProperty().bind(taRemarksText.textProperty());
         textHolder.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             if (oldHeight != newValue.getHeight()) {
@@ -148,28 +109,133 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
                 taRemarksText.setMinHeight(newHeight);
             }
         });
+        //Инициализируем коллекцию с изображениями
+        picturesInRemark = new ArrayList<>();
 
-        allPicFiles = new ArrayList<>();
-
-        if(operation.equals(EOperation.CHANGE))
-            Platform.runLater(()-> {
-                fillFieldsOnTheForm(formView.getAllSelectedItems().get(0));
+        //Заполним поля формы данными
+        if(operation.equals(EOperation.CHANGE)) {
+            changingRemark = formView.getAllSelectedItems().get(0);
+            Platform.runLater(() -> {
+                fillFieldsOnTheForm(changingRemark);
+                //Снимаем шторку, когда поля формы заполнены
                 waitingBlind.setVisible(false);
                 vbMain.setVisible(true);
             });
 
-        else {
+        }else { //Если создаем новый комментарий
             Platform.runLater(()-> {
                 showEmptyForm();
+                //Снимаем шторку, когда поля формы заполнены
                 waitingBlind.setVisible(false);
                 vbMain.setVisible(true);
             });
         }
-
-
     }
 
-    private void addNewImageToTheForm(File file){
+
+    @FXML
+    void cancel(ActionEvent event) {
+        closeWindow(event);
+    }
+
+    @FXML
+    void ok(ActionEvent event) {
+        //Включаем индикатор
+        spIndicator.setVisible(true);
+
+        //Создаем новый комментарий с полями
+        Remark newRemark = new Remark();
+        newRemark.setCreationTime(AppStatic.getCurrentTime());
+        newRemark.setUser(CH_CURRENT_USER);
+        newRemark.setPassport(passport);
+        newRemark.setText(taRemarksText.getText());
+        newRemark.setPicsInRemark(collectPicturesInRemark());
+
+        if(operation.equals(EOperation.CHANGE)) {
+            newRemark.setId(changingRemark.getId());
+            commands.change(event, newRemark);
+        } else
+            commands.add(event, newRemark);
+
+        //Закрываем окно
+        closeWindow(event);
+    }
+
+    /**
+     * Метод из коллекции picturesInRemark формирует новую коллекцию List<Pic>
+     * которая необходима для добавления в поле pics нового экземпляра Remark
+     */
+    private List<Pic> collectPicturesInRemark(){
+        List<Pic> allPics = new ArrayList<>();
+        for(FileImage fi : picturesInRemark){
+            if(fi.pic != null){
+                allPics.add(fi.pic);
+            } else {
+                Pic pic = createPicFromFileAndSaveItToDB(fi.file);
+                allPics.add(pic);
+            }
+        }
+
+        return allPics;
+    }
+
+    /**
+     * Метод создает Pic и сохраняет его в БД
+     * Затем изображение, соответствующее Pic загружается на сервер
+     * Возвращается сохраненный в базе Pic
+     */
+    private Pic createPicFromFileAndSaveItToDB(File file){
+        //Находим в коллекции picturesInRemark необходимый Image соответствующий нашему File
+        Image picture = picturesInRemark.stream().filter(i->i.file.equals(file)).findFirst().get().image;
+        //Создаем новый экземпляр Pic с полями
+        Pic newPic = new Pic();
+        newPic.setUser(CH_CURRENT_USER);
+        newPic.setTime(AppStatic.getCurrentTime());
+        newPic.setWidth((int) picture.getWidth());
+        newPic.setHeight((int) picture.getHeight());
+        //Готовим файл для добавления картинки в папку "pics" на сервере
+        //сжимаем картинку до приемлимых значений
+        File compressedFile = ImageUtil.compressImageToFile(file, null);
+        //Добавляем расширение уже сжатого файла
+        newPic.setExtension(FilenameUtils.getExtension(compressedFile.toString()));
+
+        //Сохраняем Pic в базе данных
+        Pic savedPic = CH_PICS.save(newPic);
+
+        //Загружаем картинку на сервер
+        String fileName = savedPic.getId() + "." + FilenameUtils.getExtension(compressedFile.toString());
+        try {
+
+            CH_FILES.upload(fileName, "pics", compressedFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return savedPic;
+    }
+
+    /**
+     * Кнопка ДОБАВИТЬ ФОТО
+     */
+    @FXML
+    void addPicture(ActionEvent event) {
+        // Пользователь выбирает несколько рисунков
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Изображения", "*.png", "*.jpg");
+        List<File> chosenFiles = AppStatic.chooseManyFile(event, new File("C:\\"), filter);
+        if(chosenFiles == null || chosenFiles.isEmpty()) return;
+        for(File file : chosenFiles){
+            //Добавляем рисунок на форму
+            Image image = addNewImageToTheForm(file);
+            //Добавляем рисунок в коллекцию без поля pic, так как он еще не сохранен в БД
+            picturesInRemark.add(new FileImage(file, image, null));
+        }
+    }
+
+    /**
+     * Метод добавляет изображение на форму и возвращает Image,
+     * необходимый для получения исходных размеров изображения
+     */
+    private Image addNewImageToTheForm(File file){
 
         Image image = new Image(file.toURI().toString());
 
@@ -206,51 +272,63 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
         });
 
         imageView.setOnContextMenuRequested(e ->{
-            Menu contextMenu = new Menu();
-            MenuItem deletePhoto = new MenuItem("Удалить фото");
-            deletePhoto.setOnAction(ev -> {
-                allPicFiles.remove(file);
-                vbRemarksEntryContainer.getChildren().clear();
-                for(File f : allPicFiles){
-                    addNewImageToTheForm(f);
-                }
-            });
-
-            contextMenu.getItems().add(deletePhoto);
-
+            ContextMenu contextMenu = createContextMenu(file);
+            contextMenu.show(imageView, e.getScreenX(), e.getScreenY());
         });
 
         vbRemarksEntryContainer.getChildren().add(imageView);
+
+        return image;
     }
 
-//    private void updateListOfPhotos(){
-//        vbRemarksEntryContainer.getChildren().clear();
-//        for(File f : allPics){
-//            addNewImageToTheForm(f);
-//        }
-//    }
+    private ContextMenu createContextMenu(File file) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem deletePhoto = new MenuItem("Удалить фото");
+        deletePhoto.setOnAction(ev -> {
+            //Находим в коллекции picturesInRemark изображение, которое нужно удалить
+            FileImage deletingPicture = picturesInRemark.stream().filter(i -> i.file.equals(file)).findFirst().get();
+            picturesInRemark.remove(deletingPicture);
+            //Если удаляемая картинка уже сохранена в базе, то удаляем ее и из базы
+            Pic pic = deletingPicture.getPic();
+            if (pic != null)
+                CH_PICS.delete(pic);
+
+            //Обновляем изображения с учетом удаленного
+            vbRemarksEntryContainer.getChildren().clear();
+            for(FileImage fi : picturesInRemark){
+                addNewImageToTheForm(fi.file);
+            }
+        });
+
+        contextMenu.getItems().add(deletePhoto);
+        return contextMenu;
+    }
 
     @Override
     public ArrayList<String> getNotNullFields() {
+        //Не используется
         return null;
     }
 
     @Override
     public Remark getNewItem() {
+        //Не используется
         return null;
     }
 
     @Override
     public Remark getOldItem() {
+        //Не используется
         return null;
     }
 
     @Override
     public void fillFieldsOnTheForm(Remark oldItem) {
-
         taRemarksText.setText(oldItem.getText());
         initialPics = CH_REMARKS.getPics(oldItem);
         if(initialPics == null || initialPics.isEmpty()) return;
+        //Сортируем список, чтобы последние добавленные(новые) оказались внизу
+        initialPics.sort(Comparator.comparing(Pic::getTime));
         for(Pic p : initialPics) {
             String tempFileName = "remark" + "-" + p.getId() + "." + p.getExtension();
             boolean res = CH_FILES.download("pics", //Постоянная папка в каталоге для чертежей
@@ -261,17 +339,16 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
 
             File file = new File(WF_TEMPDIR.toString() + "\\" + tempFileName);
             //Добавляем файл в общий список
-            allPicFiles.add(file);
+            Image image = addNewImageToTheForm(file);
 
-            addNewImageToTheForm(file);
-
+            picturesInRemark.add(new FileImage(file, image, p));
         }
 
     }
 
     @Override
     public void changeOldItemFields(Remark oldItem) {
-
+        //Не используется
     }
 
     @Override
@@ -281,7 +358,8 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
 
     @Override
     public boolean enteredDataCorrect() {
-        return false;
+        //Не используется
+        return true;
     }
 
     @Getter
@@ -291,5 +369,6 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
     private class FileImage{
         File file;
         Image image;
+        Pic pic;
     }
 }

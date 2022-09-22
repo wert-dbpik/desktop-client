@@ -47,7 +47,7 @@
                                                 </TextArea>
                                                 <StackPane VBox.vgrow="ALWAYS">
                                                     <children>
-                                                        <Button fx:id="btnAddPhoto" mnemonicParsing="false" onAction="#addPhoto" text="+ Фото" StackPane.alignment="TOP_RIGHT">
+                                                        <Button fx:id="btnAddPhoto" mnemonicParsing="false" onAction="#addPicture" text="+ Фото" StackPane.alignment="TOP_RIGHT">
                                                             <font>
                                                                 <Font size="18.0" />
                                                             </font>

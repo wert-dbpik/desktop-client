@@ -1,6 +1,7 @@
 package ru.wert.datapik.utils.remarks.commands;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.utils.common.commands.ICommand;
 import ru.wert.datapik.utils.remarks.Remark_TableView;
@@ -9,8 +10,7 @@ import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.util.List;
 
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_REMARKS;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.utils.services.ChogoriServices.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
@@ -36,6 +36,11 @@ public class RemarkDeleteCommand implements ICommand {
 
         for(Remark item : items){
             try {
+                List<Pic> pics = CH_REMARKS.getPics(item);
+                if (pics != null && !pics.isEmpty())
+                    for (Pic p : pics)
+                        CH_PICS.delete(p);
+
                 CH_REMARKS.delete(item);
                 log.info("Удален комментарий {}", item.getName());
                 AppStatic.createLog(true, String.format("Удалил комментарий '%s' для '%s'", item.getId(), item.getPassport().toUsefulString()));

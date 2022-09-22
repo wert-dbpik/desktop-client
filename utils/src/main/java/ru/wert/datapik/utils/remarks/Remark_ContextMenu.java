@@ -29,7 +29,7 @@ public class Remark_ContextMenu extends FormView_ContextMenu<Remark> {
     @Override
     public void createMainMenuItems() {
         boolean addItem = true;
-        boolean copyItem =true;
+        boolean copyItem = false;
         boolean changeItem = true;
         boolean deleteItem = true;
 

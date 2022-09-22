@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.client.interfaces.UpdatableTabController;
@@ -16,9 +17,11 @@ public class RemarksController  implements UpdatableTabController {
     @FXML
     private VBox vbRemarksContainer; //Контенер для таблицы с камментариями
 
-    Remark_TableView tableView;
+    private Remark_TableView tableView;
+    @Getter private Passport passport;
 
     public void init(Passport passport){
+        this.passport = passport;
         tableView = new Remark_TableView("КОММЕНТАРИИ", true, passport);
         tableView.updateView();
         VBox.setVgrow(tableView, Priority.ALWAYS);
