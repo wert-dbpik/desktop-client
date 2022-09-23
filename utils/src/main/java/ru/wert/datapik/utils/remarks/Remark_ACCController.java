@@ -11,6 +11,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import lombok.AllArgsConstructor;
@@ -83,20 +84,6 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
         btnAddPhoto.setText("");
         btnAddPhoto.setGraphic(new ImageView(BTN_ADD_PHOTO_IMG));
         btnAddPhoto.setTooltip(new Tooltip("Добавить изображение"));
-    }
-
-
-    @Override
-    public void init(EOperation operation, IFormView<Remark> formView, ItemCommands<Remark> commands) {
-        this.commands = commands;
-        this.operation = operation;
-
-        passport = ((Remark_TableView)formView).getPassport();
-
-//      Изменим текст на кнопке ОК согласно типу выполняемой операции
-        if(operation.equals(EOperation.ADD)) btnOk.setText("ДОБАВИТЬ");
-        else btnOk.setText("ИЗМЕНИТЬ");
-
         //Применим CSS стили к TextArea
         taRemarksText.setId("blobTextArea");
         //Сделаем из стандартного TextArea раздуваемый
@@ -109,6 +96,20 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
                 taRemarksText.setMinHeight(newHeight);
             }
         });
+    }
+
+
+    @Override
+    public void init(EOperation operation, IFormView<Remark> formView, ItemCommands<Remark> commands) {
+        this.commands = commands;
+        this.operation = operation;
+
+        passport = ((Remark_TableView)formView).getPassport();
+
+        //Изменим текст на кнопке ОК согласно типу выполняемой операции
+        if(operation.equals(EOperation.ADD)) btnOk.setText("ДОБАВИТЬ");
+        else btnOk.setText("ИЗМЕНИТЬ");
+
         //Инициализируем коллекцию с изображениями
         picturesInRemark = new ArrayList<>();
 

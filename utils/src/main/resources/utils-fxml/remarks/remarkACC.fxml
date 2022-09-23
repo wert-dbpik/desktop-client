@@ -26,6 +26,9 @@
                                             <VBox.margin>
                                                 <Insets />
                                             </VBox.margin>
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
                                         </TextArea>
                                     <HBox VBox.vgrow="ALWAYS">
                                        <children>
