@@ -36,11 +36,6 @@ public class RemarkDeleteCommand implements ICommand {
 
         for(Remark item : items){
             try {
-                List<Pic> pics = CH_REMARKS.getPics(item);
-                if (pics != null && !pics.isEmpty())
-                    for (Pic p : pics)
-                        CH_PICS.delete(p);
-
                 CH_REMARKS.delete(item);
                 log.info("Удален комментарий {}", item.getName());
                 AppStatic.createLog(true, String.format("Удалил комментарий '%s' для '%s'", item.getId(), item.getPassport().toUsefulString()));
