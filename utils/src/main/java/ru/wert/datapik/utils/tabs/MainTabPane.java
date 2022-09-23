@@ -44,9 +44,8 @@ public class MainTabPane extends TabPane {
      * @param name String, наименование вкладки
      * @param content Node, узел типа Parent
      * @param showTab boolean, опциональное - открывать созданную вкладку или не открывать
-     * @param updateTask Task<Void>, задача на обновление вкладки
      */
-    public void createNewTab(String name, Node content, boolean showTab, Task<Void> updateTask, ITabController searchableTabController){
+    public void createNewTab(String name, Node content, boolean showTab, ITabController searchableTabController){
         this.searchablePane = searchableTabController;
 
         if(searchableTabController instanceof SearchableTab)

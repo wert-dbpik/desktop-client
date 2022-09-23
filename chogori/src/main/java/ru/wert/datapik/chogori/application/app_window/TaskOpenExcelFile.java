@@ -36,7 +36,7 @@ public class TaskOpenExcelFile extends Task<Void> {
 
         parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
         Platform.runLater(()->{
-            CH_TAB_PANE.createNewTab(chosenFile.getName(), parent, true, null, null);
+            CH_TAB_PANE.createNewTab(chosenFile.getName(), parent, true, null);
         });
 
 
