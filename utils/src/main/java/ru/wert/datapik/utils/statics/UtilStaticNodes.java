@@ -13,6 +13,8 @@ import ru.wert.datapik.utils.toolpane.ChogoriToolBar;
 public class UtilStaticNodes {
 
     public static StackPane CH_DECORATION_ROOT_PANEL;
+    public static HBox CH_APPLICATION_WAITING_BLIND; //Шторка исп-ся при загрузке табов
+    public static StackPane CH_APPLICATION_ROOT_PANEL;
     public static MainTabPane CH_TAB_PANE;
     public static SearchField CH_SEARCH_FIELD;
     public static StackPane CH_TOOL_STACK_PANE;

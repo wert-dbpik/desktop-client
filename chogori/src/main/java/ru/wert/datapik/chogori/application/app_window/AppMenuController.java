@@ -1,8 +1,11 @@
 package ru.wert.datapik.chogori.application.app_window;
 
+import com.sun.javafx.scene.control.skin.ContextMenuContent;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -49,11 +52,15 @@ public class AppMenuController {
     @FXML
     Button btnChat;
 
+    public static Parent BLIND; //Шторка
+
     private User tempUser;
     private boolean open;
 
     @FXML
     void initialize(){
+
+        createBlind();
 
         createMenu();
 
@@ -82,6 +89,17 @@ public class AppMenuController {
                 SP_CHAT.getChildren().clear();
             }
         });
+    }
+
+    private void createBlind() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/appWindow/blind.fxml"));
+            Parent parent = loader.load();
+           this.BLIND = parent;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -326,15 +344,40 @@ public class AppMenuController {
      * -- ЧЕРТЕЖИ
      */
     private void openDrafts(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
-            Parent parent = loader.load();
-            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws InterruptedException {
+
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
+                        Parent parent = loader.load();
+                        parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
+                        CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                super.done();
+                CH_TOOL_STACK_PANE.setVisible(false);
+            }
+        };
+
+        CH_TOOL_STACK_PANE.setVisible(true);
+
+        Thread t = new Thread(task);
+        t.setDaemon(true);
+        t.start();
+
+
     }
+
+
 
     //######################   МАТЕРИАЛЫ   ##########################
 

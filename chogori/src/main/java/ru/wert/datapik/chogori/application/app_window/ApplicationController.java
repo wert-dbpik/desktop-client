@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.utils.statics.AppStatic;
@@ -35,6 +36,9 @@ public class ApplicationController {
     private VBox vbApplication;
 
     @FXML
+    private HBox waitingBlind;
+
+    @FXML
     private StackPane rootPanel;
 
     @FXML
@@ -58,11 +62,15 @@ public class ApplicationController {
 
     @FXML
     void initialize() {
-//        CH_APPLICATION_ROOT_PANEL = rootPanel;
+        CH_APPLICATION_ROOT_PANEL = rootPanel;
+        CH_APPLICATION_WAITING_BLIND = waitingBlind;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
+
+        CH_TOOL_STACK_PANE.setVisible(false);
+
         SP_CHAT = spChat;
 
-//        createToolPanel();
+
         createUserLabel();
         createTimeLabel();
         createTabPane();

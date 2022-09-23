@@ -420,3 +420,9 @@
 #awaiting {
     -fx-background-color: lightgrey;
 }
+
+/*===========   Индикатор мыслительной деятельности   ТОНЕНЬКИЙ  ===========================================*/
+/*.progress-bar > .bar {*/
+/*    -fx-background-insets: 1 1 2 1;*/
+/*    -fx-padding: 0.20em;*/
+/*}*/

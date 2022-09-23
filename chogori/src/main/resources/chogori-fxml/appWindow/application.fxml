@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -17,7 +18,10 @@
       <VBox>
          <children>
             <StackPane fx:id="spAppMenu" prefWidth="600.0" />
-            <StackPane fx:id="stackPaneForToolPane" />
+            <StackPane fx:id="stackPaneForToolPane">
+               <children>
+                  <ProgressBar maxWidth="1.7976931348623157E308" styleClass="-fx-background-insets: 1 1 2 1;    -fx-padding: 0.20em;" />
+               </children></StackPane>
          </children>
       </VBox>
       <HBox alignment="CENTER" VBox.vgrow="ALWAYS">

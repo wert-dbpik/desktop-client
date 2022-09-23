@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.chogori.application.app_window.AppMenuController;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
@@ -29,6 +30,8 @@ import java.util.List;
 
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_APPLICATION_ROOT_PANEL;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TOOL_STACK_PANE;
 import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 

@@ -2,9 +2,12 @@ package ru.wert.datapik.utils.tabs;
 
 import javafx.concurrent.Task;
 import javafx.event.Event;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.interfaces.ITabController;
 import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.utils.popups.HintPopup;
@@ -13,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 /**
  * Класс создает панель TabPane и входящие в нее вкладки Tab
@@ -48,19 +52,19 @@ public class MainTabPane extends TabPane {
     public void createNewTab(String name, Node content, boolean showTab, ITabController searchableTabController){
         this.searchablePane = searchableTabController;
 
-        if(searchableTabController instanceof SearchableTab)
+        if (searchableTabController instanceof SearchableTab)
             showSearchPane();
         else
             hideSearchPane();
 
 
         AppTab tab = tabIsAvailable(name);
-        if(tab == null){
+        if (tab == null) {
 
-                tab = new AppTab(name, content, searchableTabController);
+            tab = new AppTab(name, content, searchableTabController);
 
-                getTabs().add(tab);//вкладку добавляем к TabPane
-                setContextMenu(createContextMenu());
+            getTabs().add(tab);//вкладку добавляем к TabPane
+            setContextMenu(createContextMenu());
 
         }
 
