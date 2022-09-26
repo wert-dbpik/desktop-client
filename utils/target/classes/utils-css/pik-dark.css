@@ -414,18 +414,28 @@
     -fx-opacity: 0;
 }
 
+/*##########  long process ##################################################################################*/
+#wait_a_minute{
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-background-color: #6d6b6b;
+}
+
+
 
 /*##########  awaiting ##################################################################################*/
 
 #awaiting {
     -fx-background-color: lightgrey;
 }
-
-#wait_a_minute{
+/*##########  wait_a_minute ##################################################################################*/
+#wait_a_minute, #long_process{
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px ;
     -fx-border-color: white;
     -fx-border-width: 2px;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
     -fx-background-color: #6d6b6b;
 }
 
@@ -476,9 +486,6 @@
 #wait_a_minute .progress-indicator .spinner .segment11{
     -fx-background-color: #8c8c8c;
 }
-
-
-
 
 
 /*===========   Индикатор мыслительной деятельности   ТОНЕНЬКИЙ  ===========================================*/

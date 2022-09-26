@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -28,11 +29,12 @@ public class WaitAMinute extends ModalWindow{
             FXMLLoader loader = new FXMLLoader(WaitAMinute.class.getResource("/winform-fxml/long_process/waitAMinute.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(WaitAMinute.class.getResource("/utils-css/pik-dark.css").toString());
-
-            stage.setScene(new Scene(parent));
+            Scene scene = new Scene(parent);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initStyle(StageStyle.TRANSPARENT);
 
             Platform.runLater(()->{
                 centerWindow(stage, WF_MAIN_STAGE, null);

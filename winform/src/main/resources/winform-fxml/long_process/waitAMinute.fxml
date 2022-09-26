@@ -21,7 +21,7 @@
             </ProgressIndicator>
             <Text fill="#f8f8f8" strokeType="OUTSIDE" strokeWidth="0.0" text="Загрузка...">
                <font>
-                  <Font name="System Bold Italic" size="36.0" />
+                  <Font name="System Italic" size="36.0" />
                </font>
             </Text>
          </children>
