@@ -18,10 +18,7 @@
       <VBox>
          <children>
             <StackPane fx:id="spAppMenu" prefWidth="600.0" />
-            <StackPane fx:id="stackPaneForToolPane">
-               <children>
-                  <ProgressBar maxWidth="1.7976931348623157E308" styleClass="-fx-background-insets: 1 1 2 1;    -fx-padding: 0.20em;" />
-               </children></StackPane>
+            <StackPane fx:id="stackPaneForToolPane" />
          </children>
       </VBox>
       <HBox alignment="CENTER" VBox.vgrow="ALWAYS">

@@ -421,6 +421,66 @@
     -fx-background-color: lightgrey;
 }
 
+#wait_a_minute{
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-background-color: #6d6b6b;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment0{
+    -fx-background-color: #fafafa;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment1{
+    -fx-background-color: #f0f0f0;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment2{
+    -fx-background-color: #e6e6e6;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment3{
+    -fx-background-color: #dcdcdc;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment4{
+    -fx-background-color: #d2d2d2;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment5{
+    -fx-background-color: #c8c8c8;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment6{
+    -fx-background-color: #bebebe;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment7{
+    -fx-background-color: #b4b4b4;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment8{
+    -fx-background-color: #aaaaaa;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment9{
+    -fx-background-color: #a0a0a0;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment10{
+    -fx-background-color: #969696;
+}
+
+#wait_a_minute .progress-indicator .spinner .segment11{
+    -fx-background-color: #8c8c8c;
+}
+
+
+
+
+
 /*===========   Индикатор мыслительной деятельности   ТОНЕНЬКИЙ  ===========================================*/
 /*.progress-bar > .bar {*/
 /*    -fx-background-insets: 1 1 2 1;*/

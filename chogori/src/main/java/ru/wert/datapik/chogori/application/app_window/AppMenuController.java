@@ -23,9 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
 import ru.wert.datapik.client.entity.models.ChatGroup;
 import ru.wert.datapik.client.entity.models.User;
+import ru.wert.datapik.client.utils.BLConst;
 import ru.wert.datapik.utils.chat.SideChat;
 import ru.wert.datapik.utils.help.About;
 import ru.wert.datapik.utils.search.SearchField;
+import ru.wert.datapik.winform.modal.LongProcess;
+import ru.wert.datapik.winform.modal.WaitAMinute;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
@@ -52,15 +55,11 @@ public class AppMenuController {
     @FXML
     Button btnChat;
 
-    public static Parent BLIND; //Шторка
-
     private User tempUser;
     private boolean open;
 
     @FXML
     void initialize(){
-
-        createBlind();
 
         createMenu();
 
@@ -91,16 +90,6 @@ public class AppMenuController {
         });
     }
 
-    private void createBlind() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/appWindow/blind.fxml"));
-            Parent parent = loader.load();
-           this.BLIND = parent;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     /**
      * СОЗДАТЬ МЕНЮ
@@ -333,13 +322,15 @@ public class AppMenuController {
         Task<Void> openFileCabinetTask = new Task<Void>() {
             @Override
             public Void call() throws InterruptedException {
+                Platform.runLater(WaitAMinute::create);
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/passports/passportsEditor.fxml"));
                     Parent parent = loader.load();
                     parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+
                     CH_TAB_PANE.createNewTab("Картотека", parent, true, loader.getController());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.debug("Cancelled by user");
                 }
                 return null;
             }
@@ -347,11 +338,16 @@ public class AppMenuController {
             @Override
             protected void done() {
                 super.done();
-                CH_TOOL_STACK_PANE.setVisible(false);
+                Platform.runLater(WaitAMinute::close);
+
+            }
+
+            @Override
+            protected void cancelled() {
+                super.cancelled();
+                Platform.runLater(WaitAMinute::close);
             }
         };
-
-        CH_TOOL_STACK_PANE.setVisible(true);
 
         Thread t = new Thread(openFileCabinetTask);
         t.setDaemon(true);
@@ -362,28 +358,38 @@ public class AppMenuController {
      * -- ЧЕРТЕЖИ
      */
     private void openDrafts(ActionEvent event) {
+
         Task<Void> openDraftsTask = new Task<Void>() {
             @Override
             public Void call() throws InterruptedException {
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
-                        Parent parent = loader.load();
-                        parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-                        CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                if (isCancelled()) return null ;
+                Platform.runLater(WaitAMinute::create);
+
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
+                    Parent parent = loader.load();
+                    parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
+                    CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
+                } catch (IOException e) {
+                    log.debug("Cancelled by user");
+                }
+
                 return null;
             }
 
             @Override
             protected void done() {
                 super.done();
-                CH_TOOL_STACK_PANE.setVisible(false);
+                Platform.runLater(WaitAMinute::close);
             }
-        };
 
-        CH_TOOL_STACK_PANE.setVisible(true);
+            @Override
+            protected void cancelled() {
+                super.cancelled();
+                Platform.runLater(WaitAMinute::close);
+            }
+
+        };
 
         Thread t = new Thread(openDraftsTask);
         t.setDaemon(true);
