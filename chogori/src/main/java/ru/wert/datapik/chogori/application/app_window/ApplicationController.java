@@ -13,6 +13,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.UtilStaticNodes;
 import ru.wert.datapik.utils.tabs.MainTabPane;
@@ -29,7 +30,7 @@ import java.util.TimerTask;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
-
+@Slf4j
 public class ApplicationController {
 
     @FXML
@@ -62,6 +63,7 @@ public class ApplicationController {
 
     @FXML
     void initialize() {
+        log.debug("initialize : запускается блок инициализации");
         CH_APPLICATION_ROOT_PANEL = rootPanel;
         CH_APPLICATION_WAITING_BLIND = waitingBlind;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
@@ -80,9 +82,14 @@ public class ApplicationController {
             createAdvertLabel();
 
         try {
+            log.debug("initialize : appMenu.fxml создается ...");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/appWindow/appMenu.fxml"));
             Parent parent = loader.load();
+            log.debug("initialize : spAppMenu = " + spAppMenu);
+            log.debug("initialize : parent = " + parent);
             spAppMenu.getChildren().add(parent);
+            log.debug("initialize : appMenu.fxml успешно создана и добавлена к  spAppMenu");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -114,7 +121,7 @@ public class ApplicationController {
             }
             event.consume();
         });
-
+        log.debug("initialize : блок инициализации успешно выполнен");
     }
 
 
@@ -164,6 +171,7 @@ public class ApplicationController {
     }
 
     private void createAdvertLabel(){
+        log.debug("createAdvertLabel : создается надпись с новой доступной версией программы");
         Label lblNewVersion = new Label();
         lblNewVersion.setStyle("-fx-text-fill: #FFFF99; -fx-background-color: -fx-my-black;");
         lblNewVersion.setText("Доступна новая версия v." + AppStatic.LAST_VERSION_IN_DB);
@@ -183,6 +191,8 @@ public class ApplicationController {
             spAdvert.getChildren().clear();
             new TaskDownloadNewVersion();
         });
+
+        log.debug("createAdvertLabel : надпись с новой доступной версией программы успешно создана");
 
     }
 

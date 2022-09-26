@@ -93,7 +93,7 @@ public class LoginController {
     }
 
     private void loadApplicationSettings() {
-        log.debug("loadApplicationSettings : application settings are going to be load");
+        log.debug("loadApplicationSettings : загружаются настройки приложения...");
         CH_CURRENT_USER_GROUP = CH_CURRENT_USER.getUserGroup();
 
         CH_CURRENT_USER_SETTINGS = CH_SETTINGS.findByName(CH_CURRENT_USER.getName());
@@ -110,6 +110,8 @@ public class LoginController {
         CH_VALIDATE_DEC_NUMBERS = CH_CURRENT_USER_SETTINGS.isValidateDecNumbers();
         CH_PDF_VIEWER = EPDFViewer.values()[CH_CURRENT_USER_SETTINGS.getPdfViewer()];
         CH_DEFAULT_PATH_TO_NORMY_MK = new File(CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
+
+        log.debug("loadApplicationSettings : загружаются настройки приложения успешно загружены");
 
     }
 
@@ -134,7 +136,11 @@ public class LoginController {
             CH_DECORATION_ROOT_PANEL.getChildren().add(parent);
 
 
+            log.debug("На панель CH_DECORATION_ROOT_PANEL добавлена application.fxml");
+            log.info("ПРИЛОЖЕНИЕ ЗАПУЩЕНО!!!");
+
         } catch (IOException ioException) {
+            log.info("application.fxml не была создана");
             ioException.printStackTrace();
         }
     }

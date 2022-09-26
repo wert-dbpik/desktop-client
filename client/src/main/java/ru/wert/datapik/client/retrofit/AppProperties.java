@@ -33,7 +33,7 @@ public class AppProperties {
      * если файла не существует, то он создается и в файл записываются данные по умолчанию
      */
     private AppProperties() {
-        log.debug("AppProperties : propsFile is creating ...");
+        log.debug("AppProperties : propsFile создается  ...");
         File propsFile = new File(appConfigPath);
         if (!propsFile.exists())
             createFileOfConnectionSettings(appConfigPath);
@@ -48,6 +48,7 @@ public class AppProperties {
                 e.printStackTrace();
             }
         }
+        log.debug("AppProperties : propsFile успешно создан");
     }
 
     /**
@@ -55,6 +56,7 @@ public class AppProperties {
      * @param appConfigPath String, путь к файлу connectionSettings.properties
      */
     private void createFileOfConnectionSettings(String appConfigPath) {
+        log.debug("createFileOfConnectionSettings : connectionSettings.properties создается  ...");
         try {
             log.debug("File of application settings is creating...");
             File dir = new File(homeDir);
@@ -81,6 +83,7 @@ public class AppProperties {
             }
 
         }
+        log.debug("createFileOfConnectionSettings : connectionSettings.properties успешно создан");
     }
 
     public String getIpAddress(){
@@ -134,6 +137,7 @@ public class AppProperties {
     }
 
     public void setLastUser(final long userId){
+        log.debug("setLastUser : устанавливается последний пользователь LAST_USER");
         try {
             FileOutputStream fos = new FileOutputStream(appConfigPath);
             connectionProps.setProperty("LAST_USER", String.valueOf(userId));
@@ -141,6 +145,7 @@ public class AppProperties {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        log.debug("setLastUser : последний пользователь LAST_USER успешно установлен");
     }
 
 

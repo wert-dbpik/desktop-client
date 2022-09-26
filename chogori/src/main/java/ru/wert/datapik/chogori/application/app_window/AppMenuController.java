@@ -60,6 +60,7 @@ public class AppMenuController {
 
     @FXML
     void initialize(){
+        log.debug("initialize : запускается блок инициализации ...");
 
         createMenu();
 
@@ -68,26 +69,27 @@ public class AppMenuController {
         PANE_WITH_SEARCH = createSearchField();
 
 
-        SideChat sideChat = new SideChat();
-
-        btnChat.setText("чат");
-        btnChat.setGraphic(new ImageView(CHAT_WHITE_IMG));
-        btnChat.setOnAction(event -> {
-            open = !open;
-            if(open) {
-                SP_CHAT.setPrefWidth(250.0);
-                SP_CHAT.setMinWidth(250.0);
-                SP_CHAT.setMaxWidth(250.0);
-                SP_CHAT.getChildren().add(sideChat.getChatVBox());
-            }else {
-                for(double width = SP_CHAT.getWidth(); width >= 0; width--){
-                    SP_CHAT.setPrefWidth(width);
-                    SP_CHAT.setMinWidth(width);
-                    SP_CHAT.setMaxWidth(width);
-                                    }
-                SP_CHAT.getChildren().clear();
-            }
-        });
+//        SideChat sideChat = new SideChat();
+//
+//        btnChat.setText("чат");
+//        btnChat.setGraphic(new ImageView(CHAT_WHITE_IMG));
+//        btnChat.setOnAction(event -> {
+//            open = !open;
+//            if(open) {
+//                SP_CHAT.setPrefWidth(250.0);
+//                SP_CHAT.setMinWidth(250.0);
+//                SP_CHAT.setMaxWidth(250.0);
+//                SP_CHAT.getChildren().add(sideChat.getChatVBox());
+//            }else {
+//                for(double width = SP_CHAT.getWidth(); width >= 0; width--){
+//                    SP_CHAT.setPrefWidth(width);
+//                    SP_CHAT.setMinWidth(width);
+//                    SP_CHAT.setMaxWidth(width);
+//                                    }
+//                SP_CHAT.getChildren().clear();
+//            }
+//        });
+        log.debug("initialize : блок инициализации успешно выполнен");
     }
 
 
@@ -95,6 +97,7 @@ public class AppMenuController {
      * СОЗДАТЬ МЕНЮ
      */
     private void createMenu() {
+        log.debug("createMenu : запускается создание меню ...");
 
         menuBar.getMenus().add(createMainMenu());
         //Чертежи
@@ -114,6 +117,7 @@ public class AppMenuController {
             menuBar.getMenus().add(createAdminMenu());
         //Помощь
         menuBar.getMenus().add(createHelpMenu());
+        log.debug("createMenu : меню успешно создано");
     }
 
     /**
@@ -121,6 +125,7 @@ public class AppMenuController {
      */
     private HBox createSearchField() {
 
+        log.debug("createSearchField : поле поиска создается ...");
         ImageView search = new ImageView(BTN_SEARCH_IMG);
 
         HBox hbox = new HBox();
@@ -137,6 +142,8 @@ public class AppMenuController {
         hbox.setAlignment(Pos.CENTER_RIGHT);
         hbox.setSpacing(2);
         hbox.getStylesheets().add(getClass().getResource("/chogori-css/toolpane-dark.css").toString());
+
+        log.debug("createSearchField : поле поиска успешно создано");
 
         return hbox;
 
