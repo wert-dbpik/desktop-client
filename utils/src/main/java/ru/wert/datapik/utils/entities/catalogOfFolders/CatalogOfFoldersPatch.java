@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.entities.catalogOfFolders;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
@@ -8,6 +9,7 @@ import ru.wert.datapik.utils.entities.folders.Folder_TableView;
 import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CatalogOfFoldersPatch {
 

@@ -330,34 +330,17 @@ public class AppMenuController {
      * -- КАРТОТЕКА
      */
     private void openFileCabinet(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/passports/passportsEditor.fxml"));
-            Parent parent = loader.load();
-            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Картотека", parent, true,  loader.getController());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * -- ЧЕРТЕЖИ
-     */
-    private void openDrafts(ActionEvent event) {
-        Task<Void> task = new Task<Void>() {
+        Task<Void> openFileCabinetTask = new Task<Void>() {
             @Override
             public Void call() throws InterruptedException {
-
-                Platform.runLater(() -> {
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
-                        Parent parent = loader.load();
-                        parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-                        CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/passports/passportsEditor.fxml"));
+                    Parent parent = loader.load();
+                    parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+                    CH_TAB_PANE.createNewTab("Картотека", parent, true, loader.getController());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return null;
             }
 
@@ -370,11 +353,41 @@ public class AppMenuController {
 
         CH_TOOL_STACK_PANE.setVisible(true);
 
-        Thread t = new Thread(task);
+        Thread t = new Thread(openFileCabinetTask);
         t.setDaemon(true);
         t.start();
+    }
 
+    /**
+     * -- ЧЕРТЕЖИ
+     */
+    private void openDrafts(ActionEvent event) {
+        Task<Void> openDraftsTask = new Task<Void>() {
+            @Override
+            public Void call() throws InterruptedException {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
+                        Parent parent = loader.load();
+                        parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
+                        CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                return null;
+            }
 
+            @Override
+            protected void done() {
+                super.done();
+                CH_TOOL_STACK_PANE.setVisible(false);
+            }
+        };
+
+        CH_TOOL_STACK_PANE.setVisible(true);
+
+        Thread t = new Thread(openDraftsTask);
+        t.setDaemon(true);
+        t.start();
     }
 
 

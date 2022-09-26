@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.tabs;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.geometry.Pos;
@@ -52,49 +53,53 @@ public class MainTabPane extends TabPane {
     public void createNewTab(String name, Node content, boolean showTab, ITabController searchableTabController){
         this.searchablePane = searchableTabController;
 
-        if (searchableTabController instanceof SearchableTab)
-            showSearchPane();
-        else
-            hideSearchPane();
-
-
-        AppTab tab = tabIsAvailable(name);
-        if (tab == null) {
-
-            tab = new AppTab(name, content, searchableTabController);
-
-            getTabs().add(tab);//вкладку добавляем к TabPane
-            setContextMenu(createContextMenu());
-
-        }
-
-        createTitle(tab, name);
-
-        tab.setContextMenu(tabMenu());
-
-        tab.setOnClosed((event)->{
-            if(getTabs().isEmpty())
+        Platform.runLater(()->{
+            if (searchableTabController instanceof SearchableTab)
+                showSearchPane();
+            else
                 hideSearchPane();
+
+
+            AppTab tab = tabIsAvailable(name);
+            if (tab == null) {
+
+                tab = new AppTab(name, content, searchableTabController);
+
+                getTabs().add(tab);//вкладку добавляем к TabPane
+                setContextMenu(createContextMenu());
+
+            }
+
+            createTitle(tab, name);
+
+            tab.setContextMenu(tabMenu());
+
+            tab.setOnClosed((event)->{
+                if(getTabs().isEmpty())
+                    hideSearchPane();
+            });
+
+            tab.setOnSelectionChanged(e->{
+                if(searchableTabController instanceof SearchableTab) {
+                    ((SearchableTab) searchableTabController).tuneSearching();
+                    showSearchPane();
+                } else
+                    hideSearchPane();
+            });
+
+            if (showTab) {
+                //ОТКРЫВАЕМ созданную вкладку
+                getSelectionModel().select(tab);
+                //Создаем поле поиска
+                if(searchableTabController instanceof SearchableTab) {
+                    ((SearchableTab) searchableTabController).tuneSearching();
+                    showSearchPane();
+                } else
+                    hideSearchPane();
+            }
+
         });
 
-        tab.setOnSelectionChanged(e->{
-            if(searchableTabController instanceof SearchableTab) {
-                ((SearchableTab) searchableTabController).tuneSearching();
-                showSearchPane();
-            } else
-                hideSearchPane();
-        });
-
-        if (showTab) {
-            //ОТКРЫВАЕМ созданную вкладку
-            getSelectionModel().select(tab);
-            //Создаем поле поиска
-            if(searchableTabController instanceof SearchableTab) {
-                ((SearchableTab) searchableTabController).tuneSearching();
-                showSearchPane();
-            } else
-                hideSearchPane();
-        }
 
     }
 

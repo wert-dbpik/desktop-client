@@ -1,6 +1,7 @@
 package ru.wert.datapik.utils.common.utils;
 
 
+import javafx.application.Platform;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -29,15 +30,22 @@ public class ClipboardUtils {
     }
 
     public static String getStringFromClipboard(){
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final String[] string = new String[1];
+        Platform.runLater(()->{
+            final Clipboard clipboard = Clipboard.getSystemClipboard();
+            string[0] = clipboard.getString();
+        });
+
 //        final ClipboardContent content = new ClipboardContent();
 
-        return clipboard.getString();
+        return string[0];
     }
 
     public static void clear(){
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
-        clipboard.clear();
+        Platform.runLater(()->{
+            final Clipboard clipboard = Clipboard.getSystemClipboard();
+            clipboard.clear();
+        });
     }
 
     public static void copyToClipboardImage(Label lbl) {
