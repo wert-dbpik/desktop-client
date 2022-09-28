@@ -50,7 +50,7 @@ public class StartChogori extends Application {
 
         //Определяем последнюю доступную версию программы в Базе данных
         List<VersionDesktop> allVersions = CH_VERSIONS_DESKTOP.findAll();
-        AppStatic.LAST_VERSION_IN_DB = allVersions.get(allVersions.size()-1).getName();
+        WinformStatic.LAST_VERSION_IN_DB = allVersions.get(allVersions.size()-1).getName();
 
         new ChogoriToolBar();
         //Создадим папку временного хранения файлов чертежей
@@ -92,7 +92,7 @@ public class StartChogori extends Application {
 
             //Меняем заголовок окна
             Label windowName = (Label)decoration.lookup("#windowName");
-            String headerName = "Информационная база";
+            String headerName = "";
             windowName.setText(headerName);
 
             Scene scene = new Scene(decoration);

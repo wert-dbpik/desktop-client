@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.statics.UtilStaticNodes;
 import ru.wert.datapik.utils.tabs.MainTabPane;
+import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,7 +79,7 @@ public class ApplicationController {
         createTabPane();
         createButtonInterceptor();
 
-        if(AppStatic.CURRENT_PROJECT_VERSION.compareTo(AppStatic.LAST_VERSION_IN_DB) < 0)
+        if(WinformStatic.CURRENT_PROJECT_VERSION.compareTo(WinformStatic.LAST_VERSION_IN_DB) < 0)
             createAdvertLabel();
 
         try {
@@ -174,7 +175,7 @@ public class ApplicationController {
         log.debug("createAdvertLabel : создается надпись с новой доступной версией программы");
         Label lblNewVersion = new Label();
         lblNewVersion.setStyle("-fx-text-fill: #FFFF99; -fx-background-color: -fx-my-black;");
-        lblNewVersion.setText("Доступна новая версия v." + AppStatic.LAST_VERSION_IN_DB);
+        lblNewVersion.setText("Доступна новая версия v." + WinformStatic.LAST_VERSION_IN_DB);
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {

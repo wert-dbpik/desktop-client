@@ -17,6 +17,8 @@ import java.util.List;
 @Slf4j
 public class WinformStatic {
 
+    public static String CURRENT_PROJECT_VERSION = "6.0"; //Версия приложения обновляется вручную
+    public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
     public static Stage WF_MAIN_STAGE;
     public static File WF_TEMPDIR; //Директория временного хранения
     public static File HOME_BAZA_PIK; //Папка в домашней директории пользователя

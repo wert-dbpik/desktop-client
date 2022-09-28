@@ -20,6 +20,7 @@ import ru.wert.datapik.winform.winform_settings.WinformSettings;
 import java.io.IOException;
 import java.util.List;
 
+import static ru.wert.datapik.winform.statics.WinformStatic.CURRENT_PROJECT_VERSION;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 import static ru.wert.datapik.winform.winform_settings.WinformSettings.CH_MONITOR;
 
@@ -41,7 +42,7 @@ public class WindowDecoration {
      * 1 - С указанием владельца
      */
     public WindowDecoration(String headerName, Parent rootPane, Boolean resizable, Stage owner){
-        this.headerName = headerName;
+        this.headerName = !headerName.equals("") ? " : " + headerName : "";
         this.rootPane = rootPane;
         this.waiting = waiting;
         this.resizable = resizable;
@@ -58,7 +59,7 @@ public class WindowDecoration {
      * @param waiting - Ожидание ответа
      */
     public WindowDecoration(String headerName, Parent rootPane, Boolean resizable, Stage owner, boolean waiting ){
-        this.headerName = headerName;
+        this.headerName = !headerName.equals("") ? " : " + headerName : "";
         this.rootPane = rootPane;
         this.waiting = waiting;
         this.resizable = resizable;
@@ -83,6 +84,9 @@ public class WindowDecoration {
 
             StackPane pane = (StackPane)decoration.lookup("#mainPane");
             pane.getChildren().add(rootPane);
+
+            Label lblVersion = (Label)decoration.lookup("#lblVersion");
+            lblVersion.setText(CURRENT_PROJECT_VERSION);
 
             //Меняем заголовок окна
             windowName = (Label)decoration.lookup("#windowName");

@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.modal.ModalWindow;
+import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.io.IOException;
 
@@ -35,17 +36,17 @@ public class About extends ModalWindow {
 
             Label version = (Label)parent.lookup("#lblVersion");
 //            version.setText("Версия " + projectVersion);
-            version.setText("Версия " + AppStatic.CURRENT_PROJECT_VERSION);
+            version.setText("Версия " + WinformStatic.CURRENT_PROJECT_VERSION);
 
             //ВЕРСИЯ
             Label versionInfo = (Label)parent.lookup("#lblVersionInfo");
             versionInfo.setStyle("-fx-text-fill: #FFFF99");
-            String currentVersion = AppStatic.CURRENT_PROJECT_VERSION;
-            String inDataBaseVersion = AppStatic.LAST_VERSION_IN_DB;
+            String currentVersion = WinformStatic.CURRENT_PROJECT_VERSION;
+            String inDataBaseVersion = WinformStatic.LAST_VERSION_IN_DB;
             if(currentVersion.compareTo(inDataBaseVersion) == 0)
                 versionInfo.setText("(это последняя версия)");
             else if(currentVersion.compareTo(inDataBaseVersion) < 0)
-                versionInfo.setText("доступна новая версия " + AppStatic.LAST_VERSION_IN_DB);
+                versionInfo.setText("доступна новая версия " + WinformStatic.LAST_VERSION_IN_DB);
             else
                 versionInfo.setText("Это beta версия");
 

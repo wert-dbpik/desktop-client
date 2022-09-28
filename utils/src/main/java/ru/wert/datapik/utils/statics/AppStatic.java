@@ -59,9 +59,7 @@ public class AppStatic {
 
     public static String BASE_URL = RetrofitClient.baseUrl;
 
-    public static String CURRENT_PROJECT_VERSION = "6.0"; //Версия приложения обновляется вручную
 
-    public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
 
     public static final String DEC_NUMBER = "\\d{6}[.]\\d{3}";// XXXXXX.XXX
     public static final String DEC_NUMBER_WITH_EXT = "\\d{6}[.]\\d{3}[-]\\d{2,3}";// XXXXXX.XXX-ХХ(Х)
