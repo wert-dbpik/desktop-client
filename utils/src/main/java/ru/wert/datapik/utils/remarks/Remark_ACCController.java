@@ -11,13 +11,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Pic;
@@ -25,6 +20,7 @@ import ru.wert.datapik.client.entity.models.Remark;
 import ru.wert.datapik.utils.common.commands.ItemCommands;
 import ru.wert.datapik.utils.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.utils.common.interfaces.IFormView;
+import ru.wert.datapik.utils.images.FileImage;
 import ru.wert.datapik.utils.images.ImageUtil;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EOperation;
@@ -169,10 +165,10 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
     private List<Pic> collectPicturesInRemark(){
         List<Pic> allPics = new ArrayList<>();
         for(FileImage fi : picturesInRemark){
-            if(fi.pic != null){
-                allPics.add(fi.pic);
+            if(fi.getPic() != null){
+                allPics.add(fi.getPic());
             } else {
-                Pic pic = createPicFromFileAndSaveItToDB(fi.file);
+                Pic pic = createPicFromFileAndSaveItToDB(fi.getFile());
                 allPics.add(pic);
             }
         }
@@ -187,7 +183,7 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
      */
     private Pic createPicFromFileAndSaveItToDB(File file){
         //Находим в коллекции picturesInRemark необходимый Image соответствующий нашему File
-        Image picture = picturesInRemark.stream().filter(i->i.file.equals(file)).findFirst().get().image;
+        Image picture = picturesInRemark.stream().filter(i->i.getFile().equals(file)).findFirst().get().getImage();
         //Создаем новый экземпляр Pic с полями
         Pic newPic = new Pic();
         newPic.setUser(CH_CURRENT_USER);
@@ -287,7 +283,7 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
         MenuItem deletePhoto = new MenuItem("Удалить фото");
         deletePhoto.setOnAction(ev -> {
             //Находим в коллекции picturesInRemark изображение, которое нужно удалить
-            FileImage deletingPicture = picturesInRemark.stream().filter(i -> i.file.equals(file)).findFirst().get();
+            FileImage deletingPicture = picturesInRemark.stream().filter(i -> i.getFile().equals(file)).findFirst().get();
             picturesInRemark.remove(deletingPicture);
             //Если удаляемая картинка уже сохранена в базе, то удаляем ее и из базы
             Pic pic = deletingPicture.getPic();
@@ -297,7 +293,7 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
             //Обновляем изображения с учетом удаленного
             vbRemarksEntryContainer.getChildren().clear();
             for(FileImage fi : picturesInRemark){
-                addNewImageToTheForm(fi.file);
+                addNewImageToTheForm(fi.getFile());
             }
         });
 
@@ -363,13 +359,5 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
         return true;
     }
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    private class FileImage{
-        File file;
-        Image image;
-        Pic pic;
-    }
+
 }

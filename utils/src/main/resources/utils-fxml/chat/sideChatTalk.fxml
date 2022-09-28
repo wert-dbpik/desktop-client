@@ -40,18 +40,24 @@
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <TextArea fx:id="taMessageText" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <TextArea fx:id="taMessageText" maxHeight="1.7976931348623157E308" wrapText="true" VBox.vgrow="ALWAYS" />
+                              <VBox fx:id="vbPictures" />
+                           </children>
+                        </VBox>
                      </children>
                   </AnchorPane>
               </items>
             </SplitPane>
             <HBox alignment="CENTER_RIGHT" VBox.vgrow="NEVER">
                <children>
-                  <Button fx:id="btnSend" mnemonicParsing="false" text="пуск">
+                  <Button fx:id="btnAddPicture" mnemonicParsing="false" text="pic">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
+                  <Button fx:id="btnSend" mnemonicParsing="false" text="пуск" />
                </children>
             </HBox>
          </children>
