@@ -69,26 +69,26 @@ public class AppMenuController {
         PANE_WITH_SEARCH = createSearchField();
 
 
-//        SideChat sideChat = new SideChat();
-//
-//        btnChat.setText("чат");
-//        btnChat.setGraphic(new ImageView(CHAT_WHITE_IMG));
-//        btnChat.setOnAction(event -> {
-//            open = !open;
-//            if(open) {
-//                SP_CHAT.setPrefWidth(250.0);
-//                SP_CHAT.setMinWidth(250.0);
-//                SP_CHAT.setMaxWidth(250.0);
-//                SP_CHAT.getChildren().add(sideChat.getChatVBox());
-//            }else {
-//                for(double width = SP_CHAT.getWidth(); width >= 0; width--){
-//                    SP_CHAT.setPrefWidth(width);
-//                    SP_CHAT.setMinWidth(width);
-//                    SP_CHAT.setMaxWidth(width);
-//                                    }
-//                SP_CHAT.getChildren().clear();
-//            }
-//        });
+        SideChat sideChat = new SideChat();
+
+        btnChat.setText("чат");
+        btnChat.setGraphic(new ImageView(CHAT_WHITE_IMG));
+        btnChat.setOnAction(event -> {
+            open = !open;
+            if(open) {
+                SP_CHAT.setPrefWidth(250.0);
+                SP_CHAT.setMinWidth(250.0);
+                SP_CHAT.setMaxWidth(250.0);
+                SP_CHAT.getChildren().add(sideChat.getChatVBox());
+            }else {
+                for(double width = SP_CHAT.getWidth(); width >= 0; width--){
+                    SP_CHAT.setPrefWidth(width);
+                    SP_CHAT.setMinWidth(width);
+                    SP_CHAT.setMaxWidth(width);
+                                    }
+                SP_CHAT.getChildren().clear();
+            }
+        });
         log.debug("initialize : блок инициализации успешно выполнен");
     }
 

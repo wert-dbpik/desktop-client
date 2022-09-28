@@ -86,8 +86,6 @@ public class ApplicationController {
             log.debug("initialize : appMenu.fxml создается ...");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/appWindow/appMenu.fxml"));
             Parent parent = loader.load();
-            log.debug("initialize : spAppMenu = " + spAppMenu);
-            log.debug("initialize : parent = " + parent);
             spAppMenu.getChildren().add(parent);
             log.debug("initialize : appMenu.fxml успешно создана и добавлена к  spAppMenu");
 
