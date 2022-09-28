@@ -43,7 +43,7 @@ public class BtnImages {
     public static Image SEND_MESSAGE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/send-message(32x32).png"), size16, size16, true, true);
     public static Image CHAT_WHITE_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/chat-white(32x32).png"), size16, size16, true, true);
     public static Image CHATS_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/chats(32x32).png"), size16, size16, true, true);
-    public static Image BTN_ADD_PHOTO_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/add_image.png"), size64, size64, true, true);
+    public static Image BTN_ADD_PHOTO_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/add_Image.png"), size64, size64, true, true);
 
 
 
