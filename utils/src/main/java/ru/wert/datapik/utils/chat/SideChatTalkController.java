@@ -1,5 +1,7 @@
 package ru.wert.datapik.utils.chat;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -24,7 +26,10 @@ import static ru.wert.datapik.utils.images.BtnImages.SEND_MESSAGE_IMG;
 public class SideChatTalkController {
 
     @FXML
-    private StackPane spMessageArea;
+    private StackPane spMessageContainer;
+
+    @FXML
+    private SplitPane splitPane;
 
     @FXML
     private VBox vbPictures;
@@ -67,20 +72,24 @@ public class SideChatTalkController {
             chat.showChatGroups();
         });
 
+        SplitPane.Divider divider = splitPane.getDividers().get(0);
+
+
         //Применим CSS стили к TextArea
         taMessageText.setId("blobTextArea");
         //Сделаем из стандартного TextArea раздуваемый
-        textHolder.textProperty().bind(taMessageText.textProperty());
+        textHolder.textProperty().bind(taMessageText.accessibleTextProperty());
         textHolder.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             if (oldHeight != newValue.getHeight()) {
                 oldHeight = newValue.getHeight();
-                double newHeight = textHolder.getLayoutBounds().getHeight() + 30;
+                double newHeight = textHolder.getLayoutBounds().getHeight()+30;
                 taMessageText.setPrefHeight(newHeight);
                 taMessageText.setMinHeight(newHeight);
+                taMessageText.setMaxHeight(newHeight);
+
+                divider.setPosition(1 - newHeight / splitPane.getHeight());
             }
         });
-
-
 
     }
 
