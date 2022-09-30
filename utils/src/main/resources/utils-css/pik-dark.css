@@ -388,8 +388,6 @@
 #blobTextArea {
     -fx-background-insets: 0;
     -fx-background-color: transparent, white, transparent, white;
-    -fx-border-width: 1 1 1 1;
-    -fx-border-style: solid;
 }
 
 #blobTextArea .content {

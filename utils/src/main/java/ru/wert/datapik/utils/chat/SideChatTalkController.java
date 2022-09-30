@@ -4,6 +4,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -57,6 +59,7 @@ public class SideChatTalkController {
     //Переменные для taText
     private Text textHolder = new Text();
     private double oldHeight = 0;
+    private double oldWidth = 0;
 
 
     @FXML
@@ -74,22 +77,28 @@ public class SideChatTalkController {
 
         SplitPane.Divider divider = splitPane.getDividers().get(0);
 
-
         //Применим CSS стили к TextArea
         taMessageText.setId("blobTextArea");
         //Сделаем из стандартного TextArea раздуваемый
-        textHolder.textProperty().bind(taMessageText.accessibleTextProperty());
+        textHolder.textProperty().bind(taMessageText.textProperty());
         textHolder.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            textHolder.setWrappingWidth(taMessageText.getWidth()-10);
             if (oldHeight != newValue.getHeight()) {
                 oldHeight = newValue.getHeight();
-                double newHeight = textHolder.getLayoutBounds().getHeight()+30;
-                taMessageText.setPrefHeight(newHeight);
-                taMessageText.setMinHeight(newHeight);
-                taMessageText.setMaxHeight(newHeight);
 
-                divider.setPosition(1 - newHeight / splitPane.getHeight());
+                double newHeight = textHolder.getLayoutBounds().getHeight()+30;
+                divider.setPosition(1.0 - newHeight / splitPane.getHeight());
+                taMessageText.resize(taMessageText.getWidth(),newHeight);
             }
         });
+
+        taMessageText.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            textHolder.setWrappingWidth(taMessageText.getWidth()-10);
+            double newHeight = textHolder.getLayoutBounds().getHeight()+30;
+            divider.setPosition(1.0 - newHeight / splitPane.getHeight());
+            taMessageText.resize(taMessageText.getWidth(), newHeight);
+        });
+
 
     }
 

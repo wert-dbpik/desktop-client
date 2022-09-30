@@ -29,7 +29,7 @@
             <Separator prefWidth="200.0" />
             <SplitPane fx:id="splitPane" dividerPositions="0.99" maxHeight="1.7976931348623157E308" orientation="VERTICAL" prefWidth="200.0" VBox.vgrow="ALWAYS">
               <items>
-                  <StackPane maxHeight="1.7976931348623157E308">
+                  <StackPane alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308">
                      <children>
                         <ListView fx:id="listOfMessages" maxHeight="1.7976931348623157E308">
                            <padding>
