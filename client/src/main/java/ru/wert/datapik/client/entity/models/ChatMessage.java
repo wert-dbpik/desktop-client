@@ -16,8 +16,9 @@ public class ChatMessage extends _BaseEntity implements Item {
 
     private ChatGroup group; //id руппы чата
     private User user; //id пользователя, написавшего в группе
-    private String text; //Текст сообщения
-    private LocalDateTime creationTime; //Время отправки сообщения
+    private Integer messageType; //тип ообщения, см. EMessageType
+    private String text; //Текст сообщения, либо строку id-шников
+    private String creationTime; //Время отправки сообщения
 
     @Override
     public String getName() {
@@ -27,6 +28,6 @@ public class ChatMessage extends _BaseEntity implements Item {
 
     @Override
     public String toUsefulString() {
-        return "from: " + user.getName() + "message: " + text;
+        return "from: " + user.getName() + " ,type: " + messageType +" ,message: " + text;
     }
 }

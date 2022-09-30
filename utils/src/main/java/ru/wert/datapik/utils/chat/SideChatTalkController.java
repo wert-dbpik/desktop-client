@@ -2,6 +2,8 @@ package ru.wert.datapik.utils.chat;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -13,17 +15,20 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import lombok.Getter;
 import ru.wert.datapik.client.entity.models.ChatMessage;
 import ru.wert.datapik.utils.images.FileImage;
 import ru.wert.datapik.utils.images.MessageContainer;
 import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.utils.views.lists.SimpleListCell;
 
 import java.io.File;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_ADD_CHAT_PIC_IMG;
 import static ru.wert.datapik.utils.images.BtnImages.SEND_MESSAGE_IMG;
+import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class SideChatTalkController {
 
@@ -32,9 +37,6 @@ public class SideChatTalkController {
 
     @FXML
     private SplitPane splitPane;
-
-    @FXML
-    private VBox vbPictures;
 
     @FXML
     private Button btnAddPicture;
@@ -50,22 +52,33 @@ public class SideChatTalkController {
     private TextArea taMessageText;
 
     @FXML
-    private ListView<ChatMessage> listOfMessages;
+    private ListView<ChatMessage> listViewWithMessages;
 
     @FXML
     private Button btnSend;
+
+
     private SideChat chat;
 
-    //Переменные для taText
+    //Переменные для taMessageText
     private Text textHolder = new Text();
     private double oldHeight = 0;
-    private double oldWidth = 0;
 
+    private ObservableList<ChatMessage> messages;
+
+    public void init(SideChat chat){
+        this.chat = chat;
+        messages = FXCollections.observableArrayList();
+
+    }
 
     @FXML
     void initialize(){
+        listViewWithMessages.setCellFactory((ListView<ChatMessage> tv) -> new ChatListCell());
+
         btnSend.setText(null);
         btnSend.setGraphic(new ImageView(SEND_MESSAGE_IMG));
+        btnSend.setOnAction(this::send);
 
         btnAddPicture.setText("");
         btnAddPicture.setGraphic(new ImageView(BTN_ADD_CHAT_PIC_IMG));
@@ -102,10 +115,29 @@ public class SideChatTalkController {
 
     }
 
+    private void send(ActionEvent actionEvent) {
+        String text = taMessageText.getText();
+        ChatMessage message = createChatMessage(EMessageType.CHAT_TEXT, text);
+        messages.add(message);
+        updateListView();
+        taMessageText.setText("");
+
+    }
+
+    private void updateListView() {
+        listViewWithMessages.getItems().clear();
+        listViewWithMessages.getItems().addAll(messages);
+
+    }
 
 
-    public void init(SideChat chat){
-        this.chat = chat;
+    private ChatMessage createChatMessage(EMessageType type, String text){
+        ChatMessage message = new ChatMessage();
+        message.setMessageType(type.ordinal());
+        message.setUser(CH_CURRENT_USER);
+        message.setCreationTime(AppStatic.getCurrentTime());
+        message.setText(text);
 
+        return message;
     }
 }
