@@ -14,7 +14,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"passport", "draftType", "pageNumber", "status"}, callSuper = false)
+@EqualsAndHashCode(of = {"passport", "draftType", "pageNumber", "status", "statusTime"}, callSuper = false)
 public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
 
     private Passport passport; //ОСНОВНОЕ 1
