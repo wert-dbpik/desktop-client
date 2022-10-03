@@ -487,6 +487,48 @@
     -fx-background-color: #8c8c8c;
 }
 
+/*====================      listViewWithMessages  ===============================*/
+
+#listViewWithMessages .list-cell {
+    -fx-background-color: white;
+}
+
+
+#listViewWithMessages .list-cell:selected:focused{
+    -fx-background-color: #ded6b5;
+}
+
+/*==================   OUT    MESSAGES    =================================================*/
+#outMessageData{
+    -fx-padding: 0 5 0 0;
+    -fx-font-style: oblique;
+    -fx-text-fill: royalblue;
+    -fx-alignment: top-right;
+    -fx-text-alignment: right;
+}
+
+#outMessage{
+    -fx-background-color: #edf8eb;
+    -fx-background-radius: 10;
+    -fx-padding: 5;
+}
+
+/*==================   OUT    MESSAGES    =================================================*/
+
+#inMessageData{
+    -fx-padding: 0 0 0 5;
+    -fx-font-style: oblique;
+    -fx-text-fill: royalblue;
+    -fx-alignment: top-left;
+    -fx-text-alignment: left;
+}
+
+#inMessage{
+    -fx-background-color: #f7ebf8;
+    -fx-background-radius: 10;
+    -fx-padding: 5;
+}
+
 
 /*===========   Индикатор мыслительной деятельности   ТОНЕНЬКИЙ  ===========================================*/
 /*.progress-bar > .bar {*/

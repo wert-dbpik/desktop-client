@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="vbMessageContainer" alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Separator fx:id="separator" maxWidth="1.7976931348623157E308">
+         <VBox.margin>
+            <Insets bottom="5.0" top="5.0" />
+         </VBox.margin>
+      </Separator>
+      <Label fx:id="lblFrom" alignment="CENTER_RIGHT" text="Алексей Симонов" textAlignment="RIGHT" />
+      <Label fx:id="lblDate" alignment="CENTER_RIGHT" text="30.09.2022" textAlignment="RIGHT" />
+      <VBox fx:id="vbMessage">
+         <VBox.margin>
+            <Insets bottom="5.0" top="5.0" />
+         </VBox.margin>
+      </VBox>
+   </children>
+</VBox>

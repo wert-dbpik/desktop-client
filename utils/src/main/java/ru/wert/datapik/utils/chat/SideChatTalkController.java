@@ -1,5 +1,6 @@
 package ru.wert.datapik.utils.chat;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -75,6 +76,7 @@ public class SideChatTalkController {
     @FXML
     void initialize(){
         listViewWithMessages.setCellFactory((ListView<ChatMessage> tv) -> new ChatListCell());
+        listViewWithMessages.setId("listViewWithMessages");
 
         btnSend.setText(null);
         btnSend.setGraphic(new ImageView(SEND_MESSAGE_IMG));
@@ -125,8 +127,12 @@ public class SideChatTalkController {
     }
 
     private void updateListView() {
-        listViewWithMessages.getItems().clear();
-        listViewWithMessages.getItems().addAll(messages);
+        Platform.runLater(()->{
+            listViewWithMessages.autosize();
+            listViewWithMessages.getItems().clear();
+            listViewWithMessages.getItems().addAll(messages);
+            listViewWithMessages.refresh();
+        });
 
     }
 

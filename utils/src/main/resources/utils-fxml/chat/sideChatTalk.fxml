@@ -29,20 +29,11 @@
             <Separator prefWidth="200.0" />
             <SplitPane fx:id="splitPane" dividerPositions="0.99" maxHeight="1.7976931348623157E308" orientation="VERTICAL" VBox.vgrow="ALWAYS">
               <items>
-                  <AnchorPane>
-                     <children>
-                        <VBox layoutY="23.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Pane maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
-                              <ListView fx:id="listViewWithMessages" minHeight="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" StackPane.alignment="BOTTOM_CENTER">
-                                 <padding>
-                                    <Insets left="5.0" right="5.0" />
-                                 </padding>
-                              </ListView>
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
+                  <ListView fx:id="listViewWithMessages" minHeight="-Infinity">
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                  </ListView>
                   <StackPane fx:id="spMessageContainer" alignment="TOP_CENTER">
                      <children>
                         <TextArea fx:id="taMessageText" prefRowCount="1" wrapText="true" />

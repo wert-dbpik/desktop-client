@@ -1,11 +1,12 @@
 package ru.wert.datapik.utils.chat;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.entity.models.ChatMessage;
 import ru.wert.datapik.utils.statics.AppStatic;
@@ -16,6 +17,10 @@ import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class ChatListCell extends ListCell<ChatMessage> {
 
+    VBox vbMessageContainer; //Самый верхний контейнер
+    VBox vbMessage; //Само сообщение
+    Label lblFrom;
+    Label lblDate;
     static final String OUT = "message_out"; //Исходящие сообщения
     static final String IN = "message_in";   //Входящие сообщения
 
@@ -42,33 +47,45 @@ public class ChatListCell extends ListCell<ChatMessage> {
     private VBox formatMessage(ChatMessage message, String in_out){
         VBox inMessage = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/chat/inMessage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/chat/message.fxml"));
             inMessage = loader.load();
             separator = (Separator) inMessage.lookup("#separator");
-            Label lblFrom = (Label) inMessage.lookup("#lblFrom");
-            Label lblDate = (Label) inMessage.lookup("#lblDate");
-            VBox vbMessage = (VBox) inMessage.lookup("#vbMessage");
+            separator.setVisible(false);
+            lblFrom = (Label) inMessage.lookup("#lblFrom");
+            lblDate = (Label) inMessage.lookup("#lblDate");
+            vbMessageContainer = (VBox) inMessage.lookup("#vbMessageContainer");
+            vbMessage = (VBox) inMessage.lookup("#vbMessage");
             vbMessage.prefWidthProperty().bind(separator.widthProperty().multiply(0.8));
 
-            lblFrom.setText(message.getUser().getName());
-            lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime()));
-            EMessageType type = EMessageType.values()[message.getMessageType()];
-
-            switch(type){
-                case CHAT_TEXT: mountText(vbMessage, message); break;
-                case CHAT_DRAFTS: mountDrafts(vbMessage, message); break;
-                case CHAT_PICS: mountPics(vbMessage, message); break;
-            }
-
             if(in_out.equals(OUT)){
-                lblFrom.setStyle("-fx-text-alignment: right; -fx-alignment: top-right; -fx-font-style: oblique; -fx-text-fill: royalblue;");
-                lblDate.setStyle("-fx-text-alignment: right; -fx-alignment: top-right; -fx-font-style: oblique; -fx-text-fill: royalblue;");
-                vbMessage.setStyle("-fx-alignment: top-right; -fx-start-margin: 50px;");
+                vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
+                lblFrom.setId("outMessageData");
+                lblDate.setId("outMessageData");
+                vbMessage.setId("outMessage");
             } else {
-                lblFrom.setStyle("-fx-text-alignment: left; -fx-alignment: top-left; -fx-font-style: oblique; -fx-text-fill: royalblue;");
-                lblDate.setStyle("-fx-text-alignment: left; -fx-alignment: top-left; -fx-font-style: oblique; -fx-text-fill: royalblue;");
-                vbMessage.setStyle("-fx-alignment: top-left; -fx-end-margin: 50px;");
+                vbMessageContainer.setAlignment(Pos.TOP_LEFT);
+                lblFrom.setId("inMessageData");
+                lblDate.setId("inMessageData");
+                vbMessage.setId("inMessage");
             }
+
+            Platform.runLater(()->{
+
+                lblFrom.setText(message.getUser().getName());
+                lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime()));
+                EMessageType type = EMessageType.values()[message.getMessageType()];
+
+                switch(type){
+                    case CHAT_TEXT: mountText(vbMessage, message); break;
+                    case CHAT_DRAFTS: mountDrafts(vbMessage, message); break;
+                    case CHAT_PICS: mountPics(vbMessage, message); break;
+                }
+
+                vbMessage.autosize();
+            });
+
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,6 +104,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
 //        text.setId("blobTextArea");
 
         vbMessage.getChildren().add(text);
+
     }
 
     private void mountPics(VBox vbMessage, ChatMessage message) {
