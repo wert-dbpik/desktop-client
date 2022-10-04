@@ -97,11 +97,8 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
     private void mountText(VBox vbMessage, ChatMessage message) {
         Label text = new Label(message.getText());
-        text.setStyle("-fx-text-fill: black; -fx-font-size: 14;");
-//        text.setPrefWidth(vbMessage.getWidth());
-        text.prefWidthProperty().bind(separator.widthProperty().multiply(0.9));
         text.setWrapText(true);
-//        text.setId("blobTextArea");
+
 
         vbMessage.getChildren().add(text);
 

@@ -498,6 +498,12 @@
     -fx-background-color: #ded6b5;
 }
 
+#outMessage .label, #inMessage .label{
+    -fx-text-fill: black;
+    -fx-font-size: 14;
+    -fx-padding: 5px;
+}
+
 /*==================   OUT    MESSAGES    =================================================*/
 #outMessageData{
     -fx-padding: 0 5 0 0;
