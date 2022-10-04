@@ -10,12 +10,23 @@ import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.entity.models.ChatMessage;
+import ru.wert.datapik.client.entity.models.Pic;
+import ru.wert.datapik.utils.images.ImageUtil;
 import ru.wert.datapik.utils.statics.AppStatic;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ru.wert.datapik.utils.images.BtnImages.SOLID_3D_IMG;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_FILES;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_PICS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_TEMPDIR;
 
 public class ChatListCell extends ListCell<ChatMessage> {
 
@@ -57,7 +68,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
             lblDate = (Label) inMessage.lookup("#lblDate");
             vbMessageContainer = (VBox) inMessage.lookup("#vbMessageContainer");
             vbMessage = (VBox) inMessage.lookup("#vbMessage");
-            vbMessage.prefWidthProperty().bind(separator.widthProperty().multiply(0.8));
+
 
             if(in_out.equals(OUT)){
                 vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
@@ -72,7 +83,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
             }
 
             Platform.runLater(()->{
-
+                vbMessage.autosize();
                 lblFrom.setText(message.getUser().getName());
                 lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime()));
                 EMessageType type = EMessageType.values()[message.getMessageType()];
@@ -83,11 +94,8 @@ public class ChatListCell extends ListCell<ChatMessage> {
                     case CHAT_PICS: mountPics(vbMessage, message); break;
                 }
 
-                vbMessage.autosize();
+
             });
-
-
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,15 +106,33 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
 
     private void mountText(VBox vbMessage, ChatMessage message) {
+        vbMessage.prefWidthProperty().bind(separator.widthProperty().multiply(0.8));
         Label text = new Label(message.getText());
         text.setWrapText(true);
         vbMessage.getChildren().add(text);
     }
 
     private void mountPics(VBox vbMessage, ChatMessage message) {
-        Label labelWithImage = new Label();
-        labelWithImage.setGraphic(new ImageView(SOLID_3D_IMG));
-        vbMessage.getChildren().add(labelWithImage);
+        String text = message.getText();
+        List<Long> ids =  Arrays.asList(text.split(" ", -1))
+                .stream().map(Long::valueOf).collect(Collectors.toList());
+        for(Long id : ids){
+            Pic p = CH_PICS.findById(id);
+            String tempFileName = "chat" + "-" + p.getId() + "." + p.getExtension();
+            boolean res = CH_FILES.download("pics", //Постоянная папка в каталоге для чертежей
+                    String.valueOf(p.getId()), //название скачиваемого файла
+                    "." + p.getExtension(), //расширение скачиваемого файла
+                    WF_TEMPDIR.toString(),//временная папка, куда необходимо скачать фай
+                    "chat"); //префикс
+
+            File file = new File(WF_TEMPDIR.toString() + "\\" + tempFileName);
+            //Добавляем файл в общий список
+            ImageView imageView = ImageUtil.createImageViewFromFile(file, null, 200, 0.5f, 0.7f, 0.6f);
+            vbMessage.getChildren().add(imageView);
+            imageView.fitWidthProperty().unbind();
+        }
+
+
     }
 
     private void mountDrafts(VBox vbMessage, ChatMessage message) {

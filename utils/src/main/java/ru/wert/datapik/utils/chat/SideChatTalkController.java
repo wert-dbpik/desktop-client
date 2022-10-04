@@ -18,17 +18,23 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import lombok.Getter;
+import org.apache.commons.io.FilenameUtils;
 import ru.wert.datapik.client.entity.models.ChatMessage;
+import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.utils.images.FileImage;
+import ru.wert.datapik.utils.images.ImageUtil;
 import ru.wert.datapik.utils.images.MessageContainer;
 import ru.wert.datapik.utils.statics.AppStatic;
 import ru.wert.datapik.utils.views.lists.SimpleListCell;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.datapik.utils.images.BtnImages.BTN_ADD_CHAT_PIC_IMG;
 import static ru.wert.datapik.utils.images.BtnImages.SEND_MESSAGE_IMG;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_FILES;
+import static ru.wert.datapik.utils.services.ChogoriServices.CH_PICS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class SideChatTalkController {
@@ -119,21 +125,20 @@ public class SideChatTalkController {
     }
 
     private void sendPicture(ActionEvent event) {
+        StringBuilder text = new StringBuilder();
         // Пользователь выбирает несколько рисунков
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Изображения", "*.png", "*.jpg");
         List<File> chosenFiles = AppStatic.chooseManyFile(event, new File("C:\\"), filter);
         if(chosenFiles == null || chosenFiles.isEmpty()) return;
         for(File file : chosenFiles){
-            //Добавляем рисунок на форму
-//            Image image = addNewImageToTheForm(file);
-            //Добавляем рисунок в коллекцию без поля pic, так как он еще не сохранен в БД
-//            picturesInRemark.add(new FileImage(file, image, null));
+//            ImageView imageView = ImageUtil.createImageViewFromFile(file, null);
+            Image image = new Image(file.toURI().toString());
+            Pic savedPic = ImageUtil.createPicFromFileAndSaveItToDB(image, file);
+            text.append(savedPic.getId());
+            text.append(" ");
         }
 
-
-
-        String text = "0 1";
-        ChatMessage message = createChatMessage(EMessageType.CHAT_PICS, text);
+        ChatMessage message = createChatMessage(EMessageType.CHAT_PICS, text.toString().trim());
         messages.add(message);
         updateListView();
         taMessageText.setText("");

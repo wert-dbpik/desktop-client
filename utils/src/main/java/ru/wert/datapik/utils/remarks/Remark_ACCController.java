@@ -3,11 +3,9 @@ package ru.wert.datapik.utils.remarks;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -168,47 +166,14 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
             if(fi.getPic() != null){
                 allPics.add(fi.getPic());
             } else {
-                Pic pic = createPicFromFileAndSaveItToDB(fi.getFile());
+                //Находим в коллекции picturesInRemark необходимый Image соответствующий нашему File
+                Image picture = picturesInRemark.stream().filter(i->i.getFile().equals(fi.getFile())).findFirst().get().getImage();
+                Pic pic = ImageUtil.createPicFromFileAndSaveItToDB(picture, fi.getFile());
                 allPics.add(pic);
             }
         }
 
         return allPics;
-    }
-
-    /**
-     * Метод создает Pic и сохраняет его в БД
-     * Затем изображение, соответствующее Pic загружается на сервер
-     * Возвращается сохраненный в базе Pic
-     */
-    private Pic createPicFromFileAndSaveItToDB(File file){
-        //Находим в коллекции picturesInRemark необходимый Image соответствующий нашему File
-        Image picture = picturesInRemark.stream().filter(i->i.getFile().equals(file)).findFirst().get().getImage();
-        //Создаем новый экземпляр Pic с полями
-        Pic newPic = new Pic();
-        newPic.setUser(CH_CURRENT_USER);
-        newPic.setTime(AppStatic.getCurrentTime());
-        newPic.setWidth((int) picture.getWidth());
-        newPic.setHeight((int) picture.getHeight());
-        //Готовим файл для добавления картинки в папку "pics" на сервере
-        //сжимаем картинку до приемлимых значений
-        File compressedFile = ImageUtil.compressImageToFile(file, null);
-        //Добавляем расширение уже сжатого файла
-        newPic.setExtension(FilenameUtils.getExtension(compressedFile.toString()));
-
-        //Сохраняем Pic в базе данных
-        Pic savedPic = CH_PICS.save(newPic);
-
-        //Загружаем картинку на сервер
-        String fileName = savedPic.getId() + "." + FilenameUtils.getExtension(compressedFile.toString());
-        try {
-
-            CH_FILES.upload(fileName, "pics", compressedFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return savedPic;
     }
 
     /**
@@ -234,7 +199,7 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
      */
     private ImageView addNewImageToTheForm(File file){
 
-        ImageView imageView = ImageUtil.addNewImageToTheForm(file, taRemarksText);
+        ImageView imageView = ImageUtil.createImageViewFromFile(file, taRemarksText, null,0.3f, 0.6f, 0.4f);
 
         imageView.setOnContextMenuRequested(e ->{
             ContextMenu contextMenu = createContextMenu(file);
