@@ -40,9 +40,6 @@ public class SideChatTalkController {
     private SplitPane splitPane;
 
     @FXML
-    private Button btnAddPicture;
-
-    @FXML
     private Button btnChatGroups;
 
     @FXML
@@ -57,6 +54,9 @@ public class SideChatTalkController {
 
     @FXML
     private Button btnSend;
+
+    @FXML
+    private Button btnAddPicture;
 
 
     private SideChat chat;
@@ -85,6 +85,7 @@ public class SideChatTalkController {
         btnAddPicture.setText("");
         btnAddPicture.setGraphic(new ImageView(BTN_ADD_CHAT_PIC_IMG));
         btnAddPicture.setTooltip(new Tooltip("Добавить изображение"));
+        btnAddPicture.setOnAction(this::sendPicture);
 
         btnChatGroups.setOnAction(e->{
             chat.showChatGroups();
@@ -115,6 +116,27 @@ public class SideChatTalkController {
         });
 
 
+    }
+
+    private void sendPicture(ActionEvent event) {
+        // Пользователь выбирает несколько рисунков
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Изображения", "*.png", "*.jpg");
+        List<File> chosenFiles = AppStatic.chooseManyFile(event, new File("C:\\"), filter);
+        if(chosenFiles == null || chosenFiles.isEmpty()) return;
+        for(File file : chosenFiles){
+            //Добавляем рисунок на форму
+//            Image image = addNewImageToTheForm(file);
+            //Добавляем рисунок в коллекцию без поля pic, так как он еще не сохранен в БД
+//            picturesInRemark.add(new FileImage(file, image, null));
+        }
+
+
+
+        String text = "0 1";
+        ChatMessage message = createChatMessage(EMessageType.CHAT_PICS, text);
+        messages.add(message);
+        updateListView();
+        taMessageText.setText("");
     }
 
     private void send(ActionEvent actionEvent) {

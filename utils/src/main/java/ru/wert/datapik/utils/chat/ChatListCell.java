@@ -7,12 +7,14 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Separator;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.entity.models.ChatMessage;
 import ru.wert.datapik.utils.statics.AppStatic;
 
 import java.io.IOException;
 
+import static ru.wert.datapik.utils.images.BtnImages.SOLID_3D_IMG;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class ChatListCell extends ListCell<ChatMessage> {
@@ -98,13 +100,13 @@ public class ChatListCell extends ListCell<ChatMessage> {
     private void mountText(VBox vbMessage, ChatMessage message) {
         Label text = new Label(message.getText());
         text.setWrapText(true);
-
-
         vbMessage.getChildren().add(text);
-
     }
 
     private void mountPics(VBox vbMessage, ChatMessage message) {
+        Label labelWithImage = new Label();
+        labelWithImage.setGraphic(new ImageView(SOLID_3D_IMG));
+        vbMessage.getChildren().add(labelWithImage);
     }
 
     private void mountDrafts(VBox vbMessage, ChatMessage message) {

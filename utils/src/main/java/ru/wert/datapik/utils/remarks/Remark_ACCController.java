@@ -222,7 +222,7 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
         if(chosenFiles == null || chosenFiles.isEmpty()) return;
         for(File file : chosenFiles){
             //Добавляем рисунок на форму
-            Image image = addNewImageToTheForm(file);
+            Image image = addNewImageToTheForm(file).getImage();
             //Добавляем рисунок в коллекцию без поля pic, так как он еще не сохранен в БД
             picturesInRemark.add(new FileImage(file, image, null));
         }
@@ -232,41 +232,9 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
      * Метод добавляет изображение на форму и возвращает Image,
      * необходимый для получения исходных размеров изображения
      */
-    private Image addNewImageToTheForm(File file){
+    private ImageView addNewImageToTheForm(File file){
 
-        Image image = new Image(file.toURI().toString());
-
-        double w = image.getWidth();
-        double h = image.getHeight();
-
-        float weight;
-        if (w - h < w * 0.1f)
-            weight = 0.3f;
-        else if (w - h > w * 0.1f)
-            weight = 0.6f;
-        else
-            weight = 0.4f;
-
-        ImageView imageView = new ImageView(image);
-        imageView.setStyle("-fx-start-margin: 5");
-        imageView.setStyle("-fx-end-margin: 5");
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(600 * weight);
-
-        imageView.fitWidthProperty().bind(taRemarksText.widthProperty().multiply(weight));
-
-        imageView.setOnMouseEntered(e -> {
-            ((Node) e.getSource()).getScene().setCursor(javafx.scene.Cursor.HAND);
-        });
-        imageView.setOnMouseExited(e -> {
-            ((Node) e.getSource()).getScene().setCursor(javafx.scene.Cursor.DEFAULT);
-        });
-
-        imageView.setOnMouseClicked(e -> {
-            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
-                new Pic_OutstandingPreviewer().create(null, file);
-            }
-        });
+        ImageView imageView = ImageUtil.addNewImageToTheForm(file, taRemarksText);
 
         imageView.setOnContextMenuRequested(e ->{
             ContextMenu contextMenu = createContextMenu(file);
@@ -275,7 +243,7 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
 
         vbRemarksEntryContainer.getChildren().add(imageView);
 
-        return image;
+        return imageView;
     }
 
     private ContextMenu createContextMenu(File file) {
@@ -336,9 +304,9 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
 
             File file = new File(WF_TEMPDIR.toString() + "\\" + tempFileName);
             //Добавляем файл в общий список
-            Image image = addNewImageToTheForm(file);
+            ImageView imageView = addNewImageToTheForm(file);
 
-            picturesInRemark.add(new FileImage(file, image, p));
+            picturesInRemark.add(new FileImage(file, imageView.getImage(), p));
         }
 
     }

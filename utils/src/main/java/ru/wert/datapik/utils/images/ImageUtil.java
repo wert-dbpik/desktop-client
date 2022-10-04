@@ -1,6 +1,13 @@
 package ru.wert.datapik.utils.images;
 
+import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Control;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import ru.wert.datapik.utils.remarks.Pic_OutstandingPreviewer;
 import ru.wert.datapik.winform.statics.WinformStatic;
 
 import javax.imageio.IIOImage;
@@ -72,5 +79,48 @@ public class ImageUtil {
         }
 
         return compressedImageFile;
+    }
+
+    /**
+     * Метод добавляет изображение на форму и возвращает Image,
+     * необходимый для получения исходных размеров изображения
+     */
+    public static ImageView addNewImageToTheForm(File file, Control node){
+
+        Image image = new Image(file.toURI().toString());
+
+        double w = image.getWidth();
+        double h = image.getHeight();
+
+        float weight;
+        if (w - h < w * 0.1f)
+            weight = 0.3f;
+        else if (w - h > w * 0.1f)
+            weight = 0.6f;
+        else
+            weight = 0.4f;
+
+        ImageView imageView = new ImageView(image);
+        imageView.setStyle("-fx-start-margin: 5");
+        imageView.setStyle("-fx-end-margin: 5");
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(600 * weight);
+
+        imageView.setOnMouseEntered(e -> {
+            ((Node) e.getSource()).getScene().setCursor(javafx.scene.Cursor.HAND);
+        });
+        imageView.setOnMouseExited(e -> {
+            ((Node) e.getSource()).getScene().setCursor(javafx.scene.Cursor.DEFAULT);
+        });
+
+        imageView.setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
+                new Pic_OutstandingPreviewer().create(null, file);
+            }
+        });
+
+        imageView.fitWidthProperty().bind(node.widthProperty().multiply(weight));
+
+        return imageView;
     }
 }
