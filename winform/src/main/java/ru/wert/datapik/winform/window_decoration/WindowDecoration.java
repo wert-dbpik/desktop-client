@@ -93,7 +93,7 @@ public class WindowDecoration {
             windowName.setText(headerName);
 
             Scene scene = new Scene(decoration);
-            scene.getStylesheets().add(this.getClass().getResource("/utils-css/pik-dark.css").toString());;
+            scene.getStylesheets().add(this.getClass().getResource("/chogori-css/pik-dark.css").toString());;
 
             window = new Stage();
             window.setScene(scene);
