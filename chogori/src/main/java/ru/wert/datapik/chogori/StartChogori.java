@@ -102,7 +102,7 @@ public class StartChogori extends Application {
 
             stage.sizeToScene();
             stage.setResizable(true);
-            stage.getIcons().add(new Image("/chogori-pics/Pikovka(256x256).png"));
+            stage.getIcons().add(new Image("/chogori-pics/new_logo_black256.png"));
             stage.setTitle("База ПИК");
 
             stage.show();

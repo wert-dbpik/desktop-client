@@ -12,6 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import lombok.Getter;
+import ru.wert.datapik.chogori.application.app_window.AppMenuController;
 import ru.wert.datapik.client.entity.models.ChatMessage;
 import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.chogori.images.ImageUtil;
@@ -124,7 +125,7 @@ public class SideChatTalkController {
     }
 
     private void sendDraft(ActionEvent actionEvent) {
-
+        AppMenuController.openDrafts(actionEvent);
     }
 
     private void sendPicture(ActionEvent event) {
