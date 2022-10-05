@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.chat.SideChatTalkController">
+<AnchorPane maxHeight="1.7976931348623157E308" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.utils.chat.SideChatTalkController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -29,7 +29,7 @@
             <Separator prefWidth="200.0" />
             <SplitPane fx:id="splitPane" dividerPositions="0.99" maxHeight="1.7976931348623157E308" orientation="VERTICAL" VBox.vgrow="ALWAYS">
               <items>
-                  <ListView fx:id="listViewWithMessages" minHeight="-Infinity">
+                  <ListView fx:id="listViewWithMessages" minHeight="-Infinity" minWidth="0.0">
                      <padding>
                         <Insets left="5.0" right="5.0" />
                      </padding>
@@ -43,6 +43,7 @@
             </SplitPane>
             <HBox alignment="CENTER_RIGHT" VBox.vgrow="NEVER">
                <children>
+                  <Button fx:id="btnAddDraft" mnemonicParsing="false" text="draft" />
                   <Button fx:id="btnAddPicture" mnemonicParsing="false" text="pic">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

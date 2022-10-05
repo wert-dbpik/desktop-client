@@ -45,6 +45,7 @@ public class BtnImages {
     public static Image CHATS_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/chats(32x32).png"), size16, size16, true, true);
     public static Image BTN_ADD_PHOTO_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/add_Image.png"), size64, size64, true, true);
     public static Image BTN_ADD_CHAT_PIC_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/add_Image.png"), size16, size16, true, true);
+    public static Image BTN_ADD_CHAT_DRAFT_IMG = new Image(BtnImages.class.getResourceAsStream("/utils-pics/btns/add_draft.png"), size16, size16, true, true);
 
 
 

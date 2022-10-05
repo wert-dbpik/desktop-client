@@ -7,8 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,11 +33,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static ru.wert.datapik.utils.images.BtnImages.BTN_ADD_CHAT_PIC_IMG;
-import static ru.wert.datapik.utils.images.BtnImages.SEND_MESSAGE_IMG;
+import static ru.wert.datapik.utils.images.BtnImages.*;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_FILES;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PICS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
 
 public class SideChatTalkController {
 
@@ -64,8 +66,16 @@ public class SideChatTalkController {
     @FXML
     private Button btnAddPicture;
 
+    @FXML
+    private Button btnAddDraft;
+
 
     private SideChat chat;
+
+    public static final float MESSAGE_WIDTH = 0.8f;
+    public static final float PORTRAIT_WIDTH = 0.5f;
+    public static final float LANDSCAPE_WIDTH = 0.8f;
+    public static final float SQUARE_WIDTH = 0.6f;
 
     //Переменные для taMessageText
     private Text textHolder = new Text();
@@ -92,6 +102,11 @@ public class SideChatTalkController {
         btnAddPicture.setGraphic(new ImageView(BTN_ADD_CHAT_PIC_IMG));
         btnAddPicture.setTooltip(new Tooltip("Добавить изображение"));
         btnAddPicture.setOnAction(this::sendPicture);
+
+        btnAddDraft.setText("");
+        btnAddDraft.setGraphic(new ImageView(BTN_ADD_CHAT_DRAFT_IMG));
+        btnAddDraft.setTooltip(new Tooltip("Добавить чертеж"));
+        btnAddDraft.setOnAction(this::sendDraft);
 
         btnChatGroups.setOnAction(e->{
             chat.showChatGroups();
@@ -121,6 +136,10 @@ public class SideChatTalkController {
             taMessageText.resize(taMessageText.getWidth(), newHeight);
         });
 
+
+    }
+
+    private void sendDraft(ActionEvent actionEvent) {
 
     }
 

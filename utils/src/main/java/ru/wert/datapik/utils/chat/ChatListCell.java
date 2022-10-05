@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static ru.wert.datapik.utils.chat.SideChatTalkController.*;
 import static ru.wert.datapik.utils.images.BtnImages.SOLID_3D_IMG;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_FILES;
 import static ru.wert.datapik.utils.services.ChogoriServices.CH_PICS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.datapik.winform.statics.WinformStatic.CHAT_WIDTH;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_TEMPDIR;
 
 public class ChatListCell extends ListCell<ChatMessage> {
@@ -106,8 +108,15 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
 
     private void mountText(VBox vbMessage, ChatMessage message) {
-        vbMessage.prefWidthProperty().bind(separator.widthProperty().multiply(0.8));
+//        vbMessage.prefWidthProperty().bind(separator.widthProperty().multiply(0.8));
+//        vbMessage.setMaxWidth(200.0);
+
+
+
         Label text = new Label(message.getText());
+        text.setPrefWidth(CHAT_WIDTH * MESSAGE_WIDTH);
+//        text.prefWidthProperty().bind(separator.widthProperty().multiply(MESSAGE_WIDTH));
+
         text.setWrapText(true);
         vbMessage.getChildren().add(text);
     }
@@ -127,7 +136,8 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
             File file = new File(WF_TEMPDIR.toString() + "\\" + tempFileName);
             //Добавляем файл в общий список
-            ImageView imageView = ImageUtil.createImageViewFromFile(file, null, 200, 0.5f, 0.7f, 0.6f);
+            ImageView imageView = ImageUtil.createImageViewFromFile(file, null,
+                    (int) CHAT_WIDTH, PORTRAIT_WIDTH, LANDSCAPE_WIDTH, SQUARE_WIDTH);
             vbMessage.getChildren().add(imageView);
             imageView.fitWidthProperty().unbind();
         }

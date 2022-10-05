@@ -23,6 +23,8 @@ public class WinformStatic {
     public static File WF_TEMPDIR; //Директория временного хранения
     public static File HOME_BAZA_PIK; //Папка в домашней директории пользователя
 
+    public static final double CHAT_WIDTH = 350.0; //первоначальная ширина чата
+
     /**
      * Метод обеспечивает закрытие любого окна
      * В случае, если это окно главного приложения, то осуществляется выход из приложения

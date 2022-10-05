@@ -42,6 +42,7 @@ import static ru.wert.datapik.utils.services.ChogoriServices.CH_CHAT_GROUPS;
 import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.datapik.winform.statics.WinformStatic.CHAT_WIDTH;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 @Slf4j
 public class AppMenuController {
@@ -68,7 +69,6 @@ public class AppMenuController {
         SEARCH_CONTAINER = hbSearch;
         PANE_WITH_SEARCH = createSearchField();
 
-
         SideChat sideChat = new SideChat();
 
         btnChat.setText("чат");
@@ -76,9 +76,9 @@ public class AppMenuController {
         btnChat.setOnAction(event -> {
             open = !open;
             if(open) {
-                SP_CHAT.setPrefWidth(250.0);
-                SP_CHAT.setMinWidth(250.0);
-                SP_CHAT.setMaxWidth(250.0);
+                SP_CHAT.setPrefWidth(CHAT_WIDTH);
+                SP_CHAT.setMinWidth(CHAT_WIDTH);
+                SP_CHAT.setMaxWidth(CHAT_WIDTH);
                 SP_CHAT.getChildren().add(sideChat.getChatVBox());
             }else {
                 for(double width = SP_CHAT.getWidth(); width >= 0; width--){
@@ -295,7 +295,7 @@ public class AppMenuController {
         draftsCabinetItem.setOnAction(this::openFileCabinet);
 
         MenuItem draftsItem = new MenuItem("Чертежи");
-        draftsItem.setOnAction(this::openDrafts);
+        draftsItem.setOnAction(AppMenuController::openDrafts);
 
         MenuItem changeHistoryItem = new MenuItem("История изменений");
         changeHistoryItem.setOnAction(this::openChangeHistory);
@@ -364,7 +364,7 @@ public class AppMenuController {
     /**
      * -- ЧЕРТЕЖИ
      */
-    private void openDrafts(ActionEvent event) {
+    public static void openDrafts(ActionEvent event) {
 
         Task<Void> openDraftsTask = new Task<Void>() {
             @Override
