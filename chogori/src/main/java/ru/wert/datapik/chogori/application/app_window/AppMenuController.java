@@ -1,11 +1,9 @@
 package ru.wert.datapik.chogori.application.app_window;
 
-import com.sun.javafx.scene.control.skin.ContextMenuContent;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -23,11 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
 import ru.wert.datapik.client.entity.models.ChatGroup;
 import ru.wert.datapik.client.entity.models.User;
-import ru.wert.datapik.client.utils.BLConst;
-import ru.wert.datapik.utils.chat.SideChat;
-import ru.wert.datapik.utils.help.About;
-import ru.wert.datapik.utils.search.SearchField;
-import ru.wert.datapik.winform.modal.LongProcess;
+import ru.wert.datapik.chogori.chat.SideChat;
+import ru.wert.datapik.chogori.help.About;
+import ru.wert.datapik.chogori.search.SearchField;
 import ru.wert.datapik.winform.modal.WaitAMinute;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
@@ -37,11 +33,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
-import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_CHAT_GROUPS;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.datapik.chogori.images.BtnImages.*;
+import static ru.wert.datapik.chogori.services.ChogoriServices.CH_CHAT_GROUPS;
+import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.*;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.datapik.winform.statics.WinformStatic.CHAT_WIDTH;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 @Slf4j
@@ -193,7 +189,7 @@ public class AppMenuController {
      */
     private void openChat(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/chat/chat.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/chat.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Чат", parent, true, loader.getController());
@@ -219,7 +215,7 @@ public class AppMenuController {
      */
     private void changePassword(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/password/changePassword.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/password/changePassword.fxml"));
             Parent parent = loader.load();
 
             new WindowDecoration("Смена пароля", parent, false, WF_MAIN_STAGE, true);
@@ -242,7 +238,7 @@ public class AppMenuController {
      */
     private void openSettings(Event e){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/settings/settings.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/settings/settings.fxml"));
             Parent parent = loader.load();
 
             new WindowDecoration("Настройки", parent, false, WF_MAIN_STAGE, true);
@@ -313,7 +309,7 @@ public class AppMenuController {
      */
     private void openChangeHistory(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/logging/changeHistory.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/logging/changeHistory.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("История изменений", parent, true,  loader.getController());
@@ -427,7 +423,7 @@ public class AppMenuController {
      */
     private void openCatalogOfMaterials(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfMaterials/catalogOfMaterials.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/catalogOfMaterials/catalogOfMaterials.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Материалы", parent, true, null);
@@ -462,7 +458,7 @@ public class AppMenuController {
      */
     void openCatalogOfProducts(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfProducts/catalogOfProducts.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/catalogOfProducts/catalogOfProducts.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Изделия", parent, true, null);
@@ -524,7 +520,7 @@ public class AppMenuController {
      */
     private void openLogs(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/logging/logging.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/logging/logging.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Логирование", parent, true, loader.getController());
@@ -567,7 +563,7 @@ public class AppMenuController {
      */
     void openCatalogOfFolders(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/utils-fxml/catalogOfFolders/catalogOfFolders.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/catalogOfFolders/catalogOfFolders.fxml"));
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Пакеты", parent, true, loader.getController());

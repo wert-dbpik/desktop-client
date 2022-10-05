@@ -5,7 +5,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -14,9 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.datapik.utils.statics.AppStatic;
-import ru.wert.datapik.utils.statics.UtilStaticNodes;
-import ru.wert.datapik.utils.tabs.MainTabPane;
+import ru.wert.datapik.chogori.statics.UtilStaticNodes;
+import ru.wert.datapik.chogori.tabs.MainTabPane;
 import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.io.File;
@@ -28,8 +26,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.*;
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.*;
+import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 @Slf4j
 public class ApplicationController {

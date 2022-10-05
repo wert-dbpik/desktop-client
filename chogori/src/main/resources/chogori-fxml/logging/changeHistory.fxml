@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="apChangeHistoryPatch" pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.logging.ChangeHistoryController">
+   <children>
+      <VBox fx:id="vbChangeHistory" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
+               <children>
+                  <Label text="ИСТОРИЯ ИЗМЕНЕНИЙ">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox fx:id="changeHistoryButtons" alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="3.0" top="3.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

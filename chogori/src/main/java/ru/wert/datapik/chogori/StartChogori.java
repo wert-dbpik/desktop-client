@@ -13,11 +13,10 @@ import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.VersionDesktop;
 import ru.wert.datapik.client.retrofit.AppProperties;
-import ru.wert.datapik.utils.statics.UtilStaticNodes;
-import ru.wert.datapik.utils.toolpane.ChogoriToolBar;
-import ru.wert.datapik.utils.common.components.FileFwdSlash;
-import ru.wert.datapik.utils.statics.AppStatic;
-import ru.wert.datapik.utils.tempfile.TempDir;
+import ru.wert.datapik.chogori.statics.UtilStaticNodes;
+import ru.wert.datapik.chogori.toolpane.ChogoriToolBar;
+import ru.wert.datapik.chogori.common.components.FileFwdSlash;
+import ru.wert.datapik.chogori.tempfile.TempDir;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
@@ -27,7 +26,7 @@ import ru.wert.datapik.winform.winform_settings.WinformSettings;
 import java.io.IOException;
 import java.util.List;
 
-import static ru.wert.datapik.utils.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.services.ChogoriServices.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 @Slf4j
@@ -98,12 +97,12 @@ public class StartChogori extends Application {
             Scene scene = new Scene(decoration);
             stage.setScene(scene);
             stage.initStyle(StageStyle.UNDECORATED);
-            scene.getStylesheets().add(this.getClass().getResource("/utils-css/pik-dark.css").toString());
+            scene.getStylesheets().add(this.getClass().getResource("/chogori-css/pik-dark.css").toString());
 
 
             stage.sizeToScene();
             stage.setResizable(true);
-            stage.getIcons().add(new Image("/utils-pics/Pikovka(256x256).png"));
+            stage.getIcons().add(new Image("/chogori-pics/Pikovka(256x256).png"));
             stage.setTitle("База ПИК");
 
             stage.show();

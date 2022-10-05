@@ -11,7 +11,7 @@ import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
 
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 @Slf4j
 public class TaskOpenExcelFile extends Task<Void> {
 

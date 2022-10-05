@@ -9,24 +9,24 @@ import javafx.scene.layout.StackPane;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.client.entity.models.Prefix;
-import ru.wert.datapik.utils.common.components.BtnDouble;
-import ru.wert.datapik.utils.excel.model.EditorRow;
-import ru.wert.datapik.utils.excel.table.Excel_Patch;
-import ru.wert.datapik.utils.excel.table.Excel_PatchController;
-import ru.wert.datapik.utils.excel.table.Excel_TableView;
-import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
-import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
-import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
-import ru.wert.datapik.utils.info.InfoPatch;
-import ru.wert.datapik.utils.info.InfoPatchController;
-import ru.wert.datapik.utils.previewer.PreviewerPatchController;
+import ru.wert.datapik.chogori.common.components.BtnDouble;
+import ru.wert.datapik.chogori.excel.model.EditorRow;
+import ru.wert.datapik.chogori.excel.table.Excel_Patch;
+import ru.wert.datapik.chogori.excel.table.Excel_PatchController;
+import ru.wert.datapik.chogori.excel.table.Excel_TableView;
+import ru.wert.datapik.chogori.entities.drafts.Draft_Patch;
+import ru.wert.datapik.chogori.entities.drafts.Draft_PatchController;
+import ru.wert.datapik.chogori.entities.drafts.Draft_TableView;
+import ru.wert.datapik.chogori.info.InfoPatch;
+import ru.wert.datapik.chogori.info.InfoPatchController;
+import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
 
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.images.BtnImages.*;
+import static ru.wert.datapik.chogori.services.ChogoriServices.*;
 
 /**
  * Класс описывает контроллер редактора таблиц Excel

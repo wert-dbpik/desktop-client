@@ -10,16 +10,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
-import lombok.extern.slf4j.XSlf4j;
-import retrofit2.Retrofit;
-import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.retrofit.AppProperties;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
-import ru.wert.datapik.utils.connectionProperties.NoConnection;
-import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.chogori.connectionProperties.NoConnection;
 import ru.wert.datapik.winform.modal.ModalWindow;
-import ru.wert.datapik.winform.window_decoration.WindowDecoration;
-import ru.wert.datapik.winform.winform_settings.WinformSettings;
 
 @Slf4j
 public class AppPreloader extends Preloader {
@@ -49,7 +43,7 @@ public class AppPreloader extends Preloader {
         scene.getStylesheets().add(this.getClass().getResource("/chogori-css/preloader.css").toString());
         preloaderWindow.setScene(scene);
 
-        preloaderWindow.getIcons().add(new Image("/utils-pics/Pikovka(256x256).png"));
+        preloaderWindow.getIcons().add(new Image("/chogori-pics/Pikovka(256x256).png"));
         log.debug("start : preloaderWindow icon has been loaded");
 
         preloaderWindow.setTitle("Загрузка данных");

@@ -28,7 +28,7 @@ public class WaitAMinute extends ModalWindow{
             stage = new Stage();
             FXMLLoader loader = new FXMLLoader(WaitAMinute.class.getResource("/winform-fxml/long_process/waitAMinute.fxml"));
             Parent parent = loader.load();
-            parent.getStylesheets().add(WaitAMinute.class.getResource("/utils-css/pik-dark.css").toString());
+            parent.getStylesheets().add(WaitAMinute.class.getResource("/chogori-css/pik-dark.css").toString());
             Scene scene = new Scene(parent);
             scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);

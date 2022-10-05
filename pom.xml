@@ -20,7 +20,6 @@
     <modules>
         <module>winform</module>
         <module>client</module>
-        <module>utils</module>
         <module>chogori</module>
     </modules>
 

@@ -8,7 +8,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/utils/pom.xml" />
         <option value="$PROJECT_DIR$/client/pom.xml" />
         <option value="$PROJECT_DIR$/login/pom.xml" />
         <option value="$PROJECT_DIR$/chogori/pom.xml" />

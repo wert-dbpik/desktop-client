@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="modal_pane" prefHeight="676.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.entities.drafts.Draft_ACCController">
+   <children>
+      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <StackPane fx:id="spPreviewer" HBox.hgrow="ALWAYS" />
+            <VBox maxWidth="270.0" minWidth="270.0" prefWidth="270.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="NEVER">
+               <children>
+                  <HBox prefHeight="0.0" spacing="5.0">
+                     <children>
+                        <VBox spacing="3.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="lblNumFile" text="Файл">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblFileName" maxHeight="32.0" maxWidth="1.7976931348623157E308" minHeight="32.0" prefHeight="32.0" text="ПИК.745222.072-05">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </Label>
+                              <HBox>
+                                 <children>
+                                    <Button fx:id="btnPrevious" minWidth="90.0" mnemonicParsing="false" text="Предыдущий" />
+                                    <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Button fx:id="btnNext" minWidth="90.0" mnemonicParsing="false" text="Следующий" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Slider fx:id="sliderCurrentPosition" max="0.0">
+                                 <padding>
+                                    <Insets left="-5.0" right="-5.0" />
+                                 </padding>
+                              </Slider>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="0.0" spacing="5.0" VBox.vgrow="NEVER">
+                     <children>
+                        <VBox prefHeight="200.0" spacing="3.0" HBox.hgrow="NEVER">
+                           <children>
+                              <Label text="Префикс">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="bxPrefix" maxHeight="32.0" maxWidth="75.0" minHeight="30.0" minWidth="75.0" prefHeight="32.0" prefWidth="75.0">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets></ComboBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="3.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Дец.номер">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtNumber" maxHeight="32.0" maxWidth="1.7976931348623157E308" minHeight="32.0" prefHeight="32.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox prefHeight="0.0" spacing="3.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label text="Наименование">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblDraftNameInDB" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <TextField fx:id="txtName" maxHeight="32.0" minHeight="32.0" prefHeight="32.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="0.0" spacing="5.0" VBox.vgrow="NEVER">
+                     <children>
+                        <VBox prefHeight="0.0" spacing="3.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Тип">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="bxType" maxHeight="32.0" maxWidth="1.7976931348623157E308" minHeight="32.0" prefHeight="32.0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="0.0" spacing="3.0" HBox.hgrow="NEVER">
+                           <children>
+                              <Label text="Лист">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="bxPage" maxHeight="32.0" minHeight="32.0" prefHeight="32.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox prefHeight="0.0" spacing="3.0">
+                     <children>
+                        <Label text="Пакет">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <HBox spacing="5.0">
+                           <children>
+                              <ComboBox fx:id="bxFolder" maxHeight="32.0" maxWidth="1.7976931348623157E308" minHeight="32.0" prefHeight="32.0" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnSearchFolder" alignment="CENTER" contentDisplay="CENTER" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" snapToPixel="false" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="0.0" spacing="3.0">
+                     <children>
+                        <Label text="Статус">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label fx:id="lblStatus" maxHeight="32.0" maxWidth="1.7976931348623157E308" minHeight="32.0" prefHeight="32.0" text="ДЕЙСТВУЕТ" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="74.0" prefWidth="260.0" spacing="3.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Label text="Примечание">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextArea fx:id="txtAreaNote" maxHeight="1.7976931348623157E308" prefHeight="58.0" prefWidth="260.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></TextArea>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="70.0" prefWidth="260.0">
+                     <children>
+                        <Label text="При совпадении:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox>
+                           <children>
+                              <GridPane>
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <RadioButton fx:id="rbAsk" mnemonicParsing="false" text="Спросить">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="10.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="3.0" />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rbSkip" mnemonicParsing="false" text="Пропустить" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rbDelete" mnemonicParsing="false" text="Удалить" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rbChange" mnemonicParsing="false" text="Заменить" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets right="3.0" />
+                                       </padding>
+                                    </RadioButton>
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Separator prefWidth="200.0" />
+                  <HBox spacing="10.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                     <children>
+                        <Button fx:id="btnCancel" alignment="CENTER" cancelButton="true" contentDisplay="CENTER" maxHeight="39.0" maxWidth="125.0" minHeight="39.0" minWidth="125.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="125.0" text="ОТМЕНА">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnOk" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" maxHeight="39.0" maxWidth="125.0" minHeight="39.0" minWidth="125.0" mnemonicParsing="false" onAction="#ok" prefHeight="39.0" prefWidth="125.0" text="ОК">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</AnchorPane>

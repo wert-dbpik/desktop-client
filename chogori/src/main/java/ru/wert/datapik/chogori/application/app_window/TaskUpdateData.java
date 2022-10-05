@@ -6,13 +6,13 @@ import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.serviceQUICK.*;
 import ru.wert.datapik.client.interfaces.UpdatableTabController;
-import ru.wert.datapik.utils.tabs.AppTab;
+import ru.wert.datapik.chogori.tabs.AppTab;
 import ru.wert.datapik.winform.modal.LongProcess;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.utils.statics.UtilStaticNodes.CH_TAB_PANE;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
 @Slf4j
 public class TaskUpdateData extends Task<Void> {

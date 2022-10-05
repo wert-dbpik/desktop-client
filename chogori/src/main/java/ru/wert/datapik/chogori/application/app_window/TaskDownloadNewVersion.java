@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.datapik.utils.statics.AppStatic;
+import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.winform.modal.LongProcess;
 import ru.wert.datapik.winform.warnings.Warning1;
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.chat.SideChatGroupsController">
+   <children>
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+              <tabs>
+                <Tab fx:id="tabPaneChats" text="чаты">
+                     <content>
+                        <VBox maxHeight="1.7976931348623157E308">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308">
+                                 <children>
+                                    <Button fx:id="btnAddNewChatGroup" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="+Добавить групповой чат" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="System Bold Italic" size="14.0" />
+                                       </font></Button>
+                                 </children>
+                              </HBox>
+                              <ListView fx:id="listOfChats" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
+                <Tab fx:id="tabPaneUsers" text="пользователи">
+                     <content>
+                        <ListView fx:id="listOfUsers" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

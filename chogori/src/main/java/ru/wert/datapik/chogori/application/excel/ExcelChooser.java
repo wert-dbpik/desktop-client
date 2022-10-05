@@ -4,7 +4,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
+import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class ExcelChooser {

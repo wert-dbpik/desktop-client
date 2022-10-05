@@ -3,9 +3,6 @@ package ru.wert.datapik.chogori.application.passports;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -16,33 +13,32 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
-import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.client.interfaces.UpdatableTabController;
-import ru.wert.datapik.utils.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
-import ru.wert.datapik.utils.common.components.BtnDouble;
-import ru.wert.datapik.utils.entities.catalogOfFolders.CatalogOfFoldersPatch;
-import ru.wert.datapik.utils.entities.drafts.Draft_TableView;
-import ru.wert.datapik.utils.entities.drafts.Draft_Patch;
-import ru.wert.datapik.utils.entities.drafts.Draft_PatchController;
-import ru.wert.datapik.utils.entities.folders.Folder_TableView;
-import ru.wert.datapik.utils.entities.passports.Passport_Patch;
-import ru.wert.datapik.utils.entities.passports.Passport_PatchController;
-import ru.wert.datapik.utils.entities.passports.Passport_TableView;
-import ru.wert.datapik.utils.previewer.PreviewerPatchController;
+import ru.wert.datapik.chogori.common.components.BtnDouble;
+import ru.wert.datapik.chogori.entities.catalogOfFolders.CatalogOfFoldersPatch;
+import ru.wert.datapik.chogori.entities.drafts.Draft_TableView;
+import ru.wert.datapik.chogori.entities.drafts.Draft_Patch;
+import ru.wert.datapik.chogori.entities.drafts.Draft_PatchController;
+import ru.wert.datapik.chogori.entities.folders.Folder_TableView;
+import ru.wert.datapik.chogori.entities.passports.Passport_Patch;
+import ru.wert.datapik.chogori.entities.passports.Passport_PatchController;
+import ru.wert.datapik.chogori.entities.passports.Passport_TableView;
+import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.services.ChogoriServices.CH_QUICK_FOLDERS;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSED;
+import static ru.wert.datapik.chogori.images.BtnImages.*;
+import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
+import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSED;
 
 
 @Slf4j

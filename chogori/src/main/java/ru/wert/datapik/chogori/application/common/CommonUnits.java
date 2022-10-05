@@ -2,14 +2,14 @@ package ru.wert.datapik.chogori.application.common;
 
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
-import ru.wert.datapik.utils.common.components.ChevronButton;
-import ru.wert.datapik.utils.common.components.ExpandButton;
-import ru.wert.datapik.utils.previewer.PreviewerPatch;
-import ru.wert.datapik.utils.previewer.PreviewerPatchController;
+import ru.wert.datapik.chogori.common.components.ChevronButton;
+import ru.wert.datapik.chogori.common.components.ExpandButton;
+import ru.wert.datapik.chogori.previewer.PreviewerPatch;
+import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
 
-import static ru.wert.datapik.utils.images.BtnImages.*;
-import static ru.wert.datapik.utils.images.BtnImages.BTN_CHEVRON_UP_IMG;
-import static ru.wert.datapik.utils.setteings.ChogoriSettings.CH_PDF_VIEWER;
+import static ru.wert.datapik.chogori.images.BtnImages.*;
+import static ru.wert.datapik.chogori.images.BtnImages.BTN_CHEVRON_UP_IMG;
+import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_PDF_VIEWER;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class CommonUnits {
