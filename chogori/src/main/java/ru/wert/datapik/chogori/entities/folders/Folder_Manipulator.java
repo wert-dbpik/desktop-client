@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 
 public class Folder_Manipulator {
 

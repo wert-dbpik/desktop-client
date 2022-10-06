@@ -11,7 +11,7 @@ import ru.wert.datapik.chogori.statics.AppStatic;
 
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_REMARKS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class _RemarkCommands implements ItemCommands<Remark> {

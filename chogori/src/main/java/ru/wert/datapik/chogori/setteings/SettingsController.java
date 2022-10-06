@@ -28,7 +28,7 @@ import java.util.List;
 
 import static ru.wert.datapik.chogori.images.AppImages.TREE_NODE_IMG;
 import static ru.wert.datapik.chogori.images.BtnImages.BTN_HOME_IMG;
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;

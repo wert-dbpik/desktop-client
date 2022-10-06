@@ -22,7 +22,7 @@ import ru.wert.datapik.chogori.statics.AppStatic;
 import java.io.IOException;
 
 import static ru.wert.datapik.chogori.images.BtnImages.*;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USERS;
 
 public class UsersPermissionsController implements SearchableTab, UpdatableTabController {
 

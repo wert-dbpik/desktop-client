@@ -12,7 +12,7 @@ import ru.wert.datapik.winform.warnings.Warning1;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;
 

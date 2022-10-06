@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.datapik.winform.statics.WinformStatic.*;
@@ -54,9 +54,8 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class AppStatic {
 
+    public static final double CHAT_WIDTH = 300; //первоначальная ширина чата
     public static String BASE_URL = RetrofitClient.baseUrl;
-
-
 
     public static final String DEC_NUMBER = "\\d{6}[.]\\d{3}";// XXXXXX.XXX
     public static final String DEC_NUMBER_WITH_EXT = "\\d{6}[.]\\d{3}[-]\\d{2,3}";// XXXXXX.XXX-ХХ(Х)
@@ -173,7 +172,7 @@ public class AppStatic {
      * Метод открывает список чертежей каждый в отдельной вкладке
      * Допукается список, состоящий из одного чертежа
      */
-    public static void openDraftsInNewTabs(List<Draft> chosenDrafts, Draft_TableView tableView){
+    public static void openDraftsInNewTabs(List<Draft> chosenDrafts){
 
         if(chosenDrafts.isEmpty()) return;
         for(Draft d : chosenDrafts){

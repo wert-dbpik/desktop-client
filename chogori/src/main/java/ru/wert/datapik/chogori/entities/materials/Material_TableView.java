@@ -19,7 +19,7 @@ import ru.wert.datapik.chogori.entities.materials.commands._Material_Commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_MATERIALS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_MATERIALS;
 
 public class Material_TableView extends CatalogTableView<Material, MaterialGroup> {
 

@@ -14,7 +14,7 @@ import java.util.List;
 
 import static ru.wert.datapik.client.entity.serviceQUICK.FolderQuickService.DEFAULT_FOLDER;
 import static ru.wert.datapik.client.utils.BLConst.RAZLOZHENO;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_FOLDERS;
 
 public class BXFolder {
 

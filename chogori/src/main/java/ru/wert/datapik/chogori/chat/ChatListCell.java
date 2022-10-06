@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.wert.datapik.chogori.chat.SideChatTalkController.*;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_FILES;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_PICS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_FILES;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PICS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
-import static ru.wert.datapik.winform.statics.WinformStatic.CHAT_WIDTH;
+import static ru.wert.datapik.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_TEMPDIR;
 
 public class ChatListCell extends ListCell<ChatMessage> {
@@ -105,15 +105,8 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
 
     private void mountText(VBox vbMessage, ChatMessage message) {
-//        vbMessage.prefWidthProperty().bind(separator.widthProperty().multiply(0.8));
-//        vbMessage.setMaxWidth(200.0);
-
-
-
         Label text = new Label(message.getText());
         text.setPrefWidth(CHAT_WIDTH * MESSAGE_WIDTH);
-//        text.prefWidthProperty().bind(separator.widthProperty().multiply(MESSAGE_WIDTH));
-
         text.setWrapText(true);
         vbMessage.getChildren().add(text);
     }
@@ -135,7 +128,18 @@ public class ChatListCell extends ListCell<ChatMessage> {
             //Добавляем файл в общий список
             ImageView imageView = ImageUtil.createImageViewFromFile(file, null,
                     (int) CHAT_WIDTH, PORTRAIT_WIDTH, LANDSCAPE_WIDTH, SQUARE_WIDTH);
-            vbMessage.getChildren().add(imageView);
+
+            Parent cardWithImage = null;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/card.fxml"));
+                cardWithImage = loader.load();
+                CardController controller = loader.getController();
+                controller.init("Изображение", imageView);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            vbMessage.getChildren().add(cardWithImage);
             imageView.fitWidthProperty().unbind();
         }
 
@@ -143,6 +147,25 @@ public class ChatListCell extends ListCell<ChatMessage> {
     }
 
     private void mountDrafts(VBox vbMessage, ChatMessage message) {
+        String text = message.getText();
+        List<String> ids =  Arrays.asList(text.split(" ", -1));
+
+        for(String id : ids){
+            Parent cardWithDraft = null;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/draftCard.fxml"));
+                cardWithDraft = loader.load();
+                DraftCardController controller = loader.getController();
+                controller.init(id);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            vbMessage.getChildren().add(cardWithDraft);
+            vbMessage.setPrefWidth(CHAT_WIDTH * MESSAGE_WIDTH);
+        }
+
+
     }
 
 

@@ -4,7 +4,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.client.entity.models.MaterialGroup;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_MATERIAL_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_MATERIAL_GROUPS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class _MaterialGroup_TreeViewPatch {

@@ -535,6 +535,14 @@
     -fx-padding: 5;
 }
 
+#draftInChat{
+    -fx-background-color: #f8f5eb;
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-radius: 10 10 10 10;
+    -fx-border-color: royalblue;
+    -fx-padding: 5;
+}
+
 
 /*===========   Индикатор мыслительной деятельности   ТОНЕНЬКИЙ  ===========================================*/
 /*.progress-bar > .bar {*/

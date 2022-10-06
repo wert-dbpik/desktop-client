@@ -7,7 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.util.StringConverter;
 import ru.wert.datapik.client.entity.models.Prefix;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_PREFIXES;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_PREFIXES;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
 
 public class BXPrefix {

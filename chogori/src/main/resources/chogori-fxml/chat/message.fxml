@@ -16,9 +16,9 @@
       </Separator>
       <Label fx:id="lblFrom" alignment="CENTER_RIGHT" text="Алексей Симонов" textAlignment="RIGHT" />
       <Label fx:id="lblDate" alignment="CENTER_RIGHT" text="30.09.2022" textAlignment="RIGHT" />
-      <VBox fx:id="vbMessage" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
+      <VBox fx:id="vbMessage" maxWidth="-Infinity" minWidth="-Infinity">
          <VBox.margin>
-            <Insets bottom="5.0" top="5.0" />
+            <Insets />
          </VBox.margin>
       </VBox>
    </children>

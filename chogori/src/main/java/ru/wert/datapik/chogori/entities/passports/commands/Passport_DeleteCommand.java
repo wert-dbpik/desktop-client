@@ -8,7 +8,7 @@ import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_PASSPORTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_PASSPORTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j

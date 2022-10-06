@@ -17,8 +17,8 @@ import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
 
 import java.util.*;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_DRAFTS;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_PASSPORTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_PASSPORTS;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Passport_TableView extends RoutineTableView<Passport> implements Sorting<Passport> {

@@ -18,7 +18,7 @@ import ru.wert.datapik.winform.warnings.Warning1;
 import java.io.File;
 import java.io.IOException;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_DECORATION_ROOT_PANEL;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;

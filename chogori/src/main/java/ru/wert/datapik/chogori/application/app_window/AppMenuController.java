@@ -34,11 +34,11 @@ import java.io.IOException;
 import java.net.URI;
 
 import static ru.wert.datapik.chogori.images.BtnImages.*;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_CHAT_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_CHAT_GROUPS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
-import static ru.wert.datapik.winform.statics.WinformStatic.CHAT_WIDTH;
+import static ru.wert.datapik.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 @Slf4j
 public class AppMenuController {

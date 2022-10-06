@@ -18,7 +18,7 @@ import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_MATERIAL_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_MATERIAL_GROUPS;
 
 @Slf4j
 public class MaterialGroup_ACCController extends FormView_ACCController<MaterialGroup> {

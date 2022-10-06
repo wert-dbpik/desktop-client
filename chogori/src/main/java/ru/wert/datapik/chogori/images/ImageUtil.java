@@ -22,8 +22,8 @@ import java.awt.image.WritableRaster;
 import java.io.*;
 import java.util.Iterator;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_FILES;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_PICS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_FILES;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PICS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class ImageUtil {

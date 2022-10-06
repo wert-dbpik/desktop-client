@@ -17,7 +17,7 @@ import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_ANY_PARTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_ANY_PARTS;
 
 @Slf4j
 public class MaterialProfileController extends MaterialCommonTypeController {

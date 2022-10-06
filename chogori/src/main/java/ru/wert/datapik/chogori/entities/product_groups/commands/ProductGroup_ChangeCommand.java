@@ -11,7 +11,7 @@ import ru.wert.datapik.winform.warnings.Warning1;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_PRODUCT_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j

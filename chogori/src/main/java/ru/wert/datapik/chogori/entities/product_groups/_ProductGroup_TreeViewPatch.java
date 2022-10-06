@@ -8,7 +8,7 @@ import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.chogori.common.tableView.ItemTableView;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_PRODUCT_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class _ProductGroup_TreeViewPatch<P extends Item> {

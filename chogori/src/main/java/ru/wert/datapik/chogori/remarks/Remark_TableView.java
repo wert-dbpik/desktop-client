@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_REMARKS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Remark_TableView extends RoutineTableView<Remark>{

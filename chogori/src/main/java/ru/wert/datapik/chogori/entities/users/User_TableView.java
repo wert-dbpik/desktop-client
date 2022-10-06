@@ -14,7 +14,7 @@ import ru.wert.datapik.chogori.statics.Comparators;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class User_TableView extends RoutineTableView<User> implements Sorting<User> {

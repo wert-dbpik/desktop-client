@@ -13,7 +13,7 @@ import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ITEM_IS_BUSY_MAYBE;
 

@@ -18,7 +18,7 @@ import ru.wert.datapik.winform.enums.EOperation;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.statics.AppStatic.UPWARD;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 

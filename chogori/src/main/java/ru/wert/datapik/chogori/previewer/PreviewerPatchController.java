@@ -43,7 +43,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.images.BtnImages.*;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_REMARKS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.datapik.chogori.statics.AppStatic.SOLID_EXTENSIONS;
 import static ru.wert.datapik.chogori.statics.AppStatic.openDraftInPreviewer;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
@@ -164,7 +164,7 @@ public class PreviewerPatchController {
         btnOpenInNewTab.setTooltip(new Tooltip("Открыть в отдельной вкладке"));
         btnOpenInNewTab.setOnAction(event -> {
             if(currentDraft.get() == null) return;
-            AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()), draftsTableView);
+            AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()));
         });
 
         //ОТКРЫТЬ В СТОРОННЕМ ПРИЛОЖЕНИИ
@@ -222,6 +222,7 @@ public class PreviewerPatchController {
         updateDraftView.setGraphic(new ImageView(BTN_UPDATE_IMG));
         updateDraftView.setTooltip(new Tooltip("Обновить изображение"));
         updateDraftView.setOnAction(event -> {
+            if(draftsTableView == null) return;
             Draft selectedDraft = draftsTableView.getSelectionModel().getSelectedItem();
             openDraftInPreviewer(selectedDraft, this);
         });

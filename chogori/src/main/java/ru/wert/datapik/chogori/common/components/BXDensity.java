@@ -7,7 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.util.StringConverter;
 import ru.wert.datapik.client.entity.models.Density;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_DENSITIES;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_DENSITIES;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
 
 public class BXDensity {

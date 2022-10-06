@@ -7,7 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.util.StringConverter;
 import ru.wert.datapik.client.entity.models.Material;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_MATERIALS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_MATERIALS;
 
 
 public class BXMaterial {

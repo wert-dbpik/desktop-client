@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ru.wert.datapik.chogori.images.BtnImages.*;
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 
 /**
  * Класс описывает контроллер редактора таблиц Excel

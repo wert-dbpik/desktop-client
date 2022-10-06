@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.chogori.statics.AppStatic.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 

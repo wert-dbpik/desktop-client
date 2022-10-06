@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.services;
+package ru.wert.datapik.chogori.application.services;
 
 
 import ru.wert.datapik.client.entity.serviceQUICK.*;

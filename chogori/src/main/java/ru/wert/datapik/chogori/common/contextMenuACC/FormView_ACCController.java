@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.common.components.BXPrefix.LAST_PREFIX;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_PRODUCT_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CHECK_ENTERED_NUMBER;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;
 import static ru.wert.datapik.chogori.statics.AppStatic.closeWindow;

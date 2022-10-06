@@ -26,7 +26,7 @@ import ru.wert.datapik.winform.winform_settings.WinformSettings;
 import java.io.IOException;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 @Slf4j

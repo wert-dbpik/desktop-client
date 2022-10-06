@@ -17,7 +17,7 @@ import ru.wert.datapik.chogori.entities.product_groups.commands._ProductGroup_Co
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_FOLDERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_FOLDERS;
 
 public class FormViewControlIml<P extends Item> {
 

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<Draft> {
@@ -115,7 +115,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY) && e.isAltDown()) {
                 if (e.getClickCount() == 2)
-                    AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems(), this);
+                    AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
                 else {
                     if(getAltOnProperty().get()) {
                         Platform.runLater(()->{

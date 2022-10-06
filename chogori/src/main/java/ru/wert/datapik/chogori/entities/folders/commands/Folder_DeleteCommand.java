@@ -15,8 +15,8 @@ import ru.wert.datapik.winform.warnings.Warning2;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_DRAFTS;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j

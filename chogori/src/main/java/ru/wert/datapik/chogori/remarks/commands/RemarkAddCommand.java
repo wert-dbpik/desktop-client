@@ -8,7 +8,7 @@ import ru.wert.datapik.chogori.remarks.Remark_TableView;
 import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_REMARKS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j

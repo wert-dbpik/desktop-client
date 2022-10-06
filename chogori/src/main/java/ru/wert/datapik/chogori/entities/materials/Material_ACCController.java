@@ -18,7 +18,7 @@ import ru.wert.datapik.winform.enums.EOperation;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 
 public class Material_ACCController extends FormView_ACCController<Material> {
 

@@ -13,7 +13,7 @@ import ru.wert.datapik.winform.warnings.Warning2;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 

@@ -25,7 +25,7 @@ import java.io.IOException;
 
 import static ru.wert.datapik.chogori.images.BtnImages.BTN_CHEVRON_LEFT_IMG;
 import static ru.wert.datapik.chogori.images.BtnImages.BTN_CHEVRON_RIGHT_IMG;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_USER_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USER_GROUPS;
 
 public class UserGroupsPermissionsController implements SearchableTab, UpdatableTabController {
 

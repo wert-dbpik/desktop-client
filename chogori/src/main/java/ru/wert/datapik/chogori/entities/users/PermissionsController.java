@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_USERS;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_USER_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USER_GROUPS;
 
 public class PermissionsController<P extends Item> {
 

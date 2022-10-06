@@ -53,7 +53,7 @@ public class VBoxPassport extends VBox {
 
 
 
-        getChildren().addAll(lbName, lbDecNumber);
+        getChildren().addAll(lbDecNumber, lbName);
 
     }
 

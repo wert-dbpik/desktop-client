@@ -11,7 +11,7 @@ import ru.wert.datapik.chogori.entities.products.Product_TableView;
 import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j

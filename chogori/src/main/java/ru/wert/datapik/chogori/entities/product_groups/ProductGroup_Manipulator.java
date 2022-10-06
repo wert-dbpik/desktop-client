@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.images.AppImages.TREE_NODE_IMG;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_PRODUCT_GROUPS;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PRODUCT_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class ProductGroup_Manipulator {

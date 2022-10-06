@@ -8,7 +8,7 @@ import ru.wert.datapik.chogori.common.commands.ICommand;
 import ru.wert.datapik.chogori.entities.material_groups.MaterialGroup_TreeView;
 import ru.wert.datapik.winform.warnings.Warning1;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_MATERIAL_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_MATERIAL_GROUPS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j

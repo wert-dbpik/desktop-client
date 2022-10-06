@@ -9,7 +9,7 @@ import ru.wert.datapik.chogori.common.tableView.ReadOnlyTableView;
 import java.util.List;
 
 import static java.util.Collections.reverse;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_LOGS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_LOGS;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class AppLog_TableView extends ReadOnlyTableView<AppLog> {

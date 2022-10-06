@@ -28,7 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.images.BtnImages.BTN_ADD_PHOTO_IMG;
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_TEMPDIR;
 import static ru.wert.datapik.winform.statics.WinformStatic.closeWindow;

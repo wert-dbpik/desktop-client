@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.images.AppImages.TREE_NODE_IMG;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.chogori.statics.AppStatic.UPWARD;
 import static ru.wert.datapik.chogori.statics.Comparators.usefulStringComparator;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;

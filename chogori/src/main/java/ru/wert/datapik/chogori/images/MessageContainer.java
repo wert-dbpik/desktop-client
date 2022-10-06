@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_PICS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PICS;
 
 public class MessageContainer {
 

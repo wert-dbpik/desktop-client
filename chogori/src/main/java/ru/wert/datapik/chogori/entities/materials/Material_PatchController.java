@@ -14,7 +14,7 @@ import ru.wert.datapik.chogori.common.components.BtnGlobe;
 import ru.wert.datapik.chogori.common.components.BtnMenuMaterialsColumns;
 import ru.wert.datapik.chogori.common.treeView.Item_TreeView;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_MATERIALS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_MATERIALS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class Material_PatchController {

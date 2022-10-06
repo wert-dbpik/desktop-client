@@ -18,7 +18,7 @@ import ru.wert.datapik.chogori.entities.product_groups._ProductGroup_TreeViewPat
 import ru.wert.datapik.chogori.common.treeView.Item_TreeView;
 
 import static ru.wert.datapik.chogori.images.BtnImages.*;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_PRODUCTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PRODUCTS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class CatalogOfProductsController {

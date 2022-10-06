@@ -8,7 +8,7 @@ import ru.wert.datapik.client.entity.models.User;
 
 import java.util.Comparator;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USERS;
 
 public class BXUsers {
 

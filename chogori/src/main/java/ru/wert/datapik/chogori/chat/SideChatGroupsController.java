@@ -15,7 +15,7 @@ import java.util.List;
 
 import static ru.wert.datapik.chogori.images.BtnImages.CHATS_IMG;
 import static ru.wert.datapik.chogori.images.BtnImages.MAN_IMG;
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class SideChatGroupsController {

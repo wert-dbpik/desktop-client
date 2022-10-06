@@ -15,7 +15,7 @@ import java.util.List;
 
 import static ru.wert.datapik.client.entity.serviceQUICK.ProductQuickService.DEFAULT_PRODUCT;
 import static ru.wert.datapik.client.utils.BLConst.RAZNOE;
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_QUICK_PRODUCTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_PRODUCTS;
 
 public class BXProduct {
 

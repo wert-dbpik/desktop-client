@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.Comparator;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_TEMPDIR;
 

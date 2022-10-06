@@ -12,7 +12,7 @@ import ru.wert.datapik.winform.warnings.Warning2;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j

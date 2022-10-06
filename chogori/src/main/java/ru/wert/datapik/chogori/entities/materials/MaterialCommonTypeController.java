@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Objects;
 
-import static ru.wert.datapik.chogori.services.ChogoriServices.CH_ANY_PART_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_ANY_PART_GROUPS;
 
 abstract class MaterialCommonTypeController extends FormView_ACCController<Material> {
 
