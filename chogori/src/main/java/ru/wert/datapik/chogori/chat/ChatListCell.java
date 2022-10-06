@@ -33,6 +33,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
     VBox vbMessage; //Само сообщение
     Label lblFrom;
     Label lblDate;
+    Label lblTime;
     static final String OUT = "message_out"; //Исходящие сообщения
     static final String IN = "message_in";   //Входящие сообщения
 
@@ -65,6 +66,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
             separator.setVisible(false);
             lblFrom = (Label) inMessage.lookup("#lblFrom");
             lblDate = (Label) inMessage.lookup("#lblDate");
+            lblTime = (Label) inMessage.lookup("#lblTime");
             vbMessageContainer = (VBox) inMessage.lookup("#vbMessageContainer");
             vbMessage = (VBox) inMessage.lookup("#vbMessage");
 
@@ -85,6 +87,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
                 vbMessage.autosize();
                 lblFrom.setText(message.getUser().getName());
                 lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime()));
+                lblTime.setText(AppStatic.parseStringToTime(message.getCreationTime()));
                 EMessageType type = EMessageType.values()[message.getMessageType()];
 
                 switch(type){

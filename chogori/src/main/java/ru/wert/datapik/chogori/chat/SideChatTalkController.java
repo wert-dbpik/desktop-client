@@ -74,7 +74,6 @@ public class SideChatTalkController {
 
     public void init(SideChat chat){
         this.chat = chat;
-//        messages = FXCollections.observableArrayList();
 
     }
 
@@ -159,9 +158,11 @@ public class SideChatTalkController {
         }
 
         ChatMessage message = createChatMessage(EMessageType.CHAT_DRAFTS, text.toString().trim());
-        messages.add(message);
-        listViewWithMessages.scrollTo(listViewWithMessages.getItems().size() - 1);
         taMessageText.setText("");
+        int index = messages.size();
+        listViewWithMessages.getItems().add(message);
+        listViewWithMessages.refresh();
+        listViewWithMessages.scrollTo(message);
 
     }
 
@@ -196,9 +197,11 @@ public class SideChatTalkController {
         }
 
         ChatMessage message = createChatMessage(EMessageType.CHAT_PICS, text.toString().trim());
-        messages.add(message);
-        listViewWithMessages.scrollTo(listViewWithMessages.getItems().size() - 1);
         taMessageText.setText("");
+        int index = messages.size();
+        listViewWithMessages.getItems().add(message);
+        listViewWithMessages.refresh();
+        listViewWithMessages.scrollTo(message);
 
     }
 
@@ -213,12 +216,10 @@ public class SideChatTalkController {
         String text = taMessageText.getText();
         ChatMessage message = createChatMessage(EMessageType.CHAT_TEXT, text);
         taMessageText.setText("");
-        messages.add(message);
-        listViewWithMessages.scrollTo(listViewWithMessages.getItems().size()-1);
-
-        System.out.print(messages.size());
-        System.out.println("  ---  " + listViewWithMessages.getItems().size());
-
+        int index = messages.size();
+        listViewWithMessages.getItems().add(message);
+        listViewWithMessages.refresh();
+        listViewWithMessages.scrollTo(message);
     }
 
     //=====================    ОБЩИЕ МЕТОДЫ    =================================================
@@ -227,18 +228,18 @@ public class SideChatTalkController {
     /**
      * Обновление ListView
      */
-    private void updateListView(boolean saveListPosition) {
-
-        Platform.runLater(()->{
-            listViewWithMessages.autosize();
-            listViewWithMessages.getItems().clear();
-            listViewWithMessages.setItems(messages);
-            listViewWithMessages.refresh();
-            if(!saveListPosition)
-                listViewWithMessages.scrollTo(messages.size()-1);
-        });
-
-    }
+//    private void updateListView(boolean saveListPosition) {
+//
+//        Platform.runLater(()->{
+//            listViewWithMessages.autosize();
+//            listViewWithMessages.getItems().clear();
+//            listViewWithMessages.setItems(messages);
+//            listViewWithMessages.refresh();
+//            if(!saveListPosition)
+//                listViewWithMessages.scrollTo(messages.size()-1);
+//        });
+//
+//    }
 
     /**
      * Метода создает сообщение ChatMessage

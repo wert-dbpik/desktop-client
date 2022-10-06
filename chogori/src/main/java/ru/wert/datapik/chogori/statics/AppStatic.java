@@ -75,13 +75,27 @@ public class AppStatic {
     public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
 
     /**
-     * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в необходимый фотрмат
+     * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в фотрмат dd.MM.yyyy
      */
     public static  String parseStringToDate(String dateString){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
         try {
             Date date = format.parse(dateString);
             SimpleDateFormat myFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+            return myFormat.format(date);
+        } catch (ParseException e) {
+            return dateString;
+        }
+    }
+
+    /**
+     * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в фотрмат HH:mm"
+     */
+    public static  String parseStringToTime(String dateString){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+        try {
+            Date date = format.parse(dateString);
+            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return myFormat.format(date);
         } catch (ParseException e) {
             return dateString;

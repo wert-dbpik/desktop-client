@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -21,5 +22,13 @@
             <Insets />
          </VBox.margin>
       </VBox>
+      <Label fx:id="lblTime" alignment="CENTER_RIGHT" text="22:15">
+         <font>
+            <Font size="10.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Label>
    </children>
 </VBox>
