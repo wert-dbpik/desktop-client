@@ -54,7 +54,7 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class AppStatic {
 
-    public static final double CHAT_WIDTH = 300; //первоначальная ширина чата
+    public static final double CHAT_WIDTH = 250; //первоначальная ширина чата
     public static String BASE_URL = RetrofitClient.baseUrl;
 
     public static final String DEC_NUMBER = "\\d{6}[.]\\d{3}";// XXXXXX.XXX
