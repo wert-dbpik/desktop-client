@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.MouseButton;
@@ -223,9 +224,9 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         }
 
         filterList(list);
-        List<Draft> finalList = list;
+        ObservableList<Draft> finalList = FXCollections.observableArrayList(list);
         Platform.runLater(()->{
-            preparedList.set(FXCollections.observableArrayList(finalList));
+            preparedList.set(finalList);
         });
 
         return list;

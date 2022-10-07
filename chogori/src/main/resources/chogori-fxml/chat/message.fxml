@@ -17,18 +17,16 @@
       </Separator>
       <Label fx:id="lblFrom" alignment="CENTER_RIGHT" text="Алексей Симонов" textAlignment="RIGHT" />
       <Label fx:id="lblDate" alignment="CENTER_RIGHT" text="30.09.2022" textAlignment="RIGHT" />
-      <VBox fx:id="vbMessage" maxWidth="-Infinity" minWidth="-Infinity">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
+      <VBox fx:id="vbOutlineMessage" maxWidth="-Infinity" minWidth="-Infinity">
+         <children>
+            <Label fx:id="lblTitle" maxWidth="1.7976931348623157E308" text="Label" />
+            <VBox fx:id="vbMessage" minWidth="-Infinity">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </VBox>
+            <Label fx:id="lblTime" maxWidth="1.7976931348623157E308" text="Label" />
+         </children>
       </VBox>
-      <Label fx:id="lblTime" alignment="CENTER_RIGHT" text="22:15">
-         <font>
-            <Font size="10.0" />
-         </font>
-         <VBox.margin>
-            <Insets top="5.0" />
-         </VBox.margin>
-      </Label>
    </children>
 </VBox>

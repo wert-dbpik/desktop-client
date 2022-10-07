@@ -61,9 +61,9 @@ public class SideChatTalkController {
 
     private SideChat chat;
 
-    public static final float MESSAGE_WIDTH = 0.8f;
+    public static final float MESSAGE_WIDTH = 0.7f;
     public static final float PORTRAIT_WIDTH = 0.5f;
-    public static final float LANDSCAPE_WIDTH = 0.8f;
+    public static final float LANDSCAPE_WIDTH = 0.7f;
     public static final float SQUARE_WIDTH = 0.6f;
 
     //Переменные для taMessageText

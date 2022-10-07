@@ -488,49 +488,69 @@
 }
 
 /*====================      listViewWithMessages  ===============================*/
-
+/*Каждая позиция в чате, чтобы убрать черезполосицу*/
 #listViewWithMessages .list-cell {
     -fx-background-color: white;
 }
 
-
+/*Выделенная позиция в чате*/
 #listViewWithMessages .list-cell:selected:focused{
     -fx-background-color: #ded6b5;
 }
 
-#outMessage .label, #inMessage .label{
-    -fx-text-fill: black;
-    -fx-font-size: 14;
-    -fx-padding: 5px;
+/*Заголовок сообщения*/
+#messageTitleLabel{
+    -fx-font-style: oblique;
+    -fx-text-fill: darkred;
+    -fx-padding: 3;
 }
 
-/*==================   OUT    MESSAGES    =================================================*/
-#outMessageData{
+/*Текст сообщения*/
+#outMessageVBox .label, #inMessageVBox .label{
+    -fx-text-fill: black;
+    -fx-font-size: 14;
+    -fx-padding: 2px;
+}
+/*Время сообщения*/
+#messageTimeLabel{
+    -fx-font-size: 10;
+    -fx-font-style: oblique;
+    -fx-text-fill: black;
+    -fx-alignment: top-right;
+    -fx-end-margin: 5;
+    -fx-opacity: 0.3;
+    -fx-padding: 2px;
+}
+
+/*==================   ИСХОДЯЩИЕ СООБЩЕНИЯ  =================================================*/
+/*Данные исходящего сообщения (Автор, дата)*/
+#outMessageDataLabel{
     -fx-padding: 0 5 0 0;
     -fx-font-style: oblique;
     -fx-text-fill: royalblue;
     -fx-alignment: top-right;
     -fx-text-alignment: right;
 }
-
-#outMessage{
+/*Фон исходящего сообщения (Заголовок, Сообщение, Дата)*/
+#outOutlineMessageVBox{
     -fx-background-color: #edf8eb;
     -fx-background-radius: 10;
     -fx-padding: 5;
 }
 
-/*==================   OUT    MESSAGES    =================================================*/
+/*==================   ВХОДЯЩИЕ СООБЩЕНИЯ  =================================================*/
 
-#inMessageData{
-    -fx-padding: 0 0 0 5;
+/*Данные входящего сообщения (Автор, дата)*/
+#inMessageDataLabel{
+    -fx-padding: 0 5 0 0;
     -fx-font-style: oblique;
     -fx-text-fill: royalblue;
     -fx-alignment: top-left;
     -fx-text-alignment: left;
 }
-
-#inMessage{
-    -fx-background-color: #f7ebf8;
+/*Фон входящего сообщения (Заголовок, Сообщение, Дата)*/
+#inOutlineMessageVBox{
+    -fx-background-color: #f6ebf8;
     -fx-background-radius: 10;
     -fx-padding: 5;
 }
