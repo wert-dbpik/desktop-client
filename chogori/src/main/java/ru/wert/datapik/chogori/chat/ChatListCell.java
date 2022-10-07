@@ -103,6 +103,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
                 switch(type){
                     case CHAT_TEXT: mountText(vbMessage, message); break;
                     case CHAT_DRAFTS: mountDrafts(vbMessage, message); break;
+                    case CHAT_FOLDERS: mountFolders(vbMessage, message); break;
                     case CHAT_PICS: mountPics(vbMessage, message); break;
                 }
 
@@ -180,6 +181,32 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
             String title = "Чертеж:";
             if(ids.size() > 1) title = "Чертежи:";
+            lblTitle.setText(title);
+
+            vbMessage.getChildren().add(cardWithDraft);
+            vbMessage.setPrefWidth(CHAT_WIDTH * MESSAGE_WIDTH);
+        }
+
+
+    }
+
+    private void mountFolders(VBox vbMessage, ChatMessage message) {
+        String text = message.getText();
+        List<String> ids =  Arrays.asList(text.split(" ", -1));
+
+        for(String id : ids){
+            Parent cardWithDraft = null;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/draftCard.fxml"));
+                cardWithDraft = loader.load();
+                DraftCardController controller = loader.getController();
+                controller.init(id);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String title = "Комплект чертежей:";
+            if(ids.size() > 1) title = "Комплекты чертежей:";
             lblTitle.setText(title);
 
             vbMessage.getChildren().add(cardWithDraft);

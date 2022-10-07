@@ -55,7 +55,7 @@ public class ListViewWithMessages_Manipulator {
                 }
             } else if (db.hasString()){
                 String str = db.getString();
-                if(str.startsWith("pik! DR#")){
+                if(str.startsWith("pik! DR#") || str.startsWith("pik! F#")){
                     event.acceptTransferModes(TransferMode.MOVE);
                     event.consume();
                     return;
@@ -76,6 +76,8 @@ public class ListViewWithMessages_Manipulator {
                 String str = db.getString();
                 if (str.startsWith("pik! DR#")) {
                     chatController.createDraftsChatMessage(str);
+                } else if(str.startsWith("pik! F#")){
+                    chatController.createFoldersChatMessage(str);
                 }
 
             }

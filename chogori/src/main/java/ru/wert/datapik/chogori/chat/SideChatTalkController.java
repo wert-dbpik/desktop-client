@@ -166,6 +166,31 @@ public class SideChatTalkController {
 
     }
 
+    /**
+     * Метод создает сообщение с чертежами
+     */
+    public void createFoldersChatMessage(String str) {
+        StringBuilder text = new StringBuilder();
+        String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
+        for (String s : pasteData) {
+            String clazz = Arrays.asList(s.split("#", -1)).get(0);
+            if (!clazz.equals("F")) continue;
+            else {
+                String strId = s.replace("F#", "");
+                text.append(strId);
+                text.append(" ");
+            }
+        }
+
+        ChatMessage message = createChatMessage(EMessageType.CHAT_FOLDERS, text.toString().trim());
+        taMessageText.setText("");
+        int index = messages.size();
+        listViewWithMessages.getItems().add(message);
+        listViewWithMessages.refresh();
+        listViewWithMessages.scrollTo(message);
+
+    }
+
     //============          ОТПРАВИТЬ ИЗОБРАЖЕНИЯ   ========================================================
 
     /**

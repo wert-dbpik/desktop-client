@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.chogori.application.drafts.DraftsEditorController;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
 import ru.wert.datapik.client.entity.models.ChatGroup;
 import ru.wert.datapik.client.entity.models.User;
@@ -360,24 +361,25 @@ public class AppMenuController {
     /**
      * -- ЧЕРТЕЖИ
      */
-    public static void openDrafts(ActionEvent event) {
+    public static DraftsEditorController openDrafts(Event event) {
 
-        Task<Void> openDraftsTask = new Task<Void>() {
+        Task<DraftsEditorController> openDraftsTask = new Task<DraftsEditorController>() {
             @Override
-            public Void call() throws InterruptedException {
+            public DraftsEditorController call() throws InterruptedException {
                 if (isCancelled()) return null ;
                 Platform.runLater(WaitAMinute::create);
-
+                DraftsEditorController controller = null;
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
                     Parent parent = loader.load();
+                    controller = loader.getController();
                     parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
                     CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
                 } catch (IOException e) {
                     log.debug("Cancelled by user");
                 }
 
-                return null;
+                return controller;
             }
 
             @Override
@@ -397,6 +399,11 @@ public class AppMenuController {
         Thread t = new Thread(openDraftsTask);
         t.setDaemon(true);
         t.start();
+
+
+        return t.
+
+
     }
 
 
