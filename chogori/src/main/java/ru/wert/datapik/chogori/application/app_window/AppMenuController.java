@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.drafts.DraftsEditorController;
 import ru.wert.datapik.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
+import ru.wert.datapik.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.datapik.client.entity.models.ChatGroup;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.chogori.chat.SideChat;
@@ -328,37 +329,8 @@ public class AppMenuController {
      * -- КАРТОТЕКА
      */
     private void openFileCabinet(ActionEvent event) {
-        Task<Void> openFileCabinetTask = new Task<Void>() {
-            @Override
-            public Void call() throws InterruptedException {
-                Platform.runLater(WaitAMinute::create);
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/passports/passportsEditor.fxml"));
-                    Parent parent = loader.load();
-                    parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
 
-                    CH_TAB_PANE.createNewTab("Картотека", parent, true, loader.getController());
-                } catch (IOException e) {
-                    log.debug("Cancelled by user");
-                }
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                super.done();
-                Platform.runLater(WaitAMinute::close);
-
-            }
-
-            @Override
-            protected void cancelled() {
-                super.cancelled();
-                Platform.runLater(WaitAMinute::close);
-            }
-        };
-
-        Thread t = new Thread(openFileCabinetTask);
+        Thread t = new Thread(new OpenPassportsEditorTask());
         t.setDaemon(true);
         t.start();
     }

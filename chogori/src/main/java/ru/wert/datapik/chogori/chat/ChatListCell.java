@@ -145,7 +145,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
             Parent cardWithImage = null;
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/card.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cardd.fxml"));
                 cardWithImage = loader.load();
                 CardController controller = loader.getController();
                 controller.init("Изображение", imageView);
