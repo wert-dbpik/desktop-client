@@ -195,11 +195,11 @@ public class ChatListCell extends ListCell<ChatMessage> {
         List<String> ids =  Arrays.asList(text.split(" ", -1));
 
         for(String id : ids){
-            Parent cardWithDraft = null;
+            Parent cardWithFolder = null;
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/draftCard.fxml"));
-                cardWithDraft = loader.load();
-                DraftCardController controller = loader.getController();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/folderCard.fxml"));
+                cardWithFolder = loader.load();
+                FolderCardController controller = loader.getController();
                 controller.init(id);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -209,7 +209,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
             if(ids.size() > 1) title = "Комплекты чертежей:";
             lblTitle.setText(title);
 
-            vbMessage.getChildren().add(cardWithDraft);
+            vbMessage.getChildren().add(cardWithFolder);
             vbMessage.setPrefWidth(CHAT_WIDTH * MESSAGE_WIDTH);
         }
 

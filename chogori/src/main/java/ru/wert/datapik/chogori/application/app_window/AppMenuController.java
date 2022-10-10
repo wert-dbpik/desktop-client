@@ -1,6 +1,8 @@
 package ru.wert.datapik.chogori.application.app_window;
 
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -363,23 +365,25 @@ public class AppMenuController {
      */
     public static DraftsEditorController openDrafts(Event event) {
 
-        Task<DraftsEditorController> openDraftsTask = new Task<DraftsEditorController>() {
+        ObjectProperty<DraftsEditorController> controllerProperty = new SimpleObjectProperty<>();
+
+        Task<Void> openDraftsTask = new Task<Void>() {
             @Override
-            public DraftsEditorController call() throws InterruptedException {
-                if (isCancelled()) return null ;
+            public Void call() throws InterruptedException {
+                if (isCancelled()) return null;
                 Platform.runLater(WaitAMinute::create);
-                DraftsEditorController controller = null;
+
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
                     Parent parent = loader.load();
-                    controller = loader.getController();
+                    controllerProperty.set(loader.getController());
                     parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
                     CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
                 } catch (IOException e) {
                     log.debug("Cancelled by user");
                 }
 
-                return controller;
+                return null;
             }
 
             @Override
@@ -400,10 +404,7 @@ public class AppMenuController {
         t.setDaemon(true);
         t.start();
 
-
-        return t.
-
-
+        return controllerProperty.get();
     }
 
 

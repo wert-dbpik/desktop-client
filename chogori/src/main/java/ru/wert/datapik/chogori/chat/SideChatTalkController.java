@@ -214,7 +214,6 @@ public class SideChatTalkController {
     public void createPicsChatMessage( List<File> chosenFiles) {
         StringBuilder text = new StringBuilder();
         for(File file : chosenFiles){
-//            ImageView imageView = ImageUtil.createImageViewFromFile(file, null);
             Image image = new Image(file.toURI().toString());
             Pic savedPic = ImageUtil.createPicFromFileAndSaveItToDB(image, file);
             text.append(savedPic.getId());
