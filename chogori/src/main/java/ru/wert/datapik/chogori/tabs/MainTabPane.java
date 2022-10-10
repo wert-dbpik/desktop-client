@@ -153,7 +153,7 @@ public class MainTabPane extends TabPane {
      * @param name String название вкладки (id)
      * @return Tab или null
      */
-    private AppTab tabIsAvailable(String name){
+    public AppTab tabIsAvailable(String name){
         for(Tab tab : getTabs()){
             if(((Label)tab.getGraphic()).getText().equals(name))
                 return (AppTab)tab;

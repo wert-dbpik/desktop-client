@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_FOLDERS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
@@ -54,7 +55,8 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
     private Draft_PatchController draftPatchController;
     private PreviewerPatchController previewerPatchController;
 //    private Label lblDraftInfo;
-    private Folder_TableView folderTableView;
+
+    @Getter private Folder_TableView folderTableView;
     private ProductGroup_TreeView<Folder> productGroupsTreeView;
 
     @FXML
@@ -68,6 +70,16 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
 
         folderTableView.setDraftTable(draftsTable);
 
+    }
+
+    //=========== РАБОТА С ЧАТОМ   ====================================================
+
+    public void openFolderFromChat(Folder folder){
+//        Platform.runLater(()->{
+            ProductGroup group = folder.getProductGroup();
+            folderTableView.updateVisibleLeafOfTableView(group);
+            folderTableView.getSelectionModel().select(folder);
+//        });
     }
 
 
@@ -162,7 +174,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
 
     }
 
-    private void updateListOfDrafts(Item newValue) {
+    public void updateListOfDrafts(Item newValue) {
         draftPatchController.showSourceOfPassports(newValue);
         draftsTable.setTempSelectedFolders(Collections.singletonList((Folder) newValue));
         draftsTable.setSearchedText(""); //обнуляем поисковую строку

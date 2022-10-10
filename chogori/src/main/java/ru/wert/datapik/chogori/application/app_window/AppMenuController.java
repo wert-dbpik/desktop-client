@@ -4,8 +4,10 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -21,6 +23,7 @@ import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.drafts.DraftsEditorController;
+import ru.wert.datapik.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
 import ru.wert.datapik.client.entity.models.ChatGroup;
 import ru.wert.datapik.client.entity.models.User;
@@ -294,7 +297,7 @@ public class AppMenuController {
         draftsCabinetItem.setOnAction(this::openFileCabinet);
 
         MenuItem draftsItem = new MenuItem("Чертежи");
-        draftsItem.setOnAction(AppMenuController::openDrafts);
+        draftsItem.setOnAction(this::openDrafts);
 
         MenuItem changeHistoryItem = new MenuItem("История изменений");
         changeHistoryItem.setOnAction(this::openChangeHistory);
@@ -363,48 +366,11 @@ public class AppMenuController {
     /**
      * -- ЧЕРТЕЖИ
      */
-    public static DraftsEditorController openDrafts(Event event) {
+    public void openDrafts(Event event) {
 
-        ObjectProperty<DraftsEditorController> controllerProperty = new SimpleObjectProperty<>();
-
-        Task<Void> openDraftsTask = new Task<Void>() {
-            @Override
-            public Void call() throws InterruptedException {
-                if (isCancelled()) return null;
-                Platform.runLater(WaitAMinute::create);
-
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/drafts/draftsEditor.fxml"));
-                    Parent parent = loader.load();
-                    controllerProperty.set(loader.getController());
-                    parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-                    CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
-                } catch (IOException e) {
-                    log.debug("Cancelled by user");
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                super.done();
-                Platform.runLater(WaitAMinute::close);
-            }
-
-            @Override
-            protected void cancelled() {
-                super.cancelled();
-                Platform.runLater(WaitAMinute::close);
-            }
-
-        };
-
-        Thread t = new Thread(openDraftsTask);
+        Thread t = new Thread(new OpenDraftsEditorTask());
         t.setDaemon(true);
         t.start();
-
-        return controllerProperty.get();
     }
 
 

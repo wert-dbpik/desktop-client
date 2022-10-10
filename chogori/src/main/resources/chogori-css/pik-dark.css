@@ -555,12 +555,13 @@
     -fx-padding: 5;
 }
 
+/*Стиль карточки со ссылкой на чертеж, комплект чертежей и тд*/
 #draftInChat{
     -fx-background-color: #f8f5eb;
     -fx-background-radius: 10 10 10 10;
     -fx-border-radius: 10 10 10 10;
     -fx-border-color: royalblue;
-    -fx-padding: 5;
+    -fx-padding: 0 5 0 5;
 }
 
 

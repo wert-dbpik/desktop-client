@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import lombok.Getter;
 import ru.wert.datapik.chogori.application.app_window.AppMenuController;
+import ru.wert.datapik.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.datapik.client.entity.models.ChatMessage;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -131,6 +132,8 @@ public class SideChatTalkController {
 
     }
 
+
+
     //============          ОТПРАВИТЬ ЧЕРТЕЖИ   ========================================================
 
     /**
@@ -138,7 +141,10 @@ public class SideChatTalkController {
      * При нажатии открывается вкладка "Чертежи"
      */
     private void sendDraft(ActionEvent actionEvent) {
-        AppMenuController.openDrafts(actionEvent);
+
+        Thread t = new Thread(new OpenDraftsEditorTask());
+        t.setDaemon(true);
+        t.start();
     }
 
     /**
