@@ -132,7 +132,32 @@ public class SideChatTalkController {
 
     }
 
+    //============          ОТПРАВИТЬ ПАССПОРТА   ========================================================
 
+    /**
+     * Метод создает сообщение с пасспортами
+     */
+    public void createPassportsChatMessage(String str) {
+        StringBuilder text = new StringBuilder();
+        String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
+        for (String s : pasteData) {
+            String clazz = Arrays.asList(s.split("#", -1)).get(0);
+            if (!clazz.equals("PP")) continue;
+            else {
+                String strId = s.replace("PP#", "");
+                text.append(strId);
+                text.append(" ");
+            }
+        }
+
+        ChatMessage message = createChatMessage(EMessageType.CHAT_PASSPORTS, text.toString().trim());
+        taMessageText.setText("");
+        int index = messages.size();
+        listViewWithMessages.getItems().add(message);
+        listViewWithMessages.refresh();
+        listViewWithMessages.scrollTo(message);
+
+    }
 
     //============          ОТПРАВИТЬ ЧЕРТЕЖИ   ========================================================
 
@@ -173,7 +198,7 @@ public class SideChatTalkController {
     }
 
     /**
-     * Метод создает сообщение с чертежами
+     * Метод создает сообщение с комплектами чертежей
      */
     public void createFoldersChatMessage(String str) {
         StringBuilder text = new StringBuilder();

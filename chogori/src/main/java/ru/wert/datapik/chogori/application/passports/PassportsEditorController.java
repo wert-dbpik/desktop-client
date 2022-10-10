@@ -13,6 +13,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.SearchableTab;
@@ -35,8 +36,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.images.BtnImages.*;
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_FOLDERS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSED;
 
@@ -84,6 +85,23 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
         loadStackPaneCatalog(); //Каталог
 
         loadStackPanePassports(); //Пасспорта
+
+    }
+
+    public void openPassportFromChat(Passport passport){
+
+        Draft draft = CH_QUICK_DRAFTS.findByPassport(passport).get(0);
+            updateListOfPassports(draft.getFolder());
+
+//        Folder folder = draft.getFolder();
+//        ProductGroup group = draft.getFolder().getProductGroup();
+//        folderTableView.updateVisibleLeafOfTableView(group);
+
+
+//        folderTableView.getSelectionModel().select(folder);
+
+            passportsTable.getSelectionModel().select(passport);
+            passportsTable.scrollTo(passport);
 
     }
 

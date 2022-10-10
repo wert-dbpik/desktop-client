@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.chat;
+package ru.wert.datapik.chogori.chat.cards;
 
 import ru.wert.datapik.client.interfaces.UpdatableTabController;
 

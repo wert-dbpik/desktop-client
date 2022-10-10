@@ -29,7 +29,7 @@ public class OpenPassportsEditorTask extends Task<PassportsEditorController> {
             Parent parent = loader.load();
             controller = loader.getController();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
+            CH_TAB_PANE.createNewTab("Картотека", parent, true, loader.getController());
         } catch (IOException e) {
             log.debug("OpenDraftsEditorTask : Cancelled by user");
         }

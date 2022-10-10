@@ -5,6 +5,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
+import ru.wert.datapik.chogori.entities.drafts.Draft_Manipulator;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
@@ -62,6 +63,8 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
     public Passport_TableView(String promptText, PreviewerPatchController previewerController, boolean useContextMenu) {
         this(promptText);
         this.previewerController = previewerController;
+
+        new Passport_Manipulator(this);
 
         //Создаем изначальное контекстное меню, чтобы оно могло открыться при клике в пустом месте
         if(useContextMenu) createContextMenu();

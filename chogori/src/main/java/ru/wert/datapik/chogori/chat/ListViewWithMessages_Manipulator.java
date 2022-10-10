@@ -55,7 +55,7 @@ public class ListViewWithMessages_Manipulator {
                 }
             } else if (db.hasString()){
                 String str = db.getString();
-                if(str.startsWith("pik! DR#") || str.startsWith("pik! F#")){
+                if(str.startsWith("pik! DR#") || str.startsWith("pik! F#") || str.startsWith("pik! PP#")){
                     event.acceptTransferModes(TransferMode.MOVE);
                     event.consume();
                     return;
@@ -78,6 +78,8 @@ public class ListViewWithMessages_Manipulator {
                     chatController.createDraftsChatMessage(str);
                 } else if(str.startsWith("pik! F#")){
                     chatController.createFoldersChatMessage(str);
+                } else if(str.startsWith("pik! PP#")) {
+                    chatController.createPassportsChatMessage(str);
                 }
 
             }

@@ -9,6 +9,10 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import ru.wert.datapik.chogori.chat.cards.CardController;
+import ru.wert.datapik.chogori.chat.cards.DraftCardController;
+import ru.wert.datapik.chogori.chat.cards.FolderCardController;
+import ru.wert.datapik.chogori.chat.cards.PassportCardController;
 import ru.wert.datapik.client.entity.models.ChatMessage;
 import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.chogori.images.ImageUtil;
@@ -105,6 +109,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
                     case CHAT_DRAFTS: mountDrafts(vbMessage, message); break;
                     case CHAT_FOLDERS: mountFolders(vbMessage, message); break;
                     case CHAT_PICS: mountPics(vbMessage, message); break;
+                    case CHAT_PASSPORTS: mountPassports(vbMessage, message); break;
                 }
 
             });
@@ -210,6 +215,32 @@ public class ChatListCell extends ListCell<ChatMessage> {
             lblTitle.setText(title);
 
             vbMessage.getChildren().add(cardWithFolder);
+            vbMessage.setPrefWidth(CHAT_WIDTH * MESSAGE_WIDTH);
+        }
+
+
+    }
+
+    private void mountPassports(VBox vbMessage, ChatMessage message) {
+        String text = message.getText();
+        List<String> ids =  Arrays.asList(text.split(" ", -1));
+
+        for(String id : ids){
+            Parent cardWithPassport = null;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/passportCard.fxml"));
+                cardWithPassport = loader.load();
+                PassportCardController controller = loader.getController();
+                controller.init(id);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String title = "Пасспорт:";
+            if(ids.size() > 1) title = "Пасспорта:";
+            lblTitle.setText(title);
+
+            vbMessage.getChildren().add(cardWithPassport);
             vbMessage.setPrefWidth(CHAT_WIDTH * MESSAGE_WIDTH);
         }
 

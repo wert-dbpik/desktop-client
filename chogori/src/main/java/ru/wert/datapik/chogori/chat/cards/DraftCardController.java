@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.chat;
+package ru.wert.datapik.chogori.chat.cards;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -26,7 +26,7 @@ public class DraftCardController {
     @FXML
     private AnchorPane draftChatCard;
 
-    void init(String strId){
+    public void init(String strId){
         Draft draft = CH_DRAFTS.findById(Long.valueOf(strId));
         Passport passport = draft.getPassport();
         VBox box = new VBox();

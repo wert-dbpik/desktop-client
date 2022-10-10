@@ -75,11 +75,11 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
     //=========== РАБОТА С ЧАТОМ   ====================================================
 
     public void openFolderFromChat(Folder folder){
-//        Platform.runLater(()->{
+        Platform.runLater(()->{
             ProductGroup group = folder.getProductGroup();
             folderTableView.updateVisibleLeafOfTableView(group);
             folderTableView.getSelectionModel().select(folder);
-//        });
+        });
     }
 
 

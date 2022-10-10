@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.chat;
+package ru.wert.datapik.chogori.chat.cards;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -17,7 +17,7 @@ public class CardController {
     @FXML
     private AnchorPane chatCard;
 
-    void init(String cardName, ImageView imageView){
+    public void init(String cardName, ImageView imageView){
         lblCardName.setText(cardName);
         vbImageView.getChildren().add(imageView);
     }
