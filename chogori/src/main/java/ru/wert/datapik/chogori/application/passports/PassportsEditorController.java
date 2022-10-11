@@ -3,6 +3,8 @@ package ru.wert.datapik.chogori.application.passports;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -32,6 +34,7 @@ import ru.wert.datapik.chogori.entities.passports.Passport_PatchController;
 import ru.wert.datapik.chogori.entities.passports.Passport_TableView;
 import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
 
+import javax.swing.event.ChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -74,6 +77,8 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
     private Folder_TableView folderTableView;
     private ProductGroup_TreeView<Folder> productGroupsTreeView;
 
+    private ChangeListener<Item> folderTableSelectedItemChangeListener;
+
 
     @FXML
     void initialize() {
@@ -91,17 +96,21 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
     public void openPassportFromChat(Passport passport){
 
         Draft draft = CH_QUICK_DRAFTS.findByPassport(passport).get(0);
-            updateListOfPassports(draft.getFolder());
 
-//        Folder folder = draft.getFolder();
-//        ProductGroup group = draft.getFolder().getProductGroup();
+        Folder folder = draft.getFolder();
+        ProductGroup group = draft.getFolder().getProductGroup();
+//        folderTableView.getSelectionModel().selectedItemProperty().removeListener(folderTableSelectedItemChangeListener);
 //        folderTableView.updateVisibleLeafOfTableView(group);
-
-
 //        folderTableView.getSelectionModel().select(folder);
 
+
+        updateListOfPassports(folder);
+        Platform.runLater(() -> {
             passportsTable.getSelectionModel().select(passport);
             passportsTable.scrollTo(passport);
+//            folderTableView.getSelectionModel().selectedItemProperty().addListener(folderTableSelectedItemChangeListener);
+        });
+
 
     }
 
@@ -209,16 +218,19 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
         //Подключаем слушатель
         folderTableView = catalogPatch.getFolderTableView();
 
-        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue instanceof Folder) {
-                if(folderTableView.getAltOnProperty().get()){
-                    if(CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT))
+        folderTableSelectedItemChangeListener = (observable, oldValue, newValue) -> {
+            if (newValue instanceof Folder) {
+                if (folderTableView.getAltOnProperty().get()) {
+                    if (CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT))
                         updateListOfPassports(newValue);
                 } else
                     updateListOfPassports(newValue);
 
             }
-        });
+        };
+
+        folderTableView.getSelectionModel().selectedItemProperty().addListener(folderTableSelectedItemChangeListener);
+
 
         folderTableView.setOnMouseClicked(e->{
             //Нажата правая клавиша мыши
