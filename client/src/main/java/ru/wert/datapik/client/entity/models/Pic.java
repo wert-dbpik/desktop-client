@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Wither;
 import ru.wert.datapik.client.interfaces.Item;
 
 @Getter
@@ -13,6 +14,7 @@ import ru.wert.datapik.client.interfaces.Item;
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"user", "time"}, callSuper = true)
 public class Pic extends _BaseEntity implements Item {
+    private String initName;
     private String extension;
     private Integer width;
     private Integer height;

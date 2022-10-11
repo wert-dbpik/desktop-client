@@ -153,7 +153,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cardd.fxml"));
                 cardWithImage = loader.load();
                 CardController controller = loader.getController();
-                controller.init("Изображение", imageView);
+                controller.init(p.getInitName(), imageView);
             } catch (IOException e) {
                 e.printStackTrace();
             }

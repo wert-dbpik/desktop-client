@@ -148,6 +148,7 @@ public class ImageUtil {
     public static Pic createPicFromFileAndSaveItToDB(Image image, File file){
         //Создаем новый экземпляр Pic с полями
         Pic newPic = new Pic();
+        newPic.setInitName(file.getName());
         newPic.setUser(CH_CURRENT_USER);
         newPic.setTime(AppStatic.getCurrentTime());
         newPic.setWidth((int) image.getWidth());
