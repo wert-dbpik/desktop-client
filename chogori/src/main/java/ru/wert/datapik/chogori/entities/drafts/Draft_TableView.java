@@ -11,6 +11,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
+import ru.wert.datapik.chogori.common.tableView.TableViewWithResizableColumns;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
@@ -133,6 +134,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         focusedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ЧЕРТЕЖ");
         });
+
+        new TableViewWithResizableColumns(this, previewerController.getPaneViewer());
 
     }
 

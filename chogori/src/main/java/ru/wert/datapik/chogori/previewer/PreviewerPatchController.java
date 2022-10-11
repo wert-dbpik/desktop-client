@@ -62,7 +62,7 @@ public class PreviewerPatchController {
     private Label bracket2;
 
     @FXML
-    private StackPane paneViewer;
+    @Getter private StackPane paneViewer;
 
     @FXML
     @Getter private HBox hboxPreviewerButtons;
