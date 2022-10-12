@@ -82,11 +82,11 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
      * @param promptText String, текст, добавляемый в поисковую строку
      * @param previewerController PreviewerNoTBController контроллер окна предпросмотра
      */
-    public Draft_TableView(String promptText, PreviewerPatchController previewerController) {
+    public Draft_TableView(String promptText, PreviewerPatchController previewerController, VBox vbox) {
         super(promptText);
         this.previewerController = previewerController;
 
-//        new TableViewWithResizableColumns(this, previewerController.getPaneViewer());
+        new TableViewWithResizableColumns(this, vbox);
 
         manipulator = new Draft_Manipulator(this);
 

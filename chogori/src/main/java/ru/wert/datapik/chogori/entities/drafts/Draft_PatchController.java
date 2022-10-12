@@ -82,13 +82,12 @@ public class Draft_PatchController {
 
     private void createDraftTableView() {
         //запуск новой версии
-        draftsTable = new Draft_TableView("ЧЕРТЕЖ", previewerController);
+        draftsTable = new Draft_TableView("ЧЕРТЕЖ", previewerController, vboxDrafts);
         draftsTable.setModifyingClass(modifyingClass);
         draftsTable.getSelectionModel().setSelectionMode(mode);
         VBox.setVgrow(draftsTable, Priority.ALWAYS);
         vboxDrafts.getChildren().add(draftsTable);
 
-//        CH_SEARCH_FIELD.setSearchableTableController(draftsTable);
         draftsTable.updateView();
 
     }
