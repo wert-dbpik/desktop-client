@@ -1,41 +1,57 @@
 package ru.wert.datapik.chogori.common.tableView;
 
+import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.control.Control;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import org.icepdf.ri.common.views.Controller;
+import ru.wert.datapik.client.interfaces.Item;
 
 import java.util.List;
 
-import static javafx.scene.control.TableView.UNCONSTRAINED_RESIZE_POLICY;
+import static ru.wert.datapik.chogori.excel.table.TableMaster.countPrefTableWidth;
+import static ru.wert.datapik.chogori.excel.table.TableMaster.getAllColumns;
 
 public class TableViewWithResizableColumns {
 
     private TableView table;
-    private List<TableColumn> columns;
+    private List<TableColumn<Item, ?>> columns;
     private StackPane container;
+    private boolean isFirstRun = true;
+
 
     public TableViewWithResizableColumns(TableView table, StackPane container) {
         this.table = table;
         this.container = container;
         this.columns = table.getColumns();
 
-        table.setColumnResizePolicy(UNCONSTRAINED_RESIZE_POLICY);
-        table.setPrefWidth(countPreferredTableWidth());
 
+        container.widthProperty().addListener((observable, oldValue, newValue) -> {
 
-    }
+        });
 
+        for (TableColumn col : columns) {
+            if (col.isResizable())
+                col.widthProperty().addListener((observable, oldValue, newValue) -> {
 
-    private double countPreferredTableWidth(){
-        double tableWidth = 0.0;
+                    if ((newValue.doubleValue() < col.getMinWidth() && newValue.doubleValue() > col.getMaxWidth())) return;
+                    double deltaW = newValue.doubleValue() - oldValue.doubleValue();
 
-        for(TableColumn col : columns){
-            if(col.isVisible())
-                tableWidth += col.getPrefWidth();
+                    Parent pane = table.getParent();
+
+                    Platform.runLater(() -> {
+                        pane.resize(table.getWidth() + deltaW, table.getHeight());
+                        table.resize(table.getWidth() + deltaW, table.getHeight());
+                        table.setPrefWidth(table.getWidth() + deltaW);
+                    });
+
+                });
+
         }
 
-        return tableWidth;
-
     }
+
 }

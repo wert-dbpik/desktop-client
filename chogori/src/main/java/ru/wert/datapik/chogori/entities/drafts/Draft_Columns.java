@@ -27,9 +27,14 @@ public class Draft_Columns {
         TableColumn<Draft, String> tcId = new TableColumn<>("ID");
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tcId.setStyle("-fx-alignment: CENTER;");
-        tcId.setMinWidth(0);//40
+
+        tcId.setMinWidth(50);
+        tcId.setPrefWidth(80);
+        tcId.setMaxWidth(80);
+        tcId.setResizable(false);
 //        tcId.setComparator(createIntegerComparator(tcId));
         return tcId;
+
     };
 
     /**
@@ -54,7 +59,9 @@ public class Draft_Columns {
         });
 
         tcPassport.setMinWidth(150);
+        tcPassport.setPrefWidth(150);
         tcPassport.setMaxWidth(5000);
+        tcPassport.setResizable(true);
         return tcPassport;
     };
 
@@ -93,8 +100,10 @@ public class Draft_Columns {
 
         tcDraftNumber.setComparator(createLabelComparator(tcDraftNumber));
 
-        tcDraftNumber.setMinWidth(100);
-        tcDraftNumber.setMaxWidth(5000);
+        tcDraftNumber.setMinWidth(120);
+        tcDraftNumber.setPrefWidth(120);
+        tcDraftNumber.setMaxWidth(150);
+        tcDraftNumber.setResizable(true);
         return tcDraftNumber;
     }
 
@@ -114,8 +123,11 @@ public class Draft_Columns {
 
         });
         tcDraftName.setComparator(createLabelComparator(tcDraftName));
-        tcDraftName.setMinWidth(120);
+
+        tcDraftName.setMinWidth(100);
+        tcDraftName.setPrefWidth(120);
         tcDraftName.setMaxWidth(5000);
+        tcDraftName.setResizable(true);
         return tcDraftName;
     }
 
@@ -161,8 +173,11 @@ public class Draft_Columns {
         });
         tcStatus.setComparator(createLabelComparator(tcStatus));
         tcStatus.setStyle("-fx-alignment: CENTER;");
-        tcStatus.setMinWidth(10);//100
-        tcStatus.setMaxWidth(5000);
+
+        tcStatus.setMinWidth(100);//100
+        tcStatus.setPrefWidth(100);//100
+        tcStatus.setMaxWidth(100);
+        tcStatus.setResizable(false);
         return tcStatus;
     };
 
@@ -173,8 +188,11 @@ public class Draft_Columns {
         TableColumn<Draft, String> tcFolder = new TableColumn<>("Папка хранения");
         tcFolder.setCellValueFactory(new PropertyValueFactory<>("folder"));
         tcFolder.setStyle("-fx-alignment: CENTER;");
-        tcFolder.setMinWidth(10);//120
+
+        tcFolder.setMinWidth(100);//120
+        tcFolder.setPrefWidth(120);//120
         tcFolder.setMaxWidth(5000);
+        tcFolder.setResizable(true);
         return tcFolder;
     };
 
@@ -185,8 +203,12 @@ public class Draft_Columns {
         TableColumn<Draft, String> tcInitialDraftName = new TableColumn<>("Имя файла");
         tcInitialDraftName.setCellValueFactory(new PropertyValueFactory<>("initialDraftName"));
         tcInitialDraftName.setStyle("-fx-alignment: CENTER;");
-        tcInitialDraftName.setMinWidth(10);//120
+
+        tcInitialDraftName.setMinWidth(100);//120
+        tcInitialDraftName.setPrefWidth(120);//120
         tcInitialDraftName.setMaxWidth(5000);
+        tcInitialDraftName.setResizable(true);
+
         return tcInitialDraftName;
     };
 
@@ -212,9 +234,12 @@ public class Draft_Columns {
             return new ReadOnlyObjectWrapper<>(label);
         });
         tcDraftType.setSortable(false);
-        tcDraftType.setMinWidth(10);//80
-        tcDraftType.setMaxWidth(5000);
         tcDraftType.setStyle("-fx-alignment: CENTER;");
+
+        tcDraftType.setMinWidth(80);//80
+        tcDraftType.setPrefWidth(80);//80
+        tcDraftType.setMaxWidth(80);
+        tcDraftType.setResizable(false);
         return tcDraftType;
     };
 
@@ -230,8 +255,10 @@ public class Draft_Columns {
         });
 
         tcCreation.setStyle("-fx-alignment: CENTER;");
-        tcCreation.setMinWidth(10);//120
-        tcCreation.setMaxWidth(5000);
+        tcCreation.setMinWidth(150);//120
+        tcCreation.setPrefWidth(150);//120
+        tcCreation.setMaxWidth(150);
+        tcCreation.setResizable(false);
         return tcCreation;
     };
 
@@ -243,8 +270,9 @@ public class Draft_Columns {
     public static TableColumn<Draft, String> createTcNote(){
         TableColumn<Draft, String> tcNote = new TableColumn<>("Примечание");
         tcNote.setCellValueFactory(new PropertyValueFactory<>("note"));
-        tcNote.setMinWidth(10);//120
+        tcNote.setMinWidth(120);//120
         tcNote.setMaxWidth(5000);
+        tcNote.setResizable(true);
         tcNote.setSortable(false);
         return tcNote;
     };

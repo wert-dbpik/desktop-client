@@ -23,6 +23,7 @@ import ru.wert.datapik.chogori.entities.drafts.commands._Draft_Commands;
 import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
 import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.chogori.statics.Comparators;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 
 import java.util.ArrayList;
@@ -48,8 +49,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     @Getter@Setter private List<Folder> selectedFolders;//ForContextMenu и не только
 
     @Getter ListProperty<Draft> preparedList = new SimpleListProperty<>();
-
-
 
     //Фильтр
     @Getter@Setter private boolean showValid = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
@@ -86,6 +85,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     public Draft_TableView(String promptText, PreviewerPatchController previewerController) {
         super(promptText);
         this.previewerController = previewerController;
+
+//        new TableViewWithResizableColumns(this, previewerController.getPaneViewer());
 
         manipulator = new Draft_Manipulator(this);
 
@@ -135,7 +136,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
             if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ЧЕРТЕЖ");
         });
 
-        new TableViewWithResizableColumns(this, previewerController.getPaneViewer());
 
     }
 
