@@ -6,11 +6,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.util.Callback;
-import ru.wert.datapik.client.entity.models.ChatGroup;
+import ru.wert.datapik.client.entity.models.Room;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.chogori.statics.Comparators;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.images.BtnImages.CHATS_IMG;
@@ -27,7 +28,7 @@ public class SideChatGroupsController {
     private ListView<User> listOfUsers;
 
     @FXML
-    private ListView<ChatGroup> listOfChats;
+    private ListView<Room> listOfChats;
 
     @FXML
     private Tab tabPaneChats;
@@ -76,8 +77,8 @@ public class SideChatGroupsController {
      * В методе создается пустой список, который выводится в ListView, если в базе еще нет чатов
      */
     private void updateListOfGroups() {
-        List<ChatGroup> groups = new ArrayList<>();
-        List<ChatGroup> allGroups = CH_CHAT_GROUPS.findAll();
+        List<Room> groups = new ArrayList<>();
+        List<Room> allGroups = CH_ROOMS.findAll();
 
         if(allGroups != null && !allGroups.isEmpty())
             groups.addAll(allGroups);
@@ -129,8 +130,8 @@ public class SideChatGroupsController {
         Long user1 = CH_CURRENT_USER.getId();
         Long user2 = CH_USERS.findByName(userLabel.getText()).getId();
         String groupName = "#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
-        ChatGroup chatGroup = createNewChatGroupIfNeeded(groupName);
-        chat.showChatTalk(chatGroup);
+        Room room = createNewChatGroupIfNeeded(groupName);
+        chat.showChatTalk(room);
     }
 
     private ContextMenu createContextMenu(){
@@ -148,17 +149,18 @@ public class SideChatGroupsController {
     /**
      *
      */
-    private ChatGroup createNewChatGroupIfNeeded(String groupName) {
-        ChatGroup group = null;
-        group = CH_CHAT_GROUPS.findByName(groupName);
-        if (group == null) {
-            ChatGroup newGroup = new ChatGroup();
-            newGroup.setName(groupName);
-            newGroup.setUser(CH_CURRENT_USER);
+    private Room createNewChatGroupIfNeeded(String groupName) {
+        Room room = null;
+        room = CH_ROOMS.findByName(groupName);
+        if (room == null) {
+            Room newRoom = new Room();
+            newRoom.setName(groupName);
+            newRoom.setCreator(CH_CURRENT_USER);
+            newRoom.setRoommates(Collections.singletonList(CH_CURRENT_USER));
 
-            group = CH_CHAT_GROUPS.save(newGroup);
+            room = CH_ROOMS.save(newRoom);
         }
-        return group;
+        return room;
     }
 
 
@@ -167,12 +169,12 @@ public class SideChatGroupsController {
         Label placeholder = new Label("Ни одного чата\nеще не создано");
         placeholder.setStyle("-fx-text-fill: saddlebrown; -fx-font-size: 14; -fx-font-style: italic; -fx-font-weight: bold");
         listOfChats.setPlaceholder(placeholder);
-        listOfChats.setCellFactory(new Callback<ListView<ChatGroup>, ListCell<ChatGroup>>() {
-            public ListCell<ChatGroup> call(ListView<ChatGroup> param) {
+        listOfChats.setCellFactory(new Callback<ListView<Room>, ListCell<Room>>() {
+            public ListCell<Room> call(ListView<Room> param) {
                 final Label userLabel = new Label();
-                final ListCell<ChatGroup> cell = new ListCell<ChatGroup>() {
+                final ListCell<Room> cell = new ListCell<Room>() {
                     @Override
-                    public void updateItem(ChatGroup item, boolean empty) {
+                    public void updateItem(Room item, boolean empty) {
                         super.updateItem(item, empty);
 
                         if (empty) {

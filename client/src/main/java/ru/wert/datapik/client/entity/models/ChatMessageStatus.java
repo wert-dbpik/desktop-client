@@ -12,7 +12,7 @@ import ru.wert.datapik.client.interfaces.Item;
 //@EqualsAndHashCode(of = {"name"}, callSuper = false)
 public class ChatMessageStatus extends _BaseEntity implements Item {
 
-    private ChatMessage message; //Сообщение
+    private Message message; //Сообщение
     private User user; //Пользователь, кому написано сообщение
     private Integer status = 0; //Статус сообщения
 

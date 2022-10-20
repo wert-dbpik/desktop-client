@@ -1,13 +1,8 @@
 package ru.wert.datapik.chogori.application.app_window;
 
-import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -22,16 +17,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.datapik.chogori.application.drafts.DraftsEditorController;
 import ru.wert.datapik.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
 import ru.wert.datapik.chogori.application.passports.OpenPassportsEditorTask;
-import ru.wert.datapik.client.entity.models.ChatGroup;
+import ru.wert.datapik.client.entity.models.Room;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.chogori.chat.SideChat;
 import ru.wert.datapik.chogori.help.About;
 import ru.wert.datapik.chogori.search.SearchField;
-import ru.wert.datapik.winform.modal.WaitAMinute;
 import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
@@ -41,7 +34,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import static ru.wert.datapik.chogori.images.BtnImages.*;
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_CHAT_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
@@ -519,11 +512,11 @@ public class AppMenuController {
     }
 
     void makeTest(ActionEvent event){
-        ChatGroup group = new ChatGroup();
+        Room group = new Room();
         group.setName("#1#96");
-        group.setUser(CH_CURRENT_USER);
+        group.setCreator(CH_CURRENT_USER);
 
-        ChatGroup newGroup = CH_CHAT_GROUPS.save(group);
+        Room newGroup = CH_ROOMS.save(group);
     }
 
     //########################   ПОМОЩЬ    ###########################

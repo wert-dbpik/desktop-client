@@ -12,7 +12,7 @@ public class ChogoriServices {
 
     public static IFilesService CH_FILES;
 
-    public static IChatGroupService CH_CHAT_GROUPS;
+    public static IChatGroupService CH_ROOMS;
     public static IChatMessageService CH_CHAT_MESSAGES;
     public static IChatMessageStatusService CH_CHAT_MESSAGE_STATUSES;
 
@@ -53,8 +53,8 @@ public class ChogoriServices {
 
         ChogoriServices.CH_FILES = FilesService.getInstance();
 
-        ChogoriServices.CH_CHAT_GROUPS = ChatGroupService.getInstance();
-        ChogoriServices.CH_CHAT_MESSAGES = ChatMessageService.getInstance();
+        ChogoriServices.CH_ROOMS = RoomService.getInstance();
+        ChogoriServices.CH_CHAT_MESSAGES = MessageService.getInstance();
         ChogoriServices.CH_CHAT_MESSAGE_STATUSES = ChatMessageStatusService.getInstance();
 
         ChogoriServices.CH_USERS = UserService.getInstance();

@@ -13,7 +13,7 @@ import ru.wert.datapik.chogori.chat.cards.CardController;
 import ru.wert.datapik.chogori.chat.cards.DraftCardController;
 import ru.wert.datapik.chogori.chat.cards.FolderCardController;
 import ru.wert.datapik.chogori.chat.cards.PassportCardController;
-import ru.wert.datapik.client.entity.models.ChatMessage;
+import ru.wert.datapik.client.entity.models.Message;
 import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.chogori.images.ImageUtil;
 import ru.wert.datapik.chogori.statics.AppStatic;
@@ -31,7 +31,7 @@ import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_TEMPDIR;
 
-public class ChatListCell extends ListCell<ChatMessage> {
+public class ChatListCell extends ListCell<Message> {
 
     VBox vbMessageContainer; //Самый верхний контейнер
     VBox vbOutlineMessage; //Контейнер включает Заголовок, Сообщение, Время создания
@@ -46,7 +46,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
     private Separator separator;
 
     @Override
-    protected void updateItem(ChatMessage item, boolean empty) {
+    protected void updateItem(Message item, boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             setText(null);
@@ -54,7 +54,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
         } else {
             setText(null);
             Parent mes;
-            if(item.getUser().equals(CH_CURRENT_USER))
+            if(item.getSender().equals(CH_CURRENT_USER))
                 mes = formatMessage(item, OUT);
             else
                 mes = formatMessage(item, IN);
@@ -63,7 +63,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
         }
     }
 
-    private VBox formatMessage(ChatMessage message, String in_out){
+    private VBox formatMessage(Message message, String in_out){
         VBox inMessage = null;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/message.fxml"));
@@ -99,12 +99,12 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
             Platform.runLater(()->{
                 vbMessage.autosize();
-                lblFrom.setText(message.getUser().getName());
+                lblFrom.setText(message.getSender().getName());
                 lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime()));
 
-                EMessageType type = EMessageType.values()[message.getMessageType()];
+//                Message.MessageType type = message.getType();
 
-                switch(type){
+                switch(message.getType()){
                     case CHAT_TEXT: mountText(vbMessage, message); break;
                     case CHAT_DRAFTS: mountDrafts(vbMessage, message); break;
                     case CHAT_FOLDERS: mountFolders(vbMessage, message); break;
@@ -122,7 +122,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
     }
 
 
-    private void mountText(VBox vbMessage, ChatMessage message) {
+    private void mountText(VBox vbMessage, Message message) {
         vbOutlineMessage.getChildren().removeAll(lblTitle);
         Label text = new Label(message.getText());
         text.setMaxWidth(CHAT_WIDTH * MESSAGE_WIDTH);
@@ -130,7 +130,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
         vbMessage.getChildren().add(text);
     }
 
-    private void mountPics(VBox vbMessage, ChatMessage message) {
+    private void mountPics(VBox vbMessage, Message message) {
         String text = message.getText();
         List<Long> ids =  Arrays.asList(text.split(" ", -1))
                 .stream().map(Long::valueOf).collect(Collectors.toList());
@@ -169,7 +169,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
     }
 
-    private void mountDrafts(VBox vbMessage, ChatMessage message) {
+    private void mountDrafts(VBox vbMessage, Message message) {
         String text = message.getText();
         List<String> ids =  Arrays.asList(text.split(" ", -1));
 
@@ -195,7 +195,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
     }
 
-    private void mountFolders(VBox vbMessage, ChatMessage message) {
+    private void mountFolders(VBox vbMessage, Message message) {
         String text = message.getText();
         List<String> ids =  Arrays.asList(text.split(" ", -1));
 
@@ -221,7 +221,7 @@ public class ChatListCell extends ListCell<ChatMessage> {
 
     }
 
-    private void mountPassports(VBox vbMessage, ChatMessage message) {
+    private void mountPassports(VBox vbMessage, Message message) {
         String text = message.getText();
         List<String> ids =  Arrays.asList(text.split(" ", -1));
 

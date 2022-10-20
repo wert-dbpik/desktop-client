@@ -1,6 +1,5 @@
 package ru.wert.datapik.chogori.chat;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,11 +11,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import lombok.Getter;
-import ru.wert.datapik.chogori.application.app_window.AppMenuController;
 import ru.wert.datapik.chogori.application.drafts.OpenDraftsEditorTask;
-import ru.wert.datapik.client.entity.models.ChatMessage;
-import ru.wert.datapik.client.entity.models.Draft;
-import ru.wert.datapik.client.entity.models.Folder;
+import ru.wert.datapik.client.entity.models.Message;
 import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.chogori.images.ImageUtil;
 import ru.wert.datapik.chogori.statics.AppStatic;
@@ -25,7 +21,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.chogori.images.BtnImages.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
@@ -48,7 +43,7 @@ public class SideChatTalkController {
     private TextArea taMessageText;
 
     @FXML
-    private ListView<ChatMessage> listViewWithMessages;
+    private ListView<Message> listViewWithMessages;
 
     @FXML
     private Button btnSend;
@@ -71,7 +66,7 @@ public class SideChatTalkController {
     private Text textHolder = new Text();
     private double oldHeight = 0;
 
-    private ObservableList<ChatMessage> messages;
+    private ObservableList<Message> messages;
 
     public void init(SideChat chat){
         this.chat = chat;
@@ -81,7 +76,7 @@ public class SideChatTalkController {
     @FXML
     void initialize(){
         messages = FXCollections.observableArrayList();
-        listViewWithMessages.setCellFactory((ListView<ChatMessage> tv) -> new ChatListCell());
+        listViewWithMessages.setCellFactory((ListView<Message> tv) -> new ChatListCell());
         listViewWithMessages.setId("listViewWithMessages");
         listViewWithMessages.setItems(messages);
 
@@ -150,7 +145,7 @@ public class SideChatTalkController {
             }
         }
 
-        ChatMessage message = createChatMessage(EMessageType.CHAT_PASSPORTS, text.toString().trim());
+        Message message = createChatMessage(Message.MessageType.CHAT_PASSPORTS, text.toString().trim());
         taMessageText.setText("");
         int index = messages.size();
         listViewWithMessages.getItems().add(message);
@@ -188,7 +183,7 @@ public class SideChatTalkController {
             }
         }
 
-        ChatMessage message = createChatMessage(EMessageType.CHAT_DRAFTS, text.toString().trim());
+        Message message = createChatMessage(Message.MessageType.CHAT_DRAFTS, text.toString().trim());
         taMessageText.setText("");
         int index = messages.size();
         listViewWithMessages.getItems().add(message);
@@ -213,7 +208,7 @@ public class SideChatTalkController {
             }
         }
 
-        ChatMessage message = createChatMessage(EMessageType.CHAT_FOLDERS, text.toString().trim());
+        Message message = createChatMessage(Message.MessageType.CHAT_FOLDERS, text.toString().trim());
         taMessageText.setText("");
         int index = messages.size();
         listViewWithMessages.getItems().add(message);
@@ -251,7 +246,7 @@ public class SideChatTalkController {
             text.append(" ");
         }
 
-        ChatMessage message = createChatMessage(EMessageType.CHAT_PICS, text.toString().trim());
+        Message message = createChatMessage(Message.MessageType.CHAT_PICS, text.toString().trim());
         taMessageText.setText("");
         int index = messages.size();
         listViewWithMessages.getItems().add(message);
@@ -269,7 +264,7 @@ public class SideChatTalkController {
      */
     private void send(ActionEvent actionEvent) {
         String text = taMessageText.getText();
-        ChatMessage message = createChatMessage(EMessageType.CHAT_TEXT, text);
+        Message message = createChatMessage(Message.MessageType.CHAT_TEXT, text);
         taMessageText.setText("");
         int index = messages.size();
         listViewWithMessages.getItems().add(message);
@@ -297,14 +292,14 @@ public class SideChatTalkController {
 //    }
 
     /**
-     * Метода создает сообщение ChatMessage
+     * Метода создает сообщение Message
      * @param type EMessageType
      * @param text String
      */
-    private ChatMessage createChatMessage(EMessageType type, String text){
-        ChatMessage message = new ChatMessage();
-        message.setMessageType(type.ordinal());
-        message.setUser(CH_CURRENT_USER);
+    private Message createChatMessage(Message.MessageType type, String text){
+        Message message = new Message();
+        message.setType(type);
+        message.setSender(CH_CURRENT_USER);
         message.setCreationTime(AppStatic.getCurrentTime());
         message.setText(text);
 

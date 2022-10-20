@@ -8,8 +8,8 @@ public class BLlinks {
     public static PicService picService;
     public static RemarkService remarkService;
 
-    public static ChatGroupService chatGroupService;
-    public static ChatMessageService chatMessageService;
+    public static RoomService roomService;
+    public static MessageService messageService;
     public static ChatMessageStatusService chatMessageStatusService;
 
     public static UserService userService;

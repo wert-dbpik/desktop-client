@@ -2,9 +2,9 @@ package ru.wert.datapik.client.entity.serviceREST;
 
 
 import retrofit2.Call;
-import ru.wert.datapik.client.entity.api_interfaces.ChatGroupApiInterface;
-import ru.wert.datapik.client.entity.models.ChatGroup;
-import ru.wert.datapik.client.entity.service_interfaces.IChatGroupService;
+import ru.wert.datapik.client.entity.api_interfaces.MessageApiInterface;
+import ru.wert.datapik.client.entity.models.Message;
+import ru.wert.datapik.client.entity.service_interfaces.IChatMessageService;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.client.utils.BLlinks;
@@ -12,41 +12,30 @@ import ru.wert.datapik.client.utils.BLlinks;
 import java.io.IOException;
 import java.util.List;
 
-public class ChatGroupService implements IChatGroupService, ItemService<ChatGroup> {
+public class MessageService implements IChatMessageService, ItemService<Message> {
 
-    private static ChatGroupService instance;
-    private ChatGroupApiInterface api;
+    private static MessageService instance;
+    private MessageApiInterface api;
 
-    private ChatGroupService() {
-        BLlinks.chatGroupService = this;
-        api = RetrofitClient.getInstance().getRetrofit().create(ChatGroupApiInterface.class);
+    private MessageService() {
+        BLlinks.messageService = this;
+        api = RetrofitClient.getInstance().getRetrofit().create(MessageApiInterface.class);
     }
 
-    public ChatGroupApiInterface getApi() {
+    public MessageApiInterface getApi() {
         return api;
     }
 
-    public static ChatGroupService getInstance() {
+    public static MessageService getInstance() {
         if (instance == null)
-            return new ChatGroupService();
+            return new MessageService();
         return instance;
     }
 
     @Override
-    public ChatGroup findById(Long id) {
+    public Message findById(Long id) {
         try {
-            Call<ChatGroup> call = api.getById(id);
-            return call.execute().body();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-    public ChatGroup findByName(String name) {
-        try {
-            Call<ChatGroup> call = api.getByName(name);
+            Call<Message> call = api.getById(id);
             return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,9 +44,9 @@ public class ChatGroupService implements IChatGroupService, ItemService<ChatGrou
     }
 
     @Override
-    public List<ChatGroup> findAll() {
+    public List<Message> findAll() {
         try {
-            Call<List<ChatGroup>> call = api.getAll();
+            Call<List<Message>> call = api.getAll();
             return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,15 +55,15 @@ public class ChatGroupService implements IChatGroupService, ItemService<ChatGrou
     }
 
     @Override
-    public List<ChatGroup> findAllByText(String text) {
+    public List<Message> findAllByText(String text) {
         //НЕ ИСПОЛЬЗУЕТСЯ
         return null;
     }
 
     @Override
-    public ChatGroup save(ChatGroup entity) {
+    public Message save(Message entity) {
         try {
-            Call<ChatGroup> call = api.create(entity);
+            Call<Message> call = api.create(entity);
             return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,7 +72,7 @@ public class ChatGroupService implements IChatGroupService, ItemService<ChatGrou
     }
 
     @Override
-    public boolean update(ChatGroup entity) {
+    public boolean update(Message entity) {
         try {
             Call<Void> call = api.update(entity);
             return call.execute().isSuccessful();
@@ -94,7 +83,7 @@ public class ChatGroupService implements IChatGroupService, ItemService<ChatGrou
     }
 
     @Override
-    public boolean delete(ChatGroup entity) {
+    public boolean delete(Message entity) {
         Long id = entity.getId();
         try {
             Call<Void> call = api.deleteById(id);

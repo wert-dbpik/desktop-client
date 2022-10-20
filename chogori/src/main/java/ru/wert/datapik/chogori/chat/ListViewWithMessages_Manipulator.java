@@ -5,7 +5,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import ru.wert.datapik.client.entity.models.ChatMessage;
+import ru.wert.datapik.client.entity.models.Message;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,10 +19,10 @@ import static ru.wert.datapik.chogori.statics.AppStatic.*;
 
 public class ListViewWithMessages_Manipulator {
 
-    private final ListView<ChatMessage> listView;
+    private final ListView<Message> listView;
     private SideChatTalkController chatController;
 
-    public ListViewWithMessages_Manipulator(ListView<ChatMessage> listView, SideChatTalkController chatController) {
+    public ListViewWithMessages_Manipulator(ListView<Message> listView, SideChatTalkController chatController) {
         this.listView = listView;
         this.chatController = chatController;
 

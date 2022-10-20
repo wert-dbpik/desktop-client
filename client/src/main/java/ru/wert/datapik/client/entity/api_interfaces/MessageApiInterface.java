@@ -2,24 +2,23 @@ package ru.wert.datapik.client.entity.api_interfaces;
 
 import retrofit2.Call;
 import retrofit2.http.*;
-import ru.wert.datapik.client.entity.models.ChatMessage;
-import ru.wert.datapik.client.entity.models.Coat;
+import ru.wert.datapik.client.entity.models.Message;
 
 import java.util.List;
 
-public interface ChatMessageApiInterface {
+public interface MessageApiInterface {
 
     @GET("chat-messages/id/{id}")
-    Call<ChatMessage> getById(@Path("id") Long id);
+    Call<Message> getById(@Path("id") Long id);
 
     @GET("chat-messages/all")
-    Call<List<ChatMessage>> getAll();
+    Call<List<Message>> getAll();
     
     @POST("chat-messages/create")
-    Call<ChatMessage> create(@Body ChatMessage entity);
+    Call<Message> create(@Body Message entity);
 
     @PUT("chat-messages/update")
-    Call<Void> update(@Body ChatMessage entity);
+    Call<Void> update(@Body Message entity);
 
     @DELETE("chat-messages/delete/{id}")
     Call<Void> deleteById(@Path("id") Long id);

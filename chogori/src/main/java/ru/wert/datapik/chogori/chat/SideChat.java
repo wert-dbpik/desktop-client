@@ -10,7 +10,7 @@ import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import lombok.Getter;
-import ru.wert.datapik.client.entity.models.ChatGroup;
+import ru.wert.datapik.client.entity.models.Room;
 import ru.wert.datapik.chogori.statics.AppStatic;
 
 import java.io.IOException;
@@ -75,8 +75,8 @@ public class SideChat {
         mainPane.getChildren().add(sideChatGroups);
     }
 
-    public void showChatTalk(ChatGroup chatGroup){
-        talkController.getLblChatGroup().setText(chatGroup.getName());
+    public void showChatTalk(Room room){
+        talkController.getLblChatGroup().setText(room.getName());
         mainPane.getChildren().clear();
         mainPane.getChildren().add(sideChatTalk);
     }
