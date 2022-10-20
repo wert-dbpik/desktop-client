@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori;
 
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,7 +35,6 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    public static final User admin = CH_USERS.findById(1L);
 
     @FXML
     void initialize() {
@@ -49,13 +49,7 @@ public class LoginController {
         CH_CURRENT_USER = null;
         CH_CURRENT_USER_GROUP = null;
 
-        passwordField.setOnAction(e->{
-            try {
-                welcomeUser();
-            } catch (NoSuchFieldException exception) {
-                exception.printStackTrace();
-            }
-        });
+        passwordField.setOnAction(this::welcomeUser);
 
         Platform.runLater(()->passwordField.requestFocus());
 
@@ -63,31 +57,23 @@ public class LoginController {
 
     }
 
-    private void welcomeUser() throws NoSuchFieldException{
+    private void welcomeUser(Event e){
         User user = bxUsers.getValue();
-        if(user == null) user = admin;
-
         String pass = passwordField.getText();
-        //Вход без регистрации личности
-        // 1 - Используется зарезервированный пароль разработчика
-        if(user == admin & pass.equals(CH_DEV_PASS)){
-            CH_CURRENT_USER = admin;
+
+        if (user.getPassword().equals(pass)) {
+            CH_CURRENT_USER = user;
             loadApplicationSettings();
             showTabPaneWindow();
+            AppProperties.getInstance().setLastUser(user.getId());
+            AppStatic.createLog(true, "Подключился к серверу");
+            //ОТКРЫВАЕМ ТЕСТОВОЕ ОКНО
             openTestWindow();
+        } else {
+            passwordField.setText("");
+            Warning1.create($ATTENTION, $NO_SUCH_USER, $TRY_MORE);
         }
-        //Вход с регистрацией личности
-        else {
-            if(user.getPassword().equals(pass)){
-                CH_CURRENT_USER = user;
-                loadApplicationSettings();
-                showTabPaneWindow();
-                openTestWindow();
-            } else
-                Warning1.create($ATTENTION, $NO_SUCH_USER, $TRY_MORE);
-        }
-        AppProperties.getInstance().setLastUser(user.getId());
-        AppStatic.createLog(true, "Подключился к серверу");
+
     }
 
     private void loadApplicationSettings() {
