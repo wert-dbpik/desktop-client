@@ -55,9 +55,7 @@ public class ListViewDialog extends ListView<Message> {
         Message message = createChatMessage(Message.MessageType.CHAT_PASSPORTS, text.toString().trim());
         taMessageText.setText("");
 
-        getItems().add(message);
-        refresh();
-        scrollTo(message);
+        sendMessageToRecipient(message);
 
     }
 
@@ -82,9 +80,7 @@ public class ListViewDialog extends ListView<Message> {
         Message message = createChatMessage(Message.MessageType.CHAT_DRAFTS, text.toString().trim());
         taMessageText.setText("");
 
-        getItems().add(message);
-        refresh();
-        scrollTo(message);
+        sendMessageToRecipient(message);
 
     }
 
@@ -107,9 +103,7 @@ public class ListViewDialog extends ListView<Message> {
         Message message = createChatMessage(Message.MessageType.CHAT_FOLDERS, text.toString().trim());
         taMessageText.setText("");
 
-        getItems().add(message);
-        refresh();
-        scrollTo(message);
+        sendMessageToRecipient(message);
 
     }
 
@@ -145,9 +139,7 @@ public class ListViewDialog extends ListView<Message> {
         Message message = createChatMessage(Message.MessageType.CHAT_PICS, text.toString().trim());
         taMessageText.setText("");
 
-        getItems().add(message);
-        refresh();
-        scrollTo(message);
+        sendMessageToRecipient(message);
 
     }
 
@@ -163,14 +155,13 @@ public class ListViewDialog extends ListView<Message> {
         Message message = createChatMessage(Message.MessageType.CHAT_TEXT, text);
         taMessageText.setText("");
 
-        getItems().add(message);
-        refresh();
-        scrollTo(message);
+        sendMessageToRecipient(message);
     }
+
+
 
     //=====================    ОБЩИЕ МЕТОДЫ    =================================================
 
-    
     /**
      * Метода создает сообщение Message
      * @param type EMessageType
@@ -186,4 +177,15 @@ public class ListViewDialog extends ListView<Message> {
         return message;
     }
 
+    /**
+     * Собственно отправка сообщения пользователю
+     * @param message
+     */
+    private void sendMessageToRecipient(Message message) {
+        getItems().add(message);
+        refresh();
+        scrollTo(message);
+
+
+    }
 }
