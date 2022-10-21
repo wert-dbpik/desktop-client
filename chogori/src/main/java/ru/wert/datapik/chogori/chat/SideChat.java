@@ -23,7 +23,7 @@ public class SideChat {
     @Getter private Parent sideChatTalk;
 
     @Getter private Parent sideChatGroups;
-    @Getter private SideChatDialogController talkController;
+    @Getter private SideRoomDialogController talkController;
     @Getter private SideRoomsController groupsController;
     @Getter private final VBox chatVBox;
     @Getter private final StackPane mainPane;
@@ -75,8 +75,9 @@ public class SideChat {
         mainPane.getChildren().add(sideChatGroups);
     }
 
-    public void showChatTalk(Room room){
+    public void showChatDialog(Room room){
         talkController.getLblRoom().setText(ChatMaster.getRoomName(room.getName()));
+        talkController.openDialog(room);
         mainPane.getChildren().clear();
         mainPane.getChildren().add(sideChatTalk);
     }

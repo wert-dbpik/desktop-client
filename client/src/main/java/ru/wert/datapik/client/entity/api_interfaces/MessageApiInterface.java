@@ -13,6 +13,9 @@ public interface MessageApiInterface {
 
     @GET("chat-messages/all")
     Call<List<Message>> getAll();
+
+    @GET("chat-messages/allByRoomId/{roomId}")
+    Call<List<Message>> getAllByRoomId(@Path("roomId") Long id);
     
     @POST("chat-messages/create")
     Call<Message> create(@Body Message entity);
@@ -22,5 +25,7 @@ public interface MessageApiInterface {
 
     @DELETE("chat-messages/delete/{id}")
     Call<Void> deleteById(@Path("id") Long id);
+
+
 
 }

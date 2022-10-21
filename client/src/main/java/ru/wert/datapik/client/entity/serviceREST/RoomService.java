@@ -4,7 +4,7 @@ package ru.wert.datapik.client.entity.serviceREST;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.RoomApiInterface;
 import ru.wert.datapik.client.entity.models.Room;
-import ru.wert.datapik.client.entity.service_interfaces.IChatGroupService;
+import ru.wert.datapik.client.entity.service_interfaces.IRoomService;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.client.utils.BLlinks;
@@ -12,7 +12,7 @@ import ru.wert.datapik.client.utils.BLlinks;
 import java.io.IOException;
 import java.util.List;
 
-public class RoomService implements IChatGroupService, ItemService<Room> {
+public class RoomService implements IRoomService, ItemService<Room> {
 
     private static RoomService instance;
     private RoomApiInterface api;

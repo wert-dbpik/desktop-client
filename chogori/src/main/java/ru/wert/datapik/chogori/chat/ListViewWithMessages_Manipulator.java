@@ -20,9 +20,9 @@ import static ru.wert.datapik.chogori.statics.AppStatic.*;
 public class ListViewWithMessages_Manipulator {
 
     private final ListView<Message> listView;
-    private SideChatDialogController chatController;
+    private SideRoomDialogController chatController;
 
-    public ListViewWithMessages_Manipulator(ListView<Message> listView, SideChatDialogController chatController) {
+    public ListViewWithMessages_Manipulator(ListView<Message> listView, SideRoomDialogController chatController) {
         this.listView = listView;
         this.chatController = chatController;
 

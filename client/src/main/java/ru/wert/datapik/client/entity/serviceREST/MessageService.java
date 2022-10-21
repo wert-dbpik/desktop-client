@@ -4,7 +4,8 @@ package ru.wert.datapik.client.entity.serviceREST;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.MessageApiInterface;
 import ru.wert.datapik.client.entity.models.Message;
-import ru.wert.datapik.client.entity.service_interfaces.IChatMessageService;
+import ru.wert.datapik.client.entity.models.Room;
+import ru.wert.datapik.client.entity.service_interfaces.IMessageService;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.client.utils.BLlinks;
@@ -12,7 +13,7 @@ import ru.wert.datapik.client.utils.BLlinks;
 import java.io.IOException;
 import java.util.List;
 
-public class MessageService implements IChatMessageService, ItemService<Message> {
+public class MessageService implements IMessageService, ItemService<Message> {
 
     private static MessageService instance;
     private MessageApiInterface api;
@@ -47,6 +48,17 @@ public class MessageService implements IChatMessageService, ItemService<Message>
     public List<Message> findAll() {
         try {
             Call<List<Message>> call = api.getAll();
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Message> findAllByRoom(Room room) {
+        try {
+            Call<List<Message>> call = api.getAllByRoomId(room.getId());
             return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();

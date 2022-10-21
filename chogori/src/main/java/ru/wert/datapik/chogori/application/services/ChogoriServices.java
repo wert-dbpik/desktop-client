@@ -12,8 +12,8 @@ public class ChogoriServices {
 
     public static IFilesService CH_FILES;
 
-    public static IChatGroupService CH_ROOMS;
-    public static IChatMessageService CH_CHAT_MESSAGES;
+    public static IRoomService CH_ROOMS;
+    public static IMessageService CH_MESSAGES;
     public static IChatMessageStatusService CH_CHAT_MESSAGE_STATUSES;
 
     public static IAppSettingsService CH_SETTINGS;
@@ -54,7 +54,7 @@ public class ChogoriServices {
         ChogoriServices.CH_FILES = FilesService.getInstance();
 
         ChogoriServices.CH_ROOMS = RoomService.getInstance();
-        ChogoriServices.CH_CHAT_MESSAGES = MessageService.getInstance();
+        ChogoriServices.CH_MESSAGES = MessageService.getInstance();
         ChogoriServices.CH_CHAT_MESSAGE_STATUSES = ChatMessageStatusService.getInstance();
 
         ChogoriServices.CH_USERS = UserService.getInstance();

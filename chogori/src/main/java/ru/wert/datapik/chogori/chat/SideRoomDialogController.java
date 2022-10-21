@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,15 +17,17 @@ import ru.wert.datapik.client.entity.models.Message;
 import ru.wert.datapik.client.entity.models.Pic;
 import ru.wert.datapik.chogori.images.ImageUtil;
 import ru.wert.datapik.chogori.statics.AppStatic;
+import ru.wert.datapik.client.entity.models.Room;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.datapik.chogori.images.BtnImages.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
-public class SideChatDialogController {
+public class SideRoomDialogController {
 
     @FXML
     private StackPane spMessageContainer;
@@ -43,7 +46,10 @@ public class SideChatDialogController {
     private TextArea taMessageText;
 
     @FXML
-    private ListView<Message> listViewWithMessages;
+    private StackPane spDialogsContainer;
+
+//    @FXML
+//    private ListView<Message> currentDialog;
 
     @FXML
     private Button btnSend;
@@ -66,22 +72,56 @@ public class SideChatDialogController {
     private Text textHolder = new Text();
     private double oldHeight = 0;
 
-    private ObservableList<Message> messages;
+    private ObservableList<Message> roomMessages;
+    private Room room;
+    private ListViewDialog lvCurrentDialog;
+//    private List<Room> roomsInContainer;
 
     public void init(SideChat chat){
         this.chat = chat;
+    }
 
+    public void openDialog(Room room){
+        this.room = room;
+        ListViewDialog foundDialog = findOpenDialog(room);
+        //Если диалог еще не открыт, то загружаем диалог в ноую комнату
+        if(foundDialog == null) {
+            lvCurrentDialog = new ListViewDialog(room);
+
+            List<Message> messages = CH_MESSAGES.findAllByRoom(room);
+            roomMessages =
+                    messages == null ?
+                            FXCollections.observableArrayList() : //пустой лист
+                            FXCollections.observableArrayList(messages);
+            lvCurrentDialog.setItems(roomMessages);
+            lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new ChatListCell());
+            lvCurrentDialog.setId("listViewWithMessages");
+            new ListViewWithMessages_Manipulator(lvCurrentDialog, this);
+            spDialogsContainer.getChildren().add(lvCurrentDialog);
+
+        }
+        else
+            lvCurrentDialog = foundDialog;
+
+        lblRoom.setText(ChatMaster.getRoomName(room.getName()));
+        lvCurrentDialog.toFront();
+
+    }
+
+    private ListViewDialog findOpenDialog(Room room) {
+        ListViewDialog dialog = null;
+        for(Node lvd : spDialogsContainer.getChildren() ){
+            if(lvd instanceof ListViewDialog) {
+                if (((ListViewDialog) lvd).getRoom().equals(room))
+                    dialog = (ListViewDialog) lvd;
+            }
+        }
+        return dialog;
     }
 
     @FXML
     void initialize(){
-        messages = FXCollections.observableArrayList();
-        listViewWithMessages.setCellFactory((ListView<Message> tv) -> new ChatListCell());
-        listViewWithMessages.setId("listViewWithMessages");
-        listViewWithMessages.setItems(messages);
-
-        new ListViewWithMessages_Manipulator(listViewWithMessages, this);
-
+        
         btnSend.setText(null);
         btnSend.setGraphic(new ImageView(SEND_MESSAGE_IMG));
         btnSend.setOnAction(this::send);
@@ -147,10 +187,10 @@ public class SideChatDialogController {
 
         Message message = createChatMessage(Message.MessageType.CHAT_PASSPORTS, text.toString().trim());
         taMessageText.setText("");
-        int index = messages.size();
-        listViewWithMessages.getItems().add(message);
-        listViewWithMessages.refresh();
-        listViewWithMessages.scrollTo(message);
+        int index = roomMessages.size();
+        lvCurrentDialog.getItems().add(message);
+        lvCurrentDialog.refresh();
+        lvCurrentDialog.scrollTo(message);
 
     }
 
@@ -185,10 +225,10 @@ public class SideChatDialogController {
 
         Message message = createChatMessage(Message.MessageType.CHAT_DRAFTS, text.toString().trim());
         taMessageText.setText("");
-        int index = messages.size();
-        listViewWithMessages.getItems().add(message);
-        listViewWithMessages.refresh();
-        listViewWithMessages.scrollTo(message);
+        int index = roomMessages.size();
+        lvCurrentDialog.getItems().add(message);
+        lvCurrentDialog.refresh();
+        lvCurrentDialog.scrollTo(message);
 
     }
 
@@ -210,10 +250,10 @@ public class SideChatDialogController {
 
         Message message = createChatMessage(Message.MessageType.CHAT_FOLDERS, text.toString().trim());
         taMessageText.setText("");
-        int index = messages.size();
-        listViewWithMessages.getItems().add(message);
-        listViewWithMessages.refresh();
-        listViewWithMessages.scrollTo(message);
+        int index = roomMessages.size();
+        lvCurrentDialog.getItems().add(message);
+        lvCurrentDialog.refresh();
+        lvCurrentDialog.scrollTo(message);
 
     }
 
@@ -248,10 +288,10 @@ public class SideChatDialogController {
 
         Message message = createChatMessage(Message.MessageType.CHAT_PICS, text.toString().trim());
         taMessageText.setText("");
-        int index = messages.size();
-        listViewWithMessages.getItems().add(message);
-        listViewWithMessages.refresh();
-        listViewWithMessages.scrollTo(message);
+        int index = roomMessages.size();
+        lvCurrentDialog.getItems().add(message);
+        lvCurrentDialog.refresh();
+        lvCurrentDialog.scrollTo(message);
 
     }
 
@@ -266,10 +306,10 @@ public class SideChatDialogController {
         String text = taMessageText.getText();
         Message message = createChatMessage(Message.MessageType.CHAT_TEXT, text);
         taMessageText.setText("");
-        int index = messages.size();
-        listViewWithMessages.getItems().add(message);
-        listViewWithMessages.refresh();
-        listViewWithMessages.scrollTo(message);
+        int index = roomMessages.size();
+        lvCurrentDialog.getItems().add(message);
+        lvCurrentDialog.refresh();
+        lvCurrentDialog.scrollTo(message);
     }
 
     //=====================    ОБЩИЕ МЕТОДЫ    =================================================
@@ -281,12 +321,12 @@ public class SideChatDialogController {
 //    private void updateListView(boolean saveListPosition) {
 //
 //        Platform.runLater(()->{
-//            listViewWithMessages.autosize();
-//            listViewWithMessages.getItems().clear();
-//            listViewWithMessages.setItems(messages);
-//            listViewWithMessages.refresh();
+//            currentDialog.autosize();
+//            currentDialog.getItems().clear();
+//            currentDialog.setItems(messages);
+//            currentDialog.refresh();
 //            if(!saveListPosition)
-//                listViewWithMessages.scrollTo(messages.size()-1);
+//                currentDialog.scrollTo(messages.size()-1);
 //        });
 //
 //    }

@@ -138,7 +138,7 @@ public class SideRoomsController {
         Long user2 = CH_USERS.findByName(userLabel.getText()).getId();
         String roomName = "one-to-one:#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
         Room room = createNewRoomIfNeeded(roomName);
-        chat.showChatTalk(room);
+        chat.showChatDialog(room);
     }
 
     private ContextMenu createContextMenu(){

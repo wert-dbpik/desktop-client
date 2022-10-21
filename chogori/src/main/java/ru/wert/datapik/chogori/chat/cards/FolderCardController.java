@@ -12,7 +12,7 @@ import ru.wert.datapik.chogori.tabs.AppTab;
 import ru.wert.datapik.client.entity.models.Folder;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_FOLDERS;
-import static ru.wert.datapik.chogori.chat.SideChatDialogController.MESSAGE_WIDTH;
+import static ru.wert.datapik.chogori.chat.SideRoomDialogController.MESSAGE_WIDTH;
 import static ru.wert.datapik.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
