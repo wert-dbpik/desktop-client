@@ -22,7 +22,7 @@ public class ListViewWithMessages_Manipulator {
     private final ListView<Message> listView;
     private SideRoomDialogController chatController;
 
-    public ListViewWithMessages_Manipulator(ListView<Message> listView, SideRoomDialogController chatController) {
+    public ListViewWithMessages_Manipulator(ListViewDialog listView, SideRoomDialogController chatController) {
         this.listView = listView;
         this.chatController = chatController;
 
@@ -71,15 +71,15 @@ public class ListViewWithMessages_Manipulator {
                 List<File> acceptedFiles = new ArrayList<>();
                 List<File> content = (List<File>) db.getContent(DataFormat.FILES);
                 for (File f : content)
-                    chatController.createPicsChatMessage(content);
+                    listView.createPicsChatMessage(content);
             } else if(db.hasString()) {
                 String str = db.getString();
                 if (str.startsWith("pik! DR#")) {
-                    chatController.createDraftsChatMessage(str);
+                    listView.createDraftsChatMessage(str);
                 } else if(str.startsWith("pik! F#")){
-                    chatController.createFoldersChatMessage(str);
+                    listView.createFoldersChatMessage(str);
                 } else if(str.startsWith("pik! PP#")) {
-                    chatController.createPassportsChatMessage(str);
+                    listView.createPassportsChatMessage(str);
                 }
 
             }
