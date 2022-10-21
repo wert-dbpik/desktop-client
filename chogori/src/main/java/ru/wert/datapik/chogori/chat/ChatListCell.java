@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.wert.datapik.chogori.chat.SideChatTalkController.*;
+import static ru.wert.datapik.chogori.chat.SideChatDialogController.*;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_FILES;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PICS;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;

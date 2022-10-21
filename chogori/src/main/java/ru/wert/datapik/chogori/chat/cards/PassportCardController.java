@@ -2,22 +2,16 @@ package ru.wert.datapik.chogori.chat.cards;
 
 import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import ru.wert.datapik.chogori.application.drafts.DraftsEditorController;
-import ru.wert.datapik.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.datapik.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.datapik.chogori.application.passports.PassportsEditorController;
 import ru.wert.datapik.chogori.common.components.VBoxPassport;
 import ru.wert.datapik.chogori.tabs.AppTab;
-import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
 
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_FOLDERS;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PASSPORTS;
-import static ru.wert.datapik.chogori.chat.SideChatTalkController.MESSAGE_WIDTH;
+import static ru.wert.datapik.chogori.chat.SideChatDialogController.MESSAGE_WIDTH;
 import static ru.wert.datapik.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 

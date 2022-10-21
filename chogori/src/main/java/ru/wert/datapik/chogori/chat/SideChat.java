@@ -23,8 +23,8 @@ public class SideChat {
     @Getter private Parent sideChatTalk;
 
     @Getter private Parent sideChatGroups;
-    @Getter private SideChatTalkController talkController;
-    @Getter private SideChatGroupsController groupsController;
+    @Getter private SideChatDialogController talkController;
+    @Getter private SideRoomsController groupsController;
     @Getter private final VBox chatVBox;
     @Getter private final StackPane mainPane;
 
@@ -76,14 +76,14 @@ public class SideChat {
     }
 
     public void showChatTalk(Room room){
-        talkController.getLblChatGroup().setText(room.getName());
+        talkController.getLblRoom().setText(ChatMaster.getRoomName(room.getName()));
         mainPane.getChildren().clear();
         mainPane.getChildren().add(sideChatTalk);
     }
 
     private void createSideChatTalk(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/sideChatTalk.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/sideChatDialog.fxml"));
             sideChatTalk = loader.load();
             talkController = loader.getController();
             talkController.init(this);
@@ -94,7 +94,7 @@ public class SideChat {
 
     private void createSideChatGroups(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/sideChatGroups.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/sideRooms.fxml"));
             sideChatGroups = loader.load();
             groupsController = loader.getController();
             groupsController.init(this);

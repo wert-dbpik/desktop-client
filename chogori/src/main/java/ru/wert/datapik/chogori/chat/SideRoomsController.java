@@ -19,7 +19,7 @@ import static ru.wert.datapik.chogori.images.BtnImages.MAN_IMG;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
-public class SideChatGroupsController {
+public class SideRoomsController {
 
     @FXML
     private Button btnAddNewChatGroup;
@@ -28,10 +28,10 @@ public class SideChatGroupsController {
     private ListView<User> listOfUsers;
 
     @FXML
-    private ListView<Room> listOfChats;
+    private ListView<Room> listOfRooms;
 
     @FXML
-    private Tab tabPaneChats;
+    private Tab tabPaneRooms;
 
     @FXML
     private Tab tabPaneUsers;
@@ -40,11 +40,16 @@ public class SideChatGroupsController {
 
     @FXML
     void initialize(){
-        createListOfUsers();
-        createListOfChatGroups();
+        createListOfRooms();
+        updateListOfRooms();
+        tabPaneRooms.setOnSelectionChanged(e->{
+            if(tabPaneRooms.isSelected()){
+                updateListOfRooms();
+            }
+        });
 
+        createListOfUsers();
         updateListOfUsers();
-        updateListOfGroups();
 
     }
 
@@ -76,14 +81,16 @@ public class SideChatGroupsController {
     /**
      * В методе создается пустой список, который выводится в ListView, если в базе еще нет чатов
      */
-    private void updateListOfGroups() {
-        List<Room> groups = new ArrayList<>();
-        List<Room> allGroups = CH_ROOMS.findAll();
+    private void updateListOfRooms() {
+        List<Room> rooms = new ArrayList<>();
+        List<Room> allRooms = CH_ROOMS.findAll();
+        for(Room room : allRooms){
+            if(room.getRoommates().contains(CH_CURRENT_USER))
+                rooms.add(room);
+        }
 
-        if(allGroups != null && !allGroups.isEmpty())
-            groups.addAll(allGroups);
-        listOfChats.getItems().clear();
-        listOfChats.setItems(FXCollections.observableArrayList(groups));
+        listOfRooms.getItems().clear();
+        listOfRooms.setItems(FXCollections.observableArrayList(rooms));
 
     }
 
@@ -112,7 +119,7 @@ public class SideChatGroupsController {
                             userLabel.setContextMenu(createContextMenu());
                             userLabel.setOnMouseClicked(e->{
                                 if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
-                                    openChat(userLabel);
+                                    openOneToOneChat(userLabel);
                                     e.consume();
                                 }
                             });
@@ -126,11 +133,11 @@ public class SideChatGroupsController {
         });
     }
 
-    private void openChat(Label userLabel){
+    private void openOneToOneChat(Label userLabel){
         Long user1 = CH_CURRENT_USER.getId();
         Long user2 = CH_USERS.findByName(userLabel.getText()).getId();
-        String groupName = "#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
-        Room room = createNewChatGroupIfNeeded(groupName);
+        String roomName = "one-to-one:#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
+        Room room = createNewRoomIfNeeded(roomName);
         chat.showChatTalk(room);
     }
 
@@ -139,7 +146,7 @@ public class SideChatGroupsController {
         MenuItem openChat = new MenuItem("Написать сообщение");
         openChat.setOnAction(e->{
             Label userLabel = (Label) ((MenuItem)e.getSource()).getParentPopup().getUserData();
-            openChat(userLabel);
+            openOneToOneChat(userLabel);
         });
         chatGroupContextMenu.getItems().add(openChat);
 
@@ -149,12 +156,12 @@ public class SideChatGroupsController {
     /**
      *
      */
-    private Room createNewChatGroupIfNeeded(String groupName) {
+    private Room createNewRoomIfNeeded(String roomName) {
         Room room = null;
-        room = CH_ROOMS.findByName(groupName);
+        room = CH_ROOMS.findByName(roomName);
         if (room == null) {
             Room newRoom = new Room();
-            newRoom.setName(groupName);
+            newRoom.setName(roomName);
             newRoom.setCreator(CH_CURRENT_USER);
             newRoom.setRoommates(Collections.singletonList(CH_CURRENT_USER));
 
@@ -164,26 +171,32 @@ public class SideChatGroupsController {
     }
 
 
-    private void createListOfChatGroups() {
-        tabPaneChats.setGraphic(new ImageView(CHATS_IMG));
+    private void createListOfRooms() {
+        tabPaneRooms.setGraphic(new ImageView(CHATS_IMG));
         Label placeholder = new Label("Ни одного чата\nеще не создано");
         placeholder.setStyle("-fx-text-fill: saddlebrown; -fx-font-size: 14; -fx-font-style: italic; -fx-font-weight: bold");
-        listOfChats.setPlaceholder(placeholder);
-        listOfChats.setCellFactory(new Callback<ListView<Room>, ListCell<Room>>() {
+        listOfRooms.setPlaceholder(placeholder);
+
+        listOfRooms.setCellFactory(new Callback<ListView<Room>, ListCell<Room>>() {
             public ListCell<Room> call(ListView<Room> param) {
                 final Label userLabel = new Label();
                 final ListCell<Room> cell = new ListCell<Room>() {
                     @Override
                     public void updateItem(Room item, boolean empty) {
                         super.updateItem(item, empty);
-
                         if (empty) {
                             setText(null);
                             setGraphic(null);
                         } else {
                             setText(null);
-                            userLabel.setText(item.getName());
-                            userLabel.setStyle("-fx-font-style: italic");
+                            userLabel.setText(ChatMaster.getRoomName(item.getName()));
+                            userLabel.setStyle("-fx-font-style: italic; -fx-text-fill: black");
+                            userLabel.setOnMouseClicked(e->{
+                                if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
+                                    openOneToOneChat(userLabel);
+                                    e.consume();
+                                }
+                            });
                             setGraphic(userLabel);
                         }
                     }

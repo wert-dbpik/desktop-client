@@ -8,13 +8,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.chat.SideChatGroupsController">
+<AnchorPane prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.chat.SideRoomsController">
    <children>
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
               <tabs>
-                <Tab fx:id="tabPaneChats" text="чаты">
+                <Tab fx:id="tabPaneRooms" text="чаты">
                      <content>
                         <VBox maxHeight="1.7976931348623157E308">
                            <children>
@@ -26,7 +26,7 @@
                                        </font></Button>
                                  </children>
                               </HBox>
-                              <ListView fx:id="listOfChats" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+                              <ListView fx:id="listOfRooms" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                      </content>

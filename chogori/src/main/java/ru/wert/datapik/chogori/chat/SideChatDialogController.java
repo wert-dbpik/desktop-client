@@ -24,7 +24,7 @@ import java.util.List;
 import static ru.wert.datapik.chogori.images.BtnImages.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
-public class SideChatTalkController {
+public class SideChatDialogController {
 
     @FXML
     private StackPane spMessageContainer;
@@ -33,11 +33,11 @@ public class SideChatTalkController {
     private SplitPane splitPane;
 
     @FXML
-    private Button btnChatGroups;
+    private Button btnRooms;
 
     @FXML
     @Getter
-    private Label lblChatGroup;
+    private Label lblRoom;
 
     @FXML
     private TextArea taMessageText;
@@ -96,7 +96,7 @@ public class SideChatTalkController {
         btnAddDraft.setTooltip(new Tooltip("Добавить чертеж"));
         btnAddDraft.setOnAction(this::sendDraft);
 
-        btnChatGroups.setOnAction(e->{
+        btnRooms.setOnAction(e->{
             chat.showChatGroups();
         });
 

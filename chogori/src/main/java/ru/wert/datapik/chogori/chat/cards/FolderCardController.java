@@ -1,34 +1,18 @@
 package ru.wert.datapik.chogori.chat.cards;
 
-import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import ru.wert.datapik.chogori.application.app_window.AppMenuController;
 import ru.wert.datapik.chogori.application.drafts.DraftsEditorController;
 import ru.wert.datapik.chogori.application.drafts.OpenDraftsEditorTask;
-import ru.wert.datapik.chogori.common.components.VBoxPassport;
-import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.chogori.tabs.AppTab;
-import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
-import ru.wert.datapik.client.entity.models.Passport;
-import ru.wert.datapik.winform.enums.EDraftType;
 
-import java.util.Collections;
-
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_DRAFTS;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_FOLDERS;
-import static ru.wert.datapik.chogori.chat.SideChatTalkController.MESSAGE_WIDTH;
+import static ru.wert.datapik.chogori.chat.SideChatDialogController.MESSAGE_WIDTH;
 import static ru.wert.datapik.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 

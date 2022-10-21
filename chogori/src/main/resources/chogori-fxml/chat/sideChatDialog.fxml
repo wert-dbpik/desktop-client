@@ -8,18 +8,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.chat.SideChatTalkController">
+<AnchorPane maxHeight="1.7976931348623157E308" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.chat.SideChatDialogController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                <children>
-                  <Button fx:id="btnChatGroups" mnemonicParsing="false" text="&lt;">
+                  <Button fx:id="btnRooms" mnemonicParsing="false" text="&lt;">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Label fx:id="lblChatGroup" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Симонов Алексей" HBox.hgrow="ALWAYS">
+                  <Label fx:id="lblRoom" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Симонов Алексей" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
                      </font>
