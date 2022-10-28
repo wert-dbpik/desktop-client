@@ -5,6 +5,7 @@ import retrofit2.http.*;
 import ru.wert.datapik.client.entity.models.Room;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RoomApiInterface {
 
@@ -25,5 +26,11 @@ public interface RoomApiInterface {
 
     @DELETE("rooms/delete/{id}")
     Call<Void> deleteById(@Path("id") Long id);
+
+    @PUT("users/add-roommate/{roomId}")
+    Call<Room> addRoommates(@Body List<String> userIds, @Path("roomId") Long roomId);
+
+    @PUT("users/remove-roommate/{roomId}")
+    Call<Room> removeRoommates(@Body List<String> userIds, @Path("roomId") Long roomId);
 
 }

@@ -16,6 +16,7 @@ public class Room extends _BaseEntity implements Item {
 
     private String name; //заголовок чата, его название
     private User creator; //id пользователя создавшего чат
+    private boolean editable; //Можно изменять список пользователей
     private List<User> roommates;
 
 

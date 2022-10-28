@@ -3,6 +3,7 @@ package ru.wert.datapik.client.entity.serviceREST;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Call;
 import ru.wert.datapik.client.entity.api_interfaces.UserApiInterface;
+import ru.wert.datapik.client.entity.models.Room;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.client.entity.service_interfaces.IUserService;
 import ru.wert.datapik.client.interfaces.ItemService;
@@ -10,7 +11,9 @@ import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.client.utils.BLlinks;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 public class UserService implements IUserService, ItemService<User> {
@@ -119,6 +122,28 @@ public class UserService implements IUserService, ItemService<User> {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<Room> subscribeRoom(User user, Room room) {
+        try {
+            Call<Set<Room>> call = api.subscribeRoom(user.getId(), room.getId());
+            return new ArrayList<Room>(call.execute().body());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Room> unsubscribeRoom(User user, Room room) {
+        try {
+            Call<Set<Room>> call = api.unsubscribeRoom(user.getId(), room.getId());
+            return new ArrayList<Room>(call.execute().body());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

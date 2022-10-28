@@ -22,6 +22,8 @@ public final class EchoWebSocketListener extends WebSocketListener {
         System.out.println("Receiving: " + text);
     }
 
+
+
     @Override
     public void onMessage(WebSocket webSocket, ByteString bytes) {
         System.out.println("Receiving: " + bytes.hex());

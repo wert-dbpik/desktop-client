@@ -55,6 +55,28 @@ public class RoomService implements IRoomService, ItemService<Room> {
     }
 
     @Override
+    public Room addRoommates(List<String> userIds, Room room) {
+        try {
+            Call<Room> call = api.addRoommates(userIds, room.getId());
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Room removeRoommates(List<String> userIds, Room room) {
+        try {
+            Call<Room> call = api.removeRoommates(userIds, room.getId());
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public List<Room> findAll() {
         try {
             Call<List<Room>> call = api.getAll();

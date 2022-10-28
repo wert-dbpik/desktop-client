@@ -85,6 +85,7 @@ public class User_ACCController extends FormView_ACCController<User> {
             txtFldUserName.getText().replaceAll("[\\s]{2,}", " ").trim(),
             txtFldPassword.getText(),
             cmbxGroup.getValue(),
+                true,
                 true
         );
     }

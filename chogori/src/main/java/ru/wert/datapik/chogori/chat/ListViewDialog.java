@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
@@ -164,14 +165,16 @@ public class ListViewDialog extends ListView<Message> {
 
     /**
      * Метода создает сообщение Message
-     * @param type EMessageType
      * @param text String
      */
     public Message createChatMessage(Message.MessageType type, String text){
         Message message = new Message();
         message.setType(type);
+        System.out.println(room.toString());
+        message.setRoom(room);
         message.setSender(CH_CURRENT_USER);
         message.setCreationTime(AppStatic.getCurrentTime());
+        message.setStatus(Message.MessageStatus.RECEIVED);
         message.setText(text);
 
         return message;
@@ -185,7 +188,8 @@ public class ListViewDialog extends ListView<Message> {
         getItems().add(message);
         refresh();
         scrollTo(message);
-
+        System.out.println(message);
+        CH_MESSAGES.save(message);
 
     }
 }
