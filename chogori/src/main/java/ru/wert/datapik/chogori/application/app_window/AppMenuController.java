@@ -105,6 +105,8 @@ public class AppMenuController {
         //Материалы
         if(CH_CURRENT_USER_GROUP.isReadMaterials())
             menuBar.getMenus().add(createMaterialsMenu());
+        //Калькулятор
+        menuBar.getMenus().add(createCalculatorMenu());
         //Изделия
 //        if(CH_CURRENT_USER_GROUP.isReadProductStructures())
 //            menuBar.getMenus().add(createEditorMenu());
@@ -417,6 +419,36 @@ public class AppMenuController {
         Thread t = new Thread(openExcelFile);
         t.setDaemon(true);
         t.start();
+    }
+
+    //########################   КАЛЬКУЛЯТОР    ###########################
+
+    /**
+     * МЕНЮ АДМИНИСТРАТОРА
+     */
+    private Menu createCalculatorMenu() {
+
+        Menu calculatorMenu = new Menu("Калькулятор");
+
+        MenuItem NormsOnPartProcessingItem = new MenuItem("Изготовление детали");
+        NormsOnPartProcessingItem.setOnAction(this::openCalculationOfNormsOnPartProcessing);
+
+        calculatorMenu.getItems().add(NormsOnPartProcessingItem);
+
+        return calculatorMenu;
+    }
+
+    private void openCalculationOfNormsOnPartProcessing(ActionEvent event) {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/partCalculators.fxml"));
+            Parent parent = loader.load();
+
+            new WindowDecoration("Калькулятор", parent, false, null);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     //########################   АДМИН    ###########################

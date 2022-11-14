@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.part_calculator.PaintingController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
@@ -22,14 +22,14 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="ivHelpOnA" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../chogori-pics/btns/help.png" />
                            </image>
                         </ImageView>
                      </children>
                   </HBox>
-                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfA" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
@@ -41,14 +41,14 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="ivHelpOnB" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../chogori-pics/btns/help.png" />
                            </image>
                         </ImageView>
                      </children>
                   </HBox>
-                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfB" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
@@ -60,14 +60,14 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="ivHelpOnHangingTime" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../chogori-pics/btns/help.png" />
                            </image>
                         </ImageView>
                      </children>
                   </HBox>
-                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfHangingTime" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox spacing="5.0">
@@ -79,14 +79,14 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="cmbxOnDifficulty" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../chogori-pics/btns/help.png" />
                            </image>
                         </ImageView>
                      </children>
                   </HBox>
-                  <ComboBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <ComboBox fx:id="cmbxDifficulty" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
          </children>
@@ -98,12 +98,12 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label minWidth="35.0" text="0.056">
+            <Label fx:id="lblNormResult" minWidth="35.0" text="0.056">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label text="мин">
+            <Label fx:id="lblTimeMeasurement" text="мин">
                <font>
                   <Font size="14.0" />
                </font>

@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chogori-fxml.calculator.PartNorms">
+<VBox prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.part_calculator.PartCalculatorController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
@@ -18,14 +18,14 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <ImageView fitHeight="16.0" fitWidth="16.0" onKeyPressed="#showHelpOnCuttingPartParameters" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="ivHelpOnPartParameters" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../chogori-pics/btns/help.png" />
                </image>
             </ImageView>
             <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fitHeight="32.0" fitWidth="32.0" onKeyPressed="#clearForm" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../chogori-pics/btns/erase.png" />
                      </image>
@@ -94,7 +94,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <ImageView fitHeight="16.0" fitWidth="16.0" onKeyPressed="#showHelpOnWeight" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="ivHelpOnWeight" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../chogori-pics/btns/help.png" />
                </image>
@@ -112,7 +112,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <ImageView fitHeight="16.0" fitWidth="16.0" onKeyPressed="#showHelpOnTechnologicalProcessing" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="ivHelpOnTechnologicalProcessing" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../chogori-pics/btns/help.png" />
                </image>
