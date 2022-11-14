@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chogori-fxml.calculator.PartNorms">
+   <children>
+      <Label text="Параметры развертки" />
+      <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" spacing="5.0" VBox.vgrow="NEVER">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefWidth="100.0">
+               <children>
+                  <Label text="Материал" />
+                  <ComboBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0">
+               <children>
+                  <Label text="Толщина, мм" />
+                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" prefWidth="100.0">
+               <children>
+                  <Label text="A, мм" />
+                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" prefWidth="100.0">
+               <children>
+                  <Label text="B, мм" />
+                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+         <content>
+            <VBox maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <CheckBox mnemonicParsing="false" text="Резка" />
+                        <StackPane maxWidth="1.7976931348623157E308">
+                           <children>
+                              <fx:include source="cutting.fxml" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+                  <VBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <CheckBox mnemonicParsing="false" text="Гибка" />
+                        <StackPane maxWidth="1.7976931348623157E308" />
+                     </children>
+                  </VBox>
+                  <VBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <CheckBox mnemonicParsing="false" text="Покраска" />
+                        <StackPane maxWidth="1.7976931348623157E308" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</VBox>

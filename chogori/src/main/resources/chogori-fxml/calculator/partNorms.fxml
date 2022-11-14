@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,37 +9,124 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chogori-fxml.calculator.PartNorms">
+<VBox prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chogori-fxml.calculator.PartNorms">
    <children>
-      <Label text="Параметры развертки" />
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Label text="Параметры развертки">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="16.0" fitWidth="16.0" onKeyPressed="#showHelpOnCuttingPartParameters" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../chogori-pics/btns/help.png" />
+               </image>
+            </ImageView>
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" onKeyPressed="#clearForm" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../chogori-pics/btns/erase.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
       <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" spacing="5.0" VBox.vgrow="NEVER">
          <children>
-            <VBox alignment="CENTER_LEFT" prefWidth="100.0">
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
                <children>
-                  <Label text="Материал" />
-                  <ComboBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
+                  <Label text="t, мм">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <TextField fx:id="tfThickness" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0">
+            <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
                <children>
-                  <Label text="Толщина, мм" />
-                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <Label text="A, мм">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <TextField fx:id="tfA" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" prefWidth="100.0">
+            <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
                <children>
-                  <Label text="A, мм" />
-                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <Label text="B, мм">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <TextField fx:id="tfB" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" prefWidth="100.0">
+            <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
                <children>
-                  <Label text="B, мм" />
-                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <Label text="Материал">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <ComboBox fx:id="cmbxMaterial" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
                </children>
             </VBox>
          </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label text="М дет =">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblWeight" minWidth="35.0" text="18.056">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <Label text="кг">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="16.0" fitWidth="16.0" onKeyPressed="#showHelpOnWeight" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../chogori-pics/btns/help.png" />
+               </image>
+            </ImageView>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+      <Separator maxWidth="1.7976931348623157E308" />
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Label text="Технологические операции">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="16.0" fitWidth="16.0" onKeyPressed="#showHelpOnTechnologicalProcessing" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../chogori-pics/btns/help.png" />
+               </image>
+            </ImageView>
+            <HBox alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="Ед.изм." />
+                  <ComboBox fx:id="cmbxTimeMeasurement" prefWidth="70.0" />
+               </children>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
       <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
          <content>
@@ -45,29 +134,37 @@
                <children>
                   <VBox maxWidth="1.7976931348623157E308">
                      <children>
-                        <CheckBox mnemonicParsing="false" text="Резка" />
-                        <StackPane maxWidth="1.7976931348623157E308">
-                           <children>
-                              <fx:include source="cutting.fxml" />
-                           </children>
-                        </StackPane>
+                        <CheckBox fx:id="chbxCutting" mnemonicParsing="false" text="Резка">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></CheckBox>
+                        <StackPane fx:id="spCuttingContainer" maxWidth="1.7976931348623157E308" />
                      </children>
                   </VBox>
                   <VBox maxWidth="1.7976931348623157E308">
                      <children>
-                        <CheckBox mnemonicParsing="false" text="Гибка" />
-                        <StackPane maxWidth="1.7976931348623157E308" />
+                        <CheckBox fx:id="chbxBending" mnemonicParsing="false" text="Гибка">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></CheckBox>
+                        <StackPane fx:id="spBendingContainer" maxWidth="1.7976931348623157E308" />
                      </children>
                   </VBox>
                   <VBox maxWidth="1.7976931348623157E308">
                      <children>
-                        <CheckBox mnemonicParsing="false" text="Покраска" />
-                        <StackPane maxWidth="1.7976931348623157E308" />
+                        <CheckBox fx:id="chboxPainting" mnemonicParsing="false" text="Покраска">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></CheckBox>
+                        <StackPane fx:id="spPaintingContainer" maxWidth="1.7976931348623157E308" />
                      </children>
                   </VBox>
                </children>
             </VBox>
          </content>
+         <VBox.margin>
+            <Insets left="10.0" top="10.0" />
+         </VBox.margin>
       </ScrollPane>
    </children>
    <padding>

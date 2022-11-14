@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -11,13 +11,13 @@
 
 <VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER_LEFT" spacing="10.0">
+      <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="10.0">
          <children>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label text="N отв">
+                        <Label text="N гибов">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -26,6 +26,9 @@
                            <image>
                               <Image url="@../../chogori-pics/btns/help.png" />
                            </image>
+                           <HBox.margin>
+                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                           </HBox.margin>
                         </ImageView>
                      </children>
                   </HBox>
@@ -36,7 +39,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label text="N перф. отв">
+                        <Label text="N человек">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -51,11 +54,11 @@
                   <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
+            <VBox alignment="CENTER_LEFT" spacing="5.0">
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label text="P экстра , мм">
+                        <Label text="Оборудование">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -67,37 +70,14 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="Зачистка">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <CheckBox contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </CheckBox>
+                  <ComboBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
                </children>
             </VBox>
          </children>
       </HBox>
       <HBox spacing="5.0">
          <children>
-            <Label text="T рез =">
+            <Label text="T гиб =">
                <font>
                   <Font size="14.0" />
                </font>

@@ -17,7 +17,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label text="N отв">
+                        <Label text="А, мм">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -36,7 +36,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label text="N перф. отв">
+                        <Label text="В, мм">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -55,7 +55,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label text="P экстра , мм">
+                        <Label text="Т навеш, сек">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -67,14 +67,14 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
+                  <TextField maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox spacing="5.0">
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label text="Зачистка">
+                        <Label text="Сложность">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -86,18 +86,14 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <CheckBox contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </CheckBox>
+                  <ComboBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
          </children>
       </HBox>
       <HBox spacing="5.0">
          <children>
-            <Label text="T рез =">
+            <Label text="T окр =">
                <font>
                   <Font size="14.0" />
                </font>
