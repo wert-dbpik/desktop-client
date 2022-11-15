@@ -570,3 +570,20 @@
 /*    -fx-background-insets: 1 1 2 1;*/
 /*    -fx-padding: 0.20em;*/
 /*}*/
+
+/*=================      КАЛЬКУЛЯТОР ================================*/
+
+#calculator{
+    -fx-background-color: #f8f5eb;
+}
+#calculator .label{
+    -fx-text-fill: black;
+}
+
+#calculator .scroll-pane{
+    -fx-background-color: #f8f5eb;
+}
+
+#calculator .scroll-pane{
+    -fx-background: #f8f5eb;
+}
