@@ -587,3 +587,7 @@
 #calculator .scroll-pane{
     -fx-background: #f8f5eb;
 }
+
+#calculator .combo-box .list-cell{
+    -fx-text-fill: black;
+}

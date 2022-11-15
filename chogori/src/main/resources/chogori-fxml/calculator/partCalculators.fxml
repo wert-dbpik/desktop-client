@@ -13,7 +13,30 @@
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label text="Параметры развертки">
+            <Label text="Материал:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="cmbxMaterial" maxWidth="1.7976931348623157E308" minWidth="-Infinity" HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="0.0">
+               <children>
+                  <ImageView fx:id="ivErase" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../chogori-pics/btns/erase.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </HBox>
+      <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0" />
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Label text="Основные параметры">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -23,35 +46,17 @@
                   <Image url="@../../chogori-pics/btns/help.png" />
                </image>
             </ImageView>
-            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../chogori-pics/btns/erase.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
          </children>
       </HBox>
       <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" spacing="5.0" VBox.vgrow="NEVER">
          <children>
-            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
-               <children>
-                  <Label text="t, мм">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Label>
-                  <TextField fx:id="tfThickness" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
-               </children>
-            </VBox>
             <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
                <children>
                   <Label text="A, мм">
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <TextField fx:id="tfA" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfA" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
@@ -60,51 +65,46 @@
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <TextField fx:id="tfB" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfB" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                     <children>
+                        <Label text="Масса, кг">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="ivHelpOnWeight" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../chogori-pics/btns/help.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <TextField fx:id="tfWeight" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
                <children>
-                  <Label text="Материал">
+                  <Label text="Покрытие, м.кв">
                      <font>
                         <Font size="14.0" />
-                     </font></Label>
-                  <ComboBox fx:id="cmbxMaterial" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfCoat" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
                </children>
             </VBox>
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" spacing="5.0">
-         <children>
-            <Label text="М дет =">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblWeight" minWidth="35.0" text="18.056">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Label>
-            <Label text="кг">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <ImageView fx:id="ivHelpOnWeight" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../chogori-pics/btns/help.png" />
-               </image>
-            </ImageView>
-         </children>
+      <Separator maxWidth="1.7976931348623157E308">
          <VBox.margin>
-            <Insets bottom="10.0" top="5.0" />
+            <Insets top="15.0" />
          </VBox.margin>
-      </HBox>
-      <Separator maxWidth="1.7976931348623157E308" />
+      </Separator>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
             <Label text="Технологические операции">
@@ -125,7 +125,7 @@
             </HBox>
          </children>
          <VBox.margin>
-            <Insets />
+            <Insets top="10.0" />
          </VBox.margin>
       </HBox>
       <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
