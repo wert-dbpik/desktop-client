@@ -580,14 +580,22 @@
     -fx-text-fill: black;
 }
 
-#calculator .scroll-pane{
+#calculator .list-view{
     -fx-background-color: #f8f5eb;
-}
-
-#calculator .scroll-pane{
     -fx-background: #f8f5eb;
+    -fx-border-width: 2 2 2 2;
+    -fx-border-color: #e2dfdf;
 }
 
-#calculator .combo-box .list-cell{
-    -fx-text-fill: black;
+#calculator .context-menu{
+    -fx-background-color: #ebf6f8;
 }
+
+#calculator .menu-item{
+    -fx-background-color: #ebf6f8;
+}
+
+#calculator .menu-item:hover{
+    -fx-background-color: #b7d2d7;
+}
+

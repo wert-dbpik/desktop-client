@@ -24,6 +24,17 @@ public class BendingController implements INormsCounter {
     @FXML
     private ComboBox<?> cmbxEquipment;
 
+    private PartCalculatorController controller;
+
+    public void init(PartCalculatorController controller){
+        this.controller = controller;
+    }
+
+    @Override//INormsCounter
+    public double countNorm(){
+        return 0.0;
+    }
+
 
     @Override//INormsCounter
     public void clearNorms() {

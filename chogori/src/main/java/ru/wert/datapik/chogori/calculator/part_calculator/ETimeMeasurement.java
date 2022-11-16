@@ -2,10 +2,6 @@ package ru.wert.datapik.chogori.calculator.part_calculator;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public enum ETimeMeasurement {
 
     SEC("сек"),
@@ -14,18 +10,6 @@ public enum ETimeMeasurement {
     @Getter String timeName;
 
     ETimeMeasurement(String timeName) {
+        this.timeName = timeName;
     }
-
-    public static List<ETimeMeasurement> allValues(){
-        return Arrays.asList(ETimeMeasurement.values());
-    }
-
-    public static List<String> allNames(){
-        List<String> list = new ArrayList<>();
-        for(ETimeMeasurement m : ETimeMeasurement.values()){
-            list.add(m.getTimeName());
-        }
-        return list;
-    }
-
 }
