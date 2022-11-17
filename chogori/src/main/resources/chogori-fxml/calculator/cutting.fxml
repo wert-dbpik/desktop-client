@@ -13,7 +13,7 @@
    <children>
       <Label text="РЕЗКА И ЗАЧИСТКА">
          <font>
-            <Font name="System Bold Italic" size="14.0" />
+            <Font name="System Italic" size="14.0" />
          </font>
          <VBox.margin>
             <Insets bottom="5.0" top="5.0" />
@@ -103,21 +103,20 @@
             </VBox>
          </children>
       </HBox>
-      <HBox spacing="5.0">
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label text="T рез =">
+            <Label text="T рез : ">
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </HBox.margin>
             </Label>
-            <Label fx:id="lblNormResult" minWidth="35.0" text="0.056">
+            <TextField fx:id="tfNormTime" />
+            <Label fx:id="lblNormTimeMeasure" text="мин">
                <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblTimeMeasurement" text="мин">
-               <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="16.0" />
                </font>
             </Label>
          </children>

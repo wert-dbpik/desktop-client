@@ -10,7 +10,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import ru.wert.datapik.chogori.calculator.INormsCounter;
+import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
 import ru.wert.datapik.chogori.common.components.BXTimeMeasurement;
 import ru.wert.datapik.client.entity.models.Material;
@@ -18,6 +19,8 @@ import ru.wert.datapik.client.entity.models.Material;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
 
 public class PartCalculatorController{
 
@@ -45,6 +48,8 @@ public class PartCalculatorController{
     @FXML @Getter
     private TextField tfB;
 
+
+
     @FXML
     private ImageView ivHelpOnWeight;
 
@@ -66,11 +71,28 @@ public class PartCalculatorController{
     @FXML
     private ImageView ivHelpOnTechnologicalProcessing;
 
-    private List<INormsCounter> addedOperations;
+    @FXML
+    private TextField tfMechanicalTime;
 
-//    public void init(){
-//        addedOperations = new ArrayList<>();
-//    }
+    @FXML
+    private TextField tfPaintingTime;
+
+    @FXML
+    private TextField tfAssemblingTime;
+
+    @FXML
+    private Label lblTimeMeasure;
+
+    @FXML @Getter
+    private TextField tfTotalTime;
+
+    private double ro; //Плотность
+    private double t; //Толщина
+    private double paramA; //параметр А
+    private double paramB; //параметр B
+
+    private List<AbstractNormsCounter> addedOperations;
+
 
     @FXML
     void initialize(){
@@ -86,6 +108,114 @@ public class PartCalculatorController{
             menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
         });
 
+        cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
+            for(AbstractNormsCounter nc : addedOperations){
+                nc.setTimeMeasurement(newValue);
+            }
+            tfMechanicalTime.setText(String.valueOf(countTotalMechanicalTime()));
+            tfPaintingTime.setText(String.valueOf(countTotalPaintingTime()));
+            tfMechanicalTime.setText(String.valueOf(countTotalAssemblingTime()));
+            tfTotalTime.setText(String.valueOf(countTotalTime()));
+
+            lblTimeMeasure.setText(newValue.getTimeName());
+        });
+
+        cmbxMaterial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            countWeightAndArea();
+            for(AbstractNormsCounter nc : addedOperations){
+                nc.setNormTime();;
+            }
+        });
+
+        tfA.textProperty().addListener((observable, oldValue, newValue) -> {
+            countWeightAndArea();
+            for(AbstractNormsCounter nc : addedOperations){
+                nc.setNormTime();;
+            }
+        });
+
+        tfB.textProperty().addListener((observable, oldValue, newValue) -> {
+            countWeightAndArea();
+            for(AbstractNormsCounter nc : addedOperations){
+                nc.setNormTime();;
+            }
+        });
+
+    }
+
+    private void countWeightAndArea() {
+        try {
+            ro = cmbxMaterial.getValue().getParamX();
+            t = cmbxMaterial.getValue().getParamS();
+            paramA = Double.parseDouble(tfA.getText().trim());
+            paramB = Double.parseDouble(tfB.getText().trim());
+            if(paramA <= 0 || paramB <= 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            tfWeight.setText("");
+            tfCoat.setText("");
+            return;
+        }
+
+        double weight = t * paramA * paramB * ro * MM2_TO_M2 * 1.1;
+        double area = 2 * paramA * paramB * MM2_TO_M2;
+
+        tfWeight.setText(String.valueOf(weight));
+        tfCoat.setText(String.valueOf(area));
+    }
+
+    /**
+     * Высчитывается общее время
+     */
+    private double countTotalTime() {
+        double time = 0.0;
+        for(AbstractNormsCounter nc : addedOperations){
+            time += nc.getCurrentNormTime();
+        }
+        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC))
+            time = time * MIN_TO_SEC;
+        return time;
+    }
+
+    /**
+     * Высчитывается общее время на механические работы
+     */
+    private double countTotalMechanicalTime() {
+        double time = 0.0;
+        for(AbstractNormsCounter nc : addedOperations){
+            if(nc.getNormType().equals(ENormType.NORM_MECHANICAL))
+                time += nc.getCurrentNormTime();
+        }
+        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC))
+            time = time * MIN_TO_SEC;
+        return time;
+    }
+
+    /**
+     * Высчитывается общее время на окрасочные работы
+     */
+    private double countTotalPaintingTime() {
+        double time = 0.0;
+        for(AbstractNormsCounter nc : addedOperations){
+            if(nc.getNormType().equals(ENormType.NORM_PAINTING))
+                time += nc.getCurrentNormTime();
+        }
+        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC))
+            time = time * MIN_TO_SEC;
+        return time;
+    }
+
+    /**
+     * Высчитывается общее время на сборочные работы
+     */
+    private double countTotalAssemblingTime() {
+        double time = 0.0;
+        for(AbstractNormsCounter nc : addedOperations){
+            if(nc.getNormType().equals(ENormType.NORM_ASSEMBLING))
+                time += nc.getCurrentNormTime();
+        }
+        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC))
+            time = time * MIN_TO_SEC;
+        return time;
     }
 
     @NotNull
@@ -167,7 +297,7 @@ public class PartCalculatorController{
      * Ищем дубликат операции в списке addedOperations по clazz
      */
     private boolean isDuplicate(String clazz){
-        for(INormsCounter cn: addedOperations){
+        for(AbstractNormsCounter cn: addedOperations){
             if(cn.getClass().getSimpleName().equals(clazz))
                 return true;
         }

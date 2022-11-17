@@ -5,9 +5,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import ru.wert.datapik.chogori.calculator.INormsCounter;
+import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 
-public class PaintingController implements INormsCounter {
+public class PaintingController extends AbstractNormsCounter {
+
+    @Getter
+    private ENormType normType = ENormType.NORM_PAINTING;
 
     @FXML
     private Label lblNormResult;
@@ -45,18 +50,25 @@ public class PaintingController implements INormsCounter {
         this.controller = controller;
     }
 
-    @Override//INormsCounter
+    /**
+     * Метод устанавливает расчитанную норму
+     */
+    @Override
+    public void setNormTime() {
+
+    }
+
+    @Override//AbstractNormsCounter
     public double countNorm(){
         return 0.0;
     }
 
-    @Override//INormsCounter
-    public void clearNorms() {
+    /**
+     * Метод устанавливает изначальные нулевые значения полей
+     */
+    @Override
+    public void setZeroValues() {
 
     }
 
-    @Override//INormsCounter
-    public double getNorm() {
-        return 0;
-    }
 }

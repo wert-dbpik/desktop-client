@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.wert.datapik.chogori.calculator.part_calculator.ETimeMeasurement;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +13,7 @@ class OpMechanicalTest {
 
     @BeforeAll
     static void beforeAll() {
-        test = new OpMechanical(1.5, 200, 300, CalcConstants.TimeMeasure.MIN);
+        test = new OpMechanical(1.5, 200, 300, ETimeMeasurement.MIN);
     }
 
     @Test

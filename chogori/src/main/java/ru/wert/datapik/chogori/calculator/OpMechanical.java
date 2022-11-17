@@ -1,10 +1,12 @@
 package ru.wert.datapik.chogori.calculator;
 
-import static ru.wert.datapik.chogori.calculator.CalcConstants.*;
+import ru.wert.datapik.chogori.calculator.part_calculator.ETimeMeasurement;
+
+import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
 
 public class OpMechanical {
 
-    CalcConstants.TimeMeasure measure; //требуемые единицы измерения (сек, мин)
+    ETimeMeasurement measure; //требуемые единицы измерения (сек, мин)
 
     double t;       //толщина материала, мм (пр: 1,5 мм)
     double a;       //длина развертки, мм (пр: 560,8 мм)
@@ -15,7 +17,7 @@ public class OpMechanical {
     double s;       //площадь обрабатываемой заготовки, м2
 
 
-    public OpMechanical(double t, int a, int b, CalcConstants.TimeMeasure measure) {
+    public OpMechanical(double t, int a, int b, ETimeMeasurement measure) {
         this.t = t;
         this.a = a;
         this.b = b;
@@ -67,8 +69,8 @@ public class OpMechanical {
                 + PERFORATION_SPEED * perfHoles)        //Время на пробивку перфорации
                 * CUTTING_SERVICE_RATIO
                 + strippingTime;
-        if(measure.equals(CalcConstants.TimeMeasure.SEC))
-            time = time * MIN_TO_CEC;
+        if(measure.equals(ETimeMeasurement.SEC))
+            time = time * MIN_TO_SEC;
 
         return time;
     }
@@ -85,8 +87,8 @@ public class OpMechanical {
         double time;
         time =  bends * BENDING_SPEED * tool * men  //мин
                 * BENDING_SERVICE_RATIO;
-        if(measure.equals(CalcConstants.TimeMeasure.SEC))
-            time = time * MIN_TO_CEC;
+        if(measure.equals(ETimeMeasurement.SEC))
+            time = time * MIN_TO_SEC;
         return time;
     }
 
@@ -131,8 +133,8 @@ public class OpMechanical {
                 + Math.pow(2*s, 0.7) * difficulty //Время нанесения покрытия
                 + 40.0/bakeBars/partsOnBar;  //Время полимеризации
 
-        if(measure.equals(CalcConstants.TimeMeasure.SEC))
-            time = time * MIN_TO_CEC;
+        if(measure.equals(ETimeMeasurement.SEC))
+            time = time * MIN_TO_SEC;
         return time;
     }
 }

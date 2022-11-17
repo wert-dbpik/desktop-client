@@ -5,9 +5,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import ru.wert.datapik.chogori.calculator.INormsCounter;
+import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 
-public class BendingController implements INormsCounter {
+public class BendingController extends AbstractNormsCounter {
+
+    @Getter
+    private ENormType normType = ENormType.NORM_MECHANICAL;
 
     @FXML
     private Label lblNormResult;
@@ -30,19 +35,26 @@ public class BendingController implements INormsCounter {
         this.controller = controller;
     }
 
-    @Override//INormsCounter
+    /**
+     * Метод устанавливает расчитанную норму
+     */
+    @Override
+    public void setNormTime() {
+
+    }
+
+    @Override//AbstractNormsCounter
     public double countNorm(){
         return 0.0;
     }
 
-
-    @Override//INormsCounter
-    public void clearNorms() {
+    /**
+     * Метод устанавливает изначальные нулевые значения полей
+     */
+    @Override
+    public void setZeroValues() {
 
     }
 
-    @Override//INormsCounter
-    public double getNorm() {
-        return 0;
-    }
+
 }

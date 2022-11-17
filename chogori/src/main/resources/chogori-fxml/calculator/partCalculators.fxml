@@ -206,7 +206,7 @@
                      </HBox.margin>
                   </Label>
                   <TextField fx:id="tfTotalTime" />
-                  <Label text="мин">
+                  <Label fx:id="lblTimeMeasure" text="мин">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
