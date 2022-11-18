@@ -1,6 +1,8 @@
 package ru.wert.datapik.chogori.calculator.part_calculator;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
@@ -30,7 +32,7 @@ public class PartCalculatorController{
     @FXML @Getter
     private ComboBox<ETimeMeasurement> cmbxTimeMeasurement;
 
-    @FXML
+    @FXML @Getter
     private ListView<VBox> listViewTechOperations;
 
     @FXML
@@ -91,13 +93,14 @@ public class PartCalculatorController{
     private double paramA; //параметр А
     private double paramB; //параметр B
 
-    private List<AbstractNormsCounter> addedOperations;
+    @Getter private ObservableList<AbstractNormsCounter> addedOperations;
 
 
     @FXML
     void initialize(){
 
-        addedOperations = new ArrayList<>();
+        addedOperations = FXCollections.observableArrayList();
+//        listViewTechOperations.setItems(addedOperations);
 
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);

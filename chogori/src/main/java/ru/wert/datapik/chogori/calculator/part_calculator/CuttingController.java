@@ -2,8 +2,10 @@ package ru.wert.datapik.chogori.calculator.part_calculator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
@@ -14,13 +16,16 @@ public class CuttingController  extends AbstractNormsCounter {
     private ENormType normType = ENormType.NORM_MECHANICAL;
 
     @FXML
+    private Label lblOperationName;
+
+    @FXML
+    private ImageView ivDeleteOperation;
+
+    @FXML
     private TextField tfNumOfHoles;
 
     @FXML
     private TextField tfNormTime;
-
-    @FXML
-    private ImageView ivHelpOnNumOfHoles;
 
     @FXML
     private TextField tfNumOfPerfHoles;
@@ -29,10 +34,13 @@ public class CuttingController  extends AbstractNormsCounter {
     private CheckBox chbxUseStripping;
 
     @FXML
-    private ImageView ivHelpOnExtraPerimeter;
+    private TextField tfExtraPerimeter;
 
     @FXML
-    private TextField tfExtraPerimeter;
+    private ImageView ivHelpOnNumOfHoles;
+
+    @FXML
+    private ImageView ivHelpOnExtraPerimeter;
 
     @FXML
     private ImageView ivHelpOnUseStripping;
@@ -58,6 +66,8 @@ public class CuttingController  extends AbstractNormsCounter {
         setZeroValues();
         setNormTime();
 
+        lblOperationName.setStyle("-fx-text-fill: saddlebrown");
+
         tfNumOfHoles.textProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
@@ -72,6 +82,12 @@ public class CuttingController  extends AbstractNormsCounter {
 
         chbxUseStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
+        });
+
+        ivDeleteOperation.setOnMouseClicked(e->{
+            controller.getAddedOperations().remove(this);
+            VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
+            controller.getListViewTechOperations().getItems().remove(box);
         });
 
     }

@@ -11,14 +11,27 @@
 
 <VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.part_calculator.PaintingController">
    <children>
-      <Label text="ПОКРАСКА">
-         <font>
-            <Font name="System Bold Italic" size="14.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="5.0" top="5.0" />
-         </VBox.margin>
-      </Label>
+      <HBox alignment="CENTER_LEFT">
+         <children>
+            <Label fx:id="lblOperationName" text="ПОКРАСКА" textFill="#2f23d0">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+               <children>
+                  <ImageView fx:id="ivDeleteOperation" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../chogori-pics/btns/close.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
@@ -87,7 +100,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ImageView fx:id="cmbxOnDifficulty" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="ivHelpOnDifficulty" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../chogori-pics/btns/help.png" />
                            </image>
@@ -99,21 +112,20 @@
             </VBox>
          </children>
       </HBox>
-      <HBox spacing="5.0">
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
-            <Label text="T окр =">
+            <Label text="T покр : ">
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </HBox.margin>
             </Label>
-            <Label fx:id="lblNormResult" minWidth="35.0" text="0.056">
+            <TextField fx:id="tfNormTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+            <Label fx:id="lblNormTimeMeasure" text="мин">
                <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblTimeMeasurement" text="мин">
-               <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="16.0" />
                </font>
             </Label>
          </children>
@@ -121,6 +133,6 @@
       <Separator maxWidth="1.7976931348623157E308" />
    </children>
    <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      <Insets left="10.0" right="10.0" top="5.0" />
    </padding>
 </VBox>

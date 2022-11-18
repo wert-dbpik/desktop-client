@@ -195,7 +195,7 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Label text="Всего : ">
                      <font>
@@ -205,7 +205,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="tfTotalTime" />
+                  <TextField fx:id="tfTotalTime" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                   <Label fx:id="lblTimeMeasure" text="мин">
                      <font>
                         <Font name="System Bold" size="16.0" />
