@@ -62,15 +62,6 @@ public class PartCalculatorController{
     private TextField tfCoat;
 
     @FXML
-    private StackPane spCuttingContainer;
-
-    @FXML
-    private StackPane spPaintingContainer;
-
-    @FXML
-    private StackPane spBendingContainer;
-
-    @FXML
     private ImageView ivHelpOnTechnologicalProcessing;
 
     @FXML
@@ -133,14 +124,16 @@ public class PartCalculatorController{
         tfA.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
             for(AbstractNormsCounter nc : addedOperations){
-                nc.setNormTime();;
+                nc.setNormTime();
+                countTotalNormTime();
             }
         });
 
         tfB.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
             for(AbstractNormsCounter nc : addedOperations){
-                nc.setNormTime();;
+                nc.setNormTime();
+                countTotalNormTime();
             }
         });
 
@@ -305,6 +298,29 @@ public class PartCalculatorController{
                 return true;
         }
         return false;
+    }
+
+    public void countTotalNormTime(){
+        double mechanicalTime = 0.0;
+        double paintingTime = 0.0;
+        double assemblingTime = 0.0;
+        double packingTime = 0.0;
+        for(AbstractNormsCounter cn: addedOperations){
+            if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
+                mechanicalTime += cn.getCurrentNormTime();
+            else if(cn.getNormType().equals(ENormType.NORM_PAINTING))
+                paintingTime += cn.getCurrentNormTime();
+            else if(cn.getNormType().equals(ENormType.NORM_ASSEMBLING))
+                assemblingTime += cn.getCurrentNormTime();
+            else if(cn.getNormType().equals(ENormType.NORM_PACKING))
+                packingTime += cn.getCurrentNormTime();
+        }
+
+        tfMechanicalTime.setText(String.valueOf(mechanicalTime));
+        tfPaintingTime.setText(String.valueOf(mechanicalTime));
+        tfAssemblingTime.setText(String.valueOf(mechanicalTime));
+
+        tfTotalTime.setText(String.valueOf(mechanicalTime + paintingTime + assemblingTime + packingTime));
     }
 
 }

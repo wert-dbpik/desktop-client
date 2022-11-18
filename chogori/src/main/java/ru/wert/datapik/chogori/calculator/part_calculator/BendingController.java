@@ -58,12 +58,16 @@ public class BendingController extends AbstractNormsCounter {
             setNormTime();
         });
 
-
+        cmbxBendingTool.valueProperty().addListener((observable, oldValue, newValue) -> {
+            setNormTime();
+        });
 
         ivDeleteOperation.setOnMouseClicked(e->{
             controller.getAddedOperations().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
+            currentNormTime = 0.0;
+            controller.countTotalNormTime();
         });
     }
 
@@ -73,6 +77,7 @@ public class BendingController extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         tfNormTime.setText(String.valueOf(countNorm()));
+        controller.countTotalNormTime();
     }
 
     @Override//AbstractNormsCounter
@@ -86,8 +91,7 @@ public class BendingController extends AbstractNormsCounter {
         double time;
         time =  bends * BENDING_SPEED * toolRatio * men  //мин
                 * BENDING_SERVICE_RATIO;
-        if(measure.equals(ETimeMeasurement.SEC))
-            time = time * MIN_TO_SEC;
+
         return time;
     }
 

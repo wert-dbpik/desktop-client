@@ -88,6 +88,8 @@ public class CuttingController  extends AbstractNormsCounter {
             controller.getAddedOperations().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
+            currentNormTime = 0.0;
+            controller.countTotalNormTime();
         });
 
     }
@@ -109,6 +111,7 @@ public class CuttingController  extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         tfNormTime.setText(String.valueOf(countNorm()));
+        controller.countTotalNormTime();
     }
 
     @Override//AbstractNormsCounter

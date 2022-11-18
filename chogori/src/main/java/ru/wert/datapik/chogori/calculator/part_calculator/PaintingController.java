@@ -92,6 +92,8 @@ public class PaintingController extends AbstractNormsCounter {
             controller.getAddedOperations().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
+            currentNormTime = 0.0;
+            controller.countTotalNormTime();
         });
 
     }
@@ -102,6 +104,7 @@ public class PaintingController extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         tfNormTime.setText(String.valueOf(countNorm()));
+        controller.countTotalNormTime();
     }
 
     @Override//AbstractNormsCounter
@@ -143,8 +146,7 @@ public class PaintingController extends AbstractNormsCounter {
                 + Math.pow(2*s, 0.7) * difficulty //Время нанесения покрытия
                 + 40.0/bakeBars/partsOnBar;  //Время полимеризации
 
-        if(measure.equals(ETimeMeasurement.SEC))
-            time = time * MIN_TO_SEC;
+        currentNormTime = time;//результат в минутах
         return time;
     }
 
