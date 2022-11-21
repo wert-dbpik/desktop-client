@@ -1,9 +1,8 @@
 package ru.wert.datapik.chogori.calculator;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.wert.datapik.chogori.calculator.part_calculator.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 import static org.junit.jupiter.api.Assertions.*;
 

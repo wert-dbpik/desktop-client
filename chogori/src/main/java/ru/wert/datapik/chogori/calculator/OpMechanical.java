@@ -1,6 +1,6 @@
 package ru.wert.datapik.chogori.calculator;
 
-import ru.wert.datapik.chogori.calculator.part_calculator.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
 

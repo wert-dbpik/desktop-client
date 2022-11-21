@@ -3,7 +3,7 @@ package ru.wert.datapik.chogori.calculator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import ru.wert.datapik.chogori.calculator.part_calculator.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 /**
  * Изначальный расчет нормы времени производится в минутах

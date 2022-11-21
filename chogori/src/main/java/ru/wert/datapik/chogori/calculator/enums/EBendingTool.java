@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.calculator.part_calculator;
+package ru.wert.datapik.chogori.calculator.enums;
 
 import lombok.Getter;
 

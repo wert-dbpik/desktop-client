@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.calculator.part_calculator;
+package ru.wert.datapik.chogori.calculator.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -9,7 +9,9 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
-import ru.wert.datapik.chogori.common.components.BXPaintingDifficulty;
+import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
+import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
+import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.TFInteger;
 
 public class PaintingController extends AbstractNormsCounter {
@@ -65,6 +67,7 @@ public class PaintingController extends AbstractNormsCounter {
 
     public void init(PartCalculatorController controller){
         this.controller = controller;
+        controller.getAddedOperations().add(this);
         new BXPaintingDifficulty().create(cmbxDifficulty);
 
         setZeroValues();
@@ -93,7 +96,7 @@ public class PaintingController extends AbstractNormsCounter {
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
             currentNormTime = 0.0;
-            controller.countTotalNormTime();
+            controller.countSumNormTimeByShops();
         });
 
     }
@@ -104,7 +107,7 @@ public class PaintingController extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         tfNormTime.setText(String.valueOf(countNorm()));
-        controller.countTotalNormTime();
+        controller.countSumNormTimeByShops();
     }
 
     @Override//AbstractNormsCounter

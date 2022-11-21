@@ -1,11 +1,11 @@
-package ru.wert.datapik.chogori.common.components;
+package ru.wert.datapik.chogori.calculator.components;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.util.StringConverter;
-import ru.wert.datapik.chogori.calculator.part_calculator.EBendingTool;
+import ru.wert.datapik.chogori.calculator.enums.EBendingTool;
 
 
 public class BXBendingTool {

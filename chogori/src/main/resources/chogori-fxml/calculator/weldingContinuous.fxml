@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -9,11 +10,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.PaintingController">
+<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.WeldingContinuousController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label fx:id="lblOperationName" text="ПОКРАСКА" textFill="#2f23d0">
+            <Label fx:id="lblOperationName" text="СВАРКА НЕПРЕРЫВНАЯ" textFill="#2f23d0">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
@@ -21,7 +22,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <ImageView fx:id="ivHelpOnA" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../chogori-pics/btns/help.png" />
                </image>
@@ -37,53 +38,83 @@
             </HBox>
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" spacing="10.0">
+      <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="10.0">
          <children>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
                <children>
-                  <Label text="А, мм">
+                  <Label text="L шва, мм">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfA" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfSeamLength" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
+            <VBox alignment="CENTER_LEFT" spacing="5.0">
                <children>
-                  <Label text="В, мм">
+                  <Label text="Габаритность сборки">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfB" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
-               <children>
-                  <Label text="Т навеш, сек">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfHangingTime" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <ComboBox fx:id="cmbxPartBigness" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" />
                </children>
             </VBox>
             <VBox spacing="5.0">
                <children>
-                  <Label text="Сложность">
+                  <Label text="Зачистка">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="cmbxDifficulty" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <CheckBox fx:id="chbxUseStripping" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
+         <children>
+            <CheckBox fx:id="chbxUseNumOfSeams" mnemonicParsing="false" />
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <Label fx:id="lblNumOfSeams" text="N швов">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfNumOfSeams" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" />
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <Label fx:id="lblConnectionLength" text="L соед., мм">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfConnectionLength" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <Label fx:id="lblStep" text="L шаг, мм">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfStep" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
          </children>
       </HBox>
       <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
-            <Label text="T покр : ">
+            <Label text="T св.непр. : ">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -98,6 +129,9 @@
                </font>
             </Label>
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
       <Separator maxWidth="1.7976931348623157E308" />
    </children>

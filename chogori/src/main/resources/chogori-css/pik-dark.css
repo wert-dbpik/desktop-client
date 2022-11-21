@@ -587,6 +587,20 @@
     -fx-border-color: #e2dfdf;
 }
 
+#calculator .list-view .list-cell{
+    -fx-background-color: #f8f5eb;
+    -fx-text-fill: black;
+}
+
+#calculator .list-view .list-cell:selected{
+    -fx-background-color: #f8edc8;
+    -fx-text-fill: black;
+}
+
+#calculator .list-view .list-cell:hover{
+    -fx-text-fill: royalblue;
+}
+
 #calculator .context-menu{
     -fx-background-color: #ebf6f8;
 }

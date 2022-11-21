@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.calculator.part_calculator;
+package ru.wert.datapik.chogori.calculator.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 public class CuttingController  extends AbstractNormsCounter {
 
@@ -63,6 +64,7 @@ public class CuttingController  extends AbstractNormsCounter {
 
     public void init(PartCalculatorController controller){
         this.controller = controller;
+        controller.getAddedOperations().add(this);
         setZeroValues();
         setNormTime();
 
@@ -89,8 +91,9 @@ public class CuttingController  extends AbstractNormsCounter {
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
             currentNormTime = 0.0;
-            controller.countTotalNormTime();
+            controller.countSumNormTimeByShops();
         });
+
 
     }
 
@@ -111,7 +114,7 @@ public class CuttingController  extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         tfNormTime.setText(String.valueOf(countNorm()));
-        controller.countTotalNormTime();
+        controller.countSumNormTimeByShops();
     }
 
     @Override//AbstractNormsCounter
@@ -152,6 +155,7 @@ public class CuttingController  extends AbstractNormsCounter {
         currentNormTime = time;//результат в минутах
         return time;
     }
+
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

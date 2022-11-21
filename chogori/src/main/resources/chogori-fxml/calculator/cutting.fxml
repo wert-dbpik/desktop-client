@@ -9,11 +9,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.part_calculator.CuttingController">
+<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.CuttingController">
    <children>
-      <HBox alignment="CENTER_LEFT">
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label fx:id="lblOperationName" text="РЕЗКА И ЗАЧИСТКА" textFill="#2f23d0">
+            <Label fx:id="lblOperationName" text="РАСКРОЙ И ЗАЧИСТКА" textFill="#2f23d0">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
@@ -21,6 +21,11 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
+            <ImageView fx:id="ivHelpOnUseStripping" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../chogori-pics/btns/help.png" />
+               </image>
+            </ImageView>
             <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                <children>
                   <ImageView fx:id="ivDeleteOperation" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
@@ -36,77 +41,41 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="N отв">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fx:id="ivHelpOnNumOfHoles" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
+                  <Label text="N отв">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <TextField fx:id="tfNumOfHoles" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="N перф. отв">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fx:id="ivHelpOnNumOfPerfHoles" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
+                  <Label text="N перф. отв">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <TextField fx:id="tfNumOfPerfHoles" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="P экстра , мм">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fx:id="ivHelpOnExtraPerimeter" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
+                  <Label text="P экстра , мм">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <TextField fx:id="tfExtraPerimeter" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
                </children>
             </VBox>
             <VBox spacing="5.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="Зачистка">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fx:id="ivHelpOnUseStripping" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
+                  <Label text="Зачистка">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <CheckBox fx:id="chbxUseStripping" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
                      <font>
                         <Font size="14.0" />

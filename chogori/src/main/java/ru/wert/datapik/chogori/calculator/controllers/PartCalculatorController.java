@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.calculator.part_calculator;
+package ru.wert.datapik.chogori.calculator.controllers;
 
 
 import javafx.collections.FXCollections;
@@ -8,19 +8,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
-import ru.wert.datapik.chogori.common.components.BXTimeMeasurement;
+import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.client.entity.models.Material;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
 
@@ -49,8 +47,6 @@ public class PartCalculatorController{
 
     @FXML @Getter
     private TextField tfB;
-
-
 
     @FXML
     private ImageView ivHelpOnWeight;
@@ -125,7 +121,7 @@ public class PartCalculatorController{
             countWeightAndArea();
             for(AbstractNormsCounter nc : addedOperations){
                 nc.setNormTime();
-                countTotalNormTime();
+                countSumNormTimeByShops();
             }
         });
 
@@ -133,7 +129,7 @@ public class PartCalculatorController{
             countWeightAndArea();
             for(AbstractNormsCounter nc : addedOperations){
                 nc.setNormTime();
-                countTotalNormTime();
+                countSumNormTimeByShops();
             }
         });
 
@@ -233,7 +229,20 @@ public class PartCalculatorController{
             addPaintingOperation();
         });
 
+        MenuItem addWeldingLongSeam = new MenuItem("Сварка непрерывная");
+        addWeldingLongSeam.setOnAction(event -> {
+            addWeldingContinuousOperation();
+        });
+
+        MenuItem addWeldingDotted = new MenuItem("Сварка точечная");
+        addWeldingDotted.setOnAction(event -> {
+            if(isDuplicate(WeldingDottedController.class.getSimpleName())) return ;
+            addWeldingDottedOperation();
+        });
+
         menu.getItems().addAll(addCutting, addBending, addPainting);
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
         return menu;
     }
 
@@ -247,7 +256,6 @@ public class PartCalculatorController{
             cutting.setId("calculator");
             CuttingController controller = loader.getController();
             controller.init(this);
-            addedOperations.add(controller);
             listViewTechOperations.getItems().add(cutting);
         } catch (IOException e) {
             e.printStackTrace();
@@ -264,7 +272,6 @@ public class PartCalculatorController{
             bending.setId("calculator");
             BendingController controller = loader.getController();
             controller.init(this);
-            addedOperations.add(controller);
             listViewTechOperations.getItems().add(bending);
         } catch (IOException e) {
             e.printStackTrace();
@@ -281,8 +288,39 @@ public class PartCalculatorController{
             painting.setId("calculator");
             PaintingController controller = loader.getController();
             controller.init(this);
-            addedOperations.add(controller);
             listViewTechOperations.getItems().add(painting);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * СВАРКА НЕПРЕРЫВНАЯ
+     */
+    private void addWeldingContinuousOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/weldingContinuous.fxml"));
+            VBox weldingLongSeam = loader.load();
+            weldingLongSeam.setId("calculator");
+            WeldingContinuousController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(weldingLongSeam);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * СВАРКА ТОЧЕЧНАЯ
+     */
+    private void addWeldingDottedOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/weldingDotted.fxml"));
+            VBox weldingDotted = loader.load();
+            weldingDotted.setId("calculator");
+            WeldingDottedController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(weldingDotted);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -300,7 +338,10 @@ public class PartCalculatorController{
         return false;
     }
 
-    public void countTotalNormTime(){
+    /**
+     * Метод расчитывает суммарное время по участкам
+     */
+    public void countSumNormTimeByShops(){
         double mechanicalTime = 0.0;
         double paintingTime = 0.0;
         double assemblingTime = 0.0;
@@ -317,10 +358,11 @@ public class PartCalculatorController{
         }
 
         tfMechanicalTime.setText(String.valueOf(mechanicalTime));
-        tfPaintingTime.setText(String.valueOf(mechanicalTime));
-        tfAssemblingTime.setText(String.valueOf(mechanicalTime));
+        tfPaintingTime.setText(String.valueOf(paintingTime));
+        tfAssemblingTime.setText(String.valueOf(assemblingTime));
 
         tfTotalTime.setText(String.valueOf(mechanicalTime + paintingTime + assemblingTime + packingTime));
+
     }
 
 }

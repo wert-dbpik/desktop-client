@@ -10,9 +10,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.part_calculator.BendingController">
+<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.BendingController">
    <children>
-      <HBox alignment="CENTER_LEFT">
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
             <Label fx:id="lblOperationName" text="ГИБКА" textFill="#2f23d0">
                <font>
@@ -22,6 +22,11 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
+            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../chogori-pics/btns/help.png" />
+               </image>
+            </ImageView>
             <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                <children>
                   <ImageView fx:id="ivDeleteOperation" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
@@ -37,61 +42,31 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="N гибов">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
+                  <Label text="N гибов">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <TextField fx:id="tfNumOfBendings" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="N человек">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
+                  <Label text="N человек">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <TextField fx:id="tfNumOfMen" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" spacing="5.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="Оборудование">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
+                  <Label text="Оборудование">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <ComboBox fx:id="cmbxBendingTool" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
                </children>
             </VBox>
