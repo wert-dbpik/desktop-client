@@ -160,7 +160,8 @@ public class WeldingContinuousController extends AbstractNormsCounter {
      */
     @Override
     public void setNormTime() {
-        tfNormTime.setText(String.valueOf(countNorm()));
+        countNorm();
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
         controller.countSumNormTimeByShops();
     }
 
@@ -214,6 +215,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
         disableNumOfSeamsCounting();
         chbxUseNumOfSeams.setSelected(true);
         chbxUseStripping.setSelected(false);
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
     /**

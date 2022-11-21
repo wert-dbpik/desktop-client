@@ -106,6 +106,9 @@ public class CuttingController  extends AbstractNormsCounter {
         tfNumOfPerfHoles.setText("0");
         tfExtraPerimeter.setText("0");
         chbxUseStripping.setSelected(true);
+
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+
     }
 
     /**
@@ -113,7 +116,8 @@ public class CuttingController  extends AbstractNormsCounter {
      */
     @Override
     public void setNormTime() {
-        tfNormTime.setText(String.valueOf(countNorm()));
+        countNorm();
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
         controller.countSumNormTimeByShops();
     }
 

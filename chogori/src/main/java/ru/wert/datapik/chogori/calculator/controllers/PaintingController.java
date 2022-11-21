@@ -106,7 +106,8 @@ public class PaintingController extends AbstractNormsCounter {
      */
     @Override
     public void setNormTime() {
-        tfNormTime.setText(String.valueOf(countNorm()));
+        countNorm();
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
         controller.countSumNormTimeByShops();
     }
 
@@ -164,6 +165,7 @@ public class PaintingController extends AbstractNormsCounter {
         tfA.setText("0");
         tfB.setText(String.valueOf(Math.min(razvParamA, razvParamB)));
         tfHangingTime.setText("20");
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
     /**

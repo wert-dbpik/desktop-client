@@ -102,10 +102,12 @@ public class PartCalculatorController{
             for(AbstractNormsCounter nc : addedOperations){
                 nc.setTimeMeasurement(newValue);
             }
-            tfMechanicalTime.setText(String.valueOf(countTotalMechanicalTime()));
-            tfPaintingTime.setText(String.valueOf(countTotalPaintingTime()));
-            tfMechanicalTime.setText(String.valueOf(countTotalAssemblingTime()));
-            tfTotalTime.setText(String.valueOf(countTotalTime()));
+//            tfMechanicalTime.setText(String.valueOf(countTotalMechanicalTime()));
+//            tfPaintingTime.setText(String.valueOf(countTotalPaintingTime()));
+//            tfMechanicalTime.setText(String.valueOf(countTotalAssemblingTime()));
+//            tfTotalTime.setText(String.valueOf(countTotalTime()));
+
+            countSumNormTimeByShops();
 
             lblTimeMeasure.setText(newValue.getTimeName());
         });
@@ -355,6 +357,12 @@ public class PartCalculatorController{
                 assemblingTime += cn.getCurrentNormTime();
             else if(cn.getNormType().equals(ENormType.NORM_PACKING))
                 packingTime += cn.getCurrentNormTime();
+        }
+
+        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)){
+            mechanicalTime = mechanicalTime * MIN_TO_SEC;
+            paintingTime = paintingTime * MIN_TO_SEC;
+            assemblingTime = assemblingTime * MIN_TO_SEC;
         }
 
         tfMechanicalTime.setText(String.valueOf(mechanicalTime));

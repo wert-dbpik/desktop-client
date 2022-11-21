@@ -78,7 +78,8 @@ public class WeldingDottedController extends AbstractNormsCounter {
      */
     @Override
     public void setNormTime() {
-        tfNormTime.setText(String.valueOf(countNorm()));
+        countNorm();
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
         controller.countSumNormTimeByShops();
     }
 
@@ -107,6 +108,7 @@ public class WeldingDottedController extends AbstractNormsCounter {
         tfNumOfParts.setText("0");
         tfNumOfDots.setText("0");
         tfNumOfDrops.setText("0");
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
     /**

@@ -79,7 +79,8 @@ public class BendingController extends AbstractNormsCounter {
      */
     @Override
     public void setNormTime() {
-        tfNormTime.setText(String.valueOf(countNorm()));
+        countNorm();
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
         controller.countSumNormTimeByShops();
     }
 
@@ -106,6 +107,7 @@ public class BendingController extends AbstractNormsCounter {
     public void setZeroValues() {
         tfNumOfBendings.setText("1");
         tfNumOfMen.setText("1");
+        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
     /**
