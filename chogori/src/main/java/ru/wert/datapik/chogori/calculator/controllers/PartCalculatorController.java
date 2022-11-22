@@ -274,13 +274,20 @@ public class PartCalculatorController{
             addAssemblingCuttingsOperation();
         });
 
+        //СБОРКА СТАНДАРТНЫХ УЗЛОВ
+        MenuItem addAssemblingNodes = new MenuItem("Сборка стандартных узлов");
+        addAssemblingNodes.setOnAction(event -> {
+            if(isDuplicate(AssemblingNodesController.class.getSimpleName())) return ;
+            addAssemblingNodesOperation();
+        });
+
         menu.getItems().addAll(addCutting, addBending, addLocksmith);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(addPainting);
         menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(addAssemblingNuts, addAssemblingCuttings);
+        menu.getItems().addAll(addAssemblingNuts, addAssemblingCuttings, addAssemblingNodes);
 
         return menu;
     }
@@ -408,6 +415,22 @@ public class PartCalculatorController{
             AssemblingCuttingsController controller = loader.getController();
             controller.init(this);
             listViewTechOperations.getItems().add(assemblingCuttings);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * СБОРКА СТАНДАРТНЫХ УЗЛОВ
+     */
+    private void addAssemblingNodesOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingNodes.fxml"));
+            VBox assemblingNodes = loader.load();
+            assemblingNodes.setId("calculator");
+            AssemblingNodesController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(assemblingNodes);
         } catch (IOException e) {
             e.printStackTrace();
         }
