@@ -13,7 +13,7 @@ import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
-import ru.wert.datapik.chogori.common.components.TFInteger;
+import ru.wert.datapik.chogori.calculator.components.TFInteger;
 
 public class PaintingController extends AbstractNormsCounter {
 

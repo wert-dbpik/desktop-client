@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.common.components;
+package ru.wert.datapik.chogori.calculator.components;
 
 import javafx.scene.control.TextField;
 

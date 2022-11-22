@@ -208,37 +208,58 @@ public class PartCalculatorController{
         return time;
     }
 
+    /**
+     * МЕНЮ ====================================================================
+     */
     @NotNull
     private ContextMenu createOperationsMenu() {
+        //РАСКРОЙ И ЗАЧИСТКА
         ContextMenu menu = new ContextMenu();
         MenuItem addCutting = new MenuItem("Резка и зачистка");
         addCutting.setOnAction(event -> {
             if(isDuplicate(CuttingController.class.getSimpleName())) return ;
             addCattingOperation();
         });
+
+        //ГИБКА
         MenuItem addBending = new MenuItem("Гибка");
         addBending.setOnAction(event -> {
             if(isDuplicate(BendingController.class.getSimpleName())) return ;
             addBendingOperation();
         });
-        MenuItem addPainting = new MenuItem("Покраска");
-        addPainting.setOnAction(event -> {
-            if(isDuplicate(PaintingController.class.getSimpleName())) return ;
-            addPaintingOperation();
+
+        //СЛЕСАРНЫЕ РАБОТЫ
+        MenuItem addLocksmith = new MenuItem("Слесарные операции");
+        addLocksmith.setOnAction(event -> {
+            if(isDuplicate(LocksmithController.class.getSimpleName())) return ;
+            addLocksmithOperation();
         });
 
+        //=======================================================================
+
+        //СВАРКА НЕПРЕРЫВНАЯ
         MenuItem addWeldingLongSeam = new MenuItem("Сварка непрерывная");
         addWeldingLongSeam.setOnAction(event -> {
             addWeldingContinuousOperation();
         });
 
+        //СВАРКА ТОЧЕЧНАЯ
         MenuItem addWeldingDotted = new MenuItem("Сварка точечная");
         addWeldingDotted.setOnAction(event -> {
             if(isDuplicate(WeldingDottedController.class.getSimpleName())) return ;
             addWeldingDottedOperation();
         });
 
-        menu.getItems().addAll(addCutting, addBending);
+        //=======================================================================
+
+        //ПОКРАСКА
+        MenuItem addPainting = new MenuItem("Покраска");
+        addPainting.setOnAction(event -> {
+            if(isDuplicate(PaintingController.class.getSimpleName())) return ;
+            addPaintingOperation();
+        });
+
+        menu.getItems().addAll(addCutting, addBending, addLocksmith);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
         menu.getItems().add(new SeparatorMenuItem());
@@ -249,7 +270,7 @@ public class PartCalculatorController{
     }
 
     /**
-     * РЕЗКА И ЗАЧИСТКА
+     * РАСКРОЙ И ЗАЧИСТКА
      */
     private void addCattingOperation() {
         try {
@@ -281,16 +302,16 @@ public class PartCalculatorController{
     }
 
     /**
-     * ПОКРАСКА
+     * СЛЕСАРНЫЕ ОПЕРАЦИИ
      */
-    private void addPaintingOperation() {
+    private void addLocksmithOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/painting.fxml"));
-            VBox painting = loader.load();
-            painting.setId("calculator");
-            PaintingController controller = loader.getController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/locksmith.fxml"));
+            VBox locksmith = loader.load();
+            locksmith.setId("calculator");
+            LocksmithController controller = loader.getController();
             controller.init(this);
-            listViewTechOperations.getItems().add(painting);
+            listViewTechOperations.getItems().add(locksmith);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -328,6 +349,21 @@ public class PartCalculatorController{
         }
     }
 
+    /**
+     * ПОКРАСКА
+     */
+    private void addPaintingOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/painting.fxml"));
+            VBox painting = loader.load();
+            painting.setId("calculator");
+            PaintingController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(painting);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Ищем дубликат операции в списке addedOperations по clazz
@@ -364,8 +400,6 @@ public class PartCalculatorController{
             paintingTime = paintingTime * MIN_TO_SEC;
             assemblingTime = assemblingTime * MIN_TO_SEC;
         }
-
-
 
         String format = doubleFormat;
         if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)) format = integerFormat;

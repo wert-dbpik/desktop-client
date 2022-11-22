@@ -16,6 +16,7 @@ public abstract class AbstractNormsCounter {
     public static final double MM2_TO_M2 = 0.000001; //перевод мм квадратных в квадратные метры
     public static final double MM3_TO_M3 = 0.000000001; //перевод мм квадратных в квадратные метры
     public static final double MIN_TO_SEC = 60; //перевод минут в секунды
+    public static final double SEC_TO_MIN = 1.0/60; //перевод минут в секунды
     public static final double RO = 0.00000785; //плотность стали кг/м3
     public static final String doubleFormat = "%5.3f";
     public static final String integerFormat = "%10.0f";
