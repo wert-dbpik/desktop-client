@@ -267,13 +267,20 @@ public class PartCalculatorController{
             addAssemblingNutsOperation();
         });
 
+        //СБОРКА - РАСКРОЙНЫЙ МАТЕРИАЛ
+        MenuItem addAssemblingCuttings = new MenuItem("Сборка раскройного материала");
+        addAssemblingCuttings.setOnAction(event -> {
+            if(isDuplicate(AssemblingCuttingsController.class.getSimpleName())) return ;
+            addAssemblingCuttingsOperation();
+        });
+
         menu.getItems().addAll(addCutting, addBending, addLocksmith);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(addPainting);
         menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().add(addAssemblingNuts);
+        menu.getItems().addAll(addAssemblingNuts, addAssemblingCuttings);
 
         return menu;
     }
@@ -375,7 +382,7 @@ public class PartCalculatorController{
     }
 
     /**
-     * ПОКРАСКА
+     * СБОРКА КРЕПЕЖА
      */
     private void addAssemblingNutsOperation() {
         try {
@@ -385,6 +392,22 @@ public class PartCalculatorController{
             AssemblingNutsController controller = loader.getController();
             controller.init(this);
             listViewTechOperations.getItems().add(assemblingNuts);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * СБОРКА РАСКРОЙНОГО МАТЕРИАЛА
+     */
+    private void addAssemblingCuttingsOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingCuttings.fxml"));
+            VBox assemblingCuttings = loader.load();
+            assemblingCuttings.setId("calculator");
+            AssemblingCuttingsController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(assemblingCuttings);
         } catch (IOException e) {
             e.printStackTrace();
         }
