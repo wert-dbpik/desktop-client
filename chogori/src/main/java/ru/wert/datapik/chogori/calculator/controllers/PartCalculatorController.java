@@ -259,12 +259,21 @@ public class PartCalculatorController{
             addPaintingOperation();
         });
 
+        //=======================================================================
+        //СБОРКА - КРЕПЕЖ
+        MenuItem addAssemblingNuts = new MenuItem("Сборка крепежа");
+        addAssemblingNuts.setOnAction(event -> {
+            if(isDuplicate(AssemblingNutsController.class.getSimpleName())) return ;
+            addAssemblingNutsOperation();
+        });
+
         menu.getItems().addAll(addCutting, addBending, addLocksmith);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(addPainting);
-
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(addAssemblingNuts);
 
         return menu;
     }
@@ -360,6 +369,22 @@ public class PartCalculatorController{
             PaintingController controller = loader.getController();
             controller.init(this);
             listViewTechOperations.getItems().add(painting);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * ПОКРАСКА
+     */
+    private void addAssemblingNutsOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingNuts.fxml"));
+            VBox assemblingNuts = loader.load();
+            assemblingNuts.setId("calculator");
+            AssemblingNutsController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(assemblingNuts);
         } catch (IOException e) {
             e.printStackTrace();
         }
