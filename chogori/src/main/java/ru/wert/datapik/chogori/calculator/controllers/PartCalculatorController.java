@@ -102,10 +102,6 @@ public class PartCalculatorController{
             for(AbstractNormsCounter nc : addedOperations){
                 nc.setTimeMeasurement(newValue);
             }
-//            tfMechanicalTime.setText(String.valueOf(countTotalMechanicalTime()));
-//            tfPaintingTime.setText(String.valueOf(countTotalPaintingTime()));
-//            tfMechanicalTime.setText(String.valueOf(countTotalAssemblingTime()));
-//            tfTotalTime.setText(String.valueOf(countTotalTime()));
 
             countSumNormTimeByShops();
 
@@ -153,8 +149,8 @@ public class PartCalculatorController{
         double weight = t * paramA * paramB * ro * MM2_TO_M2 * 1.1;
         double area = 2 * paramA * paramB * MM2_TO_M2;
 
-        tfWeight.setText(String.valueOf(weight));
-        tfCoat.setText(String.valueOf(area));
+        tfWeight.setText(String.format(doubleFormat, weight));
+        tfCoat.setText(String.format(doubleFormat, area));
     }
 
     /**
@@ -242,9 +238,13 @@ public class PartCalculatorController{
             addWeldingDottedOperation();
         });
 
-        menu.getItems().addAll(addCutting, addBending, addPainting);
+        menu.getItems().addAll(addCutting, addBending);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(addPainting);
+
+
         return menu;
     }
 
@@ -365,11 +365,16 @@ public class PartCalculatorController{
             assemblingTime = assemblingTime * MIN_TO_SEC;
         }
 
-        tfMechanicalTime.setText(String.valueOf(mechanicalTime));
-        tfPaintingTime.setText(String.valueOf(paintingTime));
-        tfAssemblingTime.setText(String.valueOf(assemblingTime));
 
-        tfTotalTime.setText(String.valueOf(mechanicalTime + paintingTime + assemblingTime + packingTime));
+
+        String format = doubleFormat;
+        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)) format = integerFormat;
+
+        tfMechanicalTime.setText(String.format(format, mechanicalTime));
+        tfPaintingTime.setText(String.format(format, paintingTime));
+        tfAssemblingTime.setText(String.format(format, assemblingTime));
+
+        tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime + assemblingTime + packingTime));
 
     }
 

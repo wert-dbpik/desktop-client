@@ -79,7 +79,7 @@ public class WeldingDottedController extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         countNorm();
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+        setTimeMeasurement(measure);
         controller.countSumNormTimeByShops();
     }
 

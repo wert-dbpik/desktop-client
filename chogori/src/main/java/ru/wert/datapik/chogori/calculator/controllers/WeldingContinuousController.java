@@ -14,6 +14,7 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
+import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
@@ -44,6 +45,9 @@ public class WeldingContinuousController extends AbstractNormsCounter {
     private TextField tfNumOfSeams;
 
     @FXML
+    private TextField tfNumOfMen;
+
+    @FXML
     private Label lblConnectionLength;
 
     @FXML
@@ -66,6 +70,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
     private int seamLength; //Длина шва
     private int seams; //Количество швов расчетное
     private int numOfSeams; //Количество швов заданное пользователем
+    private int numOfMen; //Число человек, работающих над операцией
     private boolean useStripping; //Использовать зачистку
     private int connectionLength; //Длина сединения на которую расчитывается количество точек
     private int step; //шаг точек
@@ -79,13 +84,19 @@ public class WeldingContinuousController extends AbstractNormsCounter {
         setZeroValues();
         setNormTime();
 
+        new TFColoredInteger(tfSeamLength, this);
+        new TFColoredInteger(tfNumOfSeams, this);
+        new TFColoredInteger(tfNumOfMen, this);
+        new TFColoredInteger(tfConnectionLength, this);
+        new TFColoredInteger(tfStep, this);
+
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        tfSeamLength.textProperty().addListener((observable, oldValue, newValue) -> {
+        chbxUseStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
-        chbxUseStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        cmbxPartBigness.valueProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
@@ -95,22 +106,6 @@ public class WeldingContinuousController extends AbstractNormsCounter {
             } else {
                 enableNumOfSeamsCounting();
             }
-            setNormTime();
-        });
-
-        tfNumOfSeams.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfConnectionLength.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfStep.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        cmbxPartBigness.valueProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
@@ -161,7 +156,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         countNorm();
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+        setTimeMeasurement(measure);
         controller.countSumNormTimeByShops();
     }
 
@@ -197,7 +192,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
 
 
         double time;
-        time =  sumWeldLength * MM_TO_M * WELDING_SPEED + assemblingTime + strippingTime;   //мин
+        time =  numOfMen * (sumWeldLength * MM_TO_M * WELDING_SPEED + assemblingTime) + strippingTime;   //мин
 
         currentNormTime = time;
         return time;
@@ -209,6 +204,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
     @Override
     public void setZeroValues() {
         tfSeamLength.setText("0");
+        tfNumOfMen.setText("1");
         tfNumOfSeams.setText("1");
         tfSeamLength.setText("0");
         enableNumOfSeams();
@@ -226,6 +222,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
             seamLength = Integer.parseInt(tfSeamLength.getText().trim());
             if (seamLength == 0.0) return false;
             numOfSeams = Integer.parseInt(tfNumOfSeams.getText().trim());
+            numOfMen = Integer.parseInt(tfNumOfMen.getText().trim());
             connectionLength = Integer.parseInt(tfConnectionLength.getText().trim());
             step = Integer.parseInt(tfStep.getText().trim());
             useStripping = chbxUseStripping.isSelected();

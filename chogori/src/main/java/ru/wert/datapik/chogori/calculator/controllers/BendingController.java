@@ -11,6 +11,7 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
+import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EBendingTool;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
@@ -48,18 +49,12 @@ public class BendingController extends AbstractNormsCounter {
         this.controller = controller;
         controller.getAddedOperations().add(this);
         new BXBendingTool().create(cmbxBendingTool);
+        new TFColoredInteger(tfNumOfBendings, this);
+        new TFColoredInteger(tfNumOfMen, this);
         setZeroValues();
         setNormTime();
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
-
-        tfNumOfBendings.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfNumOfMen.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
 
         cmbxBendingTool.valueProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
@@ -80,7 +75,7 @@ public class BendingController extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         countNorm();
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+        setTimeMeasurement(measure);
         controller.countSumNormTimeByShops();
     }
 

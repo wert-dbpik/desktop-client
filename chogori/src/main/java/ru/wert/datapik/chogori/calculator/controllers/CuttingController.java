@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 public class CuttingController  extends AbstractNormsCounter {
@@ -50,8 +51,8 @@ public class CuttingController  extends AbstractNormsCounter {
     private ImageView ivHelpOnNumOfPerfHoles;
 
     private PartCalculatorController controller;
-    private double p; //Периметр контура развертки
-    private double s; //Площадь развертки
+    private double perimetre; //Периметр контура развертки
+    private double area; //Площадь развертки
     private double plusLength; //Дополнительный периметр обработки
     private double t; //Толщина материала
     private double paramA; //Параметр А развертки
@@ -68,19 +69,11 @@ public class CuttingController  extends AbstractNormsCounter {
         setZeroValues();
         setNormTime();
 
+        new TFColoredInteger(tfNumOfHoles, this);
+        new TFColoredInteger(tfNumOfPerfHoles, this);
+        new TFColoredInteger(tfExtraPerimeter, this);
+
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
-
-        tfNumOfHoles.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfNumOfPerfHoles.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfExtraPerimeter.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
 
         chbxUseStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
@@ -93,7 +86,6 @@ public class CuttingController  extends AbstractNormsCounter {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
-
 
     }
 
@@ -117,7 +109,7 @@ public class CuttingController  extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         countNorm();
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+        setTimeMeasurement(measure);
         controller.countSumNormTimeByShops();
     }
 
@@ -131,6 +123,7 @@ public class CuttingController  extends AbstractNormsCounter {
         final double PERFORATION_SPEED = 0.007; //корость перфорирования, мин/уд
         final double CUTTING_SERVICE_RATIO = 1.22; //коэфффициент, учитывающий 22% времени на обслуживание при резке
         final double PLUS_LENGTH = plusLength * MM_TO_M;
+
         double speed;
         //Скорость резания, м/мин
         if (t < 1.5) speed = 5.5;
@@ -142,14 +135,14 @@ public class CuttingController  extends AbstractNormsCounter {
         //Время зачистки
         double strippingTime; //мин
         if(useStriping){
-            strippingTime = ((p + PLUS_LENGTH) * 2.5 + holes) / 60;
+            strippingTime = ((perimetre + PLUS_LENGTH) * 2.5 + holes) / 60;
         } else
             strippingTime = 0.0;
 
         double time;
 
-        time = ((p + PLUS_LENGTH)/speed                 //Время на резку по периметру
-                + 1.28 * s                              //Время подготовительное - заключительоне
+        time = ((perimetre + PLUS_LENGTH)/speed                 //Время на резку по периметру
+                + 1.28 * area                              //Время подготовительное - заключительоне
                 + REVOLVER_SPEED * holes                //Время на пробивку отверстий
                 + PERFORATION_SPEED * perfHoles)        //Время на пробивку перфорации
                 * CUTTING_SERVICE_RATIO
@@ -171,8 +164,8 @@ public class CuttingController  extends AbstractNormsCounter {
             t = controller.getCmbxMaterial().getValue().getParamS();
             if (paramA == 0.0 || paramB == 0.0 || t == 0) return false;
 
-            p = 2*(paramA + paramB) * MM_TO_M;
-            s = paramA * paramB * MM2_TO_M2;
+            perimetre = 2*(paramA + paramB) * MM_TO_M;
+            area = paramA * paramB * MM2_TO_M2;
             plusLength = Double.parseDouble(tfExtraPerimeter.getText().trim());
             useStriping = chbxUseStripping.isSelected();
             holes = Integer.parseInt(tfNumOfHoles.getText().trim());

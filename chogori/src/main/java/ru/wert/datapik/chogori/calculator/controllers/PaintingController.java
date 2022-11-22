@@ -10,6 +10,7 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
+import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.TFInteger;
@@ -73,19 +74,11 @@ public class PaintingController extends AbstractNormsCounter {
         setZeroValues();
         setNormTime();
 
+        new TFColoredInteger(tfA, this);
+        new TFColoredInteger(tfB, this);
+        new TFColoredInteger(tfHangingTime, this);
+
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
-
-        tfA.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfB.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfHangingTime.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
 
         cmbxDifficulty.valueProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
@@ -107,7 +100,7 @@ public class PaintingController extends AbstractNormsCounter {
     @Override
     public void setNormTime() {
         countNorm();
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+        setTimeMeasurement(measure);
         controller.countSumNormTimeByShops();
     }
 

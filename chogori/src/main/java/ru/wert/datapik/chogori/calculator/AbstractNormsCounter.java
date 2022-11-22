@@ -17,6 +17,8 @@ public abstract class AbstractNormsCounter {
     public static final double MM3_TO_M3 = 0.000000001; //перевод мм квадратных в квадратные метры
     public static final double MIN_TO_SEC = 60; //перевод минут в секунды
     public static final double RO = 0.00000785; //плотность стали кг/м3
+    public static final String doubleFormat = "%5.3f";
+    public static final String integerFormat = "%10.0f";
 
     //Переменные
     protected double currentNormTime;
@@ -64,9 +66,13 @@ public abstract class AbstractNormsCounter {
      */
     public void setTimeMeasurement(ETimeMeasurement measure){
         double time = currentNormTime;
+        String format = doubleFormat;
         lblNormTimeMeasure.setText(measure.getTimeName());
-        if (measure.equals(ETimeMeasurement.SEC))
+        if (measure.equals(ETimeMeasurement.SEC)) {
             time = currentNormTime * MIN_TO_SEC;
-        tfNormTime.setText(String.valueOf(time));
+            format = integerFormat;
+        }
+
+        tfNormTime.setText(String.format(format,time));
     };
 }
