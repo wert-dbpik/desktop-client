@@ -9,13 +9,16 @@ public class TFColoredInteger{
 
     public TFColoredInteger(TextField tf, AbstractNormsCounter counter) {
         String style = tf.getStyle();
+        String normStyle = counter.getTfNormTime().getStyle();
 
         tf.textProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue.equals("")) {
                 tf.setStyle("-fx-border-color: #FF5555");
+                counter.getTfNormTime().setStyle("-fx-border-color: #FF5555");
                 return;
             }
             tf.setStyle(style);
+            counter.getTfNormTime().setStyle(normStyle);
             counter.setNormTime();
         });
 

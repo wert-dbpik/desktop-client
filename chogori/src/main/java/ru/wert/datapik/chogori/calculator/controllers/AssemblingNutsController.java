@@ -11,6 +11,7 @@ import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class AssemblingNutsController extends AbstractNormsCounter {
 
@@ -96,8 +97,7 @@ public class AssemblingNutsController extends AbstractNormsCounter {
     @Override//AbstractNormsCounter
     public double countNorm(){
 
-        boolean res = countInitialValues();
-        if(!res) return 0.0;
+        countInitialValues();
 
         final double SCREWS_SPEED = 0.25; //скорость установки вытяжных винтов
         final double VSHGS_SPEED = 0.4; //скорость установки комплектов ВШГ
@@ -136,18 +136,16 @@ public class AssemblingNutsController extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            screws = Integer.parseInt(tfScrews.getText().trim());
-            VSHGs = Integer.parseInt(tfVSHGs.getText().trim());
-            rivets = Integer.parseInt(tfRivets.getText().trim());
-            rivetNuts = Integer.parseInt(tfRivetNuts.getText().trim());
-            groundSets = Integer.parseInt(tfGroundSets.getText().trim());
-            others = Integer.parseInt(tfOthers.getText().trim());
 
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
-        }
+        screws = IntegerParser.getValue(tfScrews);
+        VSHGs = IntegerParser.getValue(tfVSHGs);
+        rivets = IntegerParser.getValue(tfRivets);
+        rivetNuts = IntegerParser.getValue(tfRivetNuts);
+        groundSets = IntegerParser.getValue(tfGroundSets);
+        others = IntegerParser.getValue(tfOthers);
+
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 

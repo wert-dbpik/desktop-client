@@ -11,6 +11,7 @@ import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class LocksmithController extends AbstractNormsCounter {
 
@@ -86,8 +87,7 @@ public class LocksmithController extends AbstractNormsCounter {
     @Override//AbstractNormsCounter
     public double countNorm(){
 
-        boolean res = countInitialValues();
-        if(!res) return 0.0;
+        countInitialValues();
 
         final double RIVETS_SPEED = 18 * SEC_TO_MIN; //скорость установки вытяжной заклепки
         final double COUNTERSINKING_SPEED = 0.31; //скорость сверления и зенковки
@@ -123,16 +123,14 @@ public class LocksmithController extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            rivets = Integer.parseInt(tfRivets.getText().trim());
-            countersinkings = Integer.parseInt(tfCountersinkings.getText().trim());
-            threadings = Integer.parseInt(tfThreadings.getText().trim());
-            smallSawings = Integer.parseInt(tfSmallSawings.getText().trim());
-            bigSawings = Integer.parseInt(tfBigSawings.getText().trim());
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
-        }
+
+        rivets = IntegerParser.getValue(tfRivets);
+        countersinkings = IntegerParser.getValue(tfCountersinkings);
+        threadings = IntegerParser.getValue(tfThreadings);
+        smallSawings = IntegerParser.getValue(tfSmallSawings);
+        bigSawings = IntegerParser.getValue(tfBigSawings);
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 

@@ -11,6 +11,7 @@ import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class CuttingController  extends AbstractNormsCounter {
 
@@ -24,13 +25,13 @@ public class CuttingController  extends AbstractNormsCounter {
     private ImageView ivDeleteOperation;
 
     @FXML
-    private TextField tfNumOfHoles;
+    private TextField tfHoles;
 
     @FXML
     private TextField tfNormTime;
 
     @FXML
-    private TextField tfNumOfPerfHoles;
+    private TextField tfPerfHoles;
 
     @FXML
     private CheckBox chbxUseStripping;
@@ -69,8 +70,8 @@ public class CuttingController  extends AbstractNormsCounter {
         setZeroValues();
         setNormTime();
 
-        new TFColoredInteger(tfNumOfHoles, this);
-        new TFColoredInteger(tfNumOfPerfHoles, this);
+        new TFColoredInteger(tfHoles, this);
+        new TFColoredInteger(tfPerfHoles, this);
         new TFColoredInteger(tfExtraPerimeter, this);
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
@@ -94,8 +95,8 @@ public class CuttingController  extends AbstractNormsCounter {
      */
     @Override//AbstractNormsCounter
     public void setZeroValues(){
-        tfNumOfHoles.setText("0");
-        tfNumOfPerfHoles.setText("0");
+        tfHoles.setText("0");
+        tfPerfHoles.setText("0");
         tfExtraPerimeter.setText("0");
         chbxUseStripping.setSelected(true);
 
@@ -116,8 +117,7 @@ public class CuttingController  extends AbstractNormsCounter {
     @Override//AbstractNormsCounter
     public double countNorm(){
 
-        boolean res = countInitialValues();
-        if(!res) return 0.0;
+        countInitialValues();
 
         final double REVOLVER_SPEED = 0.057; //скорость вырубки одного элемента револьвером, мин/уд
         final double PERFORATION_SPEED = 0.007; //корость перфорирования, мин/уд
@@ -148,6 +148,7 @@ public class CuttingController  extends AbstractNormsCounter {
                 * CUTTING_SERVICE_RATIO
                 + strippingTime;
 
+        if(area == 0.0) time = 0.0;
 
         currentNormTime = time;//результат в минутах
         return time;
@@ -158,22 +159,18 @@ public class CuttingController  extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            paramA = Double.parseDouble(controller.getTfA().getText().trim());
-            paramB = Double.parseDouble(controller.getTfB().getText().trim());
-            t = controller.getCmbxMaterial().getValue().getParamS();
-            if (paramA == 0.0 || paramB == 0.0 || t == 0) return false;
 
-            perimetre = 2*(paramA + paramB) * MM_TO_M;
-            area = paramA * paramB * MM2_TO_M2;
-            plusLength = Double.parseDouble(tfExtraPerimeter.getText().trim());
-            useStriping = chbxUseStripping.isSelected();
-            holes = Integer.parseInt(tfNumOfHoles.getText().trim());
-            perfHoles = Integer.parseInt(tfNumOfPerfHoles.getText().trim());
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
-        }
+        paramA = IntegerParser.getValue(controller.getTfA());
+        paramB = IntegerParser.getValue(controller.getTfB());
+        t = controller.getCmbxMaterial().getValue().getParamS();
+        perimetre = 2 * (paramA + paramB) * MM_TO_M;
+        area = paramA * paramB * MM2_TO_M2;
+        plusLength = IntegerParser.getValue(tfExtraPerimeter);
+        useStriping = chbxUseStripping.isSelected();
+        holes = IntegerParser.getValue(tfHoles);
+        perfHoles = IntegerParser.getValue(tfPerfHoles);
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 

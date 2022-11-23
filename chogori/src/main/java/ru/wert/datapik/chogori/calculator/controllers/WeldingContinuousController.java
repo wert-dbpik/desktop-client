@@ -17,6 +17,7 @@ import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class WeldingContinuousController extends AbstractNormsCounter {
 
@@ -163,8 +164,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
     @Override//AbstractNormsCounter
     public double countNorm(){
 
-        boolean res = countInitialValues();
-        if(!res) return 0.0;
+        countInitialValues();
 
         final double WELDING_SPEED = 4.0; //скорость сваркм, мин/гиб
 
@@ -193,6 +193,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
 
         double time;
         time =  numOfMen * (sumWeldLength * MM_TO_M * WELDING_SPEED + assemblingTime) + strippingTime;   //мин
+        if(sumWeldLength == 0.0) time = 0.0;
 
         currentNormTime = time;
         return time;
@@ -218,19 +219,16 @@ public class WeldingContinuousController extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            seamLength = Integer.parseInt(tfSeamLength.getText().trim());
-            if (seamLength == 0.0) return false;
-            numOfSeams = Integer.parseInt(tfNumOfSeams.getText().trim());
-            numOfMen = Integer.parseInt(tfNumOfMen.getText().trim());
-            connectionLength = Integer.parseInt(tfConnectionLength.getText().trim());
-            step = Integer.parseInt(tfStep.getText().trim());
-            useStripping = chbxUseStripping.isSelected();
-            assemblingTime = cmbxPartBigness.getValue().getTime();
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
-        }
+
+        seamLength = IntegerParser.getValue(tfSeamLength);
+        numOfSeams = IntegerParser.getValue(tfNumOfSeams);
+        numOfMen = IntegerParser.getValue(tfNumOfMen);
+        connectionLength = IntegerParser.getValue(tfConnectionLength);
+        step = IntegerParser.getValue(tfStep);
+        useStripping = chbxUseStripping.isSelected();
+        assemblingTime = cmbxPartBigness.getValue().getTime();
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 

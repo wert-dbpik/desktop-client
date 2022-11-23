@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 /**
@@ -25,7 +26,7 @@ public abstract class AbstractNormsCounter {
     protected double currentNormTime;
 
 
-    @FXML
+    @FXML @Getter
     private TextField tfNormTime;
 
     @FXML

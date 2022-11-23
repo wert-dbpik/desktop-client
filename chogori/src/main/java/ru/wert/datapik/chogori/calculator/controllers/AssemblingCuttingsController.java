@@ -12,6 +12,7 @@ import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
 
 public class AssemblingCuttingsController extends AbstractNormsCounter {
 
@@ -78,8 +79,7 @@ public class AssemblingCuttingsController extends AbstractNormsCounter {
     @Override//AbstractNormsCounter
     public double countNorm(){
 
-        boolean res = countInitialValues();
-        if(!res) return 0.0;
+         countInitialValues();
 
         final double SEALER_SPEED = 40 * SEC_TO_MIN; //скорость монтажа уплотнителя
         final double SELF_ADH_SEALER_SPEED =  20 * SEC_TO_MIN; //скорость наклейки уплотнителя
@@ -110,15 +110,13 @@ public class AssemblingCuttingsController extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            sealer = Double.parseDouble(tfSealer.getText().trim());
-            selfAdhSealer = Double.parseDouble(tfSelfAdhSealer.getText().trim());
-            insulation = Double.parseDouble(tfInsulation.getText().trim());
 
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
-        }
+        sealer = DoubleParser.getValue(tfSealer);
+        selfAdhSealer = DoubleParser.getValue(tfSelfAdhSealer);
+        insulation = DoubleParser.getValue(tfInsulation);
+
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 

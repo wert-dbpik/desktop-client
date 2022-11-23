@@ -11,6 +11,7 @@ import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class AssemblingNodesController extends AbstractNormsCounter {
 
@@ -90,8 +91,7 @@ public class AssemblingNodesController extends AbstractNormsCounter {
     @Override//AbstractNormsCounter
     public double countNorm(){
 
-        boolean res = countInitialValues();
-        if(!res) return 0.0;
+        countInitialValues();
 
         final double POST_LOCKS_SPEED = 0.25; //скорость установки вытяжных винтов
         final double DOUBLE_LOCKS_SPEED = 0.4; //скорость установки комплектов ВШГ
@@ -128,17 +128,15 @@ public class AssemblingNodesController extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            postLocks = Integer.parseInt(tfPostLocks.getText().trim());
-            doubleLocks = Integer.parseInt(tfDoubleLocks.getText().trim());
-            mirrors = Integer.parseInt(tfMirrors.getText().trim());
-            detectors = Integer.parseInt(tfDetectors.getText().trim());
-            connectionBoxes = Integer.parseInt(tfConnectionBoxes.getText().trim());
 
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
-        }
+        postLocks = IntegerParser.getValue(tfPostLocks);
+        doubleLocks = IntegerParser.getValue(tfDoubleLocks);
+        mirrors = IntegerParser.getValue(tfMirrors);
+        detectors = IntegerParser.getValue(tfDetectors);
+        connectionBoxes = IntegerParser.getValue(tfConnectionBoxes);
+
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 

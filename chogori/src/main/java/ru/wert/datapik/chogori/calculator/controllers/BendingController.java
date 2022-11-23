@@ -14,6 +14,7 @@ import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EBendingTool;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class BendingController extends AbstractNormsCounter {
 
@@ -82,8 +83,7 @@ public class BendingController extends AbstractNormsCounter {
     @Override//AbstractNormsCounter
     public double countNorm(){
 
-        boolean res = countInitialValues();
-        if(!res) return 0.0;
+        countInitialValues();
 
         final double BENDING_SERVICE_RATIO = 1.25; //коэфффициент, учитывающий 25% времени на обслуживание при гибке
         final double BENDING_SPEED = 0.15; //корость гибки, мин/гиб
@@ -109,14 +109,12 @@ public class BendingController extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            bends = Integer.parseInt(tfNumOfBendings.getText().trim());
-            men = Integer.parseInt(tfNumOfMen.getText().trim());
-            toolRatio = cmbxBendingTool.getValue().getToolRatio();
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
-        }
+
+        bends = IntegerParser.getValue(tfNumOfBendings);
+        men = IntegerParser.getValue(tfNumOfMen);
+        toolRatio = cmbxBendingTool.getValue().getToolRatio();
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 

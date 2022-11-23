@@ -13,6 +13,7 @@ import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class WeldingDottedController extends AbstractNormsCounter {
 
@@ -86,8 +87,7 @@ public class WeldingDottedController extends AbstractNormsCounter {
     @Override//AbstractNormsCounter
     public double countNorm(){
 
-        boolean res = countInitialValues();
-        if(!res) return 0.0;
+        countInitialValues();
 
         final double WELDING_PARTS_SPEED = 0.13; //скорость онденсаторной сварки точкой, мин/элемент
         final double WELDING_DOTTED_SPEED = 0.3; //скорость контактной сварки, мин/точку
@@ -115,14 +115,12 @@ public class WeldingDottedController extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            parts = Integer.parseInt(tfNumOfParts.getText().trim());
-            dots = Integer.parseInt(tfNumOfDots.getText().trim());
-            drops = Integer.parseInt(tfNumOfDrops.getText().trim());
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
-        }
+
+        parts = IntegerParser.getValue(tfNumOfParts);
+        dots = IntegerParser.getValue(tfNumOfDots);
+        drops = IntegerParser.getValue(tfNumOfDrops);
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 

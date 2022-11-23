@@ -14,6 +14,7 @@ import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.components.TFInteger;
+import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class PaintingController extends AbstractNormsCounter {
 
@@ -142,6 +143,7 @@ public class PaintingController extends AbstractNormsCounter {
                 + (WASHING + WINDING + DRYING/dryingBars)/partsOnBar //Время подготовки к окрашиванию
                 + Math.pow(2*s, 0.7) * difficulty //Время нанесения покрытия
                 + 40.0/bakeBars/partsOnBar;  //Время полимеризации
+        if(s == 0.0) time = 0.0;
 
         currentNormTime = time;//результат в минутах
         return time;
@@ -165,24 +167,22 @@ public class PaintingController extends AbstractNormsCounter {
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private boolean countInitialValues() {
-        try {
-            razvParamA = Integer.parseInt(controller.getTfA().getText().trim());
-            razvParamB = Integer.parseInt(controller.getTfB().getText().trim());
-            if (razvParamA == 0.0 || razvParamB == 0.0) return false;
-            s = razvParamA * razvParamB * MM2_TO_M2;
 
-            paramC = Integer.parseInt(tfA.getText().trim());
-            paramD = Integer.parseInt(tfB.getText().trim());
-            if(paramC == 0 && paramD == 0) {
-                paramC = Math.min(razvParamA, razvParamB);
-                paramD = 0;
-            }
-            difficulty = cmbxDifficulty.getValue().getDifficultyRatio();
-            holdingTime = Integer.parseInt(tfHangingTime.getText().trim());
-            measure = controller.getCmbxTimeMeasurement().getValue();
-        } catch (NumberFormatException e) {
-            tfNormTime.setText("");
+        razvParamA = IntegerParser.getValue(controller.getTfA());
+        razvParamB = IntegerParser.getValue(controller.getTfB());
+
+        s = razvParamA * razvParamB * MM2_TO_M2;
+
+        paramC = IntegerParser.getValue(tfA);
+        paramD = IntegerParser.getValue(tfB);
+        if (paramC == 0 && paramD == 0) {
+            paramC = Math.min(razvParamA, razvParamB);
+            paramD = 0;
         }
+        difficulty = cmbxDifficulty.getValue().getDifficultyRatio();
+        holdingTime = IntegerParser.getValue(tfHangingTime);
+        measure = controller.getCmbxTimeMeasurement().getValue();
+
         return true;
     }
 
