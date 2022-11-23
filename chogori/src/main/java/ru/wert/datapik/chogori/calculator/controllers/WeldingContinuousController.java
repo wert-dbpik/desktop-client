@@ -1,8 +1,6 @@
 package ru.wert.datapik.chogori.calculator.controllers;
 
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -13,6 +11,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;

@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;

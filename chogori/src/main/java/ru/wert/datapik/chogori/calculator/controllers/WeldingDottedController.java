@@ -2,7 +2,6 @@ package ru.wert.datapik.chogori.calculator.controllers;
 
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -10,8 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
-import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
+import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 

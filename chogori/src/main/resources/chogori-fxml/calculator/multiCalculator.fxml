@@ -13,12 +13,12 @@
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label text="Материал:">
+            <Label text="Наименование">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <ComboBox fx:id="cmbxMaterial" maxWidth="1.7976931348623157E308" minWidth="-Infinity" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="tfName" HBox.hgrow="ALWAYS" />
             <HBox alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="0.0">
                <children>
                   <ImageView fx:id="ivErase" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
@@ -33,69 +33,6 @@
             <Insets bottom="5.0" />
          </VBox.margin>
       </HBox>
-      <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0" />
-      <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" spacing="5.0" VBox.vgrow="NEVER">
-         <children>
-            <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
-               <children>
-                  <HBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label text="A, мм">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fx:id="ivHelpOnPartParameters" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <TextField fx:id="tfA" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
-               <children>
-                  <Label text="B, мм">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Label>
-                  <TextField fx:id="tfB" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
-               </children>
-            </VBox>
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
-               <children>
-                  <HBox alignment="CENTER_LEFT" spacing="10.0">
-                     <children>
-                        <Label text="Масса, кг">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ImageView fx:id="ivHelpOnWeight" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../chogori-pics/btns/help.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <TextField fx:id="tfWeight" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
-               <children>
-                  <Label text="Покрытие, м.кв">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfCoat" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
       <Separator maxWidth="1.7976931348623157E308">
          <VBox.margin>
             <Insets top="10.0" />
@@ -105,7 +42,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Label text="Технологические операции">
+                  <Label text="Состав и тех.операции">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -193,9 +130,19 @@
                         <TextField fx:id="tfAssemblingTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
                      </children>
                   </VBox>
+                  <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
+                     <children>
+                        <Label text="Упаковка">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="tfAssemblingTime1" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
+                     </children>
+                  </VBox>
                </children>
             </HBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="14.0" prefWidth="490.0" spacing="10.0">
                <children>
                   <Label text="Всего : ">
                      <font>

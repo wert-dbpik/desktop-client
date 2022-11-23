@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.calculator.controllers;
+package ru.wert.datapik.chogori.calculator;
 
 
 import javafx.collections.FXCollections;
@@ -13,6 +13,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.controllers.*;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
@@ -22,7 +23,7 @@ import java.io.IOException;
 
 import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
 
-public class PartCalculatorController{
+public class PartCalculatorController implements ICalculatorController{
 
     @FXML @Getter
     private ComboBox<Material> cmbxMaterial;
