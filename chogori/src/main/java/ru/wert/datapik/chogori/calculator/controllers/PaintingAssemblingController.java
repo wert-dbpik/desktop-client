@@ -7,16 +7,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
-import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
+import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.components.BXAssemblingType;
+import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
-import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
-import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.components.TFInteger;
+import ru.wert.datapik.chogori.calculator.enums.EAssemblingType;
+import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class PaintingController extends AbstractNormsCounter {
+public class PaintingAssemblingController extends AbstractNormsCounter {
 
     @Getter
     private ENormType normType = ENormType.NORM_PAINTING;
@@ -28,60 +30,47 @@ public class PaintingController extends AbstractNormsCounter {
     private ImageView ivDeleteOperation;
 
     @FXML
-    private TextField tfA;
+    private ComboBox<EAssemblingType> cmbxAssemblingType;
 
     @FXML
-    private TextField tfB;
+    private TextField tfArea;
 
     @FXML
-    private ComboBox<EPaintingDifficulty> cmbxDifficulty;
+    private TextField tfAlong;
 
     @FXML
-    private ImageView ivHelpOnDifficulty;
+    private TextField tfAcross;
 
     @FXML
-    private ImageView ivHelpOnA;
-
-    @FXML
-    private ImageView ivHelpOnB;
-
-    @FXML
-    private ImageView ivHelpOnHangingTime;
-
-
-
-    @FXML
-    private TextField tfHangingTime;
+    private ImageView ivHelpOnPainting;
 
     @FXML
     private TextField tfNormTime;
 
     private PartCalculatorController controller;
 
-    private int razvA; //Параметр А развертки
-    private int razvB; //Параметр B развертки
-    private int along; //Параметр А - габарит сложенной детали вдоль штанги
-    private int across; //Параметр B - габарит сложенной детали поперек штанги
+    private int along; //Параметр А вдоль штанги
+    private int across; //Параметр B поперек штанги
     private double area; //Площадь развертки
-    private double difficulty; //Сложность окрашивания
-    private double holdingTime; //Время навешивания
+    private double pantingSpeed;// Скорость нанесения покрытия
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
     public void init(PartCalculatorController controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
-        new BXPaintingDifficulty().create(cmbxDifficulty);
+        new BXAssemblingType().create(cmbxAssemblingType);
 
         setZeroValues();
         setNormTime();
 
-        new TFColoredInteger(tfA, this);
-        new TFColoredInteger(tfB, this);
-        new TFColoredInteger(tfHangingTime, this);
+        new TFColoredDouble(tfArea, this);
+        new TFColoredInteger(tfAlong, this);
+        new TFColoredInteger(tfAcross, this);
+
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        cmbxDifficulty.valueProperty().addListener((observable, oldValue, newValue) -> {
+        cmbxAssemblingType.valueProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
@@ -110,21 +99,13 @@ public class PaintingController extends AbstractNormsCounter {
 
         countInitialValues();
 
-        final int DELTA = 100; //расстояние между деталями
+        final int DELTA = 300; //расстояние между сборками
 
-        final double WASHING = 12/60.0; //мойка, мин
-        final double WINDING = 6/60.0; //продувка, мин
-        final double DRYING = 20/60.0; //сушка, мин
-        final double HOLDING_TIME = holdingTime/60.0; //время навешивания, мин
+        final double HANGING_TIME = 0.34; //ремя навески и снятия после полимеризации
+        final double WINDING_MOVING_SPEED = 1.4; //продувка после промывки и перемещение изделя на штанге, мин/1 м.кв.
 
-        final int alongSize = Math.max(along, across) + DELTA;
-        final int acrossSize = Math.min(along, across) + DELTA;
-
-        //Количество штанг в сушилке
-        int dryingBars;
-        if(acrossSize < 99) dryingBars = 3;
-        else if(acrossSize >= 100 && acrossSize <= 300) dryingBars = 2;
-        else dryingBars = 1;
+        final int alongSize = along + DELTA;
+        final int acrossSize = across + DELTA;
 
         int partsOnBar = 2500/alongSize;
 
@@ -138,9 +119,9 @@ public class PaintingController extends AbstractNormsCounter {
         else bakeBars = 1;
 
         double time;
-        time = HOLDING_TIME //Время навешивания
-                + (WASHING + WINDING + DRYING/dryingBars)/partsOnBar //Время подготовки к окрашиванию
-                + Math.pow(2* area, 0.7) * difficulty //Время нанесения покрытия
+        time = HANGING_TIME//Время навешивания
+                + area * WINDING_MOVING_SPEED //Время подготовки к окрашиванию
+                + area * pantingSpeed //Время нанесения покрытия
                 + 40.0/bakeBars/partsOnBar;  //Время полимеризации
         if(area == 0.0) time = 0.0;
 
@@ -154,36 +135,23 @@ public class PaintingController extends AbstractNormsCounter {
     @Override
     public void setZeroValues() {
         measure = controller.getCmbxTimeMeasurement().getValue();
-        razvA = new TFInteger(controller.getTfA()).getIntegerValue();
-        razvB = new TFInteger(controller.getTfB()).getIntegerValue();
-        tfA.setText(String.valueOf(Math.min(razvA, razvB)));
-        tfB.setText("0");
+        tfArea.setText("0.0");
+        tfAlong.setText("0");
+        tfAcross.setText("0");
 
-        tfHangingTime.setText("20");
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
-    private boolean countInitialValues() {
-
-        razvA = IntegerParser.getValue(controller.getTfA());
-        razvB = IntegerParser.getValue(controller.getTfB());
-
-        area = razvA * razvB * MM2_TO_M2;
-
-        along = IntegerParser.getValue(tfA);
-        across = IntegerParser.getValue(tfB);
-        if (along == 0 && across == 0) {
-            along = Math.min(razvA, razvB);
-            across = 0;
-        }
-        difficulty = cmbxDifficulty.getValue().getDifficultyRatio();
-        holdingTime = IntegerParser.getValue(tfHangingTime);
+    private void countInitialValues() {
         measure = controller.getCmbxTimeMeasurement().getValue();
+        area = DoubleParser.getValue(tfArea);
+        along = IntegerParser.getValue(tfAlong);
+        across = IntegerParser.getValue(tfAcross);
+        pantingSpeed = cmbxAssemblingType.getValue().getSpeed();
 
-        return true;
     }
 
 }

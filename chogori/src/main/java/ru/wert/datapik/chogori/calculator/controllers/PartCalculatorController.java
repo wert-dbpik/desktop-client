@@ -253,10 +253,17 @@ public class PartCalculatorController{
         //=======================================================================
 
         //ПОКРАСКА
-        MenuItem addPainting = new MenuItem("Покраска");
+        MenuItem addPainting = new MenuItem("Покраска детали");
         addPainting.setOnAction(event -> {
             if(isDuplicate(PaintingController.class.getSimpleName())) return ;
             addPaintingOperation();
+        });
+
+        //ПОКРАСКА СБОРОЧНОЙ ЕДИНИЦЫ
+        MenuItem addPaintingAssembling = new MenuItem("Покраска сборочной единицы");
+        addPaintingAssembling.setOnAction(event -> {
+            if(isDuplicate(PaintingAssemblingController.class.getSimpleName())) return ;
+            addPaintingAssemblingOperation();
         });
 
         //=======================================================================
@@ -285,7 +292,7 @@ public class PartCalculatorController{
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
         menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().add(addPainting);
+        menu.getItems().addAll(addPainting, addPaintingAssembling);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addAssemblingNuts, addAssemblingCuttings, addAssemblingNodes);
 
@@ -341,6 +348,38 @@ public class PartCalculatorController{
     }
 
     /**
+     * ПОКРАСКА ДЕТАЛИ
+     */
+    private void addPaintingOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/painting.fxml"));
+            VBox painting = loader.load();
+            painting.setId("calculator");
+            PaintingController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(painting);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * ПОКРАСКА СБОРОЧНОЙ ЕДИНИЦЫ
+     */
+    private void addPaintingAssemblingOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/paintingAssembling.fxml"));
+            VBox paintingAssembling = loader.load();
+            paintingAssembling.setId("calculator");
+            PaintingAssemblingController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(paintingAssembling);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * СВАРКА НЕПРЕРЫВНАЯ
      */
     private void addWeldingContinuousOperation() {
@@ -372,21 +411,7 @@ public class PartCalculatorController{
         }
     }
 
-    /**
-     * ПОКРАСКА
-     */
-    private void addPaintingOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/painting.fxml"));
-            VBox painting = loader.load();
-            painting.setId("calculator");
-            PaintingController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(painting);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     /**
      * СБОРКА КРЕПЕЖА
