@@ -87,7 +87,6 @@ public class PartCalculatorController{
     void initialize(){
 
         addedOperations = FXCollections.observableArrayList();
-//        listViewTechOperations.setItems(addedOperations);
 
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
@@ -153,64 +152,9 @@ public class PartCalculatorController{
         tfCoat.setText(String.format(doubleFormat, area));
     }
 
-    /**
-     * Высчитывается общее время
-     */
-    private double countTotalTime() {
-        double time = 0.0;
-        for(AbstractNormsCounter nc : addedOperations){
-            time += nc.getCurrentNormTime();
-        }
-        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC))
-            time = time * MIN_TO_SEC;
-        return time;
-    }
-
-    /**
-     * Высчитывается общее время на механические работы
-     */
-    private double countTotalMechanicalTime() {
-        double time = 0.0;
-        for(AbstractNormsCounter nc : addedOperations){
-            if(nc.getNormType().equals(ENormType.NORM_MECHANICAL))
-                time += nc.getCurrentNormTime();
-        }
-        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC))
-            time = time * MIN_TO_SEC;
-        return time;
-    }
-
-    /**
-     * Высчитывается общее время на окрасочные работы
-     */
-    private double countTotalPaintingTime() {
-        double time = 0.0;
-        for(AbstractNormsCounter nc : addedOperations){
-            if(nc.getNormType().equals(ENormType.NORM_PAINTING))
-                time += nc.getCurrentNormTime();
-        }
-        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC))
-            time = time * MIN_TO_SEC;
-        return time;
-    }
-
-    /**
-     * Высчитывается общее время на сборочные работы
-     */
-    private double countTotalAssemblingTime() {
-        double time = 0.0;
-        for(AbstractNormsCounter nc : addedOperations){
-            if(nc.getNormType().equals(ENormType.NORM_ASSEMBLING))
-                time += nc.getCurrentNormTime();
-        }
-        if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC))
-            time = time * MIN_TO_SEC;
-        return time;
-    }
-
-    /**
-     * МЕНЮ ====================================================================
-     */
+    /*##################################################################################################################
+                                            М Е Н Ю
+      ##################################################################################################################*/
     @NotNull
     private ContextMenu createOperationsMenu() {
         //РАСКРОЙ И ЗАЧИСТКА
@@ -288,6 +232,13 @@ public class PartCalculatorController{
             addAssemblingNodesOperation();
         });
 
+        //НАНЕСЕНИЕ НАЛИВНОГО УПЛОТНИТЕЛЯ
+        MenuItem addLevelingSealer = new MenuItem("Нанесение наливного утеплителя");
+        addLevelingSealer.setOnAction(event -> {
+            if(isDuplicate(LevelingSealerController.class.getSimpleName())) return ;
+            addLevelingSealerOperation();
+        });
+
         menu.getItems().addAll(addCutting, addBending, addLocksmith);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
@@ -295,9 +246,15 @@ public class PartCalculatorController{
         menu.getItems().addAll(addPainting, addPaintingAssembling);
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(addAssemblingNuts, addAssemblingCuttings, addAssemblingNodes);
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(addLevelingSealer);
 
         return menu;
     }
+
+    /*##################################################################################################################
+                                                М Е Т О Д Ы
+      ##################################################################################################################*/
 
     /**
      * РАСКРОЙ И ЗАЧИСТКА
@@ -347,6 +304,8 @@ public class PartCalculatorController{
         }
     }
 
+    //==================================================================================================================
+
     /**
      * ПОКРАСКА ДЕТАЛИ
      */
@@ -378,6 +337,8 @@ public class PartCalculatorController{
             e.printStackTrace();
         }
     }
+
+    //==================================================================================================================
 
     /**
      * СВАРКА НЕПРЕРЫВНАЯ
@@ -411,7 +372,7 @@ public class PartCalculatorController{
         }
     }
 
-
+    //==================================================================================================================
 
     /**
      * СБОРКА КРЕПЕЖА
@@ -461,6 +422,24 @@ public class PartCalculatorController{
         }
     }
 
+    //==================================================================================================================
+
+    /**
+     * НАНЕСЕНИЕ НАЛИВНОГО УПЛОТНИТЕЛЯ
+     */
+    private void addLevelingSealerOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/levelingSealer.fxml"));
+            VBox levelingSealer = loader.load();
+            levelingSealer.setId("calculator");
+            LevelingSealerController controller = loader.getController();
+            controller.init(this);
+            listViewTechOperations.getItems().add(levelingSealer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Ищем дубликат операции в списке addedOperations по clazz
      */
@@ -471,6 +450,9 @@ public class PartCalculatorController{
         }
         return false;
     }
+
+    /*##################################################################################################################
+      ##################################################################################################################*/
 
     /**
      * Метод расчитывает суммарное время по участкам
