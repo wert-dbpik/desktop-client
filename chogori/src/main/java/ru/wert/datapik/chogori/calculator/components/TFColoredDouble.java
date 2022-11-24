@@ -1,7 +1,7 @@
 package ru.wert.datapik.chogori.calculator.components;
 
 import javafx.scene.control.TextField;
-import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
 
 /**
  * Класс перехватывает ошибочно введенные значения,
@@ -10,7 +10,7 @@ import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
  */
 public class TFColoredDouble {
 
-    public TFColoredDouble(TextField tf, AbstractNormsCounter counter) {
+    public TFColoredDouble(TextField tf, AbstractOperationCounter counter) {
         String style = tf.getStyle();
 
         tf.textProperty().addListener((observable, oldValue, newValue) -> {

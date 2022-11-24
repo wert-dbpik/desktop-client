@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxWidth="1.7976931348623157E308" prefWidth="441.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.LocksmithController">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Label fx:id="lblOperationName" text="СБОРКА" textFill="#2f23d0">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="tfName" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="250.0" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="ivCopy" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../chogori-pics/btns/copy.png" />
+               </image>
+               <HBox.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+            <ImageView fx:id="ivEdit" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../chogori-pics/btns/edit.png" />
+               </image>
+               <HBox.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </HBox.margin>
+            </ImageView>
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+               <children>
+                  <ImageView fx:id="ivDeleteOperation" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../chogori-pics/btns/close.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" top="10.0" />
+         </VBox.margin>
+      </HBox>
+      <Separator maxWidth="1.7976931348623157E308" />
+   </children>
+   <padding>
+      <Insets left="10.0" right="10.0" />
+   </padding>
+</VBox>

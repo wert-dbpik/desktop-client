@@ -14,9 +14,12 @@ import ru.wert.datapik.chogori.common.components.BXMaterial;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.client.entity.models.Material;
 
-import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
+import static ru.wert.datapik.chogori.calculator.AbstractOperationCounter.*;
 
-public class CalculatorPartController implements IMenuCalculator {
+public class CalculatorPartController implements IMenuCalculator, ICalculator {
+
+    @FXML @Getter
+    private TextField tfPartName;
 
     @FXML @Getter
     private ComboBox<Material> cmbxMaterial;
@@ -61,9 +64,6 @@ public class CalculatorPartController implements IMenuCalculator {
     private TextField tfPaintingTime;
 
     @FXML
-    private TextField tfAssemblingTime;
-
-    @FXML
     private Label lblTimeMeasure;
 
     @FXML @Getter
@@ -74,8 +74,14 @@ public class CalculatorPartController implements IMenuCalculator {
     private double paramA; //параметр А
     private double paramB; //параметр B
 
-    @Getter private ObservableList<AbstractNormsCounter> addedOperations;
+    @Getter private ObservableList<AbstractOperationCounter> addedOperations;
 
+    @Override
+    public void init(TextField tfName) {
+        tfPartName.setText(tfName.getText());
+        tfName.textProperty().bindBidirectional(tfPartName.textProperty());
+
+    }
 
     @FXML
     void initialize(){
@@ -85,23 +91,19 @@ public class CalculatorPartController implements IMenuCalculator {
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
 
-        CalculatorMenu menu = new CalculatorMenu(this, addedOperations, listViewTechOperations);
+        MenuCalculator menu = new MenuCalculator(this, addedOperations, listViewTechOperations);
         menu.getItems().addAll(menu.getAddCutting(), menu.getAddBending(), menu.getAddLocksmith());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddWeldingLongSeam(), menu.getAddWeldingDotted());
         menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(menu.getAddPainting(), menu.getAddPaintingAssembling());
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(menu.getAddAssemblingNuts(), menu.getAddAssemblingCuttings(), menu.getAddAssemblingNodes());
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().add(menu.getAddLevelingSealer());
+        menu.getItems().addAll(menu.getAddPainting());
 
         ivAddOperation.setOnMouseClicked(e->{
             menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
         });
 
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
-            for(AbstractNormsCounter nc : addedOperations){
+            for(AbstractOperationCounter nc : addedOperations){
                 nc.setTimeMeasurement(newValue);
             }
 
@@ -112,14 +114,14 @@ public class CalculatorPartController implements IMenuCalculator {
 
         cmbxMaterial.valueProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractNormsCounter nc : addedOperations){
+            for(AbstractOperationCounter nc : addedOperations){
                 nc.setNormTime();;
             }
         });
 
         tfA.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractNormsCounter nc : addedOperations){
+            for(AbstractOperationCounter nc : addedOperations){
                 nc.setNormTime();
                 countSumNormTimeByShops();
             }
@@ -127,7 +129,7 @@ public class CalculatorPartController implements IMenuCalculator {
 
         tfB.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractNormsCounter nc : addedOperations){
+            for(AbstractOperationCounter nc : addedOperations){
                 nc.setNormTime();
                 countSumNormTimeByShops();
             }
@@ -162,23 +164,16 @@ public class CalculatorPartController implements IMenuCalculator {
     public void countSumNormTimeByShops(){
         double mechanicalTime = 0.0;
         double paintingTime = 0.0;
-        double assemblingTime = 0.0;
-        double packingTime = 0.0;
-        for(AbstractNormsCounter cn: addedOperations){
+        for(AbstractOperationCounter cn: addedOperations){
             if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
                 mechanicalTime += cn.getCurrentNormTime();
             else if(cn.getNormType().equals(ENormType.NORM_PAINTING))
                 paintingTime += cn.getCurrentNormTime();
-            else if(cn.getNormType().equals(ENormType.NORM_ASSEMBLING))
-                assemblingTime += cn.getCurrentNormTime();
-            else if(cn.getNormType().equals(ENormType.NORM_PACKING))
-                packingTime += cn.getCurrentNormTime();
         }
 
         if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)){
             mechanicalTime = mechanicalTime * MIN_TO_SEC;
             paintingTime = paintingTime * MIN_TO_SEC;
-            assemblingTime = assemblingTime * MIN_TO_SEC;
         }
 
         String format = doubleFormat;
@@ -186,10 +181,11 @@ public class CalculatorPartController implements IMenuCalculator {
 
         tfMechanicalTime.setText(String.format(format, mechanicalTime));
         tfPaintingTime.setText(String.format(format, paintingTime));
-        tfAssemblingTime.setText(String.format(format, assemblingTime));
 
-        tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime + assemblingTime + packingTime));
+
+        tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime ));
 
     }
+
 
 }

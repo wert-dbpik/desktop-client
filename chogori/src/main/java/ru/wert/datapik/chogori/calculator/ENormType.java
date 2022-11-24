@@ -5,6 +5,8 @@ public enum ENormType {
     NORM_MECHANICAL,
     NORM_PAINTING,
     NORM_ASSEMBLING,
-    NORM_PACKING;
+    NORM_PACKING,
+    NORM_DETAIL,
+    NORM_ASSEMBLE;
 
 }

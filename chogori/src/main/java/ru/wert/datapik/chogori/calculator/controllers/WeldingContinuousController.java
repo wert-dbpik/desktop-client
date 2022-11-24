@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
@@ -18,7 +18,7 @@ import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class WeldingContinuousController extends AbstractNormsCounter {
+public class WeldingContinuousController extends AbstractOperationCounter {
 
     @Getter
     private ENormType normType = ENormType.NORM_MECHANICAL;
@@ -160,7 +160,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractNormsCounter
+    @Override//AbstractOperationCounter
     public double countNorm(){
 
         countInitialValues();

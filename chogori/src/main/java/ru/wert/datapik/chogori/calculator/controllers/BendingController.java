@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -17,7 +17,7 @@ import ru.wert.datapik.chogori.calculator.enums.EBendingTool;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class BendingController extends AbstractNormsCounter {
+public class BendingController extends AbstractOperationCounter {
 
     @Getter
     private ENormType normType = ENormType.NORM_MECHANICAL;
@@ -29,10 +29,10 @@ public class BendingController extends AbstractNormsCounter {
     private ImageView ivDeleteOperation;
 
     @FXML
-    private TextField tfNumOfBendings;
+    private TextField tfBendings;
 
     @FXML
-    private TextField tfNumOfMen;
+    private TextField tfMen;
 
     @FXML
     private ComboBox<EBendingTool> cmbxBendingTool;
@@ -51,8 +51,8 @@ public class BendingController extends AbstractNormsCounter {
         this.controller = controller;
         controller.getAddedOperations().add(this);
         new BXBendingTool().create(cmbxBendingTool);
-        new TFColoredInteger(tfNumOfBendings, this);
-        new TFColoredInteger(tfNumOfMen, this);
+        new TFColoredInteger(tfBendings, this);
+        new TFColoredInteger(tfMen, this);
         setZeroValues();
         setNormTime();
 
@@ -81,7 +81,7 @@ public class BendingController extends AbstractNormsCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractNormsCounter
+    @Override//AbstractOperationCounter
     public double countNorm(){
 
         countInitialValues();
@@ -101,8 +101,8 @@ public class BendingController extends AbstractNormsCounter {
      */
     @Override
     public void setZeroValues() {
-        tfNumOfBendings.setText("1");
-        tfNumOfMen.setText("1");
+        tfBendings.setText("1");
+        tfMen.setText("1");
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
@@ -111,8 +111,8 @@ public class BendingController extends AbstractNormsCounter {
      */
     private void countInitialValues() {
 
-        bends = IntegerParser.getValue(tfNumOfBendings);
-        men = IntegerParser.getValue(tfNumOfMen);
+        bends = IntegerParser.getValue(tfBendings);
+        men = IntegerParser.getValue(tfMen);
         toolRatio = cmbxBendingTool.getValue().getToolRatio();
         measure = controller.getCmbxTimeMeasurement().getValue();
     }

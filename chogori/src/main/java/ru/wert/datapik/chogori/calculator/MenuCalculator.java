@@ -10,22 +10,31 @@ import ru.wert.datapik.chogori.calculator.controllers.*;
 
 import java.io.IOException;
 
-public class CalculatorMenu extends ContextMenu {
+public class MenuCalculator extends ContextMenu {
 
     private IMenuCalculator calculator;
-    private ObservableList<AbstractNormsCounter> addedOperations;
+    private ObservableList<AbstractOperationCounter> addedOperations;
 
     private ListView<VBox> listViewTechOperations;
 
     /**
      * Create a new ContextMenu
      */
-    public CalculatorMenu(IMenuCalculator calculator, ObservableList<AbstractNormsCounter> addedOperations, ListView<VBox> listViewTechOperations) {
+    public MenuCalculator(IMenuCalculator calculator, ObservableList<AbstractOperationCounter> addedOperations, ListView<VBox> listViewTechOperations) {
         this.calculator = calculator;
         this.addedOperations = addedOperations;
         this.listViewTechOperations = listViewTechOperations;
     }
 
+
+    //ДОБАВИТЬ ДЕТАЛЬ
+    public MenuItem getAddDetail(){
+        MenuItem addDetail = new MenuItem("Добавить деталь");
+        addDetail.setOnAction(event -> {
+            addDetailOperation();
+        });
+        return addDetail;
+    }
 
 
     //РАСКРОЙ И ЗАЧИСТКА
@@ -155,12 +164,33 @@ public class CalculatorMenu extends ContextMenu {
      * Ищем дубликат операции в списке addedOperations по clazz
      */
     private boolean isDuplicate(String clazz){
-        for(AbstractNormsCounter cn: addedOperations){
+        for(AbstractOperationCounter cn: addedOperations){
             if(cn.getClass().getSimpleName().equals(clazz))
                 return true;
         }
         return false;
     }
+
+    /*==================================================================================================================
+    *                                                М Е Т О Д Ы
+    * ==================================================================================================================*/
+
+    /**
+     * ДОБАВЛЕНИЕ ДЕТАЛИ
+     */
+    private void addDetailOperation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/detail.fxml"));
+            VBox detail = loader.load();
+            detail.setId("calculator");
+            DetailController controller = loader.getController();
+            controller.init(calculator);
+            listViewTechOperations.getItems().add(detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * РАСКРОЙ И ЗАЧИСТКА

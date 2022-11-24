@@ -7,9 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
 import ru.wert.datapik.chogori.calculator.CalculatorPartController;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -18,7 +18,7 @@ import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.components.TFInteger;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class PaintingController extends AbstractNormsCounter {
+public class PaintingController extends AbstractOperationCounter {
 
     @Getter
     private ENormType normType = ENormType.NORM_PAINTING;
@@ -39,18 +39,7 @@ public class PaintingController extends AbstractNormsCounter {
     private ComboBox<EPaintingDifficulty> cmbxDifficulty;
 
     @FXML
-    private ImageView ivHelpOnDifficulty;
-
-    @FXML
     private ImageView ivHelpOnA;
-
-    @FXML
-    private ImageView ivHelpOnB;
-
-    @FXML
-    private ImageView ivHelpOnHangingTime;
-
-
 
     @FXML
     private TextField tfHangingTime;
@@ -67,7 +56,7 @@ public class PaintingController extends AbstractNormsCounter {
     private int across; //Параметр B - габарит сложенной детали поперек штанги
     private double area; //Площадь развертки
     private double difficulty; //Сложность окрашивания
-    private double holdingTime; //Время навешивания
+    private double hangingTime; //Время навешивания
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
     public void init(IMenuCalculator controller){
@@ -110,7 +99,7 @@ public class PaintingController extends AbstractNormsCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractNormsCounter
+    @Override//AbstractOperationCounter
     public double countNorm(){
 
         countInitialValues();
@@ -120,7 +109,7 @@ public class PaintingController extends AbstractNormsCounter {
         final double WASHING = 12/60.0; //мойка, мин
         final double WINDING = 6/60.0; //продувка, мин
         final double DRYING = 20/60.0; //сушка, мин
-        final double HOLDING_TIME = holdingTime/60.0; //время навешивания, мин
+        final double HOLDING_TIME = hangingTime /60.0; //время навешивания, мин
 
         final int alongSize = Math.max(along, across) + DELTA;
         final int acrossSize = Math.min(along, across) + DELTA;
@@ -185,7 +174,7 @@ public class PaintingController extends AbstractNormsCounter {
             across = 0;
         }
         difficulty = cmbxDifficulty.getValue().getDifficultyRatio();
-        holdingTime = IntegerParser.getValue(tfHangingTime);
+        hangingTime = IntegerParser.getValue(tfHangingTime);
         measure = controller.getCmbxTimeMeasurement().getValue();
     }
 

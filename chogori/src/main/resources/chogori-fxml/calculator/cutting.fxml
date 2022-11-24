@@ -76,7 +76,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <CheckBox fx:id="chbxUseStripping" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
+                  <CheckBox fx:id="chbxStripping" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
                      <font>
                         <Font size="14.0" />
                      </font>

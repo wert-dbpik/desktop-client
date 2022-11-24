@@ -1,13 +1,12 @@
 package ru.wert.datapik.chogori.calculator.components;
 
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
-import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
 
 public class TFColoredInteger{
 
 
-    public TFColoredInteger(TextField tf, AbstractNormsCounter counter) {
+    public TFColoredInteger(TextField tf, AbstractOperationCounter counter) {
         String style = tf.getStyle();
         String normStyle = counter.getTfNormTime().getStyle();
 

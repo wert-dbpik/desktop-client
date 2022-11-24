@@ -7,10 +7,11 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 /**
+ * Класс наследует интерфейс IOperation
  * Изначальный расчет нормы времени производится в минутах
  * Конвертация в секунды происходит в методе setTimeMeasurement()
  */
-public abstract class AbstractNormsCounter {
+public abstract class AbstractOperationCounter implements IOperation {
 
     // КОНСТАНТЫ
     public static final double MM_TO_M = 0.001; //перевод мм в метры
@@ -33,18 +34,13 @@ public abstract class AbstractNormsCounter {
     private Label lblNormTimeMeasure;
 
 
-    public AbstractNormsCounter() {
+    public AbstractOperationCounter() {
     }
 
     /**
      * Метод устанавливает расчитанную норму
      */
     public abstract void setNormTime();
-
-    /**
-     * Метод возвращает тип нормы времени (МК, покраска и т.д)
-     */
-    public abstract ENormType getNormType();
 
     /**
      * Метод расчитывает норму времени в минутах

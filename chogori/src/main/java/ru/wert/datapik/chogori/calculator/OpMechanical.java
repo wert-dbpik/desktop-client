@@ -2,7 +2,7 @@ package ru.wert.datapik.chogori.calculator;
 
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
-import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
+import static ru.wert.datapik.chogori.calculator.AbstractOperationCounter.*;
 
 public class OpMechanical {
 

@@ -11,15 +11,13 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
-import ru.wert.datapik.chogori.common.components.BXMaterial;
-import ru.wert.datapik.client.entity.models.Material;
 
-import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
+import static ru.wert.datapik.chogori.calculator.AbstractOperationCounter.*;
 
-public class CalculatorAssmController implements IMenuCalculator {
+public class CalculatorAssmController implements IMenuCalculator, ICalculator {
 
     @FXML
-    private TextField tfName;
+    private TextField tfAssmName;
 
     @FXML @Getter
     private ComboBox<ETimeMeasurement> cmbxTimeMeasurement;
@@ -52,7 +50,15 @@ public class CalculatorAssmController implements IMenuCalculator {
     private TextField tfTotalTime;
 
 
-    @Getter private ObservableList<AbstractNormsCounter> addedOperations;
+    @Getter private ObservableList<AbstractOperationCounter> addedOperations;
+
+
+    @Override
+    public void init(TextField tfName) {
+        tfAssmName.setText(tfName.getText());
+        tfName.textProperty().bindBidirectional(tfAssmName.textProperty());
+
+    }
 
 
     @FXML
@@ -62,8 +68,10 @@ public class CalculatorAssmController implements IMenuCalculator {
 
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
 
-        CalculatorMenu menu = new CalculatorMenu(this, addedOperations, listViewTechOperations);
+        MenuCalculator menu = new MenuCalculator(this, addedOperations, listViewTechOperations);
 
+        menu.getItems().add(menu.getAddDetail());
+        menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddWeldingLongSeam(), menu.getAddWeldingDotted());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddPaintingAssembling());
@@ -77,7 +85,7 @@ public class CalculatorAssmController implements IMenuCalculator {
         });
 
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
-            for(AbstractNormsCounter nc : addedOperations){
+            for(AbstractOperationCounter nc : addedOperations){
                 nc.setTimeMeasurement(newValue);
             }
 
@@ -98,7 +106,7 @@ public class CalculatorAssmController implements IMenuCalculator {
         double paintingTime = 0.0;
         double assemblingTime = 0.0;
         double packingTime = 0.0;
-        for(AbstractNormsCounter cn: addedOperations){
+        for(AbstractOperationCounter cn: addedOperations){
             if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
                 mechanicalTime += cn.getCurrentNormTime();
             else if(cn.getNormType().equals(ENormType.NORM_PAINTING))

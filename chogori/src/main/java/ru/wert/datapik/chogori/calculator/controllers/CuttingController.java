@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
 import ru.wert.datapik.chogori.calculator.CalculatorPartController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
@@ -15,7 +15,7 @@ import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class CuttingController  extends AbstractNormsCounter {
+public class CuttingController  extends AbstractOperationCounter {
 
     @Getter
     private ENormType normType = ENormType.NORM_MECHANICAL;
@@ -36,16 +36,13 @@ public class CuttingController  extends AbstractNormsCounter {
     private TextField tfPerfHoles;
 
     @FXML
-    private CheckBox chbxUseStripping;
+    private CheckBox chbxStripping;
 
     @FXML
     private TextField tfExtraPerimeter;
 
     @FXML
     private ImageView ivHelpOnUseStripping;
-
-    @FXML
-    private ImageView ivHelpOnNumOfPerfHoles;
 
     private IMenuCalculator controller;
     private CalculatorPartController partController;
@@ -77,7 +74,7 @@ public class CuttingController  extends AbstractNormsCounter {
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        chbxUseStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        chbxStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
@@ -94,12 +91,12 @@ public class CuttingController  extends AbstractNormsCounter {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override//AbstractNormsCounter
+    @Override//AbstractOperationCounter
     public void setZeroValues(){
         tfHoles.setText("0");
         tfPerfHoles.setText("0");
         tfExtraPerimeter.setText("0");
-        chbxUseStripping.setSelected(true);
+        chbxStripping.setSelected(true);
 
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
 
@@ -115,7 +112,7 @@ public class CuttingController  extends AbstractNormsCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractNormsCounter
+    @Override//AbstractOperationCounter
     public double countNorm(){
 
         countInitialValues();
@@ -167,7 +164,7 @@ public class CuttingController  extends AbstractNormsCounter {
         perimetre = 2 * (paramA + paramB) * MM_TO_M;
         area = paramA * paramB * MM2_TO_M2;
         plusLength = IntegerParser.getValue(tfExtraPerimeter);
-        useStriping = chbxUseStripping.isSelected();
+        useStriping = chbxStripping.isSelected();
         holes = IntegerParser.getValue(tfHoles);
         perfHoles = IntegerParser.getValue(tfPerfHoles);
         measure = controller.getCmbxTimeMeasurement().getValue();
