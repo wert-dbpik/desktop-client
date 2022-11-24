@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
@@ -43,7 +44,7 @@ public class LocksmithController extends AbstractNormsCounter {
     @FXML
     private Label lblOperationName;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private int rivets; //Количество заклепок
     private int countersinkings; //количество зенкуемых отверстий
@@ -52,7 +53,7 @@ public class LocksmithController extends AbstractNormsCounter {
     private int bigSawings; //Количество резов на большой пиле
     private ETimeMeasurement measure;
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         setZeroValues();

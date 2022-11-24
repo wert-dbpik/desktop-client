@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXAssemblingType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
@@ -47,7 +48,7 @@ public class PaintingAssemblingController extends AbstractNormsCounter {
     @FXML
     private TextField tfNormTime;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private int along; //Параметр А вдоль штанги
     private int across; //Параметр B поперек штанги
@@ -55,7 +56,7 @@ public class PaintingAssemblingController extends AbstractNormsCounter {
     private double pantingSpeed;// Скорость нанесения покрытия
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         new BXAssemblingType().create(cmbxAssemblingType);

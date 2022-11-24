@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
@@ -37,7 +38,7 @@ public class AssemblingCuttingsController extends AbstractNormsCounter {
     @FXML
     private Label lblOperationName;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private double sealer; //Уплотнитель на ребро корпуса
     private double selfAdhSealer; //Уплотнитель самоклеющийся
@@ -45,7 +46,7 @@ public class AssemblingCuttingsController extends AbstractNormsCounter {
 
     private ETimeMeasurement measure;
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         setZeroValues();

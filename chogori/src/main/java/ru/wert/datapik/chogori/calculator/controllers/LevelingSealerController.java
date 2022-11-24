@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXSealersWidth;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -52,7 +53,7 @@ public class LevelingSealerController extends AbstractNormsCounter {
     @FXML
     private Label lblNormTimeMeasure;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private int paramA;
     private int paramB;
@@ -60,7 +61,7 @@ public class LevelingSealerController extends AbstractNormsCounter {
 
     private ETimeMeasurement measure;
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         new BXSealersWidth().create(cmbxSealerWidth);

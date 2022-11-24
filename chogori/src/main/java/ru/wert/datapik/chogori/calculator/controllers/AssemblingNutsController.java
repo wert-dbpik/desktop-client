@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
@@ -49,7 +50,7 @@ public class AssemblingNutsController extends AbstractNormsCounter {
     @FXML
     private TextField tfScrews;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private int screws; //Количество винтов
     private int VSHGs; //Количество комплектов ВШГ
@@ -60,7 +61,7 @@ public class AssemblingNutsController extends AbstractNormsCounter {
 
     private ETimeMeasurement measure;
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         setZeroValues();

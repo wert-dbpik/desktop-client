@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
@@ -52,7 +53,7 @@ public class CuttingController  extends AbstractNormsCounter {
     @FXML
     private ImageView ivHelpOnNumOfPerfHoles;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
     private double perimetre; //Периметр контура развертки
     private double area; //Площадь развертки
     private double plusLength; //Дополнительный периметр обработки
@@ -65,7 +66,7 @@ public class CuttingController  extends AbstractNormsCounter {
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         setZeroValues();

@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -40,14 +41,14 @@ public class BendingController extends AbstractNormsCounter {
     @FXML
     private TextField tfNormTime;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private int bends;
     private int men;
     private double toolRatio;
     private ETimeMeasurement measure;
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         new BXBendingTool().create(cmbxBendingTool);

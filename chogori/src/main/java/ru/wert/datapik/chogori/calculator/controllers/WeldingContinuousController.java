@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -65,7 +66,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
     @FXML
     private TextField tfNormTime;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private int seamLength; //Длина шва
     private int seams; //Количество швов расчетное
@@ -77,7 +78,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
     private double assemblingTime; //Время сборки свариваемого узла
     private ETimeMeasurement measure;
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         new BXPartBigness().create(cmbxPartBigness);

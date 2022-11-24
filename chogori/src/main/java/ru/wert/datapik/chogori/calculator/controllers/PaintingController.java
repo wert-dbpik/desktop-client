@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -57,7 +58,7 @@ public class PaintingController extends AbstractNormsCounter {
     @FXML
     private TextField tfNormTime;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private int razvA; //Параметр А развертки
     private int razvB; //Параметр B развертки
@@ -68,7 +69,7 @@ public class PaintingController extends AbstractNormsCounter {
     private double holdingTime; //Время навешивания
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         new BXPaintingDifficulty().create(cmbxDifficulty);

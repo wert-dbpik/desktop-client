@@ -4,26 +4,19 @@ package ru.wert.datapik.chogori.calculator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
-import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
-import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.controllers.*;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.client.entity.models.Material;
 
-import java.io.IOException;
-
 import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
 
-public class PartCalculatorController implements ICalculatorController{
+public class PartCalculatorController implements IMenuCalculator {
 
     @FXML @Getter
     private ComboBox<Material> cmbxMaterial;
@@ -92,7 +85,16 @@ public class PartCalculatorController implements ICalculatorController{
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
 
-        ContextMenu menu = createOperationsMenu();
+        CalculatorMenu menu = new CalculatorMenu(this, addedOperations, listViewTechOperations);
+        menu.getItems().addAll(menu.getAddCutting(), menu.getAddBending(), menu.getAddLocksmith());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().addAll(menu.getAddWeldingLongSeam(), menu.getAddWeldingDotted());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().addAll(menu.getAddPainting(), menu.getAddPaintingAssembling());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().addAll(menu.getAddAssemblingNuts(), menu.getAddAssemblingCuttings(), menu.getAddAssemblingNodes());
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(menu.getAddLevelingSealer());
 
         ivAddOperation.setOnMouseClicked(e->{
             menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
@@ -153,307 +155,6 @@ public class PartCalculatorController implements ICalculatorController{
         tfCoat.setText(String.format(doubleFormat, area));
     }
 
-    /*##################################################################################################################
-                                            М Е Н Ю
-      ##################################################################################################################*/
-    @NotNull
-    private ContextMenu createOperationsMenu() {
-        //РАСКРОЙ И ЗАЧИСТКА
-        ContextMenu menu = new ContextMenu();
-        MenuItem addCutting = new MenuItem("Резка и зачистка");
-        addCutting.setOnAction(event -> {
-            if(isDuplicate(CuttingController.class.getSimpleName())) return ;
-            addCattingOperation();
-        });
-
-        //ГИБКА
-        MenuItem addBending = new MenuItem("Гибка");
-        addBending.setOnAction(event -> {
-            if(isDuplicate(BendingController.class.getSimpleName())) return ;
-            addBendingOperation();
-        });
-
-        //СЛЕСАРНЫЕ РАБОТЫ
-        MenuItem addLocksmith = new MenuItem("Слесарные операции");
-        addLocksmith.setOnAction(event -> {
-            if(isDuplicate(LocksmithController.class.getSimpleName())) return ;
-            addLocksmithOperation();
-        });
-
-        //=======================================================================
-
-        //СВАРКА НЕПРЕРЫВНАЯ
-        MenuItem addWeldingLongSeam = new MenuItem("Сварка непрерывная");
-        addWeldingLongSeam.setOnAction(event -> {
-            addWeldingContinuousOperation();
-        });
-
-        //СВАРКА ТОЧЕЧНАЯ
-        MenuItem addWeldingDotted = new MenuItem("Сварка точечная");
-        addWeldingDotted.setOnAction(event -> {
-            if(isDuplicate(WeldingDottedController.class.getSimpleName())) return ;
-            addWeldingDottedOperation();
-        });
-
-        //=======================================================================
-
-        //ПОКРАСКА
-        MenuItem addPainting = new MenuItem("Покраска детали");
-        addPainting.setOnAction(event -> {
-            if(isDuplicate(PaintingController.class.getSimpleName())) return ;
-            addPaintingOperation();
-        });
-
-        //ПОКРАСКА СБОРОЧНОЙ ЕДИНИЦЫ
-        MenuItem addPaintingAssembling = new MenuItem("Покраска сборочной единицы");
-        addPaintingAssembling.setOnAction(event -> {
-            if(isDuplicate(PaintingAssemblingController.class.getSimpleName())) return ;
-            addPaintingAssemblingOperation();
-        });
-
-        //=======================================================================
-        //СБОРКА - КРЕПЕЖ
-        MenuItem addAssemblingNuts = new MenuItem("Сборка крепежа");
-        addAssemblingNuts.setOnAction(event -> {
-            if(isDuplicate(AssemblingNutsController.class.getSimpleName())) return ;
-            addAssemblingNutsOperation();
-        });
-
-        //СБОРКА - РАСКРОЙНЫЙ МАТЕРИАЛ
-        MenuItem addAssemblingCuttings = new MenuItem("Сборка раскройного материала");
-        addAssemblingCuttings.setOnAction(event -> {
-            if(isDuplicate(AssemblingCuttingsController.class.getSimpleName())) return ;
-            addAssemblingCuttingsOperation();
-        });
-
-        //СБОРКА СТАНДАРТНЫХ УЗЛОВ
-        MenuItem addAssemblingNodes = new MenuItem("Сборка стандартных узлов");
-        addAssemblingNodes.setOnAction(event -> {
-            if(isDuplicate(AssemblingNodesController.class.getSimpleName())) return ;
-            addAssemblingNodesOperation();
-        });
-
-        //НАНЕСЕНИЕ НАЛИВНОГО УПЛОТНИТЕЛЯ
-        MenuItem addLevelingSealer = new MenuItem("Нанесение наливного утеплителя");
-        addLevelingSealer.setOnAction(event -> {
-            if(isDuplicate(LevelingSealerController.class.getSimpleName())) return ;
-            addLevelingSealerOperation();
-        });
-
-        menu.getItems().addAll(addCutting, addBending, addLocksmith);
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(addWeldingLongSeam, addWeldingDotted);
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(addPainting, addPaintingAssembling);
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(addAssemblingNuts, addAssemblingCuttings, addAssemblingNodes);
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().add(addLevelingSealer);
-
-        return menu;
-    }
-
-    /*##################################################################################################################
-                                                М Е Т О Д Ы
-      ##################################################################################################################*/
-
-    /**
-     * РАСКРОЙ И ЗАЧИСТКА
-     */
-    private void addCattingOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/cutting.fxml"));
-            VBox cutting = loader.load();
-            cutting.setId("calculator");
-            CuttingController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(cutting);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * ГИБКА
-     */
-    private void addBendingOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/bending.fxml"));
-            VBox bending = loader.load();
-            bending.setId("calculator");
-            BendingController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(bending);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * СЛЕСАРНЫЕ ОПЕРАЦИИ
-     */
-    private void addLocksmithOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/locksmith.fxml"));
-            VBox locksmith = loader.load();
-            locksmith.setId("calculator");
-            LocksmithController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(locksmith);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //==================================================================================================================
-
-    /**
-     * ПОКРАСКА ДЕТАЛИ
-     */
-    private void addPaintingOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/painting.fxml"));
-            VBox painting = loader.load();
-            painting.setId("calculator");
-            PaintingController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(painting);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * ПОКРАСКА СБОРОЧНОЙ ЕДИНИЦЫ
-     */
-    private void addPaintingAssemblingOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/paintingAssembling.fxml"));
-            VBox paintingAssembling = loader.load();
-            paintingAssembling.setId("calculator");
-            PaintingAssemblingController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(paintingAssembling);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //==================================================================================================================
-
-    /**
-     * СВАРКА НЕПРЕРЫВНАЯ
-     */
-    private void addWeldingContinuousOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/weldingContinuous.fxml"));
-            VBox weldingLongSeam = loader.load();
-            weldingLongSeam.setId("calculator");
-            WeldingContinuousController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(weldingLongSeam);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * СВАРКА ТОЧЕЧНАЯ
-     */
-    private void addWeldingDottedOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/weldingDotted.fxml"));
-            VBox weldingDotted = loader.load();
-            weldingDotted.setId("calculator");
-            WeldingDottedController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(weldingDotted);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //==================================================================================================================
-
-    /**
-     * СБОРКА КРЕПЕЖА
-     */
-    private void addAssemblingNutsOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingNuts.fxml"));
-            VBox assemblingNuts = loader.load();
-            assemblingNuts.setId("calculator");
-            AssemblingNutsController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(assemblingNuts);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * СБОРКА РАСКРОЙНОГО МАТЕРИАЛА
-     */
-    private void addAssemblingCuttingsOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingCuttings.fxml"));
-            VBox assemblingCuttings = loader.load();
-            assemblingCuttings.setId("calculator");
-            AssemblingCuttingsController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(assemblingCuttings);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * СБОРКА СТАНДАРТНЫХ УЗЛОВ
-     */
-    private void addAssemblingNodesOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingNodes.fxml"));
-            VBox assemblingNodes = loader.load();
-            assemblingNodes.setId("calculator");
-            AssemblingNodesController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(assemblingNodes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //==================================================================================================================
-
-    /**
-     * НАНЕСЕНИЕ НАЛИВНОГО УПЛОТНИТЕЛЯ
-     */
-    private void addLevelingSealerOperation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/levelingSealer.fxml"));
-            VBox levelingSealer = loader.load();
-            levelingSealer.setId("calculator");
-            LevelingSealerController controller = loader.getController();
-            controller.init(this);
-            listViewTechOperations.getItems().add(levelingSealer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Ищем дубликат операции в списке addedOperations по clazz
-     */
-    private boolean isDuplicate(String clazz){
-        for(AbstractNormsCounter cn: addedOperations){
-            if(cn.getClass().getSimpleName().equals(clazz))
-                return true;
-        }
-        return false;
-    }
-
-    /*##################################################################################################################
-      ##################################################################################################################*/
 
     /**
      * Метод расчитывает суммарное время по участкам

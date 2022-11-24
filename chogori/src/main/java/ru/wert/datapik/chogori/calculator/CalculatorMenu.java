@@ -1,20 +1,18 @@
 package ru.wert.datapik.chogori.calculator;
 
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.controllers.*;
 
 import java.io.IOException;
 
 public class CalculatorMenu extends ContextMenu {
 
-    private ICalculatorController calculator;
+    private IMenuCalculator calculator;
     private ObservableList<AbstractNormsCounter> addedOperations;
 
     private ListView<VBox> listViewTechOperations;
@@ -22,7 +20,7 @@ public class CalculatorMenu extends ContextMenu {
     /**
      * Create a new ContextMenu
      */
-    public CalculatorMenu(ICalculatorController calculator, ObservableList<AbstractNormsCounter> addedOperations, ListView<VBox> listViewTechOperations) {
+    public CalculatorMenu(IMenuCalculator calculator, ObservableList<AbstractNormsCounter> addedOperations, ListView<VBox> listViewTechOperations) {
         this.calculator = calculator;
         this.addedOperations = addedOperations;
         this.listViewTechOperations = listViewTechOperations;

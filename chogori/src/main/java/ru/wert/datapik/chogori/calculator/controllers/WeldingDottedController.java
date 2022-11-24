@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -36,14 +37,14 @@ public class WeldingDottedController extends AbstractNormsCounter {
     @FXML
     private TextField tfNormTime;
 
-    private PartCalculatorController controller;
+    private IMenuCalculator controller;
 
     private int parts; //Количество элементов
     private int dots; //Количество точек
     private int drops; //Количество прихваток
     private ETimeMeasurement measure;
 
-    public void init(PartCalculatorController controller){
+    public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
         setZeroValues();
