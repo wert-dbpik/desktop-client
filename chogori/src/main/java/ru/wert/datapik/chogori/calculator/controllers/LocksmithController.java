@@ -10,7 +10,6 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -124,7 +123,7 @@ public class LocksmithController extends AbstractNormsCounter {
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
-    private boolean countInitialValues() {
+    private void countInitialValues() {
 
         rivets = IntegerParser.getValue(tfRivets);
         countersinkings = IntegerParser.getValue(tfCountersinkings);
@@ -132,8 +131,6 @@ public class LocksmithController extends AbstractNormsCounter {
         smallSawings = IntegerParser.getValue(tfSmallSawings);
         bigSawings = IntegerParser.getValue(tfBigSawings);
         measure = controller.getCmbxTimeMeasurement().getValue();
-
-        return true;
     }
 
 

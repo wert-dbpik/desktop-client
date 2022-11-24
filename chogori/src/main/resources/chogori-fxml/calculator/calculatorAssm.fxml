@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="calculator" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.PartCalculatorController">
+<VBox fx:id="calculator" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.CalculatorAssmController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
@@ -35,7 +35,7 @@
       </HBox>
       <Separator maxWidth="1.7976931348623157E308">
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets />
          </VBox.margin>
       </Separator>
       <HBox alignment="BOTTOM_LEFT" fillHeight="false" spacing="10.0">
@@ -61,6 +61,9 @@
                         <Label text="Ед.изм." />
                         <ComboBox fx:id="cmbxTimeMeasurement" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
                      </children>
+                     <HBox.margin>
+                        <Insets bottom="4.0" />
+                     </HBox.margin>
                   </HBox>
                   <ImageView fx:id="ivAddOperation" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -83,7 +86,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Label text="Нормы времени по видам работ">
+                  <Label text="Нормы времени по участкам">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -100,68 +103,71 @@
             </HBox>
             <HBox spacing="5.0">
                <children>
-                  <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
-                        <Label text="Участок МК">
+                        <Label text="МК">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="tfMechanicalTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
+                        <TextField fx:id="tfMechanicalTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="90.0" />
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
-                        <Label text="Участок ППК">
+                        <Label text="ППК">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="tfPaintingTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
+                        <TextField fx:id="tfPaintingTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="90.0" />
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
                         <Label text="Сборка">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="tfAssemblingTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
+                        <TextField fx:id="tfAssemblingTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="90.0" />
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="5.0">
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
                         <Label text="Упаковка">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="tfAssemblingTime1" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="115.0" />
+                        <TextField fx:id="tfAssemblingTime1" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="90.0" />
                      </children>
                   </VBox>
+                  <Separator orientation="VERTICAL" />
+                  <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="TOP_CENTER">
+                           <children>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Всего, ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="lblTimeMeasure" text="мин">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <TextField fx:id="tfTotalTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="14.0" prefWidth="490.0" spacing="10.0">
-               <children>
-                  <Label text="Всего : ">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <TextField fx:id="tfTotalTime" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
-                  <Label fx:id="lblTimeMeasure" text="мин">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-               </children>
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
             </HBox>
          </children>
          <VBox.margin>
@@ -170,6 +176,6 @@
       </VBox>
    </children>
    <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      <Insets bottom="5.0" left="7.0" right="7.0" top="5.0" />
    </padding>
 </VBox>

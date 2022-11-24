@@ -20,9 +20,9 @@ public interface IMenuCalculator {
 
     ComboBox<ETimeMeasurement> getCmbxTimeMeasurement();
 
-    ComboBox<Material> getCmbxMaterial();
-
-    TextField getTfA();
-
-    TextField getTfB();
+//    ComboBox<Material> getCmbxMaterial();
+//
+//    TextField getTfA();
+//
+//    TextField getTfB();
 }

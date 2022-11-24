@@ -10,7 +10,6 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
@@ -113,14 +112,12 @@ public class WeldingDottedController extends AbstractNormsCounter {
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
-    private boolean countInitialValues() {
+    private void countInitialValues() {
 
         parts = IntegerParser.getValue(tfNumOfParts);
         dots = IntegerParser.getValue(tfNumOfDots);
         drops = IntegerParser.getValue(tfNumOfDrops);
         measure = controller.getCmbxTimeMeasurement().getValue();
-
-        return true;
     }
 
 

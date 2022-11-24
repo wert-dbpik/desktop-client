@@ -12,7 +12,6 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
@@ -218,7 +217,7 @@ public class WeldingContinuousController extends AbstractNormsCounter {
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
-    private boolean countInitialValues() {
+    private void countInitialValues() {
 
         seamLength = IntegerParser.getValue(tfSeamLength);
         numOfSeams = IntegerParser.getValue(tfNumOfSeams);
@@ -228,8 +227,6 @@ public class WeldingContinuousController extends AbstractNormsCounter {
         useStripping = chbxUseStripping.isSelected();
         assemblingTime = cmbxPartBigness.getValue().getTime();
         measure = controller.getCmbxTimeMeasurement().getValue();
-
-        return true;
     }
 
 

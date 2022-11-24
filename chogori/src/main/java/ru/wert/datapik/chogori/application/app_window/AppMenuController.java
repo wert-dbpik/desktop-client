@@ -430,10 +430,13 @@ public class AppMenuController {
 
         Menu calculatorMenu = new Menu("Калькулятор");
 
-        MenuItem NormsOnPartProcessingItem = new MenuItem("Изготовление детали");
-        NormsOnPartProcessingItem.setOnAction(this::openCalculationOfNormsOnPartProcessing);
+        MenuItem normsOnPartProcessingItem = new MenuItem("Рассчет норм на деталь");
+        normsOnPartProcessingItem.setOnAction(this::openCalculationOfNormsOnPartProcessing);
 
-        calculatorMenu.getItems().add(NormsOnPartProcessingItem);
+        MenuItem normsOnAssemblingProcessingItem = new MenuItem("Рассчет норм на сборку");
+        normsOnAssemblingProcessingItem.setOnAction(this::openCalculationOfNormsOnAssemblingProcessing);
+
+        calculatorMenu.getItems().addAll(normsOnPartProcessingItem, normsOnAssemblingProcessingItem);
 
         return calculatorMenu;
     }
@@ -441,7 +444,20 @@ public class AppMenuController {
     private void openCalculationOfNormsOnPartProcessing(ActionEvent event) {
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/partCalculators.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/calculatorPart.fxml"));
+            Parent parent = loader.load();
+
+            new WindowDecoration("Калькулятор", parent, false, null);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    private void openCalculationOfNormsOnAssemblingProcessing(ActionEvent event) {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/calculatorAssm.fxml"));
             Parent parent = loader.load();
 
             new WindowDecoration("Калькулятор", parent, false, null);

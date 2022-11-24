@@ -16,7 +16,7 @@ import ru.wert.datapik.client.entity.models.Material;
 
 import static ru.wert.datapik.chogori.calculator.AbstractNormsCounter.*;
 
-public class PartCalculatorController implements IMenuCalculator {
+public class CalculatorPartController implements IMenuCalculator {
 
     @FXML @Getter
     private ComboBox<Material> cmbxMaterial;

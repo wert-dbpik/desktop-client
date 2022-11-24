@@ -10,7 +10,6 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXAssemblingType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;

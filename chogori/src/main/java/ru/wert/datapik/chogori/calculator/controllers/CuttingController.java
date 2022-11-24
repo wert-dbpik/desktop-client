@@ -8,9 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
+import ru.wert.datapik.chogori.calculator.CalculatorPartController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -42,18 +42,15 @@ public class CuttingController  extends AbstractNormsCounter {
     private TextField tfExtraPerimeter;
 
     @FXML
-    private ImageView ivHelpOnNumOfHoles;
-
-    @FXML
-    private ImageView ivHelpOnExtraPerimeter;
-
-    @FXML
     private ImageView ivHelpOnUseStripping;
 
     @FXML
     private ImageView ivHelpOnNumOfPerfHoles;
 
     private IMenuCalculator controller;
+    private CalculatorPartController partController;
+
+
     private double perimetre; //Периметр контура развертки
     private double area; //Площадь развертки
     private double plusLength; //Дополнительный периметр обработки
@@ -68,6 +65,8 @@ public class CuttingController  extends AbstractNormsCounter {
 
     public void init(IMenuCalculator controller){
         this.controller = controller;
+        this.partController = (CalculatorPartController) controller;
+
         controller.getAddedOperations().add(this);
         setZeroValues();
         setNormTime();
@@ -160,11 +159,11 @@ public class CuttingController  extends AbstractNormsCounter {
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
-    private boolean countInitialValues() {
+    private void countInitialValues() {
 
-        paramA = IntegerParser.getValue(controller.getTfA());
-        paramB = IntegerParser.getValue(controller.getTfB());
-        t = controller.getCmbxMaterial().getValue().getParamS();
+        paramA = IntegerParser.getValue(partController.getTfA());
+        paramB = IntegerParser.getValue(partController.getTfB());
+        t = partController.getCmbxMaterial().getValue().getParamS();
         perimetre = 2 * (paramA + paramB) * MM_TO_M;
         area = paramA * paramB * MM2_TO_M2;
         plusLength = IntegerParser.getValue(tfExtraPerimeter);
@@ -173,7 +172,6 @@ public class CuttingController  extends AbstractNormsCounter {
         perfHoles = IntegerParser.getValue(tfPerfHoles);
         measure = controller.getCmbxTimeMeasurement().getValue();
 
-        return true;
     }
 
 }

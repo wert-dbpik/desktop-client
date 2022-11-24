@@ -112,7 +112,7 @@ public class CalculatorMenu extends ContextMenu {
     public MenuItem getAddAssemblingNuts(){
         MenuItem addAssemblingNuts = new MenuItem("Сборка крепежа");
         addAssemblingNuts.setOnAction(event -> {
-            if(isDuplicate(AssemblingNutsController.class.getSimpleName())) return ;
+            if(isDuplicate(AssmNutsController.class.getSimpleName())) return ;
             addAssemblingNutsOperation();
         });
         return addAssemblingNuts;
@@ -123,7 +123,7 @@ public class CalculatorMenu extends ContextMenu {
     public MenuItem getAddAssemblingCuttings(){
         MenuItem addAssemblingCuttings = new MenuItem("Сборка раскройного материала");
         addAssemblingCuttings.setOnAction(event -> {
-            if(isDuplicate(AssemblingCuttingsController.class.getSimpleName())) return ;
+            if(isDuplicate(AssmCuttingsController.class.getSimpleName())) return ;
             addAssemblingCuttingsOperation();
         });
         return addAssemblingCuttings;
@@ -134,7 +134,7 @@ public class CalculatorMenu extends ContextMenu {
     public MenuItem getAddAssemblingNodes(){
         MenuItem addAssemblingNodes = new MenuItem("Сборка стандартных узлов");
         addAssemblingNodes.setOnAction(event -> {
-            if(isDuplicate(AssemblingNodesController.class.getSimpleName())) return ;
+            if(isDuplicate(AssmNodesController.class.getSimpleName())) return ;
             addAssemblingNodesOperation();
         });
         return addAssemblingNodes;
@@ -233,7 +233,7 @@ public class CalculatorMenu extends ContextMenu {
      */
     private void addPaintingAssemblingOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/paintingAssembling.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/paintingAssm.fxml"));
             VBox paintingAssembling = loader.load();
             paintingAssembling.setId("calculator");
             PaintingAssemblingController controller = loader.getController();
@@ -285,10 +285,10 @@ public class CalculatorMenu extends ContextMenu {
      */
     private void addAssemblingNutsOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingNuts.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assmNuts.fxml"));
             VBox assemblingNuts = loader.load();
             assemblingNuts.setId("calculator");
-            AssemblingNutsController controller = loader.getController();
+            AssmNutsController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(assemblingNuts);
         } catch (IOException e) {
@@ -301,10 +301,10 @@ public class CalculatorMenu extends ContextMenu {
      */
     private void addAssemblingCuttingsOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingCuttings.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assmCuttings.fxml"));
             VBox assemblingCuttings = loader.load();
             assemblingCuttings.setId("calculator");
-            AssemblingCuttingsController controller = loader.getController();
+            AssmCuttingsController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(assemblingCuttings);
         } catch (IOException e) {
@@ -317,10 +317,10 @@ public class CalculatorMenu extends ContextMenu {
      */
     private void addAssemblingNodesOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assemblingNodes.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assmNodes.fxml"));
             VBox assemblingNodes = loader.load();
             assemblingNodes.setId("calculator");
-            AssemblingNodesController controller = loader.getController();
+            AssmNodesController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(assemblingNodes);
         } catch (IOException e) {

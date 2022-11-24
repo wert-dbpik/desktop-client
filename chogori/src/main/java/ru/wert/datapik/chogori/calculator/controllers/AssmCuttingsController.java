@@ -10,12 +10,11 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
 
-public class AssemblingCuttingsController extends AbstractNormsCounter {
+public class AssmCuttingsController extends AbstractNormsCounter {
 
     @Getter
     private ENormType normType = ENormType.NORM_ASSEMBLING;
@@ -110,7 +109,7 @@ public class AssemblingCuttingsController extends AbstractNormsCounter {
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
-    private boolean countInitialValues() {
+    private void countInitialValues() {
 
         sealer = DoubleParser.getValue(tfSealer);
         selfAdhSealer = DoubleParser.getValue(tfSelfAdhSealer);
@@ -118,7 +117,6 @@ public class AssemblingCuttingsController extends AbstractNormsCounter {
 
         measure = controller.getCmbxTimeMeasurement().getValue();
 
-        return true;
     }
 
 

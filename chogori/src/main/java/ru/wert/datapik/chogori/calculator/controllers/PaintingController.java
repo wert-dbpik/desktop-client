@@ -7,10 +7,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.CalculatorPartController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
@@ -59,6 +59,7 @@ public class PaintingController extends AbstractNormsCounter {
     private TextField tfNormTime;
 
     private IMenuCalculator controller;
+    private CalculatorPartController partController;
 
     private int razvA; //Параметр А развертки
     private int razvB; //Параметр B развертки
@@ -71,6 +72,8 @@ public class PaintingController extends AbstractNormsCounter {
 
     public void init(IMenuCalculator controller){
         this.controller = controller;
+        this.partController = (CalculatorPartController)controller;
+
         controller.getAddedOperations().add(this);
         new BXPaintingDifficulty().create(cmbxDifficulty);
 
@@ -156,8 +159,8 @@ public class PaintingController extends AbstractNormsCounter {
     @Override
     public void setZeroValues() {
         measure = controller.getCmbxTimeMeasurement().getValue();
-        razvA = new TFInteger(controller.getTfA()).getIntegerValue();
-        razvB = new TFInteger(controller.getTfB()).getIntegerValue();
+        razvA = new TFInteger(partController.getTfA()).getIntegerValue();
+        razvB = new TFInteger(partController.getTfB()).getIntegerValue();
         tfA.setText(String.valueOf(Math.min(razvA, razvB)));
         tfB.setText("0");
 
@@ -168,10 +171,10 @@ public class PaintingController extends AbstractNormsCounter {
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
-    private boolean countInitialValues() {
+    private void countInitialValues() {
 
-        razvA = IntegerParser.getValue(controller.getTfA());
-        razvB = IntegerParser.getValue(controller.getTfB());
+        razvA = IntegerParser.getValue(partController.getTfA());
+        razvB = IntegerParser.getValue(partController.getTfB());
 
         area = razvA * razvB * MM2_TO_M2;
 
@@ -184,8 +187,6 @@ public class PaintingController extends AbstractNormsCounter {
         difficulty = cmbxDifficulty.getValue().getDifficultyRatio();
         holdingTime = IntegerParser.getValue(tfHangingTime);
         measure = controller.getCmbxTimeMeasurement().getValue();
-
-        return true;
     }
 
 }

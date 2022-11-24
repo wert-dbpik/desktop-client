@@ -11,7 +11,6 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractNormsCounter;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.PartCalculatorController;
 import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.EBendingTool;
@@ -110,14 +109,12 @@ public class BendingController extends AbstractNormsCounter {
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
-    private boolean countInitialValues() {
+    private void countInitialValues() {
 
         bends = IntegerParser.getValue(tfNumOfBendings);
         men = IntegerParser.getValue(tfNumOfMen);
         toolRatio = cmbxBendingTool.getValue().getToolRatio();
         measure = controller.getCmbxTimeMeasurement().getValue();
-
-        return true;
     }
 
 
