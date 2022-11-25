@@ -8,10 +8,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.CalculatorPartController;
+import ru.wert.datapik.chogori.calculator.FormPartController;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
+import ru.wert.datapik.chogori.calculator.entities.OpBending;
+import ru.wert.datapik.chogori.calculator.entities.OpCutting;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
@@ -44,25 +47,36 @@ public class PlateCuttingController extends AbstractOpPlate {
     @FXML
     private ImageView ivHelpOnUseStripping;
 
-    private IMenuCalculator controller;
-    private CalculatorPartController partController;
+    private IFormMenu controller;
+    private FormPartController partController;
+    private OpCutting opData;
 
+    public OpData getOpData(){
+        return opData;
+    }
 
     private double perimetre; //Периметр контура развертки
     private double area; //Площадь развертки
-    private double plusLength; //Дополнительный периметр обработки
+    private int extraPerimeter; //Дополнительный периметр обработки
     private double t; //Толщина материала
     private double paramA; //Параметр А развертки
     private double paramB; //Параметр B развертки
-    private boolean useStriping = false; //Применить зачистку
+    private boolean striping = false; //Применить зачистку
     private int holes; //Количество отверстий в развертке
     private int perfHoles; //Количество перфораций в развертке
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpCutting opData){
         this.controller = controller;
-        this.partController = (CalculatorPartController) controller;
+        this.partController = (FormPartController) controller;
+        if(opData == null){
+            this.opData = new OpCutting();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
 
         controller.getAddedOperations().add(this);
         setZeroValues();
@@ -113,14 +127,14 @@ public class PlateCuttingController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
         final double REVOLVER_SPEED = 0.057; //скорость вырубки одного элемента револьвером, мин/уд
         final double PERFORATION_SPEED = 0.007; //корость перфорирования, мин/уд
         final double CUTTING_SERVICE_RATIO = 1.22; //коэфффициент, учитывающий 22% времени на обслуживание при резке
-        final double PLUS_LENGTH = plusLength * MM_TO_M;
+        final double PLUS_LENGTH = extraPerimeter * MM_TO_M;
 
         double speed;
         //Скорость резания, м/мин
@@ -132,7 +146,7 @@ public class PlateCuttingController extends AbstractOpPlate {
 
         //Время зачистки
         double strippingTime; //мин
-        if(useStriping){
+        if(striping){
             strippingTime = ((perimetre + PLUS_LENGTH) * 2.5 + holes) / 60;
         } else
             strippingTime = 0.0;
@@ -149,7 +163,7 @@ public class PlateCuttingController extends AbstractOpPlate {
         if(area == 0.0) time = 0.0;
 
         currentNormTime = time;//результат в минутах
-        return time;
+        collectOpData();
     }
 
 
@@ -163,12 +177,21 @@ public class PlateCuttingController extends AbstractOpPlate {
         t = partController.getCmbxMaterial().getValue().getParamS();
         perimetre = 2 * (paramA + paramB) * MM_TO_M;
         area = paramA * paramB * MM2_TO_M2;
-        plusLength = IntegerParser.getValue(tfExtraPerimeter);
-        useStriping = chbxStripping.isSelected();
+        extraPerimeter = IntegerParser.getValue(tfExtraPerimeter);
+        striping = chbxStripping.isSelected();
         holes = IntegerParser.getValue(tfHoles);
         perfHoles = IntegerParser.getValue(tfPerfHoles);
         measure = controller.getCmbxTimeMeasurement().getValue();
 
+    }
+
+    private void collectOpData(){
+        opData.setHoles(holes);
+        opData.setPerfHoles(perfHoles);
+        opData.setExtraPerimeter(extraPerimeter);
+        opData.setStripping(striping);
+
+        opData.setMechTime(currentNormTime);
     }
 
 }

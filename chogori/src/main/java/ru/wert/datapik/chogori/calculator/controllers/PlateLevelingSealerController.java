@@ -10,9 +10,12 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXSealersWidth;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
+import ru.wert.datapik.chogori.calculator.entities.OpCutting;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
+import ru.wert.datapik.chogori.calculator.entities.OpLevelingSealer;
 import ru.wert.datapik.chogori.calculator.enums.ESealersWidth;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -52,7 +55,12 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
     @FXML
     private Label lblNormTimeMeasure;
 
-    private IMenuCalculator controller;
+    private IFormMenu controller;
+    private OpLevelingSealer opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private int paramA; //Размер А
     private int paramB;//Размер Б
@@ -60,9 +68,17 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
 
     private ETimeMeasurement measure;
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpLevelingSealer opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
+        if(opData == null){
+            this.opData = new OpLevelingSealer();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
+
         new BXSealersWidth().create(cmbxSealerWidth);
         new TFColoredInteger(tfA, this);
         new TFColoredInteger(tfB, this);
@@ -95,7 +111,7 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
@@ -109,9 +125,9 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
             tfCompA.setText(String.format(doubleFormat, perimeter * cmbxSealerWidth.getValue().getCompA()));
             tfCompB.setText(String.format(doubleFormat, perimeter * cmbxSealerWidth.getValue().getCompB()));
         }
-        currentNormTime = time;
 
-        return time;
+        currentNormTime = time;
+        collectOpData();
     }
 
     /**
@@ -134,6 +150,15 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
         paramB = IntegerParser.getValue(tfB);
         perimeter = 2 * (paramA + paramB) * MM_TO_M;
         measure = controller.getCmbxTimeMeasurement().getValue();
+    }
+
+
+    private void collectOpData(){
+        opData.setSealersWidth(cmbxSealerWidth.getValue());
+        opData.setParamA(paramA);
+        opData.setParamB(paramB);
+
+        opData.setAssmTime(currentNormTime);
     }
 
 

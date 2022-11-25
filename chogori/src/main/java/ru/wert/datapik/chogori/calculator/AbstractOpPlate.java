@@ -7,11 +7,11 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 /**
- * Класс наследует интерфейс IOperation
+ * Класс наследует интерфейс IOpPlate
  * Изначальный расчет нормы времени производится в минутах
  * Конвертация в секунды происходит в методе setTimeMeasurement()
  */
-public abstract class AbstractOpPlate implements IOperation {
+public abstract class AbstractOpPlate implements IOpPlate {
 
     // КОНСТАНТЫ
     public static final double MM_TO_M = 0.001; //перевод мм в метры
@@ -45,7 +45,7 @@ public abstract class AbstractOpPlate implements IOperation {
     /**
      * Метод расчитывает норму времени в минутах
      */
-    public abstract double countNorm();
+    public abstract void countNorm();
 
     /**
      * Метод устанавливает изначальные нулевые значения полей

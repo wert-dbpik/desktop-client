@@ -67,7 +67,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfNumOfMen" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfMen" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox spacing="5.0">
@@ -77,7 +77,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <CheckBox fx:id="chbxUseStripping" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
+                  <CheckBox fx:id="chbxStripping" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -96,7 +96,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfNumOfSeams" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfSeams" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <Separator orientation="VERTICAL" />

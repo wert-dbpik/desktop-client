@@ -9,8 +9,11 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
+import ru.wert.datapik.chogori.calculator.entities.OpAssmCutting;
+import ru.wert.datapik.chogori.calculator.entities.OpAssmNut;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
@@ -49,10 +52,15 @@ public class PlateAssmNutsController extends AbstractOpPlate {
     @FXML
     private TextField tfScrews;
 
-    private IMenuCalculator controller;
+    private IFormMenu controller;
+    private OpAssmNut opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private int screws; //Количество винтов
-    private int VSHGs; //Количество комплектов ВШГ
+    private int vshgs; //Количество комплектов ВШГ
     private int rivets; //Количество заклепок
     private int rivetNuts; //Количество аклепочных гаек
     private int groundSets; //Количество комплектов заземления с этикеткой
@@ -60,9 +68,17 @@ public class PlateAssmNutsController extends AbstractOpPlate {
 
     private ETimeMeasurement measure;
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpAssmNut opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
+        if(opData == null){
+            this.opData = new OpAssmNut();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
+
         setZeroValues();
         setNormTime();
 
@@ -96,7 +112,7 @@ public class PlateAssmNutsController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
@@ -109,14 +125,14 @@ public class PlateAssmNutsController extends AbstractOpPlate {
 
         double time;
         time =  screws * SCREWS_SPEED
-                + VSHGs * VSHGS_SPEED
+                + vshgs * VSHGS_SPEED
                 + rivets * RIVETS_SPEED
                 + rivetNuts * RIVET_NUTS_SPEED
                 + groundSets * GROUND_SETS_SPEED
                 + others * OTHERS_SPEED;   //мин
 
         currentNormTime = time;
-        return time;
+        collectOpData();
     }
 
     /**
@@ -139,13 +155,24 @@ public class PlateAssmNutsController extends AbstractOpPlate {
     private void countInitialValues() {
 
         screws = IntegerParser.getValue(tfScrews);
-        VSHGs = IntegerParser.getValue(tfVSHGs);
+        vshgs = IntegerParser.getValue(tfVSHGs);
         rivets = IntegerParser.getValue(tfRivets);
         rivetNuts = IntegerParser.getValue(tfRivetNuts);
         groundSets = IntegerParser.getValue(tfGroundSets);
         others = IntegerParser.getValue(tfOthers);
 
         measure = controller.getCmbxTimeMeasurement().getValue();
+    }
+
+    private void collectOpData(){
+        opData.setScrews(screws);
+        opData.setVshgs(vshgs);
+        opData.setRivets(rivets);
+        opData.setRivetNuts(rivetNuts);
+        opData.setGroundSets(groundSets);
+        opData.setOthers(others);
+
+        opData.setAssmTime(currentNormTime);
     }
 
 

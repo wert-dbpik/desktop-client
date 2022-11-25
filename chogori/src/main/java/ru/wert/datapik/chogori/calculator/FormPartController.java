@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.entities.OpDetail;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
@@ -16,7 +17,7 @@ import ru.wert.datapik.client.entity.models.Material;
 
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
-public class CalculatorPartController implements IMenuCalculator, ICalculator {
+public class FormPartController implements IFormMenu{
 
     @FXML @Getter
     private TextField tfPartName;
@@ -57,10 +58,10 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
     @FXML
     private ImageView ivHelpOnTechnologicalProcessing;
 
-    @FXML
+    @FXML @Getter
     private TextField tfMechanicalTime;
 
-    @FXML
+    @FXML @Getter
     private TextField tfPaintingTime;
 
     @FXML
@@ -76,12 +77,19 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
 
     @Getter private ObservableList<AbstractOpPlate> addedOperations;
 
-    @Override
-    public void init(TextField tfName) {
+
+    public void init(TextField tfName, OpDetail opData) {
         tfPartName.setText(tfName.getText());
         tfName.textProperty().bindBidirectional(tfPartName.textProperty());
-
+        deployData(opData);
     }
+
+    private void deployData(OpDetail opData) {
+        for(IOpPlate plate : opData.getOperations())
+
+        listViewTechOperations.setItems(opData.getOperations());
+    }
+
 
     @FXML
     void initialize(){
@@ -94,7 +102,7 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
         MenuCalculator menu = new MenuCalculator(this, addedOperations, listViewTechOperations);
         menu.getItems().addAll(menu.getAddCutting(), menu.getAddBending(), menu.getAddLocksmith());
         menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(menu.getAddWeldingLongSeam(), menu.getAddWeldingDotted());
+        menu.getItems().addAll(menu.getAddWeldLongSeam(), menu.getAddWeldingDotted());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddPainting());
 
@@ -186,6 +194,5 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
         tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime ));
 
     }
-
 
 }

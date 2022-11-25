@@ -14,7 +14,7 @@ import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
-public class CalculatorAssmController implements IMenuCalculator, ICalculator {
+public class FormAssmController implements IFormMenu, IForm {
 
     @FXML
     private TextField tfAssmName;
@@ -72,7 +72,7 @@ public class CalculatorAssmController implements IMenuCalculator, ICalculator {
 
         menu.getItems().add(menu.getAddDetail());
         menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(menu.getAddWeldingLongSeam(), menu.getAddWeldingDotted());
+        menu.getItems().addAll(menu.getAddWeldLongSeam(), menu.getAddWeldingDotted());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddPaintingAssembling());
         menu.getItems().add(new SeparatorMenuItem());

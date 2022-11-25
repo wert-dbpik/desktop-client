@@ -8,7 +8,7 @@ import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OpWeldingContinuous extends OpData {
+public class OpWeldContinuous extends OpData {
 
     private Integer seamLength; //Длина шва
     private EPartBigness partBigness; //азмер собираемых деталей

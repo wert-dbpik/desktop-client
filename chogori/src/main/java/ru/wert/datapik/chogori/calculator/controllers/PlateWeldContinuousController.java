@@ -11,9 +11,11 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
+import ru.wert.datapik.chogori.calculator.entities.OpWeldContinuous;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -33,7 +35,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     private TextField tfSeamLength;
 
     @FXML
-    private CheckBox chbxUseStripping;
+    private CheckBox chbxStripping;
 
     @FXML
     private CheckBox chbxPreEnterSeams;
@@ -42,10 +44,10 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     private Label lblNumOfSeams;
 
     @FXML
-    private TextField tfNumOfSeams;
+    private TextField tfSeams;
 
     @FXML
-    private TextField tfNumOfMen;
+    private TextField tfMen;
 
     @FXML
     private Label lblConnectionLength;
@@ -65,34 +67,47 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IMenuCalculator controller;
+    private IFormMenu controller;
+    private OpWeldContinuous opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private int seamLength; //Длина шва
-    private int seams; //Количество швов расчетное
-    private int numOfSeams; //Количество швов заданное пользователем
-    private int numOfMen; //Число человек, работающих над операцией
-    private boolean useStripping; //Использовать зачистку
+    private int seamsCounted; //Количество швов расчетное
+    private int seams; //Количество швов заданное пользователем
+    private int men; //Число человек, работающих над операцией
+    private boolean stripping; //Использовать зачистку
     private int connectionLength; //Длина сединения на которую расчитывается количество точек
     private int step; //шаг точек
     private double assemblingTime; //Время сборки свариваемого узла
     private ETimeMeasurement measure;
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpWeldContinuous opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
+        if(opData == null){
+            this.opData = new OpWeldContinuous();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
+
         new BXPartBigness().create(cmbxPartBigness);
         setZeroValues();
         setNormTime();
 
         new TFColoredInteger(tfSeamLength, this);
-        new TFColoredInteger(tfNumOfSeams, this);
-        new TFColoredInteger(tfNumOfMen, this);
+        new TFColoredInteger(tfSeams, this);
+        new TFColoredInteger(tfMen, this);
         new TFColoredInteger(tfConnectionLength, this);
         new TFColoredInteger(tfStep, this);
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        chbxUseStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        chbxStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
@@ -120,15 +135,15 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
     private void enableNumOfSeams() {
         lblNumOfSeams.setDisable(false);
-        tfNumOfSeams.setDisable(false);
-        tfNumOfSeams.setText("1");
+        tfSeams.setDisable(false);
+        tfSeams.setText("1");
         disableNumOfSeamsCounting();
     }
 
     private void disableNumOfSeams() {
         lblNumOfSeams.setDisable(true);
-        tfNumOfSeams.setDisable(true);
-        tfNumOfSeams.setText("0");
+        tfSeams.setDisable(true);
+        tfSeams.setText("0");
     }
 
     private void disableNumOfSeamsCounting(){
@@ -161,26 +176,26 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
         final double WELDING_SPEED = 4.0; //скорость сваркм, мин/гиб
 
-        if(numOfSeams == 0){
+        if(seams == 0){
             if(step == 0){ //Деление на ноль
-                return 0.0;
+                return;
             } else
-                seams = connectionLength/step; //Получаем целу часть от деления
+                seamsCounted = connectionLength/step; //Получаем целу часть от деления
         } else {
-            seams = numOfSeams;
+            seamsCounted = seams;
         }
 
-        int sumWeldLength = seams * seamLength;
+        int sumWeldLength = seamsCounted * seamLength;
 
 
         double strippingTime;
-        if(useStripping) {
+        if(stripping) {
             //Время на зачистку, мин
             if (sumWeldLength < 100) strippingTime = 0.5;
             else if (sumWeldLength >= 100 && sumWeldLength < 500) strippingTime = 1.8;
@@ -191,11 +206,11 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
 
         double time;
-        time =  numOfMen * (sumWeldLength * MM_TO_M * WELDING_SPEED + assemblingTime) + strippingTime;   //мин
+        time =  men * (sumWeldLength * MM_TO_M * WELDING_SPEED + assemblingTime) + strippingTime;   //мин
         if(sumWeldLength == 0.0) time = 0.0;
 
         currentNormTime = time;
-        return time;
+        collectOpData();
     }
 
     /**
@@ -204,13 +219,13 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     @Override
     public void setZeroValues() {
         tfSeamLength.setText("0");
-        tfNumOfMen.setText("1");
-        tfNumOfSeams.setText("1");
+        tfMen.setText("1");
+        tfSeams.setText("1");
         tfSeamLength.setText("0");
         enableNumOfSeams();
         disableNumOfSeamsCounting();
         chbxPreEnterSeams.setSelected(true);
-        chbxUseStripping.setSelected(false);
+        chbxStripping.setSelected(false);
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
@@ -220,14 +235,38 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     private void countInitialValues() {
 
         seamLength = IntegerParser.getValue(tfSeamLength);
-        numOfSeams = IntegerParser.getValue(tfNumOfSeams);
-        numOfMen = IntegerParser.getValue(tfNumOfMen);
+        seams = IntegerParser.getValue(tfSeams);
+        men = IntegerParser.getValue(tfMen);
         connectionLength = IntegerParser.getValue(tfConnectionLength);
         step = IntegerParser.getValue(tfStep);
-        useStripping = chbxUseStripping.isSelected();
+        stripping = chbxStripping.isSelected();
         assemblingTime = cmbxPartBigness.getValue().getTime();
         measure = controller.getCmbxTimeMeasurement().getValue();
     }
 
+    private void collectOpData(){
+        opData.setSeamLength(seamLength);
+        opData.setPartBigness(cmbxPartBigness.getValue());
+        opData.setMen(men);
+        opData.setStripping(stripping);
+        opData.setPreEnterSeams(chbxPreEnterSeams.isSelected());
+        opData.setSeams(seams);
+        opData.setConnectionLength(connectionLength);
+        opData.setStep(step);
+
+        opData.setMechTime(currentNormTime);
+    }
+
+    private void fillOpData(){
+        tfSeamLength.setText(String.valueOf(opData.getSeamLength()));
+        cmbxPartBigness.setValue(opData.getPartBigness());
+        tfMen.setText(String.valueOf(opData.getMen()));
+        chbxStripping.setSelected(opData.isStripping());
+        chbxPreEnterSeams.setSelected(opData.isPreEnterSeams());
+        tfSeams.setText(String.valueOf(opData.getSeams()));
+        tfConnectionLength.setText(String.valueOf(opData.getConnectionLength()));
+        tfStep.setText(String.valueOf(opData.getStep()));
+
+    }
 
 }

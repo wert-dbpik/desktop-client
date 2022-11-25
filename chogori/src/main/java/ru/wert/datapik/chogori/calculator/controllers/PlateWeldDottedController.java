@@ -9,9 +9,9 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
-import ru.wert.datapik.chogori.calculator.entities.OpWeldingDotted;
+import ru.wert.datapik.chogori.calculator.entities.OpWeldDotted;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
@@ -38,8 +38,8 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IMenuCalculator controller;
-    private OpWeldingDotted opData;
+    private IFormMenu controller;
+    private OpWeldDotted opData;
 
     public OpData getOpData(){
         return opData;
@@ -50,10 +50,11 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     private int drops; //Количество прихваток
     private ETimeMeasurement measure;
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
-        opData = new OpWeldingDotted();
+        opData = new OpWeldDotted();
+
         setZeroValues();
         setNormTime();
 
@@ -91,7 +92,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
@@ -103,7 +104,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
         time =  parts * WELDING_PARTS_SPEED + dots * WELDING_DOTTED_SPEED + drops * WELDING_DROP_SPEED;   //мин
 
         currentNormTime = time;
-        return time;
+        collectOpData();
     }
 
     /**
@@ -134,6 +135,8 @@ public class PlateWeldDottedController extends AbstractOpPlate {
         opData.setParts(parts);
         opData.setDots(dots);
         opData.setDrops(drops);
+
+        opData.setMechTime(currentNormTime);
     }
 
 

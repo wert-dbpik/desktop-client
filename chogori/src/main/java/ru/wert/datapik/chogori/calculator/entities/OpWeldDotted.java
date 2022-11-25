@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OpWeldingDotted extends OpData {
+public class OpWeldDotted extends OpData {
 
     private int parts; //Количество элементов
     private int dots; //Количество точек

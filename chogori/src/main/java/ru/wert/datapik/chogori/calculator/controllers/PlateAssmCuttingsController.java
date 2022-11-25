@@ -9,8 +9,10 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
+import ru.wert.datapik.chogori.calculator.entities.OpAssmCutting;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
 
@@ -37,7 +39,12 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
     @FXML
     private Label lblOperationName;
 
-    private IMenuCalculator controller;
+    private IFormMenu controller;
+    private OpAssmCutting opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private double sealer; //Уплотнитель на ребро корпуса
     private double selfAdhSealer; //Уплотнитель самоклеющийся
@@ -45,10 +52,16 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
 
     private ETimeMeasurement measure;
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpAssmCutting opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
-        setZeroValues();
+        if(opData == null){
+            this.opData = new OpAssmCutting();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
         setNormTime();
 
         new TFColoredDouble(tfSealer, this);
@@ -77,7 +90,7 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
          countInitialValues();
 
@@ -91,7 +104,7 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
                 + insulation * INSULATION_SPEED;//мин
 
         currentNormTime = time;
-        return time;
+        collectOpData();
     }
 
     /**
@@ -116,7 +129,22 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
         insulation = DoubleParser.getValue(tfInsulation);
 
         measure = controller.getCmbxTimeMeasurement().getValue();
+    }
 
+    private void collectOpData(){
+        opData.setSealer(sealer);
+        opData.setSelfAdhSealer(selfAdhSealer);
+        opData.setInsulation(insulation);
+
+        opData.setAssmTime(currentNormTime);
+    }
+
+    private void fillOpData(){
+        tfSealer.setText(String.valueOf(opData.getSealer()));
+        tfSelfAdhSealer.setText(String.valueOf(opData.getSelfAdhSealer()));
+        tfInsulation.setText(String.valueOf(opData.getInsulation()));
+
+        opData.setAssmTime(currentNormTime);
     }
 
 

@@ -6,7 +6,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
-public interface IMenuCalculator {
+public interface IFormMenu {
 
     ObservableList<AbstractOpPlate> getAddedOperations();
 

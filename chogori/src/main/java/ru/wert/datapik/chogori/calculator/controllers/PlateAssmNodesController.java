@@ -9,8 +9,11 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
+import ru.wert.datapik.chogori.calculator.entities.OpAssmCutting;
+import ru.wert.datapik.chogori.calculator.entities.OpAssmNode;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
@@ -46,7 +49,12 @@ public class PlateAssmNodesController extends AbstractOpPlate {
     @FXML
     private Label lblOperationName;
 
-    private IMenuCalculator controller;
+    private IFormMenu controller;
+    private OpAssmNode opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private int postLocks; //Количество почтовых замков
     private int doubleLocks; //Количество замков с рычагами
@@ -56,9 +64,17 @@ public class PlateAssmNodesController extends AbstractOpPlate {
 
     private ETimeMeasurement measure;
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpAssmNode opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
+        if(opData == null){
+            this.opData = new OpAssmNode();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
+
         setZeroValues();
         setNormTime();
 
@@ -90,7 +106,7 @@ public class PlateAssmNodesController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
@@ -108,7 +124,7 @@ public class PlateAssmNodesController extends AbstractOpPlate {
                 + connectionBoxes * CONNECTION_BOXES_SPEED;   //мин
 
         currentNormTime = time;
-        return time;
+        collectOpData();
     }
 
     /**
@@ -139,5 +155,14 @@ public class PlateAssmNodesController extends AbstractOpPlate {
         measure = controller.getCmbxTimeMeasurement().getValue();
     }
 
+    private void collectOpData(){
+        opData.setPostLocks(postLocks);
+        opData.setDoubleLocks(doubleLocks);
+        opData.setMirrors(mirrors);
+        opData.setDetectors(detectors);
+        opData.setConnectionBoxes(connectionBoxes);
+
+        opData.setAssmTime(currentNormTime);
+    }
 
 }

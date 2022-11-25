@@ -9,10 +9,13 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXAssemblingType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
+import ru.wert.datapik.chogori.calculator.entities.OpLevelingSealer;
+import ru.wert.datapik.chogori.calculator.entities.OpPaintAssm;
 import ru.wert.datapik.chogori.calculator.enums.EAssemblingType;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
@@ -47,7 +50,12 @@ public class PlatePaintAssmController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IMenuCalculator controller;
+    private IFormMenu controller;
+    private OpPaintAssm opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private int along; //Параметр А вдоль штанги
     private int across; //Параметр B поперек штанги
@@ -55,9 +63,17 @@ public class PlatePaintAssmController extends AbstractOpPlate {
     private double pantingSpeed;// Скорость нанесения покрытия
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpPaintAssm opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
+        if(opData == null){
+            this.opData = new OpPaintAssm();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
+
         new BXAssemblingType().create(cmbxAssemblingType);
 
         setZeroValues();
@@ -95,7 +111,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
@@ -126,7 +142,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
         if(area == 0.0) time = 0.0;
 
         currentNormTime = time;//результат в минутах
-        return time;
+        collectOpData();
     }
 
     /**
@@ -152,6 +168,22 @@ public class PlatePaintAssmController extends AbstractOpPlate {
         across = IntegerParser.getValue(tfAcross);
         pantingSpeed = cmbxAssemblingType.getValue().getSpeed();
 
+    }
+
+    private void collectOpData(){
+        opData.setArea(area);
+        opData.setAlong(along);
+        opData.setAcross(across);
+        opData.setAssmType(cmbxAssemblingType.getValue());
+
+        opData.setPaintTime(currentNormTime);
+    }
+
+    private void fillOpData(){
+        tfArea.setText(String.valueOf(opData.getArea()));
+        tfAlong.setText(String.valueOf(opData.getAlong()));
+        tfAcross.setText(String.valueOf(opData.getAcross()));
+        cmbxAssemblingType.setValue(opData.getAssmType());
     }
 
 }

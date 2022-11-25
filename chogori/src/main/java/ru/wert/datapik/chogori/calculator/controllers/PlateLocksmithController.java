@@ -9,8 +9,11 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
+import ru.wert.datapik.chogori.calculator.entities.OpLevelingSealer;
+import ru.wert.datapik.chogori.calculator.entities.OpLocksmith;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
@@ -43,7 +46,12 @@ public class PlateLocksmithController extends AbstractOpPlate {
     @FXML
     private Label lblOperationName;
 
-    private IMenuCalculator controller;
+    private IFormMenu controller;
+    private OpLocksmith opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private int rivets; //Количество заклепок
     private int countersinkings; //количество зенкуемых отверстий
@@ -52,9 +60,17 @@ public class PlateLocksmithController extends AbstractOpPlate {
     private int bigSawings; //Количество резов на большой пиле
     private ETimeMeasurement measure;
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpLocksmith opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
+        if(opData == null){
+            this.opData = new OpLocksmith();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
+
         setZeroValues();
         setNormTime();
 
@@ -86,7 +102,7 @@ public class PlateLocksmithController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
@@ -104,7 +120,7 @@ public class PlateLocksmithController extends AbstractOpPlate {
                 + bigSawings * BIG_SAWING_SPEED;   //мин
 
         currentNormTime = time;
-        return time;
+        collectOpData();
     }
 
     /**
@@ -131,6 +147,16 @@ public class PlateLocksmithController extends AbstractOpPlate {
         smallSawings = IntegerParser.getValue(tfSmallSawings);
         bigSawings = IntegerParser.getValue(tfBigSawings);
         measure = controller.getCmbxTimeMeasurement().getValue();
+    }
+
+    private void collectOpData(){
+        opData.setRivets(rivets);
+        opData.setCountersinkings(countersinkings);
+        opData.setThreadings(threadings);
+        opData.setSmallSawings(smallSawings);
+        opData.setBigSawings(bigSawings);
+
+        opData.setMechTime(currentNormTime);
     }
 
 

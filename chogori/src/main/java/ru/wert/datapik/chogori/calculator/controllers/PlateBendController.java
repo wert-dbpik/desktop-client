@@ -10,9 +10,12 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
+import ru.wert.datapik.chogori.calculator.entities.OpAssmCutting;
+import ru.wert.datapik.chogori.calculator.entities.OpBending;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.EBendingTool;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -40,16 +43,29 @@ public class PlateBendController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IMenuCalculator controller;
+    private IFormMenu controller;
+    private OpBending opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private int bends;
     private int men;
     private double toolRatio;
     private ETimeMeasurement measure;
 
-    public void init(IMenuCalculator controller){
+    public void init(IFormMenu controller, OpBending opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
+        if(opData == null){
+            this.opData = new OpBending();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
+
         new BXBendingTool().create(cmbxBendingTool);
         new TFColoredInteger(tfBendings, this);
         new TFColoredInteger(tfMen, this);
@@ -82,7 +98,7 @@ public class PlateBendController extends AbstractOpPlate {
     }
 
     @Override//AbstractOpPlate
-    public double countNorm(){
+    public void countNorm(){
 
         countInitialValues();
 
@@ -93,7 +109,7 @@ public class PlateBendController extends AbstractOpPlate {
                 * BENDING_SERVICE_RATIO;
 
         currentNormTime = time;
-        return time;
+        collectOpData();
     }
 
     /**
@@ -115,6 +131,14 @@ public class PlateBendController extends AbstractOpPlate {
         men = IntegerParser.getValue(tfMen);
         toolRatio = cmbxBendingTool.getValue().getToolRatio();
         measure = controller.getCmbxTimeMeasurement().getValue();
+    }
+
+    private void collectOpData(){
+        opData.setBends(bends);
+        opData.setMen(men);
+        opData.setTool(cmbxBendingTool.getValue());
+
+        opData.setMechTime(currentNormTime);
     }
 
 
