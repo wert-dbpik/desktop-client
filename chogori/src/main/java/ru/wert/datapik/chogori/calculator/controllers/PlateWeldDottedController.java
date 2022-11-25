@@ -7,13 +7,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
+import ru.wert.datapik.chogori.calculator.entities.OpWeldingDotted;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class WeldingDottedController extends AbstractOperationCounter {
+public class PlateWeldDottedController extends AbstractOpPlate {
 
     @Getter
     private ENormType normType = ENormType.NORM_MECHANICAL;
@@ -25,18 +27,23 @@ public class WeldingDottedController extends AbstractOperationCounter {
     private ImageView ivDeleteOperation;
 
     @FXML
-    private TextField tfNumOfParts;
+    private TextField tfParts;
 
     @FXML
-    private TextField tfNumOfDots;
+    private TextField tfDots;
 
     @FXML
-    private TextField tfNumOfDrops;
+    private TextField tfDrops;
 
     @FXML
     private TextField tfNormTime;
 
     private IMenuCalculator controller;
+    private OpWeldingDotted opData;
+
+    public OpData getOpData(){
+        return opData;
+    }
 
     private int parts; //Количество элементов
     private int dots; //Количество точек
@@ -46,20 +53,21 @@ public class WeldingDottedController extends AbstractOperationCounter {
     public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
+        opData = new OpWeldingDotted();
         setZeroValues();
         setNormTime();
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        tfNumOfParts.textProperty().addListener((observable, oldValue, newValue) -> {
+        tfParts.textProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
-        tfNumOfDots.textProperty().addListener((observable, oldValue, newValue) -> {
+        tfDots.textProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
-        tfNumOfDrops.textProperty().addListener((observable, oldValue, newValue) -> {
+        tfDrops.textProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
         });
 
@@ -82,7 +90,7 @@ public class WeldingDottedController extends AbstractOperationCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractOperationCounter
+    @Override//AbstractOpPlate
     public double countNorm(){
 
         countInitialValues();
@@ -103,9 +111,9 @@ public class WeldingDottedController extends AbstractOperationCounter {
      */
     @Override
     public void setZeroValues() {
-        tfNumOfParts.setText("0");
-        tfNumOfDots.setText("0");
-        tfNumOfDrops.setText("0");
+        tfParts.setText("0");
+        tfDots.setText("0");
+        tfDrops.setText("0");
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
@@ -114,10 +122,18 @@ public class WeldingDottedController extends AbstractOperationCounter {
      */
     private void countInitialValues() {
 
-        parts = IntegerParser.getValue(tfNumOfParts);
-        dots = IntegerParser.getValue(tfNumOfDots);
-        drops = IntegerParser.getValue(tfNumOfDrops);
+        parts = IntegerParser.getValue(tfParts);
+        dots = IntegerParser.getValue(tfDots);
+        drops = IntegerParser.getValue(tfDrops);
+
         measure = controller.getCmbxTimeMeasurement().getValue();
+        collectOpData();
+    }
+
+    private void collectOpData(){
+        opData.setParts(parts);
+        opData.setDots(dots);
+        opData.setDrops(drops);
     }
 
 

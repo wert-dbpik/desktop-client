@@ -2,65 +2,60 @@ package ru.wert.datapik.chogori.calculator.controllers;
 
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
-import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
-import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
-import ru.wert.datapik.chogori.calculator.enums.EBendingTool;
+import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
-import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
+import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
 
-public class BendingController extends AbstractOperationCounter {
+public class PlateAssmCuttingsController extends AbstractOpPlate {
 
     @Getter
-    private ENormType normType = ENormType.NORM_MECHANICAL;
+    private ENormType normType = ENormType.NORM_ASSEMBLING;
 
     @FXML
-    private Label lblOperationName;
+    private TextField tfNormTime;
+
+    @FXML
+    private TextField tfSealer;
+
+    @FXML
+    private TextField tfSelfAdhSealer;
+
+    @FXML
+    private TextField tfInsulation;
 
     @FXML
     private ImageView ivDeleteOperation;
 
     @FXML
-    private TextField tfBendings;
-
-    @FXML
-    private TextField tfMen;
-
-    @FXML
-    private ComboBox<EBendingTool> cmbxBendingTool;
-
-    @FXML
-    private TextField tfNormTime;
+    private Label lblOperationName;
 
     private IMenuCalculator controller;
 
-    private int bends;
-    private int men;
-    private double toolRatio;
+    private double sealer; //Уплотнитель на ребро корпуса
+    private double selfAdhSealer; //Уплотнитель самоклеющийся
+    private double insulation; //Утеплитель
+
     private ETimeMeasurement measure;
 
     public void init(IMenuCalculator controller){
         this.controller = controller;
         controller.getAddedOperations().add(this);
-        new BXBendingTool().create(cmbxBendingTool);
-        new TFColoredInteger(tfBendings, this);
-        new TFColoredInteger(tfMen, this);
         setZeroValues();
         setNormTime();
 
-        lblOperationName.setStyle("-fx-text-fill: saddlebrown");
+        new TFColoredDouble(tfSealer, this);
+        new TFColoredDouble(tfSelfAdhSealer, this);
+        new TFColoredDouble(tfInsulation, this);
 
-        cmbxBendingTool.valueProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
+        lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
         ivDeleteOperation.setOnMouseClicked(e->{
             controller.getAddedOperations().remove(this);
@@ -81,16 +76,19 @@ public class BendingController extends AbstractOperationCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractOperationCounter
+    @Override//AbstractOpPlate
     public double countNorm(){
 
-        countInitialValues();
+         countInitialValues();
 
-        final double BENDING_SERVICE_RATIO = 1.25; //коэфффициент, учитывающий 25% времени на обслуживание при гибке
-        final double BENDING_SPEED = 0.15; //корость гибки, мин/гиб
+        final double SEALER_SPEED = 40 * SEC_TO_MIN; //скорость монтажа уплотнителя
+        final double SELF_ADH_SEALER_SPEED =  20 * SEC_TO_MIN; //скорость наклейки уплотнителя
+        final double INSULATION_SPEED = 5.5; //скорость разметки, резки и укладки уплотнителя
+
         double time;
-        time =  bends * BENDING_SPEED * toolRatio * men  //мин
-                * BENDING_SERVICE_RATIO;
+        time =  sealer * SEALER_SPEED
+                + selfAdhSealer * SELF_ADH_SEALER_SPEED
+                + insulation * INSULATION_SPEED;//мин
 
         currentNormTime = time;
         return time;
@@ -101,8 +99,10 @@ public class BendingController extends AbstractOperationCounter {
      */
     @Override
     public void setZeroValues() {
-        tfBendings.setText("1");
-        tfMen.setText("1");
+        tfSealer.setText("0");
+        tfSelfAdhSealer.setText("0");
+        tfInsulation.setText("0");
+
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
@@ -111,10 +111,12 @@ public class BendingController extends AbstractOperationCounter {
      */
     private void countInitialValues() {
 
-        bends = IntegerParser.getValue(tfBendings);
-        men = IntegerParser.getValue(tfMen);
-        toolRatio = cmbxBendingTool.getValue().getToolRatio();
+        sealer = DoubleParser.getValue(tfSealer);
+        selfAdhSealer = DoubleParser.getValue(tfSelfAdhSealer);
+        insulation = DoubleParser.getValue(tfInsulation);
+
         measure = controller.getCmbxTimeMeasurement().getValue();
+
     }
 
 

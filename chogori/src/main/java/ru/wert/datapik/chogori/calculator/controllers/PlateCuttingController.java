@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.CalculatorPartController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
@@ -15,7 +15,7 @@ import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class CuttingController  extends AbstractOperationCounter {
+public class PlateCuttingController extends AbstractOpPlate {
 
     @Getter
     private ENormType normType = ENormType.NORM_MECHANICAL;
@@ -91,7 +91,7 @@ public class CuttingController  extends AbstractOperationCounter {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override//AbstractOperationCounter
+    @Override//AbstractOpPlate
     public void setZeroValues(){
         tfHoles.setText("0");
         tfPerfHoles.setText("0");
@@ -112,7 +112,7 @@ public class CuttingController  extends AbstractOperationCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractOperationCounter
+    @Override//AbstractOpPlate
     public double countNorm(){
 
         countInitialValues();

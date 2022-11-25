@@ -12,7 +12,7 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
-import static ru.wert.datapik.chogori.calculator.AbstractOperationCounter.*;
+import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
 public class CalculatorAssmController implements IMenuCalculator, ICalculator {
 
@@ -50,7 +50,7 @@ public class CalculatorAssmController implements IMenuCalculator, ICalculator {
     private TextField tfTotalTime;
 
 
-    @Getter private ObservableList<AbstractOperationCounter> addedOperations;
+    @Getter private ObservableList<AbstractOpPlate> addedOperations;
 
 
     @Override
@@ -85,7 +85,7 @@ public class CalculatorAssmController implements IMenuCalculator, ICalculator {
         });
 
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
-            for(AbstractOperationCounter nc : addedOperations){
+            for(AbstractOpPlate nc : addedOperations){
                 nc.setTimeMeasurement(newValue);
             }
 
@@ -106,7 +106,7 @@ public class CalculatorAssmController implements IMenuCalculator, ICalculator {
         double paintingTime = 0.0;
         double assemblingTime = 0.0;
         double packingTime = 0.0;
-        for(AbstractOperationCounter cn: addedOperations){
+        for(AbstractOpPlate cn: addedOperations){
             if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
                 mechanicalTime += cn.getCurrentNormTime();
             else if(cn.getNormType().equals(ENormType.NORM_PAINTING))

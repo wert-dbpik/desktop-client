@@ -8,7 +8,7 @@ import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 public interface IMenuCalculator {
 
-    ObservableList<AbstractOperationCounter> getAddedOperations();
+    ObservableList<AbstractOpPlate> getAddedOperations();
 
     ListView<VBox> getListViewTechOperations();
 

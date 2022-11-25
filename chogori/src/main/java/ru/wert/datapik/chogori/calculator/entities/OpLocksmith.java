@@ -3,12 +3,11 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class OpLocksmith extends NormTimes{
+public class OpLocksmith extends OpData {
 
     private Integer rivets; //Вытяжные заклепки
     private Integer countersinkings; //Зенкования

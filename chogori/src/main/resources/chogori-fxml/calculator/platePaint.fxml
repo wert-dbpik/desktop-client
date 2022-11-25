@@ -9,11 +9,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.PaintingAssemblingController">
+<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.PlatePaintController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label fx:id="lblOperationName" text="ПОКРАСКА СБОРОЧНОЙ ЕДИНИЦЫ" textFill="#2f23d0">
+            <Label fx:id="lblOperationName" text="ПОКРАСКА" textFill="#2f23d0">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
@@ -21,7 +21,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <ImageView fx:id="ivHelpOnPainting" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="ivHelpOnA" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../chogori-pics/btns/help.png" />
                </image>
@@ -41,36 +41,12 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
                <children>
-                  <Label text="S покр., м.кв.">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfArea" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <Label text="Тип сборки">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="cmbxAssemblingType" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="149.0" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" spacing="10.0">
-         <children>
-            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
-               <children>
                   <Label text="А(вдоль), мм">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfAlong" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfA" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
@@ -80,7 +56,27 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfAcross" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <TextField fx:id="tfB" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
+               <children>
+                  <Label text="Т навеш, сек">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfHangingTime" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </children>
+            </VBox>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Сложность">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cmbxDifficulty" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
          </children>

@@ -19,7 +19,7 @@ import ru.wert.datapik.winform.window_decoration.WindowDecoration;
 
 import java.io.IOException;
 
-public class DetailController implements IOperation {
+public class PlateDetailController implements IOperation {
 
     @Getter
     private ENormType normType = ENormType.NORM_DETAIL;

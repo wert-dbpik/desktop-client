@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
@@ -18,7 +18,7 @@ import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class WeldingContinuousController extends AbstractOperationCounter {
+public class PlateWeldContinuousController extends AbstractOpPlate {
 
     @Getter
     private ENormType normType = ENormType.NORM_MECHANICAL;
@@ -36,7 +36,7 @@ public class WeldingContinuousController extends AbstractOperationCounter {
     private CheckBox chbxUseStripping;
 
     @FXML
-    private CheckBox chbxUseNumOfSeams;
+    private CheckBox chbxPreEnterSeams;
 
     @FXML
     private Label lblNumOfSeams;
@@ -100,7 +100,7 @@ public class WeldingContinuousController extends AbstractOperationCounter {
             setNormTime();
         });
 
-        chbxUseNumOfSeams.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        chbxPreEnterSeams.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue){
                 enableNumOfSeams();
             } else {
@@ -160,7 +160,7 @@ public class WeldingContinuousController extends AbstractOperationCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractOperationCounter
+    @Override//AbstractOpPlate
     public double countNorm(){
 
         countInitialValues();
@@ -209,7 +209,7 @@ public class WeldingContinuousController extends AbstractOperationCounter {
         tfSeamLength.setText("0");
         enableNumOfSeams();
         disableNumOfSeamsCounting();
-        chbxUseNumOfSeams.setSelected(true);
+        chbxPreEnterSeams.setSelected(true);
         chbxUseStripping.setSelected(false);
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }

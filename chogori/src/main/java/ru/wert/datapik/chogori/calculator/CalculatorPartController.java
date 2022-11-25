@@ -14,7 +14,7 @@ import ru.wert.datapik.chogori.common.components.BXMaterial;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.client.entity.models.Material;
 
-import static ru.wert.datapik.chogori.calculator.AbstractOperationCounter.*;
+import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
 public class CalculatorPartController implements IMenuCalculator, ICalculator {
 
@@ -74,7 +74,7 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
     private double paramA; //параметр А
     private double paramB; //параметр B
 
-    @Getter private ObservableList<AbstractOperationCounter> addedOperations;
+    @Getter private ObservableList<AbstractOpPlate> addedOperations;
 
     @Override
     public void init(TextField tfName) {
@@ -103,7 +103,7 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
         });
 
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
-            for(AbstractOperationCounter nc : addedOperations){
+            for(AbstractOpPlate nc : addedOperations){
                 nc.setTimeMeasurement(newValue);
             }
 
@@ -114,14 +114,14 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
 
         cmbxMaterial.valueProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractOperationCounter nc : addedOperations){
+            for(AbstractOpPlate nc : addedOperations){
                 nc.setNormTime();;
             }
         });
 
         tfA.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractOperationCounter nc : addedOperations){
+            for(AbstractOpPlate nc : addedOperations){
                 nc.setNormTime();
                 countSumNormTimeByShops();
             }
@@ -129,7 +129,7 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
 
         tfB.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractOperationCounter nc : addedOperations){
+            for(AbstractOpPlate nc : addedOperations){
                 nc.setNormTime();
                 countSumNormTimeByShops();
             }
@@ -164,7 +164,7 @@ public class CalculatorPartController implements IMenuCalculator, ICalculator {
     public void countSumNormTimeByShops(){
         double mechanicalTime = 0.0;
         double paintingTime = 0.0;
-        for(AbstractOperationCounter cn: addedOperations){
+        for(AbstractOpPlate cn: addedOperations){
             if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
                 mechanicalTime += cn.getCurrentNormTime();
             else if(cn.getNormType().equals(ENormType.NORM_PAINTING))

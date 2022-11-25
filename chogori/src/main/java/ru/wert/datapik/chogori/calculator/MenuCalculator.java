@@ -13,14 +13,14 @@ import java.io.IOException;
 public class MenuCalculator extends ContextMenu {
 
     private IMenuCalculator calculator;
-    private ObservableList<AbstractOperationCounter> addedOperations;
+    private ObservableList<AbstractOpPlate> addedOperations;
 
     private ListView<VBox> listViewTechOperations;
 
     /**
      * Create a new ContextMenu
      */
-    public MenuCalculator(IMenuCalculator calculator, ObservableList<AbstractOperationCounter> addedOperations, ListView<VBox> listViewTechOperations) {
+    public MenuCalculator(IMenuCalculator calculator, ObservableList<AbstractOpPlate> addedOperations, ListView<VBox> listViewTechOperations) {
         this.calculator = calculator;
         this.addedOperations = addedOperations;
         this.listViewTechOperations = listViewTechOperations;
@@ -41,7 +41,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddCutting(){
         MenuItem addCutting = new MenuItem("Резка и зачистка");
         addCutting.setOnAction(event -> {
-            if(isDuplicate(CuttingController.class.getSimpleName())) return ;
+            if(isDuplicate(PlateCuttingController.class.getSimpleName())) return ;
             addCattingOperation();
         });
         return addCutting;
@@ -51,7 +51,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddBending(){
         MenuItem addBending = new MenuItem("Гибка");
         addBending.setOnAction(event -> {
-            if(isDuplicate(BendingController.class.getSimpleName())) return ;
+            if(isDuplicate(PlateBendController.class.getSimpleName())) return ;
             addBendingOperation();
         });
         return addBending;
@@ -62,7 +62,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddLocksmith(){
         MenuItem addLocksmith = new MenuItem("Слесарные операции");
         addLocksmith.setOnAction(event -> {
-            if(isDuplicate(LocksmithController.class.getSimpleName())) return ;
+            if(isDuplicate(PlateLocksmithController.class.getSimpleName())) return ;
             addLocksmithOperation();
         });
         return addLocksmith;
@@ -84,7 +84,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddWeldingDotted(){
         MenuItem addWeldingDotted = new MenuItem("Сварка точечная");
         addWeldingDotted.setOnAction(event -> {
-            if(isDuplicate(WeldingDottedController.class.getSimpleName())) return ;
+            if(isDuplicate(PlateWeldDottedController.class.getSimpleName())) return ;
             addWeldingDottedOperation();
         });
         return addWeldingDotted;
@@ -97,7 +97,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddPainting(){
         MenuItem addPainting = new MenuItem("Покраска детали");
         addPainting.setOnAction(event -> {
-            if(isDuplicate(PaintingController.class.getSimpleName())) return ;
+            if(isDuplicate(PlatePaintController.class.getSimpleName())) return ;
             addPaintingOperation();
         });
         return addPainting;
@@ -109,7 +109,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddPaintingAssembling(){
         MenuItem addPaintingAssembling = new MenuItem("Покраска сборочной единицы");
         addPaintingAssembling.setOnAction(event -> {
-            if(isDuplicate(PaintingAssemblingController.class.getSimpleName())) return ;
+            if(isDuplicate(PlatePaintAssmController.class.getSimpleName())) return ;
             addPaintingAssemblingOperation();
         });
         return addPaintingAssembling;
@@ -121,7 +121,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddAssemblingNuts(){
         MenuItem addAssemblingNuts = new MenuItem("Сборка крепежа");
         addAssemblingNuts.setOnAction(event -> {
-            if(isDuplicate(AssmNutsController.class.getSimpleName())) return ;
+            if(isDuplicate(PlateAssmNutsController.class.getSimpleName())) return ;
             addAssemblingNutsOperation();
         });
         return addAssemblingNuts;
@@ -132,7 +132,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddAssemblingCuttings(){
         MenuItem addAssemblingCuttings = new MenuItem("Сборка раскройного материала");
         addAssemblingCuttings.setOnAction(event -> {
-            if(isDuplicate(AssmCuttingsController.class.getSimpleName())) return ;
+            if(isDuplicate(PlateAssmCuttingsController.class.getSimpleName())) return ;
             addAssemblingCuttingsOperation();
         });
         return addAssemblingCuttings;
@@ -143,7 +143,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddAssemblingNodes(){
         MenuItem addAssemblingNodes = new MenuItem("Сборка стандартных узлов");
         addAssemblingNodes.setOnAction(event -> {
-            if(isDuplicate(AssmNodesController.class.getSimpleName())) return ;
+            if(isDuplicate(PlateAssmNodesController.class.getSimpleName())) return ;
             addAssemblingNodesOperation();
         });
         return addAssemblingNodes;
@@ -154,7 +154,7 @@ public class MenuCalculator extends ContextMenu {
     public MenuItem getAddLevelingSealer(){
         MenuItem addLevelingSealer = new MenuItem("Нанесение наливного утеплителя");
         addLevelingSealer.setOnAction(event -> {
-            if(isDuplicate(LevelingSealerController.class.getSimpleName())) return ;
+            if(isDuplicate(PlateLevelingSealerController.class.getSimpleName())) return ;
             addLevelingSealerOperation();
         });
         return addLevelingSealer;
@@ -164,7 +164,7 @@ public class MenuCalculator extends ContextMenu {
      * Ищем дубликат операции в списке addedOperations по clazz
      */
     private boolean isDuplicate(String clazz){
-        for(AbstractOperationCounter cn: addedOperations){
+        for(AbstractOpPlate cn: addedOperations){
             if(cn.getClass().getSimpleName().equals(clazz))
                 return true;
         }
@@ -180,10 +180,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addDetailOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/detail.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateDetail.fxml"));
             VBox detail = loader.load();
             detail.setId("calculator");
-            DetailController controller = loader.getController();
+            PlateDetailController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(detail);
         } catch (IOException e) {
@@ -197,10 +197,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addCattingOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/cutting.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateCutting.fxml"));
             VBox cutting = loader.load();
             cutting.setId("calculator");
-            CuttingController controller = loader.getController();
+            PlateCuttingController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(cutting);
         } catch (IOException e) {
@@ -213,10 +213,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addBendingOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/bending.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateBend.fxml"));
             VBox bending = loader.load();
             bending.setId("calculator");
-            BendingController controller = loader.getController();
+            PlateBendController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(bending);
         } catch (IOException e) {
@@ -229,10 +229,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addLocksmithOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/locksmith.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateLocksmith.fxml"));
             VBox locksmith = loader.load();
             locksmith.setId("calculator");
-            LocksmithController controller = loader.getController();
+            PlateLocksmithController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(locksmith);
         } catch (IOException e) {
@@ -247,10 +247,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addPaintingOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/painting.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/platePaint.fxml"));
             VBox painting = loader.load();
             painting.setId("calculator");
-            PaintingController controller = loader.getController();
+            PlatePaintController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(painting);
         } catch (IOException e) {
@@ -263,10 +263,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addPaintingAssemblingOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/paintingAssm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/platePaintAssm.fxml"));
             VBox paintingAssembling = loader.load();
             paintingAssembling.setId("calculator");
-            PaintingAssemblingController controller = loader.getController();
+            PlatePaintAssmController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(paintingAssembling);
         } catch (IOException e) {
@@ -281,10 +281,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addWeldingContinuousOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/weldingContinuous.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateWeldContinuous.fxml"));
             VBox weldingLongSeam = loader.load();
             weldingLongSeam.setId("calculator");
-            WeldingContinuousController controller = loader.getController();
+            PlateWeldContinuousController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(weldingLongSeam);
         } catch (IOException e) {
@@ -297,10 +297,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addWeldingDottedOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/weldingDotted.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateWeldDotted.fxml"));
             VBox weldingDotted = loader.load();
             weldingDotted.setId("calculator");
-            WeldingDottedController controller = loader.getController();
+            PlateWeldDottedController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(weldingDotted);
         } catch (IOException e) {
@@ -315,10 +315,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addAssemblingNutsOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assmNuts.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateAssmNuts.fxml"));
             VBox assemblingNuts = loader.load();
             assemblingNuts.setId("calculator");
-            AssmNutsController controller = loader.getController();
+            PlateAssmNutsController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(assemblingNuts);
         } catch (IOException e) {
@@ -331,10 +331,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addAssemblingCuttingsOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assmCuttings.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateAssmCuttings.fxml"));
             VBox assemblingCuttings = loader.load();
             assemblingCuttings.setId("calculator");
-            AssmCuttingsController controller = loader.getController();
+            PlateAssmCuttingsController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(assemblingCuttings);
         } catch (IOException e) {
@@ -347,10 +347,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addAssemblingNodesOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/assmNodes.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateAssmNodes.fxml"));
             VBox assemblingNodes = loader.load();
             assemblingNodes.setId("calculator");
-            AssmNodesController controller = loader.getController();
+            PlateAssmNodesController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(assemblingNodes);
         } catch (IOException e) {
@@ -365,10 +365,10 @@ public class MenuCalculator extends ContextMenu {
      */
     private void addLevelingSealerOperation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/levelingSealer.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateLevelingSealer.fxml"));
             VBox levelingSealer = loader.load();
             levelingSealer.setId("calculator");
-            LevelingSealerController controller = loader.getController();
+            PlateLevelingSealerController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(levelingSealer);
         } catch (IOException e) {

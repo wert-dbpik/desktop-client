@@ -10,11 +10,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxWidth="1.7976931348623157E308" prefWidth="441.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.DetailController">
+<VBox maxWidth="1.7976931348623157E308" prefWidth="441.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.PlateLocksmithController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label fx:id="lblOperationName" text="ДЕТАЛЬ" textFill="#2f23d0">
+            <Label fx:id="lblOperationName" text="СБОРКА" textFill="#2f23d0">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>

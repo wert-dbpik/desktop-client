@@ -9,11 +9,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.CuttingController">
+<VBox maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.PlatePaintAssmController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label fx:id="lblOperationName" text="РАСКРОЙ И ЗАЧИСТКА" textFill="#2f23d0">
+            <Label fx:id="lblOperationName" text="ПОКРАСКА СБОРОЧНОЙ ЕДИНИЦЫ" textFill="#2f23d0">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
@@ -21,7 +21,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <ImageView fx:id="ivHelpOnUseStripping" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="ivHelpOnPainting" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../chogori-pics/btns/help.png" />
                </image>
@@ -41,53 +41,53 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
                <children>
-                  <Label text="N отв">
+                  <Label text="S покр., м.кв.">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfHoles" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
-               <children>
-                  <Label text="N перф. отв">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfPerfHoles" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0">
-               <children>
-                  <Label text="P экстра , мм">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfExtraPerimeter" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
+                  <TextField fx:id="tfArea" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
             <VBox spacing="5.0">
                <children>
-                  <Label text="Зачистка">
+                  <Label text="Тип сборки">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <CheckBox fx:id="chbxStripping" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
+                  <ComboBox fx:id="cmbxAssemblingType" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="149.0" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <Label text="А(вдоль), мм">
                      <font>
                         <Font size="14.0" />
                      </font>
-                  </CheckBox>
+                  </Label>
+                  <TextField fx:id="tfAlong" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <Label text="В(поперек), мм">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfAcross" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
                </children>
             </VBox>
          </children>
       </HBox>
       <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
-            <Label text="T рез : ">
+            <Label text="T покр : ">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -102,9 +102,6 @@
                </font>
             </Label>
          </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
       </HBox>
       <Separator maxWidth="1.7976931348623157E308" />
    </children>

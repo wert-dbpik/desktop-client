@@ -11,7 +11,7 @@ import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
  * Изначальный расчет нормы времени производится в минутах
  * Конвертация в секунды происходит в методе setTimeMeasurement()
  */
-public abstract class AbstractOperationCounter implements IOperation {
+public abstract class AbstractOpPlate implements IOperation {
 
     // КОНСТАНТЫ
     public static final double MM_TO_M = 0.001; //перевод мм в метры
@@ -34,7 +34,7 @@ public abstract class AbstractOperationCounter implements IOperation {
     private Label lblNormTimeMeasure;
 
 
-    public AbstractOperationCounter() {
+    public AbstractOpPlate() {
     }
 
     /**

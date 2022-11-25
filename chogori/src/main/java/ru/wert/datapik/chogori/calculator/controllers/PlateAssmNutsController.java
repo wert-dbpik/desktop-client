@@ -7,35 +7,38 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class LocksmithController extends AbstractOperationCounter {
+public class PlateAssmNutsController extends AbstractOpPlate {
 
     @Getter
-    private ENormType normType = ENormType.NORM_MECHANICAL;
+    private ENormType normType = ENormType.NORM_ASSEMBLING;
 
     @FXML
     private TextField tfNormTime;
 
     @FXML
-    private TextField tfCountersinkings;
+    private TextField tfOthers;
 
     @FXML
-    private TextField tfThreadings;
+    private TextField tfGroundSets;
+
+    @FXML
+    private TextField tfVSHGs;
 
     @FXML
     private TextField tfRivets;
 
     @FXML
-    private TextField tfSmallSawings;
+    private Label lblNormTimeMeasure;
 
     @FXML
-    private TextField tfBigSawings;
+    private TextField tfRivetNuts;
 
     @FXML
     private ImageView ivDeleteOperation;
@@ -43,13 +46,18 @@ public class LocksmithController extends AbstractOperationCounter {
     @FXML
     private Label lblOperationName;
 
+    @FXML
+    private TextField tfScrews;
+
     private IMenuCalculator controller;
 
+    private int screws; //Количество винтов
+    private int VSHGs; //Количество комплектов ВШГ
     private int rivets; //Количество заклепок
-    private int countersinkings; //количество зенкуемых отверстий
-    private int threadings; //Количество нарезаемых резьб
-    private int smallSawings; //Количество резов на малой пиле
-    private int bigSawings; //Количество резов на большой пиле
+    private int rivetNuts; //Количество аклепочных гаек
+    private int groundSets; //Количество комплектов заземления с этикеткой
+    private int others; //Количество другого крепежа
+
     private ETimeMeasurement measure;
 
     public void init(IMenuCalculator controller){
@@ -58,11 +66,13 @@ public class LocksmithController extends AbstractOperationCounter {
         setZeroValues();
         setNormTime();
 
+        new TFColoredInteger(tfScrews, this);
+        new TFColoredInteger(tfVSHGs, this);
         new TFColoredInteger(tfRivets, this);
-        new TFColoredInteger(tfCountersinkings, this);
-        new TFColoredInteger(tfThreadings, this);
-        new TFColoredInteger(tfSmallSawings, this);
-        new TFColoredInteger(tfBigSawings, this);
+        new TFColoredInteger(tfRivetNuts, this);
+        new TFColoredInteger(tfGroundSets, this);
+        new TFColoredInteger(tfOthers, this);
+
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
@@ -85,23 +95,25 @@ public class LocksmithController extends AbstractOperationCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractOperationCounter
+    @Override//AbstractOpPlate
     public double countNorm(){
 
         countInitialValues();
 
-        final double RIVETS_SPEED = 18 * SEC_TO_MIN; //скорость установки вытяжной заклепки
-        final double COUNTERSINKING_SPEED = 0.31; //скорость сверления и зенковки
-        final double THREADING_SPEED = 0.37; //скорость нарезания резьбы
-        final double SMALL_SAWING_SPEED = 0.2; //скорость пиления на малой пиле
-        final double BIG_SAWING_SPEED = 1.0; //скорость пиления на большой пиле
+        final double SCREWS_SPEED = 0.25; //скорость установки вытяжных винтов
+        final double VSHGS_SPEED = 0.4; //скорость установки комплектов ВШГ
+        final double RIVETS_SPEED = 18 * SEC_TO_MIN; //скорость установки заклепок
+        final double RIVET_NUTS_SPEED = 22 * SEC_TO_MIN; //скорость установки заклепочных гаек
+        final double GROUND_SETS_SPEED = 1.0; //скорость установки комплекта заземления с этикеткой
+        final double OTHERS_SPEED = 15 * SEC_TO_MIN; //скорость установки другого крепежа
 
         double time;
-        time =  rivets * RIVETS_SPEED
-                + countersinkings * COUNTERSINKING_SPEED
-                + threadings * THREADING_SPEED
-                + smallSawings * SMALL_SAWING_SPEED
-                + bigSawings * BIG_SAWING_SPEED;   //мин
+        time =  screws * SCREWS_SPEED
+                + VSHGs * VSHGS_SPEED
+                + rivets * RIVETS_SPEED
+                + rivetNuts * RIVET_NUTS_SPEED
+                + groundSets * GROUND_SETS_SPEED
+                + others * OTHERS_SPEED;   //мин
 
         currentNormTime = time;
         return time;
@@ -112,11 +124,12 @@ public class LocksmithController extends AbstractOperationCounter {
      */
     @Override
     public void setZeroValues() {
+        tfScrews.setText("0");
+        tfVSHGs.setText("0");
         tfRivets.setText("0");
-        tfCountersinkings.setText("0");
-        tfThreadings.setText("0");
-        tfSmallSawings.setText("0");
-        tfBigSawings.setText("0");
+        tfRivetNuts.setText("0");
+        tfGroundSets.setText("0");
+        tfOthers.setText("0");
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
 
@@ -125,11 +138,13 @@ public class LocksmithController extends AbstractOperationCounter {
      */
     private void countInitialValues() {
 
+        screws = IntegerParser.getValue(tfScrews);
+        VSHGs = IntegerParser.getValue(tfVSHGs);
         rivets = IntegerParser.getValue(tfRivets);
-        countersinkings = IntegerParser.getValue(tfCountersinkings);
-        threadings = IntegerParser.getValue(tfThreadings);
-        smallSawings = IntegerParser.getValue(tfSmallSawings);
-        bigSawings = IntegerParser.getValue(tfBigSawings);
+        rivetNuts = IntegerParser.getValue(tfRivetNuts);
+        groundSets = IntegerParser.getValue(tfGroundSets);
+        others = IntegerParser.getValue(tfOthers);
+
         measure = controller.getCmbxTimeMeasurement().getValue();
     }
 

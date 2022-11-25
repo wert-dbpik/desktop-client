@@ -8,7 +8,7 @@ import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OpPaintingAssm  extends NormTimes{
+public class OpPaintingAssm  extends OpData {
 
     private double area;
     private Integer along;

@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
 import ru.wert.datapik.chogori.calculator.components.BXSealersWidth;
@@ -17,7 +17,7 @@ import ru.wert.datapik.chogori.calculator.enums.ESealersWidth;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class LevelingSealerController extends AbstractOperationCounter {
+public class PlateLevelingSealerController extends AbstractOpPlate {
 
     @Getter
     private ENormType normType = ENormType.NORM_ASSEMBLING;
@@ -54,9 +54,9 @@ public class LevelingSealerController extends AbstractOperationCounter {
 
     private IMenuCalculator controller;
 
-    private int paramA;
-    private int paramB;
-    private double perimeter;
+    private int paramA; //Размер А
+    private int paramB;//Размер Б
+    private double perimeter; //
 
     private ETimeMeasurement measure;
 
@@ -94,7 +94,7 @@ public class LevelingSealerController extends AbstractOperationCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractOperationCounter
+    @Override//AbstractOpPlate
     public double countNorm(){
 
         countInitialValues();

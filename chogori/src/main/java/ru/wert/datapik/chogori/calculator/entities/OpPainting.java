@@ -3,15 +3,12 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.wert.datapik.chogori.calculator.IOperation;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
-
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class OpPainting extends NormTimes{
+public class OpPainting extends OpData {
 
     private Integer along;
     private Integer across;

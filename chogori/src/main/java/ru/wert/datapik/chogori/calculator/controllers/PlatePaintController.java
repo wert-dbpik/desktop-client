@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.AbstractOperationCounter;
+import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.CalculatorPartController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IMenuCalculator;
@@ -18,7 +18,7 @@ import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.components.TFInteger;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
-public class PaintingController extends AbstractOperationCounter {
+public class PlatePaintController extends AbstractOpPlate {
 
     @Getter
     private ENormType normType = ENormType.NORM_PAINTING;
@@ -99,7 +99,7 @@ public class PaintingController extends AbstractOperationCounter {
         controller.countSumNormTimeByShops();
     }
 
-    @Override//AbstractOperationCounter
+    @Override//AbstractOpPlate
     public double countNorm(){
 
         countInitialValues();
