@@ -159,5 +159,13 @@ public class PlateLocksmithController extends AbstractOpPlate {
         opData.setMechTime(currentNormTime);
     }
 
+    private void fillOpData(){
+        tfRivets.setText(String.valueOf(opData.getRivets()));
+        tfCountersinkings.setText(String.valueOf(opData.getCountersinkings()));
+        tfThreadings.setText(String.valueOf(opData.getThreadings()));
+        tfSmallSawings.setText(String.valueOf(opData.getSmallSawings()));
+        tfBigSawings.setText(String.valueOf(opData.getBigSawings()));
+    }
+
 
 }

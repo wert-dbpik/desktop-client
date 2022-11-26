@@ -12,7 +12,6 @@ import ru.wert.datapik.chogori.calculator.FormPartController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
-import ru.wert.datapik.chogori.calculator.entities.OpBending;
 import ru.wert.datapik.chogori.calculator.entities.OpCutting;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
@@ -61,7 +60,7 @@ public class PlateCuttingController extends AbstractOpPlate {
     private double t; //Толщина материала
     private double paramA; //Параметр А развертки
     private double paramB; //Параметр B развертки
-    private boolean striping = false; //Применить зачистку
+    private boolean stripping = false; //Применить зачистку
     private int holes; //Количество отверстий в развертке
     private int perfHoles; //Количество перфораций в развертке
     private ETimeMeasurement measure; //Ед. измерения нормы времени
@@ -146,7 +145,7 @@ public class PlateCuttingController extends AbstractOpPlate {
 
         //Время зачистки
         double strippingTime; //мин
-        if(striping){
+        if(stripping){
             strippingTime = ((perimetre + PLUS_LENGTH) * 2.5 + holes) / 60;
         } else
             strippingTime = 0.0;
@@ -178,7 +177,7 @@ public class PlateCuttingController extends AbstractOpPlate {
         perimetre = 2 * (paramA + paramB) * MM_TO_M;
         area = paramA * paramB * MM2_TO_M2;
         extraPerimeter = IntegerParser.getValue(tfExtraPerimeter);
-        striping = chbxStripping.isSelected();
+        stripping = chbxStripping.isSelected();
         holes = IntegerParser.getValue(tfHoles);
         perfHoles = IntegerParser.getValue(tfPerfHoles);
         measure = controller.getCmbxTimeMeasurement().getValue();
@@ -189,9 +188,17 @@ public class PlateCuttingController extends AbstractOpPlate {
         opData.setHoles(holes);
         opData.setPerfHoles(perfHoles);
         opData.setExtraPerimeter(extraPerimeter);
-        opData.setStripping(striping);
+        opData.setStripping(stripping);
 
         opData.setMechTime(currentNormTime);
+    }
+
+    private void fillOpData(){
+        tfHoles.setText(String.valueOf(opData.getHoles()));
+        tfPerfHoles.setText(String.valueOf(opData.getHoles()));
+        tfExtraPerimeter.setText(String.valueOf(opData.getHoles()));
+        chbxStripping.setSelected(opData.isStripping());
+
     }
 
 }

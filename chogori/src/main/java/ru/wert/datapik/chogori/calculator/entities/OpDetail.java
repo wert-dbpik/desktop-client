@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.wert.datapik.chogori.calculator.IOpPlate;
+import ru.wert.datapik.chogori.calculator.enums.EOpType;
 import ru.wert.datapik.client.entity.models.Material;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OpDetail extends OpData {
 
+    private EOpType op = EOpType.DETAIL;
     private String name;
     private Material material;
     private Integer paramA;

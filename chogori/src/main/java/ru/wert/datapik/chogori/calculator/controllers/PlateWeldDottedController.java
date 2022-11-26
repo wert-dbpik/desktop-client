@@ -11,6 +11,7 @@ import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
+import ru.wert.datapik.chogori.calculator.entities.OpPaint;
 import ru.wert.datapik.chogori.calculator.entities.OpWeldDotted;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -50,10 +51,16 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     private int drops; //Количество прихваток
     private ETimeMeasurement measure;
 
-    public void init(IFormMenu controller){
+    public void init(IFormMenu controller, OpWeldDotted opData){
         this.controller = controller;
         controller.getAddedOperations().add(this);
-        opData = new OpWeldDotted();
+        if(opData == null){
+            this.opData = new OpWeldDotted();
+            setZeroValues();
+        } else {
+            this.opData = opData;
+            fillOpData();
+        }
 
         setZeroValues();
         setNormTime();
@@ -137,6 +144,12 @@ public class PlateWeldDottedController extends AbstractOpPlate {
         opData.setDrops(drops);
 
         opData.setMechTime(currentNormTime);
+    }
+
+    private void fillOpData(){
+        tfParts.setText(String.valueOf(opData.getParts()));
+        tfDots.setText(String.valueOf(opData.getDots()));
+        tfDrops.setText(String.valueOf(opData.getDrops()));
     }
 
 

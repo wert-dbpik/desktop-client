@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.entities.OpCutting;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpDetail;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
@@ -16,6 +18,7 @@ import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.client.entity.models.Material;
 
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
+import static ru.wert.datapik.chogori.calculator.enums.EOpType.CUTTING;
 
 public class FormPartController implements IFormMenu{
 
@@ -70,6 +73,8 @@ public class FormPartController implements IFormMenu{
     @FXML @Getter
     private TextField tfTotalTime;
 
+    private MenuCalculator menu;
+
     private double ro; //Плотность
     private double t; //Толщина
     private double paramA; //параметр А
@@ -84,8 +89,12 @@ public class FormPartController implements IFormMenu{
         deployData(opData);
     }
 
-    private void deployData(OpDetail opData) {
-        for(IOpPlate plate : opData.getOperations())
+    private void deployData(OpData opData) {
+        for(IOpPlate plate : ((OpDetail)opData).getOperations()){
+            switch(plate.getOpData().getOpType()){
+                case CUTTING: menu.addCattingOperation((OpCutting) opData);
+            }
+        }
 
         listViewTechOperations.setItems(opData.getOperations());
     }
@@ -99,7 +108,7 @@ public class FormPartController implements IFormMenu{
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
 
-        MenuCalculator menu = new MenuCalculator(this, addedOperations, listViewTechOperations);
+        menu = new MenuCalculator(this, addedOperations, listViewTechOperations);
         menu.getItems().addAll(menu.getAddCutting(), menu.getAddBending(), menu.getAddLocksmith());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddWeldLongSeam(), menu.getAddWeldingDotted());

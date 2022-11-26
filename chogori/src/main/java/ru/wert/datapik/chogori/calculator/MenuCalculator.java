@@ -179,13 +179,13 @@ public class MenuCalculator extends ContextMenu {
     /**
      * ДОБАВЛЕНИЕ ДЕТАЛИ
      */
-    private void addDetailOperation(OpDetail opData) {
+    public void addDetailOperation(OpDetail opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateDetail.fxml"));
             VBox detail = loader.load();
             detail.setId("calculator");
             PlateDetailController controller = loader.getController();
-            controller.init(calculator, opData);
+            controller.init(calculator);
             listViewTechOperations.getItems().add(detail);
         } catch (IOException e) {
             e.printStackTrace();
@@ -196,7 +196,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * РАСКРОЙ И ЗАЧИСТКА
      */
-    private void addCattingOperation(OpCutting opData) {
+    public void addCattingOperation(OpCutting opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateCutting.fxml"));
             VBox cutting = loader.load();
@@ -212,7 +212,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * ГИБКА
      */
-    private void addBendingOperation(OpBending opData) {
+    public void addBendingOperation(OpBending opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateBend.fxml"));
             VBox bending = loader.load();
@@ -228,7 +228,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * СЛЕСАРНЫЕ ОПЕРАЦИИ
      */
-    private void addLocksmithOperation(OpLocksmith opData) {
+    public void addLocksmithOperation(OpLocksmith opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateLocksmith.fxml"));
             VBox locksmith = loader.load();
@@ -246,7 +246,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * ПОКРАСКА ДЕТАЛИ
      */
-    private void addPaintOperation(OpPaint opData) {
+    public void addPaintOperation(OpPaint opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/platePaint.fxml"));
             VBox paint = loader.load();
@@ -262,7 +262,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * ПОКРАСКА СБОРОЧНОЙ ЕДИНИЦЫ
      */
-    private void addPaintAssmOperation(OpPaintAssm opData) {
+    public void addPaintAssmOperation(OpPaintAssm opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/platePaintAssm.fxml"));
             VBox paintAssm = loader.load();
@@ -280,7 +280,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * СВАРКА НЕПРЕРЫВНАЯ
      */
-    private void addWeldContinuousOperation(OpWeldContinuous opData) {
+    public void addWeldContinuousOperation(OpWeldContinuous opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateWeldContinuous.fxml"));
             VBox weldLongSeam = loader.load();
@@ -296,7 +296,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * СВАРКА ТОЧЕЧНАЯ
      */
-    private void addWeldDottedOperation(OpWeldDotted opData) {
+    public void addWeldDottedOperation(OpWeldDotted opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateWeldDotted.fxml"));
             VBox weldDotted = loader.load();
@@ -314,7 +314,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * СБОРКА КРЕПЕЖА
      */
-    private void addAssmNutsOperation(OpAssmNut opData) {
+    public void addAssmNutsOperation(OpAssmNut opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateAssmNuts.fxml"));
             VBox assmNuts = loader.load();
@@ -330,7 +330,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * СБОРКА РАСКРОЙНОГО МАТЕРИАЛА
      */
-    private void addAssmCuttingsOperation(OpAssmCutting opData) {
+    public void addAssmCuttingsOperation(OpAssmCutting opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateAssmCuttings.fxml"));
             VBox assmCuttings = loader.load();
@@ -346,7 +346,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * СБОРКА СТАНДАРТНЫХ УЗЛОВ
      */
-    private void addAssmNodesOperation(OpAssmNode opData) {
+    public void addAssmNodesOperation(OpAssmNode opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateAssmNodes.fxml"));
             VBox assmNodes = loader.load();
@@ -364,7 +364,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * НАНЕСЕНИЕ НАЛИВНОГО УПЛОТНИТЕЛЯ
      */
-    private void addLevelingSealerOperation(OpLevelingSealer opData) {
+    public void addLevelingSealerOperation(OpLevelingSealer opData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/plateLevelingSealer.fxml"));
             VBox levelingSealer = loader.load();

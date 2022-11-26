@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.EOpType;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 
 @Getter
@@ -10,6 +11,7 @@ import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 @NoArgsConstructor
 public class OpWeldContinuous extends OpData {
 
+    private EOpType op = EOpType.WELD_CONTINUOUS;
     private Integer seamLength; //Длина шва
     private EPartBigness partBigness; //азмер собираемых деталей
     private Integer men; //Число человек, работающих над операцией

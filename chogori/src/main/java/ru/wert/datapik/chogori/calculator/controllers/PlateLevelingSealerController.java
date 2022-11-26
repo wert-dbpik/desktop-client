@@ -161,5 +161,10 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
         opData.setAssmTime(currentNormTime);
     }
 
+    private void fillOpData(){
+        cmbxSealerWidth.setValue(opData.getSealersWidth());
+        tfA.setText(String.valueOf(opData.getParamA()));
+        tfB.setText(String.valueOf(opData.getParamB()));
 
+    }
 }

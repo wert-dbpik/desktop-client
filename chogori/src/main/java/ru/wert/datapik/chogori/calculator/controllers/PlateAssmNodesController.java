@@ -165,4 +165,13 @@ public class PlateAssmNodesController extends AbstractOpPlate {
         opData.setAssmTime(currentNormTime);
     }
 
+    private void fillOpData(){
+        tfPostLocks.setText(String.valueOf(opData.getPostLocks()));
+        tfDoubleLocks.setText(String.valueOf(opData.getDoubleLocks()));
+        tfMirrors.setText(String.valueOf(opData.getMirrors()));
+        tfDetectors.setText(String.valueOf(opData.getDetectors()));
+        tfConnectionBoxes.setText(String.valueOf(opData.getConnectionBoxes()));
+
+    }
+
 }

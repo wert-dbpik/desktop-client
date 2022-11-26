@@ -175,5 +175,15 @@ public class PlateAssmNutsController extends AbstractOpPlate {
         opData.setAssmTime(currentNormTime);
     }
 
+    private void fillOpData(){
+        tfScrews.setText(String.valueOf(opData.getScrews()));
+        tfVSHGs.setText(String.valueOf(opData.getVshgs()));
+        tfRivets.setText(String.valueOf(opData.getRivets()));
+        tfRivetNuts.setText(String.valueOf(opData.getRivetNuts()));
+        tfGroundSets.setText(String.valueOf(opData.getGroundSets()));
+        tfOthers.setText(String.valueOf(opData.getOthers()));
+
+    }
+
 
 }

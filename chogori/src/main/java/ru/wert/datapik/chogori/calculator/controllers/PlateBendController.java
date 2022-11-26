@@ -13,7 +13,6 @@ import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
-import ru.wert.datapik.chogori.calculator.entities.OpAssmCutting;
 import ru.wert.datapik.chogori.calculator.entities.OpBending;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.EBendingTool;
@@ -32,7 +31,7 @@ public class PlateBendController extends AbstractOpPlate {
     private ImageView ivDeleteOperation;
 
     @FXML
-    private TextField tfBendings;
+    private TextField tfBends;
 
     @FXML
     private TextField tfMen;
@@ -67,7 +66,7 @@ public class PlateBendController extends AbstractOpPlate {
         }
 
         new BXBendingTool().create(cmbxBendingTool);
-        new TFColoredInteger(tfBendings, this);
+        new TFColoredInteger(tfBends, this);
         new TFColoredInteger(tfMen, this);
         setZeroValues();
         setNormTime();
@@ -117,7 +116,7 @@ public class PlateBendController extends AbstractOpPlate {
      */
     @Override
     public void setZeroValues() {
-        tfBendings.setText("1");
+        tfBends.setText("1");
         tfMen.setText("1");
         setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
     }
@@ -127,7 +126,7 @@ public class PlateBendController extends AbstractOpPlate {
      */
     private void countInitialValues() {
 
-        bends = IntegerParser.getValue(tfBendings);
+        bends = IntegerParser.getValue(tfBends);
         men = IntegerParser.getValue(tfMen);
         toolRatio = cmbxBendingTool.getValue().getToolRatio();
         measure = controller.getCmbxTimeMeasurement().getValue();
@@ -139,6 +138,13 @@ public class PlateBendController extends AbstractOpPlate {
         opData.setTool(cmbxBendingTool.getValue());
 
         opData.setMechTime(currentNormTime);
+    }
+
+    private void fillOpData(){
+        tfBends.setText(String.valueOf(opData.getBends()));
+        tfMen.setText(String.valueOf(opData.getMen()));
+        cmbxBendingTool.setValue(opData.getTool());
+
     }
 
 
