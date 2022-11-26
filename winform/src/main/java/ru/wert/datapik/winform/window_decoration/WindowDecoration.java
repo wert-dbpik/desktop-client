@@ -11,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.winform.modal.ModalWindow;
 import ru.wert.datapik.winform.statics.WinformStatic;
@@ -35,6 +36,7 @@ public class WindowDecoration {
     private final boolean resizable;
     private boolean waiting = false;
     private WindowDecorationController windowDecorationController;
+    @Getter private ImageView imgCloseWindow;
 
 //=============================================    НАЧАЛО    =========================================================
     /**
@@ -136,6 +138,7 @@ public class WindowDecoration {
         imgMinimizeWindow.setVisible(resizable);
         ImageView imgMaximizeWindow = (ImageView)decoration.lookup("#imgBtnMaximize");
         imgMaximizeWindow.setVisible(resizable);
+        imgCloseWindow = (ImageView)decoration.lookup("#imgBtnClose");
     }
 
     /**

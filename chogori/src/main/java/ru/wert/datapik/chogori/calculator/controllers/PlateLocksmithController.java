@@ -12,7 +12,6 @@ import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
-import ru.wert.datapik.chogori.calculator.entities.OpLevelingSealer;
 import ru.wert.datapik.chogori.calculator.entities.OpLocksmith;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -62,7 +61,7 @@ public class PlateLocksmithController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpLocksmith opData){
         this.controller = controller;
-        controller.getAddedOperations().add(this);
+        controller.getAddedPlates().add(this);
         if(opData == null){
             this.opData = new OpLocksmith();
             setZeroValues();
@@ -83,7 +82,7 @@ public class PlateLocksmithController extends AbstractOpPlate {
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
         ivDeleteOperation.setOnMouseClicked(e->{
-            controller.getAddedOperations().remove(this);
+            controller.getAddedPlates().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
             currentNormTime = 0.0;

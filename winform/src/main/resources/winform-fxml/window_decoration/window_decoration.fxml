@@ -52,7 +52,7 @@
                         <Image url="@../../winform-piсs/decoration_btns/maximize.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="imgBtnClose" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#closeWindow" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <ImageView fx:id="imgBtnClose" fitHeight="25.0" fitWidth="25.0" onMouseReleased="#closeWindow" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <image>
                         <Image url="@../../winform-piсs/decoration_btns/close.png" />
                      </image>

@@ -10,7 +10,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
+import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
@@ -50,7 +54,8 @@ public class FormAssmController implements IFormMenu, IForm {
     private TextField tfTotalTime;
 
 
-    @Getter private ObservableList<AbstractOpPlate> addedOperations;
+    @Getter private ObservableList<AbstractOpPlate> addedPlates;
+    @Getter private List<OpData> addedOperations;
 
 
     @Override
@@ -64,11 +69,12 @@ public class FormAssmController implements IFormMenu, IForm {
     @FXML
     void initialize(){
 
-        addedOperations = FXCollections.observableArrayList();
+        addedPlates = FXCollections.observableArrayList();
+        addedOperations = new ArrayList<>();
 
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
 
-        MenuCalculator menu = new MenuCalculator(this, addedOperations, listViewTechOperations);
+        MenuCalculator menu = new MenuCalculator(this, addedPlates, listViewTechOperations, addedOperations);
 
         menu.getItems().add(menu.getAddDetail());
         menu.getItems().add(new SeparatorMenuItem());
@@ -85,7 +91,7 @@ public class FormAssmController implements IFormMenu, IForm {
         });
 
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
-            for(AbstractOpPlate nc : addedOperations){
+            for(AbstractOpPlate nc : addedPlates){
                 nc.setTimeMeasurement(newValue);
             }
 
@@ -106,7 +112,7 @@ public class FormAssmController implements IFormMenu, IForm {
         double paintingTime = 0.0;
         double assemblingTime = 0.0;
         double packingTime = 0.0;
-        for(AbstractOpPlate cn: addedOperations){
+        for(AbstractOpPlate cn: addedPlates){
             if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
                 mechanicalTime += cn.getCurrentNormTime();
             else if(cn.getNormType().equals(ENormType.NORM_PAINTING))

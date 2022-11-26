@@ -54,7 +54,7 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpAssmCutting opData){
         this.controller = controller;
-        controller.getAddedOperations().add(this);
+        controller.getAddedPlates().add(this);
         if(opData == null){
             this.opData = new OpAssmCutting();
             setZeroValues();
@@ -71,7 +71,7 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
         ivDeleteOperation.setOnMouseClicked(e->{
-            controller.getAddedOperations().remove(this);
+            controller.getAddedPlates().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
             currentNormTime = 0.0;

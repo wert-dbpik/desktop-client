@@ -9,12 +9,14 @@ import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class OpPaintAssm extends OpData {
 
-    private EOpType op = EOpType.PAINTING_ASSM;
     private double area;
     private Integer along;
     private Integer across;
     private EAssemblingType assmType;
+
+    public OpPaintAssm() {
+        super.opType = EOpType.PAINTING_ASSM;
+    }
 }

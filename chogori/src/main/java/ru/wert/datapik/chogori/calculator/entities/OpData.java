@@ -12,6 +12,7 @@ import ru.wert.datapik.chogori.calculator.enums.EOpType;
 public class OpData {
 
     protected EOpType opType;
+
     private double mechTime = 0.0; //МК
     private double paintTime = 0.0; //ППК
     private double assmTime = 0.0; //Сборка

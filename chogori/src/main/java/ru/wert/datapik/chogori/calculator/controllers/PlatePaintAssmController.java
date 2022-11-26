@@ -14,7 +14,6 @@ import ru.wert.datapik.chogori.calculator.components.BXAssemblingType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
-import ru.wert.datapik.chogori.calculator.entities.OpLevelingSealer;
 import ru.wert.datapik.chogori.calculator.entities.OpPaintAssm;
 import ru.wert.datapik.chogori.calculator.enums.EAssemblingType;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
@@ -65,7 +64,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpPaintAssm opData){
         this.controller = controller;
-        controller.getAddedOperations().add(this);
+        controller.getAddedPlates().add(this);
         if(opData == null){
             this.opData = new OpPaintAssm();
             setZeroValues();
@@ -91,7 +90,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
         });
 
         ivDeleteOperation.setOnMouseClicked(e->{
-            controller.getAddedOperations().remove(this);
+            controller.getAddedPlates().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
             currentNormTime = 0.0;

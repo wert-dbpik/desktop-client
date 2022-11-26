@@ -10,21 +10,24 @@ import ru.wert.datapik.chogori.calculator.controllers.*;
 import ru.wert.datapik.chogori.calculator.entities.*;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MenuCalculator extends ContextMenu {
 
     private IFormMenu calculator;
-    private ObservableList<AbstractOpPlate> addedOperations;
+    private ObservableList<AbstractOpPlate> addedPlates;
 
     private ListView<VBox> listViewTechOperations;
+    private List<OpData> addedOperations;
 
     /**
      * Create a new ContextMenu
      */
-    public MenuCalculator(IFormMenu calculator, ObservableList<AbstractOpPlate> addedOperations, ListView<VBox> listViewTechOperations) {
+    public MenuCalculator(IFormMenu calculator, ObservableList<AbstractOpPlate> addedPlates, ListView<VBox> listViewTechOperations, List<OpData> addedOperations) {
         this.calculator = calculator;
-        this.addedOperations = addedOperations;
+        this.addedPlates = addedPlates;
         this.listViewTechOperations = listViewTechOperations;
+        this.addedOperations = addedOperations;
     }
 
 
@@ -165,7 +168,7 @@ public class MenuCalculator extends ContextMenu {
      * Ищем дубликат операции в списке addedOperations по clazz
      */
     private boolean isDuplicate(String clazz){
-        for(AbstractOpPlate cn: addedOperations){
+        for(AbstractOpPlate cn: addedPlates){
             if(cn.getClass().getSimpleName().equals(clazz))
                 return true;
         }
@@ -187,6 +190,7 @@ public class MenuCalculator extends ContextMenu {
             PlateDetailController controller = loader.getController();
             controller.init(calculator);
             listViewTechOperations.getItems().add(detail);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -204,6 +208,7 @@ public class MenuCalculator extends ContextMenu {
             PlateCuttingController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(cutting);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -220,6 +225,7 @@ public class MenuCalculator extends ContextMenu {
             PlateBendController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(bending);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -236,6 +242,7 @@ public class MenuCalculator extends ContextMenu {
             PlateLocksmithController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(locksmith);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -254,6 +261,7 @@ public class MenuCalculator extends ContextMenu {
             PlatePaintController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(paint);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -270,6 +278,7 @@ public class MenuCalculator extends ContextMenu {
             PlatePaintAssmController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(paintAssm);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -288,6 +297,7 @@ public class MenuCalculator extends ContextMenu {
             PlateWeldContinuousController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(weldLongSeam);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -304,6 +314,7 @@ public class MenuCalculator extends ContextMenu {
             PlateWeldDottedController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(weldDotted);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -322,6 +333,7 @@ public class MenuCalculator extends ContextMenu {
             PlateAssmNutsController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(assmNuts);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -338,6 +350,7 @@ public class MenuCalculator extends ContextMenu {
             PlateAssmCuttingsController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(assmCuttings);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -354,6 +367,7 @@ public class MenuCalculator extends ContextMenu {
             PlateAssmNodesController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(assmNodes);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -372,6 +386,7 @@ public class MenuCalculator extends ContextMenu {
             PlateLevelingSealerController controller = loader.getController();
             controller.init(calculator, opData);
             listViewTechOperations.getItems().add(levelingSealer);
+            addedOperations.add(opData);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -13,7 +13,6 @@ import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXSealersWidth;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
-import ru.wert.datapik.chogori.calculator.entities.OpCutting;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpLevelingSealer;
 import ru.wert.datapik.chogori.calculator.enums.ESealersWidth;
@@ -70,7 +69,7 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpLevelingSealer opData){
         this.controller = controller;
-        controller.getAddedOperations().add(this);
+        controller.getAddedPlates().add(this);
         if(opData == null){
             this.opData = new OpLevelingSealer();
             setZeroValues();
@@ -92,7 +91,7 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
         });
 
         ivDeleteOperation.setOnMouseClicked(e->{
-            controller.getAddedOperations().remove(this);
+            controller.getAddedPlates().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
             currentNormTime = 0.0;

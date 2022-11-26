@@ -7,13 +7,14 @@ import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class OpCutting extends OpData {
 
-    private EOpType op = EOpType.CUTTING;
     private Integer holes;
     private Integer perfHoles;
     private Integer extraPerimeter;
     private boolean stripping; //Зачистка
 
+    public OpCutting() {
+        super.opType = EOpType.CUTTING;
+    }
 }

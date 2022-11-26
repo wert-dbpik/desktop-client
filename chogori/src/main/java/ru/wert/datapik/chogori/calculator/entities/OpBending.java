@@ -8,11 +8,13 @@ import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class OpBending extends OpData {
 
-    private EOpType op = EOpType.BENDING;
     private Integer bends;
     private Integer men;
     private EBendingTool tool;
+
+    public OpBending() {
+        super.opType = EOpType.BENDING;
+    }
 }

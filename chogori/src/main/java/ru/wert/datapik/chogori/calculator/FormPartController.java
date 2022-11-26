@@ -9,16 +9,16 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.datapik.chogori.calculator.entities.OpCutting;
-import ru.wert.datapik.chogori.calculator.entities.OpData;
-import ru.wert.datapik.chogori.calculator.entities.OpDetail;
+import ru.wert.datapik.chogori.calculator.entities.*;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.client.entity.models.Material;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
-import static ru.wert.datapik.chogori.calculator.enums.EOpType.CUTTING;
 
 public class FormPartController implements IFormMenu{
 
@@ -80,35 +80,72 @@ public class FormPartController implements IFormMenu{
     private double paramA; //параметр А
     private double paramB; //параметр B
 
-    @Getter private ObservableList<AbstractOpPlate> addedOperations;
+    @Getter private ObservableList<AbstractOpPlate> addedPlates;
+    @Getter private List<OpData> addedOperations;
 
 
     public void init(TextField tfName, OpDetail opData) {
         tfPartName.setText(tfName.getText());
         tfName.textProperty().bindBidirectional(tfPartName.textProperty());
-        deployData(opData);
+        if(!opData.getOperations().isEmpty())
+            deployData(opData);
     }
 
-    private void deployData(OpData opData) {
-        for(IOpPlate plate : ((OpDetail)opData).getOperations()){
-            switch(plate.getOpData().getOpType()){
-                case CUTTING: menu.addCattingOperation((OpCutting) opData);
+    private void deployData(OpDetail opData) {
+        List<OpData> operations = opData.getOperations();
+        for (OpData op : operations) {
+            switch (op.getOpType()) {
+                case CUTTING:
+                    menu.addCattingOperation((OpCutting) op);
+                    break;
+                case BENDING:
+                    menu.addBendingOperation((OpBending) op);
+                    break;
+                case LOCKSMITH:
+                    menu.addLocksmithOperation((OpLocksmith) op);
+                    break;
+                case PAINTING:
+                    menu.addPaintOperation((OpPaint) op);
+                    break;
+                case PAINTING_ASSM:
+                    menu.addPaintAssmOperation((OpPaintAssm) op);
+                    break;
+                case WELD_CONTINUOUS:
+                    menu.addWeldContinuousOperation((OpWeldContinuous) op);
+                    break;
+                case WELD_DOTTED:
+                    menu.addWeldDottedOperation((OpWeldDotted) op);
+                    break;
+                case ASSM_CUTTINGS:
+                    menu.addAssmCuttingsOperation((OpAssmCutting) op);
+                    break;
+                case ASSM_NUTS:
+                    menu.addAssmNutsOperation((OpAssmNut) op);
+                    break;
+                case ASSM_NODES:
+                    menu.addAssmNodesOperation((OpAssmNode) op);
+                    break;
+                case LEVELING_SEALER:
+                    menu.addLevelingSealerOperation((OpLevelingSealer) op);
+                    break;
+
             }
         }
 
-        listViewTechOperations.setItems(opData.getOperations());
+
     }
 
 
     @FXML
     void initialize(){
 
-        addedOperations = FXCollections.observableArrayList();
+        addedPlates = FXCollections.observableArrayList();
+        addedOperations = new ArrayList<>();
 
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
 
-        menu = new MenuCalculator(this, addedOperations, listViewTechOperations);
+        menu = new MenuCalculator(this, addedPlates, listViewTechOperations, addedOperations);
         menu.getItems().addAll(menu.getAddCutting(), menu.getAddBending(), menu.getAddLocksmith());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddWeldLongSeam(), menu.getAddWeldingDotted());
@@ -120,7 +157,7 @@ public class FormPartController implements IFormMenu{
         });
 
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
-            for(AbstractOpPlate nc : addedOperations){
+            for(AbstractOpPlate nc : addedPlates){
                 nc.setTimeMeasurement(newValue);
             }
 
@@ -131,14 +168,14 @@ public class FormPartController implements IFormMenu{
 
         cmbxMaterial.valueProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractOpPlate nc : addedOperations){
+            for(AbstractOpPlate nc : addedPlates){
                 nc.setNormTime();;
             }
         });
 
         tfA.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractOpPlate nc : addedOperations){
+            for(AbstractOpPlate nc : addedPlates){
                 nc.setNormTime();
                 countSumNormTimeByShops();
             }
@@ -146,7 +183,7 @@ public class FormPartController implements IFormMenu{
 
         tfB.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
-            for(AbstractOpPlate nc : addedOperations){
+            for(AbstractOpPlate nc : addedPlates){
                 nc.setNormTime();
                 countSumNormTimeByShops();
             }
@@ -181,7 +218,7 @@ public class FormPartController implements IFormMenu{
     public void countSumNormTimeByShops(){
         double mechanicalTime = 0.0;
         double paintingTime = 0.0;
-        for(AbstractOpPlate cn: addedOperations){
+        for(AbstractOpPlate cn: addedPlates){
             if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
                 mechanicalTime += cn.getCurrentNormTime();
             else if(cn.getNormType().equals(ENormType.NORM_PAINTING))

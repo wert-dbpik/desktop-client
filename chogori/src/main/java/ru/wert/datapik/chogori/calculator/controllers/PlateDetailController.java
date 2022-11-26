@@ -64,18 +64,18 @@ public class PlateDetailController implements IOpPlate {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/calculatorPart.fxml"));
                 Parent parent = loader.load();
                 parent.setId("calculator");
-                FormPartController partController = loader.getController();
+                partController = loader.getController();
                 partController.init(tfName, opData);
-                Stage stage =(Stage) parent.getScene().getWindow();
-                stage.setOnCloseRequest(this::collectOpData);
-                new WindowDecoration("Добавить деталь", parent, false, (Stage)lblOperationName.getScene().getWindow());
+                WindowDecoration windowDecoration = new WindowDecoration("Добавить деталь", parent, false, (Stage)lblOperationName.getScene().getWindow());
+                ImageView closer = windowDecoration.getImgCloseWindow();
+                closer.setOnMousePressed(this::collectOpData);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
 
         ivDeleteOperation.setOnMouseClicked(e->{
-            controller.getAddedOperations().remove(this);
+            controller.getAddedPlates().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
 
@@ -85,12 +85,12 @@ public class PlateDetailController implements IOpPlate {
     }
 
 
-    private void collectOpData(Event event){
+    private void collectOpData(Event event) {
         opData.setName(partController.getTfPartName().getText());
         opData.setMaterial(partController.getCmbxMaterial().getValue());
         opData.setParamA(IntegerParser.getValue(partController.getTfA()));
         opData.setParamB(IntegerParser.getValue(partController.getTfB()));
-        opData.setOperations(new ArrayList<>());
+        opData.setOperations(new ArrayList<>(partController.getAddedOperations()));
 
         opData.setMechTime(DoubleParser.getValue(partController.getTfMechanicalTime()));
         opData.setPaintTime(DoubleParser.getValue(partController.getTfPaintingTime()));

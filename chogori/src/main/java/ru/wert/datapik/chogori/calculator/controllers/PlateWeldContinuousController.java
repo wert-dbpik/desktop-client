@@ -86,7 +86,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpWeldContinuous opData){
         this.controller = controller;
-        controller.getAddedOperations().add(this);
+        controller.getAddedPlates().add(this);
         if(opData == null){
             this.opData = new OpWeldContinuous();
             setZeroValues();
@@ -125,7 +125,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
         });
 
         ivDeleteOperation.setOnMousePressed(e->{
-            controller.getAddedOperations().remove(this);
+            controller.getAddedPlates().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
             currentNormTime = 0.0;

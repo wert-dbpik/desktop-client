@@ -11,7 +11,6 @@ import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
-import ru.wert.datapik.chogori.calculator.entities.OpPaint;
 import ru.wert.datapik.chogori.calculator.entities.OpWeldDotted;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -53,7 +52,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpWeldDotted opData){
         this.controller = controller;
-        controller.getAddedOperations().add(this);
+        controller.getAddedPlates().add(this);
         if(opData == null){
             this.opData = new OpWeldDotted();
             setZeroValues();
@@ -80,7 +79,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
         });
 
         ivDeleteOperation.setOnMouseClicked(e->{
-            controller.getAddedOperations().remove(this);
+            controller.getAddedPlates().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
             controller.getListViewTechOperations().getItems().remove(box);
             currentNormTime = 0.0;

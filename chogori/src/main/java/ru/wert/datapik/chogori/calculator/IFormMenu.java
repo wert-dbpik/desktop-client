@@ -8,7 +8,7 @@ import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 public interface IFormMenu {
 
-    ObservableList<AbstractOpPlate> getAddedOperations();
+    ObservableList<AbstractOpPlate> getAddedPlates();
 
     ListView<VBox> getListViewTechOperations();
 
