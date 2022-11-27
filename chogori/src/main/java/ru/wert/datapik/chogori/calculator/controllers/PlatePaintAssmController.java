@@ -65,19 +65,11 @@ public class PlatePaintAssmController extends AbstractOpPlate {
     public void init(IFormMenu controller, OpPaintAssm opData){
         this.controller = controller;
         controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpPaintAssm();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.opData = opData;
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new BXAssemblingType().create(cmbxAssemblingType);
-
-        setZeroValues();
-        setNormTime();
-
         new TFColoredDouble(tfArea, this);
         new TFColoredInteger(tfAlong, this);
         new TFColoredInteger(tfAcross, this);
@@ -97,6 +89,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        setNormTime();
     }
 
     /**
@@ -179,9 +172,16 @@ public class PlatePaintAssmController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfArea.setText(String.valueOf(opData.getArea()));
-        tfAlong.setText(String.valueOf(opData.getAlong()));
-        tfAcross.setText(String.valueOf(opData.getAcross()));
+        area = opData.getArea();
+        tfArea.setText(String.valueOf(area));
+
+        along = opData.getAlong();
+        tfAlong.setText(String.valueOf(along));
+
+        across = opData.getAcross();
+        tfAcross.setText(String.valueOf(across));
+
+        pantingSpeed = opData.getAssmType().getSpeed();
         cmbxAssemblingType.setValue(opData.getAssmType());
     }
 

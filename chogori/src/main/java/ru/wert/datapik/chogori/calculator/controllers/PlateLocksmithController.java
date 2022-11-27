@@ -62,16 +62,9 @@ public class PlateLocksmithController extends AbstractOpPlate {
     public void init(IFormMenu controller, OpLocksmith opData){
         this.controller = controller;
         controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpLocksmith();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.opData = opData;
 
-        setZeroValues();
-        setNormTime();
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new TFColoredInteger(tfRivets, this);
         new TFColoredInteger(tfCountersinkings, this);
@@ -88,6 +81,8 @@ public class PlateLocksmithController extends AbstractOpPlate {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
+
+        setNormTime();
     }
 
     /**
@@ -159,11 +154,20 @@ public class PlateLocksmithController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfRivets.setText(String.valueOf(opData.getRivets()));
-        tfCountersinkings.setText(String.valueOf(opData.getCountersinkings()));
-        tfThreadings.setText(String.valueOf(opData.getThreadings()));
-        tfSmallSawings.setText(String.valueOf(opData.getSmallSawings()));
-        tfBigSawings.setText(String.valueOf(opData.getBigSawings()));
+        rivets = opData.getRivets();
+        tfRivets.setText(String.valueOf(rivets));
+
+        countersinkings = opData.getCountersinkings();
+        tfCountersinkings.setText(String.valueOf(countersinkings));
+
+        threadings = opData.getThreadings();
+        tfThreadings.setText(String.valueOf(threadings));
+
+        smallSawings = opData.getSmallSawings();
+        tfSmallSawings.setText(String.valueOf(smallSawings));
+
+        bigSawings = opData.getBigSawings();
+        tfBigSawings.setText(String.valueOf(bigSawings));
     }
 
 

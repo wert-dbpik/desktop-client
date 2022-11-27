@@ -66,16 +66,9 @@ public class PlateAssmNodesController extends AbstractOpPlate {
     public void init(IFormMenu controller, OpAssmNode opData){
         this.controller = controller;
         controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpAssmNode();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.opData = opData;
 
-        setZeroValues();
-        setNormTime();
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new TFColoredInteger(tfPostLocks, this);
         new TFColoredInteger(tfDoubleLocks, this);
@@ -92,6 +85,8 @@ public class PlateAssmNodesController extends AbstractOpPlate {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
+
+        setNormTime();
     }
 
     /**
@@ -165,11 +160,20 @@ public class PlateAssmNodesController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfPostLocks.setText(String.valueOf(opData.getPostLocks()));
-        tfDoubleLocks.setText(String.valueOf(opData.getDoubleLocks()));
-        tfMirrors.setText(String.valueOf(opData.getMirrors()));
-        tfDetectors.setText(String.valueOf(opData.getDetectors()));
-        tfConnectionBoxes.setText(String.valueOf(opData.getConnectionBoxes()));
+        postLocks = opData.getPostLocks();
+        tfPostLocks.setText(String.valueOf(postLocks));
+
+        doubleLocks = opData.getDoubleLocks();
+        tfDoubleLocks.setText(String.valueOf(doubleLocks));
+
+        mirrors = opData.getMirrors();
+        tfMirrors.setText(String.valueOf(mirrors));
+
+        detectors = opData.getDetectors();
+        tfDetectors.setText(String.valueOf(detectors));
+
+        connectionBoxes = opData.getConnectionBoxes();
+        tfConnectionBoxes.setText(String.valueOf(connectionBoxes));
 
     }
 

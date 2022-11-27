@@ -53,16 +53,9 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     public void init(IFormMenu controller, OpWeldDotted opData){
         this.controller = controller;
         controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpWeldDotted();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.opData = opData;
 
-        setZeroValues();
-        setNormTime();
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
@@ -85,6 +78,8 @@ public class PlateWeldDottedController extends AbstractOpPlate {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
+
+        setNormTime();
     }
 
     /**
@@ -146,9 +141,14 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfParts.setText(String.valueOf(opData.getParts()));
-        tfDots.setText(String.valueOf(opData.getDots()));
-        tfDrops.setText(String.valueOf(opData.getDrops()));
+        parts = opData.getParts();
+        tfParts.setText(String.valueOf(parts));
+
+        dots = opData.getDots();
+        tfDots.setText(String.valueOf(dots));
+
+        drops = opData.getDrops();
+        tfDrops.setText(String.valueOf(drops));
     }
 
 

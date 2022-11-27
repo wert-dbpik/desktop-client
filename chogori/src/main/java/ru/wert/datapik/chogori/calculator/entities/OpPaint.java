@@ -10,10 +10,10 @@ import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 @Setter
 public class OpPaint extends OpData {
 
-    private Integer along;
-    private Integer across;
+    private Integer along = 0;
+    private Integer across = 0;
     private EPaintingDifficulty difficulty;
-    private Integer hangingTime;
+    private Integer hangingTime = 20;
 
     public OpPaint() {
         super.opType = EOpType.PAINTING;

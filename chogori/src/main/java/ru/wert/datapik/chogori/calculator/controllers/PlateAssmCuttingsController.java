@@ -54,15 +54,9 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpAssmCutting opData){
         this.controller = controller;
-        controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpAssmCutting();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
-        setNormTime();
+        this.opData = opData;
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new TFColoredDouble(tfSealer, this);
         new TFColoredDouble(tfSelfAdhSealer, this);
@@ -77,6 +71,8 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
+
+        setNormTime();
     }
 
     /**
@@ -140,11 +136,14 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfSealer.setText(String.valueOf(opData.getSealer()));
-        tfSelfAdhSealer.setText(String.valueOf(opData.getSelfAdhSealer()));
-        tfInsulation.setText(String.valueOf(opData.getInsulation()));
+        sealer = opData.getSealer();
+        tfSealer.setText(String.valueOf(sealer));
 
-        opData.setAssmTime(currentNormTime);
+        selfAdhSealer = opData.getSelfAdhSealer();
+        tfSelfAdhSealer.setText(String.valueOf(selfAdhSealer));
+
+        insulation = opData.getInsulation();
+        tfInsulation.setText(String.valueOf(insulation));
     }
 
 

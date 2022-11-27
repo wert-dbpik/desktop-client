@@ -70,16 +70,9 @@ public class PlateAssmNutsController extends AbstractOpPlate {
     public void init(IFormMenu controller, OpAssmNut opData){
         this.controller = controller;
         controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpAssmNut();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.opData = opData;
 
-        setZeroValues();
-        setNormTime();
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new TFColoredInteger(tfScrews, this);
         new TFColoredInteger(tfVSHGs, this);
@@ -87,7 +80,6 @@ public class PlateAssmNutsController extends AbstractOpPlate {
         new TFColoredInteger(tfRivetNuts, this);
         new TFColoredInteger(tfGroundSets, this);
         new TFColoredInteger(tfOthers, this);
-
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
@@ -98,6 +90,8 @@ public class PlateAssmNutsController extends AbstractOpPlate {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
+
+        setNormTime();
     }
 
     /**
@@ -175,12 +169,23 @@ public class PlateAssmNutsController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfScrews.setText(String.valueOf(opData.getScrews()));
-        tfVSHGs.setText(String.valueOf(opData.getVshgs()));
-        tfRivets.setText(String.valueOf(opData.getRivets()));
-        tfRivetNuts.setText(String.valueOf(opData.getRivetNuts()));
-        tfGroundSets.setText(String.valueOf(opData.getGroundSets()));
-        tfOthers.setText(String.valueOf(opData.getOthers()));
+        screws = opData.getScrews();
+        tfScrews.setText(String.valueOf(screws));
+
+        vshgs = opData.getVshgs();
+        tfVSHGs.setText(String.valueOf(vshgs));
+
+        rivets = opData.getRivets();
+        tfRivets.setText(String.valueOf(rivets));
+
+        rivetNuts = opData.getRivetNuts();
+        tfRivetNuts.setText(String.valueOf(rivetNuts));
+
+        groundSets = opData.getGroundSets();
+        tfGroundSets.setText(String.valueOf(groundSets));
+
+        others = opData.getOthers();
+        tfOthers.setText(String.valueOf(others));
 
     }
 

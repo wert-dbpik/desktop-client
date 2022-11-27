@@ -20,7 +20,7 @@ import java.util.List;
 
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
-public class FormPartController implements IFormMenu{
+public class FormDetailController implements IFormMenu{
 
     @FXML @Getter
     private TextField tfPartName;
@@ -74,7 +74,10 @@ public class FormPartController implements IFormMenu{
     private TextField tfTotalTime;
 
     private MenuCalculator menu;
+    private OpDetail opData;
 
+    private static int nameIndex = 0;
+    private String detailName;
     private double ro; //Плотность
     private double t; //Толщина
     private double paramA; //параметр А
@@ -85,10 +88,58 @@ public class FormPartController implements IFormMenu{
 
 
     public void init(TextField tfName, OpDetail opData) {
+        this.opData = opData;
         tfPartName.setText(tfName.getText());
         tfName.textProperty().bindBidirectional(tfPartName.textProperty());
+
+        if(opData.getName() == null && tfName.getText().equals("")) {
+            detailName = String.format("Деталь #%s", ++nameIndex);
+            tfPartName.setText(detailName);
+        }
+
+        new BXMaterial().create(cmbxMaterial);
+        new BXTimeMeasurement().create(cmbxTimeMeasurement);
+
+        ivAddOperation.setOnMouseClicked(e->{
+            menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
+        });
+
+        cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
+            for(AbstractOpPlate nc : addedPlates){
+                nc.setTimeMeasurement(newValue);
+            }
+
+            countSumNormTimeByShops();
+
+            lblTimeMeasure.setText(newValue.getTimeName());
+        });
+
+        cmbxMaterial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            countWeightAndArea();
+            for(AbstractOpPlate nc : addedPlates){
+                nc.setNormTime();;
+            }
+        });
+
+        tfA.textProperty().addListener((observable, oldValue, newValue) -> {
+            countWeightAndArea();
+            for(AbstractOpPlate nc : addedPlates){
+                nc.setNormTime();
+                countSumNormTimeByShops();
+            }
+        });
+
+        tfB.textProperty().addListener((observable, oldValue, newValue) -> {
+            countWeightAndArea();
+            for(AbstractOpPlate nc : addedPlates){
+                nc.setNormTime();
+                countSumNormTimeByShops();
+            }
+        });
         if(!opData.getOperations().isEmpty())
             deployData(opData);
+
+        fillOpData();
     }
 
     private void deployData(OpDetail opData) {
@@ -128,11 +179,8 @@ public class FormPartController implements IFormMenu{
                 case LEVELING_SEALER:
                     menu.addLevelingSealerOperation((OpLevelingSealer) op);
                     break;
-
             }
         }
-
-
     }
 
 
@@ -142,52 +190,12 @@ public class FormPartController implements IFormMenu{
         addedPlates = FXCollections.observableArrayList();
         addedOperations = new ArrayList<>();
 
-        new BXMaterial().create(cmbxMaterial);
-        new BXTimeMeasurement().create(cmbxTimeMeasurement);
-
         menu = new MenuCalculator(this, addedPlates, listViewTechOperations, addedOperations);
         menu.getItems().addAll(menu.getAddCutting(), menu.getAddBending(), menu.getAddLocksmith());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddWeldLongSeam(), menu.getAddWeldingDotted());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddPainting());
-
-        ivAddOperation.setOnMouseClicked(e->{
-            menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
-        });
-
-        cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
-            for(AbstractOpPlate nc : addedPlates){
-                nc.setTimeMeasurement(newValue);
-            }
-
-            countSumNormTimeByShops();
-
-            lblTimeMeasure.setText(newValue.getTimeName());
-        });
-
-        cmbxMaterial.valueProperty().addListener((observable, oldValue, newValue) -> {
-            countWeightAndArea();
-            for(AbstractOpPlate nc : addedPlates){
-                nc.setNormTime();;
-            }
-        });
-
-        tfA.textProperty().addListener((observable, oldValue, newValue) -> {
-            countWeightAndArea();
-            for(AbstractOpPlate nc : addedPlates){
-                nc.setNormTime();
-                countSumNormTimeByShops();
-            }
-        });
-
-        tfB.textProperty().addListener((observable, oldValue, newValue) -> {
-            countWeightAndArea();
-            for(AbstractOpPlate nc : addedPlates){
-                nc.setNormTime();
-                countSumNormTimeByShops();
-            }
-        });
 
     }
 
@@ -239,6 +247,16 @@ public class FormPartController implements IFormMenu{
 
         tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime ));
 
+    }
+
+    private void fillOpData(){
+
+        if(opData.getMaterial() != null) cmbxMaterial.setValue(opData.getMaterial());
+        paramA = opData.getParamA();
+        tfA.setText(String.valueOf(paramA));
+
+        paramB = opData.getParamB();
+        tfB.setText(String.valueOf(paramB));
     }
 
 }

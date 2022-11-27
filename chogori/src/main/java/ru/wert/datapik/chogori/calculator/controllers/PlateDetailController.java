@@ -42,7 +42,7 @@ public class PlateDetailController implements IOpPlate {
     private Label lblOperationName;
 
     private IFormMenu controller;
-    private FormPartController partController;
+    private FormDetailController partController;
     private OpDetail opData;
     public void setOpData(OpDetail opData){
         this.opData = opData;
@@ -96,10 +96,6 @@ public class PlateDetailController implements IOpPlate {
         opData.setPaintTime(DoubleParser.getValue(partController.getTfPaintingTime()));
 
     }
-
-
-
-
 
 
 }

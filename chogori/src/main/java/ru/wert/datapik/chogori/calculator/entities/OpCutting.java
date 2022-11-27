@@ -9,10 +9,10 @@ import ru.wert.datapik.chogori.calculator.enums.EOpType;
 @Setter
 public class OpCutting extends OpData {
 
-    private Integer holes;
-    private Integer perfHoles;
-    private Integer extraPerimeter;
-    private boolean stripping; //Зачистка
+    private Integer holes = 0;
+    private Integer perfHoles = 0;
+    private Integer extraPerimeter = 0;
+    private boolean stripping = false; //Зачистка
 
     public OpCutting() {
         super.opType = EOpType.CUTTING;

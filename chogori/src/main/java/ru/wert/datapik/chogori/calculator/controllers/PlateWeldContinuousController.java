@@ -87,17 +87,11 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     public void init(IFormMenu controller, OpWeldContinuous opData){
         this.controller = controller;
         controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpWeldContinuous();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.opData = opData;
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new BXPartBigness().create(cmbxPartBigness);
-        setZeroValues();
-        setNormTime();
 
         new TFColoredInteger(tfSeamLength, this);
         new TFColoredInteger(tfSeams, this);
@@ -131,6 +125,8 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
+
+        setNormTime();
     }
 
     private void enableNumOfSeams() {
@@ -258,14 +254,27 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfSeamLength.setText(String.valueOf(opData.getSeamLength()));
+        seamLength = opData.getSeamLength();
+        tfSeamLength.setText(String.valueOf(seamLength));
+
         cmbxPartBigness.setValue(opData.getPartBigness());
-        tfMen.setText(String.valueOf(opData.getMen()));
-        chbxStripping.setSelected(opData.isStripping());
+
+        men = opData.getMen();
+        tfMen.setText(String.valueOf(men));
+
+        stripping = opData.isStripping();
+        chbxStripping.setSelected(stripping);
+
         chbxPreEnterSeams.setSelected(opData.isPreEnterSeams());
-        tfSeams.setText(String.valueOf(opData.getSeams()));
-        tfConnectionLength.setText(String.valueOf(opData.getConnectionLength()));
-        tfStep.setText(String.valueOf(opData.getStep()));
+
+        seams = opData.getSeams();
+        tfSeams.setText(String.valueOf(seams));
+
+        connectionLength = opData.getConnectionLength();
+        tfConnectionLength.setText(String.valueOf(connectionLength));
+
+        step = opData.getStep();
+        tfStep.setText(String.valueOf(step));
 
     }
 

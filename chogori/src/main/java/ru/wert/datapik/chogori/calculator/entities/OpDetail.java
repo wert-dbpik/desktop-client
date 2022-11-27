@@ -14,11 +14,10 @@ import java.util.List;
 @Setter
 public class OpDetail extends OpData {
 
-    private EOpType op = EOpType.DETAIL;
-    private String name;
-    private Material material;
-    private Integer paramA;
-    private Integer paramB;
+    private String name = null;
+    private Material material = null;
+    private Integer paramA = 0;
+    private Integer paramB = 0;
     private List<OpData> operations = new ArrayList<>();
 
     public OpDetail() {

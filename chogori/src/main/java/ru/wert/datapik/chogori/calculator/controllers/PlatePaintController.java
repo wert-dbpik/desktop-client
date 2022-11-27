@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.FormPartController;
+import ru.wert.datapik.chogori.calculator.FormDetailController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
@@ -50,7 +50,7 @@ public class PlatePaintController extends AbstractOpPlate {
     private TextField tfNormTime;
 
     private IFormMenu controller;
-    private FormPartController partController;
+    private FormDetailController partController;
     private OpPaint opData;
 
     public OpData getOpData(){
@@ -69,20 +69,13 @@ public class PlatePaintController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpPaint opData){
         this.controller = controller;
-        this.partController = (FormPartController)controller;
-        if(opData == null){
-            this.opData = new OpPaint();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.partController = (FormDetailController)controller;
+        this.opData = opData;
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         controller.getAddedPlates().add(this);
         new BXPaintingDifficulty().create(cmbxDifficulty);
-
-        setZeroValues();
-        setNormTime();
 
         new TFColoredInteger(tfAlong, this);
         new TFColoredInteger(tfAcross, this);
@@ -102,6 +95,7 @@ public class PlatePaintController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        setNormTime();
     }
 
     /**
@@ -203,10 +197,17 @@ public class PlatePaintController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfAlong.setText(String.valueOf(opData.getAlong()));
-        tfAcross.setText(String.valueOf(opData.getAcross()));
+        along = opData.getAlong();
+        tfAlong.setText(String.valueOf(along));
+
+        across = opData.getAcross();
+        tfAcross.setText(String.valueOf(across));
+
+        difficulty = opData.getDifficulty().getDifficultyRatio();
         cmbxDifficulty.setValue(opData.getDifficulty());
-        tfHangingTime.setText(String.valueOf(opData.getHangingTime()));
+
+        hangingTime = opData.getHangingTime();
+        tfHangingTime.setText(String.valueOf(hangingTime));
     }
 
 }

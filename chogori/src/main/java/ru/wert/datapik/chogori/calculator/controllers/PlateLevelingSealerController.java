@@ -70,19 +70,13 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
     public void init(IFormMenu controller, OpLevelingSealer opData){
         this.controller = controller;
         controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpLevelingSealer();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.opData = opData;
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new BXSealersWidth().create(cmbxSealerWidth);
         new TFColoredInteger(tfA, this);
         new TFColoredInteger(tfB, this);
-        setZeroValues();
-        setNormTime();
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
@@ -97,6 +91,8 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
+
+        setNormTime();
     }
 
     /**
@@ -161,9 +157,14 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
+
         cmbxSealerWidth.setValue(opData.getSealersWidth());
-        tfA.setText(String.valueOf(opData.getParamA()));
-        tfB.setText(String.valueOf(opData.getParamB()));
+
+        paramA = opData.getParamA();
+        tfA.setText(String.valueOf(paramA));
+
+        paramB = opData.getParamB();
+        tfB.setText(String.valueOf(paramB));
 
     }
 }

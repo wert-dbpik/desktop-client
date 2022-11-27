@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.FormPartController;
+import ru.wert.datapik.chogori.calculator.FormDetailController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -47,7 +47,7 @@ public class PlateCuttingController extends AbstractOpPlate {
     private ImageView ivHelpOnUseStripping;
 
     private IFormMenu controller;
-    private FormPartController partController;
+    private FormDetailController partController;
     private OpCutting opData;
 
     public OpData getOpData(){
@@ -68,18 +68,10 @@ public class PlateCuttingController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpCutting opData){
         this.controller = controller;
-        this.partController = (FormPartController) controller;
-        if(opData == null){
-            this.opData = new OpCutting();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.partController = (FormDetailController) controller;
+        this.opData = opData;
 
-        controller.getAddedPlates().add(this);
-        setZeroValues();
-        setNormTime();
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new TFColoredInteger(tfHoles, this);
         new TFColoredInteger(tfPerfHoles, this);
@@ -99,6 +91,9 @@ public class PlateCuttingController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        controller.getAddedPlates().add(this);
+
+        setNormTime();
     }
 
     /**
@@ -194,10 +189,17 @@ public class PlateCuttingController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfHoles.setText(String.valueOf(opData.getHoles()));
-        tfPerfHoles.setText(String.valueOf(opData.getHoles()));
-        tfExtraPerimeter.setText(String.valueOf(opData.getHoles()));
-        chbxStripping.setSelected(opData.isStripping());
+        holes = opData.getHoles();
+        tfHoles.setText(String.valueOf(holes));
+
+        perfHoles = opData.getPerfHoles();
+        tfPerfHoles.setText(String.valueOf(perfHoles));
+
+        extraPerimeter = opData.getExtraPerimeter();
+        tfExtraPerimeter.setText(String.valueOf(extraPerimeter));
+
+        stripping = opData.isStripping();
+        chbxStripping.setSelected(stripping);
 
     }
 

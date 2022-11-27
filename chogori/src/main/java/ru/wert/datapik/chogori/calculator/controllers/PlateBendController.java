@@ -56,20 +56,13 @@ public class PlateBendController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpBending opData){
         this.controller = controller;
-        controller.getAddedPlates().add(this);
-        if(opData == null){
-            this.opData = new OpBending();
-            setZeroValues();
-        } else {
-            this.opData = opData;
-            fillOpData();
-        }
+        this.opData = opData;
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new BXBendingTool().create(cmbxBendingTool);
         new TFColoredInteger(tfBends, this);
         new TFColoredInteger(tfMen, this);
-        setZeroValues();
-        setNormTime();
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
@@ -84,6 +77,11 @@ public class PlateBendController extends AbstractOpPlate {
             currentNormTime = 0.0;
             controller.countSumNormTimeByShops();
         });
+
+        controller.getAddedPlates().add(this);
+
+
+        setNormTime();
     }
 
     /**
@@ -141,9 +139,16 @@ public class PlateBendController extends AbstractOpPlate {
     }
 
     private void fillOpData(){
-        tfBends.setText(String.valueOf(opData.getBends()));
-        tfMen.setText(String.valueOf(opData.getMen()));
-        cmbxBendingTool.setValue(opData.getTool());
+        bends = opData.getBends();
+        tfBends.setText(String.valueOf(bends));
+
+        men = opData.getMen();
+        tfMen.setText(String.valueOf(men));
+
+        if(opData.getTool() != null){
+            toolRatio = opData.getTool().getToolRatio();
+            cmbxBendingTool.setValue(opData.getTool());
+        }
 
     }
 

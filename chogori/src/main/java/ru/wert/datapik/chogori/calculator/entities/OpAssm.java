@@ -6,6 +6,7 @@ import lombok.Setter;
 import ru.wert.datapik.chogori.calculator.IOpPlate;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,7 +14,7 @@ import java.util.List;
 public class OpAssm extends OpData {
 
     private String name;
-    private List<IOpPlate> operations;
+    private List<OpData> operations = new ArrayList<>();
 
     public OpAssm() {
         super.opType = EOpType.ASSM;

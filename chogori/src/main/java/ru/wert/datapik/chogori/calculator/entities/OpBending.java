@@ -10,8 +10,8 @@ import ru.wert.datapik.chogori.calculator.enums.EOpType;
 @Setter
 public class OpBending extends OpData {
 
-    private Integer bends;
-    private Integer men;
+    private Integer bends = 1;
+    private Integer men = 1;
     private EBendingTool tool;
 
     public OpBending() {
