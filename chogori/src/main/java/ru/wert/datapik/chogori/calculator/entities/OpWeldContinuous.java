@@ -11,7 +11,7 @@ import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 public class OpWeldContinuous extends OpData {
 
     private Integer seamLength = 0; //Длина шва
-    private EPartBigness partBigness = null; //размер собираемых деталей
+    private EPartBigness partBigness =EPartBigness.SMALL; //размер собираемых деталей
     private Integer men = 1; //Число человек, работающих над операцией
     private boolean stripping = false; //Использовать зачистку
     private boolean preEnterSeams = true; //количество швов вводить вручную

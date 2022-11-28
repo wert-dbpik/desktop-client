@@ -14,7 +14,7 @@ public class OpPaintAssm extends OpData {
     private double area = 0.0;
     private Integer along = 0;
     private Integer across = 0;
-    private EAssemblingType assmType = null;
+    private EAssemblingType assmType = EAssemblingType.SOLID;
 
     public OpPaintAssm() {
         super.opType = EOpType.PAINTING_ASSM;

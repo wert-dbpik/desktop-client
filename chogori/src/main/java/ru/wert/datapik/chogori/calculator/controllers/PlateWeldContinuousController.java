@@ -13,6 +13,7 @@ import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
+import ru.wert.datapik.chogori.calculator.components.ChBox;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpWeldContinuous;
@@ -90,6 +91,10 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
         new BXPartBigness().create(cmbxPartBigness);
 
+        tfSeams.disableProperty().bind(chbxPreEnterSeams.selectedProperty().not());
+        tfConnectionLength.disableProperty().bind(chbxPreEnterSeams.selectedProperty());
+        tfStep.disableProperty().bind(chbxPreEnterSeams.selectedProperty());
+
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new TFColoredInteger(tfSeamLength, this);
@@ -97,23 +102,12 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
         new TFColoredInteger(tfMen, this);
         new TFColoredInteger(tfConnectionLength, this);
         new TFColoredInteger(tfStep, this);
+        new ChBox(chbxPreEnterSeams, this);
+        new ChBox(chbxStripping, this);
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        chbxStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
         cmbxPartBigness.valueProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        chbxPreEnterSeams.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue){
-                enableNumOfSeams();
-            } else {
-                enableNumOfSeamsCounting();
-            }
             setNormTime();
         });
 
@@ -127,38 +121,6 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
         controller.getAddedPlates().add(this);
         setNormTime();
-    }
-
-    private void enableNumOfSeams() {
-        lblNumOfSeams.setDisable(false);
-        tfSeams.setDisable(false);
-        tfSeams.setText("1");
-        disableNumOfSeamsCounting();
-    }
-
-    private void disableNumOfSeams() {
-        lblNumOfSeams.setDisable(true);
-        tfSeams.setDisable(true);
-        tfSeams.setText("0");
-    }
-
-    private void disableNumOfSeamsCounting(){
-        lblConnectionLength.setDisable(true);
-        tfConnectionLength.setDisable(true);
-        tfConnectionLength.setText("0");
-        lblStep.setDisable(true);
-        tfStep.setDisable(true);
-        tfStep.setText("0");
-    }
-
-    private void enableNumOfSeamsCounting(){
-        disableNumOfSeams();
-        lblConnectionLength.setDisable(false);
-        tfConnectionLength.setDisable(false);
-        tfConnectionLength.setText("0");
-        lblStep.setDisable(false);
-        tfStep.setDisable(false);
-        tfStep.setText("0");
     }
 
     /**
@@ -178,7 +140,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
         final double WELDING_SPEED = 4.0; //скорость сваркм, мин/гиб
 
-        if(seams == 0){
+        if(!chbxPreEnterSeams.isSelected()){
             if(step == 0){ //Деление на ноль
                 return;
             } else

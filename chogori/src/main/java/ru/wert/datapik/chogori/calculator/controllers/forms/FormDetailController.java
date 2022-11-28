@@ -100,6 +100,7 @@ public class FormDetailController implements IFormMenu {
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
 
         fillOpData();
+        countWeightAndArea();
 
         ivAddOperation.setOnMouseClicked(e->{
             menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
@@ -139,6 +140,7 @@ public class FormDetailController implements IFormMenu {
         });
         if(!opData.getOperations().isEmpty())
             deployData(opData);
+
 
 
     }

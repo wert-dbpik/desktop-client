@@ -12,7 +12,7 @@ public class OpPaint extends OpData {
 
     private Integer along = 0;
     private Integer across = 0;
-    private EPaintingDifficulty difficulty = null;
+    private EPaintingDifficulty difficulty = EPaintingDifficulty.SIMPLE;
     private Integer hangingTime = 20;
 
     public OpPaint() {
