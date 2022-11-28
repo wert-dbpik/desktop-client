@@ -76,11 +76,11 @@ public class PlateCuttingController extends AbstractOpPlate {
         this.partController = (FormDetailController) controller;
         this.opData = opData;
 
-        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
-
         new TFColoredInteger(tfHoles, this);
         new TFColoredInteger(tfPerfHoles, this);
         new TFColoredInteger(tfExtraPerimeter, this);
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 

@@ -103,18 +103,6 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
         collectOpData();
     }
 
-//    /**
-//     * Метод устанавливает изначальные нулевые значения полей
-//     */
-//    @Override
-//    public void setZeroValues() {
-//        tfSealer.setText("0");
-//        tfSelfAdhSealer.setText("0");
-//        tfInsulation.setText("0");
-//
-//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-//    }
-
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */

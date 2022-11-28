@@ -86,12 +86,11 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpWeldContinuous opData){
         this.controller = controller;
-        controller.getAddedPlates().add(this);
         this.opData = opData;
 
-        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
-
         new BXPartBigness().create(cmbxPartBigness);
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new TFColoredInteger(tfSeamLength, this);
         new TFColoredInteger(tfSeams, this);
@@ -126,6 +125,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        controller.getAddedPlates().add(this);
         setNormTime();
     }
 
@@ -208,22 +208,6 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
         currentNormTime = time;
         collectOpData();
     }
-
-    /**
-     * Метод устанавливает изначальные нулевые значения полей
-     */
-//    @Override
-//    public void setZeroValues() {
-//        tfSeamLength.setText("0");
-//        tfMen.setText("1");
-//        tfSeams.setText("1");
-//        tfSeamLength.setText("0");
-//        enableNumOfSeams();
-//        disableNumOfSeamsCounting();
-//        chbxPreEnterSeams.setSelected(true);
-//        chbxStripping.setSelected(false);
-//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

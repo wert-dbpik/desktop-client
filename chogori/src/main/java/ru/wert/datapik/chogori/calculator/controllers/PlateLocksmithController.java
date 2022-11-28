@@ -61,7 +61,6 @@ public class PlateLocksmithController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpLocksmith opData){
         this.controller = controller;
-        controller.getAddedPlates().add(this);
         this.opData = opData;
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
@@ -82,6 +81,7 @@ public class PlateLocksmithController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        controller.getAddedPlates().add(this);
         setNormTime();
     }
 
@@ -116,19 +116,6 @@ public class PlateLocksmithController extends AbstractOpPlate {
         currentNormTime = time;
         collectOpData();
     }
-
-    /**
-     * Метод устанавливает изначальные нулевые значения полей
-     */
-//    @Override
-//    public void setZeroValues() {
-//        tfRivets.setText("0");
-//        tfCountersinkings.setText("0");
-//        tfThreadings.setText("0");
-//        tfSmallSawings.setText("0");
-//        tfBigSawings.setText("0");
-//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

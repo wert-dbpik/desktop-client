@@ -69,12 +69,12 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpLevelingSealer opData){
         this.controller = controller;
-        controller.getAddedPlates().add(this);
         this.opData = opData;
+
+        new BXSealersWidth().create(cmbxSealerWidth);
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
-        new BXSealersWidth().create(cmbxSealerWidth);
         new TFColoredInteger(tfA, this);
         new TFColoredInteger(tfB, this);
 
@@ -92,6 +92,7 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        controller.getAddedPlates().add(this);
         setNormTime();
     }
 
@@ -124,18 +125,6 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
         currentNormTime = time;
         collectOpData();
     }
-
-    /**
-     * Метод устанавливает изначальные нулевые значения полей
-     */
-//    @Override
-//    public void setZeroValues() {
-//        tfA.setText("0");
-//        tfB.setText("0");
-//        tfCompA.setText("0.0");
-//        tfCompB.setText("0.0");
-//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

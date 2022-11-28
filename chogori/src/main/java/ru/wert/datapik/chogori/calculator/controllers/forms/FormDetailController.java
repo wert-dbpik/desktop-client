@@ -96,10 +96,10 @@ public class FormDetailController implements IFormMenu {
         tfPartName.setText(tfName.getText());
         tfName.textProperty().bindBidirectional(tfPartName.textProperty());
 
-        fillOpData();
-
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
+
+        fillOpData();
 
         ivAddOperation.setOnMouseClicked(e->{
             menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);

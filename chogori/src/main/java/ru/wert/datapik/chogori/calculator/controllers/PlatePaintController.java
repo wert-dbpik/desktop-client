@@ -71,10 +71,9 @@ public class PlatePaintController extends AbstractOpPlate {
         this.partController = (FormDetailController)controller;
         this.opData = opData;
 
-        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
-
-        controller.getAddedPlates().add(this);
         new BXPaintingDifficulty().create(cmbxDifficulty);
+
+        fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         new TFColoredInteger(tfAlong, this);
         new TFColoredInteger(tfAcross, this);
@@ -94,6 +93,7 @@ public class PlatePaintController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        controller.getAddedPlates().add(this);
         setNormTime();
     }
 
@@ -150,20 +150,6 @@ public class PlatePaintController extends AbstractOpPlate {
         collectOpData();
     }
 
-    /**
-     * Метод устанавливает изначальные нулевые значения полей
-     */
-//    @Override
-//    public void setZeroValues() {
-//        measure = controller.getCmbxTimeMeasurement().getValue();
-//        razvA = new TFInteger(partController.getTfA()).getIntegerValue();
-//        razvB = new TFInteger(partController.getTfB()).getIntegerValue();
-//        tfAlong.setText(String.valueOf(Math.min(razvA, razvB)));
-//        tfAcross.setText("0");
-//
-//        tfHangingTime.setText("20");
-//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

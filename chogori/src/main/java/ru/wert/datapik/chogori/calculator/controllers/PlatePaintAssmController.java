@@ -64,12 +64,12 @@ public class PlatePaintAssmController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpPaintAssm opData){
         this.controller = controller;
-        controller.getAddedPlates().add(this);
         this.opData = opData;
+
+        new BXAssemblingType().create(cmbxAssemblingType);
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
-        new BXAssemblingType().create(cmbxAssemblingType);
         new TFColoredDouble(tfArea, this);
         new TFColoredInteger(tfAlong, this);
         new TFColoredInteger(tfAcross, this);
@@ -89,6 +89,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        controller.getAddedPlates().add(this);
         setNormTime();
     }
 
@@ -136,19 +137,6 @@ public class PlatePaintAssmController extends AbstractOpPlate {
         currentNormTime = time;//результат в минутах
         collectOpData();
     }
-
-    /**
-     * Метод устанавливает изначальные нулевые значения полей
-     */
-//    @Override
-//    public void setZeroValues() {
-//        measure = controller.getCmbxTimeMeasurement().getValue();
-//        tfArea.setText("0.0");
-//        tfAlong.setText("0");
-//        tfAcross.setText("0");
-//
-//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

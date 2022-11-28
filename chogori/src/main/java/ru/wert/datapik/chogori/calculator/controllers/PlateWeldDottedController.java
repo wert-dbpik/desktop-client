@@ -10,6 +10,7 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpWeldDotted;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
@@ -52,24 +53,15 @@ public class PlateWeldDottedController extends AbstractOpPlate {
 
     public void init(IFormMenu controller, OpWeldDotted opData){
         this.controller = controller;
-        controller.getAddedPlates().add(this);
         this.opData = opData;
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        tfParts.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfDots.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
-        tfDrops.textProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
+        new TFColoredInteger(tfParts, this);
+        new TFColoredInteger(tfDots, this);
+        new TFColoredInteger(tfDrops, this);
 
         ivDeleteOperation.setOnMouseClicked(e->{
             controller.getAddedPlates().remove(this);
@@ -79,6 +71,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+        controller.getAddedPlates().add(this);
         setNormTime();
     }
 
@@ -107,17 +100,6 @@ public class PlateWeldDottedController extends AbstractOpPlate {
         currentNormTime = time;
         collectOpData();
     }
-
-    /**
-     * Метод устанавливает изначальные нулевые значения полей
-     */
-//    @Override
-//    public void setZeroValues() {
-//        tfParts.setText("0");
-//        tfDots.setText("0");
-//        tfDrops.setText("0");
-//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем
