@@ -124,16 +124,16 @@ public class PlateAssmNodesController extends AbstractOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override
-    public void setZeroValues() {
-        tfPostLocks.setText("0");
-        tfDoubleLocks.setText("0");
-        tfMirrors.setText("0");
-        tfDetectors.setText("0");
-        tfConnectionBoxes.setText("0");
-
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
+//    @Override
+//    public void setZeroValues() {
+//        tfPostLocks.setText("0");
+//        tfDoubleLocks.setText("0");
+//        tfMirrors.setText("0");
+//        tfDetectors.setText("0");
+//        tfConnectionBoxes.setText("0");
+//
+//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

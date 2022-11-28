@@ -120,15 +120,15 @@ public class PlateLocksmithController extends AbstractOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override
-    public void setZeroValues() {
-        tfRivets.setText("0");
-        tfCountersinkings.setText("0");
-        tfThreadings.setText("0");
-        tfSmallSawings.setText("0");
-        tfBigSawings.setText("0");
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
+//    @Override
+//    public void setZeroValues() {
+//        tfRivets.setText("0");
+//        tfCountersinkings.setText("0");
+//        tfThreadings.setText("0");
+//        tfSmallSawings.setText("0");
+//        tfBigSawings.setText("0");
+//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

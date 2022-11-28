@@ -140,15 +140,15 @@ public class PlatePaintAssmController extends AbstractOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override
-    public void setZeroValues() {
-        measure = controller.getCmbxTimeMeasurement().getValue();
-        tfArea.setText("0.0");
-        tfAlong.setText("0");
-        tfAcross.setText("0");
-
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
+//    @Override
+//    public void setZeroValues() {
+//        measure = controller.getCmbxTimeMeasurement().getValue();
+//        tfArea.setText("0.0");
+//        tfAlong.setText("0");
+//        tfAcross.setText("0");
+//
+//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

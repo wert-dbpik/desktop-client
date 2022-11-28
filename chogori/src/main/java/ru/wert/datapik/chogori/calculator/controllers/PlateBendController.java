@@ -110,16 +110,6 @@ public class PlateBendController extends AbstractOpPlate {
     }
 
     /**
-     * Метод устанавливает изначальные нулевые значения полей
-     */
-    @Override
-    public void setZeroValues() {
-        tfBends.setText("1");
-        tfMen.setText("1");
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
-
-    /**
      * Устанавливает и расчитывает значения, заданные пользователем
      */
     private void countInitialValues() {

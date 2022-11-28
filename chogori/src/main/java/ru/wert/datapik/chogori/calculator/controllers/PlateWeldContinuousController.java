@@ -212,18 +212,18 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override
-    public void setZeroValues() {
-        tfSeamLength.setText("0");
-        tfMen.setText("1");
-        tfSeams.setText("1");
-        tfSeamLength.setText("0");
-        enableNumOfSeams();
-        disableNumOfSeamsCounting();
-        chbxPreEnterSeams.setSelected(true);
-        chbxStripping.setSelected(false);
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
+//    @Override
+//    public void setZeroValues() {
+//        tfSeamLength.setText("0");
+//        tfMen.setText("1");
+//        tfSeams.setText("1");
+//        tfSeamLength.setText("0");
+//        enableNumOfSeams();
+//        disableNumOfSeamsCounting();
+//        chbxPreEnterSeams.setSelected(true);
+//        chbxStripping.setSelected(false);
+//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

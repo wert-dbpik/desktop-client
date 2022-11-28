@@ -131,16 +131,16 @@ public class PlateAssmNutsController extends AbstractOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override
-    public void setZeroValues() {
-        tfScrews.setText("0");
-        tfVSHGs.setText("0");
-        tfRivets.setText("0");
-        tfRivetNuts.setText("0");
-        tfGroundSets.setText("0");
-        tfOthers.setText("0");
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
+//    @Override
+//    public void setZeroValues() {
+//        tfScrews.setText("0");
+//        tfVSHGs.setText("0");
+//        tfRivets.setText("0");
+//        tfRivetNuts.setText("0");
+//        tfGroundSets.setText("0");
+//        tfOthers.setText("0");
+//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

@@ -111,13 +111,13 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override
-    public void setZeroValues() {
-        tfParts.setText("0");
-        tfDots.setText("0");
-        tfDrops.setText("0");
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
+//    @Override
+//    public void setZeroValues() {
+//        tfParts.setText("0");
+//        tfDots.setText("0");
+//        tfDrops.setText("0");
+//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

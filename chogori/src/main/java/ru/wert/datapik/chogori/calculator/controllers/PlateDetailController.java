@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.*;
+import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
 import ru.wert.datapik.chogori.calculator.entities.OpDetail;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
@@ -41,6 +42,9 @@ public class PlateDetailController implements IOpPlate {
     @FXML
     private Label lblOperationName;
 
+    private static int nameIndex = 0;
+    private String detailName;
+
     private IFormMenu controller;
     private FormDetailController partController;
     private OpDetail opData;
@@ -58,6 +62,11 @@ public class PlateDetailController implements IOpPlate {
         this.controller = controller;
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
         opData = new OpDetail();
+
+        if(opData.getName() == null && tfName.getText().equals("")) {
+            detailName = String.format("Деталь #%s", ++nameIndex);
+            tfName.setText(detailName);
+        }
 
         ivEdit.setOnMouseClicked(e->{
             try {

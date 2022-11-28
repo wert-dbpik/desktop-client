@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.calculator;
+package ru.wert.datapik.chogori.calculator.controllers.forms;
 
 
 import javafx.collections.FXCollections;
@@ -9,6 +9,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.MenuCalculator;
 import ru.wert.datapik.chogori.calculator.entities.*;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
@@ -20,7 +24,7 @@ import java.util.List;
 
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
-public class FormDetailController implements IFormMenu{
+public class FormDetailController implements IFormMenu {
 
     @FXML @Getter
     private TextField tfPartName;
@@ -76,12 +80,11 @@ public class FormDetailController implements IFormMenu{
     private MenuCalculator menu;
     private OpDetail opData;
 
-    private static int nameIndex = 0;
-    private String detailName;
+
     private double ro; //Плотность
     private double t; //Толщина
-    private double paramA; //параметр А
-    private double paramB; //параметр B
+    private int paramA; //параметр А
+    private int paramB; //параметр B
 
     @Getter private ObservableList<AbstractOpPlate> addedPlates;
     @Getter private List<OpData> addedOperations;
@@ -89,13 +92,11 @@ public class FormDetailController implements IFormMenu{
 
     public void init(TextField tfName, OpDetail opData) {
         this.opData = opData;
+
         tfPartName.setText(tfName.getText());
         tfName.textProperty().bindBidirectional(tfPartName.textProperty());
 
-        if(opData.getName() == null && tfName.getText().equals("")) {
-            detailName = String.format("Деталь #%s", ++nameIndex);
-            tfPartName.setText(detailName);
-        }
+        fillOpData();
 
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
@@ -139,7 +140,7 @@ public class FormDetailController implements IFormMenu{
         if(!opData.getOperations().isEmpty())
             deployData(opData);
 
-        fillOpData();
+
     }
 
     private void deployData(OpDetail opData) {
@@ -203,8 +204,8 @@ public class FormDetailController implements IFormMenu{
         try {
             ro = cmbxMaterial.getValue().getParamX();
             t = cmbxMaterial.getValue().getParamS();
-            paramA = Double.parseDouble(tfA.getText().trim());
-            paramB = Double.parseDouble(tfB.getText().trim());
+            paramA = Integer.parseInt(tfA.getText().trim());
+            paramB = Integer.parseInt(tfB.getText().trim());
             if(paramA <= 0 || paramB <= 0) throw new NumberFormatException();
         } catch (NumberFormatException e) {
             tfWeight.setText("");
@@ -251,7 +252,9 @@ public class FormDetailController implements IFormMenu{
 
     private void fillOpData(){
 
-        if(opData.getMaterial() != null) cmbxMaterial.setValue(opData.getMaterial());
+        if(opData.getMaterial() != null)
+            cmbxMaterial.setValue(opData.getMaterial());
+
         paramA = opData.getParamA();
         tfA.setText(String.valueOf(paramA));
 

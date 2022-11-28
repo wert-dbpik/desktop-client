@@ -50,7 +50,7 @@ public abstract class AbstractOpPlate implements IOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    public abstract void setZeroValues();
+//    public abstract void setZeroValues();
 
     /**
      * Метод возвращает текущее расчитанное

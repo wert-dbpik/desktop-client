@@ -128,14 +128,14 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override
-    public void setZeroValues() {
-        tfA.setText("0");
-        tfB.setText("0");
-        tfCompA.setText("0.0");
-        tfCompB.setText("0.0");
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
+//    @Override
+//    public void setZeroValues() {
+//        tfA.setText("0");
+//        tfB.setText("0");
+//        tfCompA.setText("0.0");
+//        tfCompB.setText("0.0");
+//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

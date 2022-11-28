@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.FormDetailController;
+import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
@@ -17,7 +17,6 @@ import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpPaint;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
-import ru.wert.datapik.chogori.calculator.components.TFInteger;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class PlatePaintController extends AbstractOpPlate {
@@ -154,17 +153,17 @@ public class PlatePaintController extends AbstractOpPlate {
     /**
      * Метод устанавливает изначальные нулевые значения полей
      */
-    @Override
-    public void setZeroValues() {
-        measure = controller.getCmbxTimeMeasurement().getValue();
-        razvA = new TFInteger(partController.getTfA()).getIntegerValue();
-        razvB = new TFInteger(partController.getTfB()).getIntegerValue();
-        tfAlong.setText(String.valueOf(Math.min(razvA, razvB)));
-        tfAcross.setText("0");
-
-        tfHangingTime.setText("20");
-        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
-    }
+//    @Override
+//    public void setZeroValues() {
+//        measure = controller.getCmbxTimeMeasurement().getValue();
+//        razvA = new TFInteger(partController.getTfA()).getIntegerValue();
+//        razvB = new TFInteger(partController.getTfB()).getIntegerValue();
+//        tfAlong.setText(String.valueOf(Math.min(razvA, razvB)));
+//        tfAcross.setText("0");
+//
+//        tfHangingTime.setText("20");
+//        setTimeMeasurement(controller.getCmbxTimeMeasurement().getValue());
+//    }
 
     /**
      * Устанавливает и расчитывает значения, заданные пользователем

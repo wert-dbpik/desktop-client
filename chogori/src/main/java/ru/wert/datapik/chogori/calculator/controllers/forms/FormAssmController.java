@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.calculator;
+package ru.wert.datapik.chogori.calculator.controllers.forms;
 
 
 import javafx.collections.FXCollections;
@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import ru.wert.datapik.chogori.calculator.*;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
