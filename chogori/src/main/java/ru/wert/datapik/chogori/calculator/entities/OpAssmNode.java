@@ -9,11 +9,11 @@ import ru.wert.datapik.chogori.calculator.enums.EOpType;
 @Setter
 public class OpAssmNode extends OpData {
 
-    private Integer postLocks; //почтовые замки
-    private Integer doubleLocks; //замки с рычагами
-    private Integer mirrors; //стекла в дверь
-    private Integer detectors; //извещатели
-    private Integer connectionBoxes;//коробки соединительные типа КС-4
+    private Integer postLocks = 0; //почтовые замки
+    private Integer doubleLocks = 0; //замки с рычагами
+    private Integer mirrors = 0; //стекла в дверь
+    private Integer detectors = 0; //извещатели
+    private Integer connectionBoxes = 0;//коробки соединительные типа КС-4
 
     public OpAssmNode() {
         super.opType = EOpType.ASSM_NODES;

@@ -10,9 +10,9 @@ import ru.wert.datapik.winform.enums.EOperation;
 @Setter
 public class OpAssmCutting extends OpData {
 
-    private Double sealer;
-    private Double selfAdhSealer;
-    private Double insulation;
+    private Double sealer = 0.0;
+    private Double selfAdhSealer = 0.0;
+    private Double insulation = 0.0;
 
     public OpAssmCutting() {
         super.opType = EOpType.ASSM_CUTTINGS;

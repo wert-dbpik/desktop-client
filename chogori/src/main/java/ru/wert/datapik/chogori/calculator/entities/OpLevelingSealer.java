@@ -10,9 +10,9 @@ import ru.wert.datapik.chogori.calculator.enums.ESealersWidth;
 @Setter
 public class OpLevelingSealer extends OpData {
 
-    private ESealersWidth sealersWidth; //Ширина уплотнителя
-    private Integer paramA; //Размер А
-    private Integer paramB;//Размер Б
+    private ESealersWidth sealersWidth = null; //Ширина уплотнителя
+    private Integer paramA = 0; //Размер А
+    private Integer paramB = 0;//Размер Б
 
     public OpLevelingSealer() {
         super.opType = EOpType.LEVELING_SEALER;

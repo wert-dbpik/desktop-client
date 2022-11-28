@@ -9,12 +9,12 @@ import ru.wert.datapik.chogori.calculator.enums.EOpType;
 @Setter
 public class OpAssmNut extends OpData {
 
-    private Integer screws; //винты
-    private Integer vshgs; //ВШГ - винт-шайба-гайка
-    private Integer rivets; //заклепки
-    private Integer rivetNuts; //заклепочные гайки
-    private Integer groundSets;//заземление(гайка-шайба-этикетка)
-    private Integer others;//другой крепеж
+    private Integer screws = 0; //винты
+    private Integer vshgs = 0; //ВШГ - винт-шайба-гайка
+    private Integer rivets = 0; //заклепки
+    private Integer rivetNuts = 0; //заклепочные гайки
+    private Integer groundSets = 0;//заземление(гайка-шайба-этикетка)
+    private Integer others = 0;//другой крепеж
 
     public OpAssmNut() {
         super.opType = EOpType.ASSM_NUTS;
