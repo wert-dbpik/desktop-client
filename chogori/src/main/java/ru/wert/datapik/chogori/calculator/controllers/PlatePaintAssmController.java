@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.BXAssemblingType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -49,7 +49,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IFormMenu controller;
+    private IFormController controller;
     private OpPaintAssm opData;
 
     public OpData getOpData(){
@@ -62,7 +62,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
     private double pantingSpeed;// Скорость нанесения покрытия
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
-    public void init(IFormMenu controller, OpPaintAssm opData){
+    public void init(IFormController controller, OpPaintAssm opData){
         this.controller = controller;
         this.opData = opData;
 

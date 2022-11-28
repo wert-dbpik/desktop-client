@@ -13,7 +13,8 @@ import java.util.List;
 @Setter
 public class OpAssm extends OpData {
 
-    private String name;
+    private String name = null;
+    private Integer quantity = 1;
     private List<OpData> operations = new ArrayList<>();
 
     public OpAssm() {

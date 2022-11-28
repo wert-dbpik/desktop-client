@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxWidth="1.7976931348623157E308" prefWidth="441.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.PlateLocksmithController">
+<VBox maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.calculator.controllers.PlateLocksmithController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
@@ -22,7 +22,13 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="tfName" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="250.0" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="tfName" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblQuantity" text="КОЛ" textFill="#2f23d0">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tfN" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" />
             <ImageView fx:id="ivCopy" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../chogori-pics/btns/copy.png" />

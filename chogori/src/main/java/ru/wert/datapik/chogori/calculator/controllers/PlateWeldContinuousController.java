@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
 import ru.wert.datapik.chogori.calculator.components.ChBox;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -68,7 +68,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IFormMenu controller;
+    private IFormController controller;
     private OpWeldContinuous opData;
 
     public OpData getOpData(){
@@ -85,7 +85,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
     private double assemblingTime; //Время сборки свариваемого узла
     private ETimeMeasurement measure;
 
-    public void init(IFormMenu controller, OpWeldContinuous opData){
+    public void init(IFormController controller, OpWeldContinuous opData){
         this.controller = controller;
         this.opData = opData;
 

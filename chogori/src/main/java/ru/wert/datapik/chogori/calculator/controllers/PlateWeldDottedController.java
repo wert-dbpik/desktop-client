@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpWeldDotted;
@@ -39,7 +39,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IFormMenu controller;
+    private IFormController controller;
     private OpWeldDotted opData;
 
     public OpData getOpData(){
@@ -51,7 +51,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
     private int drops; //Количество прихваток
     private ETimeMeasurement measure;
 
-    public void init(IFormMenu controller, OpWeldDotted opData){
+    public void init(IFormController controller, OpWeldDotted opData){
         this.controller = controller;
         this.opData = opData;
 

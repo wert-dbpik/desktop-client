@@ -6,7 +6,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
-public interface IFormMenu {
+public interface IFormController {
 
     ObservableList<AbstractOpPlate> getAddedPlates();
 
@@ -16,9 +16,10 @@ public interface IFormMenu {
 
     ComboBox<ETimeMeasurement> getCmbxTimeMeasurement();
 
-//    ComboBox<Material> getCmbxMaterial();
-//
-//    TextField getTfA();
-//
-//    TextField getTfB();
+    void setCurrentMechTime(double time);
+    void setCurrentPaintTime(double time);
+    void setCurrentAssmTime(double time);
+    void setCurrentPackTime(double time);
+
+
 }

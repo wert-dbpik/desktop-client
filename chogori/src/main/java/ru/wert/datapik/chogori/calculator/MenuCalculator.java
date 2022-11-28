@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MenuCalculator extends ContextMenu {
 
-    private IFormMenu calculator;
+    private IFormController calculator;
     private ObservableList<AbstractOpPlate> addedPlates;
 
     private ListView<VBox> listViewTechOperations;
@@ -23,7 +23,7 @@ public class MenuCalculator extends ContextMenu {
     /**
      * Create a new ContextMenu
      */
-    public MenuCalculator(IFormMenu calculator, ObservableList<AbstractOpPlate> addedPlates, ListView<VBox> listViewTechOperations, List<OpData> addedOperations) {
+    public MenuCalculator(IFormController calculator, ObservableList<AbstractOpPlate> addedPlates, ListView<VBox> listViewTechOperations, List<OpData> addedOperations) {
         this.calculator = calculator;
         this.addedPlates = addedPlates;
         this.listViewTechOperations = listViewTechOperations;
@@ -188,7 +188,7 @@ public class MenuCalculator extends ContextMenu {
             VBox detail = loader.load();
             detail.setId("calculator");
             PlateDetailController controller = loader.getController();
-            controller.init(calculator);
+            controller.init(calculator, opData);
             listViewTechOperations.getItems().add(detail);
             addedOperations.add(opData);
         } catch (IOException e) {

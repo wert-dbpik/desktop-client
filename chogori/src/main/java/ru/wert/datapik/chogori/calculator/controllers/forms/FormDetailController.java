@@ -9,9 +9,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import lombok.Setter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.MenuCalculator;
 import ru.wert.datapik.chogori.calculator.entities.*;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
@@ -24,7 +25,7 @@ import java.util.List;
 
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
-public class FormDetailController implements IFormMenu {
+public class FormDetailController implements IFormController {
 
     @FXML @Getter
     private TextField tfPartName;
@@ -81,6 +82,11 @@ public class FormDetailController implements IFormMenu {
     private OpDetail opData;
 
 
+    @Setter@Getter private double currentMechTime;
+    @Setter@Getter private double currentPaintTime;
+    @Setter@Getter private double currentAssmTime;
+    @Setter@Getter private double currentPackTime;
+
     private double ro; //Плотность
     private double t; //Толщина
     private int paramA; //параметр А
@@ -88,10 +94,11 @@ public class FormDetailController implements IFormMenu {
 
     @Getter private ObservableList<AbstractOpPlate> addedPlates;
     @Getter private List<OpData> addedOperations;
+    private IFormController controller;
 
-
-    public void init(TextField tfName, OpDetail opData) {
+    public void init(IFormController controller, TextField tfName, OpDetail opData) {
         this.opData = opData;
+        this.controller = controller;
 
         tfPartName.setText(tfName.getText());
         tfName.textProperty().bindBidirectional(tfPartName.textProperty());
@@ -140,7 +147,6 @@ public class FormDetailController implements IFormMenu {
         });
         if(!opData.getOperations().isEmpty())
             deployData(opData);
-
 
 
     }
@@ -236,6 +242,9 @@ public class FormDetailController implements IFormMenu {
                 paintingTime += cn.getCurrentNormTime();
         }
 
+        controller.set currentMechanicalTime = mechanicalTime;
+        currentPaintingTime = paintingTime;
+
         if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)){
             mechanicalTime = mechanicalTime * MIN_TO_SEC;
             paintingTime = paintingTime * MIN_TO_SEC;
@@ -244,11 +253,13 @@ public class FormDetailController implements IFormMenu {
         String format = doubleFormat;
         if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)) format = integerFormat;
 
+
         tfMechanicalTime.setText(String.format(format, mechanicalTime));
         tfPaintingTime.setText(String.format(format, paintingTime));
 
-
         tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime ));
+
+        controller.countSumNormTimeByShops();
 
     }
 

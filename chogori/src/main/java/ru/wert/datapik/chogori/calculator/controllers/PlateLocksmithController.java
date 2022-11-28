@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpLocksmith;
@@ -45,7 +45,7 @@ public class PlateLocksmithController extends AbstractOpPlate {
     @FXML
     private Label lblOperationName;
 
-    private IFormMenu controller;
+    private IFormController controller;
     private OpLocksmith opData;
 
     public OpData getOpData(){
@@ -59,7 +59,7 @@ public class PlateLocksmithController extends AbstractOpPlate {
     private int bigSawings; //Количество резов на большой пиле
     private ETimeMeasurement measure;
 
-    public void init(IFormMenu controller, OpLocksmith opData){
+    public void init(IFormController controller, OpLocksmith opData){
         this.controller = controller;
         this.opData = opData;
 

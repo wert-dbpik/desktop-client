@@ -8,9 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
@@ -48,7 +48,7 @@ public class PlatePaintController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IFormMenu controller;
+    private IFormController controller;
     private FormDetailController partController;
     private OpPaint opData;
 
@@ -66,7 +66,7 @@ public class PlatePaintController extends AbstractOpPlate {
     private int hangingTime; //Время навешивания
     private ETimeMeasurement measure; //Ед. измерения нормы времени
 
-    public void init(IFormMenu controller, OpPaint opData){
+    public void init(IFormController controller, OpPaint opData){
         this.controller = controller;
         this.partController = (FormDetailController)controller;
         this.opData = opData;

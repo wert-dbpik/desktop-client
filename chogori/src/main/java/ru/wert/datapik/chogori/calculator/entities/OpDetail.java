@@ -15,6 +15,7 @@ import java.util.List;
 public class OpDetail extends OpData {
 
     private String name = null;
+    private Integer quantity = 1;
     private Material material = null;
     private Integer paramA = 0;
     private Integer paramB = 0;

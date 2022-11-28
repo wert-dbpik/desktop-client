@@ -19,7 +19,7 @@ import java.util.List;
 
 import static ru.wert.datapik.chogori.calculator.AbstractOpPlate.*;
 
-public class FormAssmController implements IFormMenu, IForm {
+public class FormAssmController implements IFormController, IForm {
 
     @FXML
     private TextField tfAssmName;
@@ -47,6 +47,9 @@ public class FormAssmController implements IFormMenu, IForm {
 
     @FXML
     private TextField tfAssemblingTime;
+
+    @FXML
+    private TextField tfPackingTime;
 
     @FXML
     private Label lblTimeMeasure;
@@ -108,6 +111,7 @@ public class FormAssmController implements IFormMenu, IForm {
     /**
      * Метод расчитывает суммарное время по участкам
      */
+    @Override //IFormController
     public void countSumNormTimeByShops(){
         double mechanicalTime = 0.0;
         double paintingTime = 0.0;
@@ -122,12 +126,22 @@ public class FormAssmController implements IFormMenu, IForm {
                 assemblingTime += cn.getCurrentNormTime();
             else if(cn.getNormType().equals(ENormType.NORM_PACKING))
                 packingTime += cn.getCurrentNormTime();
+            else if(cn.getNormType().equals(ENormType.NORM_DETAIL)){
+                mechanicalTime += cn.getCurrentNormTime();
+                paintingTime += cn.getCurrentNormTime();
+            } else if(cn.getNormType().equals(ENormType.NORM_ASSEMBLING)){
+                mechanicalTime += cn.getCurrentNormTime();
+                paintingTime += cn.getCurrentNormTime();
+                assemblingTime += cn.getCurrentNormTime();
+                packingTime += cn.getCurrentNormTime();
+            }
         }
 
         if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)){
             mechanicalTime = mechanicalTime * MIN_TO_SEC;
             paintingTime = paintingTime * MIN_TO_SEC;
             assemblingTime = assemblingTime * MIN_TO_SEC;
+            packingTime = packingTime * MIN_TO_SEC;
         }
 
         String format = doubleFormat;
@@ -136,6 +150,7 @@ public class FormAssmController implements IFormMenu, IForm {
         tfMechanicalTime.setText(String.format(format, mechanicalTime));
         tfPaintingTime.setText(String.format(format, paintingTime));
         tfAssemblingTime.setText(String.format(format, assemblingTime));
+        tfPackingTime.setText(String.format(format, packingTime));
 
         tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime + assemblingTime + packingTime));
 

@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.BXSealersWidth;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
@@ -54,7 +54,7 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
     @FXML
     private Label lblNormTimeMeasure;
 
-    private IFormMenu controller;
+    private IFormController controller;
     private OpLevelingSealer opData;
 
     public OpData getOpData(){
@@ -67,7 +67,7 @@ public class PlateLevelingSealerController extends AbstractOpPlate {
 
     private ETimeMeasurement measure;
 
-    public void init(IFormMenu controller, OpLevelingSealer opData){
+    public void init(IFormController controller, OpLevelingSealer opData){
         this.controller = controller;
         this.opData = opData;
 

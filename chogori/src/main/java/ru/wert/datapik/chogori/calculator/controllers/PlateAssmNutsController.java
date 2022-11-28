@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpAssmNut;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
@@ -51,7 +51,7 @@ public class PlateAssmNutsController extends AbstractOpPlate {
     @FXML
     private TextField tfScrews;
 
-    private IFormMenu controller;
+    private IFormController controller;
     private OpAssmNut opData;
 
     public OpData getOpData(){
@@ -67,7 +67,7 @@ public class PlateAssmNutsController extends AbstractOpPlate {
 
     private ETimeMeasurement measure;
 
-    public void init(IFormMenu controller, OpAssmNut opData){
+    public void init(IFormController controller, OpAssmNut opData){
         this.controller = controller;
         controller.getAddedPlates().add(this);
         this.opData = opData;

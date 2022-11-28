@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.IFormMenu;
+import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpBending;
@@ -42,7 +42,7 @@ public class PlateBendController extends AbstractOpPlate {
     @FXML
     private TextField tfNormTime;
 
-    private IFormMenu controller;
+    private IFormController controller;
     private OpBending opData;
 
     public OpData getOpData(){
@@ -54,7 +54,7 @@ public class PlateBendController extends AbstractOpPlate {
     private double toolRatio;
     private ETimeMeasurement measure;
 
-    public void init(IFormMenu controller, OpBending opData){
+    public void init(IFormController controller, OpBending opData){
         this.controller = controller;
         this.opData = opData;
 
