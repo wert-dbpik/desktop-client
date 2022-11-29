@@ -15,11 +15,15 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.datapik.chogori.application.excel.ExcelChooser;
 import ru.wert.datapik.chogori.application.passports.OpenPassportsEditorTask;
+import ru.wert.datapik.chogori.calculator.controllers.PlateDetailController;
+import ru.wert.datapik.chogori.calculator.controllers.forms.FormAssmController;
+import ru.wert.datapik.chogori.calculator.entities.OpAssm;
 import ru.wert.datapik.client.entity.models.Room;
 import ru.wert.datapik.client.entity.models.User;
 import ru.wert.datapik.chogori.chat.SideChat;
@@ -430,28 +434,12 @@ public class AppMenuController {
 
         Menu calculatorMenu = new Menu("Калькулятор");
 
-        MenuItem normsOnPartProcessingItem = new MenuItem("Рассчет норм на деталь");
-        normsOnPartProcessingItem.setOnAction(this::openCalculationOfNormsOnPartProcessing);
-
-        MenuItem normsOnAssemblingProcessingItem = new MenuItem("Рассчет норм на сборку");
+        MenuItem normsOnAssemblingProcessingItem = new MenuItem("Рассчет норм времени");
         normsOnAssemblingProcessingItem.setOnAction(this::openCalculationOfNormsOnAssemblingProcessing);
 
-        calculatorMenu.getItems().addAll(normsOnPartProcessingItem, normsOnAssemblingProcessingItem);
+        calculatorMenu.getItems().addAll(normsOnAssemblingProcessingItem);
 
         return calculatorMenu;
-    }
-
-    private void openCalculationOfNormsOnPartProcessing(ActionEvent event) {
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/calculatorPart.fxml"));
-            Parent parent = loader.load();
-
-            new WindowDecoration("Калькулятор", parent, false, null);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
     }
 
     private void openCalculationOfNormsOnAssemblingProcessing(ActionEvent event) {
@@ -459,7 +447,9 @@ public class AppMenuController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/calculator/calculatorAssm.fxml"));
             Parent parent = loader.load();
-
+            parent.setId("calculator");
+            FormAssmController controller = loader.getController();
+            controller.init(null, null, new OpAssm());
             new WindowDecoration("Калькулятор", parent, false, null);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -497,7 +487,6 @@ public class AppMenuController {
         adminMenu.getItems().add(new SeparatorMenuItem());
         adminMenu.getItems().add(catalogOfFolders);
         adminMenu.getItems().add(test);
-
 
         return adminMenu;
     }

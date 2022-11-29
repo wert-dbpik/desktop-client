@@ -1,6 +1,10 @@
 package ru.wert.datapik.chogori.calculator.controllers.forms;
 
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,6 +18,7 @@ import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.MenuCalculator;
+import ru.wert.datapik.chogori.calculator.components.ObservableNormTime;
 import ru.wert.datapik.chogori.calculator.entities.*;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
@@ -81,11 +86,9 @@ public class FormDetailController implements IFormController {
     private MenuCalculator menu;
     private OpDetail opData;
 
+    @Getter ObjectProperty<Double> currentMechTime = new SimpleObjectProperty<>();
+    @Getter ObjectProperty<Double> currentPaintTime = new SimpleObjectProperty<>();
 
-    @Setter@Getter private double currentMechTime;
-    @Setter@Getter private double currentPaintTime;
-    @Setter@Getter private double currentAssmTime;
-    @Setter@Getter private double currentPackTime;
 
     private double ro; //Плотность
     private double t; //Толщина
@@ -96,23 +99,41 @@ public class FormDetailController implements IFormController {
     @Getter private List<OpData> addedOperations;
     private IFormController controller;
 
-    public void init(IFormController controller, TextField tfName, OpDetail opData) {
-        this.opData = opData;
+    @Override //IFormController
+    public void init(IFormController controller, TextField tfName, OpData opData) {
+        this.opData = (OpDetail) opData;
         this.controller = controller;
 
+        //Инициализируем список операционных плашек
+        addedPlates = FXCollections.observableArrayList();
+        addedOperations = new ArrayList<>();
+
+        //Инициализируем наименование
         tfPartName.setText(tfName.getText());
         tfName.textProperty().bindBidirectional(tfPartName.textProperty());
 
+        //Инициализируем комбобоксы
         new BXMaterial().create(cmbxMaterial);
         new BXTimeMeasurement().create(cmbxTimeMeasurement);
 
+        //Создаем меню
+        createMenu();
+
+        //Заполняем поля формы
         fillOpData();
         countWeightAndArea();
 
-        ivAddOperation.setOnMouseClicked(e->{
-            menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
-        });
+        //Инициализируем наблюдаемые переменные
+        if(controller != null) {
+            new ObservableNormTime(currentMechTime, controller);
+            new ObservableNormTime(currentPaintTime, controller);
+        }
 
+        initViews();
+
+    }
+
+    private void initViews() {
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
             for(AbstractOpPlate nc : addedPlates){
                 nc.setTimeMeasurement(newValue);
@@ -145,10 +166,6 @@ public class FormDetailController implements IFormController {
                 countSumNormTimeByShops();
             }
         });
-        if(!opData.getOperations().isEmpty())
-            deployData(opData);
-
-
     }
 
     private void deployData(OpDetail opData) {
@@ -192,20 +209,18 @@ public class FormDetailController implements IFormController {
         }
     }
 
-
-    @FXML
-    void initialize(){
-
-        addedPlates = FXCollections.observableArrayList();
-        addedOperations = new ArrayList<>();
-
+    private void createMenu(){
         menu = new MenuCalculator(this, addedPlates, listViewTechOperations, addedOperations);
+
         menu.getItems().addAll(menu.getAddCutting(), menu.getAddBending(), menu.getAddLocksmith());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddWeldLongSeam(), menu.getAddWeldingDotted());
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().addAll(menu.getAddPainting());
 
+        ivAddOperation.setOnMouseClicked(e->{
+            menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
+        });
     }
 
     private void countWeightAndArea() {
@@ -242,8 +257,8 @@ public class FormDetailController implements IFormController {
                 paintingTime += cn.getCurrentNormTime();
         }
 
-        controller.set currentMechanicalTime = mechanicalTime;
-        currentPaintingTime = paintingTime;
+        currentMechTime.set(mechanicalTime);
+        currentPaintTime.set(paintingTime);
 
         if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)){
             mechanicalTime = mechanicalTime * MIN_TO_SEC;
@@ -257,9 +272,8 @@ public class FormDetailController implements IFormController {
         tfMechanicalTime.setText(String.format(format, mechanicalTime));
         tfPaintingTime.setText(String.format(format, paintingTime));
 
-        tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime ));
 
-        controller.countSumNormTimeByShops();
+        tfTotalTime.setText(String.format(format, mechanicalTime + paintingTime ));
 
     }
 
@@ -273,6 +287,9 @@ public class FormDetailController implements IFormController {
 
         paramB = opData.getParamB();
         tfB.setText(String.valueOf(paramB));
+
+        if(!opData.getOperations().isEmpty())
+            deployData(opData);
     }
 
 }
