@@ -98,8 +98,11 @@ public class FormDetailController implements IFormController {
         addedOperations = new ArrayList<>();
 
         //Инициализируем наименование
-        tfPartName.setText(tfName.getText());
-        tfName.textProperty().bindBidirectional(tfPartName.textProperty());
+        if(tfName != null) {
+            this.opData.setName(tfName.getText());
+            tfPartName.setText(tfName.getText());
+            tfName.textProperty().bindBidirectional(tfPartName.textProperty());
+        }
 
         //Инициализируем комбобоксы
         new BXMaterial().create(cmbxMaterial);
@@ -274,5 +277,7 @@ public class FormDetailController implements IFormController {
         if(!opData.getOperations().isEmpty())
             deployData(opData);
     }
+
+
 
 }

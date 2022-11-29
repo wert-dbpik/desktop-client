@@ -7,6 +7,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.controllers.*;
+import ru.wert.datapik.chogori.calculator.controllers.forms.FormAssmController;
 import ru.wert.datapik.chogori.calculator.entities.*;
 import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
 
@@ -29,6 +30,8 @@ public class MenuCalculator extends ContextMenu {
         this.addedPlates = addedPlates;
         this.listViewTechOperations = listViewTechOperations;
         this.addedOperations = addedOperations;
+        if(calculator instanceof FormAssmController)
+            System.out.println("Создан меню сборки");
     }
 
 
@@ -37,7 +40,7 @@ public class MenuCalculator extends ContextMenu {
         MenuItem addDetail = new MenuItem("Добавить деталь");
         addDetail.setOnAction(event -> {
             OpDetail opDetail = new OpDetail();
-            System.out.println("ne Plate : " + opDetail);
+            System.out.println("Новая плашка на деталь : " + opDetail);
             addDetailPlate(opDetail);
         });
         return addDetail;

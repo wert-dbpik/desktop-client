@@ -61,7 +61,7 @@ public class FormAssmController implements IFormController {
     private TextField tfTotalTime;
 
     @Getter private ObservableList<AbstractOpPlate> addedPlates;
-    @Getter private List<OpData> addedOperations;
+    @Getter private List<OpData> assmAddedOperations;
 
     private IFormController controller;
 
@@ -74,7 +74,7 @@ public class FormAssmController implements IFormController {
 
         //Инициализируем список операционных плашек
         addedPlates = FXCollections.observableArrayList();
-        addedOperations = new ArrayList<>();
+        assmAddedOperations = new ArrayList<>();
 
         //Инициализируем наименование
         if(tfName != null) {
@@ -113,7 +113,7 @@ public class FormAssmController implements IFormController {
 
     private void createMenu() {
 
-        MenuCalculator menu = new MenuCalculator(this, addedPlates, listViewTechOperations, addedOperations);
+        MenuCalculator menu = new MenuCalculator(this, addedPlates, listViewTechOperations, assmAddedOperations);
 
         menu.getItems().add(menu.createItemAddDetail());
         menu.getItems().add(new SeparatorMenuItem());
@@ -141,10 +141,11 @@ public class FormAssmController implements IFormController {
         double assemblingTime = 0.0;
         double packingTime = 0.0;
 
-        for(OpData cn: addedOperations){
-            System.out.println(cn);
-            System.out.println(cn.getMechTime());
-            System.out.println(cn.getPaintTime());
+        System.out.println("operations: " + assmAddedOperations);
+
+        for(OpData cn: assmAddedOperations){
+            if(cn instanceof OpDetail)
+                System.out.println("Имя операции:" + ((OpDetail) cn).getName() + ", mech=" +  cn.getMechTime());
 
             mechanicalTime += cn.getMechTime();
             paintingTime += cn.getPaintTime();

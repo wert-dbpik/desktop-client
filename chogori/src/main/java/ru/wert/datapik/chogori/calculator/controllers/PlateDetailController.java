@@ -124,6 +124,8 @@ public class PlateDetailController extends AbstractOpPlate implements IOpPlate {
         countNorm();
         if (partController != null)
             setTimeMeasurement(measure);
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!
         controller.countSumNormTimeByShops();
 
     }
