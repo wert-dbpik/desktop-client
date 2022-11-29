@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.calculator;
+package ru.wert.datapik.chogori.calculator.interfaces;
 
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.enums.ENormType;

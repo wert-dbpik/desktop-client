@@ -1,7 +1,6 @@
-package ru.wert.datapik.chogori.calculator;
+package ru.wert.datapik.chogori.calculator.interfaces;
 
 import javafx.scene.control.TextField;
-import ru.wert.datapik.chogori.calculator.entities.OpAssm;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 
 /**

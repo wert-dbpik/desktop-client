@@ -1,8 +1,6 @@
 package ru.wert.datapik.chogori.calculator.controllers.forms;
 
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,10 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.enums.ENormType;
-import ru.wert.datapik.chogori.calculator.IFormController;
+import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
 import ru.wert.datapik.chogori.calculator.MenuCalculator;
-import ru.wert.datapik.chogori.calculator.components.ObservableNormTime;
 import ru.wert.datapik.chogori.calculator.entities.*;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.common.components.BXMaterial;
@@ -83,10 +79,6 @@ public class FormDetailController implements IFormController {
     private MenuCalculator menu;
     private OpDetail opData;
 
-    @Getter ObjectProperty<Double> currentMechTime = new SimpleObjectProperty<>();
-    @Getter ObjectProperty<Double> currentPaintTime = new SimpleObjectProperty<>();
-
-
     private double ro; //Плотность
     private double t; //Толщина
     private int paramA; //параметр А
@@ -119,12 +111,6 @@ public class FormDetailController implements IFormController {
         //Заполняем поля формы
         fillOpData();
         countWeightAndArea();
-
-        //Инициализируем наблюдаемые переменные
-        if(controller != null) {
-            new ObservableNormTime(currentMechTime, controller);
-            new ObservableNormTime(currentPaintTime, controller);
-        }
 
         initViews();
 
@@ -170,37 +156,37 @@ public class FormDetailController implements IFormController {
         for (OpData op : operations) {
             switch (op.getOpType()) {
                 case CUTTING:
-                    menu.addCattingOperation((OpCutting) op);
+                    menu.addCattingPlate((OpCutting) op);
                     break;
                 case BENDING:
-                    menu.addBendingOperation((OpBending) op);
+                    menu.addBendingPlate((OpBending) op);
                     break;
                 case LOCKSMITH:
-                    menu.addLocksmithOperation((OpLocksmith) op);
+                    menu.addLocksmithPlate((OpLocksmith) op);
                     break;
                 case PAINTING:
-                    menu.addPaintOperation((OpPaint) op);
+                    menu.addPaintPlate((OpPaint) op);
                     break;
                 case PAINTING_ASSM:
-                    menu.addPaintAssmOperation((OpPaintAssm) op);
+                    menu.addPaintAssmPlate((OpPaintAssm) op);
                     break;
                 case WELD_CONTINUOUS:
-                    menu.addWeldContinuousOperation((OpWeldContinuous) op);
+                    menu.addWeldContinuousPlate((OpWeldContinuous) op);
                     break;
                 case WELD_DOTTED:
-                    menu.addWeldDottedOperation((OpWeldDotted) op);
+                    menu.addWeldDottedPlate((OpWeldDotted) op);
                     break;
                 case ASSM_CUTTINGS:
-                    menu.addAssmCuttingsOperation((OpAssmCutting) op);
+                    menu.addAssmCuttingsPlate((OpAssmCutting) op);
                     break;
                 case ASSM_NUTS:
-                    menu.addAssmNutsOperation((OpAssmNut) op);
+                    menu.addAssmNutsPlate((OpAssmNut) op);
                     break;
                 case ASSM_NODES:
-                    menu.addAssmNodesOperation((OpAssmNode) op);
+                    menu.addAssmNodesPlate((OpAssmNode) op);
                     break;
                 case LEVELING_SEALER:
-                    menu.addLevelingSealerOperation((OpLevelingSealer) op);
+                    menu.addLevelingSealerPlate((OpLevelingSealer) op);
                     break;
             }
         }
@@ -209,11 +195,11 @@ public class FormDetailController implements IFormController {
     private void createMenu(){
         menu = new MenuCalculator(this, addedPlates, listViewTechOperations, addedOperations);
 
-        menu.getItems().addAll(menu.getAddCutting(), menu.getAddBending(), menu.getAddLocksmith());
+        menu.getItems().addAll(menu.createItemAddCutting(), menu.createItemAddBending(), menu.createItemAddLocksmith());
         menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(menu.getAddWeldLongSeam(), menu.getAddWeldingDotted());
+        menu.getItems().addAll(menu.createItemAddWeldLongSeam(), menu.createItemAddWeldingDotted());
         menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().addAll(menu.getAddPainting());
+        menu.getItems().addAll(menu.createItemAddPainting());
 
         ivAddOperation.setOnMouseClicked(e->{
             menu.show(ivAddOperation, Side.LEFT, -15.0, 30.0);
@@ -252,8 +238,10 @@ public class FormDetailController implements IFormController {
             paintingTime += cn.getOpData().getPaintTime();
         }
 
-        currentMechTime.set(mechanicalTime);
-        currentPaintTime.set(paintingTime);
+        opData.setMechTime(mechanicalTime);
+        opData.setPaintTime(paintingTime);
+
+        controller.countSumNormTimeByShops();
 
         if(cmbxTimeMeasurement.getValue().equals(ETimeMeasurement.SEC)){
             mechanicalTime = mechanicalTime * MIN_TO_SEC;

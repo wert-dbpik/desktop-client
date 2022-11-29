@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
+import ru.wert.datapik.chogori.calculator.interfaces.IOpPlate;
 
 /**
  * Класс наследует интерфейс IOpPlate

@@ -1,9 +1,7 @@
 package ru.wert.datapik.chogori.calculator.entities;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.wert.datapik.chogori.calculator.IOpPlate;
 import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 import ru.wert.datapik.client.entity.models.Material;
