@@ -3,8 +3,6 @@ package ru.wert.datapik.chogori.calculator.controllers.forms;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,9 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import lombok.Setter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.MenuCalculator;
 import ru.wert.datapik.chogori.calculator.components.ObservableNormTime;
@@ -251,10 +248,8 @@ public class FormDetailController implements IFormController {
         double mechanicalTime = 0.0;
         double paintingTime = 0.0;
         for(AbstractOpPlate cn: addedPlates){
-            if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
-                mechanicalTime += cn.getCurrentNormTime();
-            else if(cn.getNormType().equals(ENormType.NORM_PAINTING))
-                paintingTime += cn.getCurrentNormTime();
+            mechanicalTime += cn.getOpData().getMechTime();
+            paintingTime += cn.getOpData().getPaintTime();
         }
 
         currentMechTime.set(mechanicalTime);

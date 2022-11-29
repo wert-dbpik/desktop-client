@@ -48,11 +48,6 @@ public abstract class AbstractOpPlate implements IOpPlate {
     public abstract void countNorm();
 
     /**
-     * Метод устанавливает изначальные нулевые значения полей
-     */
-//    public abstract void setZeroValues();
-
-    /**
      * Метод возвращает текущее расчитанное
      */
     public double getCurrentNormTime(){

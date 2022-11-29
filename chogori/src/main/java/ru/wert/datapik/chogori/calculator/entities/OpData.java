@@ -2,6 +2,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
 /**
@@ -11,8 +12,8 @@ import ru.wert.datapik.chogori.calculator.enums.EOpType;
 @Setter
 public class OpData {
 
-    protected
-    protected EOpType opType;
+    protected ENormType normType; //Тип нормы по участкам (МК, ППК и т.д.)
+    protected EOpType opType; //Тип олперации (Гибка, покраска и т.д))
 
     private double mechTime = 0.0; //МК
     private double paintTime = 0.0; //ППК

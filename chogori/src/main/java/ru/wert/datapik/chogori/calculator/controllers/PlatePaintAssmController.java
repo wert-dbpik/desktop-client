@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.BXAssemblingType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
@@ -21,9 +21,6 @@ import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class PlatePaintAssmController extends AbstractOpPlate {
-
-    @Getter
-    private ENormType normType = ENormType.NORM_PAINTING;
 
     @FXML
     private Label lblOperationName;

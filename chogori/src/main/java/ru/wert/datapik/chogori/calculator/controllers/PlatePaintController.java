@@ -10,7 +10,7 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
-import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
@@ -20,9 +20,6 @@ import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class PlatePaintController extends AbstractOpPlate {
-
-    @Getter
-    private ENormType normType = ENormType.NORM_PAINTING;
 
     @FXML
     private Label lblOperationName;

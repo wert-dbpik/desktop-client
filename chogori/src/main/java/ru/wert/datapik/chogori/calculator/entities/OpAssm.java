@@ -1,9 +1,8 @@
 package ru.wert.datapik.chogori.calculator.entities;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.wert.datapik.chogori.calculator.IOpPlate;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ public class OpAssm extends OpData {
     private List<OpData> operations = new ArrayList<>();
 
     public OpAssm() {
+        super.normType = ENormType.NORM_ASSEMBLE;
         super.opType = EOpType.ASSM;
     }
 }

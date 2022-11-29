@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
 @Getter
@@ -16,6 +17,7 @@ public class OpAssmNode extends OpData {
     private Integer connectionBoxes = 0;//коробки соединительные типа КС-4
 
     public OpAssmNode() {
+        super.normType = ENormType.NORM_ASSEMBLING;
         super.opType = EOpType.ASSM_NODES;
     }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.wert.datapik.chogori.calculator.IOpPlate;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 import ru.wert.datapik.client.entity.models.Material;
 
@@ -22,6 +23,7 @@ public class OpDetail extends OpData {
     private List<OpData> operations = new ArrayList<>();
 
     public OpDetail() {
+        super.normType = ENormType.NORM_DETAIL;
         super.opType = EOpType.DETAIL;
     }
 }

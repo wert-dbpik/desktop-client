@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
-import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
 import ru.wert.datapik.chogori.calculator.components.ChBox;
@@ -22,9 +22,6 @@ import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
 
 public class PlateWeldContinuousController extends AbstractOpPlate {
-
-    @Getter
-    private ENormType normType = ENormType.NORM_MECHANICAL;
 
     @FXML
     private Label lblOperationName;

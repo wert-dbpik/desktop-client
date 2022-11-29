@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.wert.datapik.chogori.calculator.enums.EAssemblingType;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 
@@ -17,6 +18,7 @@ public class OpPaintAssm extends OpData {
     private EAssemblingType assmType = EAssemblingType.SOLID;
 
     public OpPaintAssm() {
+        super.normType = ENormType.NORM_PAINTING;
         super.opType = EOpType.PAINTING_ASSM;
     }
 }

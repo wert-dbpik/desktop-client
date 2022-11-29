@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
 @Getter
@@ -16,6 +17,7 @@ public class OpLocksmith extends OpData {
     private Integer bigSawings = 0;//Пиление на большой пиле
 
     public OpLocksmith() {
+        super.normType = ENormType.NORM_MECHANICAL;
         super.opType = EOpType.LOCKSMITH;
     }
 }

@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
 @Getter
@@ -17,6 +18,7 @@ public class OpAssmNut extends OpData {
     private Integer others = 0;//другой крепеж
 
     public OpAssmNut() {
+        super.normType = ENormType.NORM_ASSEMBLING;
         super.opType = EOpType.ASSM_NUTS;
     }
 }

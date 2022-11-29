@@ -15,6 +15,7 @@ import ru.wert.datapik.chogori.calculator.*;
 import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
 import ru.wert.datapik.chogori.calculator.entities.OpDetail;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 import ru.wert.datapik.chogori.calculator.utils.DoubleParser;
 import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
@@ -24,9 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class PlateDetailController extends AbstractOpPlate implements IOpPlate {
-
-    @Getter
-    private ENormType normType = ENormType.NORM_DETAIL;
 
     @FXML
     private TextField tfName;

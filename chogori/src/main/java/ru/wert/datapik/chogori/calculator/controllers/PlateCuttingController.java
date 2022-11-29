@@ -10,7 +10,7 @@ import lombok.Getter;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
 import ru.wert.datapik.chogori.calculator.IFormController;
 import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
-import ru.wert.datapik.chogori.calculator.ENormType;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpCutting;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
@@ -23,9 +23,6 @@ import ru.wert.datapik.chogori.calculator.utils.IntegerParser;
  * они обновляются при любом изменении полей плашки.
  */
 public class PlateCuttingController extends AbstractOpPlate {
-
-    @Getter
-    private ENormType normType = ENormType.NORM_MECHANICAL;
 
     @FXML
     private Label lblOperationName;

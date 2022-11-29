@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 import ru.wert.datapik.chogori.calculator.enums.EPaintingDifficulty;
 
@@ -16,6 +17,7 @@ public class OpPaint extends OpData {
     private Integer hangingTime = 20;
 
     public OpPaint() {
+        super.normType = ENormType.NORM_PAINTING;
         super.opType = EOpType.PAINTING;
     }
 }

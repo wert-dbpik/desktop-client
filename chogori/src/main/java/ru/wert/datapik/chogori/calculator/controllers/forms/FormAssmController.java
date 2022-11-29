@@ -3,8 +3,6 @@ package ru.wert.datapik.chogori.calculator.controllers.forms;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,11 +11,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.chogori.calculator.*;
 import ru.wert.datapik.chogori.calculator.components.BXTimeMeasurement;
 import ru.wert.datapik.chogori.calculator.components.ObservableNormTime;
 import ru.wert.datapik.chogori.calculator.entities.*;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.ETimeMeasurement;
 
 import java.util.ArrayList;
@@ -158,23 +156,10 @@ public class FormAssmController implements IFormController {
         double assemblingTime = 0.0;
         double packingTime = 0.0;
         for(AbstractOpPlate cn: addedPlates){
-            if(cn.getNormType().equals(ENormType.NORM_MECHANICAL))
-                mechanicalTime += cn.getCurrentNormTime();
-            else if(cn.getNormType().equals(ENormType.NORM_PAINTING))
-                paintingTime += cn.getCurrentNormTime();
-            else if(cn.getNormType().equals(ENormType.NORM_ASSEMBLING))
-                assemblingTime += cn.getCurrentNormTime();
-            else if(cn.getNormType().equals(ENormType.NORM_PACKING))
-                packingTime += cn.getCurrentNormTime();
-            else if(cn.getNormType().equals(ENormType.NORM_DETAIL)){
-                mechanicalTime += cn.getCurrentMechTime().get();
-                paintingTime += cn.getCurrentPaintTime().get();
-            } else if(cn.getNormType().equals(ENormType.NORM_ASSEMBLING)){
-                mechanicalTime += cn.getCurrentMechTime().get();
-                paintingTime += cn.getCurrentPaintTime().get();
-                assemblingTime += cn.getCurrentAssmTime().get();
-                packingTime += cn.getCurrentPackTime().get();
-            }
+            mechanicalTime += cn.getOpData().getMechTime();
+            paintingTime += cn.getOpData().getPaintTime();
+            assemblingTime += cn.getOpData().getAssmTime();
+            packingTime += cn.getOpData().getPackTime();
         }
 
         currentMechTime.set(mechanicalTime);

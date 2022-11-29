@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
 
@@ -20,6 +21,7 @@ public class OpWeldContinuous extends OpData {
     private Integer step = 0; //шаг точек
 
     public OpWeldContinuous() {
+        super.normType = ENormType.NORM_MECHANICAL;
         super.opType = EOpType.WELD_CONTINUOUS;
     }
 }

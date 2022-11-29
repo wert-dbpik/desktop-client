@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 import ru.wert.datapik.chogori.calculator.enums.ESealersWidth;
 
@@ -15,6 +16,7 @@ public class OpLevelingSealer extends OpData {
     private Integer paramB = 0;//Размер Б
 
     public OpLevelingSealer() {
+        super.normType = ENormType.NORM_ASSEMBLING;
         super.opType = EOpType.LEVELING_SEALER;
     }
 }

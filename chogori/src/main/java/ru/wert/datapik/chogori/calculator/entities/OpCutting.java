@@ -3,6 +3,7 @@ package ru.wert.datapik.chogori.calculator.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.wert.datapik.chogori.calculator.enums.ENormType;
 import ru.wert.datapik.chogori.calculator.enums.EOpType;
 
 @Getter
@@ -15,6 +16,7 @@ public class OpCutting extends OpData {
     private boolean stripping = false; //Зачистка
 
     public OpCutting() {
+        super.normType = ENormType.NORM_MECHANICAL;
         super.opType = EOpType.CUTTING;
     }
 }
