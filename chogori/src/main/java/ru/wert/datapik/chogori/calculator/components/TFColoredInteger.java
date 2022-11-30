@@ -18,7 +18,7 @@ public class TFColoredInteger{
             }
             tf.setStyle(style);
             counter.getTfNormTime().setStyle(normStyle);
-            counter.setNormTime();
+            counter.countNorm();
         });
 
         tf.setOnKeyTyped(e->{

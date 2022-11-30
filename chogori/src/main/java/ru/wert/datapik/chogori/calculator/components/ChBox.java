@@ -10,7 +10,7 @@ public class ChBox {
     public ChBox(CheckBox chbx, AbstractOpPlate counter) {
 
         chbx.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            counter.setNormTime();
+            counter.countNorm();
         });
 
     }

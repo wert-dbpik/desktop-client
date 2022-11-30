@@ -1,6 +1,8 @@
 package ru.wert.datapik.chogori.calculator.controllers.forms;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -92,6 +94,7 @@ public class FormDetailController implements IFormController {
     public void init(IFormController controller, TextField tfName, OpData opData) {
         this.opData = (OpDetail) opData;
         this.controller = controller;
+        System.out.println();
 
         //Инициализируем список операционных плашек
         addedPlates = FXCollections.observableArrayList();
@@ -120,12 +123,15 @@ public class FormDetailController implements IFormController {
     }
 
     private void initViews() {
+
+        tfTotalTime.textProperty().addListener((observable, oldValue, newValue) -> {
+            countSumNormTimeByShops();
+        });
+
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
             for(AbstractOpPlate nc : addedPlates){
                 nc.setTimeMeasurement(newValue);
             }
-
-            countSumNormTimeByShops();
 
             lblTimeMeasure.setText(newValue.getTimeName());
         });
@@ -141,7 +147,6 @@ public class FormDetailController implements IFormController {
             countWeightAndArea();
             for(AbstractOpPlate nc : addedPlates){
                 nc.setNormTime();
-                countSumNormTimeByShops();
             }
         });
 
@@ -149,7 +154,6 @@ public class FormDetailController implements IFormController {
             countWeightAndArea();
             for(AbstractOpPlate nc : addedPlates){
                 nc.setNormTime();
-                countSumNormTimeByShops();
             }
         });
     }

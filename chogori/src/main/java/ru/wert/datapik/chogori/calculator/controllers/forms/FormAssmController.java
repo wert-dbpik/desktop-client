@@ -1,6 +1,8 @@
 package ru.wert.datapik.chogori.calculator.controllers.forms;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -99,13 +101,14 @@ public class FormAssmController implements IFormController {
 
     private void initViews() {
 
+        tfTotalTime.textProperty().addListener((observable, oldValue, newValue) -> {
+            countSumNormTimeByShops();
+        });
+
         cmbxTimeMeasurement.valueProperty().addListener((observable, oldValue, newValue) -> {
             for(AbstractOpPlate nc : addedPlates){
                 nc.setTimeMeasurement(newValue);
             }
-
-            countSumNormTimeByShops();
-
             lblTimeMeasure.setText(newValue.getTimeName());
         });
 

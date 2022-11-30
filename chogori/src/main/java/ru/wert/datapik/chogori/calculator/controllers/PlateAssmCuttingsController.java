@@ -67,6 +67,8 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
+
+
         setNormTime();
     }
 

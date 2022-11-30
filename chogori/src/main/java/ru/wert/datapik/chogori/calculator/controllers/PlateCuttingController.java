@@ -70,6 +70,7 @@ public class PlateCuttingController extends AbstractOpPlate {
         this.controller = controller;
         this.partController = (FormDetailController) controller;
         this.opData = opData;
+        controller.getAddedPlates().add(this);
 
         new TFColoredInteger(tfHoles, this);
         new TFColoredInteger(tfPerfHoles, this);
@@ -78,6 +79,10 @@ public class PlateCuttingController extends AbstractOpPlate {
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
+
+        getTfNormTime().textProperty().addListener((observable, oldValue, newValue) -> {
+            controller.countSumNormTimeByShops();
+        });
 
         chbxStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
             setNormTime();
@@ -91,8 +96,8 @@ public class PlateCuttingController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
-        controller.getAddedPlates().add(this);
         setNormTime();
+        controller.countSumNormTimeByShops();
 
     }
 
@@ -102,8 +107,7 @@ public class PlateCuttingController extends AbstractOpPlate {
     @Override
     public void setNormTime() {
         countNorm();
-        setTimeMeasurement(measure);
-        controller.countSumNormTimeByShops();
+
     }
 
     /**
@@ -150,6 +154,7 @@ public class PlateCuttingController extends AbstractOpPlate {
 
         currentNormTime = time;//результат в минутах
         collectOpData();
+        setTimeMeasurement(measure);
     }
 
 

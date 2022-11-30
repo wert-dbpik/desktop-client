@@ -83,7 +83,7 @@ public class PlateDetailController extends AbstractOpPlate implements IOpPlate {
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
         lblQuantity.setStyle("-fx-text-fill: #8b4513");
 
-        if(opData.getName() == null &&
+        if(this.opData.getName() == null &&
                 tfName.getText() == null || tfName.getText().equals("")) {
             detailName = String.format("Деталь #%s", ++nameIndex);
             tfName.setText(detailName);
@@ -95,7 +95,8 @@ public class PlateDetailController extends AbstractOpPlate implements IOpPlate {
                 Parent parent = loader.load();
                 parent.setId("calculator");
                 partController = loader.getController();
-                partController.init(controller, tfName, opData);
+                //!!!!!!!!!!!!!!!controller
+                partController.init(controller, tfName, this.opData);
                 WindowDecoration windowDecoration = new WindowDecoration("Добавить деталь", parent, false, (Stage)lblOperationName.getScene().getWindow());
                 ImageView closer = windowDecoration.getImgCloseWindow();
                 closer.setOnMousePressed(ev->collectOpData());
@@ -113,7 +114,7 @@ public class PlateDetailController extends AbstractOpPlate implements IOpPlate {
         });
 
         controller.getAddedPlates().add(this);
-        setNormTime();
+//        setNormTime();
     }
 
     /**
@@ -124,8 +125,6 @@ public class PlateDetailController extends AbstractOpPlate implements IOpPlate {
         countNorm();
         if (partController != null)
             setTimeMeasurement(measure);
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!
         controller.countSumNormTimeByShops();
 
     }
