@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.components.CmBx;
+import ru.wert.datapik.chogori.calculator.components.TFNormTime;
 import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
 import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
 import ru.wert.datapik.chogori.calculator.components.BXPaintingDifficulty;
@@ -70,15 +72,14 @@ public class PlatePaintController extends AbstractOpPlate {
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
+        new TFNormTime(tfNormTime, controller);
         new TFColoredInteger(tfAlong, this);
         new TFColoredInteger(tfAcross, this);
         new TFColoredInteger(tfHangingTime, this);
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        cmbxDifficulty.valueProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
+        new CmBx(cmbxDifficulty, this);
 
         ivDeleteOperation.setOnMouseClicked(e->{
             controller.getAddedPlates().remove(this);
@@ -89,17 +90,7 @@ public class PlatePaintController extends AbstractOpPlate {
         });
 
         controller.getAddedPlates().add(this);
-        setNormTime();
-    }
-
-    /**
-     * Метод устанавливает расчитанную норму
-     */
-    @Override
-    public void setNormTime() {
         countNorm();
-        setTimeMeasurement(measure);
-        controller.countSumNormTimeByShops();
     }
 
     @Override//AbstractOpPlate
@@ -143,6 +134,7 @@ public class PlatePaintController extends AbstractOpPlate {
 
         currentNormTime = time;//результат в минутах
         collectOpData();
+        setTimeMeasurement(measure);
     }
 
 

@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.components.TFNormTime;
 import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
 import ru.wert.datapik.chogori.calculator.entities.OpAssmCutting;
@@ -53,6 +54,7 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
+        new TFNormTime(tfNormTime, controller);
         new TFColoredDouble(tfSealer, this);
         new TFColoredDouble(tfSelfAdhSealer, this);
         new TFColoredDouble(tfInsulation, this);
@@ -67,20 +69,9 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
-
-
-        setNormTime();
-    }
-
-    /**
-     * Метод устанавливает расчитанную норму
-     */
-    @Override
-    public void setNormTime() {
         countNorm();
-        setTimeMeasurement(measure);
-        controller.countSumNormTimeByShops();
     }
+
 
     @Override//AbstractOpPlate
     public void countNorm(){
@@ -98,6 +89,7 @@ public class PlateAssmCuttingsController extends AbstractOpPlate {
 
         currentNormTime = time;
         collectOpData();
+        setTimeMeasurement(measure);
     }
 
     /**

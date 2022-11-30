@@ -37,12 +37,6 @@ public abstract class AbstractOpPlate implements IOpPlate {
 
     public AbstractOpPlate() {
     }
-
-    /**
-     * Метод устанавливает расчитанную норму
-     */
-    public abstract void setNormTime();
-
     /**
      * Метод расчитывает норму времени в минутах
      */

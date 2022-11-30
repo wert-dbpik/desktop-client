@@ -9,10 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.components.*;
 import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
-import ru.wert.datapik.chogori.calculator.components.BXPartBigness;
-import ru.wert.datapik.chogori.calculator.components.ChBox;
-import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpWeldContinuous;
 import ru.wert.datapik.chogori.calculator.enums.EPartBigness;
@@ -92,6 +90,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
+        new TFNormTime(tfNormTime, controller);
         new TFColoredInteger(tfSeamLength, this);
         new TFColoredInteger(tfSeams, this);
         new TFColoredInteger(tfMen, this);
@@ -102,10 +101,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        cmbxPartBigness.valueProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
-
+        new CmBx(cmbxPartBigness, this);
         ivDeleteOperation.setOnMousePressed(e->{
             controller.getAddedPlates().remove(this);
             VBox box = controller.getListViewTechOperations().getSelectionModel().getSelectedItem();
@@ -115,17 +111,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
         });
 
         controller.getAddedPlates().add(this);
-        setNormTime();
-    }
-
-    /**
-     * Метод устанавливает расчитанную норму
-     */
-    @Override
-    public void setNormTime() {
         countNorm();
-        setTimeMeasurement(measure);
-        controller.countSumNormTimeByShops();
     }
 
     @Override//AbstractOpPlate
@@ -164,6 +150,7 @@ public class PlateWeldContinuousController extends AbstractOpPlate {
 
         currentNormTime = time;
         collectOpData();
+        setTimeMeasurement(measure);
     }
 
     /**

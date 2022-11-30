@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import ru.wert.datapik.chogori.calculator.*;
+import ru.wert.datapik.chogori.calculator.components.TFNormTime;
 import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
 import ru.wert.datapik.chogori.calculator.entities.OpDetail;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
@@ -117,18 +118,6 @@ public class PlateDetailController extends AbstractOpPlate implements IOpPlate {
 //        setNormTime();
     }
 
-    /**
-     * Метод устанавливает расчитанную норму
-     */
-    @Override
-    public void setNormTime() {
-        countNorm();
-        if (partController != null)
-            setTimeMeasurement(measure);
-        controller.countSumNormTimeByShops();
-
-    }
-
     @Override//AbstractOpPlate
     public void countNorm(){
 
@@ -144,6 +133,8 @@ public class PlateDetailController extends AbstractOpPlate implements IOpPlate {
         currentMechanicalNormTime = mechanicalTime * quantity;
         currentPaintNormTime = paintTime * quantity;
         collectOpData();
+        if (partController != null)
+            setTimeMeasurement(measure);
     }
 
     /**

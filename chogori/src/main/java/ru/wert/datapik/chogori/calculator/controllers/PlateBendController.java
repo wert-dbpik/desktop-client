@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.components.CmBx;
+import ru.wert.datapik.chogori.calculator.components.TFNormTime;
 import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
 import ru.wert.datapik.chogori.calculator.components.BXBendingTool;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -57,14 +59,13 @@ public class PlateBendController extends AbstractOpPlate {
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
+        new TFNormTime(tfNormTime, controller);
         new TFColoredInteger(tfBends, this);
         new TFColoredInteger(tfMen, this);
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        cmbxBendingTool.valueProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
+        new CmBx(cmbxBendingTool, this);
 
         ivDeleteOperation.setOnMouseClicked(e->{
             controller.getAddedPlates().remove(this);
@@ -75,20 +76,9 @@ public class PlateBendController extends AbstractOpPlate {
         });
 
         controller.getAddedPlates().add(this);
-
-
-        setNormTime();
-    }
-
-    /**
-     * Метод устанавливает расчитанную норму
-     */
-    @Override
-    public void setNormTime() {
         countNorm();
-        setTimeMeasurement(measure);
-        controller.countSumNormTimeByShops();
     }
+
 
     @Override//AbstractOpPlate
     public void countNorm(){
@@ -103,6 +93,7 @@ public class PlateBendController extends AbstractOpPlate {
 
         currentNormTime = time;
         collectOpData();
+        setTimeMeasurement(measure);
     }
 
     /**

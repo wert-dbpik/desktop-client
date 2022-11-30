@@ -7,10 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.components.*;
 import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
-import ru.wert.datapik.chogori.calculator.components.BXAssemblingType;
-import ru.wert.datapik.chogori.calculator.components.TFColoredDouble;
-import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
 import ru.wert.datapik.chogori.calculator.entities.OpPaintAssm;
 import ru.wert.datapik.chogori.calculator.enums.EAssemblingType;
@@ -65,6 +63,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
+        new TFNormTime(tfNormTime, controller);
         new TFColoredDouble(tfArea, this);
         new TFColoredInteger(tfAlong, this);
         new TFColoredInteger(tfAcross, this);
@@ -72,9 +71,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
-        cmbxAssemblingType.valueProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
-        });
+        new CmBx(cmbxAssemblingType, this);
 
         ivDeleteOperation.setOnMouseClicked(e->{
             controller.getAddedPlates().remove(this);
@@ -85,17 +82,8 @@ public class PlatePaintAssmController extends AbstractOpPlate {
         });
 
         controller.getAddedPlates().add(this);
-        setNormTime();
-    }
-
-    /**
-     * Метод устанавливает расчитанную норму
-     */
-    @Override
-    public void setNormTime() {
         countNorm();
-        setTimeMeasurement(measure);
-        controller.countSumNormTimeByShops();
+
     }
 
     @Override//AbstractOpPlate
@@ -131,6 +119,7 @@ public class PlatePaintAssmController extends AbstractOpPlate {
 
         currentNormTime = time;//результат в минутах
         collectOpData();
+        setTimeMeasurement(measure);
     }
 
     /**

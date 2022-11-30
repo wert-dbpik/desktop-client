@@ -139,21 +139,21 @@ public class FormDetailController implements IFormController {
         cmbxMaterial.valueProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
             for(AbstractOpPlate nc : addedPlates){
-                nc.setNormTime();;
+                nc.countNorm();;
             }
         });
 
         tfA.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
             for(AbstractOpPlate nc : addedPlates){
-                nc.setNormTime();
+                nc.countNorm();
             }
         });
 
         tfB.textProperty().addListener((observable, oldValue, newValue) -> {
             countWeightAndArea();
             for(AbstractOpPlate nc : addedPlates){
-                nc.setNormTime();
+                nc.countNorm();
             }
         });
     }

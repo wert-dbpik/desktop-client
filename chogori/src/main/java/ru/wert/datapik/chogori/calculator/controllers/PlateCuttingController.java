@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.components.TFNormTime;
 import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
 import ru.wert.datapik.chogori.calculator.controllers.forms.FormDetailController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
@@ -78,6 +79,7 @@ public class PlateCuttingController extends AbstractOpPlate {
 
         fillOpData(); //Должен стоять до навешивагия слушателей на TextField
 
+        new TFNormTime(tfNormTime, controller);
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
         getTfNormTime().textProperty().addListener((observable, oldValue, newValue) -> {
@@ -85,7 +87,7 @@ public class PlateCuttingController extends AbstractOpPlate {
         });
 
         chbxStripping.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            setNormTime();
+            countNorm();
         });
 
         ivDeleteOperation.setOnMouseClicked(e->{
@@ -96,17 +98,8 @@ public class PlateCuttingController extends AbstractOpPlate {
             controller.countSumNormTimeByShops();
         });
 
-        setNormTime();
-        controller.countSumNormTimeByShops();
-
-    }
-
-    /**
-     * Метод вызывается для вычисления нормы времени на плашку и суммарного времени для формы
-     */
-    @Override
-    public void setNormTime() {
         countNorm();
+        controller.countSumNormTimeByShops();
 
     }
 

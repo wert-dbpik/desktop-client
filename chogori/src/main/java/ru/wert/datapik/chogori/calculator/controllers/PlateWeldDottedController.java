@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.datapik.chogori.calculator.AbstractOpPlate;
+import ru.wert.datapik.chogori.calculator.components.TFNormTime;
 import ru.wert.datapik.chogori.calculator.interfaces.IFormController;
 import ru.wert.datapik.chogori.calculator.components.TFColoredInteger;
 import ru.wert.datapik.chogori.calculator.entities.OpData;
@@ -54,6 +55,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
 
         lblOperationName.setStyle("-fx-text-fill: saddlebrown");
 
+        new TFNormTime(tfNormTime, controller);
         new TFColoredInteger(tfParts, this);
         new TFColoredInteger(tfDots, this);
         new TFColoredInteger(tfDrops, this);
@@ -67,17 +69,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
         });
 
         controller.getAddedPlates().add(this);
-        setNormTime();
-    }
-
-    /**
-     * Метод устанавливает расчитанную норму
-     */
-    @Override
-    public void setNormTime() {
         countNorm();
-        setTimeMeasurement(measure);
-        controller.countSumNormTimeByShops();
     }
 
     @Override//AbstractOpPlate
@@ -94,6 +86,7 @@ public class PlateWeldDottedController extends AbstractOpPlate {
 
         currentNormTime = time;
         collectOpData();
+        setTimeMeasurement(measure);
     }
 
     /**
