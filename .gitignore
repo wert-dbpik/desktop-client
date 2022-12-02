@@ -30,3 +30,4 @@ client/client.iml
 .idea/compiler.xml
 .idea/compiler.xml
 *.xml
+*.lst
