@@ -95,7 +95,7 @@ public class LoginController {
         CH_PDF_VIEWER = EPDFViewer.values()[CH_CURRENT_USER_SETTINGS.getPdfViewer()];
         CH_DEFAULT_PATH_TO_NORMY_MK = new File(CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
 
-        log.debug("loadApplicationSettings : загружаются настройки приложения успешно загружены");
+        log.debug("loadApplicationSettings : настройки приложения успешно загружены");
 
     }
 

@@ -21,8 +21,8 @@ import ru.wert.datapik.winform.winform_settings.WinformSettings;
 import java.io.IOException;
 import java.util.List;
 
-import static ru.wert.datapik.winform.statics.WinformStatic.CURRENT_PROJECT_VERSION;
-import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.*;
+import static ru.wert.datapik.winform.statics.WinformStatic.TEST_VERSION;
 import static ru.wert.datapik.winform.winform_settings.WinformSettings.CH_MONITOR;
 
 @Slf4j
@@ -87,11 +87,13 @@ public class WindowDecoration {
             StackPane pane = (StackPane)decoration.lookup("#mainPane");
             pane.getChildren().add(rootPane);
 
-            Label lblVersion = (Label)decoration.lookup("#lblVersion");
-            lblVersion.setText(CURRENT_PROJECT_VERSION);
-
             //Меняем заголовок окна
-            windowName = (Label)decoration.lookup("#windowName");
+            Label programName = (Label)decoration.lookup("#programName");
+            Label labelVersion = (Label)decoration.lookup("#lblVersion");
+            Label windowName = (Label)decoration.lookup("#windowName");
+
+            programName.setText(PROGRAM_NAME);
+            labelVersion.setText(!TEST_VERSION ? CURRENT_PROJECT_VERSION : CURRENT_PROJECT_VERSION + " ТЕСТ");
             windowName.setText(headerName);
 
             Scene scene = new Scene(decoration);

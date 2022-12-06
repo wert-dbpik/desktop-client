@@ -2,12 +2,14 @@ package ru.wert.datapik.client.retrofit;
 
 import javafx.scene.control.Dialog;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.*;
 import java.util.Properties;
 
 import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+import static ru.wert.datapik.winform.statics.WinformStatic.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.HOME_BAZA_PIK;
 @Slf4j
 public class AppProperties {
@@ -24,7 +26,14 @@ public class AppProperties {
     private int attempt = 0;
     private Properties connectionProps;
     private String homeDir = System.getProperty("user.home") + File.separator + "AppData" + File.separator + "Local" + File.separator + "BazaPIK";
-    private String appConfigPath = homeDir + File.separator + "connectionSettings.properties";
+    private String appConfigPath;
+
+    {
+        if (TEST_VERSION)
+            appConfigPath = homeDir + File.separator + "connectionSettingsTest.properties";
+        else
+            appConfigPath = homeDir + File.separator + "connectionSettings.properties";
+    }
 
 
     /**
@@ -67,7 +76,7 @@ public class AppProperties {
             log.info("File of application settings is created: {}", props.toString());
 
             FileWriter writer = new FileWriter (props);
-            writer.write("IP_ADDRESS=192.168.2.132\n");
+            writer.write("IP_ADDRESS=192.168.3.40\n");
             writer.write("PORT = 8080\n");
             writer.write("MONITOR=0\n");
             writer.write("LAST_USER=0\n");

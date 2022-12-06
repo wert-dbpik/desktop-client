@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
+import static ru.wert.datapik.winform.statics.WinformStatic.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
 @Slf4j
@@ -90,9 +91,13 @@ public class StartChogori extends Application {
 
 
             //Меняем заголовок окна
+            Label programName = (Label)decoration.lookup("#programName");
+            Label labelVersion = (Label)decoration.lookup("#lblVersion");
             Label windowName = (Label)decoration.lookup("#windowName");
-            String headerName = "";
-            windowName.setText(headerName);
+
+            programName.setText(PROGRAM_NAME);
+            labelVersion.setText(!TEST_VERSION ? CURRENT_PROJECT_VERSION : CURRENT_PROJECT_VERSION + " ТЕСТ");
+            windowName.setText("");
 
             Scene scene = new Scene(decoration);
             stage.setScene(scene);
@@ -103,7 +108,8 @@ public class StartChogori extends Application {
             stage.sizeToScene();
             stage.setResizable(true);
             stage.getIcons().add(new Image("/chogori-pics/new_logo_black256.png"));
-            stage.setTitle("База ПИК");
+//            stage.setTitle("База ПИК");
+
 
             stage.show();
             controller.centerInitialWindow(stage, true, WinformSettings.CH_MONITOR);
