@@ -19,6 +19,11 @@ public class ModalWindow {
     protected static double dragOffsetX;
     protected static double dragOffsetY;
 
+    protected static void setMovingPane(Parent parent) {
+        AnchorPane anchorPane = (AnchorPane)parent.lookup("#movingPane");
+        anchorPane.setOnMousePressed((ModalWindow::onMousePressed));
+        anchorPane.setOnMouseDragged((ModalWindow::onMouseDragged));
+    }
 
 // =======================   ПЕРЕМЕЩАЕМ ОКНО  ========================================
 
@@ -34,14 +39,6 @@ public class ModalWindow {
         window.setY(mouseEvent.getScreenY() - dragOffsetY);
     }
 //====================================================================================
-
-    protected static void setMovingPane(Parent parent) {
-        AnchorPane anchorPane = (AnchorPane)parent.lookup("#movingPane");
-        anchorPane.setOnMousePressed((ModalWindow::onMousePressed));
-        anchorPane.setOnMouseDragged((ModalWindow::onMouseDragged));
-    }
-
-
 
     /**
      * Метод центрирует модальное окно относительно главного окна приложения
