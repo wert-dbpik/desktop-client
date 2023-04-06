@@ -29,6 +29,7 @@ import java.util.List;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.datapik.winform.statics.WinformStatic.clearCash;
 
 
@@ -51,7 +52,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
     @FXML
     private SplitPane sppHorizontal;
 
-    private Draft_TableView draftsTable;
+    @Getter private Draft_TableView draftsTable;
     private Draft_PatchController draftPatchController;
     private PreviewerPatchController previewerPatchController;
 //    private Label lblDraftInfo;
@@ -185,6 +186,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
     @Override//SearchableTab
     public void tuneSearching() {
         Platform.runLater(()->draftsTable.requestFocus());
+        CH_SEARCH_FIELD.changeSearchedTableView(draftsTable, "ЧЕРТЕЖ");
     }
 
     @Override //UpdatableTabController

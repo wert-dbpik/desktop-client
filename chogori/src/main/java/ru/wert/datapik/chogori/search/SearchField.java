@@ -25,19 +25,7 @@ public class SearchField extends TextField {
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue) && searchedTableView != null) {
-                searchedTableView.setSearchedText(newValue);
-                if (newValue.equals("")) {
-                    setPromptText(promptText);
-                    if(searchedTableView instanceof CatalogableTable){
-                        //При обновлении таблицы - части каталога - нужно учитывать верхний узел видимой
-                        CatalogableTable<? extends Item> catalogableTable = (CatalogableTable<? extends Item>) searchedTableView;
-                        CatalogGroup upwardTreeItemRow = catalogableTable.getUpwardRow().getValue();
-                        ((CatalogableTable) searchedTableView).updateVisibleLeafOfTableView(upwardTreeItemRow);
-                    } else
-                        searchedTableView.updateTableView();
-                } else
-                    ((Searchable<? extends Item>) searchedTableView).updateSearchedView();
-
+                searchNow(newValue);
             }
         });
 
@@ -50,6 +38,23 @@ public class SearchField extends TextField {
                 }
             }
         });
+    }
+    /**
+     * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, насильственный поиск
+     */
+    public void searchNow(String newValue) {
+        searchedTableView.setSearchedText(newValue);
+        if (newValue.equals("")) {
+            setPromptText(promptText);
+            if(searchedTableView instanceof CatalogableTable){
+                //При обновлении таблицы - части каталога - нужно учитывать верхний узел видимой
+                CatalogableTable<? extends Item> catalogableTable = (CatalogableTable<? extends Item>) searchedTableView;
+                CatalogGroup upwardTreeItemRow = catalogableTable.getUpwardRow().getValue();
+                ((CatalogableTable) searchedTableView).updateVisibleLeafOfTableView(upwardTreeItemRow);
+            } else
+                searchedTableView.updateTableView();
+        } else
+            ((Searchable<? extends Item>) searchedTableView).updateSearchedView();
     }
 
     public void changeSearchedTableView(ItemTableView<? extends Item> tableView, String promptText) {

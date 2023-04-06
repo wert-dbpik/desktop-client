@@ -170,7 +170,6 @@ public class ListViewDialog extends ListView<Message> {
     public Message createChatMessage(Message.MessageType type, String text){
         Message message = new Message();
         message.setType(type);
-        System.out.println(room.toString());
         message.setRoom(room);
         message.setSender(CH_CURRENT_USER);
         message.setCreationTime(AppStatic.getCurrentTime());

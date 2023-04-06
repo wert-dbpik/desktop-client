@@ -33,10 +33,6 @@ public class UserGroup_TableView extends RoutineTableView<UserGroup> implements 
 
         commands = new _UserGroupCommands(this);
 
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ГРУППА ПОЛЬЗОВАТЕЛЕЙ");
-        });
-
         if (useContextMenu)
             createContextMenu();
     }

@@ -57,9 +57,11 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         super(prompt);
         this.useContextMenu = useContextMenu;
 
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "КОМПЛЕКТ ЧЕРТЕЖЕЙ");
-        });
+//        ПОИСК ПЕРЕНЕСЕН В ПОИСК ПО КНОПКЕ ПО КОМПЛЕКТАМ НЕВОЗМОЖЕН!
+
+//        focusedProperty().addListener((observable, oldValue, newValue) -> {
+//            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "КОМПЛЕКТ ЧЕРТЕЖЕЙ");
+//        });
 
     }
 

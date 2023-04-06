@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import static ru.wert.datapik.chogori.images.BtnImages.*;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USERS;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class UsersPermissionsController implements SearchableTab, UpdatableTabController {
 
@@ -115,6 +116,7 @@ public class UsersPermissionsController implements SearchableTab, UpdatableTabCo
     @Override
     public void tuneSearching() {
         Platform.runLater(()->userTable.requestFocus());
+        CH_SEARCH_FIELD.changeSearchedTableView(userTable, "ПОЛЬЗОВАТЕЛЬ");
     }
 
 

@@ -6,6 +6,7 @@ import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -23,7 +24,10 @@ import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.chogori.entities.product_groups._ProductGroup_TreeViewPatch;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_FOLDERS;
+import static ru.wert.datapik.chogori.images.BtnImages.BTN_SEARCH_BLACK_IMG;
+import static ru.wert.datapik.chogori.images.BtnImages.BTN_SEARCH_IMG;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class CatalogOfFoldersController implements UpdatableTabController {
     @FXML
@@ -170,16 +174,26 @@ public class CatalogOfFoldersController implements UpdatableTabController {
         //Устанавливаем начальное значение altOn в контроллере
         btnDoubleAlt.getStateProperty().set(false);
 
+        //Кнопка переключения на поиск по КОМПЛЕКТАМ
+        Button btnSearchFolder = new Button();
+        btnSearchFolder.setId("patchButton");
+        btnSearchFolder.setText("");
+        btnSearchFolder.setGraphic(new ImageView(BTN_SEARCH_BLACK_IMG));
+        btnSearchFolder.setOnAction(e->{
+            CH_SEARCH_FIELD.changeSearchedTableView(folderTableView, "КОМПЛЕКТ ЧЕРТЕЖЕЙ");
+        });
+
+// ======   ИСКЛЮЧЕНА ЗА НЕНАДОБНОСТЬЮ
         //Кнопка переключения режимов GLOBE/CATALOG
-        BtnDoubleGlobeVsCatalog btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView, false);
-        Button btnGlobeVsCatalog = btnDoubleGlobeVsCatalog.create();
-        btnDoubleGlobeVsCatalog.getStateProperty().bindBidirectional(folderTableView.getGlobalOffProperty());
+//        BtnDoubleGlobeVsCatalog btnDoubleGlobeVsCatalog = new BtnDoubleGlobeVsCatalog(folderTableView, false);
+//        Button btnGlobeVsCatalog = btnDoubleGlobeVsCatalog.create();
+//        btnDoubleGlobeVsCatalog.getStateProperty().bindBidirectional(folderTableView.getGlobalOffProperty());
 
         //Устанавливаем начальное значение globalOn в контроллере
         //Значение получилось перевернутым true - показывает Каталог
-        btnDoubleGlobeVsCatalog.getStateProperty().set(true);
-
-        foldersButtons.getChildren().addAll(btnAltOn, btnGlobeVsCatalog);
+//        btnDoubleGlobeVsCatalog.getStateProperty().set(true);
+// ==================================================================================================================
+        foldersButtons.getChildren().addAll(btnAltOn, btnSearchFolder);
     }
 
 

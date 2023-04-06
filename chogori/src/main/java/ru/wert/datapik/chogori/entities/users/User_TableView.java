@@ -33,10 +33,6 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
 
         commands = new _UserCommands(this);
 
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ПОЛЬЗОВАТЕЛЬ");
-        });
-
         if (useContextMenu)
             createContextMenu();
     }

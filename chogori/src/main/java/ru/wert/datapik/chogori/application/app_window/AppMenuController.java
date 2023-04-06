@@ -128,7 +128,10 @@ public class AppMenuController {
     private HBox createSearchField() {
 
         log.debug("createSearchField : поле поиска создается ...");
-        ImageView search = new ImageView(BTN_SEARCH_IMG);
+        Button searchNowButton = new Button();
+        searchNowButton.setText("");
+        searchNowButton.setGraphic(new ImageView(BTN_SEARCH_IMG));
+        searchNowButton.setOnAction(e->CH_SEARCH_FIELD.searchNow(CH_SEARCH_FIELD.getText()));
 
         HBox hbox = new HBox();
 
@@ -140,7 +143,7 @@ public class AppMenuController {
             CH_SEARCH_FIELD.requestFocus();
         });
         btnClean.setGraphic(new ImageView(BTN_CLEAN_IMG_W));
-        hbox.getChildren().addAll(search, CH_SEARCH_FIELD, btnClean);
+        hbox.getChildren().addAll(searchNowButton, CH_SEARCH_FIELD, btnClean);
         hbox.setAlignment(Pos.CENTER_RIGHT);
         hbox.setSpacing(2);
         hbox.getStylesheets().add(getClass().getResource("/chogori-css/toolpane-dark.css").toString());

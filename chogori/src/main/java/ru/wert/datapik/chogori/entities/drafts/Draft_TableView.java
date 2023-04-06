@@ -132,6 +132,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
             }
         });
 
+       //Здесь происходит выключение поиска по КОМПЛЕКТАМ ЧЕРТЕЖЕЙ и включение поиска по чертежам
         focusedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ЧЕРТЕЖ");
         });
@@ -239,7 +240,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
      * Метод фильтрует переданный список чертежей по статусу
      * @param items List<Draft>
      */
-    public void filterList(List<Draft> items) {
+    public synchronized void filterList(List<Draft> items) {
         if(items.isEmpty()) return;
         Iterator<Draft> i = items.iterator();
         while (i.hasNext()) {
@@ -283,7 +284,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     }
 
     @Override
-    public void sortItemList(List<Draft> list) {
+    public synchronized void sortItemList(List<Draft> list) {
         list.sort(Comparators.draftsComparator());
     }
 

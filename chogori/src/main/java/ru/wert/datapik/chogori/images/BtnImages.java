@@ -29,6 +29,7 @@ public class BtnImages {
     public static Image BTN_INFO_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/info(32x32).png"), size16, size16, true, true);
     public static Image BTN_REMARKS_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/remarks(32x32).png"), size16, size16, true, true);
     public static Image BTN_SEARCH_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/search(24x24).png"), size24, size24, true, true);
+    public static Image BTN_SEARCH_BLACK_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/search_black(24x24).png"), size16, size16, true, true);
     public static Image BTN_ALT_TRUE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/alt-white(32x32).png"), size24, size24, true, true);
     public static Image BTN_ALT_FALSE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/alt-black(32x32).png"), size24, size24, true, true);
     public static Image BTN_HOME_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/home(32x32).png"), size24, size24, true, true);

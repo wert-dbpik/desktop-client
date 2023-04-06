@@ -23,10 +23,6 @@ public class AppLog_TableView extends ReadOnlyTableView<AppLog> {
         super(itemName);
         this.adminOnly = adminOnly;
 
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
-            CH_SEARCH_FIELD.changeSearchedTableView(this, "ЛОГ");
-        });
-
         if (useContextMenu)
             createContextMenu();
     }

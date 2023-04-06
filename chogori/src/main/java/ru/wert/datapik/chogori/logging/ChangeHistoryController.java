@@ -13,6 +13,7 @@ import ru.wert.datapik.client.interfaces.SearchableTab;
 import ru.wert.datapik.client.interfaces.UpdatableTabController;
 
 import static ru.wert.datapik.chogori.images.BtnImages.BTN_UPDATE_IMG;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class ChangeHistoryController implements SearchableTab, UpdatableTabController {
 
@@ -53,5 +54,6 @@ public class ChangeHistoryController implements SearchableTab, UpdatableTabContr
     @Override //SearchableTab
     public void tuneSearching() {
         Platform.runLater(()->tableView.requestFocus());
+        CH_SEARCH_FIELD.changeSearchedTableView(tableView, "ЛОГ");
     }
 }

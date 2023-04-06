@@ -69,10 +69,6 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
         //Создаем изначальное контекстное меню, чтобы оно могло открыться при клике в пустом месте
         if(useContextMenu) createContextMenu();
 
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "КАРТОЧКА");
-        });
-
     }
 
 

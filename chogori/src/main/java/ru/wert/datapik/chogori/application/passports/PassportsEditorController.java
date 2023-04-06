@@ -43,6 +43,7 @@ import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.images.BtnImages.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_KEYS_NOW_PRESSED;
+import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 
 @Slf4j
@@ -281,6 +282,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
     @Override//SearchableTab
     public void tuneSearching() {
         Platform.runLater(()->passportsTable.requestFocus());
+        CH_SEARCH_FIELD.changeSearchedTableView(passportsTable, "КАРТОЧКА");
     }
 
 
