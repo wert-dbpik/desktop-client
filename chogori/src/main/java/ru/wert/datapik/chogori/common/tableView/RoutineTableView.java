@@ -1,4 +1,5 @@
 package ru.wert.datapik.chogori.common.tableView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
@@ -38,7 +39,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
     }
 
     /**
-     * Обновляет данные формы
+     * Обновляет данные формы без учета поисковой строки
      */
     public void updateRoutineTableView() {
         TaskUpdateItemsInRoutineTableView<P> taskUpdate = new TaskUpdateItemsInRoutineTableView<>(this);
