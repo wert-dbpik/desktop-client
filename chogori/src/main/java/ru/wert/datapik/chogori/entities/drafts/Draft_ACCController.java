@@ -657,6 +657,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 if (savedDraft != null) {
                     Long saveDraftId = savedDraft.getId();
                     draftsList.get(currentPosition.get()).setDraftId(saveDraftId);
+
+//                    tableView.getItems().add(getValue());
+                    tableView.updateRoutineTableView(getValue(), true);
                     showNextDraft();
                 }
             }
@@ -805,6 +808,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     draftsList.get(currentPosition.get()).setDraftId(getValue().getId());
                     showNextDraft();
                 }
+
+                //К отображаемому списку добавляем вновь созданный чертеж
+                tableView.getItems().add(getValue());
+                tableView.updateRoutineTableView(getValue(), true);
             }
         };
     }
