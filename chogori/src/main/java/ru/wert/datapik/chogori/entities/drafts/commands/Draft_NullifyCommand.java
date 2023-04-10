@@ -66,11 +66,7 @@ public class Draft_NullifyCommand implements ICommand {
             }
         else return;
 
-        Platform.runLater(() -> {
-            tableView.updateView();
-            tableView.scrollTo(row);
-            tableView.getSelectionModel().select(row);
-        });
+        tableView.updateRoutineTableView(item, true);
     }
 
 }

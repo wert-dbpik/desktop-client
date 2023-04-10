@@ -31,12 +31,13 @@ public class Draft_ChangeCommand implements ICommand {
 
         try {
             CH_QUICK_DRAFTS.update(item);
-            tableView.updateDraftTableView(item);
+            tableView.updateRoutineTableView(item, true);
             log.info("Изменение параметров чертежа {}", item.toUsefulString());
             AppStatic.createLog(false, String.format("Изменил чертеж '%s' (%s) в комплекте '%s'",
                     item.getPassport().toUsefulString(),
                             EDraftType.getDraftTypeById(item.getDraftType()).getShortName() + "-" + item.getPageNumber(),
                     item.getFolder().toUsefulString()));
+
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
             log.error("При изменении параметров чертежа {} произошла ошибка",

@@ -685,6 +685,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
                         changeOldItemFields(oldDraft);
                         commands.change(null, oldDraft);
+
                         return oldDraft;
                     }
                 };
@@ -766,6 +767,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                         //Сохраняем новый чертеж
                         currentCommand = new Draft_MultipleAddCommand(getNewItem(), tableView);
                         return ((Draft_MultipleAddCommand) currentCommand).addDraft();
+
                     }
 
                 };
