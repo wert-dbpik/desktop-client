@@ -43,8 +43,9 @@ public class ServiceDeleteDrafts extends Service<Void> {
                     LongProcess.create("УДАЛЕНИЕ ДАННЫХ", this);
                 });
                 updateProgress(progress += 0.2, max); //Для затравочки
-
+                int selectedPos = -1;
                 for(Draft item : items){
+
                     //Удаляем запись чертежа из БД
                     try {
                         CH_QUICK_DRAFTS.delete(item);
@@ -53,6 +54,8 @@ public class ServiceDeleteDrafts extends Service<Void> {
                                 item.getPassport().toUsefulString(),
                                         EDraftType.getDraftTypeById(item.getDraftType()).getShortName() + "-" + item.getPageNumber(),
                                 item.getFolder().toUsefulString()));
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
@@ -64,18 +67,23 @@ public class ServiceDeleteDrafts extends Service<Void> {
                         String fileName = item.getId() + "." + item.getExtension();
                         CH_QUICK_DRAFTS.deleteDraftFile("drafts", fileName);
                         log.info("Удален файл чертежа {}", item.toUsefulString());
+
                     } catch (Exception e) {
                         Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
                         log.error("При удалении файла чертежа {} произошла ошибка", item.toUsefulString());
                         e.printStackTrace();
                     }
                     updateProgress(progress += 1.0, max);
+                    //Удаляем запись о чертеже с экрана
+                    selectedPos = tableView.getItems().indexOf(item) - 1;
+                    Platform.runLater(()-> tableView.getItems().remove(item));
                 }
-                Platform.runLater(()->{
-                    tableView.updateView();
-                    tableView.scrollTo(rowToBeSelected);
-                    tableView.getSelectionModel().select(rowToBeSelected);
-                });
+
+                tableView.updateRoutineTableView(
+                        selectedPos >= 0 ? tableView.getItems().get(selectedPos) : null,
+                        true);
+
+
                 return null;
             }
 

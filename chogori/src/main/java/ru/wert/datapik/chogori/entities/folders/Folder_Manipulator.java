@@ -251,7 +251,7 @@ public class Folder_Manipulator {
                 Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
                 draft.setFolder(selectedFolder);
                 CH_QUICK_DRAFTS.update(draft);
-                tableView.getDraftTable().updateRoutineTableView();
+                tableView.getDraftTable().updateRoutineTableView(null, false);
             }
 
         }

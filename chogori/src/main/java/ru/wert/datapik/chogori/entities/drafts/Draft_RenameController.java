@@ -81,13 +81,8 @@ public class Draft_RenameController {
                 PassportQuickService.getInstance();
                 DraftQuickService.getInstance();
                 //А теперь обновляем
-                Platform.runLater(()->{
-                    tableView.updateView();
-                    if(selectedDraft != null) {
-                        tableView.scrollTo(selectedDraft);
-                        tableView.getSelectionModel().select(selectedDraft);
-                    }
-                });
+                tableView.updateRoutineTableView(selectedDraft, true);
+
                 AppStatic.closeWindow(event);
             }
 

@@ -9,16 +9,21 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.chogori.common.interfaces.Sorting;
 
+import java.util.ArrayList;
 import java.util.List;
 @Slf4j
 public class TaskUpdateItemsInRoutineTableView<P extends Item> extends Task<Void> {
 
     private final RoutineTableView<P> itemView;
+    private final P selectedItem;
     private final ProgressIndicator progressIndicator;
+    private final boolean savePreparedList;
 
 
-    public TaskUpdateItemsInRoutineTableView(RoutineTableView<P> itemView) {
+    public TaskUpdateItemsInRoutineTableView(RoutineTableView<P> itemView, P selectedItem, boolean savePreparedList) {
         this.itemView = itemView;
+        this.selectedItem = selectedItem;
+        this.savePreparedList = savePreparedList;
 
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(90, 90);
@@ -29,26 +34,31 @@ public class TaskUpdateItemsInRoutineTableView<P extends Item> extends Task<Void
 
     @Override
     protected Void call() throws Exception {
-
-        List<P> items = itemView.prepareList();
-
+        List<P> items;
+        if(!savePreparedList) {
+            items = itemView.prepareList();
+        } else {
+            items = new ArrayList<>(itemView.getItems());
+        }
         if (items.isEmpty()) {
             showEmptyTable();
         } else {
-
-            if(itemView instanceof Sorting) {
+            if (itemView instanceof Sorting) {
                 ((Sorting) itemView).sortItemList(items);
             }
+        }
+        itemView.setCurrentItemSearchedList(items);
 
-            itemView.setCurrentItemSearchedList(items);
-
-            Platform.runLater(() -> {
+        List<P> finalItems = items;
+        Platform.runLater(() -> {
                 itemView.getItems().clear();
                 itemView.refresh();
-                itemView.setItems(FXCollections.observableArrayList(items));
+                itemView.setItems(FXCollections.observableArrayList(finalItems));
+                if(selectedItem != null){
+                    itemView.getSelectionModel().select(selectedItem);
+                    itemView.scrollTo(selectedItem);
+                }
             });
-
-        }
 
         return null;
     }

@@ -28,9 +28,9 @@ public class LongProcess extends ModalWindow{
 
         try {
             stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(LongProcess.class.getResource("/winform-fxml/long_process/longProcess.fxml"));
+            FXMLLoader loader = new FXMLLoader(LongProcess.class.getResource("/chogori-fxml/longProcess/longProcess.fxml"));
             Parent parent = loader.load();
-            parent.getStylesheets().add(LongProcess.class.getResource("/utils-css/pik-dark.css").toString());
+            parent.getStylesheets().add(LongProcess.class.getResource("/chogori-css/pik-dark.css").toString());
             Scene scene = new Scene(parent);
             scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);

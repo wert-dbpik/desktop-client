@@ -35,14 +35,14 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      * Обновляет данные формы
      */
     public void updateTableView() {
-        updateRoutineTableView();
+        updateRoutineTableView(null, false);
     }
 
     /**
      * Обновляет данные формы без учета поисковой строки
      */
-    public void updateRoutineTableView() {
-        TaskUpdateItemsInRoutineTableView<P> taskUpdate = new TaskUpdateItemsInRoutineTableView<>(this);
+    public void updateRoutineTableView(P selectedItem, boolean savePreparedList) {
+        TaskUpdateItemsInRoutineTableView<P> taskUpdate = new TaskUpdateItemsInRoutineTableView<>(this, selectedItem, savePreparedList);
         Thread t = new Thread(taskUpdate);
         t.setDaemon(true);
         t.start();
