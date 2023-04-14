@@ -35,6 +35,7 @@ public class TaskUpdateItemsInRoutineTableView<P extends Item> extends Task<Void
     @Override
     protected Void call() throws Exception {
         List<P> items;
+        //
         if(!savePreparedList) {
             items = itemView.prepareList();
         } else {

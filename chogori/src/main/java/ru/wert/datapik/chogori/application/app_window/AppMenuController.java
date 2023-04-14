@@ -110,7 +110,7 @@ public class AppMenuController {
         if(CH_CURRENT_USER_GROUP.isReadMaterials())
             menuBar.getMenus().add(createMaterialsMenu());
         //Калькулятор
-        menuBar.getMenus().add(createCalculatorMenu());
+//        menuBar.getMenus().add(createCalculatorMenu());
         //Изделия
 //        if(CH_CURRENT_USER_GROUP.isReadProductStructures())
 //            menuBar.getMenus().add(createEditorMenu());

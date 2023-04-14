@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.entities.drafts.commands;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_PASSPORTS;
@@ -67,6 +69,15 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
                     "Возможно, сервер не доступен");
             e.printStackTrace();
         }
+
+//        tableView.updateTableView();
+
+
+//        Platform.runLater(()->{
+//            tableView.getItems().add(newItem);
+//            tableView.setCurrentItemSearchedList(new ArrayList<>(tableView.getItems()));
+//tableView.updateRoutineTableView(newItem, true);
+//        });
 
         tableView.updateDraftTableView(newItem);
 

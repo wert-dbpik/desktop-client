@@ -64,7 +64,8 @@ public class CatalogOfFoldersController implements UpdatableTabController {
 
         //Создаем связанные между собой панели каталога и изделий
         boolean useContextMenu = false;
-        if(CH_CURRENT_USER.getUserGroup().isEditDrafts()) useContextMenu = true;
+        if(CH_CURRENT_USER.getUserGroup().isEditDrafts())
+            useContextMenu = true;
         createCatalogForms(useContextMenu);
 
         productGroupsTreeView.setConnectedForm(folderTableView);
