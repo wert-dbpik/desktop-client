@@ -11,6 +11,8 @@ import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.modal.LongProcess;
 import ru.wert.datapik.winform.warnings.Warning1;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
@@ -24,6 +26,7 @@ public class ServiceDeleteDrafts extends Service<Void> {
     private final double max;
     private double progress;
     private final int rowToBeSelected;
+    private int selectedPos = -1;
 
     public ServiceDeleteDrafts(List<Draft> items, Draft_TableView tableView) {
         this.items = items;
@@ -32,6 +35,7 @@ public class ServiceDeleteDrafts extends Service<Void> {
 
         this.max = items.size();
         this.progress = 0.0;
+
     }
 
     @Override
@@ -43,19 +47,15 @@ public class ServiceDeleteDrafts extends Service<Void> {
                     LongProcess.create("УДАЛЕНИЕ ДАННЫХ", this);
                 });
                 updateProgress(progress += 0.2, max); //Для затравочки
-                int selectedPos = -1;
                 for(Draft item : items){
-
                     //Удаляем запись чертежа из БД
                     try {
                         CH_QUICK_DRAFTS.delete(item);
                         log.info("Удалена запись о чертеже {}", item.toUsefulString());
                         AppStatic.createLog(false, String.format("Удалил чертеж '%s' (%s) из комплекта '%s'",
                                 item.getPassport().toUsefulString(),
-                                        EDraftType.getDraftTypeById(item.getDraftType()).getShortName() + "-" + item.getPageNumber(),
+                                EDraftType.getDraftTypeById(item.getDraftType()).getShortName() + "-" + item.getPageNumber(),
                                 item.getFolder().toUsefulString()));
-
-
                     } catch (Exception e) {
                         e.printStackTrace();
                         Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
@@ -75,14 +75,8 @@ public class ServiceDeleteDrafts extends Service<Void> {
                     }
                     updateProgress(progress += 1.0, max);
                     //Удаляем запись о чертеже с экрана
-                    selectedPos = tableView.getItems().indexOf(item) - 1;
-                    Platform.runLater(()-> tableView.getItems().remove(item));
+
                 }
-
-                tableView.updateRoutineTableView(
-                        selectedPos >= 0 ? tableView.getItems().get(selectedPos) : null,
-                        true);
-
 
                 return null;
             }
@@ -102,7 +96,20 @@ public class ServiceDeleteDrafts extends Service<Void> {
     @Override
     protected void succeeded() {
         super.succeeded();
+
+        int minPos = tableView.getItems().size() - 1;
+        for(Draft item : items) {
+            int currentIndex = tableView.getItems().indexOf(item);
+            minPos = Math.min(currentIndex, minPos);
+        }
+
+        tableView.getItems().removeAll(items);
+        tableView.setCurrentItemSearchedList(new ArrayList<>(tableView.getItems()));
+        tableView.updateRoutineTableView(
+                minPos - 1 >= 0 ? tableView.getItems().get(minPos - 1) : null,
+                true);
         LongProcess.close();
+
     }
 
     @Override

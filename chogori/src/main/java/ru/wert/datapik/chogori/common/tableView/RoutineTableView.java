@@ -34,14 +34,16 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
     /**
      * Обновляет данные формы
      */
-    public void updateTableView() {
+    public synchronized void updateTableView() {
         updateRoutineTableView(null, false);
     }
 
     /**
      * Обновляет данные формы без учета поисковой строки
+     * P selectedItem - необходимый к выделению элемент после обновления
+     * boolean savePreparedList - следует ли сохранить исходный перечень элементов в таблице
      */
-    public void updateRoutineTableView(P selectedItem, boolean savePreparedList) {
+    public synchronized void updateRoutineTableView(P selectedItem, boolean savePreparedList) {
         TaskUpdateItemsInRoutineTableView<P> taskUpdate = new TaskUpdateItemsInRoutineTableView<>(this, selectedItem, savePreparedList);
         Thread t = new Thread(taskUpdate);
         t.setDaemon(true);
@@ -52,7 +54,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      * Обновляет данные формы
      */
     @Override //Searchable
-    public void updateSearchedView(){
+    public synchronized void updateSearchedView(){
         List<P> list = getCurrentItemSearchedList();
         List<P> foundList = new ArrayList<>();
         String searchedText = CH_SEARCH_FIELD.getText();
@@ -67,7 +69,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      * Обновляет данные формы
      */
     @Override //Searchable
-    public void easyUpdate(ItemService<P> service) {
+    public synchronized void easyUpdate(ItemService<P> service) {
         getItems().clear();
         refresh();
         List<P> list = service.findAll();
