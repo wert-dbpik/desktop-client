@@ -1,0 +1,6 @@
+НАСТРОЙКИ ПРОГРАММЫ:  класс ru.wert.datapik.winform.statics.WinformStatic
+
+PROGRAM_NAME - название программы
+CURRENT_PROJECT_VERSION - версия программы
+TEST_VERSION - true - тестовая версия, автоматически переключается на локальную БД
+

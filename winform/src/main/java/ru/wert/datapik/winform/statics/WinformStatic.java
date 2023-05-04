@@ -18,8 +18,8 @@ import java.util.List;
 public class WinformStatic {
 
     public static String PROGRAM_NAME = "БазаПИК"; //Наименование программы
-    public static String CURRENT_PROJECT_VERSION = "6.1"; //Версия приложения обновляется вручную
-    public static boolean TEST_VERSION = false; //тестовая версия - работает с тестовым сервером
+    public static String CURRENT_PROJECT_VERSION = "6.2"; //Версия приложения обновляется вручную
+    public static boolean TEST_VERSION = true; //тестовая версия - работает с тестовым сервером
 
     public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
     public static Stage WF_MAIN_STAGE;
@@ -42,7 +42,7 @@ public class WinformStatic {
      * Метод обеспечивает выход из приложения
      */
     public static void exitApplication(Event event){
-        if(Warning2.create("ОДУМАЙТЕСЬ!", "Вы близки к выходу из программы?", "А поработать?")) {
+        if(Warning2.create("ВНИМАНИЕ!", "Вы уверены, что хотите выйти", "из программы?")) {
             clearCash();
             System.exit(0);
         }
