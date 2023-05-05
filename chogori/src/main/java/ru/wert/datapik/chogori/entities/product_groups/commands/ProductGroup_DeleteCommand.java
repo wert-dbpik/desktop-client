@@ -3,6 +3,8 @@ package ru.wert.datapik.chogori.entities.product_groups.commands;
 import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.*;
 import ru.wert.datapik.chogori.common.tableView.CatalogableTable;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PRODUCT_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
@@ -29,7 +32,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
     private ItemTableView<Item> tableView = null;
 
     private List<ProductGroup> groupsToBeDeleted;
-    private List<P> itemsToBeDeleted;
+    private List<P> foldersToBeDeleted;
 
     private List<ProductGroup> notDeletedGroups = new ArrayList<>();
     private List<P> notDeletedItems = new ArrayList<>();
@@ -68,21 +71,24 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
             if (groupsToBeDeleted == null) return;
 
             //TODO: Находим элементы входящие в группы
-            itemsToBeDeleted = findAllItemsToBeDeleted(groupsToBeDeleted);
+            foldersToBeDeleted = findAllFoldersToBeDeleted(groupsToBeDeleted);
+
 
             //TODO: Спрашиваем пользователя в последний раз
             boolean answer = Warning2.create($ATTENTION, "Вы уверены, что хотите удалить папки\n" +
                     "и все входящие в папку изделия?", "Востановить удаленное будет трудно!");
             if (answer) {
-                //TODO: Удаляем сначала элементы, входящие в папки, если они есть
-                if(!itemsToBeDeleted.isEmpty())
-                    deleteItemsInGroup(itemsToBeDeleted);
+                //TODO: Удаляем сначала комплекты, входящие в папки, если они есть
+                if(!foldersToBeDeleted.isEmpty())
+                    deleteFoldersInGroup(foldersToBeDeleted);
                 //TODO: Удаляем и сами папки
                 deleteProductGroups(groupsToBeDeleted);
             }
 
             //TODO: Обновляем дерево и таблицу
             commands.updateFormsWhenDeleted(rowToBeSelectedAfterDeleting);
+
+            update(-1);
 
             //TODO: Предупреждаем пользователя, если не все получилось удалить
             if (!notDeletedGroups.isEmpty() || !notDeletedItems.isEmpty())
@@ -146,12 +152,12 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
      * @param allGroupsToBeDeleted List<ProductGroup> найденные ранее группы на удаление
      * @return List<P>
      */
-    private List<P> findAllItemsToBeDeleted(List<ProductGroup> allGroupsToBeDeleted){
+    private List<P> findAllFoldersToBeDeleted(List<ProductGroup> allGroupsToBeDeleted){
         if(allGroupsToBeDeleted.isEmpty()) return null;
 
         List<P> foundItems = new ArrayList<>();
         for(ProductGroup group : allGroupsToBeDeleted) {
-            log.debug(String.format("findAllItemsToBeDeleted : Находим элементы, входящие в группу '%s'", group.getName()));
+            log.debug(String.format("findAllFoldersToBeDeleted : Находим элементы, входящие в группу '%s'", group.getName()));
             foundItems.addAll(itemService.findAllByGroupId(group.getId()));
         }
 
@@ -184,9 +190,16 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
      * @param allItemsToBeDeleted List<P>
      * @return List<P> notDeletedItems
      */
-    private List<P> deleteItemsInGroup(List<P> allItemsToBeDeleted){
-        List<P> notDeletedItems = new ArrayList<>();
+    private List<P> deleteFoldersInGroup(List<P> allItemsToBeDeleted){
+//        List<P> notDeletedItems = new ArrayList<>();
         for(P p : allItemsToBeDeleted){
+            List<Draft> draftsInFolder = CH_QUICK_DRAFTS.findAllByFolder((Folder)p);
+            if(!draftsInFolder.isEmpty()){
+                notDeletedItems.add(p);
+                Warning1.create($ATTENTION, String.format("Комплект %s не пустой и не может быть удален!", p.toUsefulString()),
+                        "Удалите чертежи из комплекта");
+                continue;
+            }
             boolean res = itemService.delete(p);
             if(res){
                 log.info("Удалено изделие {}", p.toUsefulString());
