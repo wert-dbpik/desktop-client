@@ -2,11 +2,13 @@ package ru.wert.datapik.chogori.entities.folders;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.client.entity.models.*;
 import ru.wert.datapik.chogori.common.commands.ItemCommands;
 import ru.wert.datapik.chogori.common.components.BXProductGroup;
@@ -97,6 +99,9 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     @Override
     public Folder getNewItem() {
+//        ProductGroup group = event.getSource().equals(ProductGroup_TreeView<>)
+//        System.out.println((event.getSource());
+
         return new Folder(
                 bxGroup.getValue(),
                 tfName.getText().trim(),

@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori.entities.product_groups.commands;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.client.entity.models.Draft;
@@ -18,8 +19,7 @@ import ru.wert.datapik.winform.warnings.Warning2;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PRODUCT_GROUPS;
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
@@ -56,7 +56,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
 
     @Override
     public void execute() {
-        if(items.isEmpty()) return;
+        if (items.isEmpty()) return;
 
         //TODO: Находим элементы, выделяемые после завершения операции
 
@@ -65,42 +65,71 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
             rowToBeSelectedAfterDeleting = findRowToBeSelectedAfterDeleting();
         }
 
-        try {
-            //TODO:Находим входящие группы
-            groupsToBeDeleted = findAllGroupsToBeDeleted(items);
-            if (groupsToBeDeleted == null) return;
+        //TODO:Находим входящие группы
+        groupsToBeDeleted = findAllGroupsToBeDeleted(items);
+        if (groupsToBeDeleted == null) return;
 
-            //TODO: Находим элементы входящие в группы
-            foldersToBeDeleted = findAllFoldersToBeDeleted(groupsToBeDeleted);
+        //TODO: Находим элементы входящие в группы
+        foldersToBeDeleted = findAllFoldersToBeDeleted(groupsToBeDeleted);
 
-
-            //TODO: Спрашиваем пользователя в последний раз
-            boolean answer = Warning2.create($ATTENTION, "Вы уверены, что хотите удалить папки\n" +
-                    "и все входящие в папку изделия?", "Востановить удаленное будет трудно!");
-            if (answer) {
-                //TODO: Удаляем сначала комплекты, входящие в папки, если они есть
-                if(!foldersToBeDeleted.isEmpty())
-                    deleteFoldersInGroup(foldersToBeDeleted);
-                //TODO: Удаляем и сами папки
-                deleteProductGroups(groupsToBeDeleted);
-            }
-
-            //TODO: Обновляем дерево и таблицу
-            commands.updateFormsWhenDeleted(rowToBeSelectedAfterDeleting);
-
-            update(-1);
-
-            //TODO: Предупреждаем пользователя, если не все получилось удалить
-            if (!notDeletedGroups.isEmpty() || !notDeletedItems.isEmpty())
-                Warning1.create($ATTENTION, "Некоторые элементы не удалось удалить!",
-                        "Возможно, они имеют зависимости");
-
-        } catch (Exception e) {
-            Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
-            log.error("При удалении произошла ошибка");
-            e.printStackTrace();
+        if (!foldersEmpty((List<Folder>) foldersToBeDeleted)) {
+            Warning1.create($ATTENTION, "Некоторые комплекты содержат чертежи!",
+                    "Комплекты с чертежами удалите отдельно.\nОперация остановлена.");
+            return;
         }
 
+        //TODO: Спрашиваем пользователя в последний раз
+        boolean answer = Warning2.create($ATTENTION, "Вы уверены, что хотите удалить папки\n" +
+                "и все входящие комплекты?", "Востановить удаленное будет трудно!");
+        if (answer) {
+
+            Integer finalRowToBeSelectedAfterDeleting = rowToBeSelectedAfterDeleting;
+            Task<Void> delTask = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    //TODO: Удаляем сначала комплекты, входящие в папки, если они есть
+                    if (!foldersToBeDeleted.isEmpty())
+                        deleteFoldersInGroup(foldersToBeDeleted);
+                    //TODO: Удаляем и сами папки
+                    deleteProductGroups(groupsToBeDeleted);
+                    return null;
+                }
+
+                @Override
+                protected void succeeded() {
+                    super.succeeded();
+                    //TODO: Обновляем дерево и таблицу
+                    commands.updateFormsWhenDeleted(finalRowToBeSelectedAfterDeleting);
+
+                    update(-1);
+
+                    //TODO: Предупреждаем пользователя, если не все получилось удалить
+                    if (!notDeletedGroups.isEmpty() || !notDeletedItems.isEmpty())
+                        Warning1.create($ATTENTION, "Некоторые элементы не удалось удалить!",
+                                "Возможно, они имеют зависимости");
+                }
+
+                @Override
+                protected void failed() {
+                    super.failed();
+                    Warning1.create($ATTENTION, $ERROR_WHILE_DELETING_ITEM, $ITEM_IS_BUSY_MAYBE);
+                    log.error("При удалении произошла ошибка");
+                }
+            };
+
+            Thread t = new Thread(delTask);
+            t.setDaemon(true);
+            t.start();
+        }
+
+    }
+
+    private boolean foldersEmpty(List<Folder> foldersToBeDeleted) {
+        for(Folder f : foldersToBeDeleted){
+            if(!CH_QUICK_DRAFTS.findAllByFolder(f).isEmpty())
+                return false;
+        }
+        return true;
     }
 
     private Integer findRowToBeSelectedAfterDeleting(){

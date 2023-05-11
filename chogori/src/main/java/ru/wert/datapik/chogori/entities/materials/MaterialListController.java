@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.entities.materials;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
