@@ -101,7 +101,7 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
                     //TODO: Обновляем дерево и таблицу
                     commands.updateFormsWhenDeleted(finalRowToBeSelectedAfterDeleting);
 
-                    update(-1);
+                    update(finalRowToBeSelectedAfterDeleting);
 
                     //TODO: Предупреждаем пользователя, если не все получилось удалить
                     if (!notDeletedGroups.isEmpty() || !notDeletedItems.isEmpty())
@@ -256,9 +256,14 @@ public class ProductGroup_DeleteCommand<P extends Item> implements ICommand {
                 treeView.getFocusModel().focus(row);
                 treeView.scrollTo(row);
                 int trow = ((ItemTableView<P>) tableView).getSelectionModel().getSelectedIndex();
-                ((CatalogableTable<? extends CatalogGroup>) tableView).updateVisibleLeafOfTableView(selectedTreeItemInTable.getValue());
-                ((ItemTableView<P>) tableView).getSelectionModel().select(trow);
-                ((ItemTableView<P>) tableView).scrollTo(trow);
+
+                try {
+                    ((CatalogableTable<? extends CatalogGroup>) tableView).updateVisibleLeafOfTableView(selectedTreeItemInTable.getValue());
+                    ((ItemTableView<P>) tableView).getSelectionModel().select(trow);
+                    ((ItemTableView<P>) tableView).scrollTo(trow);
+                } catch (Exception e) {
+
+                }
             }
 
         });

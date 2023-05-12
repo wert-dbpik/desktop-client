@@ -73,7 +73,7 @@ public class FormViewACCWindow<P extends Item> {
                 ((ProductGroup_ACCController) accController).setChangesInTableView(changesAreInTableView);
                 ((ProductGroup_ACCController) accController).setTableView(draftsTableView);
             }
-            if (accController instanceof Folder_ACCController) {
+            else if (accController instanceof Folder_ACCController && treeView != null) {
                 ProductGroup selectedGroup = ((TreeItem<ProductGroup>) treeView.getSelectionModel().getSelectedItem()).getValue();
                 ((Folder_ACCController) accController).setSelectedGroup(selectedGroup);
             }
