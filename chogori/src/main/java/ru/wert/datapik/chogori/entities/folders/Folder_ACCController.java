@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.client.entity.models.*;
@@ -17,6 +18,8 @@ import ru.wert.datapik.chogori.common.interfaces.IFormView;
 import ru.wert.datapik.chogori.common.tableView.ItemTableView;
 import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_Chooser;
 import ru.wert.datapik.chogori.statics.AppStatic;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.winform.enums.EOperation;
 
 import java.util.ArrayList;
@@ -49,13 +52,17 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     private ProductGroup group;
 
+    @Setter
+    private ProductGroup selectedGroup = null;
+
 
     @Override
     public void init(EOperation operation, IFormView<Folder> formView, ItemCommands<Folder> commands) {
         super.initSuper(operation, formView, commands, CH_QUICK_FOLDERS);
 
         //Создаем комбобоксы
-        new BXProductGroup().create(bxGroup); //ГРУППА ИЗДЕЛИЙ
+        new BXProductGroup().create(bxGroup,
+                selectedGroup); //ГРУППА ИЗДЕЛИЙ
 
         //Устанавливаем начальные значения полей в зависимости от operation
         setInitialValues();
@@ -99,9 +106,6 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
 
     @Override
     public Folder getNewItem() {
-//        ProductGroup group = event.getSource().equals(ProductGroup_TreeView<>)
-//        System.out.println((event.getSource());
-
         return new Folder(
                 bxGroup.getValue(),
                 tfName.getText().trim(),
@@ -131,7 +135,8 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
     @Override
     public void showEmptyForm() {
 
-        setComboboxProductGroupValue(bxGroup);
+        if(selectedGroup == null)
+            setComboboxProductGroupValue(bxGroup);
 
     }
 
@@ -140,16 +145,4 @@ public class Folder_ACCController extends FormView_ACCController<Folder> {
         return true;
     }
 
-
-//    private String combineDecNumberAndName(){
-//        String decNumber;
-//        Prefix prefix =  bxPrefix.getValue();
-//        if(prefix == null || prefix.getName().equals("-")){
-//            decNumber = tfNumber.getText().trim();
-//        } else {
-//            decNumber = bxPrefix.getValue().getName() + "." + tfNumber.getText().trim();
-//        }
-//
-//        return decNumber + ", " + tfName.getText().trim();
-//    }
 }

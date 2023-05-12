@@ -2,6 +2,7 @@ package ru.wert.datapik.chogori.search;
 
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
+import lombok.Getter;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.chogori.common.tableView.CatalogableTable;
@@ -16,7 +17,7 @@ public class SearchField extends TextField {
 
 
     private String promptText;
-    private ItemTableView<? extends Item> searchedTableView = null;
+    @Getter private ItemTableView<? extends Item> searchedTableView = null;
     private PastePopup paste = new PastePopup(this);
     private Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 

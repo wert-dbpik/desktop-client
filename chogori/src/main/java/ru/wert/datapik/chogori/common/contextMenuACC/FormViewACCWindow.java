@@ -3,6 +3,12 @@ package ru.wert.datapik.chogori.common.contextMenuACC;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+import ru.wert.datapik.chogori.common.treeView.Item_TreeView;
+import ru.wert.datapik.chogori.entities.folders.Folder_ACCController;
+import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.client.entity.models.ProductGroup;
+import ru.wert.datapik.client.interfaces.CatalogGroup;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.chogori.common.commands.ItemCommands;
 import ru.wert.datapik.chogori.common.interfaces.IFormView;
@@ -29,11 +35,20 @@ public class FormViewACCWindow<P extends Item> {
 
     //Контроллер диалогового окна ДОБАВИТЬ/ИЗМЕНИТЬ
     private FormView_ACCController<P> accController;
-    private TableView<Item> tableView = null;
+    private TableView<Item> draftsTableView = null;
+    private Item_TreeView treeView = null;
     private boolean changesAreInTableView;
 
-    public Parent create(EOperation op, IFormView<P> formView, ItemCommands<P> commands, String res, TableView<Item> tableView, boolean changesAreInTableView){
-        this.tableView = tableView;
+    public Parent create(EOperation op, IFormView<P> formView, ItemCommands<P> commands, String res,
+                         Item_TreeView treeView){
+        this.treeView = treeView;
+
+        return create(op, formView, commands, res);
+    }
+
+    public Parent create(EOperation op, IFormView<P> formView, ItemCommands<P> commands, String res,
+                         TableView<Item> draftsTableView, boolean changesAreInTableView){
+        this.draftsTableView = draftsTableView;
         this.changesAreInTableView = changesAreInTableView;
 
 
@@ -56,8 +71,11 @@ public class FormViewACCWindow<P extends Item> {
             //Если изменения происходят в таблице, не в дереве
             if(accController instanceof ProductGroup_ACCController && changesAreInTableView) {
                 ((ProductGroup_ACCController) accController).setChangesInTableView(changesAreInTableView);
-                ((ProductGroup_ACCController) accController).setTableView(tableView);
-
+                ((ProductGroup_ACCController) accController).setTableView(draftsTableView);
+            }
+            if (accController instanceof Folder_ACCController) {
+                ProductGroup selectedGroup = ((TreeItem<ProductGroup>) treeView.getSelectionModel().getSelectedItem()).getValue();
+                ((Folder_ACCController) accController).setSelectedGroup(selectedGroup);
             }
 
             accController.init(op, formView, commands);

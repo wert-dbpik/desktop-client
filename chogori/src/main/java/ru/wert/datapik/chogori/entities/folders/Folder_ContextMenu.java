@@ -63,7 +63,8 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         //Условие при котором таблица не отображает только папки (globalOn)
         // и в таблице не ведется поиск
-        boolean noSearchAndGlobal = CH_SEARCH_FIELD.getText().isEmpty() && tableView.isGlobalOff();
+        boolean noSearchAndGlobal = !(CH_SEARCH_FIELD.getSearchedTableView() instanceof Folder_TableView);
+
 
         if (selectedItems.size() == 0) {
             if (noSearchAndGlobal) addItem = true;

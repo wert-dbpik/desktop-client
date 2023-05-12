@@ -14,30 +14,29 @@ import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_DEFAULT_PRODU
 @Getter
 public class BXProductGroup {
 
-    private ComboBox<ProductGroup> bxProductGroup;
+    private ComboBox<ProductGroup> cmbx;
+    private ProductGroup productGroup;
 
-    public void create(ComboBox<ProductGroup> bxProductGroup){
-        this.bxProductGroup = bxProductGroup;
+    public void create(ComboBox<ProductGroup> cmbx, ProductGroup productGroup){
+        this.cmbx = cmbx;
         ObservableList<ProductGroup> groups = FXCollections.observableArrayList(CH_PRODUCT_GROUPS.findAll());
-        bxProductGroup.setItems(groups);
+        cmbx.setItems(groups);
 
         createCellFactory();
         //Выделяем префикс по умолчанию
 
         createConverter();
 
-//        bxProductGroup.getEditor().focusedProperty().addListener((obs, old, isFocused) -> {
-//            if (!isFocused) {
-//                bxProductGroup.setValue(bxProductGroup.getConverter().fromString(bxProductGroup.getEditor().getText()));
-//                bxProductGroup.hide();
-//            }
-//        });
+        if (productGroup == null)
+            cmbx.getSelectionModel().select(CH_PRODUCT_GROUPS.findByName(CH_DEFAULT_PRODUCT_GROUP));
+        else
+            cmbx.getSelectionModel().select(productGroup);
 
     }
 
     private void createCellFactory() {
-        //CellFactory определяет вид элементов комбобокса - имя группы
-        bxProductGroup.setCellFactory(i -> new ListCell<ProductGroup>() {
+        //CellFactory определяет вид элементов комбобокса - только имя префикса
+        cmbx.setCellFactory(i -> new ListCell<ProductGroup>() {
             @Override
             protected void updateItem (ProductGroup item,boolean empty){
                 super.updateItem(item, empty);
@@ -52,22 +51,19 @@ public class BXProductGroup {
     }
 
     private void createConverter() {
-        bxProductGroup.setConverter(new StringConverter<ProductGroup>() {
+        cmbx.setConverter(new StringConverter<ProductGroup>() {
             @Override
-            public String toString(ProductGroup group) {
-                if(group == null) return "system bug";
-                return group.getName();
+            public String toString(ProductGroup productGroup) {
+//                LAST_VAL = productGroup; //последний выбранный префикс становится префиксом по умолчанию
+                return productGroup.getName();
             }
 
             @Override
             public ProductGroup fromString(String string) {
-                ProductGroup group = CH_PRODUCT_GROUPS.findByName(string);
-                if(group == null) {
-                    return CH_PRODUCT_GROUPS.findByName(CH_DEFAULT_PRODUCT_GROUP);
-                }
-                return group;
+                return null;
             }
         });
+
     }
 
 

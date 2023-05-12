@@ -59,7 +59,7 @@ public class Product_ACCController extends FormView_ACCController<Product> {
 
         //Create standart buttons on the form
         new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
-        new BXProductGroup().create(bxGroup); //ГРУППА ИЗДЕЛИЙ
+        new BXProductGroup().create(bxGroup, null); //ГРУППА ИЗДЕЛИЙ
         defaultGroup = CH_PRODUCT_GROUPS.findByName("Разное");
         group = ((CatalogTableView<Product, ProductGroup>)formView).
                 findChosenGroup(operation, (CatalogTableView<Product, ProductGroup>) formView, defaultGroup);

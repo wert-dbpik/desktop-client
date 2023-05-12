@@ -2,8 +2,10 @@ package ru.wert.datapik.chogori.entities.product_groups.commands;
 
 import javafx.application.Platform;
 import javafx.event.Event;
+import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import lombok.Getter;
+import ru.wert.datapik.chogori.entities.folders.Folder_ACCController;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.CatalogGroup;
@@ -78,12 +80,13 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
     }
 
     public void addProductToFolder(Event event){
-        ItemTableView<Item> formView = treeView.getConnectedForm();
-        ItemCommands<?> commands = ((Folder_TableView)formView).getCommands();
+        ItemTableView<Item> foldersTableViewView = treeView.getConnectedForm();
+        ItemCommands<?> commands = ((Folder_TableView)foldersTableViewView).getCommands();
 
-        String itemACCRes = ((Folder_TableView)formView).getAccWindowRes();
+        String itemACCRes = ((Folder_TableView)foldersTableViewView).getAccWindowRes();
 
-        new FormViewACCWindow<Folder>().create(EOperation.ADD, (IFormView)formView, (ItemCommands<Folder>) commands, itemACCRes);
+        new FormViewACCWindow<Folder>().create(EOperation.ADD, (IFormView)foldersTableViewView, (ItemCommands<Folder>) commands, itemACCRes, treeView);
+
     }
 
     /**
