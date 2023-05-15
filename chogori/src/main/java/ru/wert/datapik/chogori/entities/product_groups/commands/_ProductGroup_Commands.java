@@ -26,7 +26,6 @@ import java.util.List;
 
 public class _ProductGroup_Commands<P extends Item> implements ItemCommands<ProductGroup> {
 
-//    private IFormView<P> tableView = null; //Таблица каталога, которая обновляется вместе с деревом
     private ProductGroup_TreeView<P> treeView;
 
     public ProductGroup_TreeView<Item> getTreeView() {
@@ -93,51 +92,22 @@ public class _ProductGroup_Commands<P extends Item> implements ItemCommands<Prod
      * Обновление форм после удаления групп
      * @param rowToBeSelectedAfterDeleting Integer
      */
-    public void updateFormsWhenDeleted(Integer rowToBeSelectedAfterDeleting){
+    public void updateFormsWhenDeleted(Integer rowToBeSelectedAfterDeleting) {
         TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
         int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
 
-        Platform.runLater(() -> {
-            treeView.updateView();
-            treeView.getFocusModel().focus(selectedItemIndex - 1);
-            treeView.scrollTo(selectedItemIndex - 1);
+        treeView.updateView();
+        treeView.getFocusModel().focus(selectedItemIndex - 1);
 
-            if (catTableView != null) {
-                TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getUpwardRow();
-                if(selectedTreeItemInTree != null && selectedTreeItemInTable.getValue().equals(selectedTreeItemInTree.getValue())) {
-                    selectedTreeItemInTable = selectedTreeItemInTable.getParent();
-                }
-                catTableView.updateVisibleLeafOfTableView(selectedTreeItemInTable.getValue());
-                if (rowToBeSelectedAfterDeleting != null) {
-                    tableView.getSelectionModel().select(rowToBeSelectedAfterDeleting);
-                    tableView.scrollTo(rowToBeSelectedAfterDeleting);
-                }
+        if (catTableView != null) {
+            TreeItem<ProductGroup> selectedTreeItemInTable = ((CatalogableTable<ProductGroup>) tableView).getUpwardRow();
+            if (selectedTreeItemInTree != null && selectedTreeItemInTable.getValue().equals(selectedTreeItemInTree.getValue())) {
+                selectedTreeItemInTable = selectedTreeItemInTable.getParent();
             }
-
-        });
-
+            catTableView.updateVisibleLeafOfTableView(selectedTreeItemInTable.getValue());
+            if (rowToBeSelectedAfterDeleting != null) {
+                tableView.getSelectionModel().select(rowToBeSelectedAfterDeleting);
+            }
+        }
     }
-
-//    /**
-//     * Обновление форм после добавления или изменения группы
-//     * @param item ProductGroup
-//     */
-//    public void updateFormsWhenAddedOrChanged(ProductGroup item) {
-//        TreeItem<? extends CatalogGroup> selectedTreeItemInTree = treeView.getSelectionModel().getSelectedItem();
-//        int selectedItemIndex = treeView.getSelectionModel().getSelectedIndex();
-//        //Заранее раскрываем выбранный узел
-//        //selectedTreeItemInTree != null - условие при добавлении в корень
-//        if(selectedTreeItemInTree != null) selectedTreeItemInTree.setExpanded(true);
-//
-//        Platform.runLater(() -> {
-//            treeView.updateView();
-//            TreeItem<? extends CatalogGroup> addedTreeItem = treeView.findTreeItemById(item.getId());
-//            treeView.getFocusModel().focus(selectedItemIndex + addedTreeItem.getParent().getChildren().indexOf(addedTreeItem) + 1);
-//            if (catTableView != null) { //Если имеем дело с каталогом, а не только с деревом
-//                catTableView.updateOnlyTableView(catTableView.getSelectedTreeItem().getValue());
-//                tableView.getSelectionModel().select(item);
-//                tableView.scrollTo(item);
-//            }
-//        });
-//    }
 }
