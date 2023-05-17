@@ -261,6 +261,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
      * @param item
      */
     public void updateDraftTableView(Draft item) {
+
         Platform.runLater(() -> {
             updateView();
             scrollTo(item);

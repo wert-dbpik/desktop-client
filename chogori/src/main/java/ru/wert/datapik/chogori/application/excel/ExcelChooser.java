@@ -3,9 +3,13 @@ package ru.wert.datapik.chogori.application.excel;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Date;
 
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_SETTINGS;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
+import static ru.wert.datapik.winform.statics.WinformStatic.WF_TEMPDIR;
 
 public class ExcelChooser {
 
@@ -27,6 +31,18 @@ public class ExcelChooser {
             e.printStackTrace();
         }
 
-        return chosenFile;
+        return createTempCopyOfFile(chosenFile);
+    }
+
+    public File createTempCopyOfFile(File oldFile){
+        File copied = null;
+        try {
+//          copied = File.createTempFile(oldFile.getName(), "excel.tmp", tempDir);  //не работает
+            copied = new File(WF_TEMPDIR, oldFile.getName() + new Date().getTime());
+            Files.copy(oldFile.toPath(), copied.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return copied;
     }
 }

@@ -58,6 +58,8 @@ public class POIReader {
         this.modelColNames = findModelColNames();
         this.executions = findExecutions();
         this.data = findData();
+
+        book.close(); //Закрываем книгу
     }
 
     /**

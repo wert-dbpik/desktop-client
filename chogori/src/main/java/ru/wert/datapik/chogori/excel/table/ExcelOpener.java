@@ -17,7 +17,7 @@ public class ExcelOpener {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("exel", "*.xlsx")
         );
-        fileChooser.setInitialDirectory(new File("C:/test"));
+        fileChooser.setInitialDirectory(new File("C:/"));
         File selectedFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
         if (selectedFile == null) return;
         try {

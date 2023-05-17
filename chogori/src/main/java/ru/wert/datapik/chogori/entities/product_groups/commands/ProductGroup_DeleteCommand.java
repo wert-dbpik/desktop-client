@@ -1,25 +1,25 @@
 package ru.wert.datapik.chogori.entities.product_groups.commands;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.chogori.common.commands.ICommand;
+import ru.wert.datapik.chogori.common.tableView.ItemTableView;
+import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
-import ru.wert.datapik.client.interfaces.*;
-import ru.wert.datapik.chogori.common.tableView.CatalogableTable;
-import ru.wert.datapik.chogori.common.tableView.ItemTableView;
-import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
-import ru.wert.datapik.chogori.common.commands.ICommand;
-import ru.wert.datapik.chogori.statics.AppStatic;
+import ru.wert.datapik.client.interfaces.GroupedItemService;
+import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.winform.warnings.Warning1;
 import ru.wert.datapik.winform.warnings.Warning2;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PRODUCT_GROUPS;
+import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
 @Slf4j
