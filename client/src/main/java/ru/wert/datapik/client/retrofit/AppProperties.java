@@ -1,16 +1,12 @@
 package ru.wert.datapik.client.retrofit;
 
-import javafx.scene.control.Dialog;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.datapik.winform.statics.WinformStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.io.*;
 import java.util.Properties;
 
-import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
-import static ru.wert.datapik.winform.statics.WinformStatic.*;
-import static ru.wert.datapik.winform.statics.WinformStatic.HOME_BAZA_PIK;
+import static ru.wert.datapik.winform.statics.WinformStatic.TEST_VERSION;
 @Slf4j
 public class AppProperties {
 
