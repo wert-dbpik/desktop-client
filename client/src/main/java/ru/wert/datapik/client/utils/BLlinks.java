@@ -17,6 +17,7 @@ public class BLlinks {
     public static VersionDesktopService versionDesktopService;
     public static VersionAndroidService versionAndroidService;
     public static VersionServerService versionServerService;
+    public static VersionNormicService versionNormicService;
     public static AppSettingsService appSettingsService;
     public static UserGroupService userGroupService;
     public static CoatService coatService;
