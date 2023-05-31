@@ -9,8 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import ru.wert.datapik.client.entity.models.AppLog;
 
-import static ru.wert.datapik.chogori.images.BtnImages.BTN_ANDROID_IMG;
-import static ru.wert.datapik.chogori.images.BtnImages.BTN_DESKTOP_IMG;
+import static ru.wert.datapik.chogori.images.BtnImages.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.parseLDTtoNormalDate;
 
 public class AppLog_Columns {
@@ -85,6 +84,10 @@ public class AppLog_Columns {
                 case 1:
                     label.setGraphic(new ImageView(BTN_ANDROID_IMG));
                     label.setTooltip(new Tooltip("Android"));
+                    break;
+                case 2:
+                    label.setGraphic(new ImageView(BTN_NORMIC_IMG));
+                    label.setTooltip(new Tooltip("Normic"));
                     break;
             }
             return new ReadOnlyObjectWrapper(label);

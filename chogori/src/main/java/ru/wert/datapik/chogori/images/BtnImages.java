@@ -37,6 +37,7 @@ public class BtnImages {
     public static Image BTN_EYE_CLOSE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/eye_close(32x32).png"), size24, size24, true, true);
     public static Image BTN_DESKTOP_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/desktop(32x32).png"), size24, size24, true, true);
     public static Image BTN_ANDROID_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/android(32x32).png"), size24, size24, true, true);
+    public static Image BTN_NORMIC_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/normic(32x32).png"), size24, size24, true, true);
     public static Image BTN_UPDATE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/update(32x32).png"), size16, size16, true, true);
     public static Image SOLID_3D_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/3D_IMAGE.png"), 400, 400, true, true);
     public static Image MAN_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/man(32x32).png"), size16, size16, true, true);
