@@ -29,6 +29,9 @@ public class UserGroup extends _BaseEntity implements Item {
     private boolean readMaterials;
     private boolean editMaterials;
     private boolean deleteMaterials;
+    //--------------------------
+    private boolean editNormConstants;
+    private boolean editNormExtraOperations;
 
 
     @Override

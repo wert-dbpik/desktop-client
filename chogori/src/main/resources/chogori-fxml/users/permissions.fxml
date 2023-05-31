@@ -103,6 +103,30 @@
                         <Font size="14.0" />
                      </font>
                   </CheckBox>
+                  <Separator prefHeight="29.0" prefWidth="325.0" />
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="НОРМИК" underline="true">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="25.0" />
+                           </VBox.margin>
+                        </Label>
+                        <CheckBox fx:id="chbEditNormExtraOperations" mnemonicParsing="false" text="Редактировать экстра операции">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </CheckBox>
+                        <CheckBox fx:id="chbEditNormConstants" mnemonicParsing="false" text="Редактировать константы">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </CheckBox>
+                        <Separator prefHeight="29.0" prefWidth="325.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </VBox>
                   <VBox fx:id="vbUserPermissions">
                      <children>
                         <Label text="ИНДИВИДУАЛЬНЫЕ НАСТРОЙКИ" underline="true">
@@ -114,6 +138,9 @@
                            <font>
                               <Font size="14.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </CheckBox>
                      </children>
                      <VBox.margin>

@@ -31,6 +31,8 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
     @FXML
     private CheckBox chbEditUsers;
 
+    //---------------------------------------
+
     @FXML
     private CheckBox chbReadDrafts;
     
@@ -43,6 +45,8 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
     @FXML
     private CheckBox chbCommentDrafts;
 
+    //---------------------------------------
+
     @FXML
     private CheckBox chbReadProductStructure;
 
@@ -52,6 +56,8 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
     @FXML
     private CheckBox chbDeleteProductStructure;
 
+    //---------------------------------------
+
     @FXML
     private CheckBox chbReadMaterials;
 
@@ -60,6 +66,16 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
 
     @FXML
     private CheckBox chbDeleteMaterials;
+
+    //---------------------------------------
+
+    @FXML
+    private CheckBox chbEditNormConstants;
+
+    @FXML
+    private CheckBox chbEditNormExtraOperations;
+
+    //---------------------------------------
     
     @FXML
     private Button btnOk;
@@ -90,7 +106,8 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
                 chbAdministrate,chbEditUsers,
                 chbReadDrafts,chbEditDrafts,chbDeleteDrafts,chbCommentDrafts,
                 chbReadProductStructure,chbEditProductStructure,chbDeleteProductStructure,
-                chbReadMaterials,chbEditMaterials,chbDeleteMaterials
+                chbReadMaterials,chbEditMaterials,chbDeleteMaterials,
+                chbEditNormConstants, chbEditNormExtraOperations
         );
 
     }
@@ -116,7 +133,8 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
                 chbAdministrate.isSelected(),chbEditUsers.isSelected(),
                 chbReadDrafts.isSelected(),chbEditDrafts.isSelected(),chbDeleteDrafts.isSelected(),chbCommentDrafts.isSelected(),
                 chbReadProductStructure.isSelected(),chbEditProductStructure.isSelected(),chbDeleteProductStructure.isSelected(),
-                chbReadMaterials.isSelected(),chbEditMaterials.isSelected(),chbDeleteMaterials.isSelected()
+                chbReadMaterials.isSelected(),chbEditMaterials.isSelected(),chbDeleteMaterials.isSelected(),
+                chbEditNormConstants.isSelected(),chbEditNormExtraOperations.isSelected()
         );
     }
 
@@ -145,6 +163,9 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
         chbReadMaterials.setSelected(oldItem.isReadMaterials());
         chbEditMaterials.setSelected(oldItem.isEditMaterials());
         chbDeleteMaterials.setSelected(oldItem.isDeleteMaterials());
+        //---------------------------------------------------------------------------
+        chbEditNormConstants.setSelected(oldItem.isEditMaterials());
+        chbEditNormExtraOperations.setSelected(oldItem.isEditMaterials());
     }
 
     @Override
@@ -167,6 +188,9 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
         oldItem.setReadMaterials(chbReadMaterials.isSelected());
         oldItem.setEditMaterials(chbEditMaterials.isSelected());
         oldItem.setDeleteMaterials(chbDeleteMaterials.isSelected());
+        //---------------------------------------------------------------------
+        oldItem.setEditMaterials(chbEditNormConstants.isSelected());
+        oldItem.setEditMaterials(chbEditNormExtraOperations.isSelected());
 
     }
 
@@ -175,16 +199,22 @@ public class UserGroup_ACCController extends FormView_ACCController<UserGroup> {
         tfUserGroupName.setText("");
         chbAdministrate.setSelected(false);
         chbEditUsers.setSelected(false);
+
         chbReadDrafts.setSelected(false);
         chbEditDrafts.setSelected(false);
         chbDeleteDrafts.setSelected(false);
         chbCommentDrafts.setSelected(false);
+
         chbReadProductStructure.setSelected(false);
         chbEditProductStructure.setSelected(false);
         chbDeleteProductStructure.setSelected(false);
+
         chbReadMaterials.setSelected(false);
         chbEditMaterials.setSelected(false);
         chbDeleteMaterials.setSelected(false);
+
+        chbEditNormConstants.setSelected(false);
+        chbEditNormExtraOperations.setSelected(false);
     }
 
     @Override

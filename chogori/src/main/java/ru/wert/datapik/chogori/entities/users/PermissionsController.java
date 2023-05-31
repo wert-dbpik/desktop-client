@@ -37,6 +37,8 @@ public class PermissionsController<P extends Item> {
     @FXML
     private CheckBox chbEditUsers;
 
+    //---------------------------------------
+
     @FXML
     private CheckBox chbReadDrafts;
 
@@ -49,6 +51,8 @@ public class PermissionsController<P extends Item> {
     @FXML
     private CheckBox chbCommentDrafts;
 
+    //---------------------------------------
+
     @FXML
     private CheckBox chbReadProductStructure;
 
@@ -58,6 +62,8 @@ public class PermissionsController<P extends Item> {
     @FXML
     private CheckBox chbDeleteProductStructure;
 
+    //---------------------------------------
+
     @FXML
     private CheckBox chbReadMaterials;
 
@@ -66,6 +72,15 @@ public class PermissionsController<P extends Item> {
 
     @FXML
     private CheckBox chbDeleteMaterials;
+
+    //---------------------------------------
+
+    @FXML
+    private CheckBox chbEditNormConstants;
+
+    @FXML
+    private CheckBox chbEditNormExtraOperations;
+
 
     @FXML
     private CheckBox chbLogging;
@@ -92,6 +107,7 @@ public class PermissionsController<P extends Item> {
                 chbReadDrafts,chbEditDrafts,chbDeleteDrafts,chbCommentDrafts,
                 chbReadProductStructure,chbEditProductStructure,chbDeleteProductStructure,
                 chbReadMaterials,chbEditMaterials,chbDeleteMaterials,
+                chbEditNormConstants, chbEditNormExtraOperations,
                 chbLogging
         );
 
@@ -113,6 +129,9 @@ public class PermissionsController<P extends Item> {
             chbReadMaterials.setSelected(this.userGroup.isReadMaterials());
             chbEditMaterials.setSelected(this.userGroup.isEditMaterials());
             chbDeleteMaterials.setSelected(this.userGroup.isDeleteMaterials());
+
+            chbEditNormConstants.setSelected(this.userGroup.isEditNormConstants());
+            chbEditNormExtraOperations.setSelected(this.userGroup.isEditNormExtraOperations());
         } else {
             for (CheckBox ch : boxes)
                 ch.setSelected(false);
@@ -139,6 +158,10 @@ public class PermissionsController<P extends Item> {
         map.put(chbReadMaterials, chbReadMaterials.isSelected());
         map.put(chbEditMaterials, chbEditMaterials.isSelected());
         map.put(chbDeleteMaterials, chbDeleteMaterials.isSelected());
+
+        map.put(chbEditNormConstants, chbEditNormConstants.isSelected());
+        map.put(chbEditNormExtraOperations, chbEditNormExtraOperations.isSelected());
+
         map.put(chbLogging, chbLogging.isSelected());
 
     }
@@ -161,6 +184,9 @@ public class PermissionsController<P extends Item> {
         userGroup.setReadMaterials(chbReadMaterials.isSelected());
         userGroup.setEditMaterials(chbEditMaterials.isSelected());
         userGroup.setDeleteMaterials(chbDeleteMaterials.isSelected());
+
+        userGroup.setEditNormConstants(chbEditNormConstants.isSelected());
+        userGroup.setEditNormExtraOperations(chbEditNormExtraOperations.isSelected());
 
         CH_USER_GROUPS.update(userGroup);
 
