@@ -244,7 +244,7 @@ public class PreviewerPatchController {
 
         if(currentDraft.getValue() != null){
             List<Remark> foundRemarks = CH_REMARKS.findAllByPassport(currentDraft.getValue().getPassport());
-            if(foundRemarks != null && !foundRemarks.isEmpty())
+            if(foundRemarks != null && !foundRemarks.isEmpty() && !hboxPreviewerButtons.getChildren().contains(btnShowRemarks))
                 hboxPreviewerButtons.getChildren().add(0, btnShowRemarks);
             else
                 if(hboxPreviewerButtons.getChildren().contains(btnShowRemarks))
