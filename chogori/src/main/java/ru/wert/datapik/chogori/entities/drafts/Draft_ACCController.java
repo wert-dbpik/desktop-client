@@ -22,6 +22,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
+import ru.wert.datapik.chogori.entities.drafts.commands.*;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
@@ -32,10 +33,6 @@ import ru.wert.datapik.chogori.common.components.*;
 import ru.wert.datapik.chogori.common.contextMenuACC.FormViewACCWindow;
 import ru.wert.datapik.chogori.common.contextMenuACC.FormView_ACCController;
 import ru.wert.datapik.chogori.common.interfaces.IFormView;
-import ru.wert.datapik.chogori.entities.drafts.commands.Draft_ChangeCommand;
-import ru.wert.datapik.chogori.entities.drafts.commands.Draft_DeleteCommand;
-import ru.wert.datapik.chogori.entities.drafts.commands.Draft_MultipleAddCommand;
-import ru.wert.datapik.chogori.entities.drafts.commands.Draft_RenameCommand;
 import ru.wert.datapik.chogori.entities.folders.Folder_Chooser;
 import ru.wert.datapik.chogori.popups.HintPopup;
 import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
@@ -422,9 +419,16 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
             } else if (operationProperty.get().equals(EOperation.REPLACE)) {
                 replaceDraft();
-            } else {
+            } else if(operationProperty.get().equals(EOperation.ADD)){ //EOperation.ADD
+                currentDraft = getNewItem();
+                currentCommand = new Draft_AddCommand(currentDraft, tableView);
+                btnOk.setDisable(true);
+                spIndicator.setVisible(true);
+
+                manipulation = addDraftTask();
+                manipulation.start();
+            } else
                 super.okPressed(event, spIndicator, btnOk);
-            }
         } else {
             super.okPressed(event, spIndicator, btnOk);
         }
@@ -462,8 +466,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     if (skipMe) {
                         Platform.runLater(this::showNextDraft);
                         return true;
-                    }
-                    else return foundDuplicatedAnnulledDraft(draft); //Иначе возвращаем на доработку
+                    } else return foundDuplicatedAnnulledDraft(draft); //Иначе возвращаем на доработку
                 }
             }
         }
@@ -629,7 +632,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                             return null;
                         }
                         //FALSE -->
-                        return ((Draft_MultipleAddCommand) currentCommand).addDraft();
+                        if (operation.equals(EOperation.ADD)) {
+                            ((Draft_AddCommand) currentCommand).execute();
+                            return ((Draft_AddCommand) currentCommand).getNewItem();
+                        } else //operation.equals(EOperation.ADD_FOLDER)
+                            return ((Draft_MultipleAddCommand) currentCommand).addDraft();
                     }
                 };
             }
@@ -658,7 +665,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     Long saveDraftId = savedDraft.getId();
                     draftsList.get(currentPosition.get()).setDraftId(saveDraftId);
                     tableView.updateRoutineTableView(getValue(), false);
-                    showNextDraft();
+                    if(operation.equals(EOperation.ADD))
+                        btnOk.getScene().getWindow().hide();
+                    else //EOperation.ADD_FOLDER
+                        showNextDraft();
                 }
             }
         };

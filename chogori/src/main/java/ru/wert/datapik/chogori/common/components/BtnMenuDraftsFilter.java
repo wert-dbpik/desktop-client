@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import ru.wert.datapik.chogori.entities.drafts.Draft_TableView;
+import ru.wert.datapik.client.entity.models.Draft;
 
 import static ru.wert.datapik.chogori.images.BtnImages.BTN_FILTER_IMG;
 
@@ -49,7 +50,8 @@ public class BtnMenuDraftsFilter extends MenuButton {
                 tableView.setShowAnnulled(cbAnnulled.isSelected());
 
                 Platform.runLater(() -> {
-                    tableView.updateView();
+                    Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
+                    tableView.updateRoutineTableView(selectedDraft, false);
                     tableView.refresh();
                 });
             }

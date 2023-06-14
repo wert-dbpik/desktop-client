@@ -24,6 +24,7 @@ import ru.wert.datapik.chogori.entities.drafts.commands._Draft_Commands;
 import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
 import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.chogori.statics.Comparators;
+import ru.wert.datapik.client.entity.serviceREST.DraftService;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 
@@ -207,9 +208,9 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         if(modifyingClass instanceof Folder){
             if(tempSelectedFolders == null || tempSelectedFolders.isEmpty()) {
                 if (modifyingItem == null)
-                    list = CH_QUICK_DRAFTS.findAll();
+                    list = new ArrayList<>(CH_QUICK_DRAFTS.findAll());
                 else {
-                    list = CH_QUICK_DRAFTS.findAllByFolder((Folder) modifyingItem);
+                    list = new ArrayList<>(CH_QUICK_DRAFTS.findAllByFolder((Folder) modifyingItem));
                 }
             } else {
                 for(Folder folder: tempSelectedFolders){
@@ -224,7 +225,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
             if(modifyingItem == null)
                 list = new ArrayList<>();
             else {
-                list = CH_QUICK_DRAFTS.findByPassport((Passport)modifyingItem);
+                list = new ArrayList<>(CH_QUICK_DRAFTS.findByPassport((Passport)modifyingItem));
             }
         }
 

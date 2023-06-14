@@ -14,14 +14,13 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"passport", "draftType", "pageNumber", "status", "statusTime"}, callSuper = false)
+//@EqualsAndHashCode(of = {"passport", "draftType", "pageNumber", "status", "statusTime"}, callSuper = false)
 public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
 
     private Passport passport; //ОСНОВНОЕ 1
     private String extension;
     private String initialDraftName;
     private Folder folder;
-
 
     private Integer draftType; //ОСНОВНОЕ 2
     private Integer pageNumber; //ОСНОВНОЕ 3
@@ -37,7 +36,25 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
 
     private String note;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Draft draft = (Draft) o;
 
+       if (getPassport().equals(draft.getPassport()) &&
+                getDraftType().equals(draft.getDraftType()) &&
+                getPageNumber().equals(draft.getPageNumber()) &&
+                getStatus().equals(draft.getStatus())){
+           return getStatus().equals(EDraftStatus.LEGAL.getStatusId());
+       }
+       return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPassport(), getDraftType(), getPageNumber(), getStatus(), getStatusTime());
+    }
 
     @Override
     public String getName() {

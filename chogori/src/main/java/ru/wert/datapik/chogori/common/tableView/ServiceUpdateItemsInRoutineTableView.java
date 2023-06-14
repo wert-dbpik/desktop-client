@@ -52,7 +52,7 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
 
                 //
                 if(!savePreparedList) {
-                    items = itemView.prepareList();
+                    items = new ArrayList<>(itemView.prepareList());
                 } else {
                     items = new ArrayList<>(itemView.getItems());
                 }

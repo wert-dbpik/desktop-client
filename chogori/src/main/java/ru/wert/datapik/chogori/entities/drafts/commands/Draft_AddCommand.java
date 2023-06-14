@@ -2,6 +2,7 @@ package ru.wert.datapik.chogori.entities.drafts.commands;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.wert.datapik.client.entity.models.Draft;
@@ -23,6 +24,7 @@ import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 @Slf4j
 public class Draft_AddCommand  extends Task<Void>  implements ICommand {
 
+    @Getter
     private final Draft newItem;
     private final Draft_TableView tableView;
     private Draft savedDraft;
@@ -35,6 +37,11 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
         this.newItem = newItem;
         this.tableView = tableView;
 
+    }
+
+    public Draft executeWithReturn(){
+        execute();
+        return newItem;
     }
 
     @Override
@@ -71,9 +78,9 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
             e.printStackTrace();
         }
 
-        Platform.runLater(() -> {
-            tableView.updateRoutineTableView(newItem, false);
-        });
+//        Platform.runLater(() -> {
+//            tableView.updateRoutineTableView(newItem, false);
+//        });
     }
 
     /**
