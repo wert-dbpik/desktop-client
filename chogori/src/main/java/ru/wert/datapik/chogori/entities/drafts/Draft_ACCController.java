@@ -427,8 +427,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
                 manipulation = addDraftTask();
                 manipulation.start();
-            } else
+            } else { //CHANGE, DELETE
                 super.okPressed(event, spIndicator, btnOk);
+            }
         } else {
             super.okPressed(event, spIndicator, btnOk);
         }
@@ -583,6 +584,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             return false;
         }
 
+        ICommand savedCommand = currentCommand;
+
         //Переменная changeDraft изменилась, пора действовать
         if (changeDraft.getValue().equals(ESolution.CHANGE))
 //            if(draftIsDuplicated(getNewItem()))
@@ -593,6 +596,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             log.debug("draftIsDuplicated : пользователь отказался менять статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
             return true;
         }
+
         return false;
     }
 
@@ -601,8 +605,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param oldDraft Draft
      */
     private void deleteOldDraft(Draft oldDraft) {
-        currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
-        currentCommand.execute();
+        ICommand command = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
+        command.execute();
     }
 
     /**
@@ -614,7 +618,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
         oldDraft.setStatusTime(LocalDateTime.now().toString());
         log.debug("draftIsDuplicated : меняем статус чертежа {} на ЗАМЕНЕННЫЙ", oldDraft.toUsefulString());
-        Draft_ChangeCommand updateCommand = new Draft_ChangeCommand(oldDraft, tableView);
+        ICommand updateCommand = new Draft_ChangeCommand(oldDraft, tableView);
         updateCommand.execute();
     }
 
@@ -633,8 +637,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                         }
                         //FALSE -->
                         if (operation.equals(EOperation.ADD)) {
-                            ((Draft_AddCommand) currentCommand).execute();
-                            return ((Draft_AddCommand) currentCommand).getNewItem();
+                            return ((Draft_AddCommand) currentCommand).executeWithReturn();
                         } else //operation.equals(EOperation.ADD_FOLDER)
                             return ((Draft_MultipleAddCommand) currentCommand).addDraft();
                     }
