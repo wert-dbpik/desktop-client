@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.entities.drafts.commands;
 
+import javafx.application.Platform;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.chogori.common.commands.ICommand;
 import ru.wert.datapik.chogori.common.contextMenuACC.FormViewACCWindow;
@@ -22,10 +23,13 @@ public class Draft_ReplaceCommand implements ICommand {
     @Override
     public void execute() {
 
-        FormViewACCWindow<Draft> accWindow = new FormViewACCWindow<>();
-        accWindow.create(EOperation.REPLACE, tableView, tableView.getCommands(), tableView.getAccWindowRes());
-        Draft_ACCController controller = (Draft_ACCController) accWindow.getAccController();
-        tableView.setAccController(controller);
+        Platform.runLater(()->{
+            FormViewACCWindow<Draft> accWindow = new FormViewACCWindow<>();
+            accWindow.create(EOperation.REPLACE, tableView, tableView.getCommands(), tableView.getAccWindowRes());
+            Draft_ACCController controller = (Draft_ACCController) accWindow.getAccController();
+            tableView.setAccController(controller);
+        });
+
 
     }
 }

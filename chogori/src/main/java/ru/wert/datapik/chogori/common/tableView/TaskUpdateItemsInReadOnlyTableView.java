@@ -72,9 +72,9 @@ public class TaskUpdateItemsInReadOnlyTableView<P extends Item> extends Task<Voi
     protected void failed() {
         super.succeeded();
         progressIndicator.setVisible(false);
-        log.error("The task TaskUpdateItemsInRoutineTableView failed with the following exception:\n" + System.err);
+        log.error("The task ServiceUpdateItemsInRoutineTableView failed with the following exception:\n" + System.err);
 
-//        System.err.println("The task TaskUpdateItemsInRoutineTableView failed with the following exception:");
+//        System.err.println("The task ServiceUpdateItemsInRoutineTableView failed with the following exception:");
         getException().printStackTrace(System.err);
     }
 

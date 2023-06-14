@@ -39,6 +39,7 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
 
     @Override
     public void execute() {
+
         @NotNull Passport finalPassport = createPassport();
         newItem.setPassport(finalPassport);
 
@@ -70,17 +71,9 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
             e.printStackTrace();
         }
 
-//        tableView.updateTableView();
-
-
-//        Platform.runLater(()->{
-//            tableView.getItems().add(newItem);
-//            tableView.setCurrentItemSearchedList(new ArrayList<>(tableView.getItems()));
-//tableView.updateRoutineTableView(newItem, true);
-//        });
-
-        tableView.updateDraftTableView(newItem);
-
+        Platform.runLater(() -> {
+            tableView.updateRoutineTableView(newItem, false);
+        });
     }
 
     /**

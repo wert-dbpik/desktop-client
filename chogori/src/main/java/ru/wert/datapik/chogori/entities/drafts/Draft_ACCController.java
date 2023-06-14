@@ -657,7 +657,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 if (savedDraft != null) {
                     Long saveDraftId = savedDraft.getId();
                     draftsList.get(currentPosition.get()).setDraftId(saveDraftId);
-                    tableView.updateRoutineTableView(getValue(), true);
+                    tableView.updateRoutineTableView(getValue(), false);
                     showNextDraft();
                 }
             }

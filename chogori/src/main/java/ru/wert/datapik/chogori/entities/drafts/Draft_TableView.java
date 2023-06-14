@@ -11,6 +11,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Synchronized;
 import ru.wert.datapik.chogori.common.tableView.TableViewWithResizableColumns;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
@@ -261,12 +262,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
      * @param item
      */
     public void updateDraftTableView(Draft item) {
-
-        Platform.runLater(() -> {
-            updateView();
-            scrollTo(item);
-            getSelectionModel().select(item);
-        });
+       updateRoutineTableView(item, true);
     }
     
     @Override

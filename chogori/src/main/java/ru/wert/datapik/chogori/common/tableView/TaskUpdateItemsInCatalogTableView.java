@@ -102,7 +102,7 @@ public class TaskUpdateItemsInCatalogTableView< P extends Item, T extends Catalo
     protected void failed() {
         super.failed();
         progressIndicator.setVisible(false);
-        log.error("The task TaskUpdateItemsInRoutineTableView failed with the following exception:\n" + System.err);
+        log.error("The task ServiceUpdateItemsInRoutineTableView failed with the following exception:\n" + System.err);
 
 //        System.err.println("The task TaskUpdateItemsInCatalogTableView failed with the following exception:");
 //        getException().printStackTrace(System.err);

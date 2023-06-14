@@ -1,6 +1,6 @@
 package ru.wert.datapik.chogori.common.tableView;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Service;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.chogori.common.commands.ItemCommands;
@@ -44,10 +44,8 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      * boolean savePreparedList - следует ли сохранить исходный перечень элементов в таблице
      */
     public synchronized void updateRoutineTableView(P selectedItem, boolean savePreparedList) {
-        TaskUpdateItemsInRoutineTableView<P> taskUpdate = new TaskUpdateItemsInRoutineTableView<>(this, selectedItem, savePreparedList);
-        Thread t = new Thread(taskUpdate);
-        t.setDaemon(true);
-        t.start();
+        Service<Void> updateService = new ServiceUpdateItemsInRoutineTableView<>(this, selectedItem, savePreparedList);
+        updateService.restart();
     }
 
     /**
