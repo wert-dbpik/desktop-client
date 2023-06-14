@@ -427,7 +427,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
                 manipulation = addDraftTask();
                 manipulation.start();
-            } else { //CHANGE, DELETE
+            } else { //CHANGE (Изменить)
                 super.okPressed(event, spIndicator, btnOk);
             }
         } else {
@@ -631,6 +631,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 return new Task<Draft>() {
                     @Override
                     protected Draft call() throws Exception {
+                        spIndicator.setVisible(true); //////////
                         if (draftIsDuplicated(currentDraft, null)) {
                             //TRUE -->
                             return null;
@@ -690,6 +691,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 return new Task<Draft>() {
                     @Override
                     protected Draft call() throws Exception {
+                        spIndicator.setVisible(true); //////////
                         if(draftIsDuplicated(getNewItem(), currentDraft)){
                             if (askMe)
                                 Platform.runLater(() -> Warning1.create($ATTENTION, $ITEM_EXISTS, $USE_ORIGINAL_ITEM));
@@ -768,6 +770,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 return new Task<Draft>() {
                     @Override
                     protected Draft call() throws Exception {
+                        spIndicator.setVisible(true); //////////
+
                         if (deleteMe) {
                             currentCommand = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
                             currentCommand.execute();
