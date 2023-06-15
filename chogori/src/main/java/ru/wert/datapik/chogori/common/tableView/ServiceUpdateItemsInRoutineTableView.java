@@ -18,6 +18,7 @@ import static java.lang.String.format;
 @Slf4j
 public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Service<Void> {
 
+    private static int count = 0;
     private final RoutineTableView<P> itemView;
     private final P selectedItem;
     private final ProgressIndicator progressIndicator;
@@ -33,7 +34,8 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
         this.selectedItem = selectedItem;
         this.savePreparedList = savePreparedList;
 
-        log.debug("table updating has been started");
+        count++;
+        log.debug(format("table updating #%s has been started", count));
 
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(90, 90);
@@ -50,7 +52,6 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
             protected Void call() throws Exception {
                 List<P> items;
 
-                //
                 if(!savePreparedList) {
                     items = new ArrayList<>(itemView.prepareList());
                 } else {
@@ -75,7 +76,6 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
                         itemView.scrollTo(selectedItem);
                         log.debug(format("Добавлен и выделен элемент %s", selectedItem.toUsefulString()));
                     }
-
                 });
 
                 return null;
@@ -92,6 +92,7 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
             @Override
             protected void succeeded() {
                 super.succeeded();
+                log.debug(format("table updating #%s has been finished", count));
                 progressIndicator.setVisible(false);
             }
 
@@ -104,15 +105,6 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
 //        System.err.println("The task ServiceUpdateItemsInRoutineTableView failed with the following exception:");
                 getException().printStackTrace(System.err);
             }
-
         };
-
-
     }
-
-
-
-
-
-
 }

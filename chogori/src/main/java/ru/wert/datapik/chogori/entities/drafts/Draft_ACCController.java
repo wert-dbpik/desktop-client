@@ -51,12 +51,14 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.datapik.chogori.statics.AppStatic.*;
@@ -340,7 +342,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         lblNumFile.setText("Файлов: " + draftsList.size());
 
         currentPosListener = (observable, oldValue, newValue) -> {
-            lblNumFile.setText(String.format("Файл %d из %d", currentPosition.get() +1, draftsList.size()));
+            lblNumFile.setText(format("Файл %d из %d", currentPosition.get() +1, draftsList.size()));
             Long id = draftsList.get(currentPosition.get()).draftId;
             if(id == null) {
                 btnOk.setText("ДОБАВИТЬ");
@@ -494,6 +496,24 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     }
 
     /**
+     * Метод выясняет, хочет ли пользователь изменить действующий чертеж на новый чертеж
+     * @param draft Draft
+     * @param changeDraft BooleanProperty
+     */
+    private void askIfLegalDraftMustBeChanged(Draft draft, ObjectProperty<ESolution> changeDraft) {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            changeDraft.set(new Draft_DuplicateDraftFound().create(draft, "'ДЕЙСТВУЮЩИЙ'"));
+            latch.countDown();
+        });
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Метод выясняет восстанавливает ранее аннулированный чертеж
      * @param oldDraft Draft
      * @return true - дублируется
@@ -540,29 +560,12 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private void deleteAnnulledDraft(Draft draft) {
         //Так как аннулируется не одна страница, а весь документ, то собираем с базы все записи относящиеся к данному чертежу
         //и меняем их статус на замененный, таким образом их реанимировав
-        List<Draft> annulledDrafts = CH_QUICK_DRAFTS.findByPassport(draft.getPassport());
+        List<Draft> annulledDrafts = new ArrayList<>(CH_QUICK_DRAFTS.findByPassport(draft.getPassport()));
         currentCommand = new Draft_DeleteCommand(annulledDrafts, tableView);
         currentCommand.execute();
 
     }
 
-    /**
-     * Метод выясняет, хочет ли пользователь изменить действующий чертеж на новый чертеж
-     * @param draft Draft
-     * @param changeDraft BooleanProperty
-     */
-    private void askIfLegalDraftMustBeChanged(Draft draft, ObjectProperty<ESolution> changeDraft) {
-        CountDownLatch latch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            changeDraft.set(new Draft_DuplicateDraftFound().create(draft, "'ДЕЙСТВУЮЩИЙ'"));
-            latch.countDown();
-        });
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Метод после выяснения , хочет ли пользователь изменить копию черетежа на новый чертеж
@@ -584,8 +587,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             return false;
         }
 
-        ICommand savedCommand = currentCommand;
-
         //Переменная changeDraft изменилась, пора действовать
         if (changeDraft.getValue().equals(ESolution.CHANGE))
 //            if(draftIsDuplicated(getNewItem()))
@@ -605,7 +606,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param oldDraft Draft
      */
     private void deleteOldDraft(Draft oldDraft) {
-        ICommand command = new Draft_DeleteCommand(Arrays.asList(oldDraft), tableView);
+        log.debug(format("deleteOldDraft() - deleting draft with id %s", oldDraft.getId()));
+        ICommand command = new Draft_DeleteCommand(Collections.singletonList(oldDraft), tableView);
         command.execute();
     }
 
@@ -666,10 +668,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 spIndicator.setVisible(false);
                 Draft savedDraft = this.getValue();
                 if (savedDraft != null) {
-                    Long saveDraftId = savedDraft.getId();
-                    draftsList.get(currentPosition.get()).setDraftId(saveDraftId);
+                    System.out.println(format("saveDraftId = %s", savedDraft.getId()));
+                    draftsList.get(currentPosition.get()).setDraftId(savedDraft.getId());
                     tableView.updateRoutineTableView(getValue(), false);
-                    if(operation.equals(EOperation.ADD))
+                    if(operation.equals(EOperation.ADD) && draftsList.size() == 1)
                         btnOk.getScene().getWindow().hide();
                     else //EOperation.ADD_FOLDER
                         showNextDraft();
@@ -872,7 +874,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         try {
 //            draftsList = new ArrayList<>();
-
 
             File folder = null;
             DirectoryChooser dirChooser = new DirectoryChooser();
@@ -1223,7 +1224,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 return true;
         }
         return Warning2.create("ВНИМАНИЕ!",
-                String.format("Введенный номер %s не типичен.", enteredNumber),
+                format("Введенный номер %s не типичен.", enteredNumber),
                 "Желаете его оставить?"); //ОК, true - оставить
 
     }

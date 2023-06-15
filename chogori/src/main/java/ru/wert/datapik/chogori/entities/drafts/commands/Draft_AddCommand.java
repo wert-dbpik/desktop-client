@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static java.lang.String.format;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_PASSPORTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
@@ -41,6 +42,7 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
 
     public Draft executeWithReturn(){
         execute();
+        log.debug(format("executeWithReturn() - saved draft with id = %s", newItem.getId()));
         return newItem;
     }
 
@@ -55,7 +57,7 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
 
         if (savedDraft != null) { //Если сохранение произошло
             log.info("Добавлен чертеж {} ", savedDraft.getPassport().toUsefulString());
-            AppStatic.createLog(false, String.format("Добавил чертеж '%s' (%s) в комплект '%s'",
+            AppStatic.createLog(false, format("Добавил чертеж '%s' (%s) в комплект '%s'",
                     savedDraft.getPassport().toUsefulString(),
                             EDraftType.getDraftTypeById(savedDraft.getDraftType()).getShortName() + "-" + savedDraft.getPageNumber(),
                     savedDraft.getFolder().toUsefulString()));
@@ -78,9 +80,8 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
             e.printStackTrace();
         }
 
-//        Platform.runLater(() -> {
-//            tableView.updateRoutineTableView(newItem, false);
-//        });
+        log.debug(format("execute() - saved draft with id = %s", newItem.getId()));
+
     }
 
     /**
@@ -99,7 +100,7 @@ public class Draft_AddCommand  extends Task<Void>  implements ICommand {
                 finalPassport = savedPassport;
                 log.info("Добавлен пасспорт : {}", savedPassport.toUsefulString());
             } else {//Если сохранение не произошло
-                Warning1.create($ATTENTION, String.format("Не удалось создать пасспорт \n%s", newPassport.toUsefulString()),
+                Warning1.create($ATTENTION, format("Не удалось создать пасспорт \n%s", newPassport.toUsefulString()),
                         $SERVER_IS_NOT_AVAILABLE_MAYBE);
             }
         } else {
