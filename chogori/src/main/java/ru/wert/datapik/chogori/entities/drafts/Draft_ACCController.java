@@ -578,11 +578,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             //Метод меняет переменную changeDraft
             askIfLegalDraftMustBeChanged(oldDraft, changeDraft);
         } else {
-            if (deleteMe)
+            if (deleteMe) {
                 Platform.runLater(() -> deleteOldDraft(oldDraft));
-            else if (changeMe)
+            } else if (changeMe)
 //                if(draftIsDuplicated(getNewItem()))
-                    Platform.runLater(() -> changeOldDraft(oldDraft));
+                Platform.runLater(() -> changeOldDraft(oldDraft));
 
             return false;
         }
@@ -590,7 +590,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         //Переменная changeDraft изменилась, пора действовать
         if (changeDraft.getValue().equals(ESolution.CHANGE))
 //            if(draftIsDuplicated(getNewItem()))
-                Platform.runLater(() -> changeOldDraft(oldDraft));
+            Platform.runLater(() -> changeOldDraft(oldDraft));
         else if (changeDraft.getValue().equals(ESolution.DELETE))
             Platform.runLater(() -> deleteOldDraft(oldDraft));
         else {
@@ -607,8 +607,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      */
     private void deleteOldDraft(Draft oldDraft) {
         log.debug(format("deleteOldDraft() - deleting draft with id %s", oldDraft.getId()));
-        ICommand command = new Draft_DeleteCommand(Collections.singletonList(oldDraft), tableView);
-        command.execute();
+//        ICommand command = new Draft_DeleteCommand(Collections.singletonList(oldDraft), tableView);
+//        command.execute();
+
+        boolean res = CH_DRAFTS.delete(oldDraft);
+        if(res) tableView.getItems().remove(oldDraft);
     }
 
     /**

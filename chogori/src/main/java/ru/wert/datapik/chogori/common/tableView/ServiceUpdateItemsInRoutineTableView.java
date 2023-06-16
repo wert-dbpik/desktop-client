@@ -18,7 +18,6 @@ import static java.lang.String.format;
 @Slf4j
 public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Service<Void> {
 
-    private static int count = 0;
     private final RoutineTableView<P> itemView;
     private final P selectedItem;
     private final ProgressIndicator progressIndicator;
@@ -34,8 +33,7 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
         this.selectedItem = selectedItem;
         this.savePreparedList = savePreparedList;
 
-        count++;
-        log.debug(format("table updating #%s has been started", count));
+        log.debug("table updating has been started");
 
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(90, 90);
@@ -92,7 +90,7 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
             @Override
             protected void succeeded() {
                 super.succeeded();
-                log.debug(format("table updating #%s has been finished", count));
+                log.debug("table updating has been finished");
                 progressIndicator.setVisible(false);
             }
 
