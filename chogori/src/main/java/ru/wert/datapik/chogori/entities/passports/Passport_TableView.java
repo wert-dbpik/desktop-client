@@ -5,7 +5,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
-import ru.wert.datapik.chogori.entities.drafts.Draft_Manipulator;
 import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
@@ -20,7 +19,6 @@ import java.util.*;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_PASSPORTS;
-import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class Passport_TableView extends RoutineTableView<Passport> implements Sorting<Passport> {
 
@@ -182,26 +180,17 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
 
     @Override
     public void sortItemList(List<Passport> list) {
-        list.sort(draftsComparator());
+        list.sort(passportsComparator());
     }
 
     /**
      * Компаратор сравнивает чертеж по НОМЕРУ -> ТИПУ -> СТРАНИЦЕ
      */
-    public static Comparator<Passport> draftsComparator() {
+    public static Comparator<Passport> passportsComparator() {
         return (o1, o2) -> {
 
-            //Сравниваем номер чертежа, причем 745 должен быть выше, чем 469
-            int result = o2.toUsefulString()
-                    .compareTo(o1.toUsefulString());
-//            if (result == 0) {
-//                //Сравниваем тип чертежа
-//                result = o1.getPassportType() - o2.getPassportType();
-//                if (result == 0) {
-//                    //Сравниваем номер страницы
-//                    result = o1.getPageNumber() - o2.getPageNumber();
-//                }
-//            }
+            int result = o1.toUsefulString()
+                    .compareTo(o2.toUsefulString());
             return result;
         };
     }
