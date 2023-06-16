@@ -1,7 +1,7 @@
 package ru.wert.datapik.chogori.application.drafts;
 
-
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.datapik.chogori.application.common.CommonUnits;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.ProductGroup;
 import ru.wert.datapik.client.interfaces.Item;
@@ -23,9 +24,8 @@ import ru.wert.datapik.chogori.entities.drafts.Draft_TableView;
 import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.datapik.chogori.previewer.PreviewerPatchController;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.awt.event.ActionListener;
+import java.util.*;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.*;
@@ -75,12 +75,28 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
 
     //=========== РАБОТА С ЧАТОМ   ====================================================
 
-    public void openFolderFromChat(Folder folder){
-        Platform.runLater(()->{
-            ProductGroup group = folder.getProductGroup();
-            folderTableView.updateVisibleLeafOfTableView(group);
-            folderTableView.getSelectionModel().select(folder);
-        });
+    /**
+     * Открывает нужную папку во вкладке ЧЕРТЕЖИ.
+     * Вызывается из чата и из контекстного меню чертежа "Открыть комплект с этим чертежом"
+     */
+    public void openFolderByName(Folder folder, Draft draftToBeSelected) {
+                ProductGroup group = folder.getProductGroup();
+                folderTableView.updateVisibleLeafOfTableView(group);
+                folderTableView.scrollTo(folder);
+                folderTableView.getSelectionModel().select(folder);
+
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (draftToBeSelected != null) {
+                            Platform.runLater(()->{
+                                draftsTable.getSelectionModel().select(draftToBeSelected);
+                                draftsTable.scrollTo(draftToBeSelected);
+                            });
+                        }
+                    }
+                }, 1000);
+
     }
 
 

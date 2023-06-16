@@ -17,7 +17,7 @@ import static ru.wert.datapik.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
 /**
- * Controller писывает поведение карточки с наименованием комплекта чертежей, передаваемой через ЧАТ
+ * Controller описывает поведение карточки с наименованием комплекта чертежей, передаваемой через ЧАТ
  */
 public class FolderCardController {
 
@@ -49,13 +49,13 @@ public class FolderCardController {
                 AppTab pane = CH_TAB_PANE.tabIsAvailable("Чертежи");
                 if(pane != null){
                     DraftsEditorController controller = (DraftsEditorController) pane.getTabController();
-                    controller.openFolderFromChat(folder);
+                    controller.openFolderByName(folder, null);
                 } else {
                     OpenDraftsEditorTask openDraftsTask = new OpenDraftsEditorTask();
                     openDraftsTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
                             t -> {
                                 DraftsEditorController controller = openDraftsTask.getValue();
-                                controller.openFolderFromChat(folder);
+                                controller.openFolderByName(folder, null);
                             });
 
                     Thread thread = new Thread(openDraftsTask);

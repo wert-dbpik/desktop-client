@@ -29,6 +29,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem addFolder; //Добавить папку
     private MenuItem openInTab; //Открыть в отдельной вкладке
     private MenuItem openInOuterApp; //Открыть во внешнем приложении
+    private MenuItem openFolderWithDraft; //Открыть комплект с этим чертежом
     private MenuItem showRemarks; //Открыть комментарии
     private MenuItem showInfo; //Открыть информацию о чертеже
 
@@ -94,6 +95,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         boolean extraOpenInTab = false;
         boolean extraOpenInOuterApp = false;
         //================================
+        boolean extraShowFolderWithDraft = false;
         boolean extraShowRemarks = false;
         boolean extraShowInfo = false;
 
@@ -105,6 +107,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         nullifyDraft = new MenuItem("Аннулировать");
         openInTab = new MenuItem("Открыть в отдельной вкладке" );
         openInOuterApp = new MenuItem("Открыть во внешней программе" );
+        openFolderWithDraft = new MenuItem("Перейти в комплект с этим чертежом" );
         showRemarks = new MenuItem("Комментарии");
         showInfo = new MenuItem("Инфо");
 
@@ -116,6 +119,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         nullifyDraft.setOnAction(commands::nullifyDraft);
         openInTab.setOnAction(commands::openInTab);
         openInOuterApp.setOnAction(commands::openInOuterApp);
+        openFolderWithDraft.setOnAction(commands::goToFolderWithTheDraft);
         showRemarks.setOnAction(commands::showRemarks);
         showInfo.setOnAction(commands::showInfo);
 
@@ -129,6 +133,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                     extraPasteDrafts = true;
 
             } else if (selectedDrafts.size() == 1) {
+                extraShowFolderWithDraft = true;
                 extraShowInfo = true;//ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
                 extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
                 extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
@@ -180,6 +185,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if (extraOpenInOuterApp) extraItems.add(openInOuterApp);//ОТКРЫТЬ ВО ВНЕШНЕЙ ПРОГРАММЕ
 
         if (extraShowInfo) extraItems.add(new SeparatorMenuItem());//==================
+        if (extraShowFolderWithDraft) extraItems.add(openFolderWithDraft); //ПОКАЗАТЬ КОММЕНТАРИИ
         if (extraShowInfo) extraItems.add(showRemarks); //ПОКАЗАТЬ КОММЕНТАРИИ
         if (extraShowInfo) extraItems.add(showInfo); //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
 

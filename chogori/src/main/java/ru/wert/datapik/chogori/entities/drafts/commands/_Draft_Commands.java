@@ -1,11 +1,15 @@
 package ru.wert.datapik.chogori.entities.drafts.commands;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.datapik.chogori.application.drafts.DraftsEditorController;
+import ru.wert.datapik.chogori.tabs.AppTab;
 import ru.wert.datapik.client.entity.models.Draft;
+import ru.wert.datapik.client.entity.models.Folder;
 import ru.wert.datapik.client.entity.models.Passport;
 import ru.wert.datapik.chogori.common.commands.ICommand;
 import ru.wert.datapik.chogori.common.commands.ItemCommands;
@@ -117,5 +121,13 @@ public class _Draft_Commands implements ItemCommands<Draft> {
             e.printStackTrace();
         }
 
+    }
+
+    public void goToFolderWithTheDraft(ActionEvent event) {
+        Draft selectedDraft = tableView.getSelectionModel().getSelectedItems().get(0);
+        Folder folder = selectedDraft.getFolder();
+        AppTab pane = CH_TAB_PANE.tabIsAvailable("Чертежи");
+        DraftsEditorController controller = (DraftsEditorController) pane.getTabController();
+        controller.openFolderByName(folder, selectedDraft);
     }
 }
