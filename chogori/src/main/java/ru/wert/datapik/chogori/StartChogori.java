@@ -95,8 +95,7 @@ public class StartChogori extends Application {
             Label labelVersion = (Label)decoration.lookup("#lblVersion");
             Label windowName = (Label)decoration.lookup("#windowName");
 
-            programName.setText(PROGRAM_NAME);
-            labelVersion.setText(!TEST_VERSION ? CURRENT_PROJECT_VERSION : CURRENT_PROJECT_VERSION + " ТЕСТ");
+            programName.setText(!TEST_VERSION ? PROGRAM_NAME : PROGRAM_NAME + " ТЕСТ");
             windowName.setText("");
 
             Scene scene = new Scene(decoration);

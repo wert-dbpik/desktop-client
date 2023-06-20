@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class WinformStatic {
 
-    public static String PROGRAM_NAME = "БазаПИК"; //Наименование программы
+    public static String PROGRAM_NAME = "ВСЕ ЧЕРТЕЖИ"; //Наименование программы
     public static String CURRENT_PROJECT_VERSION = "6.2"; //Версия приложения обновляется вручную
     public static boolean TEST_VERSION = false; //тестовая версия - работает с тестовым сервером
 

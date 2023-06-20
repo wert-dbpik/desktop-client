@@ -33,16 +33,6 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Label>
-                  <Label contentDisplay="CENTER" text="-" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblVersion" contentDisplay="CENTER" text="X.X" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
                   <Label fx:id="windowName" contentDisplay="CENTER" text=" : Наименование окна" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="16.0" />
