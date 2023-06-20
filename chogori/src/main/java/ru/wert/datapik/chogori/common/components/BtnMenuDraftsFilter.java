@@ -15,7 +15,7 @@ import static ru.wert.datapik.chogori.images.BtnImages.BTN_FILTER_IMG;
 public class BtnMenuDraftsFilter extends MenuButton {
 
     public BtnMenuDraftsFilter(Draft_TableView tableView) {
-        setId("patchButton");
+//        setId("patchButton");
 
 
         setGraphic(new ImageView(BTN_FILTER_IMG));

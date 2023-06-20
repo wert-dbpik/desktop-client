@@ -2,9 +2,12 @@ package ru.wert.datapik.chogori.previewer;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,8 +16,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -34,18 +41,17 @@ import ru.wert.datapik.chogori.pdf.readers.PdfJSOldReader;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.enums.EPDFViewer;
+import ru.wert.datapik.winform.modal.ModalWindow;
 import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static ru.wert.datapik.chogori.images.BtnImages.*;
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_REMARKS;
-import static ru.wert.datapik.chogori.statics.AppStatic.SOLID_EXTENSIONS;
-import static ru.wert.datapik.chogori.statics.AppStatic.openDraftInPreviewer;
+import static ru.wert.datapik.chogori.statics.AppStatic.*;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
 //import ru.wert.datapik.client.entity.models.Draft;
@@ -76,6 +82,8 @@ public class PreviewerPatchController {
     private Button btnShowRemarks;
 
     private ImageView imageView;
+
+    public static List<Draft> HISTORY_PREVIEW = new ArrayList<>();
 
     ContextMenu contextMenu;
     private PDFReader pdfReader; //см enum PDFViewer
@@ -154,16 +162,39 @@ public class PreviewerPatchController {
     }
 
     /**
-     * Панель инструментов для ПРЕДПРОСМОТРА
+     * Панель инструментов для ПРЕДПРОСМОТРА btn
      */
     private void createPreviewerToolBar() {
+        Button btnWatchPreviewHistory = new Button("H");
+        btnWatchPreviewHistory.setId("patchButton");
+        btnWatchPreviewHistory.setGraphic(new ImageView(BTN_HISTORY_PREVIEW_IMG));
+        btnWatchPreviewHistory.setTooltip(new Tooltip("История предпросмотров"));
+
+        btnWatchPreviewHistory.setOnAction(event -> {
+            if (HISTORY_PREVIEW.isEmpty()) return;
+            List<Draft> list = new ArrayList<>(HISTORY_PREVIEW);
+            Collections.reverse(list);
+            ContextMenu menu = new ContextMenu();
+            for(Draft d : list){
+                String name = d.toUsefulString() + ", " + EDraftType.getDraftTypeById(d.getDraftType()).getShortName() + "-" + d.getPageNumber();
+                MenuItem item = new MenuItem(name);
+                item.setOnAction(e->openDraftInPreviewer(d, PreviewerPatchController.this));
+                menu.getItems().add(item);
+            }
+
+            btnWatchPreviewHistory.setContextMenu(menu);
+            menu.show((Node)event.getSource(), Side.LEFT, -38.0, 22.0);
+
+        });
+
+
         //ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         Button btnOpenInNewTab = new Button();
         btnOpenInNewTab.setId("patchButton");
         btnOpenInNewTab.setGraphic(new ImageView(BTN_OPEN_IN_NEW_TAB_IMG));
         btnOpenInNewTab.setTooltip(new Tooltip("Открыть в отдельной вкладке"));
         btnOpenInNewTab.setOnAction(event -> {
-            if(currentDraft.get() == null) return;
+            if (currentDraft.get() == null) return;
             AppStatic.openDraftsInNewTabs(Collections.singletonList(currentDraft.get()));
         });
 
@@ -227,6 +258,7 @@ public class PreviewerPatchController {
             openDraftInPreviewer(selectedDraft, this);
         });
 
+        hboxPreviewerButtons.getChildren().add(btnWatchPreviewHistory);
         if (useBtnUpdateDraftView) hboxPreviewerButtons.getChildren().add(updateDraftView);
         if (useBtnShowInfo) hboxPreviewerButtons.getChildren().add(btnShowInfo);
         if (useBtnOpenInOuterApp) hboxPreviewerButtons.getChildren().add(openInOuterApp);
@@ -318,8 +350,20 @@ public class PreviewerPatchController {
         this.currentDraft.set(currentDraft);
         this.currentDraftPath = currentDraftPath;
 
+        addPreviewToHistory(currentDraft);
+
 
         showDraft(currentDraftPath);
+    }
+
+    /**
+     * Метод вызывается для добавления просмотренного чертежа к истории просмотров
+     * Последний просмотренный чертеж всегда добавляется в конец списка
+     */
+    public static void addPreviewToHistory(Draft draft){
+        if(draft == null) return;
+        HISTORY_PREVIEW.removeIf(d -> d.equals(draft));
+        HISTORY_PREVIEW.add(draft);
     }
 
 }
