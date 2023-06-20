@@ -13,14 +13,21 @@ import static ru.wert.datapik.winform.statics.WinformStatic.parseLDTtoNormalDate
 
 public class DraftInfoController {
 
+
     @FXML
     private AnchorPane apInfo;
+
+    @FXML
+    private Label lblId;
 
     @FXML
     private Label lblDecNumber;
 
     @FXML
     private Label lblName;
+
+    @FXML
+    private Label lblSourceFileName;
 
     @FXML
     private Label lblCreationTime;
@@ -30,6 +37,9 @@ public class DraftInfoController {
 
     @FXML
     private Label lblStatus;
+
+    @FXML
+    private Label lblStatusTime;
 
     @FXML
     private Label lblSource;
@@ -43,17 +53,24 @@ public class DraftInfoController {
     }
 
     public void init(Draft draft){
+
+        lblId.setText(String.valueOf(draft.getId()));
+
         lblDecNumber.setText(draft.getDecimalNumber());
 
         lblName.setText(draft.getName());
 
-        lblCreationTime.setText(parseLDTtoNormalDate(draft.getStatusTime()) + ", " +
+        lblSourceFileName.setText(draft.getInitialDraftName());
+
+        lblCreationTime.setText(parseLDTtoNormalDate(draft.getCreationTime()) + ", " +
                 draft.getCreationUser().getName());
 
         EDraftType type = EDraftType.getDraftTypeById(draft.getDraftType());
         lblTypeStr.setText(type.getShortName() + "-" + draft.getPageNumber());
 
         lblStatus.setText(EDraftStatus.getStatusById(draft.getStatus()).getStatusName());
+
+        lblStatusTime.setText(parseLDTtoNormalDate(draft.getStatusTime()));
 
         lblSource.setText(draft.getFolder().toUsefulString());
 

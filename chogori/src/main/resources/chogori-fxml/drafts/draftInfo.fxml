@@ -16,26 +16,28 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="313.0" prefWidth="344.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
             <RowConstraints fillHeight="false" maxHeight="70.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Дец. номер:">
+            <Label text="Дец. номер:" GridPane.rowIndex="1">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Наименование:" GridPane.rowIndex="1">
+            <Label text="Наименование:" GridPane.rowIndex="2">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Тип-стр:" GridPane.rowIndex="3">
+            <Label text="Тип/стр:" GridPane.rowIndex="3">
                <font>
                   <Font size="16.0" />
                </font>
@@ -45,17 +47,17 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Источник:" GridPane.rowIndex="5">
+            <Label text="Комплект" GridPane.rowIndex="7">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblDecNumber" text="ПИК.940000.063" GridPane.columnIndex="1">
+            <Label fx:id="lblDecNumber" text="ПИК.940000.063" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblName" text="Установка дезинфекции" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label fx:id="lblName" text="Установка дезинфекции" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font size="16.0" />
                </font>
@@ -65,32 +67,62 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblStatus" text="ДЕЙСТВУЕТ" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <children>
+                  <Label fx:id="lblStatus" text="ДЕЙСТВУЕТ " GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label text=" С ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblStatusTime" text="21.03.2022 09:05">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Label fx:id="lblSource" text="ПИК.940000.063, Установка дезинфекции" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblSource" text="ПИК.940000.063, Установка дезинфекции" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <Label text="Создан:" GridPane.rowIndex="6">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Создан:" GridPane.rowIndex="2">
+            <Label fx:id="lblCreationTime" text="21.03.2022 09:05" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="lblCreationTime" text="21.03.2022 09:05" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Label text="Примечание:" GridPane.rowIndex="8">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label text="Примечание:" GridPane.rowIndex="6">
+            <TextArea fx:id="taNote" editable="false" prefHeight="56.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label text="Файл :" GridPane.rowIndex="5">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <TextArea fx:id="taNote" editable="false" prefHeight="56.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label fx:id="lblSourceFileName" text="Установка дезинфекции" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label text="ID :" />
+            <Label fx:id="lblId" text="2016" GridPane.columnIndex="1">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
       </GridPane>
    </children>
