@@ -133,11 +133,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                     extraPasteDrafts = true;
 
             } else if (selectedDrafts.size() == 1) {
-                extraShowFolderWithDraft = true;
-                extraShowInfo = true;//ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
-                extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
-                extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
-                extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
+
                 //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
                 if (selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId()) && editDraftsPermission) {
                     extraRenameDraft = true; //ПЕРЕИМЕНОВАТЬ
@@ -163,7 +159,12 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                 }
             }
         } else{
-            if(selectedDrafts.size() == 1) extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
+            if(selectedDrafts.size() == 1) {
+                extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
+                extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
+                extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
+                extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
+            }
             if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         }
 

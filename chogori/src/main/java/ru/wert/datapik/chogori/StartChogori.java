@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
+import static ru.wert.datapik.chogori.images.AppImages.LOGO_IMG;
 import static ru.wert.datapik.winform.statics.WinformStatic.*;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
@@ -106,7 +107,7 @@ public class StartChogori extends Application {
 
             stage.sizeToScene();
             stage.setResizable(true);
-            stage.getIcons().add(new Image("/chogori-pics/logo.png"));
+            stage.getIcons().add(LOGO_IMG);
 //            stage.setTitle("База ПИК");
 
 

@@ -59,7 +59,7 @@ public class WindowDecorationController {
 
     @FXML
     void initialize(){
-        logo.setImage(new Image(WindowDecorationController.class.getResourceAsStream("/winform_pics/logo_white.png"), 16,  16, true, true));
+        logo.setImage(new Image(WindowDecorationController.class.getResourceAsStream("/winform_pics/logo_sun.png"), 16,  16, true, true));
     }
 
 //===========================================    КНОПКИ     ========================================================
