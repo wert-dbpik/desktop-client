@@ -5,10 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ru.wert.datapik.chogori.images.AppImages;
 import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.winform.modal.ModalWindow;
 import ru.wert.datapik.winform.statics.WinformStatic;
@@ -33,6 +35,12 @@ public class About extends ModalWindow {
 //
             Package aPackage = About.class.getPackage();
             String projectVersion = aPackage.getImplementationVersion();
+
+            ImageView logo = (ImageView)parent.lookup("#logo");
+            logo.setImage(AppImages.LOGO_IMG);
+
+            Label appName = (Label)parent.lookup("#appName");
+            appName.setText(WinformStatic.PROGRAM_NAME);
 
             Label version = (Label)parent.lookup("#lblVersion");
 //            version.setText("Версия " + projectVersion);

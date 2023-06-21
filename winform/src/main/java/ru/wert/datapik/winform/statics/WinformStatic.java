@@ -17,14 +17,13 @@ import java.util.List;
 @Slf4j
 public class WinformStatic {
 
-    public static String PROGRAM_NAME = "ВСЕ ЧЕРТЕЖИ"; //Наименование программы
+    public static String PROGRAM_NAME = "QDrafts"; //Наименование программы
     public static String CURRENT_PROJECT_VERSION = "6.2"; //Версия приложения обновляется вручную
     public static boolean TEST_VERSION = false; //тестовая версия - работает с тестовым сервером
 
     public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
     public static Stage WF_MAIN_STAGE;
     public static File WF_TEMPDIR; //Директория временного хранения
-    public static File HOME_BAZA_PIK; //Папка в домашней директории пользователя
 
     /**
      * Метод обеспечивает закрытие любого окна

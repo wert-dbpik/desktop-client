@@ -43,7 +43,7 @@ public class AppPreloader extends Preloader {
         scene.getStylesheets().add(this.getClass().getResource("/chogori-css/preloader.css").toString());
         preloaderWindow.setScene(scene);
 
-        preloaderWindow.getIcons().add(new Image("/chogori-pics/new_logo_black256.png"));
+        preloaderWindow.getIcons().add(new Image("/chogori-pics/logo.png"));
         log.debug("start : preloaderWindow icon has been loaded");
 
         preloaderWindow.setTitle("Загрузка данных");

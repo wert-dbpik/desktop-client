@@ -6,6 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -26,6 +27,7 @@ import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 //@Slf4j
 public class WindowDecorationController {
 
+    @FXML private ImageView logo;
     @FXML private ImageView imgBtnClose;
     @FXML private ImageView imgBtnMaximize;
     @FXML private ImageView imgBtnMinimize;
@@ -53,6 +55,11 @@ public class WindowDecorationController {
      */
     public WindowDecorationController() {
 
+    }
+
+    @FXML
+    void initialize(){
+        logo.setImage(new Image(WindowDecorationController.class.getResourceAsStream("/winform_pics/logo_white.png"), 16,  16, true, true));
     }
 
 //===========================================    КНОПКИ     ========================================================

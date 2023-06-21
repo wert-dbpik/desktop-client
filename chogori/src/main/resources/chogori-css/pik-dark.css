@@ -28,7 +28,6 @@
 
 .root
 {
-    /*-fx-background-image: url("/utils-pics/tyled_grey.jpg");*/
     /*-fx-background-repeat: repeat;*/
     -fx-background-color: -fx-my-black;
     -fx-text-fill: white;
@@ -48,7 +47,7 @@
 /* ################    Фон задника  #########################################*/
 #rootPanel{
     /*-fx-background-color: oldlace;*/
-    -fx-background-image: url("/chogori-pics/lightgray03.jpg"); /* абстракция */
+    -fx-background-image: url("/chogori-pics/background_lightgray.jpg"); /* абстракция */
 }
 /* ################    ПАНЕЛЬ О ПРОГРАММЕ  #########################################*/
 #about_pane{

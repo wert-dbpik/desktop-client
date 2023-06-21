@@ -25,6 +25,11 @@
          <children>
             <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" onMouseDragged="#onMouseDragged" HBox.hgrow="ALWAYS">
                <children>
+                  <ImageView fx:id="logo" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </ImageView>
                   <Label fx:id="programName" contentDisplay="CENTER" text="Программа" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="16.0" />

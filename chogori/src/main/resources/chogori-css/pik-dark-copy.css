@@ -75,7 +75,7 @@
 /* таблицы на этом фоне*/
 #rootPanel{
     /*-fx-background-color: oldlace;*/
-    -fx-background-image: url("/chogori-pics/lightgray03.jpg"); /* абстракция */
+    -fx-background-image: url("/chogori-pics/background_lightgray.jpg"); /* абстракция */
 }
 
 #application{
