@@ -19,6 +19,7 @@ import ru.wert.datapik.winform.statics.WinformStatic;
 
 import java.io.IOException;
 
+import static ru.wert.datapik.chogori.images.AppImages.LOGO_IMG;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class Draft_DuplicateDraftFound extends ModalWindow {
@@ -30,7 +31,7 @@ public class Draft_DuplicateDraftFound extends ModalWindow {
 
         try {
             Stage stage = new Stage();
-            stage.getIcons().add(new Image("/chogori-pics/Pikovka(256x256).png"));
+            stage.getIcons().add(LOGO_IMG);
             stage.setTitle("Внимание!");
             FXMLLoader userDialogLoader = new FXMLLoader(Draft_DuplicateDraftFound.class.getResource("/chogori-fxml/drafts/duplicateDraftFound.fxml"));
             Parent parent = userDialogLoader.load();

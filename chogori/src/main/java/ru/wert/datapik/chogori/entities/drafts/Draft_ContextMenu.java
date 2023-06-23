@@ -125,6 +125,14 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
+        if(selectedDrafts.size() == 1) {
+            extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
+            extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
+            extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
+            extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
+        }
+        if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
+
         if(editDraftsPermission) {
             //Если ничего не выделено
             if (selectedDrafts.size() == 0) {
@@ -158,15 +166,8 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                         extraPasteDrafts = true;
                 }
             }
-        } else{
-            if(selectedDrafts.size() == 1) {
-                extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
-                extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
-                extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
-                extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
-            }
-            if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         }
+
 
         List<MenuItem> extraItems = new ArrayList<>();
 
