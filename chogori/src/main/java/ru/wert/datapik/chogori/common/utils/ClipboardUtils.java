@@ -40,6 +40,14 @@ public class ClipboardUtils {
         return string[0];
     }
 
+    public static String getStringFromClipboardOutOfFXThread(){
+        final String[] string = new String[1];
+            final Clipboard clipboard = Clipboard.getSystemClipboard();
+            string[0] = clipboard.getString();
+
+        return string[0];
+    }
+
     public static void clear(){
         Platform.runLater(()->{
             final Clipboard clipboard = Clipboard.getSystemClipboard();

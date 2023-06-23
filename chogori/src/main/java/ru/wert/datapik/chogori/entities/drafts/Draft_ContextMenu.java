@@ -134,11 +134,15 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
 
         if(editDraftsPermission) {
+
+            if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboardOutOfFXThread()))
+                extraPasteDrafts = true;
+
             //Если ничего не выделено
             if (selectedDrafts.size() == 0) {
                 extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
-                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
-                    extraPasteDrafts = true;
+//                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
+//                    extraPasteDrafts = true;
 
             } else if (selectedDrafts.size() == 1) {
 
@@ -152,8 +156,8 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                 if (condition) {
                     extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
                     extraCutDrafts = true;//ВЫРЕЗАТЬ
-                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
-                        extraPasteDrafts = true;
+//                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
+//                        extraPasteDrafts = true;
 
                 }
 
@@ -162,8 +166,8 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                 extraCutDrafts = true; //ВЫРЕЗАТЬ чертежи
                 if (condition) {
                     extraAddFolder = true; //ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
-                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
-                        extraPasteDrafts = true;
+//                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
+//                        extraPasteDrafts = true;
                 }
             }
         }
