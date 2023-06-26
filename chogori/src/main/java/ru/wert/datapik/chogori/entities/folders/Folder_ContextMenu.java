@@ -127,7 +127,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         productGroup_commands = new _ProductGroup_Commands(treeView, tableView, CH_FOLDERS);
 
         cutItems.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
-        pasteItems.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboard()));
+        pasteItems.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboardOutOfFXThread()));
         addProductGroup.setOnAction(this:: addNewProductGroup);
         changeProductGroup.setOnAction(this::changeProductGroup);
         deleteProductGroup.setOnAction(this::deleteProductGroups);
@@ -138,13 +138,12 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
         //Условие при котором таблица не отображает только папки (globalOn)
         // и в таблице не ведется поиск
         boolean noSearchAndGlobal = CH_SEARCH_FIELD.getText().isEmpty() && !tableView.isGlobalOff();
-        //Условие при котором вставка допускается
-        boolean pastePossible = manipulator.pastePossible(ClipboardUtils.getStringFromClipboard());
 
         //Если ничего не выделено
+        if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboardOutOfFXThread())) extraPasteItems = true;
         if (selectedItems.size() == 0) {
             extraAddProductGroup = true;
-            if (pastePossible) extraPasteItems = true;
+
         } else if (selectedItems.size() == 1) {
             if(!noSearchAndGlobal && selectedItems instanceof Folder){
                 extraShowFolderInCatalog = true;
@@ -156,7 +155,6 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                     extraChangeProductGroup = true;
                     extraDeleteProductGroup = true;
                     extraCutItems = true;
-                    if (pastePossible) extraPasteItems = true;
                 } else {
 
                     TablePosition<Item, Label> ts = tableView.getSelectionModel().getSelectedCells().get(0);
@@ -169,7 +167,6 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                     //Если строка элемента не является < . . . >
                     if (s.equals(UPWARD)) {
                         extraAddProductGroup = true;
-                        if (pastePossible) extraPasteItems = true;
                     } else {
                         extraAddProductGroup = true;
                         extraChangeProductGroup = true;
@@ -179,7 +176,6 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
                 }
             } else { //selectedItems.get(0) instanceof Folder
                 extraCutItems = true;
-                if (pastePossible) extraPasteItems = true;
             }
             //Если выделено много элементов
         } else  { //selectedItems.size() > 1

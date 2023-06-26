@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.entities.folders;
 
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
@@ -225,39 +226,76 @@ public class Folder_Manipulator {
 
         String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
 
-        List<Item> selectedItems = new ArrayList<>();
+        List<Item> selectedItems = new ArrayList<>(); //
         for(String s : pasteData){
             String clazz = Arrays.asList(s.split("#", -1)).get(0);
             Long pastedItemId = Long.valueOf(Arrays.asList(s.split("#", -1)).get(1));
 
             Item selectedItem = tableView.getSelectionModel().getSelectedItem();
-            if(selectedItem == null) selectedItem = tableView.getUpwardRow().getValue();
-            if(selectedItem instanceof ProductGroup){
-                ProductGroup selectedGroup = (ProductGroup)selectedItem;
-
-                if(clazz.equals("PG")){
-                    ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);
-                    pg.setParentId(selectedGroup.getId());
-                    CH_PRODUCT_GROUPS.update(pg);
-                    selectedItems.add(pg);
-                } else if(clazz.equals("F")){
-                    Folder folder = CH_QUICK_FOLDERS.findById(pastedItemId);
-                    folder.setProductGroup(CH_PRODUCT_GROUPS.findById(selectedGroup.getId()));
-                    CH_QUICK_FOLDERS.update(folder);
-                    selectedItems.add(folder);
+            if(selectedItem == null) { //Ничего не выделено
+                selectedItem = tableView.getUpwardRow().getValue();
+                switch (clazz) {
+                    case "DR":
+                        return;
+                    case "PG":
+                        ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);
+                        pg.setParentId(selectedItem.getId());
+                        CH_PRODUCT_GROUPS.update(pg);
+                        selectedItems.add(pg);
+                        break;
+                    case "F":
+                        Folder folder = CH_QUICK_FOLDERS.findById(pastedItemId);
+                        folder.setProductGroup(CH_PRODUCT_GROUPS.findById(selectedItem.getId()));
+                        CH_QUICK_FOLDERS.update(folder);
+                        selectedItems.add(folder);
+                        break;
                 }
 
+                Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, selectedItems);
+
             } else {
-                Folder selectedFolder = (Folder)selectedItem;
-                Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
-                draft.setFolder(selectedFolder);
-                CH_QUICK_DRAFTS.update(draft);
-                tableView.getDraftTable().updateRoutineTableView(Collections.singletonList(draft), false);
+                if (selectedItem instanceof ProductGroup) { //Если при вставке выделена папка с комплектами
+                    ProductGroup selectedGroup = (ProductGroup) selectedItem;
+
+                    switch (clazz) {
+                        case "PG":
+                            ProductGroup pg = CH_PRODUCT_GROUPS.findById(pastedItemId);
+                            pg.setParentId(selectedItem.getId());
+                            CH_PRODUCT_GROUPS.update(pg);
+                            selectedItems.add(pg);
+                            break;
+                        case "F":
+                            Folder folder = CH_QUICK_FOLDERS.findById(pastedItemId);
+                            folder.setProductGroup(CH_PRODUCT_GROUPS.findById(selectedGroup.getId()));
+                            CH_QUICK_FOLDERS.update(folder);
+                            selectedItems.add(folder);
+                            break;
+                    }
+
+                    Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, selectedItems);
+
+                } else if (selectedItem instanceof Folder) { //Если выделен комплект
+                    if (clazz.equals("DR")) {
+                        Folder selectedFolder = (Folder) selectedItem;
+                        Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
+                        draft.setFolder(selectedFolder);
+                        CH_QUICK_DRAFTS.update(draft);
+                        Platform.runLater(() ->
+                                tableView.getDraftTable().updateRoutineTableView(Collections.singletonList(draft), false));
+                    } else if (clazz.equals("F")) {
+                        Folder folder = CH_QUICK_FOLDERS.findById(pastedItemId);
+                        folder.setProductGroup(CH_PRODUCT_GROUPS.findById(tableView.getUpwardRow().getValue().getId()));
+                        CH_QUICK_FOLDERS.update(folder);
+                        selectedItems.add(folder);
+
+                        Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, selectedItems);
+                    }
+                }
             }
 
         }
 
-        Catalogs.updateFormsWhenAddedOrChanged(treeView, tableView, selectedItems);
+
 
         ClipboardUtils.clear();
     }

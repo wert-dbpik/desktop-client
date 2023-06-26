@@ -188,6 +188,8 @@ public class Draft_Manipulator {
             Platform.runLater(()->tableView.updateRoutineTableView(Collections.singletonList(draft), false));
         }
 
+        ClipboardUtils.clear();
+
     }
 
     public void goDraftsForward() {
