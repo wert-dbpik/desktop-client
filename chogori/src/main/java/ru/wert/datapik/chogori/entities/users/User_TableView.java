@@ -1,5 +1,6 @@
 package ru.wert.datapik.chogori.entities.users;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,8 +44,9 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
         TableColumn<User, String> tcName = User_Columns.createTcName();
         TableColumn<User, String> tcPassword = User_Columns.createTcPassword();
         TableColumn<User, String> tcUserGroup = User_Columns.createTcUserGroup();
+        TableColumn<User, Label> tcUserActivity = User_Columns.createTcActivity();
 
-        getColumns().addAll(tcName, tcPassword, tcUserGroup);
+        getColumns().addAll(tcName, tcPassword, tcUserGroup, tcUserActivity);
     }
 
     @Override

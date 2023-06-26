@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
+import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.datapik.chogori.statics.AppStatic.*;
 import static ru.wert.datapik.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
@@ -69,6 +70,7 @@ public class Draft_Manipulator {
         //Допускается добавление директории, где хотя б один файл соответствует списку
         //Если не выделено ни одной папки, то добавление файлов не допускается
         tableView.setOnDragOver(event -> {
+            if(!CH_CURRENT_USER_GROUP.isEditDrafts()) return;
             Dragboard db = event.getDragboard();
             //Если один из форматов не является FILES, то перетаскивание не допускается
             if (db.hasFiles()) {
