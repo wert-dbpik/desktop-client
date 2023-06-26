@@ -14,6 +14,8 @@ import ru.wert.datapik.client.entity.serviceQUICK.PassportQuickService;
 import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.winform.warnings.Warning1;
 
+import java.util.Collections;
+
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_PASSPORTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.$ATTENTION;
 
@@ -81,7 +83,7 @@ public class Draft_RenameController {
                 PassportQuickService.getInstance();
                 DraftQuickService.getInstance();
                 //А теперь обновляем
-                tableView.updateRoutineTableView(selectedDraft, true);
+                tableView.updateRoutineTableView(Collections.singletonList(selectedDraft), true);
 
                 AppStatic.closeWindow(event);
             }

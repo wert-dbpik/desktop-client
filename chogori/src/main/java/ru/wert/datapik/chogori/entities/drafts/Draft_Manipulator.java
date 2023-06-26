@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori.entities.drafts;
 
 import com.twelvemonkeys.io.FileUtil;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.WritableImage;
@@ -18,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -183,7 +185,7 @@ public class Draft_Manipulator {
             Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
             draft.setFolder(selectedFolder);
             CH_QUICK_DRAFTS.update(draft);
-            tableView.updateDraftTableView(draft);
+            Platform.runLater(()->tableView.updateRoutineTableView(Collections.singletonList(draft), false));
         }
 
     }

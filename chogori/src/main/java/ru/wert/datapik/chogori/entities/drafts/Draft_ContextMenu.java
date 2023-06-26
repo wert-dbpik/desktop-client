@@ -113,7 +113,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         addFolder.setOnAction(commands::addFromFolder);
         cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
-        pasteDrafts.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboard()));
+        pasteDrafts.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboardOutOfFXThread()));
         renameDraft.setOnAction(commands::renameDraft);
         replaceDraft.setOnAction(commands::replaceDraft);
         nullifyDraft.setOnAction(commands::nullifyDraft);
@@ -136,14 +136,11 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if(editDraftsPermission) {
 
             if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboardOutOfFXThread()))
-                extraPasteDrafts = true;
+                extraPasteDrafts = true; //ВСТАВИТЬ ЧЕРТЕЖИ
 
             //Если ничего не выделено
             if (selectedDrafts.size() == 0) {
                 extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
-//                if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
-//                    extraPasteDrafts = true;
-
             } else if (selectedDrafts.size() == 1) {
 
                 //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
@@ -156,9 +153,6 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                 if (condition) {
                     extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
                     extraCutDrafts = true;//ВЫРЕЗАТЬ
-//                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
-//                        extraPasteDrafts = true;
-
                 }
 
             } else { //selectedDrafts.size() >1
@@ -166,8 +160,6 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
                 extraCutDrafts = true; //ВЫРЕЗАТЬ чертежи
                 if (condition) {
                     extraAddFolder = true; //ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
-//                    if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboard()))
-//                        extraPasteDrafts = true;
                 }
             }
         }

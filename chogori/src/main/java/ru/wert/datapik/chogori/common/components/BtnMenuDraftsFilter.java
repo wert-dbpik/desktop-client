@@ -6,6 +6,8 @@ import javafx.scene.image.ImageView;
 import ru.wert.datapik.chogori.entities.drafts.Draft_TableView;
 import ru.wert.datapik.client.entity.models.Draft;
 
+import java.util.Collections;
+
 import static ru.wert.datapik.chogori.images.BtnImages.BTN_FILTER_IMG;
 
 /**
@@ -51,7 +53,7 @@ public class BtnMenuDraftsFilter extends MenuButton {
 
                 Platform.runLater(() -> {
                     Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
-                    tableView.updateRoutineTableView(selectedDraft, false);
+                    tableView.updateRoutineTableView(Collections.singletonList(selectedDraft), false);
                     tableView.refresh();
                 });
             }

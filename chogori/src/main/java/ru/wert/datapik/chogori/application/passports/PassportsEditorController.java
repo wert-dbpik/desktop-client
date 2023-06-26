@@ -257,7 +257,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
                     }
                     if(folders.isEmpty()) return;
                     passportsTable.setSelectedFolders(folders);
-                    passportsTable.updateRoutineTableView((Passport) selectedItem, false);
+                    passportsTable.updateRoutineTableView(Collections.singletonList((Passport) selectedItem), false);
                 }
 
             }

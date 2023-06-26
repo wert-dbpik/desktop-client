@@ -19,21 +19,19 @@ import static java.lang.String.format;
 public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Service<Void> {
 
     private final RoutineTableView<P> itemView;
-    private final P selectedItem;
+    private final List<P> selectedItems;
     private final ProgressIndicator progressIndicator;
     private final boolean savePreparedList;
 
     /**
      * @param itemView ссылка на таблицу
-     * @param selectedItem элемент, которые необходимо выделить после апдета
+     * @param selectedItems элемент, которые необходимо выделить после апдета
      * @param savePreparedList используется при поиске
      */
-    public ServiceUpdateItemsInRoutineTableView(RoutineTableView<P> itemView, P selectedItem, boolean savePreparedList) {
+    public ServiceUpdateItemsInRoutineTableView(RoutineTableView<P> itemView, List<P> selectedItems, boolean savePreparedList) {
         this.itemView = itemView;
-        this.selectedItem = selectedItem;
+        this.selectedItems = selectedItems;
         this.savePreparedList = savePreparedList;
-
-        log.debug("table updating has been started");
 
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(90, 90);
@@ -69,10 +67,9 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
                     itemView.getItems().clear();
                     itemView.refresh();
                     itemView.setItems(FXCollections.observableArrayList(finalItems));
-                    if (selectedItem != null) {
-                        itemView.getSelectionModel().select(selectedItem);
-                        itemView.scrollTo(selectedItem);
-                        log.debug(format("Добавлен и выделен элемент %s", selectedItem.toUsefulString()));
+                    if (selectedItems != null && !selectedItems.isEmpty()) {
+                        for(P item : selectedItems) itemView.getSelectionModel().select(item);
+                        itemView.scrollTo(selectedItems.get(selectedItems.size()-1));
                     }
                 });
 

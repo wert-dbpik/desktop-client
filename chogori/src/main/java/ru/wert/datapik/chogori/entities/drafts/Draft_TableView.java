@@ -29,6 +29,7 @@ import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.winform.enums.EDraftStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -263,7 +264,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
      * @param item
      */
     public void updateDraftTableView(Draft item) {
-       updateRoutineTableView(item, true);
+       updateRoutineTableView(Collections.singletonList(item), true);
     }
     
     @Override

@@ -8,6 +8,8 @@ import ru.wert.datapik.chogori.statics.AppStatic;
 import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.warnings.Warning1;
 
+import java.util.Collections;
+
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
 import static ru.wert.datapik.winform.warnings.WarningMessages.*;
 
@@ -31,7 +33,7 @@ public class Draft_ChangeCommand implements ICommand {
 
         try {
             CH_QUICK_DRAFTS.update(item);
-            tableView.updateRoutineTableView(item, true);
+            tableView.updateRoutineTableView(Collections.singletonList(item), true);
             log.info("Изменение параметров чертежа {}", item.toUsefulString());
             AppStatic.createLog(false, String.format("Изменил чертеж '%s' (%s) в комплекте '%s'",
                     item.getPassport().toUsefulString(),

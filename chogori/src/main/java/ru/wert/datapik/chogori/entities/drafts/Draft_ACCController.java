@@ -673,7 +673,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 if (savedDraft != null) {
                     System.out.println(format("saveDraftId = %s", savedDraft.getId()));
                     draftsList.get(currentPosition.get()).setDraftId(savedDraft.getId());
-                    tableView.updateRoutineTableView(getValue(), false);
+                    tableView.updateRoutineTableView(Collections.singletonList(getValue()), false);
                     if(operation.equals(EOperation.ADD) && draftsList.size() == 1)
                         btnOk.getScene().getWindow().hide();
                     else //EOperation.ADD_FOLDER
@@ -831,7 +831,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
                 //К отображаемому списку добавляем вновь созданный чертеж
                 tableView.getItems().add(getValue());
-                tableView.updateRoutineTableView(getValue(), true);
+                tableView.updateRoutineTableView(Collections.singletonList(getValue()), true);
             }
         };
     }

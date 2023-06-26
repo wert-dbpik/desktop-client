@@ -17,6 +17,7 @@ import ru.wert.datapik.chogori.entities.product_groups.ProductGroup_TreeView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.*;
@@ -251,7 +252,7 @@ public class Folder_Manipulator {
                 Draft draft = CH_QUICK_DRAFTS.findById(pastedItemId);
                 draft.setFolder(selectedFolder);
                 CH_QUICK_DRAFTS.update(draft);
-                tableView.getDraftTable().updateRoutineTableView(draft, false);
+                tableView.getDraftTable().updateRoutineTableView(Collections.singletonList(draft), false);
             }
 
         }

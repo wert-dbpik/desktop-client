@@ -11,6 +11,7 @@ import ru.wert.datapik.winform.enums.EDraftType;
 import ru.wert.datapik.winform.warnings.Warning2;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_QUICK_DRAFTS;
@@ -66,7 +67,7 @@ public class Draft_NullifyCommand implements ICommand {
             }
         else return;
 
-        tableView.updateRoutineTableView(item, true);
+        tableView.updateRoutineTableView(Collections.singletonList(item), true);
     }
 
 }

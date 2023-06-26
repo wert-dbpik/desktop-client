@@ -1,6 +1,7 @@
 package ru.wert.datapik.chogori.common.tableView;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
+import ru.wert.datapik.client.entity.models.Draft;
 import ru.wert.datapik.client.interfaces.Item;
 import ru.wert.datapik.client.interfaces.ItemService;
 import ru.wert.datapik.chogori.common.commands.ItemCommands;
@@ -35,7 +36,9 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      * Обновляет данные формы
      */
     public synchronized void updateTableView() {
-        updateRoutineTableView(null, false);
+        List<P> selectedDrafts = getAllSelectedItems();
+
+        updateRoutineTableView(selectedDrafts, false);
     }
 
     /**
@@ -43,8 +46,8 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
      * P selectedItem - необходимый к выделению элемент после обновления
      * boolean savePreparedList - следует ли сохранить исходный перечень элементов в таблице
      */
-    public synchronized void updateRoutineTableView(P selectedItem, boolean savePreparedList) {
-        Service<Void> updateService = new ServiceUpdateItemsInRoutineTableView<>(this, selectedItem, savePreparedList);
+    public synchronized void updateRoutineTableView(List<P> selectedItems, boolean savePreparedList) {
+        Service<Void> updateService = new ServiceUpdateItemsInRoutineTableView<>(this, selectedItems, savePreparedList);
         updateService.restart();
     }
 

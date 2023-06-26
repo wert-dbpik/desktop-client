@@ -12,6 +12,7 @@ import ru.wert.datapik.winform.modal.LongProcess;
 import ru.wert.datapik.winform.warnings.Warning1;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -106,7 +107,7 @@ public class ServiceDeleteDrafts extends Service<Void> {
         tableView.getItems().removeAll(items);
         tableView.setCurrentItemSearchedList(new ArrayList<>(tableView.getItems()));
         tableView.updateRoutineTableView(
-                minPos - 1 >= 0 ? tableView.getItems().get(minPos - 1) : null,
+                Collections.singletonList(minPos - 1 >= 0 ? tableView.getItems().get(minPos - 1) : null),
                 true);
         LongProcess.close();
 
