@@ -13,8 +13,8 @@ public class User_ContextMenu extends FormView_ContextMenu<User> {
     private final _UserCommands commands;
     private User_TableView tableView;
 
-    private MenuItem killUser;
-    private MenuItem throwOutAnEye;
+    //Дополнительные пункты меню
+    private MenuItem userActivity;
 
     public User_ContextMenu(User_TableView tableView, _UserCommands commands, String usersACCRes) {
         super(tableView, commands, usersACCRes);
@@ -48,15 +48,24 @@ public class User_ContextMenu extends FormView_ContextMenu<User> {
     @Override
     public List<MenuItem> createExtraItems() {
 
+        List<User> selectedUsers = tableView.getSelectionModel().getSelectedItems();
         List<MenuItem> extraItems = new ArrayList<>();
 
-        killUser = new MenuItem("Убить пользователя");
-        killUser.setOnAction(commands::kill);
+        userActivity = new MenuItem();
+        boolean extraUserActivity = false;
 
-        throwOutAnEye = new MenuItem("Вырвать глаз");
+        if(selectedUsers.size() == 1){
+            extraUserActivity = true;
+            if(selectedUsers.get(0).isActive()){
+                userActivity.setText("Блокировать пользователя");
+                userActivity.setOnAction(commands::blockUser);
+            } else {
+                userActivity.setText("Активировать пользователя");
+                userActivity.setOnAction(commands::activateUser);
+            }
+        }
 
-        extraItems.add(killUser);
-        extraItems.add(throwOutAnEye);
+        if(extraUserActivity) extraItems.add(userActivity);
 
         return extraItems;
     }
