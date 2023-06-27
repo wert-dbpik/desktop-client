@@ -1,4 +1,4 @@
-package ru.wert.datapik.chogori.entities.prefixes;
+package ru.wert.datapik.chogori.entities.densities;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -12,7 +12,7 @@ import ru.wert.datapik.client.interfaces.UpdatableTabController;
 import static ru.wert.datapik.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.datapik.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
-public class Prefix_Controller implements SearchableTab, UpdatableTabController {
+public class Density_Controller implements SearchableTab, UpdatableTabController {
 
     @FXML
     private AnchorPane apMainPatch;
@@ -23,16 +23,16 @@ public class Prefix_Controller implements SearchableTab, UpdatableTabController 
     @FXML
     private HBox controlButtons;
 
-    private Prefix_TableView tableView;
+    private Density_TableView tableView;
 
 
     @FXML
     void initialize() {
         //Создаем панели инструментов
-        createPrefixes_ToolBar();
+        createDensities_ToolBar();
 
         //Создаем связанные между собой панели каталога и изделий
-        createPrefixes_TableView();
+        createDensities_TableView();
     }
 
 
@@ -44,10 +44,10 @@ public class Prefix_Controller implements SearchableTab, UpdatableTabController 
     /**
      * ТАБЛИЦА ИЗДЕЛИЙ
      */
-    private void createPrefixes_TableView() {
+    private void createDensities_TableView() {
 
-        boolean useContextMenu = CH_CURRENT_USER.getUserGroup().isEditDrafts();
-        tableView = new Prefix_TableView("ПРЕФИКС", useContextMenu);
+        boolean useContextMenu = CH_CURRENT_USER.getUserGroup().isEditMaterials();
+        tableView = new Density_TableView("МАТЕРИАЛ", useContextMenu);
         tableView.updateView();
         VBox.setVgrow(tableView, Priority.ALWAYS);
         vbHeader.getChildren().add(tableView);
@@ -57,7 +57,7 @@ public class Prefix_Controller implements SearchableTab, UpdatableTabController 
     /**
      * ИНСТРУМЕНТАЛЬНАЯ ПАНЕЛЬ ДЛЯ КАТАЛОГА ИЗДЕЛИЙ
      */
-    private void createPrefixes_ToolBar(){
+    private void createDensities_ToolBar(){
 
         // КНОПОК УПРАВЛЕНИЯ НЕТ
 
@@ -67,14 +67,14 @@ public class Prefix_Controller implements SearchableTab, UpdatableTabController 
         return apMainPatch;
     }
 
-    public Prefix_TableView getPrefixTableView() {
+    public Density_TableView getDensityTableView() {
         return tableView;
     }
 
     @Override
     public void tuneSearching() {
         Platform.runLater(()->tableView.requestFocus());
-        CH_SEARCH_FIELD.changeSearchedTableView(tableView, "ПРЕФИКС");
+        CH_SEARCH_FIELD.changeSearchedTableView(tableView, "МАТЕРИАЛ");
     }
 
     @Override

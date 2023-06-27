@@ -5,13 +5,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="apMainPatch" pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.entities.prefixes.Prefix_Controller">
+<AnchorPane fx:id="apMainPatch" pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.entities.densities.Density_Controller">
    <children>
       <VBox fx:id="vbHeader" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
                <children>
-                  <Label prefHeight="28.0" text="ПРЕФИКСЫ">
+                  <Label prefHeight="28.0" text="ПЛОТНОСТЬ МАТЕРИАЛОВ">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

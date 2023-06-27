@@ -376,7 +376,10 @@ public class AppMenuController {
         MenuItem catalogOfMaterialsItem = new MenuItem("Каталог материалов");
         catalogOfMaterialsItem.setOnAction(this::openCatalogOfMaterials);
 
-        materialsMenu.getItems().add(catalogOfMaterialsItem);
+        MenuItem densitiesItem = new MenuItem("Плотность");
+        densitiesItem.setOnAction(this::openDensities);
+
+        materialsMenu.getItems().addAll(catalogOfMaterialsItem, densitiesItem);
 
         return materialsMenu;
     }
@@ -390,6 +393,20 @@ public class AppMenuController {
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Материалы", parent, true, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * -- ПЛОТНОСТИ МАТЕРИАЛОВ
+     */
+    private void openDensities(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/densities/densities.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Плотность материалов", parent, true,  loader.getController());
         } catch (IOException e) {
             e.printStackTrace();
         }
