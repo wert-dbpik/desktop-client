@@ -6,7 +6,9 @@ import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import ru.wert.datapik.client.entity.models.User;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import static ru.wert.datapik.chogori.application.services.ChogoriServices.CH_USERS;
 
@@ -18,9 +20,15 @@ public class BXUsers {
         bxUsers.setEditable(false);
 
         bxUsers.setStyle("-fx-font-size: 24; -fx-background-color: white");
-        ObservableList<User> allUsers = FXCollections.observableArrayList(CH_USERS.findAll());
-        allUsers.sort(Comparator.comparing(User::getName));
-        bxUsers.setItems(allUsers);
+
+
+        List<User> allUsers = new ArrayList<>();
+        for(User u: CH_USERS.findAll())
+            if(u.isActive()) allUsers.add(u);
+
+        ObservableList<User> activeUsers = FXCollections.observableArrayList(allUsers);
+        activeUsers.sort(Comparator.comparing(User::getName));
+        bxUsers.setItems(activeUsers);
 
         bxUsers.setConverter(new StringConverter<User>() {
             @Override
