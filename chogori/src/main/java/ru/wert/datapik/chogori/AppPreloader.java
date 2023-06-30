@@ -15,6 +15,7 @@ import ru.wert.datapik.client.retrofit.RetrofitClient;
 import ru.wert.datapik.chogori.connectionProperties.NoConnection;
 import ru.wert.datapik.winform.modal.ModalWindow;
 
+import static ru.wert.datapik.chogori.images.AppImages.LOGO_ICON;
 import static ru.wert.datapik.chogori.images.AppImages.LOGO_IMG;
 
 @Slf4j
@@ -45,7 +46,7 @@ public class AppPreloader extends Preloader {
         scene.getStylesheets().add(this.getClass().getResource("/chogori-css/preloader.css").toString());
         preloaderWindow.setScene(scene);
 
-        preloaderWindow.getIcons().add(LOGO_IMG);
+        preloaderWindow.getIcons().add(LOGO_ICON);
         log.debug("start : preloaderWindow icon has been loaded");
 
         preloaderWindow.setTitle("Загрузка данных");

@@ -302,14 +302,11 @@ public class AppMenuController {
         MenuItem changeHistoryItem = new MenuItem("История изменений");
         changeHistoryItem.setOnAction(this::openChangeHistory);
 
-        MenuItem prefixesItem = new MenuItem("Префиксы");
-        prefixesItem.setOnAction(this::openPrefixes);
-
         draftsMenu.getItems().add(draftsCabinetItem);
         draftsMenu.getItems().add(draftsItem);
         draftsMenu.getItems().add(new SeparatorMenuItem());
         draftsMenu.getItems().add(changeHistoryItem);
-        draftsMenu.getItems().add(prefixesItem);
+
 
         return draftsMenu;
     }
@@ -323,20 +320,6 @@ public class AppMenuController {
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("История изменений", parent, true,  loader.getController());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * -- ПРЕФИКСЫ
-     */
-    private void openPrefixes(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/prefixes/prefixes.fxml"));
-            Parent parent = loader.load();
-            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Префиксы", parent, true,  loader.getController());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -371,15 +354,20 @@ public class AppMenuController {
      */
     private Menu createMaterialsMenu() {
 
-        Menu materialsMenu = new Menu("Материалы");
+        Menu materialsMenu = new Menu("Номенклатура");
 
         MenuItem catalogOfMaterialsItem = new MenuItem("Каталог материалов");
         catalogOfMaterialsItem.setOnAction(this::openCatalogOfMaterials);
 
-        MenuItem densitiesItem = new MenuItem("Плотность");
+        MenuItem densitiesItem = new MenuItem("Плотность материалов");
         densitiesItem.setOnAction(this::openDensities);
 
+        MenuItem prefixesItem = new MenuItem("Префиксы");
+        prefixesItem.setOnAction(this::openPrefixes);
+
         materialsMenu.getItems().addAll(catalogOfMaterialsItem, densitiesItem);
+        materialsMenu.getItems().add(new SeparatorMenuItem());
+        materialsMenu.getItems().add(prefixesItem);
 
         return materialsMenu;
     }
@@ -407,6 +395,20 @@ public class AppMenuController {
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             CH_TAB_PANE.createNewTab("Плотность материалов", parent, true,  loader.getController());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * -- ПРЕФИКСЫ
+     */
+    private void openPrefixes(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/prefixes/prefixes.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            CH_TAB_PANE.createNewTab("Префиксы", parent, true,  loader.getController());
         } catch (IOException e) {
             e.printStackTrace();
         }

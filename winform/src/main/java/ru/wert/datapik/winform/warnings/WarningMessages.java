@@ -5,7 +5,7 @@ public class WarningMessages {
     public static final String $ATTENTION = "ВНИМАНИЕ!";
 
     //ПАРОЛЬ
-    public static final String $NO_SUCH_USER = "Такого пароля не существует!";
+    public static final String $NO_SUCH_USER = "Пароль не подходит!";
     public static final String $TRY_MORE = "Смените раскладку, попробуйте еще раз\n или обратитесь к администратору!";
 
     public static final String $EMPTY_FIELDS = "Некоторые поля не заполнены!";

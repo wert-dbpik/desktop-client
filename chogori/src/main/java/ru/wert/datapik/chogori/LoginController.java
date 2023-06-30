@@ -44,7 +44,13 @@ public class LoginController {
 
         long userId = AppProperties.getInstance().getLastUser();
         User lastUser = userId == 0L ? null : CH_USERS.findById(userId);
-        bxUsers.getSelectionModel().select(lastUser);
+
+        //Если последнего пользователя успели заблокировать
+        if (lastUser != null && !lastUser.isActive()) {
+            bxUsers.getSelectionModel().select(null);
+        } else {
+            bxUsers.getSelectionModel().select(lastUser);
+        }
 
         CH_CURRENT_USER = null;
         CH_CURRENT_USER_GROUP = null;
