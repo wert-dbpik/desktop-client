@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="modal_pane" prefHeight="202.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.chogori.entities.densities.Density_ACCController">
+<GridPane fx:id="modal_pane" prefHeight="202.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.tubus.chogori.entities.densities.Density_ACCController">
    <columnConstraints>
       <ColumnConstraints fx:id="column" hgrow="SOMETIMES" maxWidth="372.0" minWidth="10.0" prefWidth="105.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="389.0" minWidth="10.0" prefWidth="250.0" />

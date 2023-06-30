@@ -6,5 +6,5 @@ Build-Jdk: 1.8.0_281
 Implementation-Title: DataPIK :: Chogori
 Implementation-Version: 1.1.2
 Implementation-Vendor-Id: ru.wert.datapik
-Main-Class: ru.wert.datapik.chogori.StartChogori
+Main-Class: StartChogori
 

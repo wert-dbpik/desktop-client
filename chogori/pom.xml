@@ -3,18 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>data-pik</artifactId>
-        <groupId>ru.wert.datapik</groupId>
-        <version>1.1.05</version>
+        <artifactId>tubus</artifactId>
+        <groupId>ru.wert.tubus</groupId>
+        <version>6.2</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>chogori</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.05</version>
+    <version>6.2</version>
 
-    <name>DataPIK :: Chogori</name>
+    <name>Tubus :: Chogori</name>
     <description>
         Baza is for main issues
     </description>
@@ -29,16 +29,16 @@
         <!--   Мои модули -->
 
         <dependency>
-            <groupId>ru.wert.datapik</groupId>
+            <groupId>ru.wert.tubus</groupId>
             <artifactId>winform</artifactId>
-            <version>1.1.05</version>
+            <version>6.2</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>ru.wert.datapik</groupId>
+            <groupId>ru.wert.tubus</groupId>
             <artifactId>client</artifactId>
-            <version>1.1.05</version>
+            <version>6.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -138,14 +138,14 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>DataPIK</finalName>
+                    <finalName>Tubus</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <mainClass>ru.wert.datapik.chogori.StartChogori</mainClass>
+                            <mainClass>ru.wert.tubus.chogori.StartChogori</mainClass>
                         </manifest>
                     </archive>
                     <appendAssemblyId>true</appendAssemblyId>

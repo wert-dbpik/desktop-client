@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vBox" onKeyTyped="#OnKeyEscapeTyped" snapToPixel="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.datapik.winform.window_decoration.WindowDecorationController">
+<VBox fx:id="vBox" onKeyTyped="#OnKeyEscapeTyped" snapToPixel="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.tubus.winform.window_decoration.WindowDecorationController">
    <children>
       <HBox fx:id="hbox" alignment="CENTER_LEFT" onMouseClicked="#TitleBarOnMouseClicked" onMousePressed="#onMousePressed" style="-fx-background-color: royalblue; -fx-text-fill: rgb( 255,255,255);">
          <children>
