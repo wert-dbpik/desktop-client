@@ -116,7 +116,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         });
 
         setOnMouseClicked(e -> {
-            if (e.getButton().equals(MouseButton.PRIMARY) && e.isAltDown()) {
+            if (e.getButton().equals(MouseButton.PRIMARY) ) {
                 if (e.getClickCount() == 2)
                     AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
                 else {
