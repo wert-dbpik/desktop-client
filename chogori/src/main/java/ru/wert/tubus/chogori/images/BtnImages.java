@@ -14,6 +14,7 @@ public class BtnImages {
     public static Image BTN_OPEN_IN_NEW_TAB_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/open-in-window(32x32).png"), size16, size16, true, true);
     public static Image BTN_OPEN_IN_OUTER_APP_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/openInApp2(32x32).png"), size16, size16, true, true);
     public static Image BTN_CLEAN_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/clear(32x32).png"), size16, size16, true, true);
+    public static Image BTN_CLOSE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/close.png"), size16, size16, true, true);
     public static Image BTN_CLEAN_IMG_W = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/clear(32x32)w.png"), size16, size16, true, true);
     public static Image BTN_CHEVRON_UP_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/chevron-up(32x32).png"), size16, size16, true, true);
     public static Image BTN_CHEVRON_DOWN_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/chevron-down(32x32).png"), size16, size16, true, true);
