@@ -83,7 +83,7 @@ public class Draft_RenameController {
                 PassportQuickService.getInstance();
                 DraftQuickService.getInstance();
                 //А теперь обновляем
-                tableView.updateRoutineTableView(Collections.singletonList(selectedDraft), true);
+                tableView.updateRoutineTableView(Collections.singletonList(selectedDraft), false);
 
                 AppStatic.closeWindow(event);
             }
