@@ -543,7 +543,7 @@
 #inMessageDataLabel{
     -fx-padding: 0 5 0 0;
     -fx-font-style: oblique;
-    -fx-text-fill: royalblue;
+    -fx-text-fill: #4169e1;
     -fx-alignment: top-left;
     -fx-text-alignment: left;
 }
@@ -610,5 +610,13 @@
 
 #calculator .menu-item:hover{
     -fx-background-color: #b7d2d7;
+}
+
+.btnOnMenuPane {
+    -fx-background-color: -fx-my-black;
+}
+
+.btnOnMenuPane:hover{
+    -fx-background-color: -fx-my-grey;
 }
 

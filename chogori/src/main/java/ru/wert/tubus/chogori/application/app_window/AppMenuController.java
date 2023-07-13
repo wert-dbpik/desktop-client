@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
+import static ru.wert.tubus.chogori.images.BtnImages.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
@@ -51,6 +52,9 @@ public class AppMenuController {
 
     @FXML
     Button btnChat;
+
+    @FXML
+    Button btnCloseTab;
 
     private User tempUser;
     private boolean open;
@@ -76,15 +80,22 @@ public class AppMenuController {
                 SP_CHAT.setMinWidth(CHAT_WIDTH);
                 SP_CHAT.setMaxWidth(CHAT_WIDTH);
                 SP_CHAT.getChildren().add(sideChat.getChatVBox());
-            }else {
-                for(double width = SP_CHAT.getWidth(); width >= 0; width--){
+            } else {
+                for (double width = SP_CHAT.getWidth(); width >= 0; width--) {
                     SP_CHAT.setPrefWidth(width);
                     SP_CHAT.setMinWidth(width);
                     SP_CHAT.setMaxWidth(width);
-                                    }
+                }
                 SP_CHAT.getChildren().clear();
             }
         });
+
+        btnCloseTab.setGraphic(new ImageView(BTN_CLOSE_WHITE_IMG));
+        btnCloseTab.visibleProperty().bind(CH_TAB_PANE.getEmpty());
+        btnCloseTab.setOnAction(event->{
+            CH_TAB_PANE.closeThisTab(event);
+        });
+
         log.debug("initialize : блок инициализации успешно выполнен");
     }
 
@@ -172,7 +183,7 @@ public class AppMenuController {
         chatItem.setOnAction(this::openChat);
 
         MenuItem updateData = new MenuItem("Обновить данные");
-        updateData.setOnAction(this::updateData);
+        updateData.setOnAction(e->updateData());
 
         MenuItem exitItem = new MenuItem("Выйти");
         exitItem.setOnAction(this::exit);
@@ -207,7 +218,7 @@ public class AppMenuController {
     /**
      * ОБНОВИТЬ ДАННЫЕ
      */
-    private void updateData(ActionEvent actionEvent) {
+    public static void updateData() {
 
         Task<Void> updateTask = new TaskUpdateData();
         Thread t = new Thread(updateTask);

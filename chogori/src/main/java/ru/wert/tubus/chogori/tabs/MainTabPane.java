@@ -1,10 +1,13 @@
 package ru.wert.tubus.chogori.tabs;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.Event;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import lombok.Getter;
 import ru.wert.tubus.client.interfaces.ITabController;
 import ru.wert.tubus.client.interfaces.SearchableTab;
 import ru.wert.tubus.chogori.popups.HintPopup;
@@ -22,6 +25,8 @@ public class MainTabPane extends TabPane {
 
     private HintPopup hint; //Подсказка, дублирующая наименование вкладки
     private ITabController searchablePane;
+    @Getter
+    final BooleanBinding empty = Bindings.isNotEmpty(getTabs());
 
     /**
      * Конструктор

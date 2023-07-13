@@ -5,7 +5,10 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -26,6 +29,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_WHITE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
@@ -58,6 +62,9 @@ public class ApplicationController {
 
     @FXML
     private StackPane spChat;
+
+    @FXML
+    Button btnUpdateAllData;
 
 
     @FXML
@@ -118,6 +125,13 @@ public class ApplicationController {
             }
             event.consume();
         });
+
+
+        btnUpdateAllData.setGraphic(new ImageView(BTN_UPDATE_WHITE_IMG));
+        btnUpdateAllData.setTooltip(new Tooltip("Обновить данные"));
+        btnUpdateAllData.setOnAction(e->AppMenuController.updateData());
+
+
         log.debug("initialize : блок инициализации успешно выполнен");
     }
 

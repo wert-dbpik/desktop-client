@@ -159,14 +159,6 @@ public class PreviewerPatchController {
      * Панель инструментов для ПРЕДПРОСМОТРА btn
      */
     private void createPreviewerToolBar() {
-        Button btnCloseTub = new Button();
-        btnCloseTub.setId("patchButton");
-        btnCloseTub.setGraphic(new ImageView(BtnImages.BTN_CLOSE_IMG));
-        btnCloseTub.setTooltip(new Tooltip("Закрыть вкладку"));
-        btnCloseTub.setOnAction(event -> {
-            CH_TAB_PANE.closeThisTab(event);
-        });
-
         Button btnWatchPreviewHistory = new Button();
         btnWatchPreviewHistory.setId("patchButton");
         btnWatchPreviewHistory.setGraphic(new ImageView(BtnImages.BTN_HISTORY_PREVIEW_IMG));
@@ -264,7 +256,6 @@ public class PreviewerPatchController {
         if (useBtnShowInfo) hboxPreviewerButtons.getChildren().add(btnShowInfo);
         if (useBtnOpenInOuterApp) hboxPreviewerButtons.getChildren().add(openInOuterApp);
         if (useBtnOpenInNewTab) hboxPreviewerButtons.getChildren().add(btnOpenInNewTab);
-        hboxPreviewerButtons.getChildren().add(btnCloseTub);
 
     }
 
