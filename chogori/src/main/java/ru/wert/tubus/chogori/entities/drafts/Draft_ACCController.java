@@ -1034,7 +1034,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param num int - порядковый номер файла в списке выбранных файлов
      */
     private void fillForm(int num) {
-        Platform.runLater(()->{
+//        Platform.runLater(()->{ //Скрыто, иначе неменяется кнопка ДОБАВИТЬ на ИЗМЕНИТЬ
             //Если документ #num еще не сохранен, то форму заполняем из файла
             if (draftsList.get(num).getDraftId() == null) {
                 currentFilePath = draftsList.get(currentPosition.get()).getDraftFile(); //File
@@ -1049,7 +1049,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 Draft draft = ChogoriServices.CH_QUICK_DRAFTS.findById(draftsList.get(num).getDraftId());
                 fillFieldsOnTheForm(draft);
             }
-        });
+//        });
 
     }
 
@@ -1132,7 +1132,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     }
 
     /**
-     * Метод заполняет поля формы сохраненного ранее в БД чертежа
+     * Метод заполняет поля формы СОХРАНЕННОГО РАНЕЕ в БД чертежа
      * @param oldItem Draft
      */
     @Override
