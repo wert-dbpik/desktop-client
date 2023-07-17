@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="modal_pane" prefHeight="676.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.tubus.chogori.entities.drafts.Draft_ACCController">
+<AnchorPane fx:id="modal_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.tubus.chogori.entities.drafts.Draft_ACCController">
    <children>
       <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -186,6 +186,18 @@
                   </VBox>
                   <VBox prefHeight="70.0" prefWidth="260.0">
                      <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <RadioButton fx:id="rbAutopilot" mnemonicParsing="false" text="Автопилот">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                 </padding>
+                              </RadioButton>
+                           </children>
+                        </HBox>
                         <Label text="При совпадении:">
                            <font>
                               <Font size="18.0" />

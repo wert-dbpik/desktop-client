@@ -122,6 +122,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private Button btnSearchFolder;
 
     @FXML
+    private RadioButton rbAutopilot;
+
+    @FXML
     private RadioButton rbAsk;
 
     @FXML
@@ -170,6 +173,13 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     @FXML
     void initialize(){
+
+        rbAutopilot.setTooltip(new Tooltip("Включает/выключает авто добавление чертежей"));
+        rbAutopilot.setId("rbAutopilot");
+        rbAutopilot.setSelected(false);
+        rbAutopilot.setOnAction(e -> {
+            checkUppAutopilot();
+        });
 
         rbAsk.setTooltip(new Tooltip("Действие с чертежом походу добавления"));
         rbSkip.setTooltip(new Tooltip("Новый чертеж НЕ сохраняется,\nстарый чертеж НЕ меняется"));
@@ -259,6 +269,22 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         } else
             lblNumFile.setText("Файлов: 1");
 
+    }
+
+    public void autopilotWork() {
+        if(rbAutopilot.isSelected())
+            btnOk.fire();
+        checkUppAutopilot();
+    }
+
+    private void checkUppAutopilot() {
+        if (rbAutopilot.isSelected())
+            if (draftsList == null ||
+                    draftsList.size() <= 1 ||
+                    currentPosition.get() >=(draftsList.size() - 1) ||
+                    operationProperty.get().equals(EOperation.REPLACE) ||
+                    operationProperty.get().equals(EOperation.CHANGE))
+                rbAutopilot.setSelected(false);
     }
 
     private void createLblDraftNameInDB() {
@@ -676,8 +702,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     tableView.updateRoutineTableView(Collections.singletonList(getValue()), false);
                     if(operation.equals(EOperation.ADD) && draftsList.size() == 1)
                         btnOk.getScene().getWindow().hide();
-                    else //EOperation.ADD_FOLDER
+                    else { //EOperation.ADD_FOLDER
                         showNextDraft();
+                        autopilotWork();
+                    }
                 }
             }
         };
@@ -731,8 +759,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 super.succeeded();
                 btnOk.setDisable(false);
                 spIndicator.setVisible(false);
-                if(getValue() != null)
+                if(getValue() != null) {
                     showNextDraft();
+                    checkUppAutopilot();
+                }
             }
         };
     }

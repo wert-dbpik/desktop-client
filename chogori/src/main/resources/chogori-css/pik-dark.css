@@ -620,3 +620,7 @@
     -fx-background-color: -fx-my-grey;
 }
 
+#rbAutopilot:selected{
+    -fx-background-color: #FF5555;
+}
+
