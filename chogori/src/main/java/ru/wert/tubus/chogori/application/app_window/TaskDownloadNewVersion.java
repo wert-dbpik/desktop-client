@@ -28,7 +28,7 @@ public class TaskDownloadNewVersion extends Task<Void> {
             return;
         }
         FileChooser chooser = new FileChooser();
-        chooser.setInitialFileName(sourceFile.getName());
+        chooser.setInitialFileName(sourceFile.getName() + ".exe");
         File initDir = new File(System.getProperty("user.home") + "/Desktop");
         if (!initDir.exists()) initDir = new File("C:\\");
         chooser.setInitialDirectory(initDir);
@@ -36,7 +36,7 @@ public class TaskDownloadNewVersion extends Task<Void> {
         destFile = chooser.showSaveDialog(WF_MAIN_STAGE);
         if (destFile == null) return;
         log.debug("downloadLastVersion : sourceFile = " + sourceFile);
-        log.debug("downloadLastVersion : sourceFile = " + destFile);
+        log.debug("downloadLastVersion : destFile = " + destFile);
 
 
         Thread t = new Thread(this);
@@ -50,7 +50,6 @@ public class TaskDownloadNewVersion extends Task<Void> {
         Platform.runLater(()->{
             LongProcess.create("СКАЧИВАНИЕ НОВОЙ ВЕРСИИ", this);
         });
-
         Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         return null;
 
