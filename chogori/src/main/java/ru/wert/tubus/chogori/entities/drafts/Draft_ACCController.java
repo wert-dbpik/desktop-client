@@ -174,19 +174,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     @FXML
     void initialize(){
 
-        rbAutopilot.setTooltip(new Tooltip("Включает/выключает авто добавление чертежей"));
-        rbAutopilot.setId("rbAutopilot");
-        rbAutopilot.setSelected(false);
-        rbAutopilot.setOnAction(e -> {
-            checkUppAutopilot();
-        });
-
         rbAsk.setTooltip(new Tooltip("Действие с чертежом походу добавления"));
         rbSkip.setTooltip(new Tooltip("Новый чертеж НЕ сохраняется,\nстарый чертеж НЕ меняется"));
         rbChange.setTooltip(new Tooltip("Новый чертеж становится ДЕЙСТВУЮЩИМ,\nстарый чертеж меняет статус на ЗАМЕНЕННЫЙ"));
         rbDelete.setTooltip(new Tooltip("Новый чертеж становится ДЕЙСТВУЮЩИМ,\nстарый чертеж УДАЛЯЕТСЯ "));
 
         lblDraftNameInDB.setStyle("-fx-text-fill: #FFFF99");
+
+        initAutopilot();
 
         initButtonCancel();
 
@@ -195,6 +190,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         Platform.runLater(()->txtNumber.requestFocus());
 
     }
+
 
     public void addDroppedFiles(EOperation operation, IFormView<Draft> formView, ItemCommands<Draft> commands, List<File> droppedFiles){
         this.droppedFiles = droppedFiles;
@@ -271,12 +267,30 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
     }
 
+    /**
+     * Настройка АВТОПИЛОТА
+     */
+    private void initAutopilot() {
+        rbAutopilot.setTooltip(new Tooltip("Включает/выключает авто добавление чертежей"));
+        rbAutopilot.setId("rbAutopilot");
+        rbAutopilot.setSelected(false);
+        rbAutopilot.setOnAction(e -> {
+            checkUppAutopilot();
+        });
+    }
+
+    /**
+     * Запускает АВТОПИЛОТ, если он активен
+     */
     public void autopilotWork() {
         if(rbAutopilot.isSelected())
             btnOk.fire();
         checkUppAutopilot();
     }
 
+    /**
+     * Проводит проверку АТОПИЛОТА и выключает его, если необходимо
+     */
     private void checkUppAutopilot() {
         if (rbAutopilot.isSelected())
             if (draftsList == null ||
@@ -1027,7 +1041,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         if (operationProperty.get().equals(EOperation.ADD) || operationProperty.get().equals(EOperation.ADD_FOLDER))
             //При изменении файла меняется дец номер и наименование
-            lblFileName.textProperty().addListener(((observable, oldValue, newValue) -> setDecNumberAndName()));
+            lblFileName.textProperty().addListener(((observable, oldValue, newValue) -> {
+                Platform.runLater(this::setDecNumberAndName);
+            }));
 
     }
 
@@ -1064,22 +1080,23 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * @param num int - порядковый номер файла в списке выбранных файлов
      */
     private void fillForm(int num) {
-//        Platform.runLater(()->{ //Скрыто, иначе неменяется кнопка ДОБАВИТЬ на ИЗМЕНИТЬ
-            //Если документ #num еще не сохранен, то форму заполняем из файла
-            if (draftsList.get(num).getDraftId() == null) {
-                currentFilePath = draftsList.get(currentPosition.get()).getDraftFile(); //File
-                previewerController.showDraft(null, currentFilePath);
-                currentFileName = draftsList.get(currentPosition.get()).getDraftFile().getName(); //String
-                lblFileName.setText(currentFileName);
-                bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
-                txtAreaNote.setText("");//Комментарий пустой
-                setDraftStatus(null);
-            } else {
-                //Если документ уже сохранен, то форму заполняем значениями БД
-                Draft draft = ChogoriServices.CH_QUICK_DRAFTS.findById(draftsList.get(num).getDraftId());
-                fillFieldsOnTheForm(draft);
-            }
-//        });
+        //Если документ #num еще не сохранен, то форму заполняем из файла
+        if (draftsList.get(num).getDraftId() == null) {
+            currentFilePath = draftsList.get(currentPosition.get()).getDraftFile(); //File
+            previewerController.showDraft(null, currentFilePath);
+            currentFileName = draftsList.get(currentPosition.get()).getDraftFile().getName(); //String
+            lblFileName.setText(currentFileName);
+
+
+
+            bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
+            txtAreaNote.setText("");//Комментарий пустой
+            setDraftStatus(null);
+        } else {
+            //Если документ уже сохранен, то форму заполняем значениями БД
+            Draft draft = ChogoriServices.CH_QUICK_DRAFTS.findById(draftsList.get(num).getDraftId());
+            fillFieldsOnTheForm(draft);
+        }
 
     }
 
@@ -1243,7 +1260,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         bxFolder.setValue((Folder) tableView.getModifyingItem());
 
-        setDecNumberAndName();
+        Platform.runLater(this::setDecNumberAndName);
 
     }
 
@@ -1300,6 +1317,30 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         String partName = initialFileName.replace(decNumber, "").trim();
         log.debug("setDecNumberAndName : part name is '{}'", partName);
 
+        int page = 1;
+        EDraftType type = EDraftType.DETAIL;
+        String[] nameParts = partName.split(" ", -1);
+        outer_loop:
+        for(String s : nameParts){
+            for (String shortName : EDraftType.getShortNames()) {
+                Pattern pat1 = Pattern.compile(shortName + "\\d"); //сб1, сб2 ...
+                Matcher m1 = pat1.matcher(s);
+                String typeAndPage = "";
+                while (m1.find()) {
+                    typeAndPage = s.substring(m1.start(), m1.end());
+                }
+                if(typeAndPage.equals("")) continue;
+
+                type = EDraftType.getTypeByShortName(shortName);
+                String numbers = s.replace(shortName, "");
+                page = Integer.parseInt(numbers);
+                partName = partName.replace(s, "").trim();
+                break outer_loop;
+            }
+        }
+
+        bxType.getSelectionModel().select(type);
+        bxPage.getSelectionModel().select(page - 1);
         txtNumber.setText(decNumber);
         txtName.setText(partName);
 

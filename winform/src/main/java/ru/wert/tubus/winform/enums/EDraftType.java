@@ -4,6 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 public enum EDraftType {
 
@@ -52,5 +55,21 @@ public enum EDraftType {
             types.add(type.shortName);
         }
         return types;
+    }
+
+    public static EDraftType getTypeByShortName(String shortName){
+        for(EDraftType t : EDraftType.values()){
+            if(shortName.toUpperCase().equals(t.shortName))
+                return t;
+        }
+        return null;
+    }
+
+    public static List<String> getShortNames(){
+        List<String> list = new ArrayList<>();
+        for(EDraftType t : EDraftType.values()){
+            list.add(t.getShortName().toLowerCase());
+        }
+        return list;
     }
 }
