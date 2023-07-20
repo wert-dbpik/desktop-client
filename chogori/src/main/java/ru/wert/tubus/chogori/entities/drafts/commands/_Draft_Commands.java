@@ -102,8 +102,8 @@ public class _Draft_Commands implements ItemCommands<Draft> {
 
     public void openInOuterApp(Event event) {
         Draft draft = tableView.getSelectionModel().getSelectedItem();
-        File myFile = new File(WinformStatic.WF_TEMPDIR + File.separator + draft.getId() + "." + draft.getExtension());
-        AppStatic.openInOuterApplication(myFile);
+//        File myFile = new File(WinformStatic.WF_TEMPDIR + File.separator + draft.getId() + "." + draft.getExtension());
+        AppStatic.openInOuterApplication(draft);
     }
 
 

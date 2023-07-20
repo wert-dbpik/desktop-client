@@ -200,24 +200,7 @@ public class PreviewerPatchController {
         openInOuterApp.setGraphic(new ImageView(BtnImages.BTN_OPEN_IN_OUTER_APP_IMG));
         openInOuterApp.setTooltip(new Tooltip("Открыть в отдельном приложении"));
         openInOuterApp.setOnAction(event -> {
-            if(!CH_CURRENT_USER_GROUP.isReadDrafts() &&
-                    !currentDraft.get().getDraftType().equals(EDraftType.IMAGE_3D.getTypeId()))
-                return;
-
-            AppStatic.createLog(true, format("%s открыл чертеж '%s' во внешней программе",
-                    CH_CURRENT_USER.toUsefulString(), currentDraft.get().toUsefulString()));
-
-            File myFile;
-            //Если отображается чертеж из БД
-            if (currentDraft.get() == null)
-                myFile = currentDraftPath;
-            else
-                //Если отображается вновь добавляемый файл
-                myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
-                    currentDraft.get().getId() + "." + currentDraft.get().getExtension());
-
-            if (myFile.exists() && myFile.isFile())
-                AppStatic.openInOuterApplication(myFile);
+                AppStatic.openInOuterApplication(currentDraft.get());
         });
 
         //ПОКАЗАТЬ ИНФОРМАЦИЮ

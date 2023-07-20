@@ -27,6 +27,7 @@ import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.winform.enums.EDraftType;
 import ru.wert.tubus.winform.enums.EPDFViewer;
+import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.warnings.Warning1;
 
 import java.awt.*;
@@ -361,16 +362,25 @@ public class AppStatic {
 
     /**
      * Метод открывает файл во внешнем приложении
-     * @param myFile
      */
-    public static void openInOuterApplication(File myFile) {
-//
-//        if(!CH_CURRENT_USER_GROUP.isReadDrafts() &&
-//                !myFile.getDraftType().equals(EDraftType.IMAGE_3D.getTypeId()))
-//            return;
-//
-//        AppStatic.createLog(true, format("%s открыл чертеж '%s' во внешней программе",
-//                CH_CURRENT_USER.toUsefulString(), myFile.get().toUsefulString()));
+    public static void openInOuterApplication(Draft draft) {
+        if (draft == null) return;
+        if (!CH_CURRENT_USER_GROUP.isReadDrafts() && //Если нет разрешения на печать файлов
+                !draft.getDraftType().equals(EDraftType.IMAGE_3D.getTypeId())) //Если чертеж не 3D
+            return;
+
+        AppStatic.createLog(true, format("%s открыл чертеж '%s' во внешней программе",
+                CH_CURRENT_USER.toUsefulString(), draft.toUsefulString()));
+
+
+        File myFile;
+        //Если отображается чертеж из БД
+
+        //Если отображается вновь добавляемый файл
+        myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
+                draft.getId() + "." + draft.getExtension());
+
+        if (!myFile.exists() || !myFile.isFile()) return;
 
         String executingFile = null;
         String ext = FileUtil.getExtension(myFile);
