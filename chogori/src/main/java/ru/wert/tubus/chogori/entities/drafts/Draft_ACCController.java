@@ -61,6 +61,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
@@ -587,7 +589,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         for (Draft annulledDraft : annulledDrafts) {
             draft.setStatus(EDraftStatus.LEGAL.getStatusId());
             draft.setStatusTime(LocalDateTime.now().toString());
-            draft.setStatusUser(ChogoriSettings.CH_CURRENT_USER);
+            draft.setStatusUser(CH_CURRENT_USER);
             log.debug("draftIsDuplicated : меняем статус чертежа {} на АННУЛИРОВАННЫЙ", draft.toUsefulString());
             ChogoriServices.CH_QUICK_DRAFTS.update(annulledDraft);
         }
@@ -803,7 +805,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private void replaceDraft() {
         Draft oldDraft = tableView.getSelectionModel().getSelectedItem();
         oldDraft.setStatus(EDraftStatus.CHANGED.getStatusId());
-        oldDraft.setStatusUser(ChogoriSettings.CH_CURRENT_USER);
+        oldDraft.setStatusUser(CH_CURRENT_USER);
         oldDraft.setStatusTime(LocalDateTime.now().toString());
 
         manipulation = replaceDraftTask(oldDraft);
@@ -1113,7 +1115,11 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             //Помещаем панель с previewer в шаблонное окно WindowDecoration
             previewerController = loader.getController();
             previewerController.initPreviewer(ChogoriSettings.CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
-            previewerController.initPreviewerToolBar(false, false, true, false, false);
+            previewerController.initPreviewerToolBar(false,
+                    false,
+                    true, //Распечатывать чертежи
+                    false,
+                    false);
 
             //Создаем прозрачную панель с индикатором
             spIndicator = new StackPane();
@@ -1162,10 +1168,10 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         newDraft.setPageNumber(bxPage.getValue());
         // СТАТУС
         newDraft.setStatus(EDraftStatus.LEGAL.getStatusId());
-        newDraft.setStatusUser(ChogoriSettings.CH_CURRENT_USER);
+        newDraft.setStatusUser(CH_CURRENT_USER);
         newDraft.setStatusTime(LocalDateTime.now().toString());
         //СОЗДАНИЕ
-        newDraft.setCreationUser(ChogoriSettings.CH_CURRENT_USER);
+        newDraft.setCreationUser(CH_CURRENT_USER);
         newDraft.setCreationTime(LocalDateTime.now().toString());
 
         newDraft.setNote(txtAreaNote.getText());

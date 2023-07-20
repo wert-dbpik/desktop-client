@@ -51,7 +51,7 @@
                      </font>
                   </CheckBox>
                   <Separator prefWidth="200.0" />
-                  <CheckBox fx:id="chbReadDrafts" mnemonicParsing="false" text="Общий доступ к чертежам">
+                  <CheckBox fx:id="chbReadDrafts" mnemonicParsing="false" text="Распечатывать чертежи">
                      <font>
                         <Font size="14.0" />
                      </font>

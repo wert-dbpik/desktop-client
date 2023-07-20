@@ -44,6 +44,9 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.tubus.winform.statics.WinformStatic.*;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
@@ -361,6 +364,14 @@ public class AppStatic {
      * @param myFile
      */
     public static void openInOuterApplication(File myFile) {
+//
+//        if(!CH_CURRENT_USER_GROUP.isReadDrafts() &&
+//                !myFile.getDraftType().equals(EDraftType.IMAGE_3D.getTypeId()))
+//            return;
+//
+//        AppStatic.createLog(true, format("%s открыл чертеж '%s' во внешней программе",
+//                CH_CURRENT_USER.toUsefulString(), myFile.get().toUsefulString()));
+
         String executingFile = null;
         String ext = FileUtil.getExtension(myFile);
         if (PDF_EXTENSIONS.contains(ext) && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith().equals(""))

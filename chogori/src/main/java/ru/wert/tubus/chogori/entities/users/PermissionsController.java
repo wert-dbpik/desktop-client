@@ -38,7 +38,7 @@ public class PermissionsController<P extends Item> {
     //---------------------------------------
 
     @FXML
-    private CheckBox chbReadDrafts;
+    private CheckBox chbReadDrafts; //Распечатывать чертежи
 
     @FXML
     private CheckBox chbEditDrafts;

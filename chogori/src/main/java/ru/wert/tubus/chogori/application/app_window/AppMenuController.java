@@ -108,8 +108,7 @@ public class AppMenuController {
 
         menuBar.getMenus().add(createMainMenu());
         //Чертежи
-        if(CH_CURRENT_USER_GROUP.isReadDrafts())
-            menuBar.getMenus().add(createDraftsMenu());
+        menuBar.getMenus().add(createDraftsMenu());
         //Изделия
         if(CH_CURRENT_USER_GROUP.isReadProductStructures())
             menuBar.getMenus().add(createEditorMenu());
