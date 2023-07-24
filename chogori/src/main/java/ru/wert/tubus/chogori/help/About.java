@@ -52,9 +52,9 @@ public class About extends ModalWindow {
             String currentVersion = WinformStatic.CURRENT_PROJECT_VERSION;
             String inDataBaseVersion = WinformStatic.LAST_VERSION_IN_DB;
             if(currentVersion.compareTo(inDataBaseVersion) == 0)
-                versionInfo.setText("(это последняя версия)");
+                versionInfo.setText("(У Вас последняя версия)");
             else if(currentVersion.compareTo(inDataBaseVersion) < 0)
-                versionInfo.setText("доступна новая версия " + WinformStatic.LAST_VERSION_IN_DB);
+                versionInfo.setText("Доступна новая версия " + WinformStatic.LAST_VERSION_IN_DB);
             else
                 versionInfo.setText("Это beta версия");
 

@@ -1,9 +1,11 @@
 
 #modal_pane .label{
+    -fx-font-family: "Arial Narrow";
     -fx-text-fill: white;
 }
 
 #modal_pane .combo-box .label{
+    -fx-font-family: "Arial Narrow";
     -fx-text-fill: black;
 }
 

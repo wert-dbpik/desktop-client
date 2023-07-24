@@ -22,7 +22,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                </VBox.margin>
             </ImageView>
-            <Label fx:id="appName" text="QDrafts">
+            <Label fx:id="appName" text="Тубус">
                <font>
                   <Font name="System Bold Italic" size="36.0" />
                </font>
@@ -34,7 +34,8 @@
             </Label>
             <Label fx:id="lblVersionInfo" text="(У вас последняя версия)" />
             <StackPane prefHeight="150.0" prefWidth="200.0" />
-            <Label text="Алексей Cимонов" />
+            <Label text="Разработчик : Cимонов Алексей" />
+            <Label text="Дизайн : AV4" />
             <Label text="2019-2023гг.">
                <VBox.margin>
                   <Insets />
@@ -44,6 +45,6 @@
       </VBox>
    </children>
    <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      <Insets bottom="20.0" left="10.0" right="10.0" />
    </padding>
 </AnchorPane>

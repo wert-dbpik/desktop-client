@@ -1,13 +1,12 @@
 .root {
     -fx-pref-height: 120mm;
     -fx-pref-width: 120mm;
-    -fx-background-image: url("/chogori-pics/eye.jpeg") no-repeat;  /*  картинка 800x800   */
+    -fx-background-image: url("/chogori-pics/tubus_pre.png") no-repeat;  /*  картинка 800x800   */
     -fx-background-position: center;
     -fx-background-size: cover; /*     растягивает картинку на весь блок   */
 
 }
 .label{
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
+    -fx-text-fill: #494848;
     -fx-font-size: 4mm;
 }

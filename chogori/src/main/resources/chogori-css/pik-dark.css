@@ -32,6 +32,9 @@
     -fx-background-color: -fx-my-black;
     -fx-text-fill: white;
     -fx-text-weight: bold;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-size: 14;
+
 }
 
 .label {
@@ -47,8 +50,20 @@
 /* ################    Фон задника  #########################################*/
 #rootPanel{
     /*-fx-background-color: oldlace;*/
-    -fx-background-image: url("/chogori-pics/background_lightgray.jpg"); /* абстракция */
+    -fx-background-image: url("/chogori-pics/tubus_wall.png"); /* абстракция */
+    -fx-background-repeat: stretch;
+    -fx-background-size: 2560 1440;
+    -fx-background-position: center center;
+
 }
+
+.loginPane{
+    -fx-background-image: url("/chogori-pics/tubus_wall_dark.png"); /* абстракция */
+    -fx-background-repeat: stretch;
+    -fx-background-size: 2560 1440;
+    -fx-background-position: center center;
+}
+
 /* ################    ПАНЕЛЬ О ПРОГРАММЕ  #########################################*/
 #about_pane{
     -fx-border-width: 2px;
@@ -106,8 +121,9 @@
 
 /*** Top-level menu's label (not selected / hovered) ***/
 .menu-bar > .container > .menu-button > .label {
+
     -fx-text-fill: -fx-my-menu-font-color;
-    -fx-font-size: 14;
+    -fx-font-size: 16;
 
 }
 
@@ -143,7 +159,7 @@
 /*** The item's label (not hovered / focused) ***/
 .menu-item .label {
     -fx-text-fill: -fx-my-menu-font-color;
-    -fx-font-size: 14;
+    -fx-font-size: 16;
 }
 
 /*** The item's label (disabled) ***/
@@ -330,7 +346,7 @@
 }
 
 .table-view, .tree-table-view, .tree-view{
-    -fx-font-family: sans-serif;
+    -fx-font-family: Arial;
     -fx-font-size: 14px;
 }
 
