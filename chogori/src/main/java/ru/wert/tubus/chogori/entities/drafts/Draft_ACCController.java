@@ -19,6 +19,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
@@ -719,8 +720,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                     if(operation.equals(EOperation.ADD) && draftsList.size() == 1)
                         btnOk.getScene().getWindow().hide();
                     else { //EOperation.ADD_FOLDER
-                        showNextDraft();
-                        autopilotWork();
+                        if (rbAutopilot.isSelected()) {
+                            int next = currentPosition.get() + 1;
+                            sliderCurrentPosition.setValue(next);
+                            Platform.runLater(()->{
+                                autopilotWork();
+                            });
+                        } else
+                            showNextDraft();
                     }
                 }
             }
@@ -1059,8 +1066,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         btnPrevious.setOnAction(event -> {
             int prev = currentPosition.get() - 1;
             if (prev >= 0) {
-                currentPosition.set(prev);
-                fillForm(prev);
                 sliderCurrentPosition.setValue(prev);
             }
         });
@@ -1069,8 +1074,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         btnNext.setOnAction(event -> {
             int next = currentPosition.get() + 1;
             if (next < draftsList.size()) {
-                currentPosition.set(next);
-                fillForm(next);
                 sliderCurrentPosition.setValue(next);
             }
         });
@@ -1084,12 +1087,13 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private void fillForm(int num) {
         //Если документ #num еще не сохранен, то форму заполняем из файла
         if (draftsList.get(num).getDraftId() == null) {
+            
+            System.out.println("current draft = " + draftsList.get(currentPosition.get()).getDraftFile().getName());
+
             currentFilePath = draftsList.get(currentPosition.get()).getDraftFile(); //File
             previewerController.showDraft(null, currentFilePath);
             currentFileName = draftsList.get(currentPosition.get()).getDraftFile().getName(); //String
             lblFileName.setText(currentFileName);
-
-
 
             bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
             txtAreaNote.setText("");//Комментарий пустой

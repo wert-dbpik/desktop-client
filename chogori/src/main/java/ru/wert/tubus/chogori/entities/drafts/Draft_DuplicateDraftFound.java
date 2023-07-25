@@ -13,12 +13,14 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.chogori.images.AppImages;
+import ru.wert.tubus.winform.enums.EDraftType;
 import ru.wert.tubus.winform.enums.ESolution;
 import ru.wert.tubus.winform.modal.ModalWindow;
 import ru.wert.tubus.winform.statics.WinformStatic;
 
 import java.io.IOException;
 
+import static java.lang.String.format;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
 
 public class Draft_DuplicateDraftFound extends ModalWindow {
@@ -74,9 +76,11 @@ public class Draft_DuplicateDraftFound extends ModalWindow {
             lblTitle.setStyle("-fx-text-fill: #fcce45");
 
             Label lblProblem = (Label) parent.lookup("#lblProblem");
-            lblProblem.setText("Обнаружен " + status + " чертеж\n" +
-                    draft.toUsefulString() + ",\n" +
-                    "из комплекта " + draft.getFolder().toUsefulString());
+            lblProblem.setText(format("Обнаружен %s чертеж\n%s, %s-%s,\nиз комплекта '%s'",
+                    status, draft.toUsefulString(),
+                    EDraftType.getDraftTypeById(draft.getDraftType()).getShortName(),
+                    draft.getPageNumber(),
+                    draft.getFolder().toUsefulString()));
             lblProblem.setStyle("-fx-text-fill: #fcce45");
 
             Label lblDecision = (Label) parent.lookup("#lblDecision");
