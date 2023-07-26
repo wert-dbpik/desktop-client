@@ -1,5 +1,8 @@
 package ru.wert.tubus.chogori.entities.drafts;
 
+import com.sun.javafx.binding.StringFormatter;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -31,6 +34,9 @@ public class Draft_PatchController {
     @Getter @FXML
     private Label lblSourceOfDrafts;
 
+    @Getter @FXML
+    private Label lblNumberOfDrafts;
+
 
     @Getter private Draft_TableView draftsTable;
     private PreviewerPatchController previewerController;
@@ -51,7 +57,7 @@ public class Draft_PatchController {
         this.modifyingClass = modifyingClass;
         this.mode = mode;
 
-        lblSourceOfDrafts.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
+        lblSourceOfDrafts.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkblue");
 
         createDraftTableView();
 
@@ -95,6 +101,8 @@ public class Draft_PatchController {
 
     private void createDraftToolBar() {
 
+        lblNumberOfDrafts.setStyle("-fx-font-weight: bold; -fx-font-style: normal; -fx-text-fill: black");
+        lblNumberOfDrafts.textProperty().bind(draftsTable.getPreparedList().sizeProperty().asString(" (%d шт)"));
         //Кнопка ПОКАЗАТЬ ВСЕ
         Button btnDraftsGlobe = new Button();
         btnDraftsGlobe.setGraphic(new ImageView(BtnImages.BTN_GLOBE_IMG));

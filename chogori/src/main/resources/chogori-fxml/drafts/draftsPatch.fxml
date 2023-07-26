@@ -21,6 +21,7 @@
                         <Insets bottom="10.0" top="5.0" />
                      </VBox.margin>
                   </Label>
+                  <Label fx:id="lblNumberOfDrafts" />
                   <Label fx:id="lblSourceOfDrafts">
                      <HBox.margin>
                         <Insets left="10.0" />
