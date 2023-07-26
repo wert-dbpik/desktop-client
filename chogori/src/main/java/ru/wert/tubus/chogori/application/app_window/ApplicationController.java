@@ -4,10 +4,10 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_WHITE_IMG;
+import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_BLUE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
@@ -127,8 +127,10 @@ public class ApplicationController {
         });
 
 
-        btnUpdateAllData.setGraphic(new ImageView(BTN_UPDATE_WHITE_IMG));
-        btnUpdateAllData.setTooltip(new Tooltip("Обновить данные"));
+        btnUpdateAllData.setStyle("-fx-text-fill: #FFFFFF;");
+        btnUpdateAllData.setPadding(Insets.EMPTY);
+        btnUpdateAllData.setGraphic(new ImageView(BTN_UPDATE_BLUE_IMG));
+        btnUpdateAllData.setText("Обновить все!");
         btnUpdateAllData.setOnAction(e->AppMenuController.updateData());
 
 
