@@ -24,6 +24,7 @@ public class AppSettings extends _BaseEntity implements Item{
     private String pathToOpenSolidWith; //путь до папки НормыМК
     private boolean showPrefixes; //показывать префиксы
     private Prefix defaultPrefix; //Префикс по умолчанию
+    private boolean openDraftsTabOnStart = false; //Открывать вкладку чертежи при старте приложения
     private boolean validateDecNumbers; //Проверять вводимый децимальный номер
     private String lastPathToDrafts; //Последний использованный путь до папки с чертежами
 
@@ -46,6 +47,7 @@ public class AppSettings extends _BaseEntity implements Item{
         newSettings.setPathToOpenSolidWith(getPathToOpenSolidWith());
         newSettings.setShowPrefixes(isShowPrefixes());
         newSettings.setDefaultPrefix(getDefaultPrefix());
+        newSettings.setOpenDraftsTabOnStart(isOpenDraftsTabOnStart());
         newSettings.setValidateDecNumbers(isValidateDecNumbers());
         newSettings.setLastPathToDrafts(getLastPathToDrafts());
 

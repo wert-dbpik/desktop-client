@@ -100,9 +100,10 @@ public class Draft_PatchController {
     }
 
     private void createDraftToolBar() {
-
+        //Надпись о текущем количестве чертежей в таблице
         lblNumberOfDrafts.setStyle("-fx-font-weight: bold; -fx-font-style: normal; -fx-text-fill: black");
         lblNumberOfDrafts.textProperty().bind(draftsTable.getPreparedList().sizeProperty().asString(" (%d шт)"));
+
         //Кнопка ПОКАЗАТЬ ВСЕ
         Button btnDraftsGlobe = new Button();
         btnDraftsGlobe.setGraphic(new ImageView(BtnImages.BTN_GLOBE_IMG));

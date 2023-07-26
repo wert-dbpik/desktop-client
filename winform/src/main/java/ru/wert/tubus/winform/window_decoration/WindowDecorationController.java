@@ -29,8 +29,6 @@ public class WindowDecorationController {
     @FXML private ImageView imgBtnMaximize;
     @FXML private ImageView imgBtnMinimize;
     @FXML private Label windowName;
-    @FXML private Label lblVersion;
-    @FXML private StackPane stackPane;
     @FXML private VBox vBox;
     @FXML private Pane paneR;
     @FXML private Pane paneX;

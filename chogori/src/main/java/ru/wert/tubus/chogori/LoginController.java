@@ -73,8 +73,8 @@ public class LoginController {
             showTabPaneWindow();
             AppProperties.getInstance().setLastUser(user.getId());
             AppStatic.createLog(true, "Подключился к серверу");
-            //ОТКРЫВАЕМ ТЕСТОВОЕ ОКНО
-            openTestWindow();
+            //ОТКРЫВАЕМ ВКЛАДКУ С ЧЕРТЕЖАМИ
+            if(CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart()) openDrafts();
         } else {
             passwordField.setText("");
             Warning1.create($ATTENTION, $NO_SUCH_USER, $TRY_MORE);
@@ -97,6 +97,7 @@ public class LoginController {
 
         CH_SHOW_PREFIX = CH_CURRENT_USER_SETTINGS.isShowPrefixes();
         CH_DEFAULT_PREFIX = CH_CURRENT_USER_SETTINGS.getDefaultPrefix();
+        CH_OPEN_DRAFTS_TAB_ON_START = CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart();
         CH_VALIDATE_DEC_NUMBERS = CH_CURRENT_USER_SETTINGS.isValidateDecNumbers();
         CH_PDF_VIEWER = EPDFViewer.values()[CH_CURRENT_USER_SETTINGS.getPdfViewer()];
         CH_DEFAULT_PATH_TO_NORMY_MK = new File(CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
@@ -105,14 +106,11 @@ public class LoginController {
 
     }
 
-    private void openTestWindow(){
-        //========================================================================================
-//        Platform.runLater(()->{
-//            StartChogori.CH_MENU_CONTROLLER.openCatalogOfMaterials(new ActionEvent());
-//        });
+    private void openDrafts(){
+        Platform.runLater(()->{
+            StartChogori.APP_MENU_CONTROLLER.openDrafts(null);
+        });
 
-
-//===========================================================================================================
     }
 
 

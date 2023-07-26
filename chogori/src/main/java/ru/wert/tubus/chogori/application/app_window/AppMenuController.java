@@ -17,6 +17,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.StartChogori;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
@@ -64,6 +65,8 @@ public class AppMenuController {
         log.debug("initialize : запускается блок инициализации ...");
 
         createMenu();
+
+        StartChogori.APP_MENU_CONTROLLER = this;
 
         //Создать поле поиска
         SEARCH_CONTAINER = hbSearch;

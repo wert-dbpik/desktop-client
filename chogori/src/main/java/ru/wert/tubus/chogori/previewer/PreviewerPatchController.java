@@ -296,7 +296,6 @@ public class PreviewerPatchController {
      * Метод отображает соответствующее информационное изображение
      */
     private void showPlaceholder(Image image) {
-//        paneViewer.getChildren().clear();
         imageView.setImage(image);
         imageView.setFitWidth(image.getWidth());
         imageView.setFitHeight(image.getHeight());

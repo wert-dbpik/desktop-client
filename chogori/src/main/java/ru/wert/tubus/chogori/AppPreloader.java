@@ -4,6 +4,7 @@ import javafx.application.Preloader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -36,7 +37,11 @@ public class AppPreloader extends Preloader {
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.BOTTOM_CENTER);
 
-        vBox.getChildren().add(new Label("Идет загрузка данных ..."));
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setPrefWidth(400);
+
+        vBox.getChildren().add(new Label("... загрузка данных ..."));
+        vBox.getChildren().add(progressBar);
 
         BorderPane root = new BorderPane(vBox);
         Scene scene = new Scene(root);
@@ -45,7 +50,8 @@ public class AppPreloader extends Preloader {
 
         preloaderWindow.getIcons().add(AppImages.LOGO_ICON);
         log.debug("start : preloaderWindow icon has been loaded");
-
+        preloaderWindow.setWidth(400);
+        preloaderWindow.setHeight(400);
         preloaderWindow.setTitle("Загрузка данных");
         preloaderWindow.show();
 

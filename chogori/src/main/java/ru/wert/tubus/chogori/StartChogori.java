@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.application.app_window.AppMenuController;
 import ru.wert.tubus.client.entity.models.VersionDesktop;
 import ru.wert.tubus.client.retrofit.AppProperties;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
@@ -35,6 +36,7 @@ import static ru.wert.tubus.winform.warnings.WarningMessages.$ATTENTION;
 public class StartChogori extends Application {
 
     private boolean initStatus = true;
+    public static AppMenuController APP_MENU_CONTROLLER;
 
     @Override
     public void init(){
@@ -93,7 +95,6 @@ public class StartChogori extends Application {
 
             //Меняем заголовок окна
             Label programName = (Label)decoration.lookup("#programName");
-            Label labelVersion = (Label)decoration.lookup("#lblVersion");
             Label windowName = (Label)decoration.lookup("#windowName");
 
             programName.setText(!TEST_VERSION ? PROGRAM_NAME : PROGRAM_NAME + " ТЕСТ");
@@ -108,8 +109,6 @@ public class StartChogori extends Application {
             stage.sizeToScene();
             stage.setResizable(true);
             stage.getIcons().add(AppImages.LOGO_ICON);
-//            stage.setTitle("База ПИК");
-
 
             stage.show();
             controller.centerInitialWindow(stage, true, WinformSettings.CH_MONITOR);

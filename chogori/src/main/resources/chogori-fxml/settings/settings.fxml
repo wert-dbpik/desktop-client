@@ -48,7 +48,7 @@
                <tabs>
                   <Tab fx:id="tabCommonSettings" closable="false" text="Общие">
                      <content>
-                        <GridPane BorderPane.alignment="CENTER">
+                        <GridPane prefHeight="304.0" prefWidth="598.0" BorderPane.alignment="CENTER">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="165.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="427.0" minWidth="10.0" prefWidth="420.0" />
@@ -58,10 +58,11 @@
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                             <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Нормы МК" GridPane.rowIndex="4">
+                              <Label text="Нормы МК" GridPane.rowIndex="5">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -69,7 +70,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                  <children>
                                     <TextField fx:id="tfPathToNormyMK" GridPane.columnIndex="1" HBox.hgrow="ALWAYS">
                                        <font>
@@ -86,7 +87,7 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <Label text="Префиксы">
+                              <Label text="Префиксы" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -94,7 +95,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
                                     <ComboBox fx:id="cmbMonitorChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1" />
                                     <Label text="(Нужна перезагрузка)">
@@ -107,7 +108,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <Label text="PDF просмотрщик" GridPane.rowIndex="2">
+                              <Label text="PDF просмотрщик" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -115,8 +116,8 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox fx:id="cmbPDFViewerChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label text="Монитор" GridPane.rowIndex="3">
+                              <ComboBox fx:id="cmbPDFViewerChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label text="Монитор" GridPane.rowIndex="4">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -124,17 +125,27 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <CheckBox fx:id="chbShowPrefixes" mnemonicParsing="false" text="Показывать  префиксы (по умолчанию)" GridPane.columnIndex="1">
+                              <CheckBox fx:id="chbShowPrefixes" mnemonicParsing="false" text="Показывать  префиксы (по умолчанию)" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </CheckBox>
-                              <ComboBox fx:id="cmbPrefixChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Префикс по умолчанию" GridPane.rowIndex="1">
+                              <ComboBox fx:id="cmbPrefixChooser" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Префикс по умолчанию" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
+                              <Label text="При запуске">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <CheckBox fx:id="chbOpenDraftsTab" mnemonicParsing="false" text="Открывать вкладку &quot;ЧЕРТЕЖИ&quot;" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

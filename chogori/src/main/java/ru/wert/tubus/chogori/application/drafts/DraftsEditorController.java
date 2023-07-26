@@ -191,7 +191,6 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
 
     public void updateListOfDrafts(Item newValue) {
         draftPatchController.showSourceOfPassports(newValue);
-//        draftPatchController.getLblNumberOfDrafts().setText(" (" + draftsTable.getCurrentItemSearchedList().size() + ") ");
         draftsTable.setTempSelectedFolders(Collections.singletonList((Folder) newValue));
         draftsTable.setSearchedText(""); //обнуляем поисковую строку
         draftsTable.setModifyingItem(newValue);

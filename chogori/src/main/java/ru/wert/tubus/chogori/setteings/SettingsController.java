@@ -72,10 +72,13 @@ public class SettingsController {
     private Tab tabDraftsSettings;
 
     @FXML
-    private ComboBox<Prefix> cmbPrefixChooser;
+    private CheckBox chbOpenDraftsTab;
 
     @FXML
     private CheckBox chbValidateDecNumbersEntering;
+
+    @FXML
+    private ComboBox<Prefix> cmbPrefixChooser;
 
     @FXML
     private TextField tfPathToOpenPDFWith;
@@ -130,6 +133,8 @@ public class SettingsController {
 
     @FXML
     void initialize() {
+
+        chbOpenDraftsTab.setSelected(ChogoriSettings.CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart());
 
         //Отключаем вкладку с настройками Редактирования чертежей
         if(!ChogoriSettings.CH_CURRENT_USER_GROUP.isEditDrafts()) tabPane.getTabs().remove(tabDraftsSettings);
@@ -246,6 +251,8 @@ public class SettingsController {
         chbShowPrefixes.setSelected(defSettings.isShowPrefixes());
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         cmbPrefixChooser.getSelectionModel().select(defSettings.getDefaultPrefix());
+        //ОТКРЫВАТЬ ВКЛАДКУ ЧЕРТЕЖИ ПРИ СТАРТЕ
+        chbOpenDraftsTab.setSelected(defSettings.isOpenDraftsTabOnStart());
         //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
         chbValidateDecNumbersEntering.setSelected(defSettings.isValidateDecNumbers());
         //ПОСЛЕДНЯЯ ВЕРСИЯ
@@ -290,6 +297,9 @@ public class SettingsController {
         Prefix newPrefix = cmbPrefixChooser.getSelectionModel().getSelectedItem();
         ChogoriSettings.CH_DEFAULT_PREFIX = newPrefix;
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setDefaultPrefix(newPrefix);
+        //ОТКРЫВАТЬ ВКЛАДКУ ЧЕРТЕЖИ ПРИ СТАРТЕ
+        ChogoriSettings.CH_CURRENT_USER_SETTINGS.setOpenDraftsTabOnStart(chbOpenDraftsTab.isSelected());
+        ChogoriSettings.CH_OPEN_DRAFTS_TAB_ON_START = chbOpenDraftsTab.isSelected();
         //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setValidateDecNumbers(chbValidateDecNumbersEntering.isSelected());
         ChogoriSettings.CH_VALIDATE_DEC_NUMBERS = chbValidateDecNumbersEntering.isSelected();

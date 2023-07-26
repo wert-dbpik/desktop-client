@@ -44,7 +44,7 @@
 #lblDraftInfo{
     -fx-font-weight: normal;
     -fx-font-style: italic;
-    -fx-text-fill: blue;
+    -fx-text-fill: #0000ff;
 }
 
 /* ################    Фон задника  #########################################*/
