@@ -1,7 +1,10 @@
 package ru.wert.tubus.chogori.logging;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import ru.wert.tubus.chogori.statics.Comparators;
 import ru.wert.tubus.client.entity.models.AppLog;
 import ru.wert.tubus.chogori.common.contextMenuACC.FormView_ACCController;
@@ -22,6 +25,7 @@ public class AppLog_TableView extends ReadOnlyTableView<AppLog> {
     public AppLog_TableView(String itemName, boolean adminOnly, boolean useContextMenu) {
         super(itemName);
         this.adminOnly = adminOnly;
+        this.setEditable(true);
 
         if (useContextMenu)
             createContextMenu();
@@ -32,7 +36,7 @@ public class AppLog_TableView extends ReadOnlyTableView<AppLog> {
 
         TableColumn<AppLog, String> tcDate = AppLog_Columns.createTcDate();
         TableColumn<AppLog, String> tcUser = AppLog_Columns.createTcUser();
-        TableColumn<AppLog, String> tcText = AppLog_Columns.createTcText();
+        TableColumn<AppLog, TextField> tcText = AppLog_Columns.createTcText();
         TableColumn<AppLog, Label> tcApplication = AppLog_Columns.createTcApplication();
         TableColumn<AppLog, String> tcVersion = AppLog_Columns.createTcVersion();
 

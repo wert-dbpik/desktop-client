@@ -4,11 +4,17 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.text.Text;
+import ru.wert.tubus.chogori.common.utils.TextUtils;
 import ru.wert.tubus.client.entity.models.AppLog;
 import ru.wert.tubus.chogori.images.BtnImages;
+import ru.wert.tubus.winform.warnings.DialogCopyString;
+import ru.wert.tubus.winform.warnings.Warning1;
 
 import static ru.wert.tubus.winform.statics.WinformStatic.parseLDTtoNormalDate;
 
@@ -48,8 +54,9 @@ public class AppLog_Columns {
     public static TableColumn<AppLog, String> createTcUser(){
         TableColumn<AppLog, String> tc = new TableColumn<>("Пользователь");
         tc.setCellValueFactory(cd->{
-            String str = cd.getValue().getUser().getName();
-            return new ReadOnlyStringWrapper(str);
+            TextField text = new TextField(cd.getValue().getUser().getName());
+            text.setStyle("-fx-background-color: transparent, white, transparent, white;");
+            return new ReadOnlyObjectWrapper(text);
         });
         tc.setStyle("-fx-alignment: CENTER-LEFT;");
         tc.setMinWidth(100);
@@ -62,9 +69,15 @@ public class AppLog_Columns {
     /**
      * ТЕКСТ
      */
-    public static TableColumn<AppLog, String> createTcText(){
-        TableColumn<AppLog, String> tc = new TableColumn<>("Текст записи");
+    public static TableColumn<AppLog, TextField> createTcText(){
+        TableColumn<AppLog, TextField> tc = new TableColumn<>("Текст записи");
         tc.setCellValueFactory(new PropertyValueFactory<>("text"));
+        tc.setCellValueFactory(cd->{
+            TextField text = new TextField(cd.getValue().getText());
+            text.setStyle("-fx-background-color: transparent, white, transparent, white;");
+            return new ReadOnlyObjectWrapper(text);
+        });
+
         tc.setStyle("-fx-alignment: CENTER-LEFT;");
         tc.setPrefWidth(400);
         tc.setMaxWidth(5000);

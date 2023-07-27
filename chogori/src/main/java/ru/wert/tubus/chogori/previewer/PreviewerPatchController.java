@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import ru.wert.tubus.chogori.common.utils.TextUtils;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.client.entity.models.Remark;
@@ -37,7 +38,6 @@ import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.winform.enums.EDraftStatus;
 import ru.wert.tubus.winform.enums.EDraftType;
 import ru.wert.tubus.winform.enums.EPDFViewer;
-import ru.wert.tubus.winform.statics.WinformStatic;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,8 +46,6 @@ import java.util.*;
 
 import static java.lang.String.format;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_REMARKS;
-import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
-import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
@@ -71,7 +69,7 @@ public class PreviewerPatchController {
     @Getter private HBox hboxPreviewerButtons;
 
     @FXML
-    private Label lblDraftInfo;
+    private TextField tfDraftInfo;
 
     @Getter@FXML
     private Label lblCount;
@@ -102,20 +100,26 @@ public class PreviewerPatchController {
         currentDraft.addListener((observable) -> {
             Draft draft = currentDraft.get();
             if(draft == null){
-                lblDraftInfo.setText("   ...");
-                lblDraftInfo.setStyle("-fx-font-weight: bold;  -fx-text-fill: black");
+                tfDraftInfo.setText("   ...");
+                tfDraftInfo.setStyle("-fx-font-weight: bold;  -fx-text-fill: black");
                 return;
             }
             EDraftStatus status = EDraftStatus.getStatusById(draft.getStatus());
-            lblDraftInfo.setText(
-                    "   " + draft.toUsefulString() + //Обозначение чертежа
-                            " : " + EDraftType.getDraftTypeById(draft.getDraftType()).getShortName() + //Тип чертежа
-                            "-" + draft.getPageNumber() + //страница
-                            " : " + status.getStatusName()); //Статус
+            String text = "   " + draft.toUsefulString() + //Обозначение чертежа
+                    " : " + EDraftType.getDraftTypeById(draft.getDraftType()).getShortName() + //Тип чертежа
+                    "-" + draft.getPageNumber() + //страница
+                    " : " + status.getStatusName();
+            tfDraftInfo.setText(text); //Статус
+
+            tfDraftInfo.setPrefWidth(TextUtils.computeTextWidth(tfDraftInfo.getFont(),
+                    tfDraftInfo.getText(), 0.0D) + 20);
+
             if (status == EDraftStatus.LEGAL)
-                lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
+                tfDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: blue");
             else
-                lblDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
+                tfDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
+
+
         });
 
     }

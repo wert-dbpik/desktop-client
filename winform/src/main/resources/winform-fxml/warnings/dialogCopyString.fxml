@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="movingPane" maxWidth="600.0" prefHeight="75.0" prefWidth="428.0" style="-fx-border-width: 3pt;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER_RIGHT">
+               <children>
+                  <Button fx:id="btnClose" mnemonicParsing="false" text="X" />
+               </children>
+            </HBox>
+            <TextArea fx:id="taText" editable="false" prefHeight="50.0" prefWidth="200.0" wrapText="true">
+               <VBox.margin>
+                  <Insets bottom="1.0" left="1.0" right="1.0" />
+               </VBox.margin>
+            </TextArea>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

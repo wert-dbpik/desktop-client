@@ -640,3 +640,6 @@
     -fx-background-color: #FF5555;
 }
 
+#tfDraftInfo{
+    -fx-background-color: lightgrey;
+}
