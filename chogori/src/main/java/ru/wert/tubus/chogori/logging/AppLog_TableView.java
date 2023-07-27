@@ -2,6 +2,7 @@ package ru.wert.tubus.chogori.logging;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import ru.wert.tubus.chogori.statics.Comparators;
 import ru.wert.tubus.client.entity.models.AppLog;
 import ru.wert.tubus.chogori.common.contextMenuACC.FormView_ACCController;
 import ru.wert.tubus.chogori.common.tableView.ReadOnlyTableView;
@@ -51,7 +52,11 @@ public class AppLog_TableView extends ReadOnlyTableView<AppLog> {
         List<AppLog> logs;
         if(adminOnly) logs = CH_LOGS.findAllByAdminOnlyFalse();
         else logs = CH_LOGS.findAll();
-        if(logs != null) reverse(logs);
+//        if(logs != null) reverse(logs);
+        if(logs != null) {
+            logs.sort(Comparators.logsComparator());
+            reverse(logs);
+        }
         return logs;
     }
 

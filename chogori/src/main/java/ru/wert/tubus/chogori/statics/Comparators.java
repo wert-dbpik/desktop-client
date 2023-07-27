@@ -3,6 +3,7 @@ package ru.wert.tubus.chogori.statics;
 import com.sun.javafx.scene.control.TableColumnSortTypeWrapper;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import ru.wert.tubus.client.entity.models.AppLog;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.interfaces.Item;
 
@@ -113,6 +114,17 @@ public class Comparators {
 
             String str1 = o1.toUsefulString();
             String str2 = o2.toUsefulString();
+            return str1.compareTo(str2);
+        };
+    }
+
+    /**
+     * Компаратор сравнивает логи
+     */
+    public static Comparator<AppLog> logsComparator() {
+        return (o1, o2) -> {
+            String str1 = o1.getTime();
+            String str2 = o2.getTime();
             return str1.compareTo(str2);
         };
     }

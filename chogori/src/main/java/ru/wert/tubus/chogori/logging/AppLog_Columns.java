@@ -21,6 +21,7 @@ public class AppLog_Columns {
         TableColumn<AppLog, String> tc = new TableColumn<>("ID");
         tc.setCellValueFactory(new PropertyValueFactory<>("id"));
         tc.setStyle("-fx-alignment: CENTER;");
+        tc.setSortable(false);
         return tc;
     };
 
@@ -37,6 +38,7 @@ public class AppLog_Columns {
         tc.setStyle("-fx-alignment: CENTER;");
         tc.setMinWidth(130);
         tc.setMaxWidth(130);
+        tc.setSortable(false);
         return tc;
     };
 
@@ -53,6 +55,7 @@ public class AppLog_Columns {
         tc.setMinWidth(100);
         tc.setPrefWidth(200);
         tc.setMaxWidth(300);
+        tc.setSortable(false);
         return tc;
     };
 
@@ -65,6 +68,7 @@ public class AppLog_Columns {
         tc.setStyle("-fx-alignment: CENTER-LEFT;");
         tc.setPrefWidth(400);
         tc.setMaxWidth(5000);
+        tc.setSortable(false);
         return tc;
     };
 
@@ -95,6 +99,7 @@ public class AppLog_Columns {
         tc.setStyle("-fx-alignment: CENTER;");
         tc.setMinWidth(32);
         tc.setMaxWidth(32);
+        tc.setSortable(false);
         return tc;
     };
 
@@ -107,6 +112,7 @@ public class AppLog_Columns {
         tc.setStyle("-fx-alignment: CENTER-LEFT;");
         tc.setMinWidth(100);
         tc.setMaxWidth(100);
+        tc.setSortable(false);
         return tc;
     };
 
