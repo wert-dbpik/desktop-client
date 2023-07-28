@@ -100,8 +100,8 @@ public class PreviewerPatchController {
         currentDraft.addListener((observable) -> {
             Draft draft = currentDraft.get();
             if(draft == null){
-                tfDraftInfo.setText("   ...");
-                tfDraftInfo.setStyle("-fx-font-weight: bold;  -fx-text-fill: black");
+                tfDraftInfo.setText(" ");
+//                tfDraftInfo.setStyle("-fx-font-weight: bold;  -fx-background-color: lightgrey; -fx-text-fill: black");
                 return;
             }
             EDraftStatus status = EDraftStatus.getStatusById(draft.getStatus());

@@ -146,7 +146,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private Button btnOk;
 
     @FXML
-    private Button btnCancel;
+    private Button btnCancelOperation;
 
     private static File lastFile = new File("C:/test");
 
@@ -186,7 +186,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         initAutopilot();
 
-        initButtonCancel();
+//        initBtnCancelOperation();
 
         initRadioGroup();
 
@@ -246,7 +246,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         new BXPrefix().create(bxPrefix); //ПРЕФИКСЫ
         new BXFolder().create(bxFolder); //ИЗДЕЛИЯ
         new BtnSearchProduct().create(btnSearchFolder); //НАЙТИ/ДОБАВИТЬ изделие
-        new BtnCancel().create(btnCancel); //ОТМЕНА кнопка
 
         createLabelFileName();
 
@@ -347,15 +346,13 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     /**
      * Метод инициализирует кнопку Отмена
      */
-    private void initButtonCancel() {
-        btnCancel.setOnAction(event -> {
-            // НЕ РАБОТААЕТ!!!!
-            if (manipulation.isRunning()) {
-                manipulation.cancel();
-            } else {
-                super.cancelPressed(event);
-            }
-        });
+    @FXML
+    public void cancelPressed(Event event) {
+        if (manipulation.isRunning()) {
+            manipulation.cancel();
+        } else {
+            super.cancelPressed(event);
+        }
     }
 
     /**
@@ -714,7 +711,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 spIndicator.setVisible(false);
                 Draft savedDraft = this.getValue();
                 if (savedDraft != null) {
-                    System.out.println(format("saveDraftId = %s", savedDraft.getId()));
                     draftsList.get(currentPosition.get()).setDraftId(savedDraft.getId());
                     tableView.updateRoutineTableView(Collections.singletonList(getValue()), false);
                     if(operation.equals(EOperation.ADD) && draftsList.size() == 1)
@@ -1087,8 +1083,6 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
     private void fillForm(int num) {
         //Если документ #num еще не сохранен, то форму заполняем из файла
         if (draftsList.get(num).getDraftId() == null) {
-            
-            System.out.println("current draft = " + draftsList.get(currentPosition.get()).getDraftFile().getName());
 
             currentFilePath = draftsList.get(currentPosition.get()).getDraftFile(); //File
             previewerController.showDraft(null, currentFilePath);
