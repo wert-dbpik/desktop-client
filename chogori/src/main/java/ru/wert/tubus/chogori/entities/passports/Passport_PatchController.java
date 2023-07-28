@@ -32,13 +32,11 @@ public class Passport_PatchController {
     private PreviewerPatchController previewerController;
     private Object modifyingClass; //класс, от которого зависит отображаемый список в таблице (Folder, Product, Passport)
     private SelectionMode mode; //SelectionMode.SINGLE, SelectionMode.MULTIPLE
-//    @Getter private MenuButton btnShowFilter;
     @Getter private MenuButton btnShowColumns;
     private Draft_TableView draftsTable;
 
     //Кнопки toolbar
     private boolean useBtnPassportsGlobe; //Показать все индентификаторы
-//    private boolean useBtnShowFilter; //Фильтровать список
     private boolean useBtnShowColumns;
     private boolean useContextMenu;
 
@@ -71,7 +69,6 @@ public class Passport_PatchController {
 
     public void initPassportsToolBar(boolean btnPassportsGlobe, boolean btnShowColumns){
         this.useBtnPassportsGlobe = btnPassportsGlobe;
-//        this.useBtnShowFilter = btnShowFilter;
         this.useBtnShowColumns = btnShowColumns;
 
         createPassportToolBar();
@@ -79,13 +76,12 @@ public class Passport_PatchController {
 
     private void createPassportTableView() {
         //запуск новой версии
-        passportsTable = new Passport_TableView("ИДЕНТИФИКАТОР", previewerController, useContextMenu);
+        passportsTable = new Passport_TableView("ИДЕНТИФИКАТОР", previewerController, useContextMenu, true);
         passportsTable.setModifyingClass(modifyingClass);
         passportsTable.getSelectionModel().setSelectionMode(mode);
         VBox.setVgrow(passportsTable, Priority.ALWAYS);
         vboxPassports.getChildren().add(passportsTable);
 
-//        CH_SEARCH_FIELD.setSearchableTableController(passportsTable);
         passportsTable.updateView();
 
     }
@@ -105,12 +101,10 @@ public class Passport_PatchController {
             passportsTable.updateView();
         });
 
-        //Кнопка ПОКАЗАТЬ ФИЛЬТР
-//        btnShowFilter = new BtnMenuDraftsFilter(passportsTable);
+
         //Кнопка ПОКАЗАТЬ КОЛОНКИ
         btnShowColumns = new BtnMenuPassportsColumns(passportsTable);
 
-//        if(useBtnShowFilter) hboxPassportsButtons.getChildren().add(btnShowFilter);
         if(useBtnShowColumns) hboxPassportsButtons.getChildren().add(btnShowColumns);
         if(useBtnPassportsGlobe) hboxPassportsButtons.getChildren().add(btnPassportsGlobe);
 

@@ -144,7 +144,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
         draftPatch = new Draft_Patch().create();
 
         draftPatchController = draftPatch.getDraftPatchController();
-        draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.MULTIPLE);
+        draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.MULTIPLE, false);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, true, true, true, false,
                 false, true);

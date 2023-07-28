@@ -18,6 +18,8 @@ import ru.wert.tubus.chogori.application.services.ChogoriServices;
 
 import java.util.*;
 
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+
 public class Passport_TableView extends RoutineTableView<Passport> implements Sorting<Passport> {
 
     private static final String accWindowRes = "/chogori-fxml/drafts/draftACC.fxml";
@@ -56,7 +58,7 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
      * @param promptText String, текст, добавляемый в поисковую строку
      * @param previewerController PreviewerNoTBController контроллер окна предпросмотра
      */
-    public Passport_TableView(String promptText, PreviewerPatchController previewerController, boolean useContextMenu) {
+    public Passport_TableView(String promptText, PreviewerPatchController previewerController, boolean useContextMenu, boolean switchSearch) {
         this(promptText);
         this.previewerController = previewerController;
 
@@ -64,6 +66,12 @@ public class Passport_TableView extends RoutineTableView<Passport> implements So
 
         //Создаем изначальное контекстное меню, чтобы оно могло открыться при клике в пустом месте
         if(useContextMenu) createContextMenu();
+
+        //Здесь происходит включение поиска по чертежам
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(switchSearch && newValue)
+                CH_SEARCH_FIELD.changeSearchedTableView(this, "КАРТОЧКА");
+        });
 
     }
 

@@ -306,6 +306,7 @@ public class PreviewerPatchController {
         pane.setAlignment(Pos.CENTER);
         pane.setStyle("-fx-background-color: white");
         paneViewer.getChildren().set(0, pane);
+        paneViewer.autosize();
     }
 
     /**

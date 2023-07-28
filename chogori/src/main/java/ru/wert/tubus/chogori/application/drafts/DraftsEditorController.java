@@ -114,7 +114,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
         Draft_Patch draftPatch = new Draft_Patch().create();
         draftPatchController = draftPatch.getDraftPatchController();
 
-        draftPatchController.initDraftsTableView(previewerPatchController, new Folder(), SelectionMode.MULTIPLE);
+        draftPatchController.initDraftsTableView(previewerPatchController, new Folder(), SelectionMode.MULTIPLE, true);
         draftsTable = draftPatchController.getDraftsTable();
         draftsTable.showTableColumns(false, false, true, true, false,
                 false, true);

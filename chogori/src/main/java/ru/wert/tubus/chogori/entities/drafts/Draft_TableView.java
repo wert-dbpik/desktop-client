@@ -81,8 +81,9 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
      * Конструктор для таблицы, связанной с предпросмотром чертежей
      * @param promptText String, текст, добавляемый в поисковую строку
      * @param previewerController PreviewerNoTBController контроллер окна предпросмотра
+     * @param switchSearch азрешить переключение поиска на ПОИСК ЧЕРТЕЖЕЙ
      */
-    public Draft_TableView(String promptText, PreviewerPatchController previewerController, VBox vbox) {
+    public Draft_TableView(String promptText, PreviewerPatchController previewerController, VBox vbox, boolean switchSearch) {
         super(promptText);
         this.previewerController = previewerController;
 
@@ -132,9 +133,10 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
             }
         });
 
-       //Здесь происходит выключение поиска по КОМПЛЕКТАМ ЧЕРТЕЖЕЙ и включение поиска по чертежам
+       //Здесь происходит включение поиска по чертежам
         focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "ЧЕРТЕЖ");
+            if(switchSearch && newValue)
+                CH_SEARCH_FIELD.changeSearchedTableView(this, "ЧЕРТЕЖ");
         });
 
 

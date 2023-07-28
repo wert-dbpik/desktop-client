@@ -50,12 +50,14 @@ public class Draft_PatchController {
     private boolean useBtnShowFilter; //Фильтровать список
     private boolean useBtnShowColumns; //Выбор колонок для отображения
     private boolean useBtnAltSwitcher;//Переключатель Alt для перехода к предпросмотру
+    private boolean switchDraftsSearch; //Переключение на поиск чертежей при переносе фокуса на таблицу с чертежами
 
 
-    public void initDraftsTableView(PreviewerPatchController previewerController, Object modifyingClass, SelectionMode mode){
+    public void initDraftsTableView(PreviewerPatchController previewerController, Object modifyingClass, SelectionMode mode, boolean switchDraftsSearch){
         this.previewerController = previewerController;
         this.modifyingClass = modifyingClass;
         this.mode = mode;
+        this.switchDraftsSearch = switchDraftsSearch;
 
         lblSourceOfDrafts.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkblue");
 
@@ -89,7 +91,7 @@ public class Draft_PatchController {
 
     private void createDraftTableView() {
         //запуск новой версии
-        draftsTable = new Draft_TableView("ЧЕРТЕЖ", previewerController, vboxDrafts);
+        draftsTable = new Draft_TableView("ЧЕРТЕЖ", previewerController, vboxDrafts, switchDraftsSearch);
         draftsTable.setModifyingClass(modifyingClass);
         draftsTable.getSelectionModel().setSelectionMode(mode);
         VBox.setVgrow(draftsTable, Priority.ALWAYS);
