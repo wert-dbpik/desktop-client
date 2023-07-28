@@ -101,7 +101,6 @@ public class PreviewerPatchController {
             Draft draft = currentDraft.get();
             if(draft == null){
                 tfDraftInfo.setText(" ");
-//                tfDraftInfo.setStyle("-fx-font-weight: bold;  -fx-background-color: lightgrey; -fx-text-fill: black");
                 return;
             }
             EDraftStatus status = EDraftStatus.getStatusById(draft.getStatus());

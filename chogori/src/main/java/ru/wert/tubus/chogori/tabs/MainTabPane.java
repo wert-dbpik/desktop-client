@@ -92,15 +92,11 @@ public class MainTabPane extends TabPane {
                 getSelectionModel().select(tab);
                 //Создаем поле поиска
                 if(searchableTabController instanceof SearchableTab) {
-                    ((SearchableTab) searchableTabController).tuneSearching();
                     showSearchPane();
                 } else
                     hideSearchPane();
             }
-
         });
-
-
     }
 
     private void showSearchPane() {
