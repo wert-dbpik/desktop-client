@@ -30,15 +30,6 @@ public class SearchField extends TextField {
             }
         });
 
-        //Слушатель следит за кликами по полю TextField.
-        //Если TextField пуст, а буфер обмена clipboard - нет, то предлагается сделать вставку
-        setOnMouseClicked(event -> {
-            if(event.getButton().equals(MouseButton.SECONDARY)) {
-                if (getText().equals("") && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-                    paste.showHint();
-                }
-            }
-        });
     }
     /**
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, насильственный поиск
