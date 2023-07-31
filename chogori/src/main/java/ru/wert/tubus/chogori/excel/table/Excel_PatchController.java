@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.excel.table;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -60,6 +61,7 @@ public class Excel_PatchController {
 //        excelTable = new Excel_TableView("ЧЕРТЕЖ", previewerController, useContextMenu);
         try {
             poiReader = new POIReader(excelFile);
+
             HBox hbox = new HBox();
             hbox.setAlignment(Pos.TOP_CENTER);
             excelTable = new Excel_TableView(poiReader, hbox, useContextMenu).getTableView();
@@ -67,6 +69,8 @@ public class Excel_PatchController {
             hbox.getChildren().add(excelTable);
             excelTable.refresh();
             stpExcelTable.getChildren().add(hbox);
+
+
 
         } catch (IOException e) {
             e.printStackTrace();

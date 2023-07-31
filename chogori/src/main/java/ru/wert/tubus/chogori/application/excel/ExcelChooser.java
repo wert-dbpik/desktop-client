@@ -14,20 +14,20 @@ import static ru.wert.tubus.winform.statics.WinformStatic.WF_TEMPDIR;
 public class ExcelChooser {
 
     public File choose(){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Открыть файл");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("exel", "*.xlsx")
-        );
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Открыть файл");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Файлы EXCEL (.xlsx)", "*.xlsx"));
+        System.out.println(ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
         File normyMKDirectory = new File(ChogoriSettings.CH_CURRENT_USER_SETTINGS == null ? "C:/" : ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
-        fileChooser.setInitialDirectory(normyMKDirectory.exists() ? normyMKDirectory : new File("C:/"));
+        chooser.setInitialDirectory(normyMKDirectory.exists() ? normyMKDirectory : new File("C:/"));
 
         File chosenFile = new File("");
         try {
-            chosenFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
+            chosenFile = chooser.showOpenDialog(WF_MAIN_STAGE);
+            if(chosenFile == null) return null;
         } catch (Exception e) {
-            fileChooser.setInitialDirectory(new File("C:/"));
-            chosenFile = fileChooser.showOpenDialog(WF_MAIN_STAGE);
+            chooser.setInitialDirectory(new File("C:/"));
+            chosenFile = chooser.showOpenDialog(WF_MAIN_STAGE);
             e.printStackTrace();
         }
 
@@ -37,7 +37,6 @@ public class ExcelChooser {
     public File createTempCopyOfFile(File oldFile){
         File copied = null;
         try {
-//          copied = File.createTempFile(oldFile.getName(), "excel.tmp", tempDir);  //не работает
             copied = new File(WF_TEMPDIR, oldFile.getName() + new Date().getTime());
             Files.copy(oldFile.toPath(), copied.toPath());
         } catch (IOException e) {

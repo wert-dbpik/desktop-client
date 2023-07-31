@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static ru.wert.tubus.chogori.excel.enums.EColName.*;
+
 @Log
 @Getter
 public class POIReader {
@@ -42,7 +44,7 @@ public class POIReader {
         this.book = WorkbookFactory.create(file);
         this.sheet = book.getSheetAt(0);
         this.headRowIndex = findHeadRowIndex(sheet);
-        this.firstRowIndex = headRowIndex +1;
+        this.firstRowIndex = headRowIndex + 1;
         this.lastRowIndex = findLastRowInTable();
         this.colNamesList = EColName.getColNamesList();
         this.hashMapHeader = findHashMapHeader();
@@ -91,8 +93,8 @@ public class POIReader {
      */
     private int findHeadRowIndex(Sheet sheet){
         for(int i = 0; ; i++){
-            if(getDataFromCell(i, 0).equals(EColName.ROW_NUM.toString()) ||
-                    getDataFromCell(i, 1).equals(EColName.KRP.toString()))
+            if(getDataFromCell(i, 0).equals(ROW_NUM.toString()) ||
+                    getDataFromCell(i, 1).equals(KRP.toString()))
                 return sheet.getRow(i).getRowNum();
         }
     }
@@ -122,10 +124,10 @@ public class POIReader {
     private HashMap<Integer, String> findHashMapHeader(){
         hashMapHeader = new HashMap<>();
         for(int colNum = 0; ; colNum++){
-                Cell cell = sheet.getRow(headRowIndex).getCell(colNum);
-                if(cell == null) return hashMapHeader;
-                if(colNamesList.contains(cell.getStringCellValue()))
-                    hashMapHeader.put(cell.getColumnIndex(), cell.getStringCellValue());
+            Cell cell = sheet.getRow(headRowIndex).getCell(colNum);
+            if(cell == null) return hashMapHeader;
+            if(colNamesList.contains(cell.getStringCellValue()))
+                hashMapHeader.put(cell.getColumnIndex(), cell.getStringCellValue());
         }
     }
 
@@ -187,7 +189,7 @@ public class POIReader {
         executions = new HashMap<>();
         int ex = 0;//порядковый номер исполнения
         for (int i = 0; i < setOfColNames.size(); i++) {
-            if (setOfColNames.get(i).equals(EColName.TOTAL_AMOUNT.toString())) {
+            if (setOfColNames.get(i).equals(TOTAL_AMOUNT.toString())) {
                 executions.put(ex, i);
                 ex++;
             }
@@ -203,17 +205,17 @@ public class POIReader {
         ObservableList<EditorRow> editorRowData = FXCollections.observableArrayList();
         for(int i = 0; i < data.size(); i ++){
             List<String> row = new ArrayList<>(data.get(i));
-            EditorRow mc = new EditorRow();
-            mc.setColor(row.get(0));
-            mc.setRowNumber(splitDotZero(row.get(modelColNames.get(EColName.ROW_NUM.toString()))));
-            mc.setKrp(row.get(modelColNames.get(EColName.KRP.toString())));
-            mc.setDecNumber(row.get(modelColNames.get(EColName.DEC_NUM.toString())));
-            mc.setName(row.get(modelColNames.get(EColName.NAME.toString())));
+            EditorRow editorRow = new EditorRow();
+            editorRow.setColor(row.get(0));
+            editorRow.setRowNumber(splitDotZero(row.get(modelColNames.get(ROW_NUM.toString()))));
+            editorRow.setKrp(row.get(modelColNames.get(KRP.toString())));
+            editorRow.setDecNumber(row.get(modelColNames.get(DEC_NUM.toString())));
+            editorRow.setName(row.get(modelColNames.get(NAME.toString())));
             if (colLaсquerExist)
-                mc.setLacquer(row.get(modelColNames.get(EColName.LACQUER.toString())));
-            mc.setCoat(row.get(modelColNames.get(EColName.COAT.toString())));
+                editorRow.setLacquer(row.get(modelColNames.get(LACQUER.toString())));
+            editorRow.setCoat(row.get(modelColNames.get(COAT.toString())));
             if(colZpcExist)
-                mc.setZcp(row.get(modelColNames.get(EColName.ZCP.toString())));
+                editorRow.setZcp(row.get(modelColNames.get(ZCP.toString())));
 
             //Прописываем количество элементов для всех исполнений таблицы
             ArrayList<EditorRow.Execution> exs = new ArrayList<>();
@@ -226,15 +228,17 @@ public class POIReader {
                 EditorRow.Execution exx = new EditorRow.Execution(exId, am, amAs);
                 exs.add(exx);
             }
-            mc.setExecutions(exs);
+            editorRow.setExecutions(exs);
 
-            mc.setFolder(row.get(modelColNames.get(EColName.FOLDER.toString())));
-            mc.setMaterial(row.get(modelColNames.get(EColName.MATERIAL.toString())));
-            mc.setParamA(splitDotZero(row.get(modelColNames.get(EColName.A.toString()))));
-            mc.setParamB(splitDotZero(row.get(modelColNames.get(EColName.B.toString()))));
+            editorRow.setFolder(row.get(modelColNames.get(FOLDER.toString())));
+            editorRow.setMaterial(row.get(modelColNames.get(MATERIAL.toString())));
+            editorRow.setParamA(splitDotZero(row.get(modelColNames.get(A.toString()))));
+            editorRow.setParamB(splitDotZero(row.get(modelColNames.get(B.toString()))));
 
-            editorRowData.add(mc);
+            editorRowData.add(editorRow);
         }
+
+
         return editorRowData;
     }
 
@@ -285,9 +289,5 @@ public class POIReader {
             return getDataFromCell(rowExDesc, executions.get(ex)) +
                     getDataFromCell(rowExDesc + 1, executions.get(ex));
         }
-
     }
-
-
-
 }
