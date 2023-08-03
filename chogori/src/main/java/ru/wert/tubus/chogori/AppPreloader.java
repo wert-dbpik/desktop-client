@@ -15,6 +15,9 @@ import ru.wert.tubus.client.retrofit.RetrofitClient;
 import ru.wert.tubus.chogori.connectionProperties.NoConnection;
 import ru.wert.tubus.chogori.images.AppImages;
 import ru.wert.tubus.winform.modal.ModalWindow;
+import ru.wert.tubus.winform.statics.WinformStatic;
+
+import static ru.wert.tubus.winform.statics.WinformStatic.VERSION_CREATED_DATE;
 
 @Slf4j
 public class AppPreloader extends Preloader {
@@ -40,7 +43,7 @@ public class AppPreloader extends Preloader {
         ProgressBar progressBar = new ProgressBar();
         progressBar.setPrefWidth(400);
 
-        vBox.getChildren().add(new Label("... загрузка данных ..."));
+        vBox.getChildren().add(new Label("версия " + WinformStatic.CURRENT_PROJECT_VERSION + " от " + VERSION_CREATED_DATE));
         vBox.getChildren().add(progressBar);
 
         BorderPane root = new BorderPane(vBox);
