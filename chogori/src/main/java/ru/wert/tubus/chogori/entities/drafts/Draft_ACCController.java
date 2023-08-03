@@ -1089,7 +1089,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             currentFileName = draftsList.get(currentPosition.get()).getDraftFile().getName(); //String
             lblFileName.setText(currentFileName);
 
-            bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
+//            bxPage.getSelectionModel().select(0); //Устанавливаем страницу в "1"
             txtAreaNote.setText("");//Комментарий пустой
             setDraftStatus(null);
         } else {
@@ -1327,16 +1327,23 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         outer_loop:
         for(String s : nameParts){
             for (String shortName : EDraftType.getShortNames()) {
-                Pattern pat1 = Pattern.compile(shortName + "\\d"); //сб1, сб2 ...
-                Matcher m1 = pat1.matcher(s);
-                String typeAndPage = "";
-                while (m1.find()) {
-                    typeAndPage = s.substring(m1.start(), m1.end());
-                }
-                if(typeAndPage.equals("")) continue;
+                String numbers;
+                if(s.equals(shortName) || s.equals(shortName + ",") || s.equals(shortName + ".")){
+                    type = EDraftType.getTypeByShortName(shortName);
+                    numbers = "1";
+                } else {
+                    Pattern pat1 = Pattern.compile(shortName + "\\d"); //сб1, сб2 ...
+                    Matcher m1 = pat1.matcher(s);
+                    String typeAndPage = "";
+                    while (m1.find()) {
+                        typeAndPage = s.substring(m1.start(), m1.end());
+                    }
+                    if (typeAndPage.equals("")) continue;
 
-                type = EDraftType.getTypeByShortName(shortName);
-                String numbers = s.replace(shortName, "");
+                    type = EDraftType.getTypeByShortName(shortName);
+                    numbers = s.replace(shortName, "");
+                }
+
                 page = Integer.parseInt(numbers);
                 partName = partName.replace(s, "").trim();
                 break outer_loop;

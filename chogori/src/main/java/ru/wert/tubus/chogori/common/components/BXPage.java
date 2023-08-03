@@ -12,6 +12,6 @@ public class BXPage {
             pages.add(i);
         }
         bxPage.setItems(pages);
-        bxPage.getSelectionModel().select(0);
+//        bxPage.getSelectionModel().select(0);
     }
 }

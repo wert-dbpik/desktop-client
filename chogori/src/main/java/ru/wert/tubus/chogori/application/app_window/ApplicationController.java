@@ -130,7 +130,7 @@ public class ApplicationController {
         btnUpdateAllData.setStyle("-fx-text-fill: #FFFFFF;");
         btnUpdateAllData.setPadding(Insets.EMPTY);
         btnUpdateAllData.setGraphic(new ImageView(BTN_UPDATE_BLUE_IMG));
-        btnUpdateAllData.setText("Обновить все!");
+        btnUpdateAllData.setText("Обновить данные!");
         btnUpdateAllData.setOnAction(e->AppMenuController.updateData());
 
 
