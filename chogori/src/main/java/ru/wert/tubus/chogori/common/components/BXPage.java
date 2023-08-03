@@ -12,6 +12,7 @@ public class BXPage {
             pages.add(i);
         }
         bxPage.setItems(pages);
+        bxPage.setStyle("-fx-font-family: Arial; -fx-font-size: 12;");
 //        bxPage.getSelectionModel().select(0);
     }
 }
