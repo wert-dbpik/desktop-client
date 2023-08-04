@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.StartChogori;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
@@ -585,6 +586,9 @@ public class AppMenuController {
         MenuItem downloadLastVersion = new MenuItem("Скачать последнюю версию");
         downloadLastVersion.setOnAction(this::downloadLastVersion);
 
+        MenuItem openInstruction = new MenuItem("Открыть инструкцию");
+        openInstruction.setOnAction(this::openInstruction);
+
         MenuItem helpVideosOnline = new MenuItem("Обучающее видео");
         helpVideosOnline.setOnAction(this::openHelpVideosOnline);
 
@@ -594,10 +598,20 @@ public class AppMenuController {
         MenuItem test = new MenuItem("ТЕСТ");
         test.setOnAction(this::makeTest);
 
-        helpMenu.getItems().addAll(downloadLastVersion, helpVideosOnline, aboutItem);
+        helpMenu.getItems().addAll(downloadLastVersion, openInstruction, helpVideosOnline, aboutItem);
 //        helpMenu.getItems().add(test);
 
         return helpMenu;
+    }
+
+    /**
+     * Метод открывает инструкцию по работе с тубусом
+     * @param event
+     */
+    @SneakyThrows
+    private void openInstruction(ActionEvent event) {
+        File instruction = new File("//serverhp.ntcpik.com/ntcpik/BazaPIK/TUBUS - инструкция.pdf");
+        Desktop.getDesktop().open(instruction);
     }
 
     /**
