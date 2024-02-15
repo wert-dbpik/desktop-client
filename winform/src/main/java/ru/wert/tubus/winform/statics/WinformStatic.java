@@ -18,9 +18,9 @@ import java.util.List;
 public class WinformStatic {
 
     public static String PROGRAM_NAME = "TUBUS"; //Наименование программы
-    public static String CURRENT_PROJECT_VERSION = "6.4"; //Версия приложения обновляется вручную
-    public static String VERSION_CREATED_DATE = "03.08.2023"; //Дата выпуска версии
-    public static boolean TEST_VERSION = true; //тестовая версия - работает с тестовым сервером
+    public static String CURRENT_PROJECT_VERSION = "6.5"; //Версия приложения обновляется вручную
+    public static String VERSION_CREATED_DATE = "15.02.2024"; //Дата выпуска версии
+    public static boolean TEST_VERSION = false; //тестовая версия - работает с тестовым сервером
 
     public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
     public static Stage WF_MAIN_STAGE;
