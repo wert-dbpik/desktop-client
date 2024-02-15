@@ -1,8 +1,5 @@
 package ru.wert.tubus.chogori.entities.drafts;
 
-import com.sun.javafx.binding.StringFormatter;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -10,11 +7,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.ProductGroup;
 import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
-import ru.wert.tubus.chogori.common.components.BtnDoubleAlt;
 import ru.wert.tubus.chogori.common.components.BtnMenuDraftsColumns;
 import ru.wert.tubus.chogori.common.components.BtnMenuDraftsFilter;
 import ru.wert.tubus.chogori.images.BtnImages;
@@ -121,18 +116,12 @@ public class Draft_PatchController {
             e.consume();
         });
 
-        BtnDoubleAlt<Draft> btnDoubleAlt =new BtnDoubleAlt<>(draftsTable, false);
-        Button btnAltOn = btnDoubleAlt.create();
-        draftsTable.getAltOnProperty().bindBidirectional(btnDoubleAlt.getStateProperty());
-        btnDoubleAlt.getStateProperty().set(false);
-
 
         //Кнопка ПОКАЗАТЬ ФИЛЬТР
         btnShowFilter = new BtnMenuDraftsFilter(draftsTable);
         //Кнопка ПОКАЗАТЬ КОЛОНКИ
         btnShowColumns = new BtnMenuDraftsColumns(draftsTable);
 
-        if(useBtnAltSwitcher) hboxDraftsButtons.getChildren().add(btnAltOn);
         if(useBtnShowFilter) hboxDraftsButtons.getChildren().add(btnShowFilter);
         if(useBtnShowColumns) hboxDraftsButtons.getChildren().add(btnShowColumns);
         if(useBtnDraftsGlobe) hboxDraftsButtons.getChildren().add(btnDraftsGlobe);

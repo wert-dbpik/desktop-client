@@ -24,9 +24,6 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
     public abstract void createContextMenu();
     public abstract List<P> prepareList();
 
-    protected BooleanProperty altOnProperty = new SimpleBooleanProperty(); //Переключение +Alt
-    public BooleanProperty getAltOnProperty(){return altOnProperty;}
-
     @Getter@Setter protected String searchedText; //Искомый текст
 
     protected BooleanProperty globalOffProperty = new SimpleBooleanProperty(); //Режим всеобщего представления вкл

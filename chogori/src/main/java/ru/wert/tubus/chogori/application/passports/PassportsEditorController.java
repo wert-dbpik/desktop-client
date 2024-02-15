@@ -151,7 +151,6 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(false, false, true, true);
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
-        draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
         previewerPatchController.getLblCount().textProperty().bind(
                 Bindings.convert(draftsTable.getPreparedList().sizeProperty()));
@@ -218,12 +217,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
 
         folderTableSelectedItemChangeListener = (observable, oldValue, newValue) -> {
             if (newValue instanceof Folder) {
-                if (folderTableView.getAltOnProperty().get()) {
-                    if (ChogoriSettings.CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT))
-                        updateListOfPassports(newValue);
-                } else
-                    updateListOfPassports(newValue);
-
+                updateListOfPassports(newValue);
             }
         };
 
@@ -238,12 +232,8 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
 
             if((editRights && primaryBtn && e.isAltDown()) || (!editRights && primaryBtn) ){
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
-                if(selectedItem instanceof Folder){
-                    if(folderTableView.getAltOnProperty().get()){
-                        if(e.isAltDown())
-                            updateListOfPassports(selectedItem);
-                    } else
-                        updateListOfPassports(selectedItem);
+                if (selectedItem instanceof Folder) {
+                    updateListOfPassports(selectedItem);
                 }
                 if((editRights && selectedItem instanceof ProductGroup) || (!editRights && selectedItem instanceof ProductGroup && e.isAltDown())){
                     passportsPatch.getPassportPatchController().showSourceOfPassports(selectedItem);

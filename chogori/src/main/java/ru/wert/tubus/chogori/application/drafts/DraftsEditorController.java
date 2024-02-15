@@ -3,30 +3,30 @@ package ru.wert.tubus.chogori.application.drafts;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.common.CommonUnits;
+import ru.wert.tubus.chogori.entities.catalogOfFolders.CatalogOfFoldersPatch;
+import ru.wert.tubus.chogori.entities.drafts.Draft_Patch;
+import ru.wert.tubus.chogori.entities.drafts.Draft_PatchController;
+import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
+import ru.wert.tubus.chogori.entities.folders.Folder_TableView;
+import ru.wert.tubus.chogori.entities.product_groups.ProductGroup_TreeView;
+import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.ProductGroup;
 import ru.wert.tubus.client.interfaces.Item;
 import ru.wert.tubus.client.interfaces.SearchableTab;
 import ru.wert.tubus.client.interfaces.UpdatableTabController;
-import ru.wert.tubus.chogori.entities.drafts.Draft_Patch;
-import ru.wert.tubus.chogori.entities.drafts.Draft_PatchController;
-import ru.wert.tubus.chogori.entities.folders.Folder_TableView;
-import ru.wert.tubus.chogori.entities.catalogOfFolders.CatalogOfFoldersPatch;
-import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
-import ru.wert.tubus.chogori.entities.product_groups.ProductGroup_TreeView;
-import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
-import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 
@@ -145,33 +145,9 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
                 try {
                     Thread.sleep(500);
                     Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
-                    if(selectedItem == newValue) {
-                        //Нажата клавиша Alt
-                        boolean altBtnPressed = ChogoriSettings.CH_KEYS_NOW_PRESSED.contains(KeyCode.ALT);
-                        //Если выделяется папка
-                        if (selectedItem instanceof Folder) {
-                            //Если требуется нажатие Alt
-                            if (folderTableView.getAltOnProperty().get()) {
-                                if (altBtnPressed) {
-                                    clearCash();
-                                    Platform.runLater(()->updateListOfDrafts(selectedItem));
-                                }
-                            } else {
-                                clearCash();
-                                Platform.runLater(()->updateListOfDrafts(selectedItem));
-                            }
-                        }
-                        //Состав папки раскрывается только при нажатой alt
-                        if (selectedItem instanceof ProductGroup && altBtnPressed) {
-                            draftPatchController.showSourceOfPassports(selectedItem);
-                            List<ProductGroup> selectedGroups = folderTableView.findMultipleProductGroups((ProductGroup) selectedItem);
-                            List<Folder> folders = new ArrayList<>();
-                            for (ProductGroup pg : selectedGroups) {
-                                folders.addAll(CH_QUICK_FOLDERS.findAllByGroupId(pg.getId()));
-                            }
-                            draftsTable.setTempSelectedFolders(folders);
-                            Platform.runLater(()->draftsTable.updateView());
-                        }
+                    if (selectedItem == newValue && selectedItem instanceof Folder) {
+                        clearCash();
+                        Platform.runLater(() -> updateListOfDrafts(selectedItem));
                     }
 
                 } catch (InterruptedException e) {

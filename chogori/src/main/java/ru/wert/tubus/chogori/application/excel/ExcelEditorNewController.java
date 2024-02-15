@@ -180,7 +180,6 @@ public class ExcelEditorNewController {
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(false, false, true, true);
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.6));
-        draftsTable.getAltOnProperty().set(false); //Иначе превью не будет срабатывать
 
         draftPatch.connectWithPreviewer(draftsTable, previewerPatchController);
 

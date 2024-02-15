@@ -104,9 +104,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                         if (newValue == null || newValue.getId() == null)
                             return;
                         Platform.runLater(() -> {
-                            if (!getAltOnProperty().get()) {
-                                AppStatic.openDraftInPreviewer(newValue, previewerController);
-                            }
+                            AppStatic.openDraftInPreviewer(newValue, previewerController);
                         });
                     }
                 } catch (InterruptedException e) {
@@ -121,13 +119,11 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                 if (e.getClickCount() == 2)
                     AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
                 else {
-                    if(getAltOnProperty().get()) {
-                        Platform.runLater(()->{
-                            Draft selectedDraft = getSelectionModel().getSelectedItem();
-                            if(selectedDraft != null)
-                                AppStatic.openDraftInPreviewer(selectedDraft, previewerController);
-                        });
-                    }
+                    Platform.runLater(() -> {
+                        Draft selectedDraft = getSelectionModel().getSelectedItem();
+                        if (selectedDraft != null)
+                            AppStatic.openDraftInPreviewer(selectedDraft, previewerController);
+                    });
                 }
                 e.consume();
             }

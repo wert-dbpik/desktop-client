@@ -22,7 +22,6 @@ import ru.wert.tubus.chogori.entities.folders.Folder_TableView;
 import ru.wert.tubus.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.tubus.chogori.entities.product_groups._ProductGroup_TreeViewPatch;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
-import ru.wert.tubus.chogori.common.components.BtnDoubleAlt;
 import ru.wert.tubus.chogori.common.components.BtnRollDown;
 import ru.wert.tubus.chogori.common.components.BtnRollUp;
 import ru.wert.tubus.chogori.images.BtnImages;
@@ -168,14 +167,6 @@ public class CatalogOfFoldersController implements UpdatableTabController {
      */
     private void createFolders_ToolBar(){
 
-        //Кнопка ALT_ON
-        BtnDoubleAlt<Item> btnDoubleAlt = new BtnDoubleAlt<Item>(folderTableView, false);
-        Button btnAltOn = btnDoubleAlt.create();
-        folderTableView.getAltOnProperty().bindBidirectional(btnDoubleAlt.getStateProperty());
-
-        //Устанавливаем начальное значение altOn в контроллере
-        btnDoubleAlt.getStateProperty().set(false);
-
         //Кнопка переключения на поиск по КОМПЛЕКТАМ
         Button btnSearchFolder = new Button();
         btnSearchFolder.setId("patchButton");
@@ -195,7 +186,7 @@ public class CatalogOfFoldersController implements UpdatableTabController {
         //Значение получилось перевернутым true - показывает Каталог
 //        btnDoubleGlobeVsCatalog.getStateProperty().set(true);
 // ==================================================================================================================
-        foldersButtons.getChildren().addAll(btnAltOn, btnSearchFolder);
+        foldersButtons.getChildren().addAll(btnSearchFolder);
     }
 
 
