@@ -120,7 +120,6 @@ public class StartChogori extends Application {
 
     }
 
-
     public static void main(String[] args) {
         LauncherImpl.launchApplication(StartChogori.class, AppPreloader.class, args);
     }

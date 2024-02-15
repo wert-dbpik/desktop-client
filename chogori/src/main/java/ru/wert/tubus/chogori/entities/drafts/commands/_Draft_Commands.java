@@ -115,7 +115,10 @@ public class _Draft_Commands implements ItemCommands<Draft> {
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             RemarksController controller = loader.getController();
             controller.init(draftPassport);
-            CH_TAB_PANE.createNewTab("> " + draftPassport.toUsefulString(), parent, true,  null);
+
+            String tabName = "> " + draftPassport.toUsefulString();
+            String tabId = tabName;
+            CH_TAB_PANE.createNewTab(tabId, tabName , parent, true,  null);
         } catch (IOException e) {
             e.printStackTrace();
         }

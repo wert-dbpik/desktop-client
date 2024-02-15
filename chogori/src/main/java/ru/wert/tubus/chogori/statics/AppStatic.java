@@ -25,6 +25,7 @@ import ru.wert.tubus.client.entity.models.VersionDesktop;
 import ru.wert.tubus.client.retrofit.RetrofitClient;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
+import ru.wert.tubus.winform.enums.EDraftStatus;
 import ru.wert.tubus.winform.enums.EDraftType;
 import ru.wert.tubus.winform.enums.EPDFViewer;
 import ru.wert.tubus.winform.statics.WinformStatic;
@@ -202,10 +203,17 @@ public class AppStatic {
 
             String tabName = d.toUsefulString() +
                     " (" + EDraftType.getDraftTypeById(d.getDraftType()) + "-" + d.getPageNumber() + ")";
+
+            String draftStatus = EDraftStatus.getStatusById(d.getStatus()).getStatusName();
+            String statusTime = d.getStatusTime();
+
+            String tabId = d.toUsefulString() +
+                    " (" + EDraftType.getDraftTypeById(d.getDraftType()) + "-" + d.getPageNumber() + "/" + draftStatus + " c " + statusTime + ")";
+
             boolean showTabNow = false;
             if(chosenDrafts.size() == 1) showTabNow = true;
 
-            CH_TAB_PANE.createNewTab(tabName, previewerPatch.getParent(), showTabNow, null);
+            CH_TAB_PANE.createNewTab(tabId, tabName, previewerPatch.getParent(), showTabNow, null);
 
             AppStatic.openDraftInPreviewer(d, previewerController);
 

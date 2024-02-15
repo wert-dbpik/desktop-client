@@ -28,7 +28,9 @@ public class OpenDraftsEditorTask extends Task<DraftsEditorController> {
             Parent parent = loader.load();
             controller = loader.getController();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/drafts-dark.css").toString());
-            CH_TAB_PANE.createNewTab("Чертежи", parent, true, loader.getController());
+            String tabName = "Чертежи";
+            String tabId = tabName;
+            CH_TAB_PANE.createNewTab(tabId, tabName, parent, true, loader.getController());
         } catch (IOException e) {
             log.debug("OpenDraftsEditorTask : Cancelled by user");
         }

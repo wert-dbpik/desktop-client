@@ -50,7 +50,7 @@ public class MainTabPane extends TabPane {
      * @param content Node, узел типа Parent
      * @param showTab boolean, опциональное - открывать созданную вкладку или не открывать
      */
-    public void createNewTab(String name, Node content, boolean showTab, ITabController searchableTabController){
+    public void createNewTab(String tabId, String name, Node content, boolean showTab, ITabController searchableTabController){
         this.searchablePane = searchableTabController;
 
         Platform.runLater(()->{
@@ -60,10 +60,11 @@ public class MainTabPane extends TabPane {
                 hideSearchPane();
 
 
-            AppTab tab = tabIsAvailable(name);
+            AppTab tab = tabIsAvailable(tabId);
             if (tab == null) {
 
                 tab = new AppTab(name, content, searchableTabController);
+                tab.setId(tabId);
 
                 getTabs().add(tab);//вкладку добавляем к TabPane
                 setContextMenu(createContextMenu());
@@ -151,12 +152,12 @@ public class MainTabPane extends TabPane {
 
     /**
      * Возвращает вкладку, если она уже существует
-     * @param name String название вкладки (id)
+     * @param tabId String id вкладки
      * @return Tab или null
      */
-    public AppTab tabIsAvailable(String name){
+    public AppTab tabIsAvailable(String tabId){
         for(Tab tab : getTabs()){
-            if(((Label)tab.getGraphic()).getText().equals(name))
+            if(tab.getId().equals(tabId))
                 return (AppTab)tab;
         }
         return null;
