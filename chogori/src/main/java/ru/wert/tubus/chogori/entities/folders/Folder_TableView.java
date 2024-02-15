@@ -62,6 +62,8 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
 //            if(newValue) CH_SEARCH_FIELD.changeSearchedTableView(this, "КОМПЛЕКТ ЧЕРТЕЖЕЙ");
 //        });
 
+
+
     }
 
     public List<ProductGroup> findMultipleProductGroups(ProductGroup productGroup){

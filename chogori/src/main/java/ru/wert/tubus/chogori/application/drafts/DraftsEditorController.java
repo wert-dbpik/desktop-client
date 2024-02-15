@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -139,23 +140,33 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
         folderTableView = catalogPatch.getFolderTableView();
         productGroupsTreeView = catalogPatch.getProductGroupsTreeView();
 
-        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            new Thread(()->{
-                try {
-                    Thread.sleep(500);
-                    Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
-                    if (selectedItem == newValue && selectedItem instanceof Folder) {
-                        clearCash();
-                        Platform.runLater(() -> updateListOfDrafts(selectedItem));
-                    }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        folderTableView.setOnMouseClicked(e->{
+            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
+                Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
+                if ( selectedItem instanceof Folder) {
+                    clearCash();
+                    Platform.runLater(() -> updateListOfDrafts(selectedItem));
                 }
-            }).start();
-
+            }
         });
+
+//        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//
+//            new Thread(()->{
+//                try {
+//                    Thread.sleep(500);
+//                    Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
+//                    if (selectedItem == newValue && selectedItem instanceof Folder) {
+//                        clearCash();
+//                        Platform.runLater(() -> updateListOfDrafts(selectedItem));
+//                    }
+//
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }).start();
+//
+//        });
 
         catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
