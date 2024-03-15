@@ -13,16 +13,17 @@
          <children>
             <HBox fx:id="patchHeader" alignment="CENTER_LEFT">
                <children>
-                  <Label fx:id="lblShownFolder" text="ЧЕРТЕЖИ">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                     <VBox.margin>
-                        <Insets bottom="10.0" top="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label fx:id="lblNumberOfDrafts" />
-                  <Label fx:id="lblSourceOfDrafts">
+                  <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" minWidth="120.0">
+                     <children>
+                        <Label fx:id="lblShownFolder" text="ЧЕРТЕЖИ" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="lblNumberOfDrafts" text="(6999)" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="lblSourceOfDrafts" HBox.hgrow="NEVER">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
