@@ -79,22 +79,24 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
      * Вызывается из чата и из контекстного меню чертежа "Открыть комплект с этим чертежом"
      */
     public void openFolderByName(Folder folder, Draft draftToBeSelected) {
-                ProductGroup group = folder.getProductGroup();
-                folderTableView.updateVisibleLeafOfTableView(group);
-                folderTableView.scrollTo(folder);
-                folderTableView.getSelectionModel().select(folder);
+        ProductGroup group = folder.getProductGroup();
+        folderTableView.updateVisibleLeafOfTableView(group);
+        folderTableView.scrollTo(folder);
+        folderTableView.getSelectionModel().select(folder);
+        draftsTable.setModifyingItem(folder);
+        draftsTable.updateTableView();
 
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (draftToBeSelected != null) {
-                            Platform.runLater(()->{
-                                draftsTable.getSelectionModel().select(draftToBeSelected);
-                                draftsTable.scrollTo(draftToBeSelected);
-                            });
-                        }
-                    }
-                }, 1000);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (draftToBeSelected != null) {
+                    Platform.runLater(() -> {
+                        draftsTable.getSelectionModel().select(draftToBeSelected);
+                        draftsTable.scrollTo(draftToBeSelected);
+                    });
+                }
+            }
+        }, 1000);
 
     }
 
