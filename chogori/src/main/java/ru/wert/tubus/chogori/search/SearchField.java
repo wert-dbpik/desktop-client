@@ -63,15 +63,26 @@ public class SearchField extends TextField {
 
     }
 
-    private String normalizeSearchedStr(String str){
+    /**
+     * Позволяет опускать точку при поиске,
+     * вставлять строку с номером с пробелами из 1С
+     * Если набранных символов меньше равно 6, то ничего не делает
+     */
+    private String normalizeSearchedStr(String text){
+        if(text.length() <= 6) return text;
 
-        StringBuilder newStr = new StringBuilder(str.replaceAll("[^\\d]", ""));
-        if(newStr.length() >= 9){
-            newStr.delete(9, newStr.length());
-            newStr.insert(6, ".");
-            return newStr.toString();
+        else if(text.length() < 9){
+            StringBuilder newText = new StringBuilder(text);
+            return newText.insert(6, ".").toString();
+        }
+
+        StringBuilder newText = new StringBuilder(text.replaceAll("[^\\d]", ""));
+        if(newText.length() >= 9){
+            newText.delete(9, newText.length());
+            newText.insert(6, ".");
+            return newText.toString();
         } else
-            return str;
+            return text;
     }
 
 }

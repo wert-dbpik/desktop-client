@@ -99,7 +99,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         boolean extraShowInfo = false;
 
         addFolder = new MenuItem("Добавить папку с чертежами");
-        cutDrafts = new MenuItem("Вырезать");
+        cutDrafts = new MenuItem("Перенести");
         pasteDrafts = new MenuItem("Вставить");
         renameDraft = new MenuItem("Переименовать чертеж");
         replaceDraft = new MenuItem("Заменить");
@@ -126,6 +126,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         if(selectedDrafts.size() == 1) {
             extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
+            extraCutDrafts = true; //ВЫРЕЗАТЬ ЧЕРТЕЖ ДЛЯ ПЕРЕНОСА
             extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
             extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
             extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
