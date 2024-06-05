@@ -101,11 +101,12 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                 try {
                     Thread.sleep(500);
                     if (newValue == getSelectionModel().getSelectedItem()) {
-                        if (newValue == null || newValue.getId() == null)
+                        if (newValue == null || newValue.getId() == null || previewerController.getCurrentDraft().equals(newValue))
                             return;
                         Platform.runLater(() -> {
                             AppStatic.openDraftInPreviewer(newValue, previewerController);
                         });
+
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
