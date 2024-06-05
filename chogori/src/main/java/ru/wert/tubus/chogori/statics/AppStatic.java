@@ -1,6 +1,5 @@
 package ru.wert.tubus.chogori.statics;
 
-import com.twelvemonkeys.io.FileUtil;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Pos;
@@ -12,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import ru.wert.tubus.chogori.common.components.FileFwdSlash;
 import ru.wert.tubus.chogori.pdf.PDFReader;
 import ru.wert.tubus.chogori.pdf.readers.PdfJSNewReader;
@@ -391,7 +391,7 @@ public class AppStatic {
         if (!myFile.exists() || !myFile.isFile()) return;
 
         String executingFile = null;
-        String ext = FileUtil.getExtension(myFile);
+        String ext = FilenameUtils.getExtension(myFile.getName());
         if (PDF_EXTENSIONS.contains(ext) && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith().equals(""))
             executingFile = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith();
         else if (IMAGE_EXTENSIONS.contains(ext) && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith().equals(""))

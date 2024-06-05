@@ -15,7 +15,7 @@ import java.awt.datatransfer.DataFlavor;
 
 public class SearchField extends TextField {
 
-
+    private String text;
     private String promptText;
     @Getter private ItemTableView<? extends Item> searchedTableView = null;
     private PastePopup paste = new PastePopup(this);
@@ -26,7 +26,8 @@ public class SearchField extends TextField {
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue) && searchedTableView != null) {
-                searchNow(newValue);
+                text = normalizeSearchedStr(newValue);
+                searchNow(text);
             }
         });
 
@@ -60,6 +61,17 @@ public class SearchField extends TextField {
         else
             setText(searchedText);
 
+    }
+
+    private String normalizeSearchedStr(String str){
+
+        StringBuilder newStr = new StringBuilder(str.replaceAll("[^\\d]", ""));
+        if(newStr.length() >= 9){
+            newStr.delete(9, newStr.length());
+            newStr.insert(6, ".");
+            return newStr.toString();
+        } else
+            return str;
     }
 
 }

@@ -1,12 +1,12 @@
 package ru.wert.tubus.chogori.entities.drafts;
 
-import com.twelvemonkeys.io.FileUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.text.Text;
+import org.apache.commons.io.FilenameUtils;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.chogori.common.utils.ClipboardUtils;
@@ -88,7 +88,7 @@ public class Draft_Manipulator {
                     }
                 }
                 for (File file : allFiles) {
-                    String ext = FileUtil.getExtension(file.getName().toLowerCase());
+                    String ext = FilenameUtils.getExtension(file.getName().toLowerCase());
                     if (PDF_EXTENSIONS.contains(ext) || IMAGE_EXTENSIONS.contains(ext) || SOLID_EXTENSIONS.contains(ext)) {
                         if(tableView.getModifyingItem() == null){
                             event.acceptTransferModes(TransferMode.NONE);
@@ -114,17 +114,17 @@ public class Draft_Manipulator {
                         if (f.isDirectory()) {
 
                             List<Path> filesInFolder = Files.walk(f.toPath())
-                                    .filter(file -> PDF_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase())) ||
-                                                    IMAGE_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase())) ||
-                                            SOLID_EXTENSIONS.contains(FileUtil.getExtension(file.toFile().getName().toLowerCase()))
+                                    .filter(file -> PDF_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
+                                                    IMAGE_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
+                                            SOLID_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase()))
                                     )
                                     .collect(Collectors.toList());
                             for (Path p : filesInFolder)
                                 acceptedFiles.add(p.toFile());
                         } else if (f.isFile()) {
-                            if (PDF_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
-                            || IMAGE_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))
-                            || SOLID_EXTENSIONS.contains(FileUtil.getExtension(f.getName().toLowerCase()))) {
+                            if (PDF_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
+                            || IMAGE_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
+                            || SOLID_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))) {
                                 acceptedFiles.add(f);
                             }
                         }

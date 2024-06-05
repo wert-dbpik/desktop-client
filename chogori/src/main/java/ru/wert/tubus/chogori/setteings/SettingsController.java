@@ -1,6 +1,5 @@
 package ru.wert.tubus.chogori.setteings;
 
-import com.twelvemonkeys.io.FileUtil;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -8,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import org.apache.commons.io.FilenameUtils;
 import ru.wert.tubus.client.entity.models.AppSettings;
 import ru.wert.tubus.client.entity.models.Prefix;
 import ru.wert.tubus.client.entity.models.VersionAndroid;
@@ -211,7 +211,7 @@ public class SettingsController {
         chooser.setInitialDirectory(new File("C:\\"));
         File file = chooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
         if(file == null) return;
-        String ext = FileUtil.getExtension(file);
+        String ext = FilenameUtils.getExtension(file.getName());
         if(ext.equals("apk")){
             try {
                 ChogoriServices.CH_FILES.upload(file.getName(), "apk", file);
@@ -372,7 +372,7 @@ public class SettingsController {
                     "Укажите другой файл или оставьте пустую строку");
             return false;
         }
-        if (!FileUtil.getExtension(pdfOpener.getName()).equals("exe")) {
+        if (!FilenameUtils.getExtension(pdfOpener.getName()).equals("exe")) {
             Warning1.create("ОШИБКА",
                     String.format("Файл открытия %s не является исполняемым(.exe)", txt),
                     "Укажите другой файл или оставьте пустую строку");

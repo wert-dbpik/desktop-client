@@ -1,10 +1,10 @@
 package ru.wert.tubus.chogori.chat;
 
-import com.twelvemonkeys.io.FileUtil;
 import javafx.scene.control.ListView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import org.apache.commons.io.FilenameUtils;
 import ru.wert.tubus.client.entity.models.Message;
 
 import java.io.File;
@@ -45,7 +45,7 @@ public class ListViewWithMessages_Manipulator {
                     }
                 }
                 for (File file : allFiles) {
-                    String ext = FileUtil.getExtension(file.getName().toLowerCase());
+                    String ext = FilenameUtils.getExtension(file.getName().toLowerCase());
                     if (IMAGE_EXTENSIONS.contains(ext)) {
                         event.acceptTransferModes(TransferMode.MOVE);
                         event.consume();
