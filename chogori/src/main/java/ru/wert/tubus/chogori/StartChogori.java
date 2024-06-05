@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +63,16 @@ public class StartChogori extends Application {
 
         WinformStatic.WF_TEMPDIR = tempDir;
         log.info("WinformStatic.WF_TEMPDIR = tempDir; passed" );
+
+        //Если монитор, заявленный в настройках отсутствует, то при запуске он меняется на основной
+        int targetMonitor = AppProperties.getInstance().getMonitor();
+        List<Screen> screenList = Screen.getScreens();
+        if(targetMonitor > screenList.size()-1){
+            AppProperties.getInstance().setMonitor(0);
+        }
         WinformSettings.CH_MONITOR = AppProperties.getInstance().getMonitor();
+
+
         log.info("AppProperties.getInstance().getMonitor() passed");
 
     }
@@ -111,6 +121,7 @@ public class StartChogori extends Application {
             stage.getIcons().add(AppImages.LOGO_ICON);
 
             stage.show();
+
             controller.centerInitialWindow(stage, true, WinformSettings.CH_MONITOR);
 
 

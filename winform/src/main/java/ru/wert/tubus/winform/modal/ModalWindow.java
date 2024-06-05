@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import ru.wert.tubus.winform.winform_settings.WinformSettings;
 
 import java.util.List;
 
@@ -57,6 +58,8 @@ public class ModalWindow {
      */
     public static void mountStage(Stage window, int monitor) {
         List<Screen> screenList = Screen.getScreens();
+        if(monitor > screenList.size()-1)
+            monitor = 0;
         double screenMinX = screenList.get(monitor).getBounds().getMinX();
         double screenMinY = screenList.get(monitor).getBounds().getMinY();
         double screenWidth = screenList.get(monitor).getBounds().getWidth();

@@ -69,11 +69,20 @@ public class SearchField extends TextField {
      * Если набранных символов меньше равно 6, то ничего не делает
      */
     private String normalizeSearchedStr(String text){
-        if(text.length() <= 6) return text;
+        text = text.replaceAll("\\s+", "");
+        if(text.length() <= 6)
+            return text;
 
         else if(text.length() < 9){
+            if(text.charAt(6) == '/' && text.substring(0, 5).matches("[0-9]+")) {
+                text = text.replaceAll("/", ".");
+            }
+            if(text.charAt(6) == '.'){
+                return text;
+            }
             StringBuilder newText = new StringBuilder(text);
-            return newText.insert(6, ".").toString();
+            return
+                    newText.insert(6, ".").toString();
         }
 
         StringBuilder newText = new StringBuilder(text.replaceAll("[^\\d]", ""));

@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
 import ru.wert.tubus.chogori.tabs.MainTabPane;
 import ru.wert.tubus.winform.statics.WinformStatic;
+import ru.wert.tubus.winform.winform_settings.WinformSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -135,6 +136,7 @@ public class ApplicationController {
 
 
         log.debug("initialize : блок инициализации успешно выполнен");
+
     }
 
 
