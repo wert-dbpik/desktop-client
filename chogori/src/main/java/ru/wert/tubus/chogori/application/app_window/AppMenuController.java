@@ -22,6 +22,7 @@ import ru.wert.tubus.chogori.StartChogori;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
+import ru.wert.tubus.chogori.components.BtnDoublePro;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.chat.SideChat;
@@ -143,6 +144,10 @@ public class AppMenuController {
         searchNowButton.setGraphic(new ImageView(BtnImages.BTN_SEARCH_IMG));
         searchNowButton.setOnAction(e->CH_SEARCH_FIELD.searchNow(CH_SEARCH_FIELD.getText()));
 
+        BtnDoublePro doublePro = new BtnDoublePro(true);
+        Button btnPro = doublePro.create();
+        doublePro.getStateProperty().bindBidirectional(SearchField.searchProProperty);
+
         HBox hbox = new HBox();
 
         CH_SEARCH_FIELD = new SearchField();
@@ -153,7 +158,7 @@ public class AppMenuController {
             CH_SEARCH_FIELD.requestFocus();
         });
         btnClean.setGraphic(new ImageView(BtnImages.BTN_CLEAN_IMG_W));
-        hbox.getChildren().addAll(searchNowButton, CH_SEARCH_FIELD, btnClean);
+        hbox.getChildren().addAll(searchNowButton, CH_SEARCH_FIELD, btnPro, btnClean);
         hbox.setAlignment(Pos.CENTER_RIGHT);
         hbox.setSpacing(2);
         hbox.getStylesheets().add(getClass().getResource("/chogori-css/toolpane-dark.css").toString());

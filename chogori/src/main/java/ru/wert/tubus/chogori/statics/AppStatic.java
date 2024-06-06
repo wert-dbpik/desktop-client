@@ -58,7 +58,7 @@ import static ru.wert.tubus.winform.warnings.WarningMessages.*;
 @Slf4j
 public class AppStatic {
 
-    public static boolean SEARCH_PRO = true;
+//    public static boolean SEARCH_PRO = true;
 
     public static final double CHAT_WIDTH = 250; //первоначальная ширина чата
     public static String BASE_URL = RetrofitClient.baseUrl;

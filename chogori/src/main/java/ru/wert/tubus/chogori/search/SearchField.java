@@ -1,19 +1,18 @@
 package ru.wert.tubus.chogori.search;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseButton;
 import lombok.Getter;
-import ru.wert.tubus.client.interfaces.CatalogGroup;
-import ru.wert.tubus.client.interfaces.Item;
 import ru.wert.tubus.chogori.common.tableView.CatalogableTable;
 import ru.wert.tubus.chogori.common.tableView.ItemTableView;
 import ru.wert.tubus.chogori.popups.PastePopup;
+import ru.wert.tubus.client.interfaces.CatalogGroup;
+import ru.wert.tubus.client.interfaces.Item;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
 
-import static ru.wert.tubus.chogori.statics.AppStatic.SEARCH_PRO;
 
 public class SearchField extends TextField {
 
@@ -22,13 +21,14 @@ public class SearchField extends TextField {
     @Getter private ItemTableView<? extends Item> searchedTableView = null;
     private PastePopup paste = new PastePopup(this);
     private Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    public static BooleanProperty searchProProperty = new SimpleBooleanProperty(true);
 
     public SearchField() {
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue) && searchedTableView != null) {
-                if(SEARCH_PRO) {
+                if(searchProProperty.get()) {
                     seachedext = normalizeSearchedStr(newValue);
                     searchNow(seachedext);
                 } else {
