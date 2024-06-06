@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import ru.wert.tubus.chogori.common.components.BtnDoubleEye;
+import ru.wert.tubus.chogori.components.BtnDoubleEye;
 import ru.wert.tubus.winform.warnings.Warning1;
 
 import java.util.Arrays;

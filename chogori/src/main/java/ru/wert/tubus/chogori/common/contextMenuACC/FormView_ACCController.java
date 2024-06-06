@@ -24,7 +24,7 @@ import ru.wert.tubus.winform.warnings.Warning1;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.wert.tubus.chogori.common.components.BXPrefix.LAST_PREFIX;
+import static ru.wert.tubus.chogori.components.BXPrefix.LAST_PREFIX;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_PRODUCT_GROUPS;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CHECK_ENTERED_NUMBER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_DEFAULT_PREFIX;

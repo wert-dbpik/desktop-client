@@ -22,8 +22,8 @@ import ru.wert.tubus.chogori.entities.folders.Folder_TableView;
 import ru.wert.tubus.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.tubus.chogori.entities.product_groups._ProductGroup_TreeViewPatch;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
-import ru.wert.tubus.chogori.common.components.BtnRollDown;
-import ru.wert.tubus.chogori.common.components.BtnRollUp;
+import ru.wert.tubus.chogori.components.BtnRollDown;
+import ru.wert.tubus.chogori.components.BtnRollUp;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 

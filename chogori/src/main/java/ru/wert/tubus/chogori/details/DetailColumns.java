@@ -8,7 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import ru.wert.tubus.client.entity.models.Detail;
 import ru.wert.tubus.client.entity.models.Passport;
-import ru.wert.tubus.chogori.common.components.VBoxPassport;
+import ru.wert.tubus.chogori.components.VBoxPassport;
 
 public class DetailColumns {
 

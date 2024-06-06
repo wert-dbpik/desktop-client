@@ -10,8 +10,8 @@ import lombok.Getter;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.ProductGroup;
 import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
-import ru.wert.tubus.chogori.common.components.BtnMenuDraftsColumns;
-import ru.wert.tubus.chogori.common.components.BtnMenuDraftsFilter;
+import ru.wert.tubus.chogori.components.BtnMenuDraftsColumns;
+import ru.wert.tubus.chogori.components.BtnMenuDraftsFilter;
 import ru.wert.tubus.chogori.images.BtnImages;
 
 public class Draft_PatchController {

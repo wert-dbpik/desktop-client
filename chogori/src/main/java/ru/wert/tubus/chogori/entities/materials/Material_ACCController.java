@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import ru.wert.tubus.chogori.common.commands.ItemCommands;
-import ru.wert.tubus.chogori.common.components.BXMatType;
+import ru.wert.tubus.chogori.components.BXMatType;
 import ru.wert.tubus.chogori.common.contextMenuACC.FormView_ACCController;
 import ru.wert.tubus.chogori.common.interfaces.IFormView;
 import ru.wert.tubus.chogori.common.tableView.CatalogTableView;

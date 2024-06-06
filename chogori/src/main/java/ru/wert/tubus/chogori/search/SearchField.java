@@ -13,6 +13,8 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 
+import static ru.wert.tubus.chogori.statics.AppStatic.SEARCH_PRO;
+
 public class SearchField extends TextField {
 
     @Getter private String seachedext;
@@ -26,8 +28,13 @@ public class SearchField extends TextField {
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue) && searchedTableView != null) {
-                seachedext = normalizeSearchedStr(newValue);
-                searchNow(seachedext);
+                if(SEARCH_PRO) {
+                    seachedext = normalizeSearchedStr(newValue);
+                    searchNow(seachedext);
+                } else {
+                    seachedext = newValue;
+                    searchNow(seachedext);
+                }
             }
         });
 
@@ -69,29 +76,32 @@ public class SearchField extends TextField {
      * Если набранных символов меньше равно 6, то ничего не делает
      */
     private String normalizeSearchedStr(String text){
-        text = text.replaceAll("\\s+", "");
-        if(text.length() <= 6)
+        String newText = text.replaceAll("\\s+", "");
+        if(!newText.matches("[0-9]+"))
             return text;
 
-        else if(text.length() < 9){
-            if(text.charAt(6) == '/' && text.substring(0, 5).matches("[0-9]+")) {
-                text = text.replaceAll("/", ".");
+        if(newText.length() <= 6)
+            return newText;
+
+        else if(newText.length() < 9){
+            if(newText.charAt(6) == '/' && newText.substring(0, 5).matches("[0-9]+")) {
+                newText = newText.replaceAll("/", ".");
             }
-            if(text.charAt(6) == '.'){
-                return text;
+            if(newText.charAt(6) == '.'){
+                return newText;
             }
-            StringBuilder newText = new StringBuilder(text);
+            StringBuilder sbText = new StringBuilder(newText);
             return
-                    newText.insert(6, ".").toString();
+                    sbText.insert(6, ".").toString();
         }
 
-        StringBuilder newText = new StringBuilder(text.replaceAll("[^\\d]", ""));
-        if(newText.length() >= 9){
-            newText.delete(9, newText.length());
-            newText.insert(6, ".");
-            return newText.toString();
+        StringBuilder sbText = new StringBuilder(newText.replaceAll("[^\\d]", ""));
+        if(sbText.length() >= 9){
+            sbText.delete(9, sbText.length());
+            sbText.insert(6, ".");
+            return sbText.toString();
         } else
-            return text;
+            return newText;
     }
 
 }

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.entity.models.AppSettings;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.retrofit.AppProperties;
-import ru.wert.tubus.chogori.common.components.BXUsers;
+import ru.wert.tubus.chogori.components.BXUsers;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.winform.enums.EPDFViewer;
 import ru.wert.tubus.winform.warnings.Warning1;

@@ -14,7 +14,7 @@ import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.models.UserGroup;
 import ru.wert.tubus.client.interfaces.SearchableTab;
 import ru.wert.tubus.client.interfaces.UpdatableTabController;
-import ru.wert.tubus.chogori.common.components.ChevronButton;
+import ru.wert.tubus.chogori.components.ChevronButton;
 import ru.wert.tubus.chogori.entities.user_groups.UserGroup_Controller;
 import ru.wert.tubus.chogori.entities.user_groups.UserGroup_TableView;
 import ru.wert.tubus.chogori.entities.user_groups._UserGroupPatch;

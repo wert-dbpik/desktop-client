@@ -25,7 +25,7 @@ import ru.wert.tubus.chogori.common.utils.TextUtils;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.client.entity.models.Remark;
-import ru.wert.tubus.chogori.common.components.ZoomableScrollPane;
+import ru.wert.tubus.chogori.components.ZoomableScrollPane;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
 import ru.wert.tubus.chogori.entities.drafts.info.DraftInfoPatch;
 import ru.wert.tubus.chogori.remarks.RemarksController;

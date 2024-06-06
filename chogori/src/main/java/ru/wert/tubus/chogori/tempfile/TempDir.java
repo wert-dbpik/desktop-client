@@ -1,7 +1,7 @@
 package ru.wert.tubus.chogori.tempfile;
 
 import org.apache.commons.io.FileUtils;
-import ru.wert.tubus.chogori.common.components.FileFwdSlash;
+import ru.wert.tubus.chogori.components.FileFwdSlash;
 
 import java.io.File;
 import java.io.IOException;

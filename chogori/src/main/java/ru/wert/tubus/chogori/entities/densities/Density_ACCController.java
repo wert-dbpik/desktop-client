@@ -7,7 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import ru.wert.tubus.chogori.common.commands.ItemCommands;
-import ru.wert.tubus.chogori.common.components.TFDouble;
+import ru.wert.tubus.chogori.components.TFDouble;
 import ru.wert.tubus.chogori.common.contextMenuACC.FormView_ACCController;
 import ru.wert.tubus.chogori.common.interfaces.IFormView;
 import ru.wert.tubus.chogori.common.utils.DoubleParser;

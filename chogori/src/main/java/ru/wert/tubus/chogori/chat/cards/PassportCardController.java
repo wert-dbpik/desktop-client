@@ -6,7 +6,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.tubus.chogori.application.passports.PassportsEditorController;
-import ru.wert.tubus.chogori.common.components.VBoxPassport;
+import ru.wert.tubus.chogori.components.VBoxPassport;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;

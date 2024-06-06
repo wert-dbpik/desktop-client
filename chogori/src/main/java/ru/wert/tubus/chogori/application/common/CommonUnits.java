@@ -2,8 +2,8 @@ package ru.wert.tubus.chogori.application.common;
 
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
-import ru.wert.tubus.chogori.common.components.ChevronButton;
-import ru.wert.tubus.chogori.common.components.ExpandButton;
+import ru.wert.tubus.chogori.components.ChevronButton;
+import ru.wert.tubus.chogori.components.ExpandButton;
 import ru.wert.tubus.chogori.previewer.PreviewerPatch;
 import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
 import ru.wert.tubus.chogori.images.BtnImages;

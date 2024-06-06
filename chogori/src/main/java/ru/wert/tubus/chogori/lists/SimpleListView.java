@@ -7,7 +7,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
 import ru.wert.tubus.client.interfaces.Item;
 import ru.wert.tubus.client.interfaces.ItemService;
-import ru.wert.tubus.chogori.common.components.LogicButton;
+import ru.wert.tubus.chogori.components.LogicButton;
 import ru.wert.tubus.chogori.search.Searchable;
 
 import java.util.List;

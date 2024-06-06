@@ -22,7 +22,7 @@ import ru.wert.tubus.client.interfaces.UpdatableTabController;
 import ru.wert.tubus.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.Passport;
-import ru.wert.tubus.chogori.common.components.BtnDouble;
+import ru.wert.tubus.chogori.components.BtnDouble;
 import ru.wert.tubus.chogori.entities.catalogOfFolders.CatalogOfFoldersPatch;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
 import ru.wert.tubus.chogori.entities.drafts.Draft_Patch;

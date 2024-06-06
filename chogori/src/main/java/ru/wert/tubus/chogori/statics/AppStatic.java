@@ -12,7 +12,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import ru.wert.tubus.chogori.common.components.FileFwdSlash;
+import ru.wert.tubus.chogori.components.FileFwdSlash;
 import ru.wert.tubus.chogori.pdf.PDFReader;
 import ru.wert.tubus.chogori.pdf.readers.PdfJSNewReader;
 import ru.wert.tubus.chogori.pdf.readers.PdfJSOldReader;
@@ -58,6 +58,7 @@ import static ru.wert.tubus.winform.warnings.WarningMessages.*;
 @Slf4j
 public class AppStatic {
 
+    public static boolean SEARCH_PRO = true;
 
     public static final double CHAT_WIDTH = 250; //первоначальная ширина чата
     public static String BASE_URL = RetrofitClient.baseUrl;

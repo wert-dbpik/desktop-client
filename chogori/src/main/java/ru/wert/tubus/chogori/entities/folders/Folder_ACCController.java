@@ -9,7 +9,7 @@ import javafx.scene.layout.StackPane;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.common.commands.ItemCommands;
-import ru.wert.tubus.chogori.common.components.BXProductGroup;
+import ru.wert.tubus.chogori.components.BXProductGroup;
 import ru.wert.tubus.chogori.common.contextMenuACC.FormView_ACCController;
 import ru.wert.tubus.chogori.common.interfaces.IFormView;
 import ru.wert.tubus.chogori.common.tableView.ItemTableView;

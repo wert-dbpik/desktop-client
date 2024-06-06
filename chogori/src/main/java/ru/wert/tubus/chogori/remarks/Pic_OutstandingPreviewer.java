@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import ru.wert.tubus.chogori.common.components.ZoomableScrollPane;
+import ru.wert.tubus.chogori.components.ZoomableScrollPane;
 import ru.wert.tubus.winform.warnings.Warning2;
 import ru.wert.tubus.winform.window_decoration.WindowDecoration;
 

@@ -12,7 +12,7 @@ import ru.wert.tubus.client.entity.models.Material;
 import ru.wert.tubus.client.entity.models.MaterialGroup;
 import ru.wert.tubus.client.interfaces.CatalogGroup;
 import ru.wert.tubus.chogori.common.commands.ItemCommands;
-import ru.wert.tubus.chogori.common.components.BXDensity;
+import ru.wert.tubus.chogori.components.BXDensity;
 import ru.wert.tubus.chogori.common.interfaces.IFormView;
 import ru.wert.tubus.chogori.orthography.Orthography;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;

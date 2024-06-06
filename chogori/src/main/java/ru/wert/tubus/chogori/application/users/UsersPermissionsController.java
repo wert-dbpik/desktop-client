@@ -16,7 +16,7 @@ import ru.wert.tubus.chogori.entities.users.PermissionsController;
 import ru.wert.tubus.chogori.entities.users.User_Controller;
 import ru.wert.tubus.chogori.entities.users.User_TableView;
 import ru.wert.tubus.chogori.entities.users._UserPatch;
-import ru.wert.tubus.chogori.common.components.ChevronButton;
+import ru.wert.tubus.chogori.components.ChevronButton;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.images.BtnImages;

@@ -13,14 +13,6 @@
         <option value="$PROJECT_DIR$/chogori/pom.xml" />
       </list>
     </option>
-    <option name="ignoredFiles">
-      <set>
-        <option value="$PROJECT_DIR$/baza/pom.xml" />
-        <option value="$PROJECT_DIR$/login/pom.xml" />
-        <option value="$PROJECT_DIR$/ru.wert.datapik.winforms/pom.xml" />
-        <option value="$PROJECT_DIR$/viewer/pom.xml" />
-      </set>
-    </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8.0_212" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />

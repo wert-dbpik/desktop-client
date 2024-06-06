@@ -5,7 +5,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
-          <factory-entry name="DataPIK" />
+          <factory-entry name="Tubus" />
           <factory-entry name="administration" />
         </datasource-mapping>
         <naming-strategy-map />

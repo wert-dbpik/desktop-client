@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.ProductGroup;
-import ru.wert.tubus.chogori.common.components.BtnMenuPassportsColumns;
+import ru.wert.tubus.chogori.components.BtnMenuPassportsColumns;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
 import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
 import ru.wert.tubus.chogori.images.BtnImages;

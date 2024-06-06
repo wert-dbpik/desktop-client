@@ -16,7 +16,7 @@ import ru.wert.tubus.client.entity.models.VersionDesktop;
 import ru.wert.tubus.client.retrofit.AppProperties;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
 import ru.wert.tubus.chogori.toolpane.ChogoriToolBar;
-import ru.wert.tubus.chogori.common.components.FileFwdSlash;
+import ru.wert.tubus.chogori.components.FileFwdSlash;
 import ru.wert.tubus.chogori.tempfile.TempDir;
 import ru.wert.tubus.chogori.images.AppImages;
 import ru.wert.tubus.winform.statics.WinformStatic;

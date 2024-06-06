@@ -9,7 +9,7 @@ import javafx.scene.layout.StackPane;
 import ru.wert.tubus.chogori.application.common.CommonUnits;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.client.entity.models.Prefix;
-import ru.wert.tubus.chogori.common.components.BtnDouble;
+import ru.wert.tubus.chogori.components.BtnDouble;
 import ru.wert.tubus.chogori.excel.model.EditorRow;
 import ru.wert.tubus.chogori.excel.table.Excel_Patch;
 import ru.wert.tubus.chogori.excel.table.Excel_PatchController;
