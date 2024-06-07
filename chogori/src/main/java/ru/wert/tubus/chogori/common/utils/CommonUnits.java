@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.application.common;
+package ru.wert.tubus.chogori.common.utils;
 
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;

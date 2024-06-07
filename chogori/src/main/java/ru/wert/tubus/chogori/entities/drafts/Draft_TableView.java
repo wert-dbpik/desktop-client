@@ -97,22 +97,23 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
         //Слушатель работает с задержкой 0,5 сек
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            new Thread(()->{
-                try {
-                    Thread.sleep(500);
+//            new Thread(()->{
+//                try {
+//                    Thread.sleep(500);
                     if (newValue == getSelectionModel().getSelectedItem()) {
-                        if (newValue == null || newValue.getId() == null || previewerController.getCurrentDraft().equals(newValue))
+                        if (newValue == null ||
+                                newValue.getId() == null ||
+                                previewerController.getCurrentDraft() == null ||
+                                previewerController.getCurrentDraft().equals(newValue))
                             return;
                         Platform.runLater(() -> {
                             AppStatic.openDraftInPreviewer(newValue, previewerController);
                         });
-
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }).start();
         });
 
         setOnMouseClicked(e -> {
@@ -122,8 +123,11 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                 else {
                     Platform.runLater(() -> {
                         Draft selectedDraft = getSelectionModel().getSelectedItem();
-                        if (selectedDraft != null)
+                        if (selectedDraft != null) {
+//                            previewerController.setCurrentDraft(selectedDraft);
+                            CH_SEARCH_FIELD.updateSearchHistory(selectedDraft.toUsefulString());
                             AppStatic.openDraftInPreviewer(selectedDraft, previewerController);
+                        }
                     });
                 }
                 e.consume();

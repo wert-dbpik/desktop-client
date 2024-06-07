@@ -132,7 +132,7 @@ public abstract class CatalogTableView<P extends Item, T extends CatalogGroup>  
     public void updateSearchedView(){
         List<P> list = getCurrentItemSearchedList();
         List<P> foundList = new ArrayList<>();
-        String searchedText = CH_SEARCH_FIELD.getText();
+        String searchedText = CH_SEARCH_FIELD.getEditor().getText();
         for(P item : list){
             if(item.toUsefulString().contains(searchedText))
                 foundList.add(item);

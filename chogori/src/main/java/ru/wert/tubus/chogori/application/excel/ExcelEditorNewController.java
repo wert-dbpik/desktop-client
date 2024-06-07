@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import ru.wert.tubus.chogori.application.common.CommonUnits;
+import ru.wert.tubus.chogori.common.utils.CommonUnits;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.client.entity.models.Prefix;
 import ru.wert.tubus.chogori.components.BtnDouble;

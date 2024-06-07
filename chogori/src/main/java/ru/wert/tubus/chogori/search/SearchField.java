@@ -2,45 +2,50 @@ package ru.wert.tubus.chogori.search;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
-import javafx.scene.control.TextField;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import lombok.Getter;
 import ru.wert.tubus.chogori.common.tableView.CatalogableTable;
 import ru.wert.tubus.chogori.common.tableView.ItemTableView;
 import ru.wert.tubus.chogori.popups.PastePopup;
+import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.interfaces.CatalogGroup;
 import ru.wert.tubus.client.interfaces.Item;
 
-import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 
-public class SearchField extends TextField {
+public class SearchField extends ComboBox<String> {
 
     @Getter private String searchedText;
-    @Getter private Set<String> searchHistory = new HashSet<>();
+    @Getter private ObservableSet<String> searchHistory = FXCollections.observableSet();
 
     @Getter private String enteredText;
     private String promptText;
     @Getter private ItemTableView<? extends Item> searchedTableView = null;
-    private PastePopup paste = new PastePopup(this);
+    private PastePopup paste = new PastePopup(this.getEditor());
     private Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     public static BooleanProperty searchProProperty = new SimpleBooleanProperty(true);
 
     public SearchField() {
 
+        setEditable(true);
+        ObservableList<String> texts = FXCollections.observableArrayList();
+        setItems(texts);
+
+        searchHistory.addListener((SetChangeListener<String>) change -> {
+            texts.clear();
+            texts.addAll(searchHistory);
+        });
+
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
-        textProperty().addListener((observable, oldValue, newValue) -> {
+        getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue) && searchedTableView != null) {
                 enteredText = newValue;
                 searchNow();
@@ -54,8 +59,19 @@ public class SearchField extends TextField {
         });
 
 //        focusedProperty().addListener((observable, oldValue, newValue) -> {
-//                System.out.println(searchedText);
+//            if (searchedText == null || searchedText.equals("ЧЕРТЕЖ")) return;
+//            searchHistory.add(searchedText);
 //        });
+
+    }
+
+    /**
+     * Метод, который добавляет новый элемент в историю поиска
+     * @param text, Ыекштп
+     */
+    public void updateSearchHistory(String text){
+        if(text.isEmpty()) return;
+        searchHistory.add(text);
 
     }
 
@@ -64,7 +80,7 @@ public class SearchField extends TextField {
      */
     public void searchNow(){
         if(searchProProperty.get()) {
-            searchedText = normalizeSearchedStr(enteredText);
+            searchedText = normalizeSearchedText(enteredText);
         } else {
             searchedText = enteredText;
         }
@@ -91,11 +107,11 @@ public class SearchField extends TextField {
         this.promptText = promptText;
 
         String searchedText = tableView.getSearchedText();
-        setText(searchedText);
+        getEditor().setText(searchedText);
         if (searchedText.equals(""))
             setPromptText(promptText);
         else
-            setText(searchedText);
+            getEditor().setText(searchedText);
 
     }
 
@@ -104,7 +120,7 @@ public class SearchField extends TextField {
      * вставлять строку с номером с пробелами из 1С
      * Если набранных символов меньше равно 6, то ничего не делает
      */
-    private String normalizeSearchedStr(String text){
+    private String normalizeSearchedText(String text){
         String newText = text.replaceAll("\\s+", "");
         if(newText.matches("[a-zA-Z]+"))
             return text;

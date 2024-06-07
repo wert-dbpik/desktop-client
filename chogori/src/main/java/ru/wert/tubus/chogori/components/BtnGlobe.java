@@ -25,7 +25,7 @@ public class BtnGlobe<P extends Item> extends Button {
 
         if(view instanceof RoutineTableView) {
             setOnAction((e) -> {
-                CH_SEARCH_FIELD.setText("");
+                CH_SEARCH_FIELD.getEditor().setText("");
                 view.setSearchedText("");
                 ((RoutineTableView<P>) view).setModifyingItem(null);
                 view.updateView();

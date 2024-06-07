@@ -95,7 +95,7 @@ public class Passport_PatchController {
         btnPassportsGlobe.setTooltip(new Tooltip("Показать все"));
         btnPassportsGlobe.setOnAction((e) -> {
             lblSourceOfPassports.setText("...");
-            CH_SEARCH_FIELD.setText("");
+            CH_SEARCH_FIELD.getEditor().setText("");
             passportsTable.setSearchedText("");
             passportsTable.setModifyingItem(null);
             passportsTable.updateView();

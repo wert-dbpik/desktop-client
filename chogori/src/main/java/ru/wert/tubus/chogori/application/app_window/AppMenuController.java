@@ -159,7 +159,7 @@ public class AppMenuController {
         CH_SEARCH_FIELD.setPrefWidth(300);
         Button btnClean = new Button();
         btnClean.setOnAction((e)->{
-            CH_SEARCH_FIELD.setText("");
+            CH_SEARCH_FIELD.getEditor().setText("");
             CH_SEARCH_FIELD.requestFocus();
         });
         btnClean.setGraphic(new ImageView(BtnImages.BTN_CLEAN_IMG_W));

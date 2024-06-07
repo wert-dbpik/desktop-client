@@ -13,7 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.application.common.CommonUnits;
+import ru.wert.tubus.chogori.common.utils.CommonUnits;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.ProductGroup;
 import ru.wert.tubus.client.interfaces.Item;

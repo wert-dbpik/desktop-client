@@ -89,7 +89,12 @@ public class PreviewerPatchController {
     private boolean useBtnShowInfo;
     @Setter@Getter private Draft_TableView draftsTableView;
     private ObjectProperty<Draft> currentDraft = new SimpleObjectProperty<>();
-    public Draft getCurrentDraft(){return this.currentDraft.get();};
+    public Draft getCurrentDraft(){
+        return this.currentDraft.get();
+    };
+    public void setCurrentDraft(Draft draft){
+        currentDraft.setValue(draft);
+    }
 
     private File currentDraftPath;
 

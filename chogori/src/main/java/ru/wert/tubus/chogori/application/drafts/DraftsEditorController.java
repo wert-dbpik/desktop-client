@@ -9,7 +9,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.application.common.CommonUnits;
+import ru.wert.tubus.chogori.common.utils.CommonUnits;
 import ru.wert.tubus.chogori.entities.catalogOfFolders.CatalogOfFoldersPatch;
 import ru.wert.tubus.chogori.entities.drafts.Draft_Patch;
 import ru.wert.tubus.chogori.entities.drafts.Draft_PatchController;
