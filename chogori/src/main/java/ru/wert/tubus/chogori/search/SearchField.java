@@ -2,6 +2,12 @@ package ru.wert.tubus.chogori.search;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import lombok.Getter;
@@ -11,15 +17,18 @@ import ru.wert.tubus.chogori.popups.PastePopup;
 import ru.wert.tubus.client.interfaces.CatalogGroup;
 import ru.wert.tubus.client.interfaces.Item;
 
+import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class SearchField extends TextField {
 
     @Getter private String searchedText;
-    @Getter private List<String> searchHistory;
+    @Getter private Set<String> searchHistory = new HashSet<>();
 
     @Getter private String enteredText;
     private String promptText;
@@ -44,7 +53,9 @@ public class SearchField extends TextField {
             }
         });
 
-
+//        focusedProperty().addListener((observable, oldValue, newValue) -> {
+//                System.out.println(searchedText);
+//        });
 
     }
 
