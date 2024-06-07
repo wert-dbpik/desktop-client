@@ -58,6 +58,7 @@ public class SearchField extends ComboBox<String> {
             }
         });
 
+//                  ПРОБНАЯ ФУНКЦИЯ
 //        focusedProperty().addListener((observable, oldValue, newValue) -> {
 //            if (searchedText == null || searchedText.equals("ЧЕРТЕЖ")) return;
 //            searchHistory.add(searchedText);
@@ -128,7 +129,7 @@ public class SearchField extends ComboBox<String> {
         if(newText.length() <= 6)
             return newText;
 
-        else if(newText.length() < 9){
+        else if(newText.length() < 10){
             if(newText.charAt(6) == '/' && newText.substring(0, 5).matches("[0-9]+")) {
                 newText = newText.replaceAll("/", ".");
             }

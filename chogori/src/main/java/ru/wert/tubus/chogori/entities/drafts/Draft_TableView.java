@@ -117,20 +117,18 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         });
 
         setOnMouseClicked(e -> {
-            if (e.getButton().equals(MouseButton.PRIMARY) ) {
-                if (e.getClickCount() == 2)
-                    AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
-                else {
+            Draft selectedDraft = getSelectionModel().getSelectedItem();
+            if (selectedDraft == null) return;
+            CH_SEARCH_FIELD.updateSearchHistory(selectedDraft.toUsefulString());
+            if (e.getButton().equals(MouseButton.PRIMARY)) {
+                if (e.getClickCount() == 1)
                     Platform.runLater(() -> {
-                        Draft selectedDraft = getSelectionModel().getSelectedItem();
-                        if (selectedDraft != null) {
-//                            previewerController.setCurrentDraft(selectedDraft);
-                            CH_SEARCH_FIELD.updateSearchHistory(selectedDraft.toUsefulString());
-                            AppStatic.openDraftInPreviewer(selectedDraft, previewerController);
-                        }
+                        AppStatic.openDraftInPreviewer(selectedDraft, previewerController);
                     });
+                else {
+                    AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
                 }
-                e.consume();
+//                e.consume();
             }
         });
 
