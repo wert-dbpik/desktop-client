@@ -13,11 +13,14 @@ import ru.wert.tubus.client.interfaces.Item;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
+import java.util.List;
 
 
 public class SearchField extends TextField {
 
-    @Getter private String seachedText;
+    @Getter private String searchedText;
+    @Getter private List<String> searchHistory;
+
     @Getter private String enteredText;
     private String promptText;
     @Getter private ItemTableView<? extends Item> searchedTableView = null;
@@ -41,20 +44,23 @@ public class SearchField extends TextField {
             }
         });
 
+
+
     }
 
-    public void searchNow(){
-        if(searchProProperty.get()) {
-            seachedText = normalizeSearchedStr(enteredText);
-        } else {
-            seachedText = enteredText;
-        }
-        search(seachedText);
-    }
     /**
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, насильственный поиск
      */
-    public void search(String newValue) {
+    public void searchNow(){
+        if(searchProProperty.get()) {
+            searchedText = normalizeSearchedStr(enteredText);
+        } else {
+            searchedText = enteredText;
+        }
+        search(searchedText);
+    }
+
+    private void search(String newValue) {
         searchedTableView.setSearchedText(newValue);
         if (newValue.equals("")) {
             setPromptText(promptText);

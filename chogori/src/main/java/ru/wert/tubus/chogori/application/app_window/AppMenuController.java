@@ -1,5 +1,7 @@
 package ru.wert.tubus.chogori.application.app_window;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -147,6 +149,9 @@ public class AppMenuController {
         BtnDoublePro doublePro = new BtnDoublePro(true);
         Button btnPro = doublePro.create();
         doublePro.getStateProperty().bindBidirectional(SearchField.searchProProperty);
+        doublePro.getStateProperty().addListener((observable, oldValue, newValue) -> {
+            CH_SEARCH_FIELD.searchNow();
+        });
 
         HBox hbox = new HBox();
 
