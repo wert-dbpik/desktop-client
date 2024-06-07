@@ -142,7 +142,7 @@ public class AppMenuController {
         Button searchNowButton = new Button();
         searchNowButton.setText("");
         searchNowButton.setGraphic(new ImageView(BtnImages.BTN_SEARCH_IMG));
-        searchNowButton.setOnAction(e->CH_SEARCH_FIELD.searchNow(CH_SEARCH_FIELD.getText()));
+        searchNowButton.setOnAction(e->CH_SEARCH_FIELD.searchNow());
 
         BtnDoublePro doublePro = new BtnDoublePro(true);
         Button btnPro = doublePro.create();

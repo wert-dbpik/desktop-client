@@ -57,7 +57,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
     public synchronized void updateSearchedView(){
         List<P> list = getCurrentItemSearchedList();
         List<P> foundList = new ArrayList<>();
-        String searchedText = CH_SEARCH_FIELD.getSeachedext();
+        String searchedText = CH_SEARCH_FIELD.getSeachedText();
         for(P item : list){
             if(item.toUsefulString().toLowerCase().contains(searchedText.toLowerCase()))
                 foundList.add(item);

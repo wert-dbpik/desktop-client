@@ -3,6 +3,7 @@ package ru.wert.tubus.chogori.search;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import lombok.Getter;
 import ru.wert.tubus.chogori.common.tableView.CatalogableTable;
 import ru.wert.tubus.chogori.common.tableView.ItemTableView;
@@ -16,7 +17,8 @@ import java.awt.datatransfer.Clipboard;
 
 public class SearchField extends TextField {
 
-    @Getter private String seachedext;
+    @Getter private String seachedText;
+    @Getter private String enteredText;
     private String promptText;
     @Getter private ItemTableView<? extends Item> searchedTableView = null;
     private PastePopup paste = new PastePopup(this);
@@ -28,21 +30,31 @@ public class SearchField extends TextField {
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue) && searchedTableView != null) {
-                if(searchProProperty.get()) {
-                    seachedext = normalizeSearchedStr(newValue);
-                    searchNow(seachedext);
-                } else {
-                    seachedext = newValue;
-                    searchNow(seachedext);
-                }
+                enteredText = newValue;
+                searchNow();
+            }
+        });
+
+        setOnKeyPressed(e->{
+            if(e.getCode().equals(KeyCode.ENTER)){
+                searchNow();
             }
         });
 
     }
+
+    public void searchNow(){
+        if(searchProProperty.get()) {
+            seachedText = normalizeSearchedStr(enteredText);
+        } else {
+            seachedText = enteredText;
+        }
+        search(seachedText);
+    }
     /**
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, насильственный поиск
      */
-    public void searchNow(String newValue) {
+    public void search(String newValue) {
         searchedTableView.setSearchedText(newValue);
         if (newValue.equals("")) {
             setPromptText(promptText);
@@ -77,7 +89,7 @@ public class SearchField extends TextField {
      */
     private String normalizeSearchedStr(String text){
         String newText = text.replaceAll("\\s+", "");
-        if(!newText.matches("[0-9]+"))
+        if(newText.matches("[a-zA-Z]+"))
             return text;
 
         if(newText.length() <= 6)
