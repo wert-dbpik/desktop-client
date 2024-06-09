@@ -27,7 +27,7 @@ public class Draft_OutstandingPreviewer {
         previewerPatchController.initPreviewer(CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
         previewerPatchController.initPreviewerToolBar(false, false, true, false, false);
         rootPane.getChildren().add(previewerPatch.getParent());
-        openDraftInPreviewer(draft, previewerPatchController);
+        openDraftInPreviewer(draft, previewerPatchController, false);
 
         new WindowDecoration("", rootPane, true, owner, true);
 

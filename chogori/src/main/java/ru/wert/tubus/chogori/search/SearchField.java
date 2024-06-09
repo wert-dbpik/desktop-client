@@ -1,17 +1,16 @@
 package ru.wert.tubus.chogori.search;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
+import javafx.collections.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import lombok.Getter;
 import ru.wert.tubus.chogori.common.tableView.CatalogableTable;
 import ru.wert.tubus.chogori.common.tableView.ItemTableView;
 import ru.wert.tubus.chogori.popups.PastePopup;
+import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.interfaces.CatalogGroup;
 import ru.wert.tubus.client.interfaces.Item;
@@ -19,12 +18,16 @@ import ru.wert.tubus.client.interfaces.Item;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
+import java.util.List;
+
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_DRAFTS;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 
 public class SearchField extends ComboBox<String> {
 
     @Getter private String searchedText;
-    @Getter private ObservableSet<String> searchHistory = FXCollections.observableSet();
+//    @Getter private final ObservableList<String> searchHistory = FXCollections.observableArrayList();
 
     @Getter private String enteredText;
     private String promptText;
@@ -36,13 +39,8 @@ public class SearchField extends ComboBox<String> {
     public SearchField() {
 
         setEditable(true);
-        ObservableList<String> texts = FXCollections.observableArrayList();
-        setItems(texts);
-
-        searchHistory.addListener((SetChangeListener<String>) change -> {
-            texts.clear();
-            texts.addAll(searchHistory);
-        });
+//        ObservableList<String> texts = FXCollections.observableArrayList();
+        setItems(FXCollections.observableArrayList());
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
@@ -67,13 +65,16 @@ public class SearchField extends ComboBox<String> {
     }
 
     /**
-     * Метод, который добавляет новый элемент в историю поиска
-     * @param text, Ыекштп
+     * Метод добавляет новый элемент в историю поиска в начало списка
+     * Если элемент уже присутствует, то перемещает его в начало списка
+     * @param historyList, List<String>
      */
-    public void updateSearchHistory(String text){
-        if(text.isEmpty()) return;
-        searchHistory.add(text);
-
+    public void updateSearchHistory(List<String> historyList) {
+        if (historyList.isEmpty()) return;
+        String selectedItem = getSelectionModel().getSelectedItem();
+        getItems().clear();
+        getItems().addAll(historyList);
+        getSelectionModel().select(selectedItem);
     }
 
     /**
@@ -145,6 +146,8 @@ public class SearchField extends ComboBox<String> {
         if(sbText.length() >= 9){
             sbText.delete(9, sbText.length());
             sbText.insert(6, ".");
+            List<Draft> foundDrafts = CH_DRAFTS.findAllByText(sbText.toString());
+//            CH_SEARCH_FIELD.updateSearchHistory(foundDrafts.get(0).toUsefulString());
             return sbText.toString();
         } else
             return newText;

@@ -2,6 +2,7 @@ package ru.wert.tubus.chogori.previewer;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -47,6 +48,7 @@ import java.util.*;
 import static java.lang.String.format;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
 //import ru.wert.datapik.client.entity.models.Draft;
@@ -78,7 +80,8 @@ public class PreviewerPatchController {
 
     private ImageView imageView;
 
-    public static List<Draft> HISTORY_PREVIEW = new ArrayList<>();
+    public static List<Draft> HISTORY_PREVIEW = new ArrayList<>(); //Чертежи все, которые были в Превью
+    public static List<String> SEARCH_HISTORY = new ArrayList<>(); //История для поиска, чертежи, по которым кликнули
 
     ContextMenu contextMenu;
     private PDFReader pdfReader; //см enum PDFViewer
@@ -182,7 +185,7 @@ public class PreviewerPatchController {
             for(Draft d : list){
                 String name = d.toUsefulString() + ", " + EDraftType.getDraftTypeById(d.getDraftType()).getShortName() + "-" + d.getPageNumber();
                 MenuItem item = new MenuItem(name);
-                item.setOnAction(e->openDraftInPreviewer(d, PreviewerPatchController.this));
+                item.setOnAction(e->openDraftInPreviewer(d, PreviewerPatchController.this, false));
                 menu.getItems().add(item);
             }
 
@@ -251,7 +254,7 @@ public class PreviewerPatchController {
         updateDraftView.setOnAction(event -> {
             if(draftsTableView == null) return;
             Draft selectedDraft = draftsTableView.getSelectionModel().getSelectedItem();
-            openDraftInPreviewer(selectedDraft, this);
+            openDraftInPreviewer(selectedDraft, this, false);
         });
 
         hboxPreviewerButtons.getChildren().add(btnWatchPreviewHistory);
@@ -360,6 +363,22 @@ public class PreviewerPatchController {
         if(draft == null) return;
         HISTORY_PREVIEW.removeIf(d -> d.equals(draft));
         HISTORY_PREVIEW.add(draft);
+    }
+
+    public static void updateSearchHistory(Draft draft){
+        if(draft == null) return;
+        String stringDraft = draft.toUsefulString();
+        ObservableList<String> searchHistory = CH_SEARCH_FIELD.getItems();
+//        String selectedItem = CH_SEARCH_FIELD.getSelectionModel().getSelectedItem();
+        if(searchHistory.contains(stringDraft)){
+            int index = searchHistory.indexOf(stringDraft);
+            searchHistory.add(0, stringDraft);
+//            if(selectedItem.equals(stringDraft))
+//                CH_SEARCH_FIELD.getSelectionModel().select(0);
+            searchHistory.remove(index + 1);
+        } else {
+            searchHistory.add(0, stringDraft);
+        }
     }
 
 }

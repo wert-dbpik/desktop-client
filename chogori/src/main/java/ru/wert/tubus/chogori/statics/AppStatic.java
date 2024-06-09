@@ -142,9 +142,10 @@ public class AppStatic {
      * @param draft Draft
      * @param previewerController PreviewerController
      */
-    public static void openDraftInPreviewer(Draft draft, PreviewerPatchController previewerController) {
+    public static void openDraftInPreviewer(Draft draft, PreviewerPatchController previewerController, boolean fixSearchHistory) {
         if (draft != null) {
             PreviewerPatchController.addPreviewToHistory(draft);
+            if(fixSearchHistory)  PreviewerPatchController.updateSearchHistory(draft);
             //Нам нужен id загружаемого файла, так как он совпадает с его именем
             Long fileId = draft.getId();
             //и расширение
@@ -216,7 +217,7 @@ public class AppStatic {
 
             CH_TAB_PANE.createNewTab(tabId, tabName, previewerPatch.getParent(), showTabNow, null);
 
-            AppStatic.openDraftInPreviewer(d, previewerController);
+            AppStatic.openDraftInPreviewer(d, previewerController, false);
 
         }
     }

@@ -12,6 +12,7 @@ import lombok.Setter;
 import ru.wert.tubus.client.interfaces.Item;
 import ru.wert.tubus.chogori.common.interfaces.ITableView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ItemTableView<P extends Item>  extends TableView<P> implements ITableView<P> {
@@ -25,6 +26,7 @@ public abstract class ItemTableView<P extends Item>  extends TableView<P> implem
     public abstract List<P> prepareList();
 
     @Getter@Setter protected String searchedText; //Искомый текст
+    @Getter@Setter protected List<String> searchHistory = new ArrayList<>(); //История поиска
 
     protected BooleanProperty globalOffProperty = new SimpleBooleanProperty(); //Режим всеобщего представления вкл
     public BooleanProperty getGlobalOffProperty(){return globalOffProperty;}

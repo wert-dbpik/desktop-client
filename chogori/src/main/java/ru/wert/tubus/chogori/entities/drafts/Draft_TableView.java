@@ -97,33 +97,27 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
         //Слушатель работает с задержкой 0,5 сек
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            new Thread(()->{
-//                try {
-//                    Thread.sleep(500);
-                    if (newValue == getSelectionModel().getSelectedItem()) {
-                        if (newValue == null ||
-                                newValue.getId() == null ||
-                                previewerController.getCurrentDraft() == null ||
-                                previewerController.getCurrentDraft().equals(newValue))
-                            return;
-                        Platform.runLater(() -> {
-                            AppStatic.openDraftInPreviewer(newValue, previewerController);
-                        });
-                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
+            if (newValue == getSelectionModel().getSelectedItem()) {
+                if (newValue == null ||
+                        newValue.getId() == null ||
+                        previewerController.getCurrentDraft() == null ||
+                        previewerController.getCurrentDraft().equals(newValue))
+                    return;
+                Platform.runLater(() -> {
+                    AppStatic.openDraftInPreviewer(newValue, previewerController, false);
+                });
+            }
+
         });
 
         setOnMouseClicked(e -> {
             Draft selectedDraft = getSelectionModel().getSelectedItem();
             if (selectedDraft == null) return;
-            CH_SEARCH_FIELD.updateSearchHistory(selectedDraft.toUsefulString());
+//            CH_SEARCH_FIELD.updateSearchHistory(selectedDraft.toUsefulString());
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 if (e.getClickCount() == 1)
                     Platform.runLater(() -> {
-                        AppStatic.openDraftInPreviewer(selectedDraft, previewerController);
+                        AppStatic.openDraftInPreviewer(selectedDraft, previewerController, true);
                     });
                 else {
                     AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());

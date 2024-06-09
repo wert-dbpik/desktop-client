@@ -39,10 +39,10 @@ public class Draft_Patch {
             List<Draft> drafts = new ArrayList<>(newValue);
             if (!drafts.isEmpty()) {
                 drafts.sort(Comparators.draftsForPreviewerComparator());
-                AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController);
+                AppStatic.openDraftInPreviewer(drafts.get(0), previewerPatchController, false);
             } else {
                 //Отображаем NO_IMAGE
-                AppStatic.openDraftInPreviewer(null, previewerPatchController);
+                AppStatic.openDraftInPreviewer(null, previewerPatchController, false);
             }
         });
     }

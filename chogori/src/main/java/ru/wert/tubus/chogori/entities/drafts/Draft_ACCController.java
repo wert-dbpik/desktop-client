@@ -1219,7 +1219,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         }
         else {
-            AppStatic.openDraftInPreviewer(oldItem, previewerController);
+            AppStatic.openDraftInPreviewer(oldItem, previewerController, false);
         }
     }
 

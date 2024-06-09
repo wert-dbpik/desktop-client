@@ -1,6 +1,8 @@
 package ru.wert.tubus.chogori.common.tableView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
+import lombok.Getter;
 import ru.wert.tubus.client.interfaces.Item;
 import ru.wert.tubus.client.interfaces.ItemService;
 import ru.wert.tubus.chogori.common.commands.ItemCommands;
@@ -63,6 +65,12 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
                 foundList.add(item);
         }
         updateForm(foundList);
+        Platform.runLater(()->{
+            if(!getItems().isEmpty()) {
+                getFocusModel().focus(0);
+                getSelectionModel().select(getItems().get(0));
+            }
+        });
     }
 
     /**
