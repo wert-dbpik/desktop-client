@@ -365,20 +365,4 @@ public class PreviewerPatchController {
         HISTORY_PREVIEW.add(draft);
     }
 
-    public static void updateSearchHistory(Draft draft){
-        if(draft == null) return;
-        String stringDraft = draft.toUsefulString();
-        ObservableList<String> searchHistory = CH_SEARCH_FIELD.getItems();
-//        String selectedItem = CH_SEARCH_FIELD.getSelectionModel().getSelectedItem();
-        if(searchHistory.contains(stringDraft)){
-            int index = searchHistory.indexOf(stringDraft);
-            searchHistory.add(0, stringDraft);
-//            if(selectedItem.equals(stringDraft))
-//                CH_SEARCH_FIELD.getSelectionModel().select(0);
-            searchHistory.remove(index + 1);
-        } else {
-            searchHistory.add(0, stringDraft);
-        }
-    }
-
 }

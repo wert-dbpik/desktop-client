@@ -3,6 +3,8 @@ package ru.wert.tubus.chogori.search;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
@@ -15,9 +17,9 @@ import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.interfaces.CatalogGroup;
 import ru.wert.tubus.client.interfaces.Item;
 
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_DRAFTS;
@@ -27,7 +29,7 @@ import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 public class SearchField extends ComboBox<String> {
 
     @Getter private String searchedText;
-//    @Getter private final ObservableList<String> searchHistory = FXCollections.observableArrayList();
+    @Getter private final List<String> searchHistory = new ArrayList<>();
 
     @Getter private String enteredText;
     private String promptText;
@@ -56,25 +58,21 @@ public class SearchField extends ComboBox<String> {
             }
         });
 
+        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updateSearchHistory(newValue);
+            searchedTableView.requestFocus();
+        });
+
+        getEditor().setOnMouseClicked(e->{
+            getEditor().selectAll();
+        });
+
 //                  ПРОБНАЯ ФУНКЦИЯ
 //        focusedProperty().addListener((observable, oldValue, newValue) -> {
 //            if (searchedText == null || searchedText.equals("ЧЕРТЕЖ")) return;
 //            searchHistory.add(searchedText);
 //        });
 
-    }
-
-    /**
-     * Метод добавляет новый элемент в историю поиска в начало списка
-     * Если элемент уже присутствует, то перемещает его в начало списка
-     * @param historyList, List<String>
-     */
-    public void updateSearchHistory(List<String> historyList) {
-        if (historyList.isEmpty()) return;
-        String selectedItem = getSelectionModel().getSelectedItem();
-        getItems().clear();
-        getItems().addAll(historyList);
-        getSelectionModel().select(selectedItem);
     }
 
     /**
@@ -117,6 +115,28 @@ public class SearchField extends ComboBox<String> {
 
     }
 
+    public void updateSearchDraftHistory(Draft draft){
+        if(draft == null) return;
+        updateSearchHistory(draft.toUsefulString());
+    }
+
+    public void updateSearchHistory(String stringDraft){
+        if(stringDraft == null) return;
+        if(searchHistory.contains(stringDraft)){
+            //Если чертеж уже в поле поиска, то ничего делать не надо
+            if(stringDraft.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())) return;
+            int index = searchHistory.indexOf(stringDraft);
+            searchHistory.add(0, stringDraft);
+            searchHistory.remove(index + 1);
+        } else {
+            searchHistory.add(0, stringDraft);
+        }
+
+        if (searchHistory.isEmpty()) return;
+        getItems().clear();
+        getItems().addAll(searchHistory);
+    }
+
     /**
      * Позволяет опускать точку при поиске,
      * вставлять строку с номером с пробелами из 1С
@@ -124,7 +144,7 @@ public class SearchField extends ComboBox<String> {
      */
     private String normalizeSearchedText(String text){
         String newText = text.replaceAll("\\s+", "");
-        if(newText.matches("[a-zA-Z]+"))
+        if(newText.matches("[a-zA-ZА-яа-я-]+"))
             return text;
 
         if(newText.length() <= 6)

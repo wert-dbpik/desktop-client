@@ -113,7 +113,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         setOnMouseClicked(e -> {
             Draft selectedDraft = getSelectionModel().getSelectedItem();
             if (selectedDraft == null) return;
-//            CH_SEARCH_FIELD.updateSearchHistory(selectedDraft.toUsefulString());
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 if (e.getClickCount() == 1)
                     Platform.runLater(() -> {
@@ -122,8 +121,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                 else {
                     AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
                 }
-//                e.consume();
-            }
+                e.consume();
+            };
         });
 
        //Здесь происходит включение поиска по чертежам

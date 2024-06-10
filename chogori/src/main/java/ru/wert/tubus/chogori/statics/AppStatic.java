@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.tubus.winform.statics.WinformStatic.*;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
@@ -141,11 +142,12 @@ public class AppStatic {
      * Открывает чертеж в предпросмотрщике
      * @param draft Draft
      * @param previewerController PreviewerController
+     * @param fixSearchHistory boolean, флаг указывающий, что необходимо обновить историю поиска
      */
     public static void openDraftInPreviewer(Draft draft, PreviewerPatchController previewerController, boolean fixSearchHistory) {
         if (draft != null) {
             PreviewerPatchController.addPreviewToHistory(draft);
-            if(fixSearchHistory)  PreviewerPatchController.updateSearchHistory(draft);
+            if(fixSearchHistory)  CH_SEARCH_FIELD.updateSearchDraftHistory(draft);
             //Нам нужен id загружаемого файла, так как он совпадает с его именем
             Long fileId = draft.getId();
             //и расширение
