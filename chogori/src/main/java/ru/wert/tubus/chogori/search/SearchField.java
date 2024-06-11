@@ -49,23 +49,39 @@ public class SearchField extends ComboBox<String> {
             if (!oldValue.equals(newValue) && searchedTableView != null) {
                 enteredText = newValue;
                 searchNow();
+                //Если произошла вставка номера
+                if (newValue.length() - oldValue.length() > 1) {
+                    requestFocusAndSelect();
+                }
             }
         });
 
         setOnKeyPressed(e->{
             if(e.getCode().equals(KeyCode.ENTER)){
                 searchNow();
+                requestFocusAndSelect();
             }
         });
 
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateSearchHistory(newValue);
-            searchedTableView.requestFocus();
+            requestFocusAndSelect();
         });
 
         getEditor().setOnMouseClicked(e->{
             getEditor().selectAll();
         });
+
+        getItems().addListener((ListChangeListener<String>) c -> {
+
+        });
+
+    }
+
+    private void requestFocusAndSelect() {
+        searchedTableView.requestFocus();
+        if(!searchedTableView.getItems().isEmpty())
+            searchedTableView.getSelectionModel().select(0);
 
     }
 
@@ -116,6 +132,10 @@ public class SearchField extends ComboBox<String> {
 
     public void updateSearchHistory(String stringDraft){
         if(stringDraft == null) return;
+
+        String textInEditor = getEditor().getText();
+        int selectedDraft = searchedTableView.getSelectionModel().getSelectedIndex();
+
         ObservableList<String> searchHistory = getItems();
         if(searchHistory.contains(stringDraft)){
             //Если чертеж уже в поле поиска, то ничего делать не надо
@@ -126,6 +146,9 @@ public class SearchField extends ComboBox<String> {
         } else {
             searchHistory.add(0, stringDraft);
         }
+
+        getEditor().setText(textInEditor);
+        searchedTableView.getSelectionModel().select(selectedDraft);
 
     }
 
