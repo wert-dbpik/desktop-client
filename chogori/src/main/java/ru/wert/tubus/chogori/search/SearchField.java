@@ -67,12 +67,6 @@ public class SearchField extends ComboBox<String> {
             getEditor().selectAll();
         });
 
-//                  ПРОБНАЯ ФУНКЦИЯ
-//        focusedProperty().addListener((observable, oldValue, newValue) -> {
-//            if (searchedText == null || searchedText.equals("ЧЕРТЕЖ")) return;
-//            searchHistory.add(searchedText);
-//        });
-
     }
 
     /**
@@ -122,6 +116,7 @@ public class SearchField extends ComboBox<String> {
 
     public void updateSearchHistory(String stringDraft){
         if(stringDraft == null) return;
+        ObservableList<String> searchHistory = getItems();
         if(searchHistory.contains(stringDraft)){
             //Если чертеж уже в поле поиска, то ничего делать не надо
             if(stringDraft.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())) return;
@@ -132,10 +127,8 @@ public class SearchField extends ComboBox<String> {
             searchHistory.add(0, stringDraft);
         }
 
-        if (searchHistory.isEmpty()) return;
-        getItems().clear();
-        getItems().addAll(searchHistory);
     }
+
 
     /**
      * Позволяет опускать точку при поиске,
