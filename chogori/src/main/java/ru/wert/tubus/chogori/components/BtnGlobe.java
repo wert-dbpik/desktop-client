@@ -18,6 +18,7 @@ import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 public class BtnGlobe<P extends Item> extends Button {
 
     public BtnGlobe(Searchable<P> view) {
+
         setGraphic(new ImageView(BTN_GLOBE_IMG));
         setTooltip(new Tooltip("Показать все"));
 
@@ -25,10 +26,10 @@ public class BtnGlobe<P extends Item> extends Button {
 
         if(view instanceof RoutineTableView) {
             setOnAction((e) -> {
-                CH_SEARCH_FIELD.getEditor().setText("");
                 view.setSearchedText("");
                 ((RoutineTableView<P>) view).setModifyingItem(null);
                 view.updateView();
+                ((RoutineTableView<P>) view).requestFocus();
             });
         }
 

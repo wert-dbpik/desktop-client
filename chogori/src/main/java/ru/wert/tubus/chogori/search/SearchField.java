@@ -157,25 +157,29 @@ public class SearchField extends ComboBox<String> {
     }
 
     public void updateSearchHistory(String stringDraft){
-//        userAction.set(false);
-//        String selectedItem = getSelectionModel().getSelectedItem();
-
         if(stringDraft == null) return;
+
+        userAction.set(false);
+        String selectedItem = getSelectionModel().getSelectedItem();
+
         ObservableList<String> searchHistory = getItems();
         if (searchHistory.contains(stringDraft)) {
             //Если чертеж уже в поле поиска, то ничего делать не надо
-            if (stringDraft.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem()))
+            if (stringDraft.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())){
+                getSelectionModel().select(selectedItem);
+                userAction.set(true);
                 return;
+            }
+
             int index = searchHistory.indexOf(stringDraft);
             searchHistory.add(0, stringDraft);
             searchHistory.remove(index + 1);
         } else {
             searchHistory.add(0, stringDraft);
-//            userAction.set(false);
         }
 
-//        getSelectionModel().select(selectedItem);
-//        userAction.set(true);
+        getSelectionModel().select(selectedItem);
+        userAction.set(true);
 
 
     }

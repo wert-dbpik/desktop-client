@@ -109,9 +109,9 @@ public class Draft_PatchController {
         btnDraftsGlobe.setId("patchButton");
         btnDraftsGlobe.setOnAction(e->{
             draftsTable.setSelectedFolders(null);
-            draftsTable.setSearchedText("");
             draftsTable.setModifyingItem(null);
             draftsTable.updateView();
+            draftsTable.requestFocus();
             showSourceOfPassports(null);
             e.consume();
         });
