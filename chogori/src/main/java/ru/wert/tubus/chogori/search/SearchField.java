@@ -79,6 +79,7 @@ public class SearchField extends ComboBox<String> {
 
         //При выборе элемента в выпадающем списке фокус переходит в таблицу с найденным
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
             searchedTableView.requestFocus();
         });
 
