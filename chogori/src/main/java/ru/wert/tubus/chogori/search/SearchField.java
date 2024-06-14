@@ -1,7 +1,10 @@
 package ru.wert.tubus.chogori.search;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -18,6 +21,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_DRAFTS;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
@@ -36,8 +40,12 @@ public class SearchField extends ComboBox<String> {
     public static BooleanProperty searchProProperty = new SimpleBooleanProperty(true);
 
     public static boolean allTextIsSelected;
+    private TextField editor;
+    final AtomicBoolean userAction = new AtomicBoolean(true);
 
     public SearchField() {
+
+        editor = getEditor();
 
         setEditable(true);
 //        ObservableList<String> texts = FXCollections.observableArrayList();
@@ -45,25 +53,45 @@ public class SearchField extends ComboBox<String> {
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!oldValue.equals(newValue) && searchedTableView != null) {
-                enteredText = newValue;
-                searchNow();
+            // Если значение устанавливается не этим слушателем
+            if (userAction.compareAndSet(true, false)) {
+//                Platform.runLater(() -> {
+                    if (!oldValue.equals(newValue) && searchedTableView != null) {
+                        enteredText = newValue;
+                        searchNow();
+                        //Если произошла вставка
+                        if (newValue.length() - oldValue.length() > 1)
+                            searchedTableView.requestFocus();
+                    }
+                    // Отмечаем завершение работы слушателя
+                    userAction.lazySet(true);
+//                });
             }
         });
 
+        //При нажатии на ентер происходит принудительный поиск
         setOnKeyPressed(e->{
             if(e.getCode().equals(KeyCode.ENTER)){
                 searchNow();
+                searchedTableView.requestFocus();
             }
         });
 
+        //При выборе элемента в выпадающем списке фокус переходит в таблицу с найденным
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            updateSearchHistory(newValue);
             searchedTableView.requestFocus();
         });
 
+        //При потере фокуса выделение с поля поиска снимается
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue){
+                editor.deselect();
+                allTextIsSelected = false;
+            }
+        });
+
+        //Управляет выделением строки поиска при клике на поле
         getEditor().setOnMouseClicked(e -> {
-            TextField editor = getEditor();
             editor.requestFocus();
             if (editor.getSelection().getLength() == 0) {
                 if (allTextIsSelected) {
@@ -105,6 +133,11 @@ public class SearchField extends ComboBox<String> {
             ((Searchable<? extends Item>) searchedTableView).updateSearchedView();
     }
 
+    /**
+     * Так как данный SearchField используется для многих таблиц, то в этом методе происходит его настройка на новую таблицу
+     * @param tableView
+     * @param promptText
+     */
     public void changeSearchedTableView(ItemTableView<? extends Item> tableView, String promptText) {
         this.searchedTableView = tableView;
         this.promptText = promptText;
@@ -124,17 +157,26 @@ public class SearchField extends ComboBox<String> {
     }
 
     public void updateSearchHistory(String stringDraft){
+//        userAction.set(false);
+//        String selectedItem = getSelectionModel().getSelectedItem();
+
         if(stringDraft == null) return;
         ObservableList<String> searchHistory = getItems();
-        if(searchHistory.contains(stringDraft)){
+        if (searchHistory.contains(stringDraft)) {
             //Если чертеж уже в поле поиска, то ничего делать не надо
-            if(stringDraft.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())) return;
+            if (stringDraft.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem()))
+                return;
             int index = searchHistory.indexOf(stringDraft);
             searchHistory.add(0, stringDraft);
             searchHistory.remove(index + 1);
         } else {
             searchHistory.add(0, stringDraft);
+//            userAction.set(false);
         }
+
+//        getSelectionModel().select(selectedItem);
+//        userAction.set(true);
+
 
     }
 
@@ -145,6 +187,7 @@ public class SearchField extends ComboBox<String> {
      * Если набранных символов меньше равно 6, то ничего не делает
      */
     private String normalizeSearchedText(String text){
+
         String newText = text.replaceAll("\\s+", "");
         if(newText.matches("[a-zA-ZА-яа-я-]+"))
             return text;
@@ -168,8 +211,6 @@ public class SearchField extends ComboBox<String> {
         if(sbText.length() >= 9){
             sbText.delete(9, sbText.length());
             sbText.insert(6, ".");
-            List<Draft> foundDrafts = CH_DRAFTS.findAllByText(sbText.toString());
-//            CH_SEARCH_FIELD.updateSearchHistory(foundDrafts.get(0).toUsefulString());
             return sbText.toString();
         } else
             return newText;

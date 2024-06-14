@@ -68,7 +68,7 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
         Platform.runLater(()->{
             if(!getItems().isEmpty()) {
                 getFocusModel().focus(0);
-                getSelectionModel().select(getItems().get(0));
+//                getSelectionModel().select(getItems().get(0));
             }
         });
     }

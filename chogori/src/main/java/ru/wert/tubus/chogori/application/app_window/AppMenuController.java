@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.application.app_window;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -144,13 +145,21 @@ public class AppMenuController {
         Button searchNowButton = new Button();
         searchNowButton.setText("");
         searchNowButton.setGraphic(new ImageView(BtnImages.BTN_SEARCH_IMG));
-        searchNowButton.setOnAction(e->CH_SEARCH_FIELD.searchNow());
+        searchNowButton.setOnAction(e->{
+            Platform.runLater(()->{
+                CH_SEARCH_FIELD.searchNow();
+                CH_SEARCH_FIELD.getSearchedTableView().requestFocus();
+            });
+        });
 
         BtnDoublePro doublePro = new BtnDoublePro(true);
         Button btnPro = doublePro.create();
         doublePro.getStateProperty().bindBidirectional(SearchField.searchProProperty);
         doublePro.getStateProperty().addListener((observable, oldValue, newValue) -> {
-            CH_SEARCH_FIELD.searchNow();
+            Platform.runLater(()->{
+                CH_SEARCH_FIELD.searchNow();
+                CH_SEARCH_FIELD.getSearchedTableView().requestFocus();
+            });
         });
 
         HBox hbox = new HBox();

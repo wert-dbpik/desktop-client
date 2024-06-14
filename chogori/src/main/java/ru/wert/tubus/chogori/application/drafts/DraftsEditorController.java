@@ -147,7 +147,10 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if ( selectedItem instanceof Folder) {
                     clearCash();
-                    Platform.runLater(() -> updateListOfDrafts(selectedItem));
+                    Platform.runLater(() -> {
+                        updateListOfDrafts(selectedItem);
+                        draftsTable.requestFocus();
+                    });
                 }
             }
         });
