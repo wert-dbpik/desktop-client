@@ -79,7 +79,7 @@ public class SearchField extends ComboBox<String> {
 
         //При выборе элемента в выпадающем списке фокус переходит в таблицу с найденным
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
+            moveToTop(newValue);
             searchedTableView.requestFocus();
         });
 
@@ -104,6 +104,23 @@ public class SearchField extends ComboBox<String> {
                 }
             }
         });
+
+    }
+
+    private void moveToTop(String newValue) {
+        List<String> items = new ArrayList<>(getItems());
+        int pos = items.indexOf(newValue);
+        items.add(0, newValue);
+        items.remove(pos + 1);
+
+//        Platform.runLater(() -> {
+            userAction.set(false);
+            getItems().clear();
+            getItems().addAll(items);
+            getSelectionModel().select(newValue);
+
+            userAction.set(true);
+//        });
 
     }
 
