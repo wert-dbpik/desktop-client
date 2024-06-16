@@ -43,6 +43,7 @@ import java.net.URI;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.images.BtnImages.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
+import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
@@ -147,6 +148,7 @@ public class AppMenuController {
         searchNowButton.setGraphic(new ImageView(BtnImages.BTN_SEARCH_IMG));
         searchNowButton.setOnAction(e->{
             Platform.runLater(()->{
+                if(CH_SEARCH_FIELD.getTextInField().startsWith(KOMPLEKT)) return;
                 CH_SEARCH_FIELD.searchNow();
                 CH_SEARCH_FIELD.getSearchedTableView().requestFocus();
             });
@@ -157,6 +159,7 @@ public class AppMenuController {
         doublePro.getStateProperty().bindBidirectional(SearchField.searchProProperty);
         doublePro.getStateProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(()->{
+                if(CH_SEARCH_FIELD.getTextInField().startsWith(KOMPLEKT)) return;
                 CH_SEARCH_FIELD.searchNow();
                 CH_SEARCH_FIELD.getSearchedTableView().requestFocus();
             });

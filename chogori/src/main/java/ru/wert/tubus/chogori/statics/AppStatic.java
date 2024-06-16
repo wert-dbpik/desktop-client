@@ -61,6 +61,7 @@ public class AppStatic {
 
 //    public static boolean SEARCH_PRO = true;
 
+    public static final String KOMPLEKT = "компл: ";
     public static final double CHAT_WIDTH = 250; //первоначальная ширина чата
     public static String BASE_URL = RetrofitClient.baseUrl;
 
@@ -147,7 +148,7 @@ public class AppStatic {
     public static void openDraftInPreviewer(Draft draft, PreviewerPatchController previewerController, boolean fixSearchHistory) {
         if (draft != null) {
             PreviewerPatchController.addPreviewToHistory(draft);
-            if(fixSearchHistory)  CH_SEARCH_FIELD.updateSearchDraftHistory(draft);
+            if(fixSearchHistory)  CH_SEARCH_FIELD.updateSearchHistoryWithPassport(draft.getPassport());
             //Нам нужен id загружаемого файла, так как он совпадает с его именем
             Long fileId = draft.getId();
             //и расширение

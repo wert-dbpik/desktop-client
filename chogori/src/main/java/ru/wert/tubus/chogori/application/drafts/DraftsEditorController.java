@@ -146,6 +146,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
             if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if ( selectedItem instanceof Folder) {
+                    CH_SEARCH_FIELD.updateSearchHistory("компл: " + selectedItem.getName());
                     clearCash();
                     Platform.runLater(() -> {
                         updateListOfDrafts(selectedItem);
@@ -184,7 +185,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
     public void updateListOfDrafts(Item newValue) {
         draftPatchController.showSourceOfPassports(newValue);
         draftsTable.setTempSelectedFolders(Collections.singletonList((Folder) newValue));
-        draftsTable.setSearchedText(""); //обнуляем поисковую строку
+//        draftsTable.setSearchedText(""); //обнуляем поисковую строку
         draftsTable.setModifyingItem(newValue);
         draftsTable.updateView();
     }

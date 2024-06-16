@@ -38,6 +38,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private static final String accWindowRes = "/chogori-fxml/drafts/draftACC.fxml";
     private _Draft_Commands commands;
     private PreviewerPatchController previewerController;
+    @Getter@Setter private Draft_PatchController draftPatchController;//нужен для доступа к showSourceOfPassports()
     @Setter private Object modifyingClass;
     @Getter@Setter private Object modifyingItem; //Product или Folder
     private List<Draft> currentItemList = new ArrayList<>(); //Лист чертежей, отображаемых в таблице сейчас

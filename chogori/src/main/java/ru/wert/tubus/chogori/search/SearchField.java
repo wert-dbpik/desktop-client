@@ -5,6 +5,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.*;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import lombok.Getter;
@@ -14,6 +16,9 @@ import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
 import ru.wert.tubus.chogori.popups.PastePopup;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Draft;
+import ru.wert.tubus.client.entity.models.Folder;
+import ru.wert.tubus.client.entity.models.Passport;
+import ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService;
 import ru.wert.tubus.client.interfaces.CatalogGroup;
 import ru.wert.tubus.client.interfaces.Item;
 
@@ -23,7 +28,9 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 
 
 public class SearchField extends ComboBox<String> {
@@ -46,11 +53,14 @@ public class SearchField extends ComboBox<String> {
 
         editor = getEditor();
 
+        createCellFactory();
+
         setEditable(true);
         setItems(FXCollections.observableArrayList());
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.startsWith(KOMPLEKT)) return;
             // Если значение устанавливается не этим слушателем
             if (switchOnEditorListeners.compareAndSet(true, false)) {
                     if (!oldValue.equals(newValue) && searchedTableView != null) {
@@ -76,6 +86,21 @@ public class SearchField extends ComboBox<String> {
         //При выборе элемента в выпадающем списке фокус переходит в таблицу с найденным
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (switchOnEditorListeners.compareAndSet(true, false)) {
+                enteredText = newValue;
+                if(newValue.startsWith(KOMPLEKT)){
+                    clearCash();
+                    Platform.runLater(() -> {
+                        Folder folder = FolderQuickService.getInstance().findByName(newValue.substring(KOMPLEKT.length()));
+                        Draft_TableView draftsTable = (Draft_TableView) searchedTableView;
+
+                        draftsTable.setTempSelectedFolders(Collections.singletonList(folder));
+                        draftsTable.setModifyingItem(folder);
+                        draftsTable.updateView();
+                        draftsTable.getDraftPatchController().showSourceOfPassports(folder);
+
+                        draftsTable.requestFocus();
+                    });
+                }
 
                 Platform.runLater(()->{
                     moveToTop(newValue);
@@ -108,6 +133,31 @@ public class SearchField extends ComboBox<String> {
             }
         });
 
+    }
+
+    public String getTextInField(){
+        return editor.getText();
+    }
+
+    /**
+     * Выделяет комплекты, чтобы отличать их от чертежей
+     */
+    private void createCellFactory() {
+        setCellFactory(i -> new ListCell<String>() {
+            @Override
+            protected void updateItem (String item, boolean empty){
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    setText(item);
+                    setStyle("-fx-font-weight: normal; -fx-text-fill: #000000");
+                    if(item.startsWith(KOMPLEKT))
+                        setStyle("-fx-font-weight: bold; -fx-text-fill: #4c1d0f");
+                }
+            }
+
+        });
     }
 
     /**
@@ -157,6 +207,9 @@ public class SearchField extends ComboBox<String> {
                 searchedTableView.updateTableView();
         } else{
             ((Searchable<? extends Item>) searchedTableView).updateSearchedView();
+            if(newValue.startsWith(KOMPLEKT)){
+                return;
+            }
             if(searchedTableView instanceof Draft_TableView && !searchedTableView.getItems().isEmpty()){
                 AppStatic.openDraftInPreviewer(
                         (Draft) searchedTableView.getItems().get(0),
@@ -185,11 +238,15 @@ public class SearchField extends ComboBox<String> {
     }
 
     /**
-     * Добавляет чертеж в историю поиска
+     * Добавляет пасспорт в историю поиска
      */
-    public void updateSearchDraftHistory(Draft draft){
-        if(draft == null) return;
-        String stringDraft = draft.toUsefulString();
+    public void updateSearchHistoryWithPassport(Passport passport) {
+        if(passport == null) return;
+        updateSearchHistory(passport.toUsefulString());
+    }
+
+    public void updateSearchHistory(String stringDraft) {
+        if(stringDraft == null) return;
 
         //Отключаем слушатели при изменении истории
         switchOnEditorListeners.set(false);
@@ -225,6 +282,7 @@ public class SearchField extends ComboBox<String> {
      * Если набранных символов меньше равно 6, то ничего не делает
      */
     private String normalizeSearchedText(String text){
+        if(text.startsWith(KOMPLEKT)) return text;
 
         String newText = text.replaceAll("\\s+", "");
         if(newText.matches("[a-zA-ZА-яа-я-]+"))

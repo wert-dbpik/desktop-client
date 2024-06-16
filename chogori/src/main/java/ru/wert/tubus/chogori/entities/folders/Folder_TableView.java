@@ -33,6 +33,9 @@ import java.util.List;
 import static ru.wert.tubus.chogori.statics.AppStatic.UPWARD;
 import static ru.wert.tubus.chogori.statics.Comparators.usefulStringComparator;
 
+/**
+ * Комплекты чертежей
+ */
 public class Folder_TableView extends RoutineTableView<Item> implements IFormView<Item>, CatalogableTable<ProductGroup> {
 
     @Getter private final ObjectProperty<TreeItem<ProductGroup>> upwardRowProperty = new SimpleObjectProperty<>();//Верхняя строка в таблице

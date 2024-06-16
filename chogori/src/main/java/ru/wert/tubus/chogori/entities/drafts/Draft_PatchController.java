@@ -87,6 +87,7 @@ public class Draft_PatchController {
     private void createDraftTableView() {
         //запуск новой версии
         draftsTable = new Draft_TableView("ЧЕРТЕЖ", previewerController, vboxDrafts, switchDraftsSearch);
+        draftsTable.setDraftPatchController(this); //Нужен для доступа к полю
         draftsTable.setModifyingClass(modifyingClass);
         draftsTable.getSelectionModel().setSelectionMode(mode);
         VBox.setVgrow(draftsTable, Priority.ALWAYS);
