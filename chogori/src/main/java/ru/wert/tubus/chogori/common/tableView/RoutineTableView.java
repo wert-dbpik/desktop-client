@@ -65,12 +65,6 @@ public abstract class RoutineTableView<P extends Item> extends ItemTableView<P> 
                 foundList.add(item);
         }
         updateForm(foundList);
-//        Platform.runLater(()->{
-//            if(!getItems().isEmpty()) {
-//                getFocusModel().focus(0);
-////                getSelectionModel().select(getItems().get(0));
-//            }
-//        });
     }
 
     /**
