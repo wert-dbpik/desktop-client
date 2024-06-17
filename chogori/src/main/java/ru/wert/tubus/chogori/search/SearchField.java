@@ -59,16 +59,20 @@ public class SearchField extends ComboBox<String> {
         setItems(FXCollections.observableArrayList());
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
-        getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.startsWith(KOMPLEKT)) return;
+        editor.textProperty().addListener((observable, oldText, newText) -> {
+            if(newText.startsWith(KOMPLEKT)) return;
             // Если значение устанавливается не этим слушателем
             if (switchOnEditorListeners.compareAndSet(true, false)) {
-                    if (!oldValue.equals(newValue) && searchedTableView != null) {
-                        enteredText = newValue;
-                        searchNow();
-                        //Если произошла вставка
-                        if (newValue.length() - oldValue.length() > 1)
+                    if (!oldText.equals(newText) && searchedTableView != null) {
+                        enteredText = newText;
+                        //Разница между новым и предыдущим текстом по модулю
+                        int dif = Math.abs(newText.length() - oldText.length());
+                        if(dif == 1) //Если происходит редактирование вручную
+                            searchNow(false);
+                        else {//Если произошла вставка
+                            searchNow(true);
                             searchedTableView.requestFocus();
+                        }
                     }
                     // Отмечаем завершение работы слушателя
                     switchOnEditorListeners.lazySet(true);
@@ -78,7 +82,7 @@ public class SearchField extends ComboBox<String> {
         //При нажатии на ентер происходит принудительный поиск
         setOnKeyPressed(e->{
             if(e.getCode().equals(KeyCode.ENTER)){
-                searchNow();
+                searchNow(true);
                 searchedTableView.requestFocus();
             }
         });
@@ -87,6 +91,8 @@ public class SearchField extends ComboBox<String> {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (switchOnEditorListeners.compareAndSet(true, false)) {
                 enteredText = newValue;
+
+                //Переход в комплект
                 if(newValue.startsWith(KOMPLEKT)){
                     clearCash();
                     Platform.runLater(() -> {
@@ -102,6 +108,7 @@ public class SearchField extends ComboBox<String> {
                     });
                 }
 
+                //Поднимаем поисковый текст в топ истории поиска
                 Platform.runLater(()->{
                     moveToTop(newValue);
                     searchedTableView.requestFocus();
@@ -182,21 +189,21 @@ public class SearchField extends ComboBox<String> {
     /**
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, принудительный поиск
      */
-    public void searchNow(){
+    public void searchNow(boolean usePreview){
         if(searchProProperty.get()) {
             searchedText = normalizeSearchedText(enteredText);
         } else {
             searchedText = enteredText;
         }
-        search(searchedText);
+        search(searchedText, usePreview);
     }
 
     /**
-     * Собственно поиск по строке newValue
+     * Собственно поиск по строке searchedText
      */
-    private void search(String newValue) {
-        searchedTableView.setSearchedText(newValue);
-        if (newValue.equals("")) {
+    private void search(String searchedText, boolean usePreview) {
+        searchedTableView.setSearchedText(enteredText);
+        if (searchedText.equals("")) {
             setPromptText(promptText);
             if(searchedTableView instanceof CatalogableTable){
                 //При обновлении таблицы - части каталога - нужно учитывать верхний узел видимой
@@ -207,10 +214,10 @@ public class SearchField extends ComboBox<String> {
                 searchedTableView.updateTableView();
         } else{
             ((Searchable<? extends Item>) searchedTableView).updateSearchedView();
-            if(newValue.startsWith(KOMPLEKT)){
+            if(searchedText.startsWith(KOMPLEKT)){
                 return;
             }
-            if(searchedTableView instanceof Draft_TableView && !searchedTableView.getItems().isEmpty()){
+            if(searchedTableView instanceof Draft_TableView && !searchedTableView.getItems().isEmpty() && usePreview){
                 AppStatic.openDraftInPreviewer(
                         (Draft) searchedTableView.getItems().get(0),
                         ((Draft_TableView) searchedTableView).getPreviewerController(),
@@ -245,27 +252,22 @@ public class SearchField extends ComboBox<String> {
         updateSearchHistory(passport.toUsefulString());
     }
 
-    public void updateSearchHistory(String stringDraft) {
-        if(stringDraft == null) return;
+    public void updateSearchHistory(String stringPassport) {
+        if(stringPassport == null) return;
 
         //Отключаем слушатели при изменении истории
         switchOnEditorListeners.set(false);
         String selectedItem = getSelectionModel().getSelectedItem();
 
         ObservableList<String> searchHistory = getItems();
-        if (searchHistory.contains(stringDraft)) {
-            //Если чертеж уже в поле поиска, то ничего делать не надо
-            if (stringDraft.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())){
-                getSelectionModel().select(selectedItem);
-                switchOnEditorListeners.set(true);
-                return;
-            }
-
-            int index = searchHistory.indexOf(stringDraft);
-            searchHistory.add(0, stringDraft);
-            searchHistory.remove(index + 1);
+        //Если чертеж уже в поле поиска, то ничего делать не надо
+        if (searchHistory.contains(stringPassport) ||
+                stringPassport.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())) {
+            getSelectionModel().select(selectedItem);
+            switchOnEditorListeners.set(true);
+            return;
         } else {
-            searchHistory.add(0, stringDraft);
+            searchHistory.add(0, stringPassport);
         }
 
         //Включаем слушатели обратно

@@ -148,8 +148,8 @@ public class AppMenuController {
         searchNowButton.setGraphic(new ImageView(BtnImages.BTN_SEARCH_IMG));
         searchNowButton.setOnAction(e->{
             Platform.runLater(()->{
-                if(CH_SEARCH_FIELD.getTextInField().startsWith(KOMPLEKT)) return;
-                CH_SEARCH_FIELD.searchNow();
+                if(CH_SEARCH_FIELD.getEnteredText().startsWith(KOMPLEKT)) return;
+                CH_SEARCH_FIELD.searchNow(true);
                 CH_SEARCH_FIELD.getSearchedTableView().requestFocus();
             });
         });
@@ -159,8 +159,8 @@ public class AppMenuController {
         doublePro.getStateProperty().bindBidirectional(SearchField.searchProProperty);
         doublePro.getStateProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(()->{
-                if(CH_SEARCH_FIELD.getTextInField().startsWith(KOMPLEKT)) return;
-                CH_SEARCH_FIELD.searchNow();
+                if(CH_SEARCH_FIELD.getEnteredText().startsWith(KOMPLEKT)) return;
+                CH_SEARCH_FIELD.searchNow(true);
                 CH_SEARCH_FIELD.getSearchedTableView().requestFocus();
             });
         });
