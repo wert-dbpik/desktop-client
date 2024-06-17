@@ -148,7 +148,10 @@ public class AppStatic {
     public static void openDraftInPreviewer(Draft draft, PreviewerPatchController previewerController, boolean fixSearchHistory) {
         if (draft != null) {
             PreviewerPatchController.addPreviewToHistory(draft);
-            if(fixSearchHistory)  CH_SEARCH_FIELD.updateSearchHistoryWithPassport(draft.getPassport());
+            if(CH_SEARCH_FIELD.isAddToSearchHistory() && fixSearchHistory)  {
+                CH_SEARCH_FIELD.updateSearchHistoryWithPassport(draft.getPassport());
+                CH_SEARCH_FIELD.setAddToSearchHistory(false);
+            }
             //Нам нужен id загружаемого файла, так как он совпадает с его именем
             Long fileId = draft.getId();
             //и расширение

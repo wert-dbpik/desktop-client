@@ -8,8 +8,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyCode;
 import lombok.Getter;
+import lombok.Setter;
 import ru.wert.tubus.chogori.common.tableView.CatalogableTable;
 import ru.wert.tubus.chogori.common.tableView.ItemTableView;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
@@ -38,6 +40,9 @@ public class SearchField extends ComboBox<String> {
     @Getter private String searchedText;
     @Getter private final List<String> searchHistory = new ArrayList<>();
 
+    @Getter@Setter
+    boolean addToSearchHistory = false; //Флаг для сохарнения в историю
+
     @Getter private String enteredText;
     private String promptText;
     @Getter private ItemTableView<? extends Item> searchedTableView = null;
@@ -65,9 +70,10 @@ public class SearchField extends ComboBox<String> {
             if (switchOnEditorListeners.compareAndSet(true, false)) {
                     if (!oldText.equals(newText) && searchedTableView != null) {
                         enteredText = newText;
+                        if(newText.isEmpty()) return;
                         //Разница между новым и предыдущим текстом по модулю
                         int dif = Math.abs(newText.length() - oldText.length());
-                        if(dif == 1) //Если происходит редактирование вручную
+                        if(dif == 1 || newText.length() == 1) //Если происходит редактирование вручную
                             searchNow(false);
                         else {//Если произошла вставка
                             searchNow(true);
@@ -127,8 +133,9 @@ public class SearchField extends ComboBox<String> {
         });
 
         //Управляет выделением строки поиска при клике на поле
-        getEditor().setOnMouseClicked(e -> {
+        editor.setOnMouseClicked(e -> {
             editor.requestFocus();
+
             if (editor.getSelection().getLength() == 0) {
                 if (allTextIsSelected) {
                     editor.deselect();
@@ -138,9 +145,12 @@ public class SearchField extends ComboBox<String> {
                     allTextIsSelected = true;
                 }
             }
+
         });
 
     }
+
+
 
     /**
      * Выделяет комплекты, чтобы отличать их от чертежей
@@ -192,6 +202,7 @@ public class SearchField extends ComboBox<String> {
             searchedText = enteredText;
         }
         search(searchedText, usePreview);
+        addToSearchHistory = true;
     }
 
     /**
