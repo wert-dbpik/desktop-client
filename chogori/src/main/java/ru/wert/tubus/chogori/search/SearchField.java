@@ -142,10 +142,6 @@ public class SearchField extends ComboBox<String> {
 
     }
 
-    public String getTextInField(){
-        return editor.getText();
-    }
-
     /**
      * Выделяет комплекты, чтобы отличать их от чертежей
      */
@@ -218,13 +214,17 @@ public class SearchField extends ComboBox<String> {
                 return;
             }
             if(searchedTableView instanceof Draft_TableView && !searchedTableView.getItems().isEmpty() && usePreview){
-                AppStatic.openDraftInPreviewer(
-                        (Draft) searchedTableView.getItems().get(0),
-                        ((Draft_TableView) searchedTableView).getPreviewerController(),
-                        false);
+                Platform.runLater(()->{
+                    Draft topDraft = (Draft) searchedTableView.getItems().get(0);
+                    AppStatic.openDraftInPreviewer(
+                            topDraft,
+                            ((Draft_TableView) searchedTableView).getPreviewerController(),
+                            false);
+                    updateSearchHistoryWithPassport(topDraft.getPassport());
+                    moveToTop(topDraft.getPassport().toUsefulString());
+                });
             }
         }
-
     }
 
     /**

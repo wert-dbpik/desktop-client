@@ -156,6 +156,7 @@ public class AppMenuController {
 
         BtnDoublePro doublePro = new BtnDoublePro(true);
         Button btnPro = doublePro.create();
+        btnPro.setStyle("-fx-min-height: 18pt");
         doublePro.getStateProperty().bindBidirectional(SearchField.searchProProperty);
         doublePro.getStateProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(()->{
