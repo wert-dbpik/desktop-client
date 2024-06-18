@@ -33,7 +33,7 @@ import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 
 
-public class SearchField extends ComboBox<String> {
+public class SearchField extends TextField {
 
     @Getter private String searchedText;
     @Getter private final List<String> searchHistory = new ArrayList<>();
@@ -41,41 +41,34 @@ public class SearchField extends ComboBox<String> {
     @Getter private String enteredText;
     private String promptText;
     @Getter private ItemTableView<? extends Item> searchedTableView = null;
-    private PastePopup paste = new PastePopup(this.getEditor());
-    private Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
     public static BooleanProperty searchProProperty = new SimpleBooleanProperty(true);
 
     public static boolean allTextIsSelected;
-    private TextField editor;
     final AtomicBoolean switchOnEditorListeners = new AtomicBoolean(true);
 
     public SearchField() {
 
-        editor = getEditor();
+//        editor = getEditor();
 
-        createCellFactory();
+//        createCellFactory();
 
         setEditable(true);
-        setItems(FXCollections.observableArrayList());
+//        setItems(FXCollections.observableArrayList());
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
-        editor.textProperty().addListener((observable, oldText, newText) -> {
-            if(newText.startsWith(KOMPLEKT)) return;
+        textProperty().addListener((observable, oldText, newText) -> {
+            if (newText.startsWith(KOMPLEKT)) return;
+            if (searchedTableView == null) return;
             // Если значение устанавливается не этим слушателем
-            if (switchOnEditorListeners.compareAndSet(true, false)) {
-                    if (!oldText.equals(newText) && searchedTableView != null) {
-                        enteredText = newText;
-                        //Разница между новым и предыдущим текстом по модулю
-                        int dif = Math.abs(newText.length() - oldText.length());
-                        if(dif == 1) //Если происходит редактирование вручную
-                            searchNow(false);
-                        else {//Если произошла вставка
-                            searchNow(true);
-                            searchedTableView.requestFocus();
-                        }
-                    }
-                    // Отмечаем завершение работы слушателя
-                    switchOnEditorListeners.lazySet(true);
+            enteredText = newText;
+            //Разница между новым и предыдущим текстом по модулю
+            int dif = Math.abs(newText.length() - oldText.length());
+            if (dif == 1 || newText.length() == 1) //Если происходит редактирование вручную
+                searchNow(false);
+            else {//Если произошла вставка
+                searchNow(true);
+                searchedTableView.requestFocus();
             }
         });
 
@@ -87,54 +80,54 @@ public class SearchField extends ComboBox<String> {
             }
         });
 
-        //При выборе элемента в выпадающем списке фокус переходит в таблицу с найденным
-        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (switchOnEditorListeners.compareAndSet(true, false)) {
-                enteredText = newValue;
-
-                //Переход в комплект
-                if(newValue.startsWith(KOMPLEKT)){
-                    clearCash();
-                    Platform.runLater(() -> {
-                        Folder folder = FolderQuickService.getInstance().findByName(newValue.substring(KOMPLEKT.length()));
-                        Draft_TableView draftsTable = (Draft_TableView) searchedTableView;
-
-                        draftsTable.setTempSelectedFolders(Collections.singletonList(folder));
-                        draftsTable.setModifyingItem(folder);
-                        draftsTable.updateView();
-                        draftsTable.getDraftPatchController().showSourceOfPassports(folder);
-
-                        draftsTable.requestFocus();
-                    });
-                }
-
-                //Поднимаем поисковый текст в топ истории поиска
-                Platform.runLater(()->{
-                    moveToTop(newValue);
-                    searchedTableView.requestFocus();
-                });
-
-                switchOnEditorListeners.lazySet(true);
-            }
-        });
+//        //При выборе элемента в выпадающем списке фокус переходит в таблицу с найденным
+//        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//            if (switchOnEditorListeners.compareAndSet(true, false)) {
+//                enteredText = newValue;
+//
+//                //Переход в комплект
+//                if(newValue.startsWith(KOMPLEKT)){
+//                    clearCash();
+//                    Platform.runLater(() -> {
+//                        Folder folder = FolderQuickService.getInstance().findByName(newValue.substring(KOMPLEKT.length()));
+//                        Draft_TableView draftsTable = (Draft_TableView) searchedTableView;
+//
+//                        draftsTable.setTempSelectedFolders(Collections.singletonList(folder));
+//                        draftsTable.setModifyingItem(folder);
+//                        draftsTable.updateView();
+//                        draftsTable.getDraftPatchController().showSourceOfPassports(folder);
+//
+//                        draftsTable.requestFocus();
+//                    });
+//                }
+//
+//                //Поднимаем поисковый текст в топ истории поиска
+//                Platform.runLater(()->{
+//                    moveToTop(newValue);
+//                    searchedTableView.requestFocus();
+//                });
+//
+//                switchOnEditorListeners.lazySet(true);
+//            }
+//        });
 
         //При потере фокуса выделение с поля поиска снимается
         focusedProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue){
-                editor.deselect();
+                deselect();
                 allTextIsSelected = false;
             }
         });
 
         //Управляет выделением строки поиска при клике на поле
-        getEditor().setOnMouseClicked(e -> {
-            editor.requestFocus();
-            if (editor.getSelection().getLength() == 0) {
+        setOnMouseClicked(e -> {
+            requestFocus();
+            if (getSelection().getLength() == 0) {
                 if (allTextIsSelected) {
-                    editor.deselect();
+                    deselect();
                     allTextIsSelected = false;
                 } else {
-                    editor.selectAll();
+                    selectAll();
                     allTextIsSelected = true;
                 }
             }
@@ -142,45 +135,45 @@ public class SearchField extends ComboBox<String> {
 
     }
 
-    /**
-     * Выделяет комплекты, чтобы отличать их от чертежей
-     */
-    private void createCellFactory() {
-        setCellFactory(i -> new ListCell<String>() {
-            @Override
-            protected void updateItem (String item, boolean empty){
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                } else {
-                    setText(item);
-                    setStyle("-fx-font-weight: normal; -fx-text-fill: #000000");
-                    if(item.startsWith(KOMPLEKT))
-                        setStyle("-fx-font-weight: bold; -fx-text-fill: #4c1d0f");
-                }
-            }
-
-        });
-    }
+//    /**
+//     * Выделяет комплекты, чтобы отличать их от чертежей
+//     */
+//    private void createCellFactory() {
+//        setCellFactory(i -> new ListCell<String>() {
+//            @Override
+//            protected void updateItem (String item, boolean empty){
+//                super.updateItem(item, empty);
+//                if (item == null || empty) {
+//                    setText(null);
+//                } else {
+//                    setText(item);
+//                    setStyle("-fx-font-weight: normal; -fx-text-fill: #000000");
+//                    if(item.startsWith(KOMPLEKT))
+//                        setStyle("-fx-font-weight: bold; -fx-text-fill: #4c1d0f");
+//                }
+//            }
+//
+//        });
+//    }
 
     /**
      * Перемещает newValue на самый верх истории поиска
      */
-    private void moveToTop(String newValue) {
-        switchOnEditorListeners.set(false);
-
-        Iterator<String> it = getItems().iterator();
-        while (it.hasNext()) {
-            String nextStr = it.next();
-            if (nextStr.equals(newValue))
-                it.remove();
-        }
-        getItems().add(0, newValue);
-        getSelectionModel().select(newValue);
-
-        switchOnEditorListeners.set(true);
-
-    }
+//    private void moveToTop(String newValue) {
+//        switchOnEditorListeners.set(false);
+//
+//        Iterator<String> it = getItems().iterator();
+//        while (it.hasNext()) {
+//            String nextStr = it.next();
+//            if (nextStr.equals(newValue))
+//                it.remove();
+//        }
+//        getItems().add(0, newValue);
+//        getSelectionModel().select(newValue);
+//
+//        switchOnEditorListeners.set(true);
+//
+//    }
 
     /**
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, принудительный поиск
@@ -220,8 +213,8 @@ public class SearchField extends ComboBox<String> {
                             topDraft,
                             ((Draft_TableView) searchedTableView).getPreviewerController(),
                             false);
-                    updateSearchHistoryWithPassport(topDraft.getPassport());
-                    moveToTop(topDraft.getPassport().toUsefulString());
+//                    updateSearchHistoryWithPassport(topDraft.getPassport());
+//                    moveToTop(topDraft.getPassport().toUsefulString());
                 });
             }
         }
@@ -236,46 +229,46 @@ public class SearchField extends ComboBox<String> {
         this.promptText = promptText;
 
         String searchedText = tableView.getSearchedText();
-        getEditor().setText(searchedText);
+        setText(searchedText);
         if (searchedText.equals(""))
             setPromptText(promptText);
         else
-            getEditor().setText(searchedText);
+            setText(searchedText);
 
     }
 
-    /**
-     * Добавляет пасспорт в историю поиска
-     */
-    public void updateSearchHistoryWithPassport(Passport passport) {
-        if(passport == null) return;
-        updateSearchHistory(passport.toUsefulString());
-    }
-
-    public void updateSearchHistory(String stringPassport) {
-        if(stringPassport == null) return;
-
-        //Отключаем слушатели при изменении истории
-        switchOnEditorListeners.set(false);
-        String selectedItem = getSelectionModel().getSelectedItem();
-
-        ObservableList<String> searchHistory = getItems();
-        //Если чертеж уже в поле поиска, то ничего делать не надо
-        if (searchHistory.contains(stringPassport) ||
-                stringPassport.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())) {
-            getSelectionModel().select(selectedItem);
-            switchOnEditorListeners.set(true);
-            return;
-        } else {
-            searchHistory.add(0, stringPassport);
-        }
-
-        //Включаем слушатели обратно
-        getSelectionModel().select(selectedItem);
-        switchOnEditorListeners.set(true);
-
-
-    }
+//    /**
+//     * Добавляет пасспорт в историю поиска
+//     */
+//    public void updateSearchHistoryWithPassport(Passport passport) {
+//        if(passport == null) return;
+//        updateSearchHistory(passport.toUsefulString());
+//    }
+//
+//    public void updateSearchHistory(String stringPassport) {
+//        if(stringPassport == null) return;
+//
+//        //Отключаем слушатели при изменении истории
+//        switchOnEditorListeners.set(false);
+//        String selectedItem = getSelectionModel().getSelectedItem();
+//
+//        ObservableList<String> searchHistory = getItems();
+//        //Если чертеж уже в поле поиска, то ничего делать не надо
+//        if (searchHistory.contains(stringPassport) ||
+//                stringPassport.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())) {
+//            getSelectionModel().select(selectedItem);
+//            switchOnEditorListeners.set(true);
+//            return;
+//        } else {
+//            searchHistory.add(0, stringPassport);
+//        }
+//
+//        //Включаем слушатели обратно
+//        getSelectionModel().select(selectedItem);
+//        switchOnEditorListeners.set(true);
+//
+//
+//    }
 
 
     /**

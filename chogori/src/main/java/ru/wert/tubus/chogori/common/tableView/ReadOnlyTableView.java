@@ -50,7 +50,7 @@ public abstract class ReadOnlyTableView<P extends Item> extends ItemTableView<P>
     public void updateSearchedView(){
         List<P> list = getCurrentItemSearchedList();
         List<P> foundList = new ArrayList<>();
-        String searchedText = CH_SEARCH_FIELD.getEditor().getText();
+        String searchedText = CH_SEARCH_FIELD.getText();
         for(P item : list){
             if(item.toUsefulString().toLowerCase().contains(searchedText.toLowerCase()))
                 foundList.add(item);

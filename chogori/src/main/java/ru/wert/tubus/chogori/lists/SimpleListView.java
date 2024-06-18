@@ -53,7 +53,7 @@ public class SimpleListView<P extends Item> extends ListView<P> implements Searc
             @Override
             protected Void call() {
 
-                searchedText = CH_SEARCH_FIELD.getEditor().getText();
+                searchedText = CH_SEARCH_FIELD.getText();
                 List<P> items;
                 if(searchedText.equals(""))
                     items = itemService.findAll();

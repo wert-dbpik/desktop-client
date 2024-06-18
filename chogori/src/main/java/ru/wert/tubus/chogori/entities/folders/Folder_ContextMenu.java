@@ -137,7 +137,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
 
         //Условие при котором таблица не отображает только папки (globalOn)
         // и в таблице не ведется поиск
-        boolean noSearchAndGlobal = CH_SEARCH_FIELD.getEditor().getText().isEmpty() && !tableView.isGlobalOff();
+        boolean noSearchAndGlobal = CH_SEARCH_FIELD.getText().isEmpty() && !tableView.isGlobalOff();
 
         //Если ничего не выделено
         if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboardOutOfFXThread())) extraPasteItems = true;
@@ -221,7 +221,7 @@ public class Folder_ContextMenu extends FormView_ContextMenu<Folder> {
     private void showFolderInCatalog(ActionEvent actionEvent) {
         Item selectedItem = tableView.getSelectionModel().getSelectedItem();
         if(selectedItem instanceof Folder) {
-            CH_SEARCH_FIELD.getEditor().setText("");
+            CH_SEARCH_FIELD.setText("");
             tableView.updateVisibleLeafOfTableView(((Folder)selectedItem).getProductGroup());
             int index = tableView.getItems().indexOf(selectedItem);
 

@@ -146,7 +146,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
             if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if ( selectedItem instanceof Folder) {
-                    CH_SEARCH_FIELD.updateSearchHistory("компл: " + selectedItem.getName());
+//                    CH_SEARCH_FIELD.updateSearchHistory("компл: " + selectedItem.getName());
                     clearCash();
                     Platform.runLater(() -> {
                         updateListOfDrafts(selectedItem);
