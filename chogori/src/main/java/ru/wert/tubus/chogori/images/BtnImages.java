@@ -52,6 +52,7 @@ public class BtnImages {
     public static Image BTN_ADD_CHAT_DRAFT_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/add_draft.png"), size16, size16, true, true);
     public static Image BTN_PRO_ON_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/pro_on.png"), size24, size24, true, true);
     public static Image BTN_PRO_OFF_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/pro_off.png"), size24, size24, true, true);
+    public static Image BTN_SEARCH_HISTORY_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/arrow-down.png"), size24, size24, true, true);
 
 
 

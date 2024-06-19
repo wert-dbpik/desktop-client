@@ -146,7 +146,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
             if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if ( selectedItem instanceof Folder) {
-//                    CH_SEARCH_FIELD.updateSearchHistory("компл: " + selectedItem.getName());
+                    CH_SEARCH_FIELD.updateSearchHistory("компл: " + selectedItem.getName());
                     clearCash();
                     Platform.runLater(() -> {
                         updateListOfDrafts(selectedItem);
@@ -155,24 +155,6 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
                 }
             }
         });
-
-//        folderTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//
-//            new Thread(()->{
-//                try {
-//                    Thread.sleep(500);
-//                    Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
-//                    if (selectedItem == newValue && selectedItem instanceof Folder) {
-//                        clearCash();
-//                        Platform.runLater(() -> updateListOfDrafts(selectedItem));
-//                    }
-//
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
-//
-//        });
 
         catalogPatch.getFoldersButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 

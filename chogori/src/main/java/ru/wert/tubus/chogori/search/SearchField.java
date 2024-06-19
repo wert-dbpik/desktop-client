@@ -3,34 +3,23 @@ package ru.wert.tubus.chogori.search;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.*;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import lombok.Getter;
 import ru.wert.tubus.chogori.common.tableView.CatalogableTable;
 import ru.wert.tubus.chogori.common.tableView.ItemTableView;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
-import ru.wert.tubus.chogori.popups.PastePopup;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Draft;
-import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.Passport;
-import ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService;
 import ru.wert.tubus.client.interfaces.CatalogGroup;
 import ru.wert.tubus.client.interfaces.Item;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
-import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
-import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 
 
 public class SearchField extends TextField {
@@ -45,16 +34,10 @@ public class SearchField extends TextField {
     public static BooleanProperty searchProProperty = new SimpleBooleanProperty(true);
 
     public static boolean allTextIsSelected;
-    final AtomicBoolean switchOnEditorListeners = new AtomicBoolean(true);
 
     public SearchField() {
 
-//        editor = getEditor();
-
-//        createCellFactory();
-
         setEditable(true);
-//        setItems(FXCollections.observableArrayList());
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldText, newText) -> {
@@ -80,37 +63,6 @@ public class SearchField extends TextField {
             }
         });
 
-//        //При выборе элемента в выпадающем списке фокус переходит в таблицу с найденным
-//        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            if (switchOnEditorListeners.compareAndSet(true, false)) {
-//                enteredText = newValue;
-//
-//                //Переход в комплект
-//                if(newValue.startsWith(KOMPLEKT)){
-//                    clearCash();
-//                    Platform.runLater(() -> {
-//                        Folder folder = FolderQuickService.getInstance().findByName(newValue.substring(KOMPLEKT.length()));
-//                        Draft_TableView draftsTable = (Draft_TableView) searchedTableView;
-//
-//                        draftsTable.setTempSelectedFolders(Collections.singletonList(folder));
-//                        draftsTable.setModifyingItem(folder);
-//                        draftsTable.updateView();
-//                        draftsTable.getDraftPatchController().showSourceOfPassports(folder);
-//
-//                        draftsTable.requestFocus();
-//                    });
-//                }
-//
-//                //Поднимаем поисковый текст в топ истории поиска
-//                Platform.runLater(()->{
-//                    moveToTop(newValue);
-//                    searchedTableView.requestFocus();
-//                });
-//
-//                switchOnEditorListeners.lazySet(true);
-//            }
-//        });
-
         //При потере фокуса выделение с поля поиска снимается
         focusedProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue){
@@ -134,46 +86,6 @@ public class SearchField extends TextField {
         });
 
     }
-
-//    /**
-//     * Выделяет комплекты, чтобы отличать их от чертежей
-//     */
-//    private void createCellFactory() {
-//        setCellFactory(i -> new ListCell<String>() {
-//            @Override
-//            protected void updateItem (String item, boolean empty){
-//                super.updateItem(item, empty);
-//                if (item == null || empty) {
-//                    setText(null);
-//                } else {
-//                    setText(item);
-//                    setStyle("-fx-font-weight: normal; -fx-text-fill: #000000");
-//                    if(item.startsWith(KOMPLEKT))
-//                        setStyle("-fx-font-weight: bold; -fx-text-fill: #4c1d0f");
-//                }
-//            }
-//
-//        });
-//    }
-
-    /**
-     * Перемещает newValue на самый верх истории поиска
-     */
-//    private void moveToTop(String newValue) {
-//        switchOnEditorListeners.set(false);
-//
-//        Iterator<String> it = getItems().iterator();
-//        while (it.hasNext()) {
-//            String nextStr = it.next();
-//            if (nextStr.equals(newValue))
-//                it.remove();
-//        }
-//        getItems().add(0, newValue);
-//        getSelectionModel().select(newValue);
-//
-//        switchOnEditorListeners.set(true);
-//
-//    }
 
     /**
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, принудительный поиск
@@ -213,8 +125,8 @@ public class SearchField extends TextField {
                             topDraft,
                             ((Draft_TableView) searchedTableView).getPreviewerController(),
                             false);
-//                    updateSearchHistoryWithPassport(topDraft.getPassport());
-//                    moveToTop(topDraft.getPassport().toUsefulString());
+//                    SearchHistoryListView.getInstance().updateSearchHistoryWithPassport(topDraft.getPassport());
+//                    SearchHistoryListView.getInstance().moveToTop(topDraft.getPassport().toUsefulString());
                 });
             }
         }
@@ -237,38 +149,23 @@ public class SearchField extends TextField {
 
     }
 
-//    /**
-//     * Добавляет пасспорт в историю поиска
-//     */
-//    public void updateSearchHistoryWithPassport(Passport passport) {
-//        if(passport == null) return;
-//        updateSearchHistory(passport.toUsefulString());
-//    }
-//
-//    public void updateSearchHistory(String stringPassport) {
-//        if(stringPassport == null) return;
-//
-//        //Отключаем слушатели при изменении истории
-//        switchOnEditorListeners.set(false);
-//        String selectedItem = getSelectionModel().getSelectedItem();
-//
-//        ObservableList<String> searchHistory = getItems();
-//        //Если чертеж уже в поле поиска, то ничего делать не надо
-//        if (searchHistory.contains(stringPassport) ||
-//                stringPassport.equals(CH_SEARCH_FIELD.getSelectionModel().getSelectedItem())) {
-//            getSelectionModel().select(selectedItem);
-//            switchOnEditorListeners.set(true);
-//            return;
-//        } else {
-//            searchHistory.add(0, stringPassport);
-//        }
-//
-//        //Включаем слушатели обратно
-//        getSelectionModel().select(selectedItem);
-//        switchOnEditorListeners.set(true);
-//
-//
-//    }
+    /**
+     * Добавляет пасспорт в историю поиска
+     */
+    public void updateSearchHistory(Passport passport) {
+        if(passport == null) return;
+        SearchHistoryListView.getInstance().updateSearchHistory(passport.toUsefulString());
+    }
+
+    /**
+     * Добавляем строку в историю поиска
+     */
+    public void updateSearchHistory(String string) {
+        if(string == null) return;
+
+        SearchHistoryListView.getInstance().updateSearchHistory(string);
+
+    }
 
 
     /**

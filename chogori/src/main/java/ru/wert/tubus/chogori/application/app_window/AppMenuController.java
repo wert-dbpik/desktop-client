@@ -26,6 +26,7 @@ import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
+import ru.wert.tubus.chogori.search.SearchHistoryButton;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.chat.SideChat;
@@ -154,6 +155,9 @@ public class AppMenuController {
             });
         });
 
+        SearchHistoryButton btnHistory = new SearchHistoryButton();
+        btnHistory.setStyle("-fx-min-height: 18pt");
+
         BtnDoublePro doublePro = new BtnDoublePro(true);
         Button btnPro = doublePro.create();
         btnPro.setStyle("-fx-min-height: 18pt");
@@ -176,7 +180,7 @@ public class AppMenuController {
             CH_SEARCH_FIELD.requestFocus();
         });
         btnClean.setGraphic(new ImageView(BtnImages.BTN_CLEAN_IMG_W));
-        hbox.getChildren().addAll(searchNowButton, CH_SEARCH_FIELD, btnPro, btnClean);
+        hbox.getChildren().addAll(searchNowButton, CH_SEARCH_FIELD, btnHistory, btnPro, btnClean);
         hbox.setAlignment(Pos.CENTER_RIGHT);
         hbox.setSpacing(2);
         hbox.getStylesheets().add(getClass().getResource("/chogori-css/toolpane-dark.css").toString());

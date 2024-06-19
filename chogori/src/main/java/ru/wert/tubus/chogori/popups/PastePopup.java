@@ -13,8 +13,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
-//import java.awt.*;
-
 public class PastePopup extends PopupControl {
     private final TextField textField;
 

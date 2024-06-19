@@ -1,24 +1,44 @@
 package ru.wert.tubus.chogori.search;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import ru.wert.tubus.client.entity.models.Passport;
 
-import java.util.Iterator;
-
 import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
-public class SearchHistoryList extends ListView<String> {
+public class SearchHistoryListView extends ListView<String> {
 
     private final ObservableList<String> history;
+    private static SearchHistoryListView instance;
 
-    public SearchHistoryList() {
+    public static SearchHistoryListView getInstance(){
+        if(instance == null)
+            instance = new SearchHistoryListView();
+        return
+                instance;
+    }
+
+    private SearchHistoryListView() {
         history = FXCollections.observableArrayList();
         setItems(history);
         createCellFactory();
+
+        getSelectionModel().selectedItemProperty().addListener(changeListener());
+        getItems().add("ПИК.745351.109, Панель");
+        getItems().add("ПИК.305413.010, Тумба СМЛ");
+        getItems().add("ПИК.301261.320, Дно");
+        getItems().add("ПИК.745423.162, Швеллер рамы");
+    }
+
+    private ChangeListener<String> changeListener(){
+        return (observable, oldValue, newValue) ->{
+            moveToTop(newValue);
+        };
     }
 
     /**
@@ -40,43 +60,36 @@ public class SearchHistoryList extends ListView<String> {
                 if (item == null || empty) {
                     setText(null);
                 } else {
+                    int pos = getIndex();
                     setText(item);
                     setStyle("-fx-font-weight: normal; -fx-text-fill: #000000");
                     if(item.startsWith(KOMPLEKT))
                         setStyle("-fx-font-weight: bold; -fx-text-fill: #4c1d0f");
+
+                    setOnMouseEntered(e->{
+                        getFocusModel().focus(pos);
+                    });
+
                 }
             }
 
         });
     }
 
-    /**
-     * Добавляет пасспорт в историю поиска
-     */
-    public void updateSearchHistoryWithPassport(Passport passport) {
-        if(passport == null) return;
-        updateSearchHistory(passport.toUsefulString());
-    }
 
-    public void updateSearchHistory(String stringPassport) {
-        if(stringPassport == null) return;
-
-        //Отключаем слушатели при изменении истории
-        String selectedItem = getSelectionModel().getSelectedItem();
+    public void updateSearchHistory(String string) {
+        if(string == null) return;
 
         ObservableList<String> searchHistory = getItems();
         //Если чертеж уже в поле поиска, то ничего делать не надо
-        if (searchHistory.contains(stringPassport) ||
-                stringPassport.equals(CH_SEARCH_FIELD.getText())) {
-            getSelectionModel().select(selectedItem);
+        if (string.equals(CH_SEARCH_FIELD.getText()))
             return;
-        } else {
-            searchHistory.add(0, stringPassport);
+        else if(searchHistory.contains(string))
+            moveToTop(string);
+        else {
+            searchHistory.add(0, string);
         }
-
-        //Включаем слушатели обратно
-        getSelectionModel().select(selectedItem);
-
+        getSelectionModel().select(string);
 
     }
 
