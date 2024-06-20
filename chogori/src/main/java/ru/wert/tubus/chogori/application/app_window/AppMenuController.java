@@ -174,6 +174,7 @@ public class AppMenuController {
 
         CH_SEARCH_FIELD = new SearchField();
         CH_SEARCH_FIELD.setPrefWidth(300);
+        CH_SEARCH_FIELD.setStyle("-fx-min-height: 18pt");
         Button btnClean = new Button();
         btnClean.setOnAction((e)->{
             CH_SEARCH_FIELD.setText("");

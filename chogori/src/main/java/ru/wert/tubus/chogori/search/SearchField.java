@@ -90,8 +90,8 @@ public class SearchField extends TextField {
     /**
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, принудительный поиск
      */
-    public void searchNow(boolean usePreview){
-        if(searchProProperty.get()) {
+    public void searchNow(boolean usePreview) {
+        if (searchProProperty.get()) {
             searchedText = normalizeSearchedText(enteredText);
         } else {
             searchedText = enteredText;
@@ -120,13 +120,12 @@ public class SearchField extends TextField {
             }
             if(searchedTableView instanceof Draft_TableView && !searchedTableView.getItems().isEmpty() && usePreview){
                 Platform.runLater(()->{
+
                     Draft topDraft = (Draft) searchedTableView.getItems().get(0);
                     AppStatic.openDraftInPreviewer(
                             topDraft,
                             ((Draft_TableView) searchedTableView).getPreviewerController(),
                             false);
-//                    SearchHistoryListView.getInstance().updateSearchHistoryWithPassport(topDraft.getPassport());
-//                    SearchHistoryListView.getInstance().moveToTop(topDraft.getPassport().toUsefulString());
                 });
             }
         }

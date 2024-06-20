@@ -7,21 +7,16 @@ import javafx.scene.layout.AnchorPane;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class SearchHistoryPopup extends PopupControl {
-
     static final double n = 10.0; //Высота строки
 
     public void showHistory() {
 
         SearchHistoryListView historyList = SearchHistoryListView.getInstance();
-        historyList.setItems(SearchHistoryListView.getInstance().getItems());
         historyList.setPrefWidth(300);
         historyList.setMinHeight(n);
         historyList.setMaxHeight(10 * n);
 
-        historyList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        historyList.getSelectionModel().selectedItemProperty().addListener(observable -> {
-            CH_SEARCH_FIELD.setText(historyList.getSelectionModel().getSelectedItem());
+        historyList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             this.hide();
         });
 

@@ -1,20 +1,20 @@
 package ru.wert.tubus.chogori.search;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import ru.wert.tubus.client.entity.models.Passport;
+import javafx.scene.control.SelectionMode;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class SearchHistoryListView extends ListView<String> {
 
-    private final ObservableList<String> history;
     private static SearchHistoryListView instance;
+    private boolean switchOnListener = true;
 
     public static SearchHistoryListView getInstance(){
         if(instance == null)
@@ -24,11 +24,20 @@ public class SearchHistoryListView extends ListView<String> {
     }
 
     private SearchHistoryListView() {
-        history = FXCollections.observableArrayList();
-        setItems(history);
+        setItems(FXCollections.observableArrayList());
+        fillHistory();
         createCellFactory();
 
-        getSelectionModel().selectedItemProperty().addListener(changeListener());
+        getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(switchOnListener) {
+                Platform.runLater(() -> CH_SEARCH_FIELD.setText(newValue));
+                moveToTop(newValue);
+            }
+        });
+    }
+
+    private void fillHistory() {
         getItems().add("ПИК.745351.109, Панель");
         getItems().add("ПИК.305413.010, Тумба СМЛ");
         getItems().add("ПИК.301261.320, Дно");
@@ -37,16 +46,27 @@ public class SearchHistoryListView extends ListView<String> {
 
     private ChangeListener<String> changeListener(){
         return (observable, oldValue, newValue) ->{
-            moveToTop(newValue);
+            if(switchOnListener) {
+                Platform.runLater(() -> CH_SEARCH_FIELD.setText(newValue));
+                moveToTop(newValue);
+                refresh();
+            }
         };
     }
 
     /**
      * Перемещает newValue на самый верх истории поиска
      */
-    public void moveToTop(String value){
-        getItems().removeIf(next -> next.equals(value));
-        getItems().add(0, value);
+    public void moveToTop(String value) {
+        Platform.runLater(() -> {
+            switchOnListener = false;
+            int pos = getItems().indexOf(value);
+            getItems().add(0, value);
+            getItems().remove(pos + 1);
+            getSelectionModel().clearSelection();
+            getFocusModel().focus(0);
+            switchOnListener = true;
+        });
     }
 
     /**
@@ -89,6 +109,7 @@ public class SearchHistoryListView extends ListView<String> {
         else {
             searchHistory.add(0, string);
         }
+
         getSelectionModel().select(string);
 
     }
