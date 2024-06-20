@@ -1,7 +1,7 @@
 package ru.wert.tubus.chogori.search;
 
 import javafx.geometry.Point2D;
-import javafx.scene.control.*;
+import javafx.scene.control.PopupControl;
 import javafx.scene.layout.AnchorPane;
 
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;

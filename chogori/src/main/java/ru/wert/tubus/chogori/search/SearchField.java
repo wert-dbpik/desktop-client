@@ -6,12 +6,15 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import lombok.Getter;
+import lombok.Setter;
 import ru.wert.tubus.chogori.common.tableView.CatalogableTable;
 import ru.wert.tubus.chogori.common.tableView.ItemTableView;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Draft;
+import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.Passport;
+import ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService;
 import ru.wert.tubus.client.interfaces.CatalogGroup;
 import ru.wert.tubus.client.interfaces.Item;
 
@@ -20,6 +23,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 
 
 public class SearchField extends TextField {
@@ -27,7 +32,8 @@ public class SearchField extends TextField {
     @Getter private String searchedText;
     @Getter private final List<String> searchHistory = new ArrayList<>();
 
-    @Getter private String enteredText;
+    @Getter@Setter
+    private String enteredText;
     private String promptText;
     @Getter private ItemTableView<? extends Item> searchedTableView = null;
 
@@ -41,18 +47,22 @@ public class SearchField extends TextField {
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldText, newText) -> {
-            if (newText.startsWith(KOMPLEKT)) return;
             if (searchedTableView == null) return;
-            // Если значение устанавливается не этим слушателем
             enteredText = newText;
-            //Разница между новым и предыдущим текстом по модулю
-            int dif = Math.abs(newText.length() - oldText.length());
-            if (dif == 1 || newText.length() == 1) //Если происходит редактирование вручную
-                searchNow(false);
-            else {//Если произошла вставка
+            if (newText.startsWith(KOMPLEKT)) {
                 searchNow(true);
                 searchedTableView.requestFocus();
+            } else {
+                //Разница между новым и предыдущим текстом по модулю
+                int dif = Math.abs(newText.length() - oldText.length());
+                if (dif == 1 || newText.length() == 1) //Если происходит редактирование вручную
+                    searchNow(false);
+                else {//Если произошла вставка
+                    searchNow(true);
+                    searchedTableView.requestFocus();
+                }
             }
+
         });
 
         //При нажатии на ентер происходит принудительный поиск
@@ -91,12 +101,17 @@ public class SearchField extends TextField {
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, принудительный поиск
      */
     public void searchNow(boolean usePreview) {
-        if (searchProProperty.get()) {
-            searchedText = normalizeSearchedText(enteredText);
-        } else {
-            searchedText = enteredText;
+        if(enteredText.contains(KOMPLEKT))
+            openFolder(enteredText);
+        else {
+            if (searchProProperty.get()) {
+                searchedText = normalizeSearchedText(enteredText);
+            } else {
+                searchedText = enteredText;
+            }
+            search(searchedText, usePreview);
         }
-        search(searchedText, usePreview);
+
     }
 
     /**
@@ -120,7 +135,6 @@ public class SearchField extends TextField {
             }
             if(searchedTableView instanceof Draft_TableView && !searchedTableView.getItems().isEmpty() && usePreview){
                 Platform.runLater(()->{
-
                     Draft topDraft = (Draft) searchedTableView.getItems().get(0);
                     AppStatic.openDraftInPreviewer(
                             topDraft,
@@ -201,6 +215,25 @@ public class SearchField extends TextField {
             return sbText.toString();
         } else
             return newText;
+    }
+
+    /**
+     * Открывает комплект чертежей, сохраненный в истории
+     * @param folderName - String, содержит KOMPLEKT
+     */
+    public void openFolder(String folderName){
+        clearCash();
+        Platform.runLater(() -> {
+            Folder folder = FolderQuickService.getInstance().findByName(folderName.substring(KOMPLEKT.length()));
+            Draft_TableView draftsTable = (Draft_TableView) CH_SEARCH_FIELD.getSearchedTableView();
+
+            draftsTable.setTempSelectedFolders(Collections.singletonList(folder));
+            draftsTable.setModifyingItem(folder);
+            draftsTable.updateView();
+            draftsTable.getDraftPatchController().showSourceOfPassports(folder);
+
+            draftsTable.requestFocus();
+        });
     }
 
 }

@@ -13,6 +13,8 @@ import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class SearchHistoryListView extends ListView<String> {
 
+    static final int MAX_ROWS = 10;
+    static final double ROW_HEIGHT = 24;
     private static SearchHistoryListView instance;
     private boolean switchOnListener = true;
 
@@ -29,12 +31,7 @@ public class SearchHistoryListView extends ListView<String> {
         createCellFactory();
 
         getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(switchOnListener) {
-                Platform.runLater(() -> CH_SEARCH_FIELD.setText(newValue));
-                moveToTop(newValue);
-            }
-        });
+        getSelectionModel().selectedItemProperty().addListener(selectedItemChangeListener());
     }
 
     private void fillHistory() {
@@ -42,14 +39,14 @@ public class SearchHistoryListView extends ListView<String> {
         getItems().add("ПИК.305413.010, Тумба СМЛ");
         getItems().add("ПИК.301261.320, Дно");
         getItems().add("ПИК.745423.162, Швеллер рамы");
+        getItems().add("компл: ПИК.469474.171, ШАУ-2/НС");
     }
 
-    private ChangeListener<String> changeListener(){
-        return (observable, oldValue, newValue) ->{
-            if(switchOnListener) {
-                Platform.runLater(() -> CH_SEARCH_FIELD.setText(newValue));
+    private ChangeListener<String> selectedItemChangeListener() {
+        return (observable, oldValue, newValue) -> {
+            if (switchOnListener) {
+                Platform.runLater(()->CH_SEARCH_FIELD.setText(newValue));
                 moveToTop(newValue);
-                refresh();
             }
         };
     }
@@ -107,10 +104,12 @@ public class SearchHistoryListView extends ListView<String> {
         else if(searchHistory.contains(string))
             moveToTop(string);
         else {
-            searchHistory.add(0, string);
+            Platform.runLater(()->{
+                switchOnListener = false;
+                searchHistory.add(0, string);
+                switchOnListener = true;
+            });
         }
-
-        getSelectionModel().select(string);
 
     }
 
