@@ -29,7 +29,7 @@ import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 
 public class SearchField extends TextField {
 
-    private boolean blockTextPropertyListener;
+    private boolean blockTextPropertyListener; //Флаг блокировки слушателя
 
     @Getter private String searchedText;
     @Getter private final List<String> searchHistory = new ArrayList<>();
