@@ -29,6 +29,8 @@ import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 
 public class SearchField extends TextField {
 
+    private boolean blockTextPropertyListener;
+
     @Getter private String searchedText;
     @Getter private final List<String> searchHistory = new ArrayList<>();
 
@@ -47,11 +49,13 @@ public class SearchField extends TextField {
 
         //Слушатель следит за изменением текста. Если текст изменился, то вызывается апдейт таблицы
         textProperty().addListener((observable, oldText, newText) -> {
+            if(blockTextPropertyListener) return;
             if (searchedTableView == null) return;
             enteredText = newText;
             if (newText.startsWith(KOMPLEKT)) {
+                searchedTableView.setSearchedText(newText);
                 searchNow(true);
-                searchedTableView.requestFocus();
+                requestFocusOnTableView();
             } else {
                 //Разница между новым и предыдущим текстом по модулю
                 int dif = Math.abs(newText.length() - oldText.length());
@@ -59,7 +63,7 @@ public class SearchField extends TextField {
                     searchNow(false);
                 else {//Если произошла вставка
                     searchNow(true);
-                    searchedTableView.requestFocus();
+                    requestFocusOnTableView();
                 }
             }
 
@@ -69,7 +73,7 @@ public class SearchField extends TextField {
         setOnKeyPressed(e->{
             if(e.getCode().equals(KeyCode.ENTER)){
                 searchNow(true);
-                searchedTableView.requestFocus();
+                requestFocusOnTableView();
             }
         });
 
@@ -98,12 +102,21 @@ public class SearchField extends TextField {
     }
 
     /**
+     * Блокирует перестройку таблицы еще раз
+     */
+    public void requestFocusOnTableView() {
+        blockTextPropertyListener = true;
+        searchedTableView.requestFocus();
+        blockTextPropertyListener = false;
+    }
+
+    /**
      * Метод вызывается также при нажатии кнопки искать на панели MAIN_MENU, принудительный поиск
      */
     public void searchNow(boolean usePreview) {
-        if(enteredText.contains(KOMPLEKT))
+        if(enteredText.contains(KOMPLEKT)) {
             openFolder(enteredText);
-        else {
+        } else {
             if (searchProProperty.get()) {
                 searchedText = normalizeSearchedText(enteredText);
             } else {
@@ -231,8 +244,6 @@ public class SearchField extends TextField {
             draftsTable.setModifyingItem(folder);
             draftsTable.updateView();
             draftsTable.getDraftPatchController().showSourceOfPassports(folder);
-
-            draftsTable.requestFocus();
         });
     }
 

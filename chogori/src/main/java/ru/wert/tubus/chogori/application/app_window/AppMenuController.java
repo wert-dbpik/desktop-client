@@ -149,9 +149,8 @@ public class AppMenuController {
         searchNowButton.setGraphic(new ImageView(BtnImages.BTN_SEARCH_IMG));
         searchNowButton.setOnAction(e->{
             Platform.runLater(()->{
-                if(CH_SEARCH_FIELD.getEnteredText().startsWith(KOMPLEKT)) return;
                 CH_SEARCH_FIELD.searchNow(true);
-                CH_SEARCH_FIELD.getSearchedTableView().requestFocus();
+                CH_SEARCH_FIELD.requestFocusOnTableView();
             });
         });
 
@@ -166,7 +165,7 @@ public class AppMenuController {
             Platform.runLater(()->{
                 if(CH_SEARCH_FIELD.getEnteredText().startsWith(KOMPLEKT)) return;
                 CH_SEARCH_FIELD.searchNow(true);
-                CH_SEARCH_FIELD.getSearchedTableView().requestFocus();
+                CH_SEARCH_FIELD.requestFocusOnTableView();
             });
         });
 

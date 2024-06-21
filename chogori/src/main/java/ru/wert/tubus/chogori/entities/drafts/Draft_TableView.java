@@ -135,6 +135,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
     }
 
+
+
     @Override
     public void setTableColumns() {
 
