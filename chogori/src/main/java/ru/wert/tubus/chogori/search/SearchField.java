@@ -43,6 +43,8 @@ public class SearchField extends TextField {
 
     public static boolean allTextIsSelected;
 
+    public static boolean addToHistory; //Используется чтобы добавлялись в историю только сразу после поиска
+
     public SearchField() {
 
         setEditable(true);
@@ -122,6 +124,7 @@ public class SearchField extends TextField {
             } else {
                 searchedText = enteredText;
             }
+            addToHistory = true;
             search(searchedText, usePreview);
         }
 
@@ -152,7 +155,7 @@ public class SearchField extends TextField {
                     AppStatic.openDraftInPreviewer(
                             topDraft,
                             ((Draft_TableView) searchedTableView).getPreviewerController(),
-                            false);
+                            true);
                 });
             }
         }

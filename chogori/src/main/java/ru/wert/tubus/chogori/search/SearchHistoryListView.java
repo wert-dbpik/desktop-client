@@ -100,9 +100,12 @@ public class SearchHistoryListView extends ListView<String> {
             moveToTop(string);
         else {
             Platform.runLater(()->{
-                switchOnListener = false;
-                searchHistory.add(0, string);
-                switchOnListener = true;
+                if(SearchField.addToHistory) {
+                    switchOnListener = false;
+                    searchHistory.add(0, string);
+                    switchOnListener = true;
+                    SearchField.addToHistory = false;
+                }
             });
         }
 
