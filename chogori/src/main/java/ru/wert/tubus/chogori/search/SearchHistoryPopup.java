@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.control.PopupControl;
 import javafx.scene.layout.AnchorPane;
+import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -18,6 +19,8 @@ public class SearchHistoryPopup extends PopupControl {
 
     public void showHistory() {
 
+        if(!(CH_SEARCH_FIELD.getSearchedTableView() instanceof Draft_TableView)) return;
+        
         SearchHistoryListView historyList = SearchHistoryListView.getInstance();
         historyList.setPrefWidth(300);
         int rows = Math.min(historyList.getItems().size(), MAX_ROWS);
