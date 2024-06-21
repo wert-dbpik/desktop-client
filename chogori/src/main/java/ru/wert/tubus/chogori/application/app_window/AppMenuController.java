@@ -1,8 +1,6 @@
 package ru.wert.tubus.chogori.application.app_window;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -27,6 +25,7 @@ import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
 import ru.wert.tubus.chogori.search.SearchHistoryButton;
+import ru.wert.tubus.chogori.search.SearchHistoryFile;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.chat.SideChat;
@@ -215,16 +214,23 @@ public class AppMenuController {
         MenuItem updateData = new MenuItem("Обновить данные");
         updateData.setOnAction(e->updateData());
 
+        MenuItem cleanSearchHistory = new MenuItem("Очистить историю поиска");
+        cleanSearchHistory.setOnAction(e-> SearchHistoryFile.getInstance().clear());
+
         MenuItem exitItem = new MenuItem("Выйти");
         exitItem.setOnAction(this::exit);
 
 
         mainMenu.getItems().add(changeUserItem);
         mainMenu.getItems().add(changePassword);
+        mainMenu.getItems().add(new SeparatorMenuItem());
         mainMenu.getItems().add(settings);
+        mainMenu.getItems().add(new SeparatorMenuItem());
 //        if(!CH_CURRENT_USER.getName().equals("Гость"))
 //            mainMenu.getItems().add(chatItem);
         mainMenu.getItems().add(updateData);
+        mainMenu.getItems().add(cleanSearchHistory);
+        mainMenu.getItems().add(new SeparatorMenuItem());
         mainMenu.getItems().add(exitItem);
 
         return mainMenu;
@@ -277,6 +283,7 @@ public class AppMenuController {
      * -- ЗАВЕРШЕНИЕ ПРОГРАММЫ
      */
     private void exit(Event e) {
+        SearchHistoryFile.getInstance().save(); //Сохраняем историю поиска
         WinformStatic.exitApplication(e);
 
     }

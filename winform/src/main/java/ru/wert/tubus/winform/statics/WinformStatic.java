@@ -33,6 +33,7 @@ public class WinformStatic {
     public static void closeWindow(Event event) {
         Window window = ((Node) event.getSource()).getScene().getWindow();
         if (window.equals(WinformStatic.WF_MAIN_STAGE)) {
+
             exitApplication(event);
         } else
             window.hide();

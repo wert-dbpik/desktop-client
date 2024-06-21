@@ -30,20 +30,11 @@ public class SearchHistoryListView extends ListView<String> {
     }
 
     private SearchHistoryListView() {
-        setItems(FXCollections.observableArrayList());
-        fillHistory();
+        setItems(SearchHistoryFile.getInstance().read());
         createCellFactory();
 
         getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         getSelectionModel().selectedItemProperty().addListener(selectedItemChangeListener());
-    }
-
-    private void fillHistory() {
-        getItems().add("ПИК.745351.109, Панель");
-        getItems().add("ПИК.305413.010, Тумба СМЛ");
-        getItems().add("ПИК.301261.320, Дно");
-        getItems().add("ПИК.745423.162, Швеллер рамы");
-        getItems().add("компл: ПИК.469474.171, ШАУ-2/НС");
     }
 
     private ChangeListener<String> selectedItemChangeListener() {
