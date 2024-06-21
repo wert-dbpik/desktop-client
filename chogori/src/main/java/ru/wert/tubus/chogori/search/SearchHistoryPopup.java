@@ -1,20 +1,28 @@
 package ru.wert.tubus.chogori.search;
 
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.control.PopupControl;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class SearchHistoryPopup extends PopupControl {
-    static final double n = 10.0; //Высота строки
+    static final int MAX_ROWS = 10;
+    static final double ROW_HEIGHT = 26;
 
     public void showHistory() {
 
         SearchHistoryListView historyList = SearchHistoryListView.getInstance();
         historyList.setPrefWidth(300);
-        historyList.setMinHeight(n);
-        historyList.setMaxHeight(10 * n);
+        int rows = Math.min(historyList.getItems().size(), MAX_ROWS);
+        rows = rows == 0 ? 1 : rows;
+        historyList.setPrefHeight(rows * ROW_HEIGHT);
 
         historyList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             this.hide();

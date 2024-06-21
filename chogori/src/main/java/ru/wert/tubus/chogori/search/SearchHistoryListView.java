@@ -1,20 +1,24 @@
 package ru.wert.tubus.chogori.search;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+
+import java.util.stream.Collectors;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
 public class SearchHistoryListView extends ListView<String> {
-
-    static final int MAX_ROWS = 10;
-    static final double ROW_HEIGHT = 24;
     private static SearchHistoryListView instance;
     private boolean switchOnListener = true;
 
