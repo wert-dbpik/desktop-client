@@ -15,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import lombok.Getter;
 import lombok.Setter;
 import ru.wert.tubus.winform.modal.ModalWindow;
 import ru.wert.tubus.winform.statics.WinformStatic;
@@ -25,7 +26,10 @@ import java.util.List;
 public class WindowDecorationController {
 
     @FXML private ImageView logo;
-    @FXML private ImageView imgBtnClose;
+
+    @FXML@Getter
+    private ImageView imgBtnClose;
+
     @FXML private ImageView imgBtnMaximize;
     @FXML private ImageView imgBtnMinimize;
     @FXML private Label windowName;
@@ -78,6 +82,8 @@ public class WindowDecorationController {
         window = (Stage) ((Node)e.getSource()).getScene().getWindow();
         changeSizeOfWindow(window, e);
     }
+
+    //+============================================================================
 
     /**
      * Закрытие окна после ОТПУСКАНИЯ нажатой кнопки Х или кнопки ОТМЕНА

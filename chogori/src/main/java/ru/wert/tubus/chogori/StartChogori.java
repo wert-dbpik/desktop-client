@@ -6,12 +6,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.AppMenuController;
+import ru.wert.tubus.chogori.search.SearchHistoryFile;
+import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.VersionDesktop;
 import ru.wert.tubus.client.retrofit.AppProperties;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
@@ -29,6 +32,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.MAIN_CLOSE_BUTTON;
 import static ru.wert.tubus.winform.statics.WinformStatic.PROGRAM_NAME;
 import static ru.wert.tubus.winform.statics.WinformStatic.TEST_VERSION;
 import static ru.wert.tubus.winform.warnings.WarningMessages.$ATTENTION;
@@ -101,7 +105,10 @@ public class StartChogori extends Application {
             //loginWindow помещаем в WindowDecoration
             UtilStaticNodes.CH_DECORATION_ROOT_PANEL = (StackPane)decoration.lookup("#mainPane");
             UtilStaticNodes.CH_DECORATION_ROOT_PANEL.getChildren().add(loginWindow);
-
+            MAIN_CLOSE_BUTTON = (ImageView) decoration.lookup("#imgBtnClose");
+            MAIN_CLOSE_BUTTON.setOnMousePressed(e->{
+                SearchHistoryFile.getInstance().save();
+            });
 
             //Меняем заголовок окна
             Label programName = (Label)decoration.lookup("#programName");

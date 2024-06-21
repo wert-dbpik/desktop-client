@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
@@ -30,6 +31,7 @@ import ru.wert.tubus.winform.enums.EDraftType;
 import ru.wert.tubus.winform.enums.EPDFViewer;
 import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.warnings.Warning1;
+import ru.wert.tubus.winform.window_decoration.WindowDecorationController;
 
 import java.awt.*;
 import java.io.File;
@@ -49,8 +51,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
-import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
-import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.tubus.winform.statics.WinformStatic.*;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
 

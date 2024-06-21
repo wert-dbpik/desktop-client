@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.statics;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import ru.wert.tubus.chogori.tabs.MainTabPane;
@@ -7,6 +8,8 @@ import ru.wert.tubus.chogori.search.SearchField;
 
 public class UtilStaticNodes {
 
+
+    public static ImageView MAIN_CLOSE_BUTTON;
     public static StackPane CH_DECORATION_ROOT_PANEL;
     public static HBox CH_APPLICATION_WAITING_BLIND; //Шторка исп-ся при загрузке табов
     public static StackPane CH_APPLICATION_ROOT_PANEL;
