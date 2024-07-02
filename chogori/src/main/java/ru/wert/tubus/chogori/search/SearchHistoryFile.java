@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class SearchHistoryFile {
 
@@ -54,7 +55,9 @@ public class SearchHistoryFile {
      */
     public void saveToFile(String searchHistoryItems){
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(searchHistoryFilePath));
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                            new FileOutputStream(searchHistoryFilePath), StandardCharsets.UTF_8));
             writer.write(searchHistoryItems);
             writer.close();
         } catch (IOException e) {
@@ -69,7 +72,9 @@ public class SearchHistoryFile {
     public ObservableList<String> read(){
         ObservableList<String> history = FXCollections.observableArrayList();
         try {
-            BufferedReader br = new BufferedReader(new FileReader(searchHistoryFile));
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(searchHistoryFilePath), StandardCharsets.UTF_8));
             String st;
             while ((st = br.readLine()) != null)
                 history.add(st);
