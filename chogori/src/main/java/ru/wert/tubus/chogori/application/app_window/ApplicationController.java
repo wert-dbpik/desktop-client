@@ -89,9 +89,6 @@ public class ApplicationController {
         if(compareVersions(CURRENT_PROJECT_VERSION, WinformStatic.LAST_VERSION_IN_DB ))
             createAdvertLabel();
 
-//        if(CURRENT_PROJECT_VERSION.compareTo(WinformStatic.LAST_VERSION_IN_DB) < 0)
-//            createAdvertLabel();
-
         try {
             log.debug("initialize : appMenu.fxml создается ...");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/appWindow/appMenu.fxml"));
