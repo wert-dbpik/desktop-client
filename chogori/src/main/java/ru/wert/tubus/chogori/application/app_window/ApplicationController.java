@@ -33,6 +33,7 @@ import java.util.TimerTask;
 import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_BLUE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
+import static ru.wert.tubus.winform.statics.WinformStatic.CURRENT_PROJECT_VERSION;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
 @Slf4j
 public class ApplicationController {
@@ -85,8 +86,11 @@ public class ApplicationController {
         createTabPane();
         createButtonInterceptor();
 
-        if(WinformStatic.CURRENT_PROJECT_VERSION.compareTo(WinformStatic.LAST_VERSION_IN_DB) < 0)
+        if(compareVersions(CURRENT_PROJECT_VERSION, WinformStatic.LAST_VERSION_IN_DB ))
             createAdvertLabel();
+
+//        if(CURRENT_PROJECT_VERSION.compareTo(WinformStatic.LAST_VERSION_IN_DB) < 0)
+//            createAdvertLabel();
 
         try {
             log.debug("initialize : appMenu.fxml создается ...");
@@ -137,6 +141,27 @@ public class ApplicationController {
 
         log.debug("initialize : блок инициализации успешно выполнен");
 
+    }
+
+    /**
+     * Возвращает true если требуется запустить анонс новой программы,
+     * т.е. currentProjectVersion < lastVersionInDb
+     */
+    boolean compareVersions(String currentProjectVersion, String lastVersionInDb) {
+        String[] current = currentProjectVersion.split("\\.", -1);
+        String[] last = lastVersionInDb.split("\\.", -1);
+
+        for(int i = 0; i < 3 ; i++){
+            int cV = current.length < i+1 ?
+                            0 :
+                            Integer.parseInt(current[i]);
+            int lV = last.length < i+1 ?
+                    0 :
+                    Integer.parseInt(last[i]);
+            if(cV < lV)
+                return true;
+        }
+        return false;
     }
 
 
