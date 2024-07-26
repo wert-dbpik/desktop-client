@@ -11,12 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
+import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.chogori.tabs.MainTabPane;
 import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.winform_settings.WinformSettings;
@@ -76,9 +78,16 @@ public class ApplicationController {
         CH_APPLICATION_WAITING_BLIND = waitingBlind;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
 
-        CH_TOOL_STACK_PANE.setVisible(false);
-
         SP_CHAT = spChat;
+
+//        CH_APPLICATION_ROOT_PANEL.setOnKeyPressed(e->{
+//            if(e.isControlDown() && e.getCode().equals(KeyCode.X)){
+//                    System.out.println("pressed ESCAPE");
+//                    AppTab tab = CH_TAB_PANE.tabIsAvailable("Чертежи");
+//                    if(tab != null)
+//                        CH_TAB_PANE.getSelectionModel().select(tab);
+//                }
+//        });
 
 
         createUserLabel();
@@ -172,6 +181,11 @@ public class ApplicationController {
 
         WF_MAIN_STAGE.getScene().setOnKeyPressed((e)->{
             CH_KEYS_NOW_PRESSED.add(e.getCode());
+            if(e.getCode().equals(KeyCode.ESCAPE)){
+                AppTab tab = CH_TAB_PANE.tabIsAvailable("Чертежи");
+                if(tab != null)
+                    CH_TAB_PANE.getSelectionModel().select(tab);
+            }
         });
 
         WF_MAIN_STAGE.getScene().setOnKeyReleased((e)->{
@@ -182,6 +196,7 @@ public class ApplicationController {
     private void createTabPane(){
         CH_TAB_PANE = new MainTabPane();
         rootPanel.getChildren().add(CH_TAB_PANE);
+
     }
 
 
