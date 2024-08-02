@@ -16,11 +16,14 @@ import ru.wert.tubus.chogori.common.utils.ClipboardUtils;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
 import ru.wert.tubus.chogori.entities.product_groups.ProductGroup_TreeView;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
+import ru.wert.tubus.winform.warnings.Warning2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static java.lang.String.format;
 
 public class Folder_Manipulator {
 
@@ -222,6 +225,10 @@ public class Folder_Manipulator {
      * Собственно вставка элементов
      */
     public void pasteItems(String str){
+
+        if(!Warning2.create("ВНИМАНИЕ!",
+                "Вы уверены, что хотите сделать перемещение?",
+                "Отменить будет сложнее.")) return; //ОК, true - уверен
 
         String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
 

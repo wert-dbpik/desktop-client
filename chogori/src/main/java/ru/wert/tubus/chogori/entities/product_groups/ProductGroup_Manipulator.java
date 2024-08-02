@@ -18,6 +18,7 @@ import ru.wert.tubus.chogori.common.utils.ClipboardUtils;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.images.AppImages;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
+import ru.wert.tubus.winform.warnings.Warning2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -243,6 +244,10 @@ public class ProductGroup_Manipulator {
     }
 
     public void pasteItems(String str) {
+
+        if(!Warning2.create("ВНИМАНИЕ!",
+                "Вы уверены, что хотите сделать перемещение?",
+                "Отменить будет сложнее.")) return; //ОК, true - уверен
 
         String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
 

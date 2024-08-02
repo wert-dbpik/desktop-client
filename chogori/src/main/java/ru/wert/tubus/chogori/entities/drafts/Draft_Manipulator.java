@@ -13,6 +13,7 @@ import ru.wert.tubus.chogori.common.utils.ClipboardUtils;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.winform.enums.EOperation;
+import ru.wert.tubus.winform.warnings.Warning2;
 import ru.wert.tubus.winform.window_decoration.WindowDecoration;
 
 import java.io.File;
@@ -180,6 +181,10 @@ public class Draft_Manipulator {
 
 
     public void pasteItems(String str) {
+        if(!Warning2.create("ВНИМАНИЕ!",
+                "Вы уверены, что хотите сделать перемещение?",
+                "Отменить будет сложнее.")) return; //ОК, true - уверен
+
         String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
         Folder selectedFolder = tableView.getSelectedFolders().get(0);
         for (String s : pasteData) {
