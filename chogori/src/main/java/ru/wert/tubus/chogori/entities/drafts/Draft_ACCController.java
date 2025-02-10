@@ -1286,6 +1286,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * Вызывается так же при изменении lblFileName в методе createLabelFileName()
      */
     private void setDecNumberAndName() {
+        String extension = FilenameUtils.getExtension(currentFileName).toLowerCase();
         //Обрезаем расширение файла
         String initialFileName = currentFileName.substring(0, currentFileName.lastIndexOf("."));
         log.debug("setDecNumberAndName : initial file name is '{}'", initialFileName);
@@ -1321,32 +1322,39 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
         int page = 1;
         EDraftType type = EDraftType.DETAIL;
-        String[] nameParts = partName.split(" ", -1);
-        outer_loop:
-        for(String s : nameParts){
-            for (String shortName : EDraftType.getShortNames()) {
-                String numbers;
-                if(s.equals(shortName) || s.equals(shortName + ",") || s.equals(shortName + ".")){
-                    type = EDraftType.getTypeByShortName(shortName);
-                    numbers = "1";
-                } else {
-                    Pattern pat1 = Pattern.compile(shortName + "\\d"); //сб1, сб2 ...
-                    Matcher m1 = pat1.matcher(s);
-                    String typeAndPage = "";
-                    while (m1.find()) {
-                        typeAndPage = s.substring(m1.start(), m1.end());
+        if(extension.equals("step")) {
+            type = EDraftType.IMAGE_STEP;
+        } else if(extension.equals("dxf")){
+            type = EDraftType.IMAGE_DXF;
+        } else {
+            String[] nameParts = partName.split(" ", -1);
+            outer_loop:
+            for(String s : nameParts){
+                for (String shortName : EDraftType.getShortNames()) {
+                    String numbers;
+                    if(s.equals(shortName) || s.equals(shortName + ",") || s.equals(shortName + ".")){
+                        type = EDraftType.getTypeByShortName(shortName);
+                        numbers = "1";
+                    } else {
+                        Pattern pat1 = Pattern.compile(shortName + "\\d"); //сб1, сб2 ...
+                        Matcher m1 = pat1.matcher(s);
+                        String typeAndPage = "";
+                        while (m1.find()) {
+                            typeAndPage = s.substring(m1.start(), m1.end());
+                        }
+                        if (typeAndPage.equals("")) continue;
+
+                        type = EDraftType.getTypeByShortName(shortName);
+                        numbers = s.replace(shortName, "");
                     }
-                    if (typeAndPage.equals("")) continue;
 
-                    type = EDraftType.getTypeByShortName(shortName);
-                    numbers = s.replace(shortName, "");
+                    page = Integer.parseInt(numbers);
+                    partName = partName.replace(s, "").trim();
+                    break outer_loop;
                 }
-
-                page = Integer.parseInt(numbers);
-                partName = partName.replace(s, "").trim();
-                break outer_loop;
             }
         }
+
 
         bxType.getSelectionModel().select(type);
         bxPage.getSelectionModel().select(page - 1);
