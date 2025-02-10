@@ -75,12 +75,14 @@ public class AppStatic {
     public static final char TILDA = '\u02F7';
 
     public static FileChooser.ExtensionFilter ALLOWED_EXTENSIONS = new FileChooser.ExtensionFilter(
-            "PDF, PNG, JPEG, EASM",
-            "*.pdf", "*.png", "*.jpg", "*.eprt", "*.easm");
+            "PDF, PNG, JPEG, EASM, STEP, DXF",
+            "*.pdf", "*.png", "*.jpg", "*.eprt", "*.easm","*.step","*.dxf");
 
     public static List<String> PDF_EXTENSIONS = Collections.singletonList("pdf");
     public static List<String> IMAGE_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
     public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm");
+    public static List<String> STEP_EXTENSIONS = Collections.singletonList("step");
+    public static List<String> DXF_EXTENSIONS = Collections.singletonList("dxf");
     public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
 
     /**
@@ -381,7 +383,9 @@ public class AppStatic {
     public static void openInOuterApplication(Draft draft) {
         if (draft == null) return;
         if (!CH_CURRENT_USER_GROUP.isReadDrafts() && //Если нет разрешения на печать файлов
-                !draft.getDraftType().equals(EDraftType.IMAGE_3D.getTypeId())) //Если чертеж не 3D
+                !draft.getDraftType().equals(EDraftType.IMAGE_3D.getTypeId()) &&
+                !draft.getDraftType().equals(EDraftType.IMAGE_STEP.getTypeId()) &&
+                !draft.getDraftType().equals(EDraftType.IMAGE_DXF.getTypeId())) //Если чертеж не 3D
             return;
 
         AppStatic.createLog(true, format("%s открыл чертеж '%s' во внешней программе",
@@ -403,7 +407,8 @@ public class AppStatic {
             executingFile = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith();
         else if (IMAGE_EXTENSIONS.contains(ext) && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith().equals(""))
             executingFile = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith();
-        else if (SOLID_EXTENSIONS.contains(ext) && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith().equals(""))
+        else if ((SOLID_EXTENSIONS.contains(ext) || STEP_EXTENSIONS.contains(ext) || DXF_EXTENSIONS.contains(ext))
+                && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith().equals(""))
             executingFile = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith();
 
         if (executingFile != null)

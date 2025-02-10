@@ -42,6 +42,8 @@ public class BtnImages {
     public static Image BTN_UPDATE_BLUE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/update-blue.png"), size24, size24, true, true);
     public static Image BTN_HISTORY_PREVIEW_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/history.png"), size16, size16, true, true);
     public static Image SOLID_3D_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/3D_IMAGE.png"), 400, 400, true, true);
+    public static Image STEP_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/STEP_IMAGE.png"), 400, 400, true, true);
+    public static Image DXF_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/DXF_IMAGE.png"), 400, 400, true, true);
     public static Image MAN_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/man(32x32).png"), size16, size16, true, true);
     public static Image LETTER_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/letter(32x32).png"), size16, size16, true, true);
     public static Image SEND_MESSAGE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/send-message(32x32).png"), size16, size16, true, true);
