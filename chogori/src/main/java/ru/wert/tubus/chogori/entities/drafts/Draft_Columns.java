@@ -14,6 +14,7 @@ import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.winform.enums.EDraftStatus;
 import ru.wert.tubus.winform.enums.EDraftType;
 
+import static ru.wert.tubus.chogori.statics.AppStatic.DXF_DOCKS;
 import static ru.wert.tubus.chogori.statics.Comparators.createLabelComparator;
 import static ru.wert.tubus.winform.statics.WinformStatic.parseLDTtoNormalDate;
 
@@ -71,11 +72,16 @@ public class Draft_Columns {
         TableColumn<Draft, Label> tcDraftNumber = new TableColumn<>("Дец.номер");
 
         tcDraftNumber.setCellValueFactory(cd -> {
-            Passport passport = cd.getValue().getPassport();
+            final Passport passport = cd.getValue().getPassport();
             String prefix = passport.getPrefix().getName().equals("-") ? "" : passport.getPrefix().getName() + ".";
 
             if(!ChogoriSettings.CH_SHOW_PREFIX && passport.getPrefix().equals(ChogoriSettings.CH_DEFAULT_PREFIX)) prefix = "";
             String decNumber = prefix + passport.getNumber();
+
+            final EDraftType type = EDraftType.getDraftTypeById(cd.getValue().getDraftType());
+            if(DXF_DOCKS.contains(type))
+                decNumber = decNumber + "-" + String.format("%02d", cd.getValue().getPageNumber());
+
 
             Label lblNumber = new Label(decNumber);
 
@@ -92,6 +98,7 @@ public class Draft_Columns {
                 default :
                     lblNumber.setStyle("-fx-text-fill: black; -fx-font-size: 14;  -fx-font-weight: bold;");
             }
+
 
             return new ReadOnlyObjectWrapper<>(lblNumber);
 
