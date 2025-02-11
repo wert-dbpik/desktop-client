@@ -8,7 +8,7 @@ public class BXPage {
 
     public void create(ComboBox<Integer> bxPage){
         ObservableList<Integer> pages = FXCollections.observableArrayList();
-        for(int i = 1; i < 100; i++){
+        for(int i = 0; i < 100; i++){
             pages.add(i);
         }
         bxPage.setItems(pages);

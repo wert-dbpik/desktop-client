@@ -1286,6 +1286,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      * Вызывается так же при изменении lblFileName в методе createLabelFileName()
      */
     private void setDecNumberAndName() {
+        String var = "";
         String extension = FilenameUtils.getExtension(currentFileName).toLowerCase();
         //Обрезаем расширение файла
         String initialFileName = currentFileName.substring(0, currentFileName.lastIndexOf("."));
@@ -1326,6 +1327,8 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             type = EDraftType.IMAGE_STEP;
         } else if(extension.equals("dxf")){
             type = EDraftType.IMAGE_DXF;
+            page = Integer.parseInt(parsVariant(initialFileName));
+
         } else {
             String[] nameParts = partName.split(" ", -1);
             outer_loop:
@@ -1357,10 +1360,32 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
 
 
         bxType.getSelectionModel().select(type);
-        bxPage.getSelectionModel().select(page - 1);
+        bxPage.getSelectionModel().select(page);
         txtNumber.setText(decNumber);
         txtName.setText(partName);
 
+    }
+
+    /**
+     * Метод возвращает исполнение, если оно указано в наименовании чертежа
+     * По умолчанию возвращается значение "0"
+     * @param initialFileName
+     * @return
+     */
+    private String parsVariant(String initialFileName) {
+        String variant = "";
+
+        Pattern p0 = Pattern.compile("-\\d{2}"); //-xx
+        Matcher m0 = p0.matcher(initialFileName);
+        while(m0.find()){
+            variant = initialFileName.substring(m0.start(), m0.end());
+        }
+        if(!variant.equals("")){
+            variant = variant.split("-", -1)[1];
+        } else {
+            variant = "0";
+        }
+        return variant;
     }
 
 
