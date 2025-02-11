@@ -7,12 +7,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import ru.wert.tubus.client.entity.models.Folder;
-import ru.wert.tubus.client.entity.models.ProductGroup;
-import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
 import ru.wert.tubus.chogori.components.BtnMenuDraftsColumns;
 import ru.wert.tubus.chogori.components.BtnMenuDraftsFilter;
+import ru.wert.tubus.chogori.components.BtnMenuDraftsFilterDocs;
 import ru.wert.tubus.chogori.images.BtnImages;
+import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
+import ru.wert.tubus.client.entity.models.Folder;
+import ru.wert.tubus.client.entity.models.ProductGroup;
 
 public class Draft_PatchController {
 
@@ -37,6 +38,7 @@ public class Draft_PatchController {
     private PreviewerPatchController previewerController;
     private Object modifyingClass; //класс, от которого зависит отображаемый список в таблице (Folder, Product, Passport)
     private SelectionMode mode; //SelectionMode.SINGLE, SelectionMode.MULTIPLE
+    @Getter private MenuButton btnShowFilterDocs;
     @Getter private MenuButton btnShowFilter;
     @Getter private MenuButton btnShowColumns;
 
@@ -44,7 +46,7 @@ public class Draft_PatchController {
     private boolean useBtnDraftsGlobe; //Показать все чертежи
     private boolean useBtnShowFilter; //Фильтровать список
     private boolean useBtnShowColumns; //Выбор колонок для отображения
-    private boolean useBtnAltSwitcher;//Переключатель Alt для перехода к предпросмотру
+    private boolean useBtnShowFilterDocs; //Выбор документов для отображения
     private boolean switchDraftsSearch; //Переключение на поиск чертежей при переносе фокуса на таблицу с чертежами
 
 
@@ -60,11 +62,11 @@ public class Draft_PatchController {
 
     }
 
-    public void initDraftsToolBar(boolean btnAltSwitcher, boolean btnDraftsGlobe, boolean btnShowFilter, boolean btnShowColumns){
+    public void initDraftsToolBar(boolean btnDraftsGlobe, boolean btnShowFilter, boolean btnShowColumns, boolean btnShowFilterDocs){
         this.useBtnDraftsGlobe = btnDraftsGlobe;
         this.useBtnShowFilter = btnShowFilter;
         this.useBtnShowColumns = btnShowColumns;
-        this.useBtnAltSwitcher = btnAltSwitcher;
+        this.useBtnShowFilterDocs = btnShowFilterDocs;
 
         createDraftToolBar();
     }
@@ -117,12 +119,16 @@ public class Draft_PatchController {
             e.consume();
         });
 
+        //Кнопка ПОКАЗАТЬ ФИЛЬТР ДОКУМЕНТОВ
+        btnShowFilterDocs = new BtnMenuDraftsFilterDocs(draftsTable);
 
         //Кнопка ПОКАЗАТЬ ФИЛЬТР
         btnShowFilter = new BtnMenuDraftsFilter(draftsTable);
+
         //Кнопка ПОКАЗАТЬ КОЛОНКИ
         btnShowColumns = new BtnMenuDraftsColumns(draftsTable);
 
+        if(useBtnShowFilterDocs) hboxDraftsButtons.getChildren().add(btnShowFilterDocs);
         if(useBtnShowFilter) hboxDraftsButtons.getChildren().add(btnShowFilter);
         if(useBtnShowColumns) hboxDraftsButtons.getChildren().add(btnShowColumns);
         if(useBtnDraftsGlobe) hboxDraftsButtons.getChildren().add(btnDraftsGlobe);

@@ -149,7 +149,7 @@ public class PassportsEditorController implements SearchableTab, UpdatableTabCon
         draftsTable.showTableColumns(false, true, true, true, false,
                 false, true);
         //Инструментальную панель инициируем в последнюю очередь
-        draftPatchController.initDraftsToolBar(false, false, true, true);
+        draftPatchController.initDraftsToolBar(false, true, true, true);
         draftPatchController.getHboxDraftsButtons().getChildren().add(CommonUnits.createVerticalDividerButton(sppVertical, 0.8, 0.4));
 
         previewerPatchController.getLblCount().textProperty().bind(

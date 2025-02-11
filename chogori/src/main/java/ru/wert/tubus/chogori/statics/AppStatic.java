@@ -52,6 +52,8 @@ import static java.lang.String.format;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
+import static ru.wert.tubus.winform.enums.EDraftType.*;
+import static ru.wert.tubus.winform.enums.EDraftType.IMAGE_DXF;
 import static ru.wert.tubus.winform.statics.WinformStatic.*;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
 
@@ -84,6 +86,10 @@ public class AppStatic {
     public static List<String> STEP_EXTENSIONS = Collections.singletonList("step");
     public static List<String> DXF_EXTENSIONS = Collections.singletonList("dxf");
     public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
+
+    public static final List<EDraftType> DRAFT_DOCKS = Arrays.asList(DETAIL, ASSEMBLE, SPECIFICATION, PACKAGE, TOOL, MARKING, MOUNT, ELECTRIC);
+    public static final List<EDraftType> D3_DOCKS = Arrays.asList(IMAGE_3D, IMAGE_STEP);
+    public static final List<EDraftType> DXF_DOCKS = Arrays.asList(IMAGE_DXF);
 
     /**
      * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в фотрмат dd.MM.yyyy

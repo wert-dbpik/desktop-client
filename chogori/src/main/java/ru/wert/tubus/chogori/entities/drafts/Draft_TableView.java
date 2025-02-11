@@ -25,13 +25,13 @@ import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.chogori.statics.Comparators;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.winform.enums.EDraftStatus;
+import ru.wert.tubus.winform.enums.EDraftType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.tubus.winform.enums.EDraftType.*;
 
 public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<Draft> {
 
@@ -51,7 +51,12 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
     @Getter ListProperty<Draft> preparedList = new SimpleListProperty<>();
 
-    //Фильтр
+    //Фильтр типов документов
+    @Getter@Setter private boolean showDraftDocks = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
+    @Getter@Setter private boolean show3DDocks; //ЗАМЕНЕНННЫЕ
+    @Getter@Setter private boolean showDFXDocks; //АННУЛИРОВАННЫЕ
+
+    //Фильтр статусов
     @Getter@Setter private boolean showValid = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
     @Getter@Setter private boolean showChanged; //ЗАМЕНЕНННЫЕ
     @Getter@Setter private boolean showAnnulled; //АННУЛИРОВАННЫЕ
@@ -243,13 +248,18 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         while (i.hasNext()) {
             Draft d = i.next();
             EDraftStatus status = EDraftStatus.getStatusById(d.getStatus());
-            if (status != null) {
-                if ((status.equals(EDraftStatus.LEGAL) && !isShowValid()) ||
+            EDraftType type = EDraftType.getDraftTypeById(d.getDraftType());
+            if (status != null && type != null) {
+                if (
+                        (status.equals(EDraftStatus.LEGAL) && !isShowValid()) ||
                         (status.equals(EDraftStatus.CHANGED) && !isShowChanged()) ||
-                        (status.equals(EDraftStatus.ANNULLED) && !isShowAnnulled()))
+                        (status.equals(EDraftStatus.ANNULLED) && !isShowAnnulled()) ||
+                        (DRAFT_DOCKS.contains(type) && !isShowDraftDocks()) ||
+                        (D3_DOCKS.contains(type) && !isShow3DDocks()) ||
+                        (DXF_DOCKS.contains(type) && !isShowDFXDocks())
+                )
                     i.remove();
             }
-
         }
     }
 
