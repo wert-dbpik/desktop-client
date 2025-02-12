@@ -8,9 +8,12 @@ import ru.wert.tubus.chogori.common.utils.ClipboardUtils;
 import ru.wert.tubus.chogori.entities.drafts.commands._Draft_Commands;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.winform.enums.EDraftStatus;
+import ru.wert.tubus.winform.enums.EDraftType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.wert.tubus.chogori.statics.AppStatic.DXF_DOCKS;
 
 public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
@@ -31,6 +34,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem openFolderWithDraft; //Открыть комплект с этим чертежом
     private MenuItem showRemarks; //Открыть комментарии
     private MenuItem showInfo; //Открыть информацию о чертеже
+    private MenuItem downloadDrafts; //Скачать документ
 
     //Условие, при котором список составлен только для одной папки
     private boolean condition;
@@ -97,6 +101,10 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         boolean extraShowFolderWithDraft = false;
         boolean extraShowRemarks = false;
         boolean extraShowInfo = false;
+        //======================================
+        boolean extraDownloadDrafts = false;
+
+        List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
         addFolder = new MenuItem("Добавить папку с чертежами");
         cutDrafts = new MenuItem("Перенести");
@@ -109,6 +117,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         openFolderWithDraft = new MenuItem("Перейти в комплект с этим чертежом" );
         showRemarks = new MenuItem("Комментарии");
         showInfo = new MenuItem("Инфо");
+        downloadDrafts = new MenuItem("Скачать DXF");
 
         addFolder.setOnAction(commands::addFromFolder);
         cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
@@ -121,8 +130,10 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         openFolderWithDraft.setOnAction(commands::goToFolderWithTheDraft);
         showRemarks.setOnAction(commands::showRemarks);
         showInfo.setOnAction(commands::showInfo);
+        downloadDrafts.setOnAction(e->manipulator.downloadDrafts(selectedDrafts));
 
-        List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
+        if(!selectedDrafts.isEmpty() && downloadIsPossible(selectedDrafts))
+            extraDownloadDrafts = true;
 
         if(selectedDrafts.size() == 1) {
             extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
@@ -130,6 +141,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
             extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
             extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
             extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
+
         }
         if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
 
@@ -173,6 +185,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if (extraCutDrafts) extraItems.add(cutDrafts);//ВЫРЕЗАТЬ ЧЕРТЕЖИ
         if (extraPasteDrafts) extraItems.add(pasteDrafts);//ВСТАВИТЬ ЧЕРТЕЖИ
 
+
         if ((extraRenameDraft || extraReplaceDraft || extraNullifyDraft) && (extraCutDrafts || extraPasteDrafts)) extraItems.add(new SeparatorMenuItem());//==================
         if (extraRenameDraft) extraItems.add(renameDraft);//ПЕРЕИМЕНОВАТЬ
         if (extraReplaceDraft) extraItems.add(replaceDraft);//ЗАМЕНИТЬ
@@ -182,12 +195,30 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if (extraOpenInTab) extraItems.add(openInTab);//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         if (extraOpenInOuterApp) extraItems.add(openInOuterApp);//ОТКРЫТЬ ВО ВНЕШНЕЙ ПРОГРАММЕ
 
+
         if (extraShowInfo) extraItems.add(new SeparatorMenuItem());//==================
-        if (extraShowFolderWithDraft) extraItems.add(openFolderWithDraft); //ПОКАЗАТЬ КОММЕНТАРИИ
-        if (extraShowInfo) extraItems.add(showRemarks); //ПОКАЗАТЬ КОММЕНТАРИИ
+        if (extraShowFolderWithDraft) extraItems.add(openFolderWithDraft); //ПЕРЕЙТИ В КОМПЛЕКТ С ЧЕРТЕЖОМ
+        if (extraDownloadDrafts) extraItems.add(downloadDrafts); //СКАЧАТЬ ДОКУМЕНТЫ
+        if (extraShowRemarks) extraItems.add(showRemarks); //ПОКАЗАТЬ КОММЕНТАРИИ
         if (extraShowInfo) extraItems.add(showInfo); //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
 
+
+
         return extraItems;
+    }
+
+    /**
+     * Метод проверяет, есть ли среди выделенных документов такой, который можно скачать
+     * Если в списке есть хотя бы один такой документ, то возвращается true
+     * @param selectedDrafts - выделенные чертежи
+     * @return boolean
+     */
+    private boolean downloadIsPossible(List<Draft> selectedDrafts){
+        for(Draft d : selectedDrafts){
+            EDraftType type = EDraftType.getDraftTypeById(d.getDraftType());
+            if(DXF_DOCKS.contains(type)) return true;
+        }
+        return false;
     }
 
 

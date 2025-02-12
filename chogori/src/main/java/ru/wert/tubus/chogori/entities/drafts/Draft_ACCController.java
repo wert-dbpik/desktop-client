@@ -940,10 +940,18 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             if(folder == null || !folder.isDirectory()) return;
 
             List<Path> filesInFolder = Files.walk(folder.toPath())
-                    .filter(file ->file.toString().toLowerCase().endsWith(".pdf") ||
+                    .filter(file ->
+                            file.toString().toLowerCase().endsWith(".pdf") ||
                             file.toString().toLowerCase().endsWith(".png") ||
-                            file.toString().toLowerCase().endsWith(".jpg"))
+                            file.toString().toLowerCase().endsWith(".jpg") ||
+                            file.toString().toLowerCase().endsWith(".jpeg") ||
+                            file.toString().toLowerCase().endsWith(".dxf") ||
+                            file.toString().toLowerCase().endsWith(".step") ||
+                            file.toString().toLowerCase().endsWith(".eprt") ||
+                            file.toString().toLowerCase().endsWith(".easm"))
                     .collect(Collectors.toList());
+
+
             for(Path p : filesInFolder)
                 draftsList.add(new DraftFileAndId(p.toFile(), null));
             lastFile = folder.getParentFile();

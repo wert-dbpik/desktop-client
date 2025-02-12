@@ -55,7 +55,8 @@ public class RemarkEntryController {
                     String.valueOf(p.getId()), //название скачиваемого файла
                     "." + p.getExtension(), //расширение скачиваемого файла
                     WF_TEMPDIR.toString(),//временная папка, куда необходимо скачать фай
-                    "remark"); //префикс
+                    "remark",
+                    null); //префикс
 
             File file = new File( WF_TEMPDIR.toString() + "\\" + tempFileName);
 

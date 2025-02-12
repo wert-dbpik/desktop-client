@@ -38,12 +38,24 @@ public class FilesService implements IFilesService {
         return instance;
     }
 
-
+    /**
+     * Метод загружает файл из БД в указанную директорию и с указанным именем
+     * Если newName = null, то имя скачиваемого файла остается прежним, т.е. id.ext
+     * @param path, String - из какой директории выкачиваем файл (apk, drafts, excels, normic, pics)
+     * @param fileName, String - обычно ID файла
+     * @param ext, String - расширение файла (.exe, .pdf, .apk и т.д.)
+     * @param destDir, String -  папка назначения (путь до tempDir, своя папка)
+     * @param prefix, String - уточнящий префикс для управления ("chat", "remark")
+     */
     @Override
-    public boolean download(String path, String fileName, String ext, String tempDir, String prefix) {
+    public boolean download(String path, String fileName, String ext, String destDir, String prefix, String newName) {
         //ext уже с точкой
         String file = fileName + ext;
-        String destFileName = file;
+        String destFileName;
+        if(newName != null)
+            destFileName = newName;
+        else
+            destFileName = file;
         if(prefix != null) destFileName = prefix + "-" + file;
         try {
             Call<ResponseBody> call = api.download(path, file);
@@ -52,7 +64,7 @@ public class FilesService implements IFilesService {
 
 //                if (ext.toLowerCase().equals(".pdf")) {
                     InputStream inputStream = r.body().byteStream();
-                    try (OutputStream outputStream = new FileOutputStream(tempDir + "/" + destFileName)) {
+                    try (OutputStream outputStream = new FileOutputStream(destDir + "/" + destFileName)) {
                         IOUtils.copy(inputStream, outputStream);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -66,6 +78,26 @@ public class FilesService implements IFilesService {
         return false;
     }
 
+//    public boolean downloadWithNewName(String path, String fileName, String ext, String destDir, String prefix, String newName) {
+//        //ext уже с точкой
+//        String file = fileName + ext;
+//        try {
+//            Call<ResponseBody> call = api.download(path, file);
+//            Response<ResponseBody> r = call.execute();
+//            if (r.isSuccessful()) {
+//                InputStream inputStream = r.body().byteStream();
+//                try (OutputStream outputStream = new FileOutputStream(destDir + "/" + newName)) {
+//                    IOUtils.copy(inputStream, outputStream);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                return true;
+//            }
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//        return false;
+//    }
 
     @Override
     public boolean upload(String fileNameForSaving, String directoryName, File initialFile) throws IOException {

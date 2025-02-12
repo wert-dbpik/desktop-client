@@ -170,6 +170,7 @@ public class AppStatic {
                         String.valueOf(fileId), //название скачиваемого файла
                         "." + ext, //расширение скачиваемого файла
                         WF_TEMPDIR.toString(),  //временная папка, куда необходимо скачать файл
+                        null,
                         null); //префикс
                 if(res) {
                     log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", String.valueOf(fileId) + "." + ext);

@@ -263,7 +263,8 @@ public class Remark_ACCController extends FormView_ACCController<Remark> {
                     String.valueOf(p.getId()), //название скачиваемого файла
                     "." + p.getExtension(), //расширение скачиваемого файла
                     WF_TEMPDIR.toString(),//временная папка, куда необходимо скачать фай
-                    "remark"); //префикс
+                    "remark",
+                    null); //префикс
 
             File file = new File(WF_TEMPDIR.toString() + "\\" + tempFileName);
             //Добавляем файл в общий список

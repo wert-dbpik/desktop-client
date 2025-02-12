@@ -7,11 +7,13 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.text.Text;
 import org.apache.commons.io.FilenameUtils;
+import ru.wert.tubus.chogori.components.FileFwdSlash;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.chogori.common.utils.ClipboardUtils;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
+import ru.wert.tubus.winform.enums.EDraftType;
 import ru.wert.tubus.winform.enums.EOperation;
 import ru.wert.tubus.winform.warnings.Warning2;
 import ru.wert.tubus.winform.window_decoration.WindowDecoration;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
+import static ru.wert.tubus.winform.statics.WinformStatic.WF_TEMPDIR;
 
 public class Draft_Manipulator {
 
@@ -234,5 +237,17 @@ public class Draft_Manipulator {
             if(index == 0) index=rows;
             tableView.getSelectionModel().select(index - 1);
         }
+    }
+
+    public void downloadDrafts(List<Draft> selectedDrafts){
+        List<Draft> draftsToBeDownloaded = new ArrayList<>();
+        for(Draft d : selectedDrafts){
+            EDraftType type = EDraftType.getDraftTypeById(d.getDraftType());
+            if(DXF_DOCKS.contains(type)) draftsToBeDownloaded.add(d);
+        }
+
+        new TaskDownloadDXFDocks(draftsToBeDownloaded);
+
+
     }
 }
