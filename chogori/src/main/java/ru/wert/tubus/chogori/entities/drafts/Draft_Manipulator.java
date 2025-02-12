@@ -96,7 +96,6 @@ public class Draft_Manipulator {
                     if (PDF_EXTENSIONS.contains(ext) ||
                             IMAGE_EXTENSIONS.contains(ext) ||
                             SOLID_EXTENSIONS.contains(ext)||
-                            STEP_EXTENSIONS.contains(ext)||
                             DXF_EXTENSIONS.contains(ext)
                     ) {
                         if(tableView.getModifyingItem() == null){
@@ -126,7 +125,6 @@ public class Draft_Manipulator {
                                     .filter(file -> PDF_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
                                                     IMAGE_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
                                             SOLID_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
-                                            STEP_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
                                             DXF_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase()))
                                     )
                                     .collect(Collectors.toList());
@@ -136,7 +134,6 @@ public class Draft_Manipulator {
                             if (PDF_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
                             || IMAGE_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
                             || SOLID_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
-                            || STEP_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
                             || DXF_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
                             ) {
                                 acceptedFiles.add(f);

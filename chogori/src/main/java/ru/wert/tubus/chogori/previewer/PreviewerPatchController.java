@@ -317,9 +317,7 @@ public class PreviewerPatchController {
             }
         } else if (SOLID_EXTENSIONS.contains(ext)) {
             showPlaceholder(BtnImages.SOLID_3D_IMG);
-        } else if (STEP_EXTENSIONS.contains(ext)) {
-            showPlaceholder(BtnImages.STEP_IMG);
-        }else if (DXF_EXTENSIONS.contains(ext)) {
+        } else if (DXF_EXTENSIONS.contains(ext)) {
             showPlaceholder(BtnImages.DXF_IMG);
         } else {
             try {

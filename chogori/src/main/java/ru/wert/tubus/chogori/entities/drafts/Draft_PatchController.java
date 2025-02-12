@@ -1,5 +1,8 @@
 package ru.wert.tubus.chogori.entities.drafts;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -7,13 +10,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import ru.wert.tubus.chogori.components.BtnDouble;
 import ru.wert.tubus.chogori.components.BtnMenuDraftsColumns;
 import ru.wert.tubus.chogori.components.BtnMenuDraftsFilter;
 import ru.wert.tubus.chogori.components.BtnMenuDraftsFilterDocs;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
+import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.ProductGroup;
+
+import java.util.Collections;
+
+import static ru.wert.tubus.chogori.images.BtnImages.*;
 
 public class Draft_PatchController {
 
@@ -42,11 +51,14 @@ public class Draft_PatchController {
     @Getter private MenuButton btnShowFilter;
     @Getter private MenuButton btnShowColumns;
 
+    @Getter private BtnDouble btnShowDraftsDocks;
+    @Getter private BtnDouble btnShowDFXDocks;
+
     //Кнопки toolbar
     private boolean useBtnDraftsGlobe; //Показать все чертежи
     private boolean useBtnShowFilter; //Фильтровать список
     private boolean useBtnShowColumns; //Выбор колонок для отображения
-    private boolean useBtnShowFilterDocs; //Выбор документов для отображения
+    private boolean useBtnShowDFX; //Выбор документов для отображения
     private boolean switchDraftsSearch; //Переключение на поиск чертежей при переносе фокуса на таблицу с чертежами
 
 
@@ -62,11 +74,11 @@ public class Draft_PatchController {
 
     }
 
-    public void initDraftsToolBar(boolean btnDraftsGlobe, boolean btnShowFilter, boolean btnShowColumns, boolean btnShowFilterDocs){
+    public void initDraftsToolBar(boolean btnDraftsGlobe, boolean btnShowFilter, boolean btnShowColumns, boolean btnShowDFX){
         this.useBtnDraftsGlobe = btnDraftsGlobe;
         this.useBtnShowFilter = btnShowFilter;
         this.useBtnShowColumns = btnShowColumns;
-        this.useBtnShowFilterDocs = btnShowFilterDocs;
+        this.useBtnShowDFX = btnShowDFX;
 
         createDraftToolBar();
     }
@@ -119,8 +131,36 @@ public class Draft_PatchController {
             e.consume();
         });
 
+        btnShowDraftsDocks = new BtnDouble(
+                BTN_SHOW_DRAFTS_DOCKS_OFF_IMG, "Черетежи OFF",
+                BTN_SHOW_DRAFTS_DOCKS_ON_IMG, "Черетежи ON",
+                true
+        );
+        btnShowDraftsDocks.getStateProperty().addListener((observable, oldValue, newValue) -> {
+            draftsTable.setShowDraftDocks(newValue);
+            Platform.runLater(() -> {
+                Draft selectedDraft = draftsTable.getSelectionModel().getSelectedItem();
+                draftsTable.updateRoutineTableView(Collections.singletonList(selectedDraft), false);
+                draftsTable.refresh();
+            });
+        });
+
+        btnShowDFXDocks = new BtnDouble(
+                BTN_SHOW_DFX_DOCKS_OFF_IMG, "Развертки OFF",
+                BTN_SHOW_DFX_DOCKS_ON_IMG, "Развертки ON",
+                false
+        );
+        btnShowDFXDocks.getStateProperty().addListener((observable, oldValue, newValue) -> {
+            draftsTable.setShowDFXDocks(newValue);
+            Platform.runLater(() -> {
+                Draft selectedDraft = draftsTable.getSelectionModel().getSelectedItem();
+                draftsTable.updateRoutineTableView(Collections.singletonList(selectedDraft), false);
+                draftsTable.refresh();
+            });
+        });
+
         //Кнопка ПОКАЗАТЬ ФИЛЬТР ДОКУМЕНТОВ
-        btnShowFilterDocs = new BtnMenuDraftsFilterDocs(draftsTable);
+//        btnShowFilterDocs = new BtnMenuDraftsFilterDocs(draftsTable);
 
         //Кнопка ПОКАЗАТЬ ФИЛЬТР
         btnShowFilter = new BtnMenuDraftsFilter(draftsTable);
@@ -128,7 +168,10 @@ public class Draft_PatchController {
         //Кнопка ПОКАЗАТЬ КОЛОНКИ
         btnShowColumns = new BtnMenuDraftsColumns(draftsTable);
 
-        if(useBtnShowFilterDocs) hboxDraftsButtons.getChildren().add(btnShowFilterDocs);
+        if(useBtnShowDFX){
+            hboxDraftsButtons.getChildren().add(btnShowDraftsDocks);
+            hboxDraftsButtons.getChildren().add(btnShowDFXDocks);
+        }
         if(useBtnShowFilter) hboxDraftsButtons.getChildren().add(btnShowFilter);
         if(useBtnShowColumns) hboxDraftsButtons.getChildren().add(btnShowColumns);
         if(useBtnDraftsGlobe) hboxDraftsButtons.getChildren().add(btnDraftsGlobe);

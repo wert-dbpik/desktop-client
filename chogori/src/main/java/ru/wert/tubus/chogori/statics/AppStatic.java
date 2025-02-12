@@ -82,13 +82,12 @@ public class AppStatic {
 
     public static List<String> PDF_EXTENSIONS = Collections.singletonList("pdf");
     public static List<String> IMAGE_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
-    public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm");
-    public static List<String> STEP_EXTENSIONS = Collections.singletonList("step");
+    public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm", "step");
     public static List<String> DXF_EXTENSIONS = Collections.singletonList("dxf");
     public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
 
-    public static final List<EDraftType> DRAFT_DOCKS = Arrays.asList(DETAIL, ASSEMBLE, SPECIFICATION, PACKAGE, TOOL, MARKING, MOUNT, ELECTRIC);
-    public static final List<EDraftType> D3_DOCKS = Arrays.asList(IMAGE_3D, IMAGE_STEP);
+    public static final List<EDraftType> DRAFT_DOCKS = Arrays.asList(DETAIL, ASSEMBLE, SPECIFICATION, PACKAGE, TOOL,
+            MARKING, MOUNT, ELECTRIC, IMAGE_3D, IMAGE_STEP);
     public static final List<EDraftType> DXF_DOCKS = Arrays.asList(IMAGE_DXF);
 
     /**
@@ -414,7 +413,7 @@ public class AppStatic {
             executingFile = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith();
         else if (IMAGE_EXTENSIONS.contains(ext) && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith().equals(""))
             executingFile = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith();
-        else if ((SOLID_EXTENSIONS.contains(ext) || STEP_EXTENSIONS.contains(ext) || DXF_EXTENSIONS.contains(ext))
+        else if ((SOLID_EXTENSIONS.contains(ext) || DXF_EXTENSIONS.contains(ext))
                 && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith().equals(""))
             executingFile = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith();
 

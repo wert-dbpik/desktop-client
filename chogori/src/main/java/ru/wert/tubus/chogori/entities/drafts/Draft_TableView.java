@@ -52,9 +52,8 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     @Getter ListProperty<Draft> preparedList = new SimpleListProperty<>();
 
     //Фильтр типов документов
-    @Getter@Setter private boolean showDraftDocks = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
-    @Getter@Setter private boolean show3DDocks; //ЗАМЕНЕНННЫЕ
-    @Getter@Setter private boolean showDFXDocks; //АННУЛИРОВАННЫЕ
+    @Getter@Setter private boolean showDraftDocks = true; //Чертежи и 3D
+    @Getter@Setter private boolean showDFXDocks; //DFX
 
     //Фильтр статусов
     @Getter@Setter private boolean showValid = true; //ДЕЙСТВУЮЩИЕ - по умолчанию
@@ -255,7 +254,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                         (status.equals(EDraftStatus.CHANGED) && !isShowChanged()) ||
                         (status.equals(EDraftStatus.ANNULLED) && !isShowAnnulled()) ||
                         (DRAFT_DOCKS.contains(type) && !isShowDraftDocks()) ||
-                        (D3_DOCKS.contains(type) && !isShow3DDocks()) ||
                         (DXF_DOCKS.contains(type) && !isShowDFXDocks())
                 )
                     i.remove();

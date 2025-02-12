@@ -35,24 +35,17 @@ public class BtnMenuDraftsFilterDocs extends MenuButton {
         itemDraftDocs.setContent(cbDrafts);
         itemDraftDocs.setHideOnClick(false);
 
-        CustomMenuItem item3DDocs = new CustomMenuItem();
-        CheckBox cb3DDocks = new CheckBox("3D-изображения");
-        cb3DDocks.setSelected(tableView.isShow3DDocks());
-        item3DDocs.setContent(cb3DDocks);
-        item3DDocs.setHideOnClick(false);
-
         CustomMenuItem itemDFXDocks = new CustomMenuItem();
         CheckBox cbDFXDocks = new CheckBox("Развертки");
         cbDFXDocks.setSelected(tableView.isShowDFXDocks());
         itemDFXDocks.setContent(cbDFXDocks);
         itemDFXDocks.setHideOnClick(false);
 
-        getItems().addAll(itemDraftDocs, item3DDocs, itemDFXDocks);
+        getItems().addAll(itemDraftDocs, itemDFXDocks);
 
         showingProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue) {
                 tableView.setShowDraftDocks(cbDrafts.isSelected());
-                tableView.setShow3DDocks(cb3DDocks.isSelected());
                 tableView.setShowDFXDocks(cbDFXDocks.isSelected());
 
                 Platform.runLater(() -> {
