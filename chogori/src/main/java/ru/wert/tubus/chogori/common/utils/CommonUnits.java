@@ -50,7 +50,7 @@ public class CommonUnits {
         PreviewerPatch previewerPatch = new PreviewerPatch().create();
         PreviewerPatchController previewerPatchController = previewerPatch.getController();
         previewerPatchController.initPreviewer(ChogoriSettings.CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
-        previewerPatchController.initPreviewerToolBar(true, true, true, true, useBrackets);
+        previewerPatchController.initPreviewerToolBar(true, true, true, true, true, useBrackets);
         previewerPatchController.getHboxPreviewerButtons().getChildren().add(CommonUnits.createExpandPreviewButton(sppHorizontal, sppVertical));
 
         stpPreviewer.getChildren().add(previewerPatch.getParent());

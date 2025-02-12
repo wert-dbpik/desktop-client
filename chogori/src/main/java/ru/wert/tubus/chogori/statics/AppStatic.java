@@ -215,7 +215,7 @@ public class AppStatic {
             PreviewerPatch previewerPatch = new PreviewerPatch().create();
             PreviewerPatchController previewerController = previewerPatch.getController();
             previewerController.initPreviewer(ChogoriSettings.CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
-            previewerController.initPreviewerToolBar(true, false, true, true, false);
+            previewerController.initPreviewerToolBar(false, true, false, true, true, false);
 
             String tabName = d.toUsefulString() +
                     " (" + EDraftType.getDraftTypeById(d.getDraftType()) + "-" + d.getPageNumber() + ")";

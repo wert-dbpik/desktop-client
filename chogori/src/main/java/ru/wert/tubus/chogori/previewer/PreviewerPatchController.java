@@ -22,6 +22,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.http.server.DelegatingServerHttpResponse;
 import ru.wert.tubus.chogori.common.utils.TextUtils;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Passport;
@@ -86,6 +87,7 @@ public class PreviewerPatchController {
     ContextMenu contextMenu;
     private PDFReader pdfReader; //см enum PDFViewer
     private StackPane pdfStackPane; //панель на которой работает pdfReader
+    private boolean useBtnDownloadDXF;
     private boolean useBtnUpdateDraftView;
     private boolean useBtnOpenInNewTab;
     private boolean useBtnOpenInOuterApp;
@@ -98,6 +100,8 @@ public class PreviewerPatchController {
     public void setCurrentDraft(Draft draft){
         currentDraft.setValue(draft);
     }
+
+    private Button btnDownloadDXF;
 
     private File currentDraftPath;
 
@@ -126,7 +130,11 @@ public class PreviewerPatchController {
             else
                 tfDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
 
-
+            if (useBtnDownloadDXF && DXF_DOCKS.contains(EDraftType.getDraftTypeById(draft.getDraftType()))) {
+                if (!hboxPreviewerButtons.getChildren().contains(btnDownloadDXF))
+                    hboxPreviewerButtons.getChildren().add(0, btnDownloadDXF);
+            } else
+                hboxPreviewerButtons.getChildren().remove(btnDownloadDXF);
         });
 
     }
@@ -152,8 +160,9 @@ public class PreviewerPatchController {
 
     }
 
-    public void initPreviewerToolBar(boolean useBtnUpdateDraftView, boolean useBtnOpenInNewTab, boolean useBtnOpenInOuterApp,
+    public void initPreviewerToolBar(boolean useBtnDownloadDXF, boolean useBtnUpdateDraftView, boolean useBtnOpenInNewTab, boolean useBtnOpenInOuterApp,
                                      boolean useBtnShowInfo, boolean useBrackets){
+        this.useBtnDownloadDXF = useBtnDownloadDXF;
         this.useBtnUpdateDraftView = useBtnUpdateDraftView;
         this.useBtnOpenInNewTab = useBtnOpenInNewTab;
         this.useBtnOpenInOuterApp = useBtnOpenInOuterApp;
@@ -193,6 +202,19 @@ public class PreviewerPatchController {
             menu.show((Node)event.getSource(), Side.LEFT, -38.0, 22.0);
 
         });
+
+        //СКАЧАТЬ DXF файл
+        btnDownloadDXF = new Button();
+        btnDownloadDXF.setId("patchButton");
+        btnDownloadDXF.setGraphic(new ImageView(BtnImages.BTN_DOWNLOAD_IMG));
+        btnDownloadDXF.setTooltip(new Tooltip("Скачать"));
+        btnDownloadDXF.setOnAction(event -> {
+            if (currentDraft.get() == null) return;
+            getDraftsTableView().getManipulator().downloadDrafts(Collections.singletonList(currentDraft.get()));
+        });
+
+//        currentDraft.get();
+//        useBtnDownloadDXF = false;
 
 
         //ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ

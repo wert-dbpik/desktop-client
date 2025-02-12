@@ -26,6 +26,7 @@ public class BtnImages {
     public static Image BTN_ADD_SEARCH_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/add-search(32x32).png"), size16, size16, true, true);
     public static Image BTN_FILTER_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/filter(32x32).png"), size16, size16, true, true);
     public static Image BTN_FILTER_DOCS_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/filter-docs(32x32).png"), size16, size16, true, true);
+    public static Image BTN_DOWNLOAD_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/download.png"), size16, size16, true, true);
     public static Image BTN_COLUMNS_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/columns(32x32).png"), size16, size16, true, true);
     public static Image BTN_TABLE_VIEW_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/view(32x32).png"), size16, size16, true, true);
     public static Image BTN_CATALOG_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/catalog(32x32).png"), size16, size16, true, true);

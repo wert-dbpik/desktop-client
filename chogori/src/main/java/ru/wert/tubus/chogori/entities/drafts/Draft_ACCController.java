@@ -1119,7 +1119,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             //Помещаем панель с previewer в шаблонное окно WindowDecoration
             previewerController = loader.getController();
             previewerController.initPreviewer(ChogoriSettings.CH_PDF_VIEWER, WF_MAIN_STAGE.getScene());
-            previewerController.initPreviewerToolBar(false,
+            previewerController.initPreviewerToolBar(
+                    false,
+                    false,
                     false,
                     true, //Распечатывать чертежи
                     false,
