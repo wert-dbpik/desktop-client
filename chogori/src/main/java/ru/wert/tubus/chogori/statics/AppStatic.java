@@ -6,32 +6,30 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.components.FileFwdSlash;
 import ru.wert.tubus.chogori.pdf.PDFReader;
 import ru.wert.tubus.chogori.pdf.readers.PdfJSNewReader;
 import ru.wert.tubus.chogori.pdf.readers.PdfJSOldReader;
 import ru.wert.tubus.chogori.previewer.PreviewerPatch;
 import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
+import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.client.entity.models.AppLog;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Prefix;
 import ru.wert.tubus.client.entity.models.VersionDesktop;
 import ru.wert.tubus.client.retrofit.RetrofitClient;
-import ru.wert.tubus.chogori.application.services.ChogoriServices;
-import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.winform.enums.EDraftStatus;
 import ru.wert.tubus.winform.enums.EDraftType;
 import ru.wert.tubus.winform.enums.EPDFViewer;
 import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.warnings.Warning1;
-import ru.wert.tubus.winform.window_decoration.WindowDecorationController;
 
 import java.awt.*;
 import java.io.File;
@@ -51,9 +49,9 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
-import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.tubus.winform.enums.EDraftType.*;
-import static ru.wert.tubus.winform.enums.EDraftType.IMAGE_DXF;
 import static ru.wert.tubus.winform.statics.WinformStatic.*;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
 
@@ -89,6 +87,10 @@ public class AppStatic {
     public static final List<EDraftType> DRAFT_DOCKS = Arrays.asList(DETAIL, ASSEMBLE, SPECIFICATION, PACKAGE, TOOL,
             MARKING, MOUNT, ELECTRIC, IMAGE_3D, IMAGE_STEP);
     public static final List<EDraftType> DXF_DOCKS = Arrays.asList(IMAGE_DXF);
+
+    public static final List<EDraftType> OUTER_APP_LIST = Arrays.asList(IMAGE_DXF, IMAGE_3D, IMAGE_STEP);//Список документов, открываемых сторонним приложением
+
+    public static File LAST_DOWNLOAD_DIR = new File(System.getProperty("user.home") + "/Desktop");
 
     /**
      * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в фотрмат dd.MM.yyyy

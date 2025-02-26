@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+import static ru.wert.tubus.chogori.statics.AppStatic.LAST_DOWNLOAD_DIR;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
 
@@ -28,12 +29,13 @@ public class TaskDownloadDXFDocks extends Task<Void> {
         this.filesToBeDownloaded = filesToBeDownloaded;
 
         DirectoryChooser chooser = new DirectoryChooser();
-        File initDir = new File(System.getProperty("user.home") + "/Desktop");
+        File initDir = LAST_DOWNLOAD_DIR;
         if (!initDir.exists()) initDir = new File("C:\\");
         chooser.setInitialDirectory(initDir);
         chooser.setTitle("Выберите директорию для сохранения");
         destDir = chooser.showDialog(WF_MAIN_STAGE);
         if (destDir == null) return;
+        LAST_DOWNLOAD_DIR = destDir;
 
         Thread t = new Thread(this);
         t.setDaemon(true);

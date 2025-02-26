@@ -124,7 +124,11 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                         AppStatic.openDraftInPreviewer(selectedDraft, previewerController, true);
                     });
                 else {
-                    AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
+                    //Если приложение открывается сторонним приложением
+                    if(OUTER_APP_LIST.contains(EDraftType.getDraftTypeById(selectedDraft.getDraftType())))
+                        openInOuterApplication(selectedDraft);
+                    else
+                        AppStatic.openDraftsInNewTabs(getSelectionModel().getSelectedItems());
                 }
                 e.consume();
             };
