@@ -22,6 +22,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
+import ru.wert.tubus.chogori.statics.validators.NameValidator;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.Passport;
@@ -1244,7 +1245,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 oldItem.setPassport(new Passport(
                         bxPrefix.getValue(),
                         txtNumber.getText().trim(),
-                        txtName.getText().trim(),
+                        txtName.getText(),
                         new ArrayList<>())
                 );
             } else {
@@ -1372,7 +1373,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         bxType.getSelectionModel().select(type);
         bxPage.getSelectionModel().select(page);
         txtNumber.setText(decNumber);
-        txtName.setText(partName);
+        txtName.setText(NameValidator.createValidName(partName));
 
     }
 

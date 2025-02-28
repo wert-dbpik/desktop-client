@@ -18,7 +18,7 @@ public class TempDir {
             try {
                 FileUtils.deleteDirectory(tmp);
             } catch (IOException e) {
-                e.printStackTrace();
+                //Ничего не делаем
             }
         }));
         //меняем бэкслэши на обычные
