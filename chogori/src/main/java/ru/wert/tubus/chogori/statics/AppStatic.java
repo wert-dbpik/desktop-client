@@ -165,14 +165,16 @@ public class AppStatic {
             //и расширение
             String ext = draft.getExtension();
 
+            String realName = draft.toUsefulString() + "." + draft.getExtension();
+
             //Если файл отсутствует в папке temp/bddrafts, то файл туда загружается из БД
-            if(!draftInTempDir(fileId, ext)) {
+            if(!draftInTempDir(realName)) {
                 boolean res = ChogoriServices.CH_FILES.download("drafts", //Постоянная папка в каталоге для чертежей
                         String.valueOf(fileId), //название скачиваемого файла
                         "." + ext, //расширение скачиваемого файла
                         WF_TEMPDIR.toString(),  //временная папка, куда необходимо скачать файл
                         null,
-                        null); //префикс
+                        realName); //префикс
                 if(res) {
                     log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", String.valueOf(fileId) + "." + ext);
                 } else {
@@ -188,7 +190,7 @@ public class AppStatic {
                 previewerController.showDraft(draft, new FileFwdSlash(WF_TEMPDIR.toString() + "/" + fileId + "." + ext));
                 log.debug("openDraftInPreviewer : " +
                                 "Из временной папки загружен файл {}",
-                        new FileFwdSlash(WF_TEMPDIR.toString() + "/" + fileId + "." + ext).toStrong());
+                        new FileFwdSlash(WF_TEMPDIR.toString() + "/" + realName).toStrong());
             });
 
         } else { //Если чертежа нет, показываем NO IMAGE заглушку
@@ -245,8 +247,8 @@ public class AppStatic {
      * @param ext String расширение файла
      * @return boolean, true - если файл есть в папке
      */
-    private static boolean draftInTempDir(Long fileId, String ext) {
-        String searchedFileName = fileId.toString() + "." + ext;
+    private static boolean draftInTempDir(String nameWithExt) {
+        String searchedFileName = nameWithExt;
         log.debug("draftInTempDir: проверяем наличие чертежа {} во временной папке", searchedFileName);
         try {
             Path drafts = WF_TEMPDIR.toPath();
@@ -405,7 +407,7 @@ public class AppStatic {
 
         //Если отображается вновь добавляемый файл
         myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
-                draft.getId() + "." + draft.getExtension());
+                draft.toUsefulString() + "." + draft.getExtension());
 
         if (!myFile.exists() || !myFile.isFile()) return;
 
