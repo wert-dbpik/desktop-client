@@ -106,9 +106,9 @@ public class Draft_Columns {
 
         tcDraftNumber.setComparator(createLabelComparator(tcDraftNumber));
 
-        tcDraftNumber.setMinWidth(120);
-        tcDraftNumber.setPrefWidth(120);
-        tcDraftNumber.setMaxWidth(150);
+        tcDraftNumber.setMinWidth(130);
+        tcDraftNumber.setPrefWidth(130);
+        tcDraftNumber.setMaxWidth(5000);
         tcDraftNumber.setResizable(true);
         return tcDraftNumber;
     }
