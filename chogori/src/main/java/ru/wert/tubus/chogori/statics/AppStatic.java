@@ -173,12 +173,13 @@ public class AppStatic {
                         String.valueOf(fileId), //название скачиваемого файла
                         "." + ext, //расширение скачиваемого файла
                         WF_TEMPDIR.toString(),  //временная папка, куда необходимо скачать файл
-                        null,
-                        realName); //префикс
+                        null,//префикс
+                        realName
+                );
                 if(res) {
-                    log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", String.valueOf(fileId) + "." + ext);
+                    log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", realName + "." + ext);
                 } else {
-                    log.error("openDraftInPreviewer : файл '{}' не был загружен с сервера", String.valueOf(fileId) + "." + ext);
+                    log.error("openDraftInPreviewer : файл '{}' не был загружен с сервера", realName + "." + ext);
                     Platform.runLater(()->Warning1.create($ATTENTION, $DRAFT_IS_NOT_AVAILABLE, $MAYBE_IT_IS_CORRUPTED));
                     return;
                 }
@@ -187,7 +188,7 @@ public class AppStatic {
             //В итоге, загружаем файл из временной папки
             Platform.runLater(()->{
 //                if(previewerController != null)
-                previewerController.showDraft(draft, new FileFwdSlash(WF_TEMPDIR.toString() + "/" + fileId + "." + ext));
+                previewerController.showDraft(draft, new FileFwdSlash(WF_TEMPDIR.toString() + "/" + realName));
                 log.debug("openDraftInPreviewer : " +
                                 "Из временной папки загружен файл {}",
                         new FileFwdSlash(WF_TEMPDIR.toString() + "/" + realName).toStrong());

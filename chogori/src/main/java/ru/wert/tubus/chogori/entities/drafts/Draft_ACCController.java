@@ -347,7 +347,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
      */
     @FXML
     public void cancelPressed(Event event) {
-        if (manipulation.isRunning()) {
+        if (manipulation != null && manipulation.isRunning()) {
             manipulation.cancel();
         } else {
             super.cancelPressed(event);
