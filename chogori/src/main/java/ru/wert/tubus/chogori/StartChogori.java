@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.AppMenuController;
+import ru.wert.tubus.chogori.application.socketwork.SocketService;
 import ru.wert.tubus.chogori.search.SearchHistoryFile;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.VersionDesktop;
@@ -50,6 +51,10 @@ public class StartChogori extends Application {
             initServices();
             initQuickServices();
             log.debug("init : DATA from server got well!");
+            // Добавляем shutdown hook для корректного завершения работы при завершении приложения
+            Runtime.getRuntime().addShutdownHook(new Thread(SocketService::stop));
+            // Запускаем сервис
+            SocketService.start();
         } catch (Exception e) {
             log.error("init : couldn't get DATA from server");
             initStatus = false;

@@ -64,6 +64,7 @@ public class AppStatic {
 
     public static final String KOMPLEKT = "компл: ";
     public static final double CHAT_WIDTH = 250; //первоначальная ширина чата
+
     public static String BASE_URL = RetrofitClient.baseUrl;
 
     public static final String DEC_NUMBER = "\\d{6}[.]\\d{3}";// XXXXXX.XXX
