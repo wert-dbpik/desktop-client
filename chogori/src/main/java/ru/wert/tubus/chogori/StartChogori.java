@@ -55,6 +55,7 @@ public class StartChogori extends Application {
             Runtime.getRuntime().addShutdownHook(new Thread(SocketService::stop));
             // Запускаем сервис
             SocketService.start();
+//            SocketService.sendMessage("Я ПОДКЛЮЧИЛСЯ!");
         } catch (Exception e) {
             log.error("init : couldn't get DATA from server");
             initStatus = false;

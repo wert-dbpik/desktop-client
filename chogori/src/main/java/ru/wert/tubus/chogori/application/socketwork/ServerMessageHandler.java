@@ -1,6 +1,7 @@
 package ru.wert.tubus.chogori.application.socketwork;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.client.entity.models.Message;
 
 /**
  * Класс обработчик сообщений со стороны сервера
@@ -8,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ServerMessageHandler {
 
-    public void handle(String message){
+    public void handle(Message message){
         log.debug(String.format("Message form server received: %s", message));
     }
 }

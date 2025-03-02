@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.interfaces.Item;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Getter
 @Setter
@@ -36,7 +38,7 @@ public class Message extends _BaseEntity implements Item {
     private Room room; //id руппы чата
     private User sender; //id пользователя, написавшего в группе
     private String text; //Текст сообщения, либо строку id-шников
-    private String creationTime; //Время отправки сообщения
+    private LocalDateTime creationTime; //Время отправки сообщения
     private MessageStatus status; //Время отправки сообщения
 
     @Override

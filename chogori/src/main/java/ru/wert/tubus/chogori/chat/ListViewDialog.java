@@ -13,6 +13,7 @@ import ru.wert.tubus.client.entity.models.Pic;
 import ru.wert.tubus.client.entity.models.Room;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -170,7 +171,7 @@ public class ListViewDialog extends ListView<Message> {
         message.setType(type);
         message.setRoom(room);
         message.setSender(CH_CURRENT_USER);
-        message.setCreationTime(AppStatic.getCurrentTime());
+        message.setCreationTime(LocalDateTime.now());
         message.setStatus(Message.MessageStatus.RECEIVED);
         message.setText(text);
 

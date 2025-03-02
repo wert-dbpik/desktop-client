@@ -23,9 +23,11 @@ import ru.wert.tubus.chogori.StartChogori;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
+import ru.wert.tubus.chogori.application.socketwork.SocketService;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
 import ru.wert.tubus.chogori.search.SearchHistoryButton;
 import ru.wert.tubus.chogori.search.SearchHistoryFile;
+import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.chat.SideChat;
@@ -39,6 +41,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.images.BtnImages.*;
@@ -621,11 +625,17 @@ public class AppMenuController {
     }
 
     void makeTest(ActionEvent event){
-        Room group = new Room();
-        group.setName("#1#96");
-        group.setCreator(CH_CURRENT_USER);
-
-        Room newGroup = CH_ROOMS.save(group);
+        Message m = new Message();
+        m.setCreationTime(LocalDateTime.now());
+        m.setType(Message.MessageType.CHAT_TEXT);
+        m.setSender(CH_CURRENT_USER);
+        m.setText( "Я работаю!!!!!!!!!!!!!!!!!");
+        SocketService.sendMessage(m);
+//        Room group = new Room();
+//        group.setName("#1#96");
+//        group.setCreator(CH_CURRENT_USER);
+//
+//        Room newGroup = CH_ROOMS.save(group);
     }
 
     //########################   ПОМОЩЬ    ###########################

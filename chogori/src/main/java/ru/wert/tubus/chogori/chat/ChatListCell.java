@@ -72,7 +72,7 @@ public class ChatListCell extends ListCell<Message> {
             lblDate = (Label) inMessage.lookup("#lblDate");
             lblTitle = (Label) inMessage.lookup("#lblTitle");
             lblTime = (Label) inMessage.lookup("#lblTime");
-            lblTime.setText(AppStatic.parseStringToTime(message.getCreationTime()));
+            lblTime.setText(AppStatic.parseStringToTime(message.getCreationTime().toString()));
             vbMessageContainer = (VBox) inMessage.lookup("#vbMessageContainer");
             vbOutlineMessage = (VBox) inMessage.lookup("#vbOutlineMessage");
             vbMessage = (VBox) inMessage.lookup("#vbMessage");
@@ -98,7 +98,7 @@ public class ChatListCell extends ListCell<Message> {
             Platform.runLater(()->{
                 vbMessage.autosize();
                 lblFrom.setText(message.getSender().getName());
-                lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime()));
+                lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime().toString()));
 
 //                Message.MessageType type = message.getType();
 
