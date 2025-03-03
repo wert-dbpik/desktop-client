@@ -8,11 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -24,16 +24,15 @@ import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.tubus.chogori.application.socketwork.SocketService;
+import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
+import ru.wert.tubus.chogori.help.About;
+import ru.wert.tubus.chogori.images.BtnImages;
+import ru.wert.tubus.chogori.search.SearchField;
 import ru.wert.tubus.chogori.search.SearchHistoryButton;
 import ru.wert.tubus.chogori.search.SearchHistoryFile;
 import ru.wert.tubus.client.entity.models.Message;
-import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
-import ru.wert.tubus.chogori.chat.SideChat;
-import ru.wert.tubus.chogori.help.About;
-import ru.wert.tubus.chogori.search.SearchField;
-import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.window_decoration.WindowDecoration;
 
@@ -42,16 +41,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
-import static ru.wert.tubus.chogori.images.BtnImages.*;
-import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
+import static ru.wert.tubus.chogori.images.BtnImages.BTN_CLOSE_WHITE_IMG;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
+import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
-import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
-import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
+
 @Slf4j
 public class AppMenuController {
 
@@ -230,8 +229,8 @@ public class AppMenuController {
         mainMenu.getItems().add(new SeparatorMenuItem());
         mainMenu.getItems().add(settings);
         mainMenu.getItems().add(new SeparatorMenuItem());
-//        if(!CH_CURRENT_USER.getName().equals("Гость"))
-//            mainMenu.getItems().add(chatItem);
+        if(!CH_CURRENT_USER.getName().equals("Гость"))
+            mainMenu.getItems().add(chatItem);
         mainMenu.getItems().add(updateData);
         mainMenu.getItems().add(cleanSearchHistory);
         mainMenu.getItems().add(new SeparatorMenuItem());
@@ -627,8 +626,9 @@ public class AppMenuController {
     void makeTest(ActionEvent event){
         Message m = new Message();
         m.setCreationTime(LocalDateTime.now());
+        m.setRoom(CH_ROOMS.findByName("group:###"));
         m.setType(Message.MessageType.CHAT_TEXT);
-        m.setSender(CH_CURRENT_USER);
+        m.setSenderId(CH_CURRENT_USER.getId());
         m.setText( "Я работаю!!!!!!!!!!!!!!!!!");
         SocketService.sendMessage(m);
 //        Room group = new Room();

@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Nov 25 12:57:31 GMT+03:00 2021
+http\://0.0.0.0/.error=Could not transfer artifact com.twelvemonkeys.imageio\:imageio-tiff\:jar\:3.4-SNAPSHOT from/to maven-default-http-blocker (http\://0.0.0.0/)\: Blocked mirror for repositories\: [anonsvn.icesoft.org (http\://anonsvn.icesoft.org/repo/maven2/snapshots/, default, releases+snapshots)]
+@default-maven-default-http-blocker-http\://0.0.0.0/.lastUpdated=1637834251594

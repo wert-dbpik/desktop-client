@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Fri Jun 30 12:07:13 GMT+03:00 2023
+http\://anonsvn.icesoft.org/repo/maven2/snapshots/.error=Could not transfer artifact com.twelvemonkeys.common\:common-io\:pom\:3.4-SNAPSHOT from/to snapshots-repo (http\://anonsvn.icesoft.org/repo/maven2/snapshots/)\: anonsvn.icesoft.org
+@default-snapshots-repo-http\://anonsvn.icesoft.org/repo/maven2/snapshots/.lastUpdated=1688116033120

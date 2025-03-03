@@ -170,7 +170,7 @@ public class ListViewDialog extends ListView<Message> {
         Message message = new Message();
         message.setType(type);
         message.setRoom(room);
-        message.setSender(CH_CURRENT_USER);
+        message.setSenderId(CH_CURRENT_USER.getId());
         message.setCreationTime(LocalDateTime.now());
         message.setStatus(Message.MessageStatus.RECEIVED);
         message.setText(text);

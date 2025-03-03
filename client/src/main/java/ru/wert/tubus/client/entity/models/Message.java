@@ -36,7 +36,7 @@ public class Message extends _BaseEntity implements Item {
 
     private MessageType type; //Тип сообщения (текстовый, чертеж и т.д.)
     private Room room; //id руппы чата
-    private User sender; //id пользователя, написавшего в группе
+    private Long senderId; //id пользователя, написавшего в группе
     private String text; //Текст сообщения, либо строку id-шников
     private LocalDateTime creationTime; //Время отправки сообщения
     private MessageStatus status; //Время отправки сообщения
@@ -49,6 +49,6 @@ public class Message extends _BaseEntity implements Item {
 
     @Override
     public String toUsefulString() {
-        return "from: " + sender.getName() + "type: " + type.getTypeName() + " ,message: " + text;
+        return "from: " + senderId + "type: " + type.getTypeName() + " ,message: " + text;
     }
 }

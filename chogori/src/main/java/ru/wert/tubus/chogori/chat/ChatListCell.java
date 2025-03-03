@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_TEMPDIR;
 
@@ -52,7 +53,7 @@ public class ChatListCell extends ListCell<Message> {
         } else {
             setText(null);
             Parent mes;
-            if(item.getSender().equals(ChogoriSettings.CH_CURRENT_USER))
+            if(item.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId()))
                 mes = formatMessage(item, OUT);
             else
                 mes = formatMessage(item, IN);
@@ -97,7 +98,7 @@ public class ChatListCell extends ListCell<Message> {
 
             Platform.runLater(()->{
                 vbMessage.autosize();
-                lblFrom.setText(message.getSender().getName());
+                lblFrom.setText(CH_USERS.findById(message.getSenderId()).getName());
                 lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime().toString()));
 
 //                Message.MessageType type = message.getType();

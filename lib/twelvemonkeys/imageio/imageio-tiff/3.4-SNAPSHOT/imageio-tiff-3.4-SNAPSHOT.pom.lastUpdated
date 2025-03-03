@@ -1,0 +1,8 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Mar 03 10:21:51 MSK 2025
+file\://C\:\\GitHub\\PIK\\desktop-client\\chogori/lib/.error=
+file\://C\:\\GitHub\\PIK\\desktop-client\\chogori/lib/.lastUpdated=1740986511090
+http\://0.0.0.0/.error=Could not transfer artifact com.twelvemonkeys.imageio\:imageio-tiff\:pom\:3.4-SNAPSHOT from/to maven-default-http-blocker (http\://0.0.0.0/)\: Blocked mirror for repositories\: [anonsvn.icesoft.org (http\://anonsvn.icesoft.org/repo/maven2/snapshots/, default, releases+snapshots)]
+http\://anonsvn.icesoft.org/repo/maven2/snapshots/.error=Could not transfer artifact com.twelvemonkeys.imageio\:imageio-tiff\:pom\:3.4-SNAPSHOT from/to snapshots-repo (http\://anonsvn.icesoft.org/repo/maven2/snapshots/)\: anonsvn.icesoft.org
+@default-maven-default-http-blocker-http\://0.0.0.0/.lastUpdated=1740984715671
+@default-snapshots-repo-http\://anonsvn.icesoft.org/repo/maven2/snapshots/.lastUpdated=1688116032914

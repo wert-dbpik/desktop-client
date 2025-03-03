@@ -28,7 +28,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <Button fx:id="btnChat" disable="true" mnemonicParsing="false" text="ЧАТ" visible="false">
+                  <Button fx:id="btnChat" mnemonicParsing="false" text="ЧАТ">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
