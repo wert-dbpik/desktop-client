@@ -1,8 +1,7 @@
-package ru.wert.tubus.chogori.application.socketwork;
+package ru.wert.tubus.chogori.chat.socketwork;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.retrofit.AppProperties;
 

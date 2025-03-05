@@ -84,7 +84,7 @@ public class SideRoomsController {
         List<Room> rooms = new ArrayList<>();
         List<Room> allRooms = CH_ROOMS.findAll();
         for(Room room : allRooms){
-            if(room.getRoommates().contains(CH_CURRENT_USER))
+            if(room.getRoommates().contains(CH_CURRENT_USER.getId()))
                 rooms.add(room);
         }
 
@@ -161,8 +161,8 @@ public class SideRoomsController {
         if (room == null) {
             Room newRoom = new Room();
             newRoom.setName(roomName);
-            newRoom.setCreator(CH_CURRENT_USER);
-            newRoom.setRoommates(Collections.singletonList(CH_CURRENT_USER));
+            newRoom.setCreatorId(CH_CURRENT_USER.getId());
+            newRoom.setRoommates(Collections.singletonList(CH_CURRENT_USER.getId()));
 
             room = CH_ROOMS.save(newRoom);
         }

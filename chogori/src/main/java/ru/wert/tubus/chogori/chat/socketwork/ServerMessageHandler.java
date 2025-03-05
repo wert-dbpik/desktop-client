@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.application.socketwork;
+package ru.wert.tubus.chogori.chat.socketwork;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.entity.models.Message;
