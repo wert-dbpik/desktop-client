@@ -52,6 +52,10 @@ public class SocketService {
                 try {
                     // Подключение к серверу
                     connectToServer();
+
+                    // Отправка сообщения ROOKIE с идентификатором текущего пользователя
+                    sendMessageUserIn(AppProperties.getInstance().getLastUser());
+
                     // Обработчик сообщений от сервера
                     ServerMessageHandler handler = new ServerMessageHandler();
 
@@ -98,6 +102,22 @@ public class SocketService {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         log.info("Connection to server {}:{} established.", SERVER_ADDRESS, PORT);
+    }
+
+    // Метод для отправки сообщения о текущем пользователе
+    private static void sendMessageUserIn(Long userId) {
+        Message rookieMessage = new Message();
+        rookieMessage.setType(Message.MessageType.USER_IN);
+        rookieMessage.setSenderId(userId);
+        sendMessage(rookieMessage);
+    }
+
+    // Метод для отправки сообщения о том, что текущий пользователь вышел
+    private static void sendMessageUserOut(Long userId) {
+        Message rookieMessage = new Message();
+        rookieMessage.setType(Message.MessageType.USER_OUT);
+        rookieMessage.setSenderId(userId);
+        sendMessage(rookieMessage);
     }
 
     // Метод для создания потока получения сообщений от сервера
