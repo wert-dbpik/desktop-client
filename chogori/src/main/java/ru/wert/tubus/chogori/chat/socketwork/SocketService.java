@@ -53,8 +53,8 @@ public class SocketService {
                     // Подключение к серверу
                     connectToServer();
 
-                    // Отправка сообщения ROOKIE с идентификатором текущего пользователя
-                    sendMessageUserIn(AppProperties.getInstance().getLastUser());
+                    // Отправка сообщения USER_IN с идентификатором текущего пользователя
+                    ServiceMessaging.sendMessageUserIn(AppProperties.getInstance().getLastUser());
 
                     // Обработчик сообщений от сервера
                     ServerMessageHandler handler = new ServerMessageHandler();
@@ -104,46 +104,36 @@ public class SocketService {
         log.info("Connection to server {}:{} established.", SERVER_ADDRESS, PORT);
     }
 
-    // Метод для отправки сообщения о текущем пользователе
-    private static void sendMessageUserIn(Long userId) {
-        Message rookieMessage = new Message();
-        rookieMessage.setType(Message.MessageType.USER_IN);
-        rookieMessage.setSenderId(userId);
-        sendMessage(rookieMessage);
-    }
-
-    // Метод для отправки сообщения о том, что текущий пользователь вышел
-    private static void sendMessageUserOut(Long userId) {
-        Message rookieMessage = new Message();
-        rookieMessage.setType(Message.MessageType.USER_OUT);
-        rookieMessage.setSenderId(userId);
-        sendMessage(rookieMessage);
-    }
-
     // Метод для создания потока получения сообщений от сервера
     private static Runnable receiveMessagesThread(ServerMessageHandler handler) {
         return () -> {
-            try {
-                String serverMessage;
-                // Чтение сообщений от сервера
-                while (running && (serverMessage = in.readLine()) != null) {
-                    log.debug("Message received from server: {}", serverMessage);
-                    // Десериализация JSON в объект Message
-                    Message message = gson.fromJson(serverMessage, Message.class);
-                    // Обработка сообщения
-                    handler.handle(message);
+            while (running) {
+                try {
+                    String serverMessage;
+                    // Чтение сообщений от сервера
+                    while (running && (serverMessage = in.readLine()) != null) {
+                        log.debug("Message received from server: {}", serverMessage);
+                        // Десериализация JSON в объект Message
+                        Message message = gson.fromJson(serverMessage, Message.class);
+                        // Обработка сообщения
+                        handler.handle(message);
+                    }
+                } catch (SocketTimeoutException e) {
+                    if (running) {
+                        log.warn("Read timeout. Waiting for new messages...");
+                        // Продолжаем ожидание новых сообщений после тайм-аута
+                        continue;
+                    }
+                } catch (IOException e) {
+                    if (running) {
+                        log.error("Error receiving messages: {}", e.getMessage());
+                        // Если произошла ошибка, закрываем ресурсы и пытаемся переподключиться
+                        closeResources();
+                        break;
+                    }
                 }
-            } catch (SocketTimeoutException e) {
-                if (running) {
-                    log.warn("Read timeout. Waiting for new messages...");
-                }
-            } catch (IOException e) {
-                if (running) {
-                    log.error("Error receiving messages: {}", e.getMessage());
-                }
-            } finally {
-                log.info("Message receiving thread stopped.");
             }
+            log.info("Message receiving thread stopped.");
         };
     }
 

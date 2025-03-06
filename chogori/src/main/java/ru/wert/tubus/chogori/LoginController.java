@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.client.entity.models.AppSettings;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.retrofit.AppProperties;
@@ -73,6 +74,7 @@ public class LoginController {
             showTabPaneWindow();
             AppProperties.getInstance().setLastUser(user.getId());
             AppStatic.createLog(true, "Подключился к серверу");
+            ServiceMessaging.sendMessageUserIn(CH_CURRENT_USER.getId());
             //ОТКРЫВАЕМ ВКЛАДКУ С ЧЕРТЕЖАМИ
             if(CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart()) openDrafts();
         } else {
