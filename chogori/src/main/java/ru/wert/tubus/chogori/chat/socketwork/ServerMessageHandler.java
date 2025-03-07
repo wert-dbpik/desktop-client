@@ -10,6 +10,6 @@ import ru.wert.tubus.client.entity.models.Message;
 public class ServerMessageHandler {
 
     public static void handle(Message message){
-        log.debug(String.format("Message from server received: %s", message));
+        log.info(String.format("Message from server received: %s", message.toUsefulString()));
     }
 }

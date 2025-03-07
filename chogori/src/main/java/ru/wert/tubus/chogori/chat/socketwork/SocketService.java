@@ -133,7 +133,7 @@ public class SocketService {
                             Platform.runLater(() -> {
                                 ServerMessageHandler.handle(message);
                                 // Здесь можно обновить UI (например, добавить сообщение в чат)
-                                log.debug("Message received from server: {}", message.toUsefulString());
+//                                log.debug("Message received from server: {}", message.toUsefulString());
                             });
                         }
                     } catch (SocketTimeoutException e) {
