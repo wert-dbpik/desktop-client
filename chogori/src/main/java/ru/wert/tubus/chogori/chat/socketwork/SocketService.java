@@ -97,10 +97,12 @@ public class SocketService {
 
     // Метод для остановки сервиса
     public static void stop() {
-        running = false;
-        socketService.cancel();
-        closeResources();
-        log.info("Socket service is shutting down...");
+        Platform.runLater(()->{
+            running = false;
+            socketService.cancel();
+            closeResources();
+            log.info("Socket service is shutting down...");
+        });
     }
 
     // Метод для подключения к серверу
@@ -126,8 +128,10 @@ public class SocketService {
                         String serverMessage = in.readLine();
                         if (serverMessage != null) {
                             Message message = gson.fromJson(serverMessage, Message.class);
+
                             // Обновляем UI через Platform.runLater
                             Platform.runLater(() -> {
+                                ServerMessageHandler.handle(message);
                                 // Здесь можно обновить UI (например, добавить сообщение в чат)
                                 log.debug("Message received from server: {}", message.toUsefulString());
                             });

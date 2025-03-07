@@ -9,7 +9,7 @@ import ru.wert.tubus.client.entity.models.Message;
 @Slf4j
 public class ServerMessageHandler {
 
-    public void handle(Message message){
-        log.debug(String.format("Message form server received: %s", message));
+    public static void handle(Message message){
+        log.debug(String.format("Message from server received: %s", message));
     }
 }
