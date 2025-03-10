@@ -20,19 +20,19 @@ public class Message extends _BaseEntity implements Item {
     }
 
     public enum MessageType {
-        USER_IN("Пользователь вошел"),
-        USER_OUT("Пользователь вышел"),
+        USER_IN("Вошел пользователь"),
+        USER_OUT("Вышел пользователь"),
         CHAT_TEXT("текст"),
         CHAT_DRAFTS("чертежи"),
         CHAT_FOLDERS("комплекты чертежей"),
         CHAT_PICS("изображения"),
         CHAT_PASSPORTS("пасспорта"),
         ADD_DRAFT("Добавление чертежа"),
-        UPDATE_DRAFT("Обновление чертежа"),
-        DELETE_DRAFT("Удаление чертежа"),
-        ADD_FOLDER("Добавление комплекта чертежей"),
-        UPDATE_FOLDER("Обновление комплекта чертежей"),
-        DELETE_FOLDER("Удаление комплекта чертежей");
+        UPDATE_DRAFT("Обновлен чертеж"),
+        DELETE_DRAFT("Удален чертеж"),
+        ADD_FOLDER("Добавлен комплект чертежей"),
+        UPDATE_FOLDER("Обновлен комплект чертежей"),
+        DELETE_FOLDER("Удален комплект чертежей");
 
         @Getter String typeName;
 

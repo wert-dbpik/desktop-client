@@ -34,10 +34,13 @@
       <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
          <children>
             <Button fx:id="btnUpdateAllData" mnemonicParsing="false" styleClass="btnOnMenuPane" />
-            <StackPane fx:id="spAdvert" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <StackPane fx:id="spAdvert" HBox.hgrow="ALWAYS">
                <padding>
                   <Insets left="10.0" right="10.0" />
-               </padding></StackPane>
+               </padding>
+               <children>
+                  <Label fx:id="lbNotification" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Label" textAlignment="CENTER" StackPane.alignment="CENTER" />
+               </children></StackPane>
             <HBox alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
                <children>
                   <Label fx:id="lblUser" text="РЕЖИМ РАЗРАБОТЧИКА" HBox.hgrow="NEVER">

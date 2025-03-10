@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.statics;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -19,5 +20,10 @@ public class UtilStaticNodes {
     public static HBox PANE_WITH_SEARCH;
     public static HBox SEARCH_CONTAINER;
     public static StackPane SP_CHAT;
+
+
+    public static Label SP_NOTIFICATION;
+
+
 
 }

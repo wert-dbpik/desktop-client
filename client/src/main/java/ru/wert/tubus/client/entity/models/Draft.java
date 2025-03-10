@@ -1,5 +1,7 @@
 package ru.wert.tubus.client.entity.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +30,7 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
     //Поля хранения информации о текущем статусе и когда он вступил в силу
     private Integer status;
     private User statusUser;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private String statusTime; //LocalDateTime
 
     //Поля хранения информации о СОЗДАНИИ

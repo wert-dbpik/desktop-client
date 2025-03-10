@@ -41,6 +41,9 @@ import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
 public class ApplicationController {
 
     @FXML
+    private Label lbNotification;
+
+    @FXML
     private VBox vbApplication;
 
     @FXML
@@ -77,6 +80,7 @@ public class ApplicationController {
         CH_APPLICATION_ROOT_PANEL = rootPanel;
         CH_APPLICATION_WAITING_BLIND = waitingBlind;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
+        SP_NOTIFICATION = lbNotification;
 
         SP_CHAT = spChat;
 
