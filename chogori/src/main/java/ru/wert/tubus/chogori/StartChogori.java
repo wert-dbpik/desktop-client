@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.AppMenuController;
 import ru.wert.tubus.chogori.chat.socketwork.SocketService;
 import ru.wert.tubus.chogori.search.SearchHistoryFile;
+import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.models.VersionDesktop;
 import ru.wert.tubus.client.retrofit.AppProperties;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
@@ -49,16 +50,14 @@ public class StartChogori extends Application {
         try {
             initServices();
             initQuickServices();
-            log.debug("init : DATA from server got well!");
             // Добавляем shutdown hook для корректного завершения работы при завершении приложения
             Runtime.getRuntime().addShutdownHook(new Thread(SocketService::stop));
             // Запускаем сервис
             SocketService.start();
-//            SocketService.sendMessage("Я ПОДКЛЮЧИЛСЯ!");
+            log.debug("init : DATA from server got well!");
         } catch (Exception e) {
             log.error("init : couldn't get DATA from server");
             initStatus = false;
-
         }
 
         //Определяем последнюю доступную версию программы в Базе данных
@@ -85,6 +84,8 @@ public class StartChogori extends Application {
         log.info("AppProperties.getInstance().getMonitor() passed");
 
     }
+
+
 
 
     @Override

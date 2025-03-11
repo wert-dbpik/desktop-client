@@ -12,6 +12,7 @@ import ru.wert.tubus.chogori.common.tableView.RoutineTableView;
 import ru.wert.tubus.chogori.entities.users.commands._UserCommands;
 import ru.wert.tubus.chogori.statics.Comparators;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
+import ru.wert.tubus.client.entity.serviceREST.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +44,9 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
         TableColumn<User, String> tcPassword = User_Columns.createTcPassword();
         TableColumn<User, String> tcUserGroup = User_Columns.createTcUserGroup();
         TableColumn<User, Label> tcUserActivity = User_Columns.createTcActivity();
+        TableColumn<User, Label> tcUserOnline = User_Columns.createTcOnline();
 
-        getColumns().addAll(tcName, tcPassword, tcUserGroup, tcUserActivity);
+        getColumns().addAll(tcName, tcPassword, tcUserGroup, tcUserActivity, tcUserOnline);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
 
     @Override
     public List<User> prepareList() {
-        return ChogoriServices.CH_USERS.findAll();
+        return UserService.getInstance().findAll();
     }
 
     @Override

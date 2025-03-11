@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.chogori.tabs.MainTabPane;
+import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.winform_settings.WinformSettings;
 
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_BLUE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
@@ -93,7 +95,8 @@ public class ApplicationController {
 //                }
 //        });
 
-
+        //Заполняем map c пользователями онлайн
+        checkUpUsersOnline();
         createUserLabel();
         createTimeLabel();
         createTabPane();
@@ -151,6 +154,16 @@ public class ApplicationController {
 
         log.debug("initialize : блок инициализации успешно выполнен");
 
+    }
+
+    /**
+     * Сохраняем данные о пользователях онлай в map CH_USERS_ONLINE<Long, Boolean>
+     */
+    private void checkUpUsersOnline(){
+        for(User u : CH_USERS.findAll()){
+            CH_USERS_ONLINE.put(u.getId(), u.isOnline());
+        }
+        log.debug("Данные о пользователях онлайн уточнены");
     }
 
     /**

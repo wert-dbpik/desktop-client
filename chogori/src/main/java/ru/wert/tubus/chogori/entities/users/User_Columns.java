@@ -61,10 +61,7 @@ public class User_Columns {
     public static TableColumn<User, Label> createTcActivity(){
         TableColumn<User, Label> tcStatus = new TableColumn<>("Статус");
         tcStatus.setCellValueFactory(cd->{
-            HintPopup hint;
             User user = cd.getValue();
-            boolean status = user.isActive();
-            String str = "";
             Label lblStatus = new Label();
             lblStatus.setMouseTransparent(true); //Подсказка не работает
             if(user.isActive()) {
@@ -75,6 +72,33 @@ public class User_Columns {
                 lblStatus.setStyle("-fx-text-fill: darkred");
                 }
             return new ReadOnlyObjectWrapper<>(lblStatus);
+        });
+        tcStatus.setMinWidth(150);//100
+        tcStatus.setPrefWidth(150);//100
+        tcStatus.setMaxWidth(150);
+        tcStatus.setStyle("-fx-alignment: CENTER;");
+        tcStatus.setResizable(false);
+        tcStatus.setSortable(false);
+        return tcStatus;
+    };
+
+    /**
+     * ОНЛАЙН
+     */
+    public static TableColumn<User, Label> createTcOnline(){
+        TableColumn<User, Label> tcStatus = new TableColumn<>("Онлайн");
+        tcStatus.setCellValueFactory(cd->{
+            User user = cd.getValue();
+            Label lblOnline = new Label();
+            lblOnline.setMouseTransparent(true); //Подсказка не работает
+            if(user.isOnline()) {
+                lblOnline.setText("ОНЛАЙН");
+                lblOnline.setStyle("-fx-text-fill: darkgreen");
+            } else{
+                lblOnline.setText("ВЫШЕЛ");
+                lblOnline.setStyle("-fx-text-fill: darkred");
+            }
+            return new ReadOnlyObjectWrapper<>(lblOnline);
         });
         tcStatus.setMinWidth(150);//100
         tcStatus.setPrefWidth(150);//100

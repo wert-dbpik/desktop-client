@@ -8,7 +8,9 @@ import ru.wert.tubus.client.entity.models.UserGroup;
 import ru.wert.tubus.winform.enums.EPDFViewer;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChogoriSettings {
 
@@ -34,6 +36,8 @@ public class ChogoriSettings {
     public static UserGroup CH_CURRENT_USER_GROUP;//группа текущего пользователя
     public static AppSettings CH_CURRENT_USER_SETTINGS;//группа текущего пользователя
     public static List<KeyCode> CH_KEYS_NOW_PRESSED; //Массив хранения нажатых клавиш
+    public static Map<Long, Boolean> CH_USERS_ONLINE = new HashMap<>(); //Пользователи онлайн
+
 
     //ПОСЛЕДНИЕ ВЫБРАННЫЕ ДАННЫЕ
 

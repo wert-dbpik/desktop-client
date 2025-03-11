@@ -34,6 +34,7 @@ public class ServerMessageHandler {
 
         if (type == Message.MessageType.USER_IN || type == Message.MessageType.USER_OUT) {
             str.append(type.getTypeName()).append(" ").append(CH_USERS.findById(message.getSenderId()).getName());
+
         } else if (type == Message.MessageType.ADD_DRAFT || type == Message.MessageType.UPDATE_DRAFT || type == Message.MessageType.DELETE_DRAFT) {
             try {
                 Draft draft = objectMapper.readValue(message.getText(), Draft.class);

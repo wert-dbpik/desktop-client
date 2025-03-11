@@ -93,6 +93,8 @@ public class AppStatic {
 
     public static File LAST_DOWNLOAD_DIR = new File(System.getProperty("user.home") + "/Desktop");
 
+
+
     /**
      * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в фотрмат dd.MM.yyyy
      */
