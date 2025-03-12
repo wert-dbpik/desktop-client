@@ -89,6 +89,8 @@ public class ChogoriServices {
         ChogoriServices.CH_QUICK_ANY_PARTS = AnyPartQuickService.getInstance();
         ChogoriServices.CH_QUICK_PASSPORTS = PassportQuickService.getInstance();
         ChogoriServices.CH_QUICK_MATERIALS = MaterialQuickService.getInstance();
+        UserQuickService.getInstance();
+
     }
 
 

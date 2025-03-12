@@ -15,6 +15,9 @@ import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
 import ru.wert.tubus.client.interfaces.UpdatableTabController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
@@ -38,10 +41,9 @@ public class ServerMessageHandler {
         ObjectMapper objectMapper = new ObjectMapper();
         StringBuilder str = new StringBuilder("");
         Message.MessageType type = message.getType();
-
         if (type == Message.MessageType.USER_IN || type == Message.MessageType.USER_OUT) {
             str.append(type.getTypeName()).append(" ").append(CH_USERS.findById(message.getSenderId()).getName());
-            UserQuickService.getInstance().fetchUserById(message.getSenderId()).ifPresent(
+            UserQuickService.users.stream().filter(user -> user.getId().equals(message.getSenderId())).findFirst().ifPresent(
                     user -> {
                         user.setOnline(type == Message.MessageType.USER_IN);
                         for(Tab tab: CH_TAB_PANE.getTabs()){
@@ -50,8 +52,10 @@ public class ServerMessageHandler {
                                     ((UpdatableTabController) ((AppTab)tab).getTabController()).updateTab();
                                 });
                         }
+
                     }
             );
+            printUsersOnline("ServerMessageHandler : makeString :");
         } else if (type == Message.MessageType.ADD_DRAFT || type == Message.MessageType.UPDATE_DRAFT || type == Message.MessageType.DELETE_DRAFT) {
             try {
                 Draft draft = objectMapper.readValue(message.getText(), Draft.class);
@@ -65,6 +69,15 @@ public class ServerMessageHandler {
         }
 
         return str.toString();
+    }
+
+    public static void printUsersOnline(String tag) {
+        List<User> usersOnline = UserQuickService.users.stream()
+                .filter(user1 -> user1.isOnline()) // Фильтруем пользователей по статусу isOnline
+                .collect(Collectors.toList()); //
+        System.out.print(tag + ": users " + usersOnline.size() + " :" );
+        usersOnline.forEach(u-> System.out.print(u.getName() + "//"));
+        System.out.println();
     }
 
 }

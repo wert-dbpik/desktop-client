@@ -34,6 +34,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
+import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.printUsersOnline;
 import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_BLUE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
@@ -96,7 +97,9 @@ public class ApplicationController {
 //        });
 
         //Заполняем map c пользователями онлайн
-        checkUpUsersOnline();
+//        checkUpUsersOnline();
+//        printUsersOnline("Application Controller");
+
         createUserLabel();
         createTimeLabel();
         createTabPane();
@@ -156,15 +159,15 @@ public class ApplicationController {
 
     }
 
-    /**
-     * Сохраняем данные о пользователях онлай в map CH_USERS_ONLINE<Long, Boolean>
-     */
-    private void checkUpUsersOnline(){
-        for(User u : CH_USERS.findAll()){
-            CH_USERS_ONLINE.put(u.getId(), u.isOnline());
-        }
-        log.debug("Данные о пользователях онлайн уточнены");
-    }
+//    /**
+//     * Сохраняем данные о пользователях онлай в map CH_USERS_ONLINE<Long, Boolean>
+//     */
+//    private void checkUpUsersOnline(){
+//        for(User u : CH_USERS.findAll()){
+//            CH_USERS_ONLINE.put(u.getId(), u.isOnline());
+//        }
+//        log.debug("Данные о пользователях онлайн уточнены");
+//    }
 
     /**
      * Возвращает true если требуется запустить анонс новой программы,

@@ -1,21 +1,27 @@
 package ru.wert.tubus.chogori.chat;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.statics.Comparators;
 import ru.wert.tubus.chogori.images.BtnImages;
+import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
+import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.printUsersOnline;
+import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
+import static ru.wert.tubus.chogori.images.BtnImages.DOT_RED_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class SideRoomsController {
@@ -39,6 +45,7 @@ public class SideRoomsController {
 
     @FXML
     void initialize(){
+
         createListOfRooms();
         updateListOfRooms();
         tabPaneRooms.setOnSelectionChanged(e->{
@@ -49,7 +56,57 @@ public class SideRoomsController {
 
         createListOfUsers();
         updateListOfUsers();
+        setCellFactory();
 
+        printUsersOnline("SideRoomController #1");
+
+    }
+
+    private void setCellFactory() {
+        listOfUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+            @Override
+            public ListCell<User> call(ListView<User> param) {
+                return new ListCell<User>() {
+                    private final ImageView dotImageView = new ImageView();
+                    private final Label nameLabel = new Label();
+
+                    {
+                        // Устанавливаем размеры для ImageView
+                        dotImageView.setFitWidth(10);
+                        dotImageView.setFitHeight(10);
+                    }
+
+                    @Override
+                    protected void updateItem(User user, boolean empty) {
+                        super.updateItem(user, empty);
+
+                        if (empty || user == null) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            // Устанавливаем изображение в зависимости от статуса пользователя
+                            if (user.isOnline()) {
+                                dotImageView.setImage(DOT_BLUE_IMG);
+                            } else {
+                                dotImageView.setImage(DOT_RED_IMG);
+                            }
+
+                            // Устанавливаем имя пользователя
+                            nameLabel.setText(user.getName());
+                            nameLabel.setStyle("-fx-text-fill: #000001");
+
+                            // Создаем контейнер для изображения и текста
+                            HBox hbox = new HBox(dotImageView, nameLabel);
+                            hbox.setStyle("-fx-alignment: center-left");
+                            hbox.setSpacing(5); // Расстояние между изображением и текстом
+
+                            // Устанавливаем контейнер в ячейку
+                            setGraphic(hbox);
+                        }
+                    }
+                };
+            }
+        });
     }
 
     public void init(SideChat chat){
@@ -61,20 +118,19 @@ public class SideRoomsController {
      * Затем добавляется отсортированный список остальных пользователей за минусом Гостя
      */
     private void updateListOfUsers() {
-        ArrayList<User > users = new ArrayList<>();
-        users.add(CH_CURRENT_USER);
+//        ObservableList<User> users = UserQuickService.getInstance().findAll();
+//        users.add(CH_CURRENT_USER);
+//        users =
 
-        List<User> allUsers = CH_USERS.findAll();
+//        for(int i=0; i< UserQuickService.users.size(); i++){
+//            User u = UserQuickService.users.get(i);
+//            if(u.getName().equals("Гость") || u.equals(CH_CURRENT_USER))
+//                UserQuickService.users.remove(u);
+//        }
+        UserQuickService.users.sort(Comparators.usefulStringComparator());
 
-        for(int i=0; i< allUsers.size(); i++){
-            User u = allUsers.get(i);
-            if(u.getName().equals("Гость") || u.equals(CH_CURRENT_USER))
-                allUsers.remove(u);
-        }
-        allUsers.sort(Comparators.usefulStringComparator());
-        users.addAll(allUsers);
-        listOfUsers.getItems().clear();
-        listOfUsers.setItems(FXCollections.observableArrayList(users));
+//        listOfUsers.getItems().clear();
+        listOfUsers.setItems(UserQuickService.users);
     }
 
     /**
@@ -88,7 +144,6 @@ public class SideRoomsController {
                 rooms.add(room);
         }
 
-        listOfRooms.getItems().clear();
         listOfRooms.setItems(FXCollections.observableArrayList(rooms));
 
     }
