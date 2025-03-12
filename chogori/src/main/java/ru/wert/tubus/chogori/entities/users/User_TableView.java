@@ -1,18 +1,18 @@
 package ru.wert.tubus.chogori.entities.users;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import lombok.Getter;
 import lombok.Setter;
-import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.common.commands.ItemCommands;
 import ru.wert.tubus.chogori.common.contextMenuACC.FormView_ACCController;
 import ru.wert.tubus.chogori.common.interfaces.Sorting;
 import ru.wert.tubus.chogori.common.tableView.RoutineTableView;
 import ru.wert.tubus.chogori.entities.users.commands._UserCommands;
 import ru.wert.tubus.chogori.statics.Comparators;
-import ru.wert.tubus.chogori.application.services.ChogoriServices;
-import ru.wert.tubus.client.entity.serviceREST.UserService;
+import ru.wert.tubus.client.entity.models.User;
+import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +66,8 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
     }
 
     @Override
-    public List<User> prepareList() {
-        return UserService.getInstance().findAll();
+    public ObservableList<User> prepareList() {
+        return UserQuickService.getInstance().findAll(); // Возвращаем ObservableList<User>
     }
 
     @Override
