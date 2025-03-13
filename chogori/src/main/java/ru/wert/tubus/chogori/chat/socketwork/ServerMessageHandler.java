@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.SideRoomsController;
 import ru.wert.tubus.chogori.entities.users.User_TableView;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.Draft;
@@ -28,6 +29,8 @@ import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
 @Slf4j
 public class ServerMessageHandler {
 
+    public static SideRoomsController sideRoomsController;
+
     public static void handle(Message message) {
         log.info(String.format("Message from server received: %s", message.toUsefulString()));
         Platform.runLater(() -> {
@@ -43,18 +46,13 @@ public class ServerMessageHandler {
         Message.MessageType type = message.getType();
         if (type == Message.MessageType.USER_IN || type == Message.MessageType.USER_OUT) {
             str.append(type.getTypeName()).append(" ").append(CH_USERS.findById(message.getSenderId()).getName());
-            UserQuickService.users.stream().filter(user -> user.getId().equals(message.getSenderId())).findFirst().ifPresent(
-                    user -> {
-                        user.setOnline(type == Message.MessageType.USER_IN);
-                        for(Tab tab: CH_TAB_PANE.getTabs()){
-                            if(tab.getId().equals("Пользователи"))
-                                Platform.runLater(()->{
-                                    ((UpdatableTabController) ((AppTab)tab).getTabController()).updateTab();
-                                });
-                        }
-
-                    }
-            );
+            sideRoomsController.getUsersOnline().stream()
+                    .filter(userOnline -> userOnline.getUser().getId().equals(message.getSenderId()))
+                    .findFirst()
+                    .ifPresent(userOnline -> {
+                        userOnline.setOnline(type == Message.MessageType.USER_IN);
+                    });
+            sideRoomsController.refreshListOfUsers();
             printUsersOnline("ServerMessageHandler : makeString :");
         } else if (type == Message.MessageType.ADD_DRAFT || type == Message.MessageType.UPDATE_DRAFT || type == Message.MessageType.DELETE_DRAFT) {
             try {

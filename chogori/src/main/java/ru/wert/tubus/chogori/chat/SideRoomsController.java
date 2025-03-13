@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import lombok.Getter;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.statics.Comparators;
@@ -20,8 +21,8 @@ import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
 import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.printUsersOnline;
-import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
-import static ru.wert.tubus.chogori.images.BtnImages.DOT_RED_IMG;
+import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.sideRoomsController;
+import static ru.wert.tubus.chogori.images.BtnImages.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class SideRoomsController {
@@ -30,7 +31,7 @@ public class SideRoomsController {
     private Button btnAddNewChatGroup;
 
     @FXML
-    private ListView<User> listOfUsers;
+    private ListView<UserOnline> listOfUsers;
 
     @FXML
     private ListView<Room> listOfRooms;
@@ -42,6 +43,9 @@ public class SideRoomsController {
     private Tab tabPaneUsers;
 
     private SideChat chat;
+
+    @Getter
+    public ObservableList<UserOnline> usersOnline = FXCollections.observableArrayList();
 
     @FXML
     void initialize(){
@@ -63,10 +67,10 @@ public class SideRoomsController {
     }
 
     private void setCellFactory() {
-        listOfUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+        listOfUsers.setCellFactory(new Callback<ListView<UserOnline>, ListCell<UserOnline>>() {
             @Override
-            public ListCell<User> call(ListView<User> param) {
-                return new ListCell<User>() {
+            public ListCell<UserOnline> call(ListView<UserOnline> param) {
+                return new ListCell<UserOnline>() {
                     private final ImageView dotImageView = new ImageView();
                     private final Label nameLabel = new Label();
 
@@ -77,22 +81,22 @@ public class SideRoomsController {
                     }
 
                     @Override
-                    protected void updateItem(User user, boolean empty) {
-                        super.updateItem(user, empty);
+                    protected void updateItem(UserOnline userOnline, boolean empty) {
+                        super.updateItem(userOnline, empty);
 
-                        if (empty || user == null) {
+                        if (empty || userOnline == null) {
                             setGraphic(null);
                             setText(null);
                         } else {
                             // Устанавливаем изображение в зависимости от статуса пользователя
-                            if (user.isOnline()) {
+                            if (userOnline.isOnline()) {
                                 dotImageView.setImage(DOT_BLUE_IMG);
                             } else {
-                                dotImageView.setImage(DOT_RED_IMG);
+                                dotImageView.setImage(SPACE_IMG);
                             }
 
                             // Устанавливаем имя пользователя
-                            nameLabel.setText(user.getName());
+                            nameLabel.setText(userOnline.getUser().getName());
                             nameLabel.setStyle("-fx-text-fill: #000001");
 
                             // Создаем контейнер для изображения и текста
@@ -109,8 +113,16 @@ public class SideRoomsController {
         });
     }
 
+    public void refreshListOfUsers(){
+        if(listOfUsers != null){
+            listOfUsers.refresh();
+        }
+    }
+
+
     public void init(SideChat chat){
         this.chat = chat;
+        sideRoomsController = this;
     }
 
     /**
@@ -118,19 +130,22 @@ public class SideRoomsController {
      * Затем добавляется отсортированный список остальных пользователей за минусом Гостя
      */
     private void updateListOfUsers() {
-//        ObservableList<User> users = UserQuickService.getInstance().findAll();
-//        users.add(CH_CURRENT_USER);
-//        users =
+        usersOnline.clear();
+        for (User user : UserQuickService.users) {
+            usersOnline.add(new UserOnline(user, user.isOnline()));
+        }
 
-//        for(int i=0; i< UserQuickService.users.size(); i++){
-//            User u = UserQuickService.users.get(i);
-//            if(u.getName().equals("Гость") || u.equals(CH_CURRENT_USER))
-//                UserQuickService.users.remove(u);
-//        }
-        UserQuickService.users.sort(Comparators.usefulStringComparator());
+        sortUsersOnlineByName();
+        listOfUsers.setItems(usersOnline);
 
-//        listOfUsers.getItems().clear();
-        listOfUsers.setItems(UserQuickService.users);
+    }
+
+    private void sortUsersOnlineByName() {
+        usersOnline.sort((userOnline1, userOnline2) -> {
+            String name1 = userOnline1.getUser().getName();
+            String name2 = userOnline2.getUser().getName();
+            return name1.compareToIgnoreCase(name2); // Сортировка без учета регистра
+        });
     }
 
     /**
@@ -152,12 +167,12 @@ public class SideRoomsController {
     private void createListOfUsers() {
         tabPaneUsers.setGraphic(new ImageView(BtnImages.MAN_IMG));
         listOfUsers.setPlaceholder(new Label("Пользователей не найдено"));
-        listOfUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
-            public ListCell<User> call(ListView<User> param) {
+        listOfUsers.setCellFactory(new Callback<ListView<UserOnline>, ListCell<UserOnline>>() {
+            public ListCell<UserOnline> call(ListView<UserOnline> param) {
                 final Label userLabel = new Label();
-                final ListCell<User> cell = new ListCell<User>() {
+                final ListCell<UserOnline> cell = new ListCell<UserOnline>() {
                     @Override
-                    public void updateItem(User item, boolean empty) {
+                    public void updateItem(UserOnline item, boolean empty) {
                         super.updateItem(item, empty);
 
                         if (empty) {
@@ -168,7 +183,7 @@ public class SideRoomsController {
                             if(item.equals(CH_CURRENT_USER))
                                 userLabel.setText("Написать себе");
                             else
-                                userLabel.setText(item.getName());
+                                userLabel.setText(item.getUser().getName());
 
                             userLabel.setContextMenu(createContextMenu());
                             userLabel.setOnMouseClicked(e->{
