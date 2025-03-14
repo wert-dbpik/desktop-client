@@ -32,7 +32,8 @@ public class Message extends _BaseEntity implements Item {
         DELETE_DRAFT("Удален чертеж"),
         ADD_FOLDER("Добавлен комплект чертежей"),
         UPDATE_FOLDER("Обновлен комплект чертежей"),
-        DELETE_FOLDER("Удален комплект чертежей");
+        DELETE_FOLDER("Удален комплект чертежей"),
+        PUSH("Уведомление");
 
         @Getter String typeName;
 

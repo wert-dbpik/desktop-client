@@ -4,6 +4,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.tubus.client.entity.models.Message;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 
+@Slf4j
 public class ListViewWithMessages_Manipulator {
 
     private final ListView<Message> listView;
@@ -26,67 +28,94 @@ public class ListViewWithMessages_Manipulator {
         this.listView = listView;
         this.chatController = chatController;
 
-        //Допускается добавление изображений, чертежей
+        // Обработка события перетаскивания файлов над ListView
         listView.setOnDragOver(event -> {
             Dragboard db = event.getDragboard();
-            //Если один из форматов не является FILES, то перетаскивание не допускается
+            log.info("Начало обработки события перетаскивания над ListView");
+
+            // Если перетаскиваемые данные содержат файлы
             if (db.hasFiles()) {
                 List<File> allFiles = new ArrayList<>();
                 List<File> content = (List<File>) db.getContent(DataFormat.FILES);
+                log.info("Обнаружены файлы для перетаскивания: {}", content.size());
+
+                // Обработка каждого файла или папки
                 for (File f : content) {
                     try {
                         if (f.isDirectory()) {
+                            // Если это папка, собираем все файлы внутри
                             List<Path> filesInFolder = Files.walk(f.toPath()).collect(Collectors.toList());
                             for (Path p : filesInFolder) allFiles.add(p.toFile());
-                        } else if (f.isFile())
+                            log.info("Добавлены файлы из папки: {}", f.getName());
+                        } else if (f.isFile()) {
                             allFiles.add(f);
+                            log.info("Добавлен файл: {}", f.getName());
+                        }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.error("Ошибка при обработке файла или папки: {}", e.getMessage(), e);
                     }
                 }
+
+                // Проверка расширения файлов и разрешение перетаскивания для изображений
                 for (File file : allFiles) {
                     String ext = FilenameUtils.getExtension(file.getName().toLowerCase());
                     if (IMAGE_EXTENSIONS.contains(ext)) {
                         event.acceptTransferModes(TransferMode.MOVE);
                         event.consume();
+                        log.info("Разрешено перетаскивание для файла с расширением изображения: {}", file.getName());
                         return;
                     }
-//                    event.acceptTransferModes(TransferMode.NONE);
                 }
-            } else if (db.hasString()){
+            } else if (db.hasString()) {
+                // Если перетаскиваемые данные содержат строку
                 String str = db.getString();
-                if(str.startsWith("pik! DR#") || str.startsWith("pik! F#") || str.startsWith("pik! PP#")){
+                log.info("Обнаружена строка для перетаскивания: {}", str);
+
+                // Проверка строки на соответствие определенным шаблонам
+                if (str.startsWith("pik! DR#") || str.startsWith("pik! F#") || str.startsWith("pik! PP#")) {
                     event.acceptTransferModes(TransferMode.MOVE);
                     event.consume();
+                    log.info("Разрешено перетаскивание для строки: {}", str);
                     return;
                 }
-
             }
-                event.acceptTransferModes(TransferMode.NONE);
+
+            // Если ни одно из условий не выполнено, перетаскивание запрещено
+            event.acceptTransferModes(TransferMode.NONE);
+            log.info("Перетаскивание запрещено, так как данные не соответствуют допустимым форматам");
         });
 
+        // Обработка события завершения перетаскивания
         listView.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
+            log.info("Начало обработки события завершения перетаскивания");
+
             if (db.hasFiles()) {
+                // Если перетаскиваемые данные содержат файлы
                 List<File> acceptedFiles = new ArrayList<>();
                 List<File> content = (List<File>) db.getContent(DataFormat.FILES);
-                for (File f : content)
-                    listView.createPicsChatMessage(content);
-            } else if(db.hasString()) {
+                log.info("Файлы успешно перетащены: {}", content.size());
+
+                // Создание сообщения с изображениями
+                listView.createPicsChatMessage(content);
+                log.info("Создано сообщение с изображениями");
+            } else if (db.hasString()) {
+                // Если перетаскиваемые данные содержат строку
                 String str = db.getString();
+                log.info("Строка успешно перетащена: {}", str);
+
+                // Создание сообщения в зависимости от типа строки
                 if (str.startsWith("pik! DR#")) {
                     listView.createDraftsChatMessage(str);
-                } else if(str.startsWith("pik! F#")){
+                    log.info("Создано сообщение с чертежом");
+                } else if (str.startsWith("pik! F#")) {
                     listView.createFoldersChatMessage(str);
-                } else if(str.startsWith("pik! PP#")) {
+                    log.info("Создано сообщение с папкой");
+                } else if (str.startsWith("pik! PP#")) {
                     listView.createPassportsChatMessage(str);
+                    log.info("Создано сообщение с паспортом");
                 }
-
             }
         });
     }
-
-
-
-
 }

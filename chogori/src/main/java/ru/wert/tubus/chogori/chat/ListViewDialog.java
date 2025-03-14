@@ -6,6 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import lombok.Getter;
+import ru.wert.tubus.chogori.chat.socketwork.SocketService;
 import ru.wert.tubus.chogori.images.ImageUtil;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Message;
@@ -183,11 +184,19 @@ public class ListViewDialog extends ListView<Message> {
      * @param message
      */
     private void sendMessageToRecipient(Message message) {
+        SocketService.sendMessage(message);
         getItems().add(message);
         refresh();
         scrollTo(message);
-        System.out.println(message);
-        CH_MESSAGES.save(message);
+    }
 
+    /**
+     * Получение сообщения от сервера (пользователю)
+     * @param message
+     */
+    public void receiveMessageFromServer(Message message) {
+        getItems().add(message);
+        refresh();
+        scrollTo(message);
     }
 }
