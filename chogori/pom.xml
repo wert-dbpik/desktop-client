@@ -133,12 +133,12 @@
 
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>local-repo</id>
-            <url>file://${project.basedir}/lib</url>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>local-repo</id>-->
+<!--            <url>file://${project.basedir}/lib</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
 
     <build>

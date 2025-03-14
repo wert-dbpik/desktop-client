@@ -19,14 +19,14 @@ public class SocketService {
     private static volatile boolean running = true;
 
     // Менеджер для управления соединением с сервером
-    private final SocketConnectionManager connectionManager = new SocketConnectionManager();
+    private static final SocketConnectionManager connectionManager = new SocketConnectionManager();
     // Получатель сообщений от сервера
-    private MessageReceiver messageReceiver;
+    private static MessageReceiver messageReceiver;
     // Отправитель сообщений на сервер
-    private MessageSender messageSender;
+    private static MessageSender messageSender;
 
     // Сервис для работы с сокетом в фоновом потоке
-    private final Service<Void> socketService = new Service<Void>() {
+    private static final Service<Void> socketService = new Service<Void>() {
         @Override
         protected Task<Void> createTask() {
             return new Task<Void>() {
@@ -80,14 +80,14 @@ public class SocketService {
     };
 
     // Метод для запуска сервиса сокета
-    public void start() {
+    public static void start() {
         if (!socketService.isRunning()) {
             socketService.restart();
         }
     }
 
     // Метод для остановки сервиса сокета
-    public void stop() {
+    public static void stop() {
         Platform.runLater(() -> {
             running = false;
             socketService.cancel();
@@ -99,7 +99,7 @@ public class SocketService {
     }
 
     // Метод для отправки сообщения на сервер
-    public void sendMessage(Message message) {
+    public static void sendMessage(Message message) {
         if (messageSender != null) {
             messageSender.sendMessage(message);
         }
