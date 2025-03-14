@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.chat.socketwork;
 
+import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.client.entity.models.Message;
 
 /**

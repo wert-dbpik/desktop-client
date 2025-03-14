@@ -6,7 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import lombok.Getter;
-import ru.wert.tubus.chogori.chat.socketwork.SocketService;
+import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.images.ImageUtil;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Message;
@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**

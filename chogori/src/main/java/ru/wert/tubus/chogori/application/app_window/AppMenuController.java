@@ -23,7 +23,7 @@ import ru.wert.tubus.chogori.StartChogori;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
-import ru.wert.tubus.chogori.chat.socketwork.SocketService;
+import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
 import ru.wert.tubus.chogori.help.About;
