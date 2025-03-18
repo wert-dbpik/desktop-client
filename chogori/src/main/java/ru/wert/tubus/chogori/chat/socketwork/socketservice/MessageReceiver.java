@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException;
 public class MessageReceiver {
 
     private final BufferedReader in; // Поток для чтения данных от сервера
-    private final Gson gson = new Gson(); // Объект для преобразования JSON в объекты Java и обратно
+    private final Gson gson = Message.createGson(); // Объект для преобразования JSON в объекты Java и обратно
     private volatile boolean running = true; // Флаг для управления циклом работы потока
 
     // Конструктор, принимающий BufferedReader для чтения данных от сервера

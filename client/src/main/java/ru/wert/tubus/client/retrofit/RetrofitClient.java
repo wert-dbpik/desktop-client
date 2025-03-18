@@ -42,19 +42,19 @@ public class RetrofitClient{
                 .setLenient()
                 .create();
 
+        //Перехватчик для логгирования запросов и ответов
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         //борьба с readTimeout
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
                 .callTimeout(2, TimeUnit.MINUTES)
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS);
+                .writeTimeout(30, TimeUnit.SECONDS)
+//                .addInterceptor(interceptor)
+                ;
 
-        //Перехватчик для логгирования запросов и ответов
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient.Builder client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor);
 
 //        Interceptor interceptor1 = chain -> {
 //            Request.Builder requestBuilder = chain.request().newBuilder();

@@ -1,5 +1,6 @@
 package ru.wert.tubus.client.entity.models;
 
+import com.google.gson.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.interfaces.Item;
@@ -11,12 +12,11 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class Message extends _BaseEntity implements Item {
 
     public enum MessageStatus {
-        RECEIVED, //Уведомление получено
-        DELIVERED //Сообщение прочитано
+        RECEIVED, // Уведомление получено
+        DELIVERED // Сообщение прочитано
     }
 
     public enum MessageType {
@@ -35,20 +35,20 @@ public class Message extends _BaseEntity implements Item {
         DELETE_FOLDER("Удален комплект чертежей"),
         PUSH("Уведомление");
 
-        @Getter String typeName;
+        @Getter
+        private final String typeName;
 
         MessageType(String typeName) {
             this.typeName = typeName;
         }
     }
 
-
-    private MessageType type; //Тип сообщения (текстовый, чертеж и т.д.)
-    private Room room; //id руппы чата
-    private Long senderId; //id пользователя, написавшего в группе
-    private String text; //Текст сообщения, либо строку id-шников
-    private LocalDateTime creationTime; //Время отправки сообщения
-    private MessageStatus status; //Время отправки сообщения
+    private MessageType type; // Тип сообщения (текстовый, чертеж и т.д.)
+    private Room room; // id группы чата
+    private Long senderId; // id пользователя, написавшего в группе
+    private String text; // Текст сообщения, либо строку id-шников
+    private LocalDateTime creationTime; // Время отправки сообщения
+    private MessageStatus status; // Статус сообщения
 
     @Override
     public String getName() {
@@ -59,5 +59,12 @@ public class Message extends _BaseEntity implements Item {
     @Override
     public String toUsefulString() {
         return "from: " + senderId + ", type: " + type.name() + " ,message: " + text;
+    }
+
+    // Метод для создания Gson с адаптером для LocalDateTime
+    public static Gson createGson() {
+        return new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
     }
 }
