@@ -10,7 +10,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import ru.wert.tubus.client.entity.models.LocalDateTimeAdapter;
 import ru.wert.tubus.client.entity.models.User;
 
 import java.io.IOException;
@@ -40,10 +39,7 @@ public class RetrofitClient{
      */
     private RetrofitClient() {
 
-        gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .setLenient()
-                .create();
+        gson = GsonConfiguration.createGson();
 
         //Перехватчик для логгирования запросов и ответов
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

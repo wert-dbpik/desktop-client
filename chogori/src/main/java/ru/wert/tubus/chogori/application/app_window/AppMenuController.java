@@ -626,7 +626,7 @@ public class AppMenuController {
     void makeTest(ActionEvent event){
         Message m = new Message();
         m.setCreationTime(LocalDateTime.now());
-        m.setRoom(CH_ROOMS.findByName("group:###"));
+        m.setRoomId(CH_ROOMS.findByName("group:###").getId());
         m.setType(Message.MessageType.CHAT_TEXT);
         m.setSenderId(CH_CURRENT_USER.getId());
         m.setText( "Я работаю!!!!!!!!!!!!!!!!!");

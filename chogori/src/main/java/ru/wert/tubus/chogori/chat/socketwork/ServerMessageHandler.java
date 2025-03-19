@@ -14,6 +14,7 @@ import ru.wert.tubus.chogori.entities.users.User_TableView;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
+import ru.wert.tubus.client.entity.serviceREST.RoomService;
 import ru.wert.tubus.client.interfaces.UpdatableTabController;
 
 import java.util.List;
@@ -93,7 +94,8 @@ public class ServerMessageHandler {
                 type == Message.MessageType.CHAT_FOLDERS ||
                 type == Message.MessageType.CHAT_PICS) {
             // Проверяем, входит ли пользователь в комнату
-            Room room = message.getRoom();
+            Long roomId = message.getRoomId();
+            Room room = RoomService.getInstance().findById(roomId);
             if (room != null && room.getRoommates().contains(CH_CURRENT_USER.getId())) {
                 // Добавляем комнату в список, если она отсутствует
                 sideRoomsController.addRoomIfAbsent(room);
@@ -111,7 +113,7 @@ public class ServerMessageHandler {
      * @param message Сообщение чата.
      */
     private static void handleChatMessage(Message message) {
-        Room room = message.getRoom();
+        Room room = RoomService.getInstance().findById(message.getRoomId());
         if (room != null) {
             // Находим диалог для этой комнаты с помощью метода из SideRoomDialogController
             ListViewDialog dialog = sideRoomDialogController.findDialogForRoom(room);

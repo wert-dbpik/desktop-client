@@ -1,7 +1,7 @@
 package ru.wert.tubus.chogori.chat.socketwork.socketservice;
 
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.client.retrofit.GsonConfiguration;
 import ru.wert.tubus.client.entity.models.Message;
 
 import java.io.PrintWriter;
@@ -34,7 +34,7 @@ public class MessageSender {
                     Message message = messageQueue.take();
                     if (out != null) {
                         // Преобразование объекта Message в JSON-строку
-                        String jsonMessage = new Gson().toJson(message);
+                        String jsonMessage = GsonConfiguration.createGson().toJson(message);
                         // Логирование отправляемого сообщения
                         log.debug("Отправка сообщения на сервер: {}", jsonMessage);
                         // Отправка JSON-строки на сервер

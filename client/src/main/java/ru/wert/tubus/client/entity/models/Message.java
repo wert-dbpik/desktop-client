@@ -44,7 +44,7 @@ public class Message extends _BaseEntity implements Item {
     }
 
     private MessageType type; // Тип сообщения (текстовый, чертеж и т.д.)
-    private Room room; // id группы чата
+    private Long roomId; // id группы чата
     private Long senderId; // id пользователя, написавшего в группе
     private String text; // Текст сообщения, либо строку id-шников
     private LocalDateTime creationTime; // Время отправки сообщения
@@ -61,10 +61,4 @@ public class Message extends _BaseEntity implements Item {
         return "from: " + senderId + ", type: " + type.name() + " ,message: " + text;
     }
 
-    // Метод для создания Gson с адаптером для LocalDateTime
-    public static Gson createGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .create();
-    }
 }

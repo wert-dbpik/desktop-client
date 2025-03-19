@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
+import ru.wert.tubus.client.retrofit.GsonConfiguration;
 import ru.wert.tubus.client.entity.models.Message;
 
 import java.io.BufferedReader;
@@ -14,7 +15,7 @@ import java.net.SocketTimeoutException;
 public class MessageReceiver {
 
     private final BufferedReader in; // Поток для чтения данных от сервера
-    private final Gson gson = Message.createGson(); // Объект для преобразования JSON в объекты Java и обратно
+    private final Gson gson = GsonConfiguration.createGson(); // Объект для преобразования JSON в объекты Java и обратно
     private volatile boolean running = true; // Флаг для управления циклом работы потока
 
     // Конструктор, принимающий BufferedReader для чтения данных от сервера
