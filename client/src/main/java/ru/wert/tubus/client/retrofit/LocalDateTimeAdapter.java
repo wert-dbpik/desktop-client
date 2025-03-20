@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 public class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
 
     // Формат даты и времени
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
@@ -20,8 +20,11 @@ public class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, Json
     @Override
     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        // Десериализация: строка -> LocalDateTime
-        String dateTimeString = json.getAsString();
-        return LocalDateTime.parse(dateTimeString, FORMATTER);
+        try {
+            String dateTimeString = json.getAsString();
+            return LocalDateTime.parse(dateTimeString, FORMATTER);
+        } catch (Exception e) {
+            throw new JsonParseException("Не удалось распарсить LocalDateTime: " + json.getAsString(), e);
+        }
     }
 }

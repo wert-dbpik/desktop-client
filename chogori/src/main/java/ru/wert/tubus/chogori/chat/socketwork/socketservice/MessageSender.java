@@ -5,6 +5,8 @@ import ru.wert.tubus.client.retrofit.GsonConfiguration;
 import ru.wert.tubus.client.entity.models.Message;
 
 import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -39,6 +41,7 @@ public class MessageSender {
                         log.debug("Отправка сообщения на сервер: {}", jsonMessage);
                         // Отправка JSON-строки на сервер
                         out.println(jsonMessage);
+                        log.info("Сообщение отправлено на сервер: {}", jsonMessage);
                     } else {
                         // Логирование предупреждения, если сокет не подключен
                         log.warn("Сокет не подключен, сообщение не отправлено: {}", message.toUsefulString());

@@ -3,12 +3,10 @@ package ru.wert.tubus.chogori.chat.socketwork.socketservice;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.retrofit.AppProperties;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class SocketConnectionManager {
@@ -38,10 +36,10 @@ public class SocketConnectionManager {
         // Установка таймаута для чтения данных из сокета
         socket.setSoTimeout(SOCKET_TIMEOUT_MS);
 
-        // Инициализация потока для отправки данных на сервер
-        out = new PrintWriter(socket.getOutputStream(), true);
-        // Инициализация потока для чтения данных от сервера
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        // Инициализация потока для отправки данных на сервер с использованием UTF-8
+        out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+        // Инициализация потока для чтения данных от сервера с использованием UTF-8
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
 
         // Логирование успешного подключения
         log.info("Подключение к серверу {}:{} установлено.", SERVER_ADDRESS, PORT);
