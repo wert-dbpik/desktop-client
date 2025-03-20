@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.sideRoomsController;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
@@ -65,7 +64,7 @@ public class SideRoomsController {
 
         createListOfUsers();
         updateListOfUsers();
-        setCellFactory();
+
     }
 
     /**
@@ -78,53 +77,6 @@ public class SideRoomsController {
             log.debug("Добавление комнаты в список: {}", room.getName());
             listOfRooms.getItems().add(room);
         }
-    }
-
-    private void setCellFactory() {
-        listOfUsers.setCellFactory(new Callback<ListView<UserOnline>, ListCell<UserOnline>>() {
-            @Override
-            public ListCell<UserOnline> call(ListView<UserOnline> param) {
-                return new ListCell<UserOnline>() {
-                    private final ImageView dotImageView = new ImageView();
-                    private final Label nameLabel = new Label();
-
-                    {
-                        // Устанавливаем размеры для ImageView
-                        dotImageView.setFitWidth(10);
-                        dotImageView.setFitHeight(10);
-                    }
-
-                    @Override
-                    protected void updateItem(UserOnline userOnline, boolean empty) {
-                        super.updateItem(userOnline, empty);
-
-                        if (empty || userOnline == null) {
-                            setGraphic(null);
-                            setText(null);
-                        } else {
-                            // Устанавливаем изображение в зависимости от статуса пользователя
-                            if (userOnline.isOnline()) {
-                                dotImageView.setImage(DOT_BLUE_IMG);
-                            } else {
-                                dotImageView.setImage(SPACE_IMG);
-                            }
-
-                            // Устанавливаем имя пользователя
-                            nameLabel.setText(userOnline.getUser().getName());
-                            nameLabel.setStyle("-fx-text-fill: #000001");
-
-                            // Создаем контейнер для изображения и текста
-                            HBox hbox = new HBox(dotImageView, nameLabel);
-                            hbox.setStyle("-fx-alignment: center-left");
-                            hbox.setSpacing(5); // Расстояние между изображением и текстом
-
-                            // Устанавливаем контейнер в ячейку
-                            setGraphic(hbox);
-                        }
-                    }
-                };
-            }
-        });
     }
 
     public void refreshListOfUsers() {
@@ -157,10 +109,22 @@ public class SideRoomsController {
 
     private void sortUsersOnlineByName() {
         log.debug("Сортировка пользователей по имени");
+        String currentUserName = CH_CURRENT_USER.getName(); // Имя текущего пользователя
+
         usersOnline.sort((userOnline1, userOnline2) -> {
             String name1 = userOnline1.getUser().getName();
             String name2 = userOnline2.getUser().getName();
-            return name1.compareToIgnoreCase(name2); // Сортировка без учета регистра
+
+            // Если первый пользователь - это текущий пользователь, он должен быть выше
+            if (name1.equals(currentUserName)) {
+                return -1; // userOnline1 будет выше
+            }
+            // Если второй пользователь - это текущий пользователь, он должен быть выше
+            if (name2.equals(currentUserName)) {
+                return 1; // userOnline2 будет выше
+            }
+            // В остальных случаях сортируем по имени без учета регистра
+            return name1.compareToIgnoreCase(name2);
         });
     }
 
@@ -185,56 +149,82 @@ public class SideRoomsController {
         listOfUsers.setPlaceholder(new Label("Пользователей не найдено"));
         listOfUsers.setCellFactory(new Callback<ListView<UserOnline>, ListCell<UserOnline>>() {
             public ListCell<UserOnline> call(ListView<UserOnline> param) {
-                final Label userLabel = new Label();
-                final ListCell<UserOnline> cell = new ListCell<UserOnline>() {
+                return new ListCell<UserOnline>() {
+                    private final ImageView dotImageView = new ImageView();
+                    private final Label nameLabel = new Label();
+
+                    {
+                        // Устанавливаем размеры для ImageView
+                        dotImageView.setFitWidth(10);
+                        dotImageView.setFitHeight(10);
+                    }
+
                     @Override
-                    public void updateItem(UserOnline item, boolean empty) {
-                        super.updateItem(item, empty);
+                    public void updateItem(UserOnline userOnline, boolean empty) {
+                        super.updateItem(userOnline, empty);
 
                         if (empty) {
                             setText(null);
                             setGraphic(null);
                         } else {
                             setText(null);
-                            if (item.equals(CH_CURRENT_USER))
-                                userLabel.setText("Написать себе");
-                            else
-                                userLabel.setText(item.getUser().getName());
 
-                            userLabel.setContextMenu(createContextMenu());
-                            userLabel.setOnMouseClicked(e -> {
+                            // Устанавливаем имя пользователя
+                            if (userOnline.getUser().equals(CH_CURRENT_USER))
+                                nameLabel.setText("Написать себе");
+                            else
+                                nameLabel.setText(userOnline.getUser().getName());
+
+                             nameLabel.setContextMenu(createContextMenu(userOnline.getUser()));
+                             nameLabel.setOnMouseClicked(e -> {
                                 if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
-                                    log.debug("Открытие чата с пользователем: {}", item.getUser().getName());
-                                    openOneToOneChat(userLabel);
+                                    log.debug("Открытие чата с пользователем: {}", userOnline.getUser().getName());
+                                    openOneToOneChat(userOnline.getUser());
                                     e.consume();
                                 }
                             });
-                            userLabel.setStyle("-fx-font-size:14; -fx-text-fill:black; -fx-font-style: italic");
-                            setGraphic(userLabel);
+                            nameLabel.setStyle("-fx-font-size:14; -fx-text-fill:black; -fx-font-style: italic");
+                            // Устанавливаем изображение в зависимости от статуса пользователя
+                            if (userOnline.isOnline()) {
+                                dotImageView.setImage(DOT_BLUE_IMG);
+                            } else {
+                                dotImageView.setImage(SPACE_IMG);
+                            }
+
+                            // Создаем контейнер для изображения и текста
+                            HBox hbox = new HBox(dotImageView, nameLabel);
+                            hbox.setStyle("-fx-alignment: center-left");
+                            hbox.setSpacing(5); // Расстояние между изображением и текстом
+
+                            // Устанавливаем контейнер в ячейку
+                            setGraphic(hbox);
                         }
                     }
                 };
-                return cell;
             }
         });
     }
 
-    private void openOneToOneChat(Label userLabel) {
-        Long user1 = CH_CURRENT_USER.getId();
-        Long user2 = CH_USERS.findByName(userLabel.getText()).getId();
-        String roomName = "one-to-one:#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
-        Room room = createNewRoomIfNeeded(roomName);
-        log.debug("Открытие чата с пользователем: {}", userLabel.getText());
+    private void openChat(Room room){
+        log.debug("Открытие чата {}", room.getName());
         chat.showChatDialog(room);
     }
 
-    private ContextMenu createContextMenu() {
+    private void openOneToOneChat(User interlocutor) {
+        Long user1 = CH_CURRENT_USER.getId();
+        Long user2 = interlocutor.getId();
+        String roomName = "one-to-one:#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
+        Room room = createNewRoomIfNeeded(roomName);
+        log.debug("Открытие чата с пользователем: {}", interlocutor.getName());
+        chat.showChatDialog(room);
+    }
+
+    private ContextMenu createContextMenu(User interlocutor) {
         ContextMenu chatGroupContextMenu = new ContextMenu();
         MenuItem openChat = new MenuItem("Написать сообщение");
         openChat.setOnAction(e -> {
-            Label userLabel = (Label) ((MenuItem) e.getSource()).getParentPopup().getUserData();
-            log.debug("Открытие чата через контекстное меню с пользователем: {}", userLabel.getText());
-            openOneToOneChat(userLabel);
+            log.debug("Открытие чата через контекстное меню с пользователем: {}", interlocutor.getName());
+            openOneToOneChat(interlocutor);
         });
         chatGroupContextMenu.getItems().add(openChat);
 
@@ -270,26 +260,26 @@ public class SideRoomsController {
 
         listOfRooms.setCellFactory(new Callback<ListView<Room>, ListCell<Room>>() {
             public ListCell<Room> call(ListView<Room> param) {
-                final Label userLabel = new Label();
+                final Label chatLabel = new Label();
                 final ListCell<Room> cell = new ListCell<Room>() {
                     @Override
-                    public void updateItem(Room item, boolean empty) {
-                        super.updateItem(item, empty);
+                    public void updateItem(Room room, boolean empty) {
+                        super.updateItem(room, empty);
                         if (empty) {
                             setText(null);
                             setGraphic(null);
                         } else {
                             setText(null);
-                            userLabel.setText(ChatMaster.getRoomName(item.getName()));
-                            userLabel.setStyle("-fx-font-style: italic; -fx-text-fill: black");
-                            userLabel.setOnMouseClicked(e -> {
+                            chatLabel.setText(ChatMaster.getRoomName(room.getName()));
+                            chatLabel.setStyle("-fx-font-style: italic; -fx-text-fill: black");
+                            chatLabel.setOnMouseClicked(e -> {
                                 if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
-                                    log.debug("Открытие чата в комнате: {}", item.getName());
-                                    openOneToOneChat(userLabel);
+                                    log.debug("Открытие чата в комнате: {}", room.getName());
+                                    openChat(room);
                                     e.consume();
                                 }
                             });
-                            setGraphic(userLabel);
+                            setGraphic(chatLabel);
                         }
                     }
                 };

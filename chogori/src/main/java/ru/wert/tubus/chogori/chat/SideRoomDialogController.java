@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.chat;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -42,7 +43,7 @@ public class SideRoomDialogController {
     @FXML
     private TextArea taMessageText; // Текстовое поле для ввода сообщений
 
-    @FXML
+    @FXML@Getter
     private StackPane spDialogsContainer; // Контейнер для отображения сообщений в текущей комнате
 
     @FXML
@@ -69,7 +70,7 @@ public class SideRoomDialogController {
 
     private ObservableList<Message> roomMessages; // Список сообщений в текущей комнате
     private Room room; // Текущая комната
-    private ListViewDialog lvCurrentDialog; // Текущий диалог (список сообщений)
+    @Getter private ListViewDialog lvCurrentDialog; // Текущий диалог (список сообщений)
 
     /**
      * Инициализация контроллера.
@@ -229,5 +230,13 @@ public class SideRoomDialogController {
                     e.getCode().equals(KeyCode.ENTER))
                 btnSend.fire();
         });
+    }
+
+    /**
+     * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
+     */
+    public void scrollToBottom() {
+        Platform.runLater(()->lvCurrentDialog.scrollTo(lvCurrentDialog.getItems().size() - 1));
+
     }
 }

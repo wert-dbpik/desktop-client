@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.chat;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
@@ -138,4 +139,6 @@ public class SideChat {
             e.printStackTrace();
         }
     }
+
+
 }
