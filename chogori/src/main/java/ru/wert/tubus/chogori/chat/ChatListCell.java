@@ -10,10 +10,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.chat.cards.CardController;
-import ru.wert.tubus.chogori.chat.cards.DraftCardController;
-import ru.wert.tubus.chogori.chat.cards.FolderCardController;
-import ru.wert.tubus.chogori.chat.cards.PassportCardController;
+import ru.wert.tubus.chogori.chat.cards.*;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Pic;
 import ru.wert.tubus.chogori.images.ImageUtil;
@@ -140,6 +137,9 @@ public class ChatListCell extends ListCell<Message> {
                     case CHAT_PASSPORTS:
                         mountPassports(vbMessage, message);
                         break;
+                    case CHAT_SEPARATOR:
+                        mountSeparator(vbMessage, message);
+                        break;
                 }
             });
 
@@ -148,6 +148,24 @@ public class ChatListCell extends ListCell<Message> {
             return null;
         }
         return inMessage;
+    }
+
+    /**
+     * Отображает сепаратора с датой.
+     *
+     * @param vbMessage Контейнер для сообщения.
+     * @param message   Сообщение для отображения.
+     */
+    private void mountSeparator(VBox vbMessage, Message message) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/dateSeparator.fxml"));
+            Parent dateSeparator = loader.load();
+            DateSeparatorController controller = loader.getController();
+            controller.init(message.getText());
+            vbMessage.getChildren().add(dateSeparator);
+        } catch (IOException e) {
+            log.error("Ошибка при загрузке FXML для изображения: {}", e.getMessage(), e);
+        }
     }
 
     /**

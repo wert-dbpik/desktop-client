@@ -11,12 +11,16 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.chogori.images.BtnImages;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
@@ -70,7 +74,7 @@ public class SideRoomDialogController {
 
     private ObservableList<Message> roomMessages; // Список сообщений в текущей комнате
     private Room room; // Текущая комната
-    @Getter private ListViewDialog lvCurrentDialog; // Текущий диалог (список сообщений)
+    private ListViewDialog lvCurrentDialog; // Текущий диалог (список сообщений)
 
     /**
      * Инициализация контроллера.
@@ -95,7 +99,7 @@ public class SideRoomDialogController {
             lvCurrentDialog = new ListViewDialog(room, taMessageText);
 
             // Загружаем сообщения для комнаты
-            List<Message> messages = CH_MESSAGES.findAllByRoom(room);
+            List<Message> messages = insertSeparators(CH_MESSAGES.findAllByRoom(room));
             roomMessages = messages == null ?
                     FXCollections.observableArrayList() : // Пустой список, если сообщений нет
                     FXCollections.observableArrayList(messages);
@@ -117,6 +121,54 @@ public class SideRoomDialogController {
         // Устанавливаем название комнаты и переключаемся на диалог
         lblRoom.setText(ChatMaster.getRoomName(room.getName()));
         lvCurrentDialog.toFront();
+    }
+
+    /**
+     * Перебирает список сообщений и вставляет сепараторы при смене даты в сообщениях
+     *
+     * @param messages исходная коллекция сообщентй
+     * @return
+     */
+    private List<Message> insertSeparators(List<Message> messages){
+
+        if (messages == null || messages.isEmpty()) {
+            return messages; // Если список сообщений пуст, возвращаем пустой спиок
+        }
+
+        // Создаем временный список для хранения сообщений с разделителями
+        List<Message> messagesWithSeparators = new ArrayList<>();
+
+        messagesWithSeparators.add(getSeparatorMessage(messages.get(0)));
+
+        // Переменная для хранения последней даты
+        LocalDateTime lastDate = null;
+        for (Message message : messages) {
+            LocalDateTime currentDate = message.getCreationTime().toLocalDate().atStartOfDay();
+
+            // Если дата сообщения отличается от последней даты, добавляем разделитель
+            if (lastDate == null || !currentDate.isEqual(lastDate)) {
+                // Создаем разделитель с датой
+                Message separator = getSeparatorMessage(message);
+
+                // Добавляем разделитель в список
+                messagesWithSeparators.add(separator);
+                lastDate = currentDate; // Обновляем последнюю дату
+            }
+
+            // Добавляем текущее сообщение в список
+            messagesWithSeparators.add(message);
+        }
+
+        return messagesWithSeparators;
+    }
+
+    @NotNull
+    private Message getSeparatorMessage(Message message) {
+        Message separator = new Message();
+        separator.setType(Message.MessageType.CHAT_SEPARATOR);
+        separator.setText(message.getCreationTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        separator.setCreationTime(message.getCreationTime());
+        return separator;
     }
 
     /**

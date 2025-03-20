@@ -27,6 +27,7 @@ public class Message extends _BaseEntity implements Item {
         CHAT_FOLDERS("комплекты чертежей"),
         CHAT_PICS("изображения"),
         CHAT_PASSPORTS("пасспорта"),
+        CHAT_SEPARATOR("сепаратор с датой"),
         ADD_DRAFT("Добавление чертежа"),
         UPDATE_DRAFT("Обновлен чертеж"),
         DELETE_DRAFT("Удален чертеж"),
