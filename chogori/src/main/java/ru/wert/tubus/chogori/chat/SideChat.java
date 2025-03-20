@@ -1,6 +1,5 @@
 package ru.wert.tubus.chogori.chat;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
@@ -9,11 +8,14 @@ import javafx.scene.Parent;
 import javafx.scene.control.Separator;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.chogori.statics.AppStatic;
+import ru.wert.tubus.client.entity.models.Room;
 
 import java.io.IOException;
 
