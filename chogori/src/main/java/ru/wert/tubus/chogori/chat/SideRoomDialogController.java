@@ -3,13 +3,18 @@ package ru.wert.tubus.chogori.chat;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import lombok.Getter;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
@@ -47,7 +52,8 @@ public class SideRoomDialogController {
     @FXML
     private TextArea taMessageText; // Текстовое поле для ввода сообщений
 
-    @FXML@Getter
+    @FXML
+    @Getter
     private StackPane spDialogsContainer; // Контейнер для отображения сообщений в текущей комнате
 
     @FXML
@@ -61,7 +67,6 @@ public class SideRoomDialogController {
 
     private SideChat chat; // Ссылка на основной класс чата
 
-
     // Константы для управления размерами сообщений
     public static final float MESSAGE_WIDTH = 0.7f;
     public static final float PORTRAIT_WIDTH = 0.5f;
@@ -72,7 +77,7 @@ public class SideRoomDialogController {
     private Text textHolder = new Text();
     private double oldHeight = 0;
 
-    private ObservableList<Message> roomMessages; // Список сообщений в текущей комнате
+    private ObservableList<Message> roomMessages = FXCollections.observableArrayList(); // Список сообщений в текущей комнате
     private Room room; // Текущая комната
     private ListViewDialog lvCurrentDialog; // Текущий диалог (список сообщений)
 
@@ -98,22 +103,56 @@ public class SideRoomDialogController {
         if (foundDialog == null) {
             lvCurrentDialog = new ListViewDialog(room, taMessageText);
 
-            // Загружаем сообщения для комнаты
-            List<Message> messages = insertDateSeparators(CH_MESSAGES.findAllByRoom(room));
-            roomMessages = messages == null ?
-                    FXCollections.observableArrayList() : // Пустой список, если сообщений нет
-                    FXCollections.observableArrayList(messages);
+            // Создаем Task для загрузки сообщений в фоновом режиме
+            Task<List<Message>> loadMessagesTask = new Task<List<Message>>() {
+                @Override
+                protected List<Message> call() throws Exception {
+                    // Загружаем сообщения для комнаты
+                    return insertDateSeparators(CH_MESSAGES.findAllByRoom(room));
+                }
+            };
 
-            // Настраиваем ListView для отображения сообщений
-            lvCurrentDialog.setItems(roomMessages);
-            lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new ChatListCell(room));
-            lvCurrentDialog.setId("listViewWithMessages");
+            // Создаем окно ожидания
+            ProgressIndicator progressIndicator = new ProgressIndicator();
+            progressIndicator.setProgress(-1); // Неопределенный прогресс
+            Stage loadingStage = new Stage();
+            loadingStage.initModality(Modality.APPLICATION_MODAL);
+            loadingStage.initStyle(StageStyle.UNDECORATED);
+            loadingStage.setScene(new Scene(new StackPane(progressIndicator), 100, 100));
+            loadingStage.show();
 
-            // Добавляем манипулятор для обработки событий
-            new ListViewWithMessages_Manipulator(lvCurrentDialog, this);
+            // Обработка успешного завершения Task
+            loadMessagesTask.setOnSucceeded(event -> {
+                List<Message> messages = loadMessagesTask.getValue();
+                roomMessages.setAll(messages == null ? new ArrayList<>() : messages); // Обновляем ObservableList
 
-            // Добавляем диалог в контейнер
-            spDialogsContainer.getChildren().add(lvCurrentDialog);
+                // Настраиваем ListView для отображения сообщений
+                lvCurrentDialog.setItems(roomMessages);
+                lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new ChatListCell(room));
+                lvCurrentDialog.setId("listViewWithMessages");
+
+                // Добавляем манипулятор для обработки событий
+                new ListViewWithMessages_Manipulator(lvCurrentDialog, this);
+
+                // Добавляем диалог в контейнер
+                spDialogsContainer.getChildren().add(lvCurrentDialog);
+                scrollToBottom();
+
+                // Закрываем окно ожидания
+                loadingStage.close();
+            });
+
+            // Обработка ошибок в Task
+            loadMessagesTask.setOnFailed(event -> {
+                loadingStage.close();
+                // Обработка ошибки, например, вывод сообщения пользователю
+                Throwable exception = loadMessagesTask.getException();
+                exception.printStackTrace();
+                // Можно показать Alert с сообщением об ошибке
+            });
+
+            // Запускаем Task в отдельном потоке
+            new Thread(loadMessagesTask).start();
         } else {
             lvCurrentDialog = foundDialog;
         }
@@ -196,7 +235,6 @@ public class SideRoomDialogController {
         separator.setText(formattedDate); // Устанавливаем текст сепаратора как строку с датой
         return separator;
     }
-
 
     /**
      * Ищет открытый диалог для указанной комнаты.
@@ -315,7 +353,6 @@ public class SideRoomDialogController {
      * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
      */
     public void scrollToBottom() {
-        Platform.runLater(()->lvCurrentDialog.scrollTo(lvCurrentDialog.getItems().size() - 1));
-
+        Platform.runLater(() -> lvCurrentDialog.scrollTo(lvCurrentDialog.getItems().size() - 1));
     }
 }

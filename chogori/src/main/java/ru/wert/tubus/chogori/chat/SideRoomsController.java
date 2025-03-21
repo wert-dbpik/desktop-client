@@ -12,11 +12,11 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.Room;
+import ru.wert.tubus.client.entity.models.Roommate;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
@@ -129,17 +129,25 @@ public class SideRoomsController {
     }
 
     /**
-     * В методе создается пустой список, который выводится в ListView, если в базе еще нет чатов
+     * В методе создается список комнат, в которых участвует текущий пользователь.
+     * Список выводится в ListView.
      */
     private void updateListOfRooms() {
         log.debug("Обновление списка комнат");
         List<Room> rooms = new ArrayList<>();
         List<Room> allRooms = CH_ROOMS.findAll();
+
         for (Room room : allRooms) {
-            if (room.getRoommates().contains(CH_CURRENT_USER.getId()))
+            // Проверяем, является ли текущий пользователь участником комнаты
+            boolean isCurrentUserInRoom = room.getRoommates().stream()
+                    .anyMatch(roommate -> roommate.getUserId().equals(CH_CURRENT_USER.getId()));
+
+            if (isCurrentUserInRoom) {
                 rooms.add(room);
+            }
         }
 
+        // Устанавливаем обновленный список комнат в ListView
         listOfRooms.setItems(FXCollections.observableArrayList(rooms));
     }
 
@@ -238,16 +246,41 @@ public class SideRoomsController {
      * @return Созданная или найденная комната.
      */
     private Room createNewRoomIfNeeded(String roomName) {
+        // Поиск комнаты по имени
         Room room = CH_ROOMS.findByName(roomName);
+
+        // Если комната не найдена, создаем новую
         if (room == null) {
             log.debug("Создание новой комнаты: {}", roomName);
+
+            // Создаем новую комнату
             Room newRoom = new Room();
             newRoom.setName(roomName);
             newRoom.setCreatorId(CH_CURRENT_USER.getId());
-            newRoom.setRoommates(Collections.singletonList(CH_CURRENT_USER.getId()));
 
+            // Создаем объект Roommate для текущего пользователя
+            Roommate currentUserRoommate = new Roommate();
+            currentUserRoommate.setUserId(CH_CURRENT_USER.getId()); // Устанавливаем ID пользователя
+            currentUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
+            currentUserRoommate.setMember(true); // По умолчанию пользователь является участником
+
+            // Если Roommates теперь управляются отдельно, добавляем текущего пользователя в список участников
+            if (newRoom.getRoommates() == null) {
+                newRoom.setRoommates(new ArrayList<>()); // Инициализируем список, если он null
+            }
+            newRoom.getRoommates().add(currentUserRoommate);
+            if(newRoom.getName().startsWith("one-to-one")){
+                Roommate otherUserRoommate = new Roommate();
+                otherUserRoommate.setUserId(ChatMaster.getSecondUserInOneToOneChat(newRoom).getId()); // Устанавливаем ID пользователя
+                otherUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
+                otherUserRoommate.setMember(true); // По умолчанию пользователь является участником
+                newRoom.getRoommates().add(otherUserRoommate);
+            }
+
+            // Сохраняем новую комнату в базе данных
             room = CH_ROOMS.save(newRoom);
         }
+
         return room;
     }
 
