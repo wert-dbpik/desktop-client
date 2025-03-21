@@ -11,7 +11,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
@@ -21,6 +20,7 @@ import ru.wert.tubus.chogori.images.BtnImages;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
@@ -99,14 +99,14 @@ public class SideRoomDialogController {
             lvCurrentDialog = new ListViewDialog(room, taMessageText);
 
             // Загружаем сообщения для комнаты
-            List<Message> messages = insertSeparators(CH_MESSAGES.findAllByRoom(room));
+            List<Message> messages = insertDateSeparators(CH_MESSAGES.findAllByRoom(room));
             roomMessages = messages == null ?
                     FXCollections.observableArrayList() : // Пустой список, если сообщений нет
                     FXCollections.observableArrayList(messages);
 
             // Настраиваем ListView для отображения сообщений
             lvCurrentDialog.setItems(roomMessages);
-            lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new ChatListCell());
+            lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new ChatListCell(room));
             lvCurrentDialog.setId("listViewWithMessages");
 
             // Добавляем манипулятор для обработки событий
@@ -124,21 +124,26 @@ public class SideRoomDialogController {
     }
 
     /**
-     * Перебирает список сообщений и вставляет сепараторы при смене даты в сообщениях
+     * Перебирает список сообщений и вставляет сепараторы при смене даты в сообщениях.
+     * Если сегодняшняя дата больше, чем дата последнего сообщения, добавляет сепаратор с текущей датой в конец списка.
+     * Если список пуст, добавляет только сепаратор с текущей датой.
      *
-     * @param messages исходная коллекция сообщентй
-     * @return
+     * @param messages исходная коллекция сообщений
+     * @return список сообщений с добавленными сепараторами
      */
-    private List<Message> insertSeparators(List<Message> messages){
-
+    private List<Message> insertDateSeparators(List<Message> messages) {
+        // Если список сообщений пуст, добавляем только сепаратор с текущей датой
         if (messages == null || messages.isEmpty()) {
-            return messages; // Если список сообщений пуст, возвращаем пустой спиок
+            List<Message> result = new ArrayList<>();
+            result.add(getSeparatorMessage(LocalDateTime.now())); // Добавляем сепаратор с текущей датой
+            return result;
         }
+
+        // Сортируем сообщения по времени создания
+        messages.sort(Comparator.comparing(Message::getCreationTime));
 
         // Создаем временный список для хранения сообщений с разделителями
         List<Message> messagesWithSeparators = new ArrayList<>();
-
-        messagesWithSeparators.add(getSeparatorMessage(messages.get(0)));
 
         // Переменная для хранения последней даты
         LocalDateTime lastDate = null;
@@ -148,7 +153,7 @@ public class SideRoomDialogController {
             // Если дата сообщения отличается от последней даты, добавляем разделитель
             if (lastDate == null || !currentDate.isEqual(lastDate)) {
                 // Создаем разделитель с датой
-                Message separator = getSeparatorMessage(message);
+                Message separator = getSeparatorMessage(currentDate);
 
                 // Добавляем разделитель в список
                 messagesWithSeparators.add(separator);
@@ -159,17 +164,39 @@ public class SideRoomDialogController {
             messagesWithSeparators.add(message);
         }
 
+        // Получаем текущую дату
+        LocalDateTime today = LocalDateTime.now().toLocalDate().atStartOfDay();
+
+        // Получаем дату последнего сообщения
+        LocalDateTime lastMessageDate = messages.get(messages.size() - 1).getCreationTime().toLocalDate().atStartOfDay();
+
+        // Если сегодняшняя дата больше, чем дата последнего сообщения, добавляем сепаратор с текущей датой
+        if (today.isAfter(lastMessageDate)) {
+            Message separator = getSeparatorMessage(LocalDateTime.now());
+            messagesWithSeparators.add(separator);
+        }
+
         return messagesWithSeparators;
     }
 
-    @NotNull
-    private Message getSeparatorMessage(Message message) {
+    /**
+     * Создает сообщение-сепаратор с указанной датой.
+     * Дата форматируется в формате "dd.MM.yyyy".
+     *
+     * @param dateTime дата и время для сепаратора
+     * @return сообщение-сепаратор
+     */
+    private Message getSeparatorMessage(LocalDateTime dateTime) {
         Message separator = new Message();
         separator.setType(Message.MessageType.CHAT_SEPARATOR);
-        separator.setText(message.getCreationTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-        separator.setCreationTime(message.getCreationTime());
+        separator.setCreationTime(dateTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String formattedDate = dateTime.format(formatter);
+
+        separator.setText(formattedDate); // Устанавливаем текст сепаратора как строку с датой
         return separator;
     }
+
 
     /**
      * Ищет открытый диалог для указанной комнаты.

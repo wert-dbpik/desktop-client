@@ -17,7 +17,9 @@ import ru.wert.tubus.chogori.images.ImageUtil;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
+import ru.wert.tubus.client.entity.models.Room;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
+import static ru.wert.tubus.client.entity.models.Message.MessageType.CHAT_SEPARATOR;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_TEMPDIR;
 
 /**
@@ -34,6 +37,13 @@ import static ru.wert.tubus.winform.statics.WinformStatic.WF_TEMPDIR;
  */
 @Slf4j
 public class ChatListCell extends ListCell<Message> {
+
+    private final Boolean ONE_TO_ONE_CHAT; //Индивидуальный чат, не групповой
+
+    public ChatListCell(Room room) {
+        ONE_TO_ONE_CHAT = room.getName().startsWith("one-to-one");
+    }
+
 
     VBox vbMessageContainer; // Самый верхний контейнер для сообщения
     VBox vbOutlineMessage;   // Контейнер, включающий заголовок, сообщение и время создания
@@ -49,20 +59,25 @@ public class ChatListCell extends ListCell<Message> {
     private Separator separator; // Разделитель между сообщениями
 
     @Override
-    protected void updateItem(Message item, boolean empty) {
-        super.updateItem(item, empty);
+    protected void updateItem(Message message, boolean empty) {
+        super.updateItem(message, empty);
         if (empty) {
             setText(null);
             setGraphic(null);
         } else {
             setText(null);
             Parent mes;
-            // Определяем, является ли сообщение исходящим или входящим
-            if (item.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId())) {
-                mes = formatMessage(item, OUT);
+            if(message.getType().equals(Message.MessageType.CHAT_SEPARATOR)){
+                mes = mountSeparator(message);
             } else {
-                mes = formatMessage(item, IN);
+                // Определяем, является ли сообщение исходящим или входящим
+                if (message.getSenderId() != null && message.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId())) {
+                    mes = formatMessage(message, OUT);
+                } else {
+                    mes = formatMessage(message, IN);
+                }
             }
+
             setGraphic(mes);
         }
     }
@@ -101,13 +116,17 @@ public class ChatListCell extends ListCell<Message> {
             if (in_out.equals(OUT)) {
                 vbMessageContainer.getChildren().removeAll(lblFrom);
                 vbMessageContainer.getChildren().removeAll(lblDate);
-                vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
+                vbMessageContainer.setAlignment(Pos.TOP_LEFT);
                 lblFrom.setId("outMessageDataLabel");
                 lblDate.setId("outMessageDataLabel");
                 vbOutlineMessage.setId("outOutlineMessageVBox");
                 vbMessage.setId("outMessageVBox");
             } else {
-                vbMessageContainer.setAlignment(Pos.TOP_LEFT);
+                if(ONE_TO_ONE_CHAT){
+                    vbMessageContainer.getChildren().removeAll(lblFrom);
+                    vbMessageContainer.getChildren().removeAll(lblDate);
+                }
+                vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
                 lblFrom.setId("inMessageDataLabel");
                 lblDate.setId("inMessageDataLabel");
                 vbOutlineMessage.setId("inOutlineMessageVBox");
@@ -117,6 +136,7 @@ public class ChatListCell extends ListCell<Message> {
             // Обновляем интерфейс в потоке JavaFX
             Platform.runLater(() -> {
                 vbMessage.autosize();
+
                 lblFrom.setText(CH_USERS.findById(message.getSenderId()).getName());
                 lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime().toString()));
 
@@ -137,9 +157,6 @@ public class ChatListCell extends ListCell<Message> {
                     case CHAT_PASSPORTS:
                         mountPassports(vbMessage, message);
                         break;
-                    case CHAT_SEPARATOR:
-                        mountSeparator(vbMessage, message);
-                        break;
                 }
             });
 
@@ -153,19 +170,20 @@ public class ChatListCell extends ListCell<Message> {
     /**
      * Отображает сепаратора с датой.
      *
-     * @param vbMessage Контейнер для сообщения.
      * @param message   Сообщение для отображения.
      */
-    private void mountSeparator(VBox vbMessage, Message message) {
+    private Parent mountSeparator(Message message) {
+        Parent dateSeparator = null;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/dateSeparator.fxml"));
-            Parent dateSeparator = loader.load();
-            DateSeparatorController controller = loader.getController();
-            controller.init(message.getText());
-            vbMessage.getChildren().add(dateSeparator);
+            dateSeparator = loader.load();
+            Label lblDate = (Label)dateSeparator.lookup("#lblDate");
+            lblDate.setStyle("-fx-text-fill: #6f6f71");
+            lblDate.setText(message.getText());
         } catch (IOException e) {
             log.error("Ошибка при загрузке FXML для изображения: {}", e.getMessage(), e);
         }
+        return dateSeparator;
     }
 
     /**

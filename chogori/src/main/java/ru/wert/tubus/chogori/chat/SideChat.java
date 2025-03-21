@@ -68,7 +68,6 @@ public class SideChat {
             SP_CHAT.setPrefWidth(width - event.getX());
             SP_CHAT.setMinWidth(width - event.getX());
             SP_CHAT.setMaxWidth(width - event.getX());
-            log.debug("Изменение ширины чата. Новая ширина: {}", SP_CHAT.getWidth());
             event.consume();
         });
 
