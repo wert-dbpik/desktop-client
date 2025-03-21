@@ -1,6 +1,5 @@
 package ru.wert.tubus.client.entity.serviceREST;
 
-
 import retrofit2.Call;
 import ru.wert.tubus.client.entity.api_interfaces.RoomApiInterface;
 import ru.wert.tubus.client.entity.models.Room;
@@ -42,7 +41,6 @@ public class RoomService implements IRoomService, ItemService<Room> {
         }
         return null;
     }
-
 
     public Room findByName(String name) {
         try {
@@ -127,5 +125,41 @@ public class RoomService implements IRoomService, ItemService<Room> {
         }
     }
 
+    // Новые методы для управления видимостью и участием пользователей в чате
 
+    /**
+     * Устанавливает видимость чата для конкретного пользователя.
+     *
+     * @param roomId   ID комнаты
+     * @param userId   ID пользователя
+     * @param isVisible Флаг видимости (true/false)
+     * @return Обновленная комната
+     */
+    public Room setUserVisibility(Long roomId, Long userId, boolean isVisible) {
+        try {
+            Call<Room> call = api.setUserVisibility(roomId, userId, isVisible);
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Устанавливает статус участия пользователя в чате.
+     *
+     * @param roomId   ID комнаты
+     * @param userId   ID пользователя
+     * @param isMember Флаг участия (true/false)
+     * @return Обновленная комната
+     */
+    public Room setUserMembership(Long roomId, Long userId, boolean isMember) {
+        try {
+            Call<Room> call = api.setUserMembership(roomId, userId, isMember);
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

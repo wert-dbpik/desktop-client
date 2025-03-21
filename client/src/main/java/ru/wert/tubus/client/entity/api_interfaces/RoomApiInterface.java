@@ -32,4 +32,35 @@ public interface RoomApiInterface {
     @PUT("users/remove-roommate/{roomId}")
     Call<Room> removeRoommates(@Body List<String> userIds, @Path("roomId") Long roomId);
 
+    // Новые методы для управления видимостью и участием пользователей в чате
+
+    /**
+     * Устанавливает видимость чата для конкретного пользователя.
+     *
+     * @param roomId   ID комнаты
+     * @param userId   ID пользователя
+     * @param isVisible Флаг видимости (true/false)
+     * @return Обновленная комната
+     */
+    @PUT("rooms/set-visibility/{roomId}/{userId}")
+    Call<Room> setUserVisibility(
+            @Path("roomId") Long roomId,
+            @Path("userId") Long userId,
+            @Query("isVisible") boolean isVisible
+    );
+
+    /**
+     * Устанавливает статус участия пользователя в чате.
+     *
+     * @param roomId   ID комнаты
+     * @param userId   ID пользователя
+     * @param isMember Флаг участия (true/false)
+     * @return Обновленная комната
+     */
+    @PUT("rooms/set-membership/{roomId}/{userId}")
+    Call<Room> setUserMembership(
+            @Path("roomId") Long roomId,
+            @Path("userId") Long userId,
+            @Query("isMember") boolean isMember
+    );
 }

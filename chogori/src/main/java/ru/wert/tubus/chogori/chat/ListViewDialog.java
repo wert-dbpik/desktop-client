@@ -152,6 +152,7 @@ public class ListViewDialog extends ListView<Message> {
      */
     public void sendText() {
         String text = taMessageText.getText();
+        if(text == null || text.isEmpty()) return;
         Message message = createChatMessage(Message.MessageType.CHAT_TEXT, text);
         taMessageText.setText("");
 
