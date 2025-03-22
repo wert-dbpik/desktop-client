@@ -10,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.util.ChatMaster;
+import ru.wert.tubus.chogori.chat.util.UserOnline;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.Roommate;
@@ -20,13 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
-import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.sideRoomsController;
+import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.roomsController;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 @Slf4j
-public class SideRoomsController {
+public class RoomsController {
 
     @FXML
     private Button btnAddNewChatGroup;
@@ -89,7 +91,7 @@ public class SideRoomsController {
     public void init(SideChat chat) {
         log.info("Инициализация SideRoomsController с SideChat");
         this.chat = chat;
-        sideRoomsController = this;
+        roomsController = this;
     }
 
     /**

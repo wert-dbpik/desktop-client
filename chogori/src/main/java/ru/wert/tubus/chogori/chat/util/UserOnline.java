@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat;
+package ru.wert.tubus.chogori.chat.util;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

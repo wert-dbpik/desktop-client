@@ -14,6 +14,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.dialog.DialogController;
+import ru.wert.tubus.chogori.chat.util.ChatMaster;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Room;
 
@@ -31,10 +33,10 @@ public class SideChat {
     private Parent sideChatGroups;
 
     @Getter
-    private SideRoomDialogController talkController;
+    private DialogController talkController;
 
     @Getter
-    private SideRoomsController groupsController;
+    private RoomsController groupsController;
 
     @Getter
     private final VBox chatVBox;

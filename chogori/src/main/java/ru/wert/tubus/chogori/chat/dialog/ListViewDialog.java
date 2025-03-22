@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat;
+package ru.wert.tubus.chogori.chat.dialog;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.ListView;

@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat;
+package ru.wert.tubus.chogori.chat.dialog;
 
 import javafx.scene.control.ListView;
 import javafx.scene.input.DataFormat;
@@ -22,9 +22,9 @@ import static ru.wert.tubus.chogori.statics.AppStatic.*;
 public class ListViewWithMessages_Manipulator {
 
     private final ListView<Message> listView;
-    private SideRoomDialogController chatController;
+    private DialogController chatController;
 
-    public ListViewWithMessages_Manipulator(ListViewDialog listView, SideRoomDialogController chatController) {
+    public ListViewWithMessages_Manipulator(ListViewDialog listView, DialogController chatController) {
         this.listView = listView;
         this.chatController = chatController;
 

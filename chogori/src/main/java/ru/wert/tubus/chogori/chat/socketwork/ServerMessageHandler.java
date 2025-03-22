@@ -2,28 +2,17 @@ package ru.wert.tubus.chogori.chat.socketwork;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import javafx.application.Platform;
-import javafx.scene.Node;
-import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.chat.ListViewDialog;
-import ru.wert.tubus.chogori.chat.SideRoomDialogController;
-import ru.wert.tubus.chogori.chat.SideRoomsController;
-import ru.wert.tubus.chogori.entities.users.User_TableView;
-import ru.wert.tubus.chogori.tabs.AppTab;
+import ru.wert.tubus.chogori.chat.dialog.ListViewDialog;
+import ru.wert.tubus.chogori.chat.dialog.DialogController;
+import ru.wert.tubus.chogori.chat.RoomsController;
 import ru.wert.tubus.client.entity.models.*;
-import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
-import ru.wert.tubus.client.interfaces.UpdatableTabController;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
-import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
 
 /**
@@ -33,8 +22,8 @@ import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
 @Slf4j
 public class ServerMessageHandler {
 
-    public static SideRoomsController sideRoomsController; // Контроллер для управления списком комнат и пользователей
-    public static SideRoomDialogController sideRoomDialogController; // Контроллер для управления списком комнат и пользователей
+    public static RoomsController roomsController; // Контроллер для управления списком комнат и пользователей
+    public static DialogController dialogController; // Контроллер для управления списком комнат и пользователей
 
     /**
      * Обрабатывает входящее сообщение от сервера.
@@ -63,13 +52,13 @@ public class ServerMessageHandler {
         // Обработка сообщений о входе/выходе пользователя
         if (type == Message.MessageType.USER_IN || type == Message.MessageType.USER_OUT) {
             str.append(type.getTypeName()).append(" ").append(CH_USERS.findById(message.getSenderId()).getName());
-            sideRoomsController.getUsersOnline().stream()
+            roomsController.getUsersOnline().stream()
                     .filter(userOnline -> userOnline.getUser().getId().equals(message.getSenderId()))
                     .findFirst()
                     .ifPresent(userOnline -> {
                         userOnline.setOnline(type == Message.MessageType.USER_IN); // Обновляем статус пользователя
                     });
-            sideRoomsController.refreshListOfUsers(); // Обновляем список пользователей
+            roomsController.refreshListOfUsers(); // Обновляем список пользователей
 
             // Обработка сообщений о чертежах
         } else if (type == Message.MessageType.ADD_DRAFT || type == Message.MessageType.UPDATE_DRAFT || type == Message.MessageType.DELETE_DRAFT) {
@@ -98,7 +87,7 @@ public class ServerMessageHandler {
             Room room = RoomService.getInstance().findById(roomId);
             if (room != null && room.getRoommates().contains(CH_CURRENT_USER.getId())) {
                 // Добавляем комнату в список, если она отсутствует
-                sideRoomsController.addRoomIfAbsent(room);
+                roomsController.addRoomIfAbsent(room);
             }
 
             // Обрабатываем сообщение чата
@@ -116,7 +105,7 @@ public class ServerMessageHandler {
         Room room = RoomService.getInstance().findById(message.getRoomId());
         if (room != null) {
             // Находим диалог для этой комнаты с помощью метода из SideRoomDialogController
-            ListViewDialog dialog = sideRoomDialogController.findDialogForRoom(room);
+            ListViewDialog dialog = dialogController.findDialogForRoom(room);
             if (dialog != null) {
                 // Добавляем сообщение в диалог
                 dialog.getItems().add(message);

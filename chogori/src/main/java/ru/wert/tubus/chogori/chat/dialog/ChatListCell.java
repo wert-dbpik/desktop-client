@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat;
+package ru.wert.tubus.chogori.chat.dialog;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +19,6 @@ import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.client.entity.models.Room;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
-import static ru.wert.tubus.client.entity.models.Message.MessageType.CHAT_SEPARATOR;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_TEMPDIR;
 
 /**
@@ -195,7 +193,7 @@ public class ChatListCell extends ListCell<Message> {
     private void mountText(VBox vbMessage, Message message) {
         vbOutlineMessage.getChildren().removeAll(lblTitle);
         Label text = new Label(message.getText());
-        text.setMaxWidth(CHAT_WIDTH * SideRoomDialogController.MESSAGE_WIDTH);
+        text.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
         text.setWrapText(true);
         vbMessage.getChildren().add(text);
         log.debug("Текстовое сообщение отображено: {}", message.getText());
@@ -219,7 +217,7 @@ public class ChatListCell extends ListCell<Message> {
 
             File file = new File(WF_TEMPDIR.toString() + "\\" + tempFileName);
             ImageView imageView = ImageUtil.createImageViewFromFile(file, null,
-                    (int) CHAT_WIDTH, SideRoomDialogController.PORTRAIT_WIDTH, SideRoomDialogController.LANDSCAPE_WIDTH, SideRoomDialogController.SQUARE_WIDTH);
+                    (int) CHAT_WIDTH, DialogController.PORTRAIT_WIDTH, DialogController.LANDSCAPE_WIDTH, DialogController.SQUARE_WIDTH);
 
             Parent cardWithImage = null;
             try {
@@ -267,7 +265,7 @@ public class ChatListCell extends ListCell<Message> {
             lblTitle.setText(title);
 
             vbMessage.getChildren().add(cardWithDraft);
-            vbMessage.setPrefWidth(CHAT_WIDTH * SideRoomDialogController.MESSAGE_WIDTH);
+            vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
             log.debug("Чертеж отображен: {}", id);
         }
     }
@@ -298,7 +296,7 @@ public class ChatListCell extends ListCell<Message> {
             lblTitle.setText(title);
 
             vbMessage.getChildren().add(cardWithFolder);
-            vbMessage.setPrefWidth(CHAT_WIDTH * SideRoomDialogController.MESSAGE_WIDTH);
+            vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
             log.debug("Комплект чертежей отображен: {}", id);
         }
     }
@@ -329,7 +327,7 @@ public class ChatListCell extends ListCell<Message> {
             lblTitle.setText(title);
 
             vbMessage.getChildren().add(cardWithPassport);
-            vbMessage.setPrefWidth(CHAT_WIDTH * SideRoomDialogController.MESSAGE_WIDTH);
+            vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
             log.debug("Паспорт отображен: {}", id);
         }
     }

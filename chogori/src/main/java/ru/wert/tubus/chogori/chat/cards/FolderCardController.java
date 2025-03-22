@@ -11,7 +11,7 @@ import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
-import ru.wert.tubus.chogori.chat.SideRoomDialogController;
+import ru.wert.tubus.chogori.chat.dialog.DialogController;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
@@ -34,7 +34,7 @@ public class FolderCardController {
         Label label = new Label(folderName);
         label.setStyle("-fx-padding: 0 10 0 10;");
         label.setWrapText(true);
-        label.setPrefWidth(CHAT_WIDTH * SideRoomDialogController.MESSAGE_WIDTH);
+        label.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
         label.setId("draftInChat");
 
         vbFoldersName.getChildren().add(label);

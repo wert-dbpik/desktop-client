@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat;
+package ru.wert.tubus.chogori.chat.util;
 
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;

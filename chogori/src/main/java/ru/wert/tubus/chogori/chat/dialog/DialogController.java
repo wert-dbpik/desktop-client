@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat;
+package ru.wert.tubus.chogori.chat.dialog;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.Getter;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
+import ru.wert.tubus.chogori.chat.util.ChatMaster;
+import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
@@ -34,7 +36,7 @@ import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESS
  * Контроллер для управления диалогами в комнатах чата.
  * Отвечает за отображение сообщений, отправку текста, изображений и чертежей.
  */
-public class SideRoomDialogController {
+public class DialogController {
 
     @FXML
     private StackPane spMessageContainer; // Контейнер для текстового поля ввода сообщения (taMessageText)
@@ -87,7 +89,7 @@ public class SideRoomDialogController {
      */
     public void init(SideChat chat) {
         this.chat = chat;
-        ServerMessageHandler.sideRoomDialogController = this;
+        ServerMessageHandler.dialogController = this;
     }
 
     /**

@@ -10,7 +10,7 @@ import ru.wert.tubus.chogori.components.VBoxPassport;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
-import ru.wert.tubus.chogori.chat.SideRoomDialogController;
+import ru.wert.tubus.chogori.chat.dialog.DialogController;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
@@ -29,7 +29,7 @@ public class PassportCardController {
         String passportName = passport.getName();
         VBoxPassport vb = new VBoxPassport(passport, "00");
         vb.setStyle("-fx-padding: 0 10 0 10;");
-        vb.setPrefWidth(CHAT_WIDTH * SideRoomDialogController.MESSAGE_WIDTH);
+        vb.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
         vb.setId("draftInChat");
 
         vbPassportsName.getChildren().add(vb);
