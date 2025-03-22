@@ -14,7 +14,7 @@ import ru.wert.tubus.client.interfaces.Item;
 @AllArgsConstructor
 public class Roommate extends _BaseEntity implements Item {
 
-    private Long roomId; //ID комнаты
+    private Room room; //ID комнаты
     private Long userId; // ID пользователя
     private boolean visibleForUser; // Видимость чата для пользователя
     private boolean member; // Участие пользователя в чате
