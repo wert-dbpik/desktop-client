@@ -144,7 +144,15 @@ public class RoomsController {
             boolean isCurrentUserInRoom = room.getRoommates().stream()
                     .anyMatch(roommate -> roommate.getUserId().equals(CH_CURRENT_USER.getId()));
 
-            if (isCurrentUserInRoom) {
+            // Проверяем, видна ли комната для пользователя
+            boolean isRoomVisible = room.getRoommates().stream()
+                    .filter(roommate -> roommate.getUserId().equals(CH_CURRENT_USER.getId()))
+                    .findFirst()
+                    .map(Roommate::isVisibleForUser)
+                    .orElse(false);
+
+            // Добавляем комнату в список, если пользователь является участником и комната видима
+            if (isCurrentUserInRoom && isRoomVisible) {
                 rooms.add(room);
             }
         }
@@ -225,6 +233,15 @@ public class RoomsController {
         Long user2 = interlocutor.getId();
         String roomName = "one-to-one:#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
         Room room = createNewRoomIfNeeded(roomName);
+
+        // Делаем чат снова видимым для текущего пользователя
+        Room updatedRoom = CH_ROOMS.setUserVisibility(room.getId(), CH_CURRENT_USER.getId(), true);
+        if (updatedRoom != null) {
+            log.debug("Чат с пользователем {} снова видим для текущего пользователя.", interlocutor.getName());
+        } else {
+            log.error("Не удалось сделать чат видимым для текущего пользователя.");
+        }
+
         log.debug("Открытие чата с пользователем: {}", interlocutor.getName());
         chat.showChatDialog(room);
     }
@@ -296,6 +313,8 @@ public class RoomsController {
         listOfRooms.setCellFactory(new Callback<ListView<Room>, ListCell<Room>>() {
             public ListCell<Room> call(ListView<Room> param) {
                 final Label chatLabel = new Label();
+                final ContextMenu contextMenu = new ContextMenu();
+
                 final ListCell<Room> cell = new ListCell<Room>() {
                     @Override
                     public void updateItem(Room room, boolean empty) {
@@ -314,6 +333,24 @@ public class RoomsController {
                                     e.consume();
                                 }
                             });
+
+                            // Создаем пункты меню и устанавливаем обработчики событий
+                            MenuItem deleteItem = new MenuItem("Удалить из списка");
+                            deleteItem.setOnAction(event -> deleteRoomFromList(room));
+
+                            MenuItem exitItem = new MenuItem("Выйти из чата");
+                            exitItem.setOnAction(event -> exitFromChat(room));
+
+                            // Очищаем контекстное меню и добавляем пункты
+                            contextMenu.getItems().clear();
+                            contextMenu.getItems().add(deleteItem);
+
+                            // Добавляем пункт "Выйти из чата" только если имя комнаты начинается с "group"
+                            if (room.getName().startsWith("group")) {
+                                contextMenu.getItems().add(exitItem);
+                            }
+
+                            chatLabel.setContextMenu(contextMenu);
                             setGraphic(chatLabel);
                         }
                     }
@@ -321,5 +358,37 @@ public class RoomsController {
                 return cell;
             }
         });
+    }
+
+    private void deleteRoomFromList(Room room) {
+        // Логика для удаления комнаты из списка
+        if (room != null) {
+            // Получаем ID текущего пользователя
+            Long currentUserId = CH_CURRENT_USER.getId();
+
+            // Скрываем комнату для пользователя
+            Room updatedRoom = CH_ROOMS.setUserVisibility(room.getId(), currentUserId, false);
+            if (updatedRoom != null) {
+                // Удаляем комнату из списка
+                listOfRooms.getItems().remove(room); // Удаляем комнату из ObservableList
+            } else {
+                log.error("Ошибка при скрытии комнаты.");
+            }
+        }
+    }
+
+    private void exitFromChat(Room room) {
+        // Логика для выхода из чата
+        if (room != null) {
+            // Предположим, что currentUserId — это ID текущего пользователя
+            Long currentUserId = CH_CURRENT_USER.getId(); // Нужно реализовать метод для получения ID текущего пользователя
+            Room updatedRoom = CH_ROOMS.setUserMembership(room.getId(), currentUserId, false);
+            if (updatedRoom != null) {
+                System.out.println("Пользователь вышел из чата: " + room.getName());
+                // Дополнительные действия, например, обновление UI
+            } else {
+                System.out.println("Ошибка при выходе из чата.");
+            }
+        }
     }
 }
