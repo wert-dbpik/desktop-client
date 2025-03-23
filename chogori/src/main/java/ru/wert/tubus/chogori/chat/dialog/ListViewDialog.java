@@ -1,11 +1,15 @@
 package ru.wert.tubus.chogori.chat.dialog;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.images.ImageUtil;
 import ru.wert.tubus.chogori.statics.AppStatic;
@@ -21,23 +25,35 @@ import java.util.List;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
- * ListViewDialog отличается от ListView только полем Room, по которому происходит его идентификация
+ * Класс ListViewDialog отвечает за отображение списка сообщений в диалоге чата.
+ * Он также обрабатывает отправку и получение сообщений, включая текстовые сообщения,
+ * изображения, чертежи и паспорта.
  */
+@Slf4j
 public class ListViewDialog extends ListView<Message> {
 
     @Getter
-    private final Room room;
-    private TextArea taMessageText;
+    private final Room room; // Текущая комната чата
+    private final TextArea taMessageText; // Текстовое поле для ввода сообщений
+    private final ObservableList<Message> messages = FXCollections.observableArrayList(); // Список сообщений
 
+    /**
+     * Конструктор класса.
+     *
+     * @param room         Комната, для которой создается диалог.
+     * @param taMessageText Текстовое поле для ввода сообщений.
+     */
     public ListViewDialog(Room room, TextArea taMessageText) {
         this.room = room;
         this.taMessageText = taMessageText;
+        setItems(messages); // Привязываем ObservableList к ListView
+        log.info("Создан новый диалог для комнаты: {}", room.getName());
     }
 
-    //============          ОТПРАВИТЬ ПАССПОРТА   ========================================================
-
     /**
-     * Метод создает сообщение с пасспортами
+     * Создает и отправляет сообщение с паспортами.
+     *
+     * @param str Строка с данными паспортов.
      */
     public void createPassportsChatMessage(String str) {
         StringBuilder text = new StringBuilder();
@@ -54,15 +70,14 @@ public class ListViewDialog extends ListView<Message> {
 
         Message message = createChatMessage(Message.MessageType.CHAT_PASSPORTS, text.toString().trim());
         taMessageText.setText("");
-
         sendMessageToRecipient(message);
-
+        log.debug("Создано сообщение с паспортами: {}", text.toString().trim());
     }
 
-    //============          ОТПРАВИТЬ ЧЕРТЕЖИ   ========================================================
-
     /**
-     * Метод создает сообщение с чертежами
+     * Создает и отправляет сообщение с чертежами.
+     *
+     * @param str Строка с данными чертежей.
      */
     public void createDraftsChatMessage(String str) {
         StringBuilder text = new StringBuilder();
@@ -79,13 +94,14 @@ public class ListViewDialog extends ListView<Message> {
 
         Message message = createChatMessage(Message.MessageType.CHAT_DRAFTS, text.toString().trim());
         taMessageText.setText("");
-
         sendMessageToRecipient(message);
-
+        log.debug("Создано сообщение с чертежами: {}", text.toString().trim());
     }
 
     /**
-     * Метод создает сообщение с комплектами чертежей
+     * Создает и отправляет сообщение с комплектами чертежей.
+     *
+     * @param str Строка с данными комплектов чертежей.
      */
     public void createFoldersChatMessage(String str) {
         StringBuilder text = new StringBuilder();
@@ -102,34 +118,32 @@ public class ListViewDialog extends ListView<Message> {
 
         Message message = createChatMessage(Message.MessageType.CHAT_FOLDERS, text.toString().trim());
         taMessageText.setText("");
-
         sendMessageToRecipient(message);
-
+        log.debug("Создано сообщение с комплектами чертежей: {}", text.toString().trim());
     }
 
-    //============          ОТПРАВИТЬ ИЗОБРАЖЕНИЯ   ========================================================
-
     /**
-     * Обработка нажатия на кнопку ОТПРАВИТЬ ИЗОБРАЖЕНИЯ
-     * При нажатии открывается вкладка "Чертежи"
+     * Обрабатывает отправку изображений.
+     *
+     * @param event Событие нажатия на кнопку.
      */
     public void sendPicture(ActionEvent event) {
-        StringBuilder text = new StringBuilder();
-        // Пользователь выбирает несколько рисунков
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Изображения", "*.png", "*.jpg");
         List<File> chosenFiles = AppStatic.chooseManyFile(event, new File("C:\\"), filter);
-        if(chosenFiles == null || chosenFiles.isEmpty()) return;
+        if (chosenFiles == null || chosenFiles.isEmpty()) return;
 
         createPicsChatMessage(chosenFiles);
+        log.debug("Пользователь выбрал изображения для отправки: {}", chosenFiles.size());
     }
 
     /**
-     * Метод создает сообщение с изображениями
-     * @param chosenFiles
+     * Создает и отправляет сообщение с изображениями.
+     *
+     * @param chosenFiles Список выбранных файлов изображений.
      */
-    public void createPicsChatMessage( List<File> chosenFiles) {
+    public void createPicsChatMessage(List<File> chosenFiles) {
         StringBuilder text = new StringBuilder();
-        for(File file : chosenFiles){
+        for (File file : chosenFiles) {
             Image image = new Image(file.toURI().toString());
             Pic savedPic = ImageUtil.createPicFromFileAndSaveItToDB(image, file);
             text.append(savedPic.getId());
@@ -138,36 +152,47 @@ public class ListViewDialog extends ListView<Message> {
 
         Message message = createChatMessage(Message.MessageType.CHAT_PICS, text.toString().trim());
         taMessageText.setText("");
-
         sendMessageToRecipient(message);
-
+        log.debug("Создано сообщение с изображениями: {}", text.toString().trim());
     }
 
-    //============          ОТПРАВИТЬ ТЕКСТ   ========================================================
-
-
     /**
-     * Обработка нажатия на кнопку ОТПРАВИТЬ
-     * Эта кнопка отправляет только текстовые сообщения
+     * Отправляет текстовое сообщение.
      */
     public void sendText() {
         String text = taMessageText.getText();
-        if(text == null || text.isEmpty()) return;
-        Message message = createChatMessage(Message.MessageType.CHAT_TEXT, text);
-        taMessageText.setText("");
+        if (text == null || text.isEmpty()) return;
 
-        sendMessageToRecipient(message);
+        // Создаем сообщение
+        Message message = new Message();
+        message.setType(Message.MessageType.CHAT_TEXT);
+        message.setRoomId(room.getId());
+        message.setSenderId(CH_CURRENT_USER.getId());
+        message.setCreationTime(LocalDateTime.now());
+        message.setStatus(Message.MessageStatus.RECEIVED);
+        message.setText(text);
+
+        // Отправляем сообщение через SocketService
+        SocketService.sendMessage(message);
+
+        // Добавляем сообщение в ObservableList
+        Platform.runLater(() -> {
+            getItems().add(message); // Добавляем сообщение в список
+            scrollTo(message); // Прокручиваем к новому сообщению
+            log.debug("Текстовое сообщение отправлено и добавлено в список: {}", text);
+        });
+
+        taMessageText.setText(""); // Очищаем текстовое поле
     }
 
-
-
-    //=====================    ОБЩИЕ МЕТОДЫ    =================================================
-
     /**
-     * Метода создает сообщение Message
-     * @param text String
+     * Создает объект сообщения.
+     *
+     * @param type Тип сообщения.
+     * @param text Текст сообщения.
+     * @return Созданное сообщение.
      */
-    public Message createChatMessage(Message.MessageType type, String text){
+    private Message createChatMessage(Message.MessageType type, String text) {
         Message message = new Message();
         message.setType(type);
         message.setRoomId(room.getId());
@@ -175,28 +200,33 @@ public class ListViewDialog extends ListView<Message> {
         message.setCreationTime(LocalDateTime.now());
         message.setStatus(Message.MessageStatus.RECEIVED);
         message.setText(text);
-
         return message;
     }
 
     /**
-     * Собственно отправка сообщения пользователю
-     * @param message
+     * Отправляет сообщение получателю.
+     *
+     * @param message Сообщение для отправки.
      */
     private void sendMessageToRecipient(Message message) {
         SocketService.sendMessage(message);
-        getItems().add(message);
-        refresh();
-        scrollTo(message);
+        Platform.runLater(() -> {
+            messages.add(message); // Добавляем сообщение в ObservableList
+            scrollTo(message); // Прокручиваем к новому сообщению
+            log.debug("Сообщение отправлено и добавлено в список: {}", message.getText());
+        });
     }
 
     /**
-     * Получение сообщения от сервера (пользователю)
-     * @param message
+     * Получает сообщение от сервера.
+     *
+     * @param message Полученное сообщение.
      */
     public void receiveMessageFromServer(Message message) {
-        getItems().add(message);
-        refresh();
-        scrollTo(message);
+        Platform.runLater(() -> {
+            messages.add(message); // Добавляем сообщение в ObservableList
+            scrollTo(message); // Прокручиваем к новому сообщению
+            log.debug("Сообщение получено и добавлено в список: {}", message.getText());
+        });
     }
 }

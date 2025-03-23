@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.chat.util.ChatMaster;
 import ru.wert.tubus.chogori.chat.SideChat;
@@ -36,6 +37,7 @@ import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESS
  * Контроллер для управления диалогами в комнатах чата.
  * Отвечает за отображение сообщений, отправку текста, изображений и чертежей.
  */
+@Slf4j
 public class DialogController {
 
     @FXML
@@ -85,16 +87,19 @@ public class DialogController {
 
     /**
      * Инициализация контроллера.
+     *
      * @param chat Ссылка на основной класс чата.
      */
     public void init(SideChat chat) {
         this.chat = chat;
         ServerMessageHandler.dialogController = this;
+        log.info("Инициализация DialogController для чата");
     }
 
     /**
      * Открывает диалог для указанной комнаты.
      * Если диалог уже открыт, переключается на него, иначе создает новый.
+     *
      * @param room Комната, для которой нужно открыть диалог.
      */
     public void openDialogForRoom(Room room) {
@@ -114,22 +119,13 @@ public class DialogController {
                 }
             };
 
-            // Создаем окно ожидания
-            ProgressIndicator progressIndicator = new ProgressIndicator();
-            progressIndicator.setProgress(-1); // Неопределенный прогресс
-            Stage loadingStage = new Stage();
-            loadingStage.initModality(Modality.APPLICATION_MODAL);
-            loadingStage.initStyle(StageStyle.UNDECORATED);
-            loadingStage.setScene(new Scene(new StackPane(progressIndicator), 100, 100));
-            loadingStage.show();
-
             // Обработка успешного завершения Task
             loadMessagesTask.setOnSucceeded(event -> {
                 List<Message> messages = loadMessagesTask.getValue();
                 roomMessages.setAll(messages == null ? new ArrayList<>() : messages); // Обновляем ObservableList
 
                 // Настраиваем ListView для отображения сообщений
-                lvCurrentDialog.setItems(roomMessages);
+                lvCurrentDialog.setItems(roomMessages); // Привязываем roomMessages к ListView
                 lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new ChatListCell(room));
                 lvCurrentDialog.setId("listViewWithMessages");
 
@@ -140,17 +136,13 @@ public class DialogController {
                 spDialogsContainer.getChildren().add(lvCurrentDialog);
                 scrollToBottom();
 
-                // Закрываем окно ожидания
-                loadingStage.close();
+                log.info("Сообщения успешно загружены для комнаты: {}", room.getName());
             });
 
             // Обработка ошибок в Task
             loadMessagesTask.setOnFailed(event -> {
-                loadingStage.close();
-                // Обработка ошибки, например, вывод сообщения пользователю
                 Throwable exception = loadMessagesTask.getException();
-                exception.printStackTrace();
-                // Можно показать Alert с сообщением об ошибке
+                log.error("Ошибка при загрузке сообщений: {}", exception.getMessage(), exception);
             });
 
             // Запускаем Task в отдельном потоке
@@ -162,6 +154,7 @@ public class DialogController {
         // Устанавливаем название комнаты и переключаемся на диалог
         lblRoom.setText(ChatMaster.getRoomName(room.getName()));
         lvCurrentDialog.toFront();
+        log.info("Открыт диалог для комнаты: {}", room.getName());
     }
 
     /**
@@ -177,6 +170,7 @@ public class DialogController {
         if (messages == null || messages.isEmpty()) {
             List<Message> result = new ArrayList<>();
             result.add(getSeparatorMessage(LocalDateTime.now())); // Добавляем сепаратор с текущей датой
+            log.debug("Добавлен сепаратор с текущей датой, так как список сообщений пуст");
             return result;
         }
 
@@ -199,6 +193,7 @@ public class DialogController {
                 // Добавляем разделитель в список
                 messagesWithSeparators.add(separator);
                 lastDate = currentDate; // Обновляем последнюю дату
+                log.debug("Добавлен сепаратор с датой: {}", lastDate);
             }
 
             // Добавляем текущее сообщение в список
@@ -215,6 +210,7 @@ public class DialogController {
         if (today.isAfter(lastMessageDate)) {
             Message separator = getSeparatorMessage(LocalDateTime.now());
             messagesWithSeparators.add(separator);
+            log.debug("Добавлен сепаратор с текущей датой: {}", today);
         }
 
         return messagesWithSeparators;
@@ -240,6 +236,7 @@ public class DialogController {
 
     /**
      * Ищет открытый диалог для указанной комнаты.
+     *
      * @param room Комната, для которой ищется диалог.
      * @return Найденный диалог или null, если диалог не найден.
      */
@@ -274,6 +271,7 @@ public class DialogController {
         btnSend.setGraphic(new ImageView(BtnImages.SEND_MESSAGE_IMG));
         btnSend.setOnAction(e -> {
             lvCurrentDialog.sendText(); // Отправка текста при нажатии на кнопку
+            log.debug("Отправлено текстовое сообщение");
         });
     }
 
@@ -286,6 +284,7 @@ public class DialogController {
         btnAddPicture.setTooltip(new Tooltip("Добавить изображение"));
         btnAddPicture.setOnAction(e -> {
             lvCurrentDialog.sendPicture(e); // Отправка изображения при нажатии на кнопку
+            log.debug("Отправлено изображение");
         });
     }
 
@@ -301,6 +300,7 @@ public class DialogController {
             Thread t = new Thread(new OpenDraftsEditorTask());
             t.setDaemon(true);
             t.start();
+            log.debug("Запущена задача для открытия редактора чертежей");
         });
     }
 
@@ -310,6 +310,7 @@ public class DialogController {
     private void createBtnRooms() {
         btnRooms.setOnAction(e -> {
             chat.showChatGroups(); // Открытие списка комнат при нажатии на кнопку
+            log.debug("Открыт список комнат");
         });
     }
 
@@ -356,5 +357,6 @@ public class DialogController {
      */
     public void scrollToBottom() {
         Platform.runLater(() -> lvCurrentDialog.scrollTo(lvCurrentDialog.getItems().size() - 1));
+        log.debug("Прокрутка списка сообщений вниз");
     }
 }
