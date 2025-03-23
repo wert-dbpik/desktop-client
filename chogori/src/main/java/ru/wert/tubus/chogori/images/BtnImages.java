@@ -53,7 +53,8 @@ public class BtnImages {
     public static Image MAN_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/man(32x32).png"), size16, size16, true, true);
     public static Image LETTER_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/letter(32x32).png"), size16, size16, true, true);
     public static Image SEND_MESSAGE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/send-message(32x32).png"), size16, size16, true, true);
-    public static Image CHAT_WHITE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/chat-white(32x32).png"), size16, size16, true, true);
+    public static Image CHAT_WHITE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/chat-white.png"), size24, size24, true, true);
+    public static Image CHAT_YELLOW_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/chat-yellow.png"), size24, size24, true, true);
     public static Image CHATS_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/chats(32x32).png"), size16, size16, true, true);
     public static Image BTN_ADD_PHOTO_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/add_Image.png"), size32, size32, true, true);
     public static Image BTN_ADD_CHAT_PIC_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/add_Image.png"), size16, size16, true, true);

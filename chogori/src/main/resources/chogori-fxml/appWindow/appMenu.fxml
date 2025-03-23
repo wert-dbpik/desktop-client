@@ -28,11 +28,6 @@
                         <Insets bottom="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <Button fx:id="btnChat" mnemonicParsing="false" text="ЧАТ">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Button>
                   <Button fx:id="btnCloseTab" mnemonicParsing="false" styleClass="btnOnMenuPane" />
                </children>
             </HBox>

@@ -16,7 +16,9 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.components.BtnChat;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.chogori.tabs.MainTabPane;
@@ -58,6 +60,9 @@ public class ApplicationController {
     private Label lblUser;
 
     @FXML
+    private Button btnChat;
+
+    @FXML
     private Label lblTime;
 
    @FXML
@@ -76,6 +81,9 @@ public class ApplicationController {
     Button btnUpdateAllData;
 
 
+    public static BtnChat chat;
+
+
     @FXML
     void initialize() {
         log.debug("initialize : запускается блок инициализации");
@@ -85,6 +93,7 @@ public class ApplicationController {
         SP_NOTIFICATION = lbNotification;
 
         SP_CHAT = spChat;
+        chat = new BtnChat(btnChat);
 
         createUserLabel();
         createTimeLabel();

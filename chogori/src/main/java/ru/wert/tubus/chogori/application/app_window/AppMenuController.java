@@ -24,7 +24,6 @@ import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
-import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
 import ru.wert.tubus.chogori.help.About;
 import ru.wert.tubus.chogori.images.BtnImages;
@@ -46,7 +45,6 @@ import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOM
 import static ru.wert.tubus.chogori.images.BtnImages.BTN_CLOSE_WHITE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
-import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
@@ -61,13 +59,9 @@ public class AppMenuController {
     public HBox hbSearch;
 
     @FXML
-    Button btnChat;
-
-    @FXML
     Button btnCloseTab;
 
     private User tempUser;
-    private boolean open;
 
     @FXML
     void initialize(){
@@ -80,27 +74,6 @@ public class AppMenuController {
         //Создать поле поиска
         SEARCH_CONTAINER = hbSearch;
         PANE_WITH_SEARCH = createSearchField();
-
-        SideChat sideChat = new SideChat();
-
-        btnChat.setText("чат");
-        btnChat.setGraphic(new ImageView(BtnImages.CHAT_WHITE_IMG));
-        btnChat.setOnAction(event -> {
-            open = !open;
-            if(open) {
-                SP_CHAT.setPrefWidth(CHAT_WIDTH);
-                SP_CHAT.setMinWidth(CHAT_WIDTH);
-                SP_CHAT.setMaxWidth(CHAT_WIDTH);
-                SP_CHAT.getChildren().add(sideChat.getChatVBox());
-            } else {
-                for (double width = SP_CHAT.getWidth(); width >= 0; width--) {
-                    SP_CHAT.setPrefWidth(width);
-                    SP_CHAT.setMinWidth(width);
-                    SP_CHAT.setMaxWidth(width);
-                }
-                SP_CHAT.getChildren().clear();
-            }
-        });
 
         btnCloseTab.setGraphic(new ImageView(BTN_CLOSE_WHITE_IMG));
         btnCloseTab.visibleProperty().bind(CH_TAB_PANE.getEmpty());
@@ -211,8 +184,9 @@ public class AppMenuController {
         MenuItem changeUserItem = new MenuItem("Сменить пользователя");
         changeUserItem.setOnAction(this::changeUser);
 
-        MenuItem chatItem = new MenuItem("Чат");
-        chatItem.setOnAction(this::openChat);
+//        Заготовка под вкладку чат во весь экран
+//        MenuItem chatItem = new MenuItem("Чат");
+//        chatItem.setOnAction(this::openChat);
 
         MenuItem updateData = new MenuItem("Обновить данные");
         updateData.setOnAction(e->updateData());
@@ -229,8 +203,8 @@ public class AppMenuController {
         mainMenu.getItems().add(new SeparatorMenuItem());
         mainMenu.getItems().add(settings);
         mainMenu.getItems().add(new SeparatorMenuItem());
-        if(!CH_CURRENT_USER.getName().equals("Гость"))
-            mainMenu.getItems().add(chatItem);
+//        if(!CH_CURRENT_USER.getName().equals("Гость"))
+//            mainMenu.getItems().add(chatItem);
         mainMenu.getItems().add(updateData);
         mainMenu.getItems().add(cleanSearchHistory);
         mainMenu.getItems().add(new SeparatorMenuItem());

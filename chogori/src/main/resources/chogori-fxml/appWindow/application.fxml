@@ -41,14 +41,14 @@
                <children>
                   <Label fx:id="lbNotification" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Label" textAlignment="CENTER" StackPane.alignment="CENTER" />
                </children></StackPane>
-            <HBox alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
+            <HBox alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="NEVER">
                <children>
                   <Label fx:id="lblUser" text="РЕЖИМ РАЗРАБОТЧИКА" HBox.hgrow="NEVER">
                      <HBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </Label>
-                  <Separator orientation="VERTICAL" />
+                  <Button fx:id="btnChat" mnemonicParsing="false" />
                   <Label fx:id="lblTime" text="21.02.21">
                      <HBox.margin>
                         <Insets left="5.0" right="10.0" />

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.application.app_window.ApplicationController;
 import ru.wert.tubus.chogori.chat.dialog.ListViewDialog;
 import ru.wert.tubus.chogori.chat.dialog.DialogController;
 import ru.wert.tubus.chogori.chat.RoomsController;
@@ -74,7 +75,11 @@ public class ServerMessageHandler {
 
             // Обработка push-уведомлений
         } else if (type == Message.MessageType.PUSH) {
-            PushNotification.show(message.getText()); // Отображаем push-уведомление
+            Platform.runLater(()->{
+                ApplicationController.chat.hasNewMessagesProperty().set(true);
+            });
+
+//            PushNotification.show(message.getText()); // Отображаем push-уведомление
 
             // Обработка сообщений чата (текст, чертежи, паспорта и т.д.)
         } else if (type == Message.MessageType.CHAT_TEXT ||
