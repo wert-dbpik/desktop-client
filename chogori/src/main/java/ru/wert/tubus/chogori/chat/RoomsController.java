@@ -30,6 +30,8 @@ import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 @Slf4j
 public class RoomsController {
 
+    public static final String WRIGHT_YOURSELF = "Написать себе";
+
     @FXML
     private Button btnAddNewChatGroup;
 
@@ -136,9 +138,16 @@ public class RoomsController {
      */
     private void updateListOfRooms() {
         log.debug("Обновление списка комнат");
-        List<Room> rooms = new ArrayList<>();
+
+        // Создаем три списка: для чата "Написать себе", для one-to-one чатов и для групповых чатов
+        List<Room> writeYourselfRoom = new ArrayList<>();
+        List<Room> oneToOneRooms = new ArrayList<>();
+        List<Room> groupRooms = new ArrayList<>();
+
+        // Получаем все комнаты из базы данных
         List<Room> allRooms = CH_ROOMS.findAll();
 
+        // Разделяем комнаты на соответствующие списки
         for (Room room : allRooms) {
             // Проверяем, является ли текущий пользователь участником комнаты
             boolean isCurrentUserInRoom = room.getRoommates().stream()
@@ -151,14 +160,46 @@ public class RoomsController {
                     .map(Roommate::isVisibleForUser)
                     .orElse(false);
 
-            // Добавляем комнату в список, если пользователь является участником и комната видима
+            // Добавляем комнату в соответствующий список, если пользователь является участником и комната видима
             if (isCurrentUserInRoom && isRoomVisible) {
-                rooms.add(room);
+                if (room.getName().startsWith("one-to-one")) {
+                    // Получаем второго пользователя в one-to-one чате
+                    User secondUser = ChatMaster.getSecondUserInOneToOneChat(room);
+
+                    // Если второй пользователь - это текущий пользователь, это чат "Написать себе"
+                    if (secondUser != null && secondUser.getId().equals(CH_CURRENT_USER.getId())) {
+                        writeYourselfRoom.add(room); // Чат "Написать себе"
+                    } else {
+                        oneToOneRooms.add(room); // One-to-one чаты
+                    }
+                } else if (room.getName().startsWith("group")) {
+                    groupRooms.add(room); // Групповые чаты
+                }
             }
         }
 
-        // Устанавливаем обновленный список комнат в ListView
-        listOfRooms.setItems(FXCollections.observableArrayList(rooms));
+        // Сортируем one-to-one чаты по имени
+        oneToOneRooms.sort((room1, room2) -> {
+            String name1 = ChatMaster.getRoomName(room1.getName());
+            String name2 = ChatMaster.getRoomName(room2.getName());
+            return name1.compareToIgnoreCase(name2);
+        });
+
+        // Сортируем групповые чаты по имени
+        groupRooms.sort((room1, room2) -> {
+            String name1 = ChatMaster.getRoomName(room1.getName());
+            String name2 = ChatMaster.getRoomName(room2.getName());
+            return name1.compareToIgnoreCase(name2);
+        });
+
+        // Объединяем списки: сначала чат "Написать себе", затем one-to-one чаты, затем групповые
+        List<Room> sortedRooms = new ArrayList<>();
+        sortedRooms.addAll(writeYourselfRoom);
+        sortedRooms.addAll(oneToOneRooms);
+        sortedRooms.addAll(groupRooms);
+
+        // Устанавливаем обновленный и отсортированный список комнат в ListView
+        listOfRooms.setItems(FXCollections.observableArrayList(sortedRooms));
     }
 
     private void createListOfUsers() {
@@ -189,7 +230,7 @@ public class RoomsController {
 
                             // Устанавливаем имя пользователя
                             if (userOnline.getUser().equals(CH_CURRENT_USER))
-                                nameLabel.setText("Написать себе");
+                                nameLabel.setText(WRIGHT_YOURSELF);
                             else
                                 nameLabel.setText(userOnline.getUser().getName());
 
@@ -312,21 +353,59 @@ public class RoomsController {
 
         listOfRooms.setCellFactory(new Callback<ListView<Room>, ListCell<Room>>() {
             public ListCell<Room> call(ListView<Room> param) {
-                final Label chatLabel = new Label();
-                final ContextMenu contextMenu = new ContextMenu();
+                return new ListCell<Room>() {
+                    private final ImageView dotImageView = new ImageView();
+                    private final Label nameLabel = new Label();
 
-                final ListCell<Room> cell = new ListCell<Room>() {
+                    {
+                        // Устанавливаем размеры для ImageView
+                        dotImageView.setFitWidth(10);
+                        dotImageView.setFitHeight(10);
+                    }
+
                     @Override
                     public void updateItem(Room room, boolean empty) {
                         super.updateItem(room, empty);
+
                         if (empty) {
                             setText(null);
                             setGraphic(null);
                         } else {
                             setText(null);
-                            chatLabel.setText(ChatMaster.getRoomName(room.getName()));
-                            chatLabel.setStyle("-fx-font-style: italic; -fx-text-fill: black");
-                            chatLabel.setOnMouseClicked(e -> {
+
+                            // Устанавливаем имя комнаты
+                            String roomName = ChatMaster.getRoomName(room.getName());
+                            if (room.getName().startsWith("one-to-one")) {
+                                User secondUser = ChatMaster.getSecondUserInOneToOneChat(room);
+                                if (secondUser != null && secondUser.getId().equals(CH_CURRENT_USER.getId())) {
+                                    roomName = WRIGHT_YOURSELF; // "Написать себе"
+                                }
+                            }
+                            nameLabel.setText(roomName);
+                            nameLabel.setStyle("-fx-font-style: italic; -fx-text-fill: black");
+
+                            // Устанавливаем изображение в зависимости от статуса пользователя в one-to-one чате
+                            if (room.getName().startsWith("one-to-one")) {
+                                User secondUser = ChatMaster.getSecondUserInOneToOneChat(room);
+                                if (secondUser != null && secondUser.isOnline()) {
+                                    dotImageView.setImage(DOT_BLUE_IMG);
+                                } else {
+                                    dotImageView.setImage(SPACE_IMG);
+                                }
+                            } else {
+                                dotImageView.setImage(SPACE_IMG); // Для групповых чатов или других типов
+                            }
+
+                            // Создаем контейнер для изображения и текста
+                            HBox hbox = new HBox(dotImageView, nameLabel);
+                            hbox.setStyle("-fx-alignment: center-left");
+                            hbox.setSpacing(5); // Расстояние между изображением и текстом
+
+                            // Устанавливаем контейнер в ячейку
+                            setGraphic(hbox);
+
+                            // Обработка двойного клика для открытия чата
+                            nameLabel.setOnMouseClicked(e -> {
                                 if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
                                     log.debug("Открытие чата в комнате: {}", room.getName());
                                     openChat(room);
@@ -334,10 +413,14 @@ public class RoomsController {
                                 }
                             });
 
-                            // Создаем пункты меню и устанавливаем обработчики событий
+                            // Создаем контекстное меню
+                            ContextMenu contextMenu = new ContextMenu();
+
+                            // Пункт меню для удаления комнаты из списка
                             MenuItem deleteItem = new MenuItem("Удалить из списка");
                             deleteItem.setOnAction(event -> deleteRoomFromList(room));
 
+                            // Пункт меню для выхода из чата (только для групповых чатов)
                             MenuItem exitItem = new MenuItem("Выйти из чата");
                             exitItem.setOnAction(event -> exitFromChat(room));
 
@@ -350,12 +433,11 @@ public class RoomsController {
                                 contextMenu.getItems().add(exitItem);
                             }
 
-                            chatLabel.setContextMenu(contextMenu);
-                            setGraphic(chatLabel);
+                            // Устанавливаем контекстное меню для метки
+                            nameLabel.setContextMenu(contextMenu);
                         }
                     }
                 };
-                return cell;
             }
         });
     }
