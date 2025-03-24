@@ -64,7 +64,7 @@ public class MessageRenderer {
         text.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
         text.setWrapText(true);
         vbMessage.getChildren().add(text);
-        log.debug("Текстовое сообщение отображено: {}", message.getText());
+//        log.debug("Текстовое сообщение отображено: {}", message.getText());
     }
 
     /**
@@ -134,7 +134,7 @@ public class MessageRenderer {
 
             vbMessage.getChildren().add(cardWithDraft);
             vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-            log.debug("Чертеж отображен: {}", id);
+//            log.debug("Чертеж отображен: {}", id);
         }
     }
 
@@ -165,7 +165,7 @@ public class MessageRenderer {
 
             vbMessage.getChildren().add(cardWithFolder);
             vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-            log.debug("Комплект чертежей отображен: {}", id);
+//            log.debug("Комплект чертежей отображен: {}", id);
         }
     }
 
@@ -196,7 +196,7 @@ public class MessageRenderer {
 
             vbMessage.getChildren().add(cardWithPassport);
             vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-            log.debug("Паспорт отображен: {}", id);
+//            log.debug("Паспорт отображен: {}", id);
         }
     }
 }

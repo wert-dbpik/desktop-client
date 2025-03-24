@@ -120,7 +120,7 @@ public class DialogController {
 
                 // Настраиваем ListView для отображения сообщений
 //                dialogListView.setItems(messages); // Привязываем roomMessages к ListView
-                dialogListView.setCellFactory((ListView<Message> tv) -> new DialogListCell(room));
+                dialogListView.setCellFactory((ListView<Message> tv) -> new DialogListCell(room, dialogListView));
                 dialogListView.setId("listViewWithMessages");
 
                 // Добавляем манипулятор для обработки событий
