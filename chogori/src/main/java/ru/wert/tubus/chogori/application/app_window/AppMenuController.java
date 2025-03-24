@@ -23,6 +23,8 @@ import ru.wert.tubus.chogori.StartChogori;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
+import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
+import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
 import ru.wert.tubus.chogori.help.About;
@@ -261,6 +263,7 @@ public class AppMenuController {
      */
     private void exit(Event e) {
         SearchHistoryFile.getInstance().save(); //Сохраняем историю поиска
+        DialogListCell.shutdown();
         WinformStatic.exitApplication(e);
 
     }
