@@ -127,7 +127,7 @@ public class DialogController {
 
                 // Добавляем диалог в контейнер
                 spDialogsContainer.getChildren().add(dialogListView);
-                scrollToBottom();
+                dialogListView.scrollToBottom();
 
                 log.info("Сообщения успешно загружены для комнаты: {}", room.getName());
             });
@@ -181,12 +181,18 @@ public class DialogController {
         inputTextArea.createTextArea();    // Настройка текстового поля ввода
     }
 
-    /**
-     * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
-     */
-    public void scrollToBottom() {
-        Platform.runLater(() -> dialogListView.scrollTo(dialogListView.getItems().size() - 1));
-        log.debug("Прокрутка списка сообщений вниз");
-    }
+//    /**
+//     * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
+//     */
+//    public void scrollToBottom() {
+//        Platform.runLater(() -> {
+//            new Thread(() -> {
+//                try { Thread.sleep(50); } catch (InterruptedException e) { e.printStackTrace(); }
+//                Platform.runLater(() -> dialogListView.scrollTo(dialogListView.getItems().size() - 1));
+//            }).start();
+//        });
+//
+//        log.debug("Прокрутка списка сообщений вниз");
+//    }
 
 }

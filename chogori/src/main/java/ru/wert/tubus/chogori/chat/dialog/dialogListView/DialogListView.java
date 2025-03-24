@@ -1,15 +1,25 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogListView;
 
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.images.ImageUtil;
 import ru.wert.tubus.chogori.statics.AppStatic;
@@ -175,13 +185,9 @@ public class DialogListView extends ListView<Message> {
 
         // Отправляем сообщение через SocketService
         SocketService.sendMessage(message);
+        roomMessages.add(message); // Добавляем сообщение в список
 
-        // Добавляем сообщение в ObservableList
-        Platform.runLater(() -> {
-            getItems().add(message); // Добавляем сообщение в список
-            scrollTo(message); // Прокручиваем к новому сообщению
-            log.debug("Текстовое сообщение отправлено и добавлено в список: {}", text);
-        });
+        scrollToBottom();
 
         taMessageText.setText(""); // Очищаем текстовое поле
     }
@@ -213,7 +219,7 @@ public class DialogListView extends ListView<Message> {
         SocketService.sendMessage(message);
         Platform.runLater(() -> {
             roomMessages.add(message); // Добавляем сообщение в ObservableList
-            Platform.runLater(() -> scrollTo(roomMessages.size() - 1));
+            scrollTo(roomMessages.size() - 1);
             log.debug("Сообщение отправлено и добавлено в список: {}", message.getText());
         });
     }
@@ -226,8 +232,20 @@ public class DialogListView extends ListView<Message> {
     public void receiveMessageFromServer(Message message) {
         Platform.runLater(() -> {
             roomMessages.add(message); // Добавляем сообщение в ObservableList
-            scrollTo(message); // Прокручиваем к новому сообщению
+            scrollTo(roomMessages.size() - 1);; // Прокручиваем к новому сообщению
             log.debug("Сообщение получено и добавлено в список: {}", message.getText());
         });
     }
+
+    /**
+     * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
+     */
+    public void scrollToBottom() {
+        Platform.runLater(() -> {
+            PauseTransition pause = new PauseTransition(Duration.millis(150));
+            pause.setOnFinished(e -> scrollTo(getItems().size() - 1));
+            pause.play();
+        });
+    }
+
 }
