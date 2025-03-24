@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat.dialog;
+package ru.wert.tubus.chogori.chat.dialog.dialogListView;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -25,7 +25,7 @@ import java.util.List;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
- * Класс ListViewDialog отвечает за отображение списка сообщений в диалоге чата.
+ * Класс DialogListView отвечает за отображение списка сообщений в диалоге чата.
  * Он также обрабатывает отправку и получение сообщений, включая текстовые сообщения,
  * изображения, чертежи и паспорта.
  */
@@ -35,7 +35,8 @@ public class DialogListView extends ListView<Message> {
     @Getter
     private final Room room; // Текущая комната чата
     private final TextArea taMessageText; // Текстовое поле для ввода сообщений
-    private final ObservableList<Message> messages = FXCollections.observableArrayList(); // Список сообщений
+    @Getter
+    private final ObservableList<Message> roomMessages = FXCollections.observableArrayList(); // Список сообщений
 
     /**
      * Конструктор класса.
@@ -46,7 +47,7 @@ public class DialogListView extends ListView<Message> {
     public DialogListView(Room room, TextArea taMessageText) {
         this.room = room;
         this.taMessageText = taMessageText;
-        setItems(messages); // Привязываем ObservableList к ListView
+        setItems(roomMessages); // Привязываем ObservableList к ListView
         log.info("Создан новый диалог для комнаты: {}", room.getName());
     }
 
@@ -211,8 +212,8 @@ public class DialogListView extends ListView<Message> {
     private void sendMessageToRecipient(Message message) {
         SocketService.sendMessage(message);
         Platform.runLater(() -> {
-            messages.add(message); // Добавляем сообщение в ObservableList
-            scrollTo(message); // Прокручиваем к новому сообщению
+            roomMessages.add(message); // Добавляем сообщение в ObservableList
+            Platform.runLater(() -> scrollTo(roomMessages.size() - 1));
             log.debug("Сообщение отправлено и добавлено в список: {}", message.getText());
         });
     }
@@ -224,7 +225,7 @@ public class DialogListView extends ListView<Message> {
      */
     public void receiveMessageFromServer(Message message) {
         Platform.runLater(() -> {
-            messages.add(message); // Добавляем сообщение в ObservableList
+            roomMessages.add(message); // Добавляем сообщение в ObservableList
             scrollTo(message); // Прокручиваем к новому сообщению
             log.debug("Сообщение получено и добавлено в список: {}", message.getText());
         });

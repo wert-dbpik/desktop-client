@@ -1,18 +1,15 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogController;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
-import ru.wert.tubus.chogori.chat.dialog.DialogListView;
-import ru.wert.tubus.chogori.chat.dialog.ListViewManipulator;
+import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
+import ru.wert.tubus.chogori.chat.dialog.dialogListView.ListViewManipulator;
 import ru.wert.tubus.chogori.chat.util.ChatMaster;
 import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
@@ -70,15 +67,16 @@ public class DialogController {
     @Getter
     private SideChat chat; // Ссылка на основной класс чата
 
+    List<DialogListView> openDialogs = new ArrayList<>();
+
     // Константы для управления размерами сообщений
     public static final float MESSAGE_WIDTH = 0.7f;
     public static final float PORTRAIT_WIDTH = 0.5f;
     public static final float LANDSCAPE_WIDTH = 0.7f;
     public static final float SQUARE_WIDTH = 0.6f;
 
-    private ObservableList<Message> roomMessages = FXCollections.observableArrayList(); // Список сообщений в текущей комнате
     private Room room; // Текущая комната
-    @Getter private DialogListView lvCurrentDialog; // Текущий диалог (список сообщений)
+    @Getter private DialogListView dialogListView; // Текущий диалог (список сообщений)
 
     /**
      * Инициализация контроллера.
@@ -99,11 +97,11 @@ public class DialogController {
      */
     public void openDialogForRoom(Room room) {
         this.room = room;
-        DialogListView foundDialog = findDialogForRoom(room);
+        DialogListView openDialog = findDialogForRoom(room);
 
         // Если диалог еще не открыт, создаем новый
-        if (foundDialog == null) {
-            lvCurrentDialog = new DialogListView(room, taMessageText);
+        if (openDialog == null) {
+            dialogListView = new DialogListView(room, taMessageText);
 
             // Создаем Task для загрузки сообщений в фоновом режиме
             Task<List<Message>> loadMessagesTask = new Task<List<Message>>() {
@@ -117,18 +115,19 @@ public class DialogController {
             // Обработка успешного завершения Task
             loadMessagesTask.setOnSucceeded(event -> {
                 List<Message> messages = loadMessagesTask.getValue();
-                roomMessages.setAll(messages == null ? new ArrayList<>() : messages); // Обновляем ObservableList
+
+                dialogListView.getRoomMessages().setAll(messages == null ? new ArrayList<>() : messages); // Обновляем ObservableList
 
                 // Настраиваем ListView для отображения сообщений
-                lvCurrentDialog.setItems(roomMessages); // Привязываем roomMessages к ListView
-                lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new DialogListCell(room));
-                lvCurrentDialog.setId("listViewWithMessages");
+//                dialogListView.setItems(messages); // Привязываем roomMessages к ListView
+                dialogListView.setCellFactory((ListView<Message> tv) -> new DialogListCell(room));
+                dialogListView.setId("listViewWithMessages");
 
                 // Добавляем манипулятор для обработки событий
-                new ListViewManipulator(lvCurrentDialog, this);
+                new ListViewManipulator(dialogListView, this);
 
                 // Добавляем диалог в контейнер
-                spDialogsContainer.getChildren().add(lvCurrentDialog);
+                spDialogsContainer.getChildren().add(dialogListView);
                 scrollToBottom();
 
                 log.info("Сообщения успешно загружены для комнаты: {}", room.getName());
@@ -143,12 +142,13 @@ public class DialogController {
             // Запускаем Task в отдельном потоке
             new Thread(loadMessagesTask).start();
         } else {
-            lvCurrentDialog = foundDialog;
+            dialogListView = openDialog;
         }
 
         // Устанавливаем название комнаты и переключаемся на диалог
         lblRoom.setText(ChatMaster.getRoomName(room.getName()));
-        lvCurrentDialog.toFront();
+        dialogListView.toFront();
+        openDialogs.add(dialogListView);
         log.info("Открыт диалог для комнаты: {}", room.getName());
     }
 
@@ -161,14 +161,20 @@ public class DialogController {
      * @return Найденный диалог или null, если диалог не найден.
      */
     public DialogListView findDialogForRoom(Room room) {
-        DialogListView dialog = null;
-        for (Node lvd : spDialogsContainer.getChildren()) {
-            if (lvd instanceof DialogListView) {
-                if (((DialogListView) lvd).getRoom().equals(room))
-                    dialog = (DialogListView) lvd;
-            }
+//        DialogListView dialog = null;
+//        for (Node lvd : spDialogsContainer.getChildren()) {
+//            if (lvd instanceof DialogListView) {
+//                if (((DialogListView) lvd).getRoom().equals(room))
+//                    dialog = (DialogListView) lvd;
+//            }
+//        }
+//        return dialog;
+
+        for(DialogListView dialog : openDialogs){
+            if(dialog.getRoom().equals(room))
+                return dialog;
         }
-        return dialog;
+        return null;
     }
 
     /**
@@ -195,7 +201,7 @@ public class DialogController {
      * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
      */
     public void scrollToBottom() {
-        Platform.runLater(() -> lvCurrentDialog.scrollTo(lvCurrentDialog.getItems().size() - 1));
+        Platform.runLater(() -> dialogListView.scrollTo(dialogListView.getItems().size() - 1));
         log.debug("Прокрутка списка сообщений вниз");
     }
 }

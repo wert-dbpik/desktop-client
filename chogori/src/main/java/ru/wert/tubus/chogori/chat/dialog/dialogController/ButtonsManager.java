@@ -22,7 +22,7 @@ public class ButtonsManager {
         controller.getBtnSend().setText(null);
         controller.getBtnSend().setGraphic(new ImageView(BtnImages.SEND_MESSAGE_IMG));
         controller.getBtnSend().setOnAction(e -> {
-            controller.getLvCurrentDialog().sendText(); // Отправка текста при нажатии на кнопку
+            controller.getDialogListView().sendText(); // Отправка текста при нажатии на кнопку
             log.debug("Отправлено текстовое сообщение");
         });
     }
@@ -35,7 +35,7 @@ public class ButtonsManager {
         controller.getBtnAddPicture().setGraphic(new ImageView(BtnImages.BTN_ADD_CHAT_PIC_IMG));
         controller.getBtnAddPicture().setTooltip(new Tooltip("Добавить изображение"));
         controller.getBtnAddPicture().setOnAction(e -> {
-            controller.getLvCurrentDialog().sendPicture(e); // Отправка изображения при нажатии на кнопку
+            controller.getDialogListView().sendPicture(e); // Отправка изображения при нажатии на кнопку
             log.debug("Отправлено изображение");
         });
     }
