@@ -7,14 +7,10 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
-import ru.wert.tubus.chogori.chat.dialog.DialogListCell;
+import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
 import ru.wert.tubus.chogori.chat.dialog.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.ListViewManipulator;
 import ru.wert.tubus.chogori.chat.util.ChatMaster;
@@ -22,12 +18,8 @@ import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
-import ru.wert.tubus.chogori.images.BtnImages;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
@@ -84,16 +76,9 @@ public class DialogController {
     public static final float LANDSCAPE_WIDTH = 0.7f;
     public static final float SQUARE_WIDTH = 0.6f;
 
-    // Переменные для управления высотой текстового поля
-
-    private Text textHolder = new Text();
-    private double oldHeight = 0;
-
     private ObservableList<Message> roomMessages = FXCollections.observableArrayList(); // Список сообщений в текущей комнате
     private Room room; // Текущая комната
     @Getter private DialogListView lvCurrentDialog; // Текущий диалог (список сообщений)
-    private DateSeparators dateSeparators;
-//    private ButtonsManager buttonsManager;
 
     /**
      * Инициализация контроллера.
@@ -102,8 +87,6 @@ public class DialogController {
      */
     public void init(SideChat chat) {
         this.chat = chat;
-        this.dateSeparators = new DateSeparators();
-//        this.buttonsManager = new ButtonsManager(this);
         ServerMessageHandler.dialogController = this;
         log.info("Инициализация DialogController для чата");
     }
@@ -127,7 +110,7 @@ public class DialogController {
                 @Override
                 protected List<Message> call() throws Exception {
                     // Загружаем сообщения для комнаты
-                    return dateSeparators.insertDateSeparators(CH_MESSAGES.findAllByRoom(room));
+                    return new DateSeparators().insertDateSeparators(CH_MESSAGES.findAllByRoom(room));
                 }
             };
 
@@ -193,11 +176,13 @@ public class DialogController {
      */
     @FXML
     void initialize() {
+
         ButtonsManager buttonsManager = new ButtonsManager(this);
         buttonsManager.createBtnSendText(); // Настройка кнопки отправки текста
         buttonsManager.createBtnPictures(); // Настройка кнопки добавления изображений
         buttonsManager.createBtnDrafts();   // Настройка кнопки добавления чертежей
         buttonsManager.createBtnRooms();    // Настройка кнопки открытия списка комнат
+
         InputTextArea inputTextArea = new InputTextArea(this);
         inputTextArea.createTextArea();    // Настройка текстового поля ввода
     }

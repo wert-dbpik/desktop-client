@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat.dialog;
+package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
