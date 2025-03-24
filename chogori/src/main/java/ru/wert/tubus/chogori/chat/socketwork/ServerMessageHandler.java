@@ -8,11 +8,13 @@ import ru.wert.tubus.chogori.application.app_window.ApplicationController;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
+import ru.wert.tubus.chogori.chat.util.ChatMaster;
 import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
+import static ru.wert.tubus.chogori.chat.util.ChatMaster.UNREAD_MESSAGES;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
 
@@ -75,7 +77,10 @@ public class ServerMessageHandler {
 
             // Обработка push-уведомлений
         } else if (type == Message.MessageType.PUSH) {
+
             Platform.runLater(()->{
+                //Выключаем моргающую кнопку
+                ChatMaster.UNREAD_MESSAGES.add(message); //Добавляем сообщение в список непрочитанных сообщений
                 ApplicationController.chat.hasNewMessagesProperty().set(true);
             });
 

@@ -1,12 +1,18 @@
 package ru.wert.tubus.chogori.chat.util;
 
+import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 public class ChatMaster {
+
+    public static List<Message> UNREAD_MESSAGES = new ArrayList<>();
 
     public static String getRoomName(String roomNameDB){
         String finalName = "";

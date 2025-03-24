@@ -15,6 +15,7 @@ import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
+import ru.wert.tubus.client.entity.serviceREST.MessageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,10 +117,12 @@ public class DialogController {
             loadMessagesTask.setOnSucceeded(event -> {
                 List<Message> messages = loadMessagesTask.getValue();
 
+                markMessagesAsDelivered(messages);
+
                 dialogListView.getRoomMessages().setAll(messages == null ? new ArrayList<>() : messages); // Обновляем ObservableList
 
+
                 // Настраиваем ListView для отображения сообщений
-//                dialogListView.setItems(messages); // Привязываем roomMessages к ListView
                 dialogListView.setCellFactory((ListView<Message> tv) -> new DialogListCell(room, dialogListView));
                 dialogListView.setId("listViewWithMessages");
 
@@ -161,15 +164,6 @@ public class DialogController {
      * @return Найденный диалог или null, если диалог не найден.
      */
     public DialogListView findDialogForRoom(Room room) {
-//        DialogListView dialog = null;
-//        for (Node lvd : spDialogsContainer.getChildren()) {
-//            if (lvd instanceof DialogListView) {
-//                if (((DialogListView) lvd).getRoom().equals(room))
-//                    dialog = (DialogListView) lvd;
-//            }
-//        }
-//        return dialog;
-
         for(DialogListView dialog : openDialogs){
             if(dialog.getRoom().equals(room))
                 return dialog;
@@ -193,15 +187,21 @@ public class DialogController {
         inputTextArea.createTextArea();    // Настройка текстового поля ввода
     }
 
-
-
-
-
     /**
      * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
      */
     public void scrollToBottom() {
         Platform.runLater(() -> dialogListView.scrollTo(dialogListView.getItems().size() - 1));
         log.debug("Прокрутка списка сообщений вниз");
+    }
+
+    public static void markMessagesAsDelivered(List<Message> messages){
+        for(Message m: messages){
+            if(m.getStatus().equals(Message.MessageStatus.RECEIVED)){
+                m.setStatus(Message.MessageStatus.DELIVERED);
+                MessageService.getInstance().update(m);
+            }
+
+        }
     }
 }

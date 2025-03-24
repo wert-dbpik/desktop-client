@@ -10,6 +10,7 @@ import javafx.stage.Screen;
 
 /**
  * Класс для создания и отображения push-уведомлений.
+ * НЕ ИСПОЛЬЗУЕТСЯ
  */
 public class PushNotification {
 

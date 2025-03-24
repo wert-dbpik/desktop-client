@@ -8,8 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.util.ChatMaster;
-import ru.wert.tubus.chogori.chat.util.UserOnline;
 import ru.wert.tubus.chogori.images.BtnImages;
+import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.Roommate;
 import ru.wert.tubus.client.entity.models.User;
@@ -17,10 +17,10 @@ import ru.wert.tubus.client.entity.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_YOURSELF;
-import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
-import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
+import static ru.wert.tubus.chogori.images.BtnImages.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 @Slf4j
@@ -46,19 +46,29 @@ public class TabRooms {
             public ListCell<Room> call(ListView<Room> param) {
                 return new ListCell<Room>() {
                     private final ImageView dotImageView = new ImageView();
+                    private final ImageView unreadMessagesIcon = new ImageView(CHAT_YELLOW_IMG);
                     private final Label nameLabel = new Label();
+                    private final HBox hbox = new HBox();
 
                     {
-                        // Устанавливаем размеры для ImageView
+                        // Устанавливаем размеры для изображений
                         dotImageView.setFitWidth(10);
                         dotImageView.setFitHeight(10);
+                        unreadMessagesIcon.setFitWidth(16);
+                        unreadMessagesIcon.setFitHeight(16);
+                        unreadMessagesIcon.setVisible(false);
+
+                        // Настройка контейнера
+                        hbox.setStyle("-fx-alignment: center-left");
+                        hbox.setSpacing(5);
+                        hbox.getChildren().addAll(dotImageView, nameLabel, unreadMessagesIcon);
                     }
 
                     @Override
                     public void updateItem(Room room, boolean empty) {
                         super.updateItem(room, empty);
 
-                        if (empty) {
+                        if (empty || room == null) {
                             setText(null);
                             setGraphic(null);
                         } else {
@@ -75,7 +85,7 @@ public class TabRooms {
                             nameLabel.setText(roomName);
                             nameLabel.setStyle("-fx-font-style: italic; -fx-text-fill: black");
 
-                            // Устанавливаем изображение в зависимости от статуса пользователя в one-to-one чате
+                            // Устанавливаем изображение статуса для one-to-one чатов
                             if (room.getName().startsWith("one-to-one")) {
                                 User secondUser = ChatMaster.getSecondUserInOneToOneChat(room);
                                 if (secondUser != null && secondUser.isOnline()) {
@@ -84,48 +94,62 @@ public class TabRooms {
                                     dotImageView.setImage(SPACE_IMG);
                                 }
                             } else {
-                                dotImageView.setImage(SPACE_IMG); // Для групповых чатов или других типов
+                                dotImageView.setImage(SPACE_IMG);
                             }
 
-                            // Создаем контейнер для изображения и текста
-                            HBox hbox = new HBox(dotImageView, nameLabel);
-                            hbox.setStyle("-fx-alignment: center-left");
-                            hbox.setSpacing(5); // Расстояние между изображением и текстом
+                            // Проверяем наличие непрочитанных сообщений для этой комнаты
+                            boolean hasUnreadMessages = ChatMaster.UNREAD_MESSAGES != null &&
+                                    ChatMaster.UNREAD_MESSAGES.stream()
+                                            .anyMatch(msg -> msg.getRoomId().equals(room.getId()) &&
+                                                    msg.getStatus() != Message.MessageStatus.DELIVERED);
+
+                            unreadMessagesIcon.setVisible(hasUnreadMessages);
 
                             // Устанавливаем контейнер в ячейку
                             setGraphic(hbox);
 
-                            // Обработка двойного клика для открытия чата
-                            nameLabel.setOnMouseClicked(e -> {
-                                if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
-                                    log.debug("Открытие чата в комнате: {}", room.getName());
-                                    controller.openChat(room);
-                                    e.consume();
+                            // Обработка клика по строке
+                            setOnMouseClicked(e -> {
+                                if (e.getButton().equals(MouseButton.PRIMARY)) {
+                                    // Двойной клик - открываем чат
+                                    if (e.getClickCount() == 2) {
+                                        log.debug("Открытие чата в комнате: {}", room.getName());
+                                        controller.openChat(room);
+                                        e.consume();
+                                    }
+                                    // Одинарный клик - отмечаем сообщения как прочитанные
+                                    else if (e.getClickCount() == 1) {
+                                        markMessagesAsDelivered(room);
+                                        unreadMessagesIcon.setVisible(false);
+                                    }
                                 }
                             });
 
-                            // Создаем контекстное меню
+                            // Контекстное меню (остается без изменений)
                             ContextMenu contextMenu = new ContextMenu();
-
-                            // Пункт меню для удаления комнаты из списка
                             MenuItem deleteItem = new MenuItem("Удалить из списка");
                             deleteItem.setOnAction(event -> controller.deleteRoomFromList(room));
-
-                            // Пункт меню для выхода из чата (только для групповых чатов)
                             MenuItem exitItem = new MenuItem("Выйти из чата");
                             exitItem.setOnAction(event -> controller.exitFromChat(room));
 
-                            // Очищаем контекстное меню и добавляем пункты
                             contextMenu.getItems().clear();
                             contextMenu.getItems().add(deleteItem);
-
-                            // Добавляем пункт "Выйти из чата" только если имя комнаты начинается с "group"
                             if (room.getName().startsWith("group")) {
                                 contextMenu.getItems().add(exitItem);
                             }
+                            setContextMenu(contextMenu);
+                        }
+                    }
 
-                            // Устанавливаем контекстное меню для метки
-                            nameLabel.setContextMenu(contextMenu);
+                    private void markMessagesAsDelivered(Room room) {
+                        if (ChatMaster.UNREAD_MESSAGES != null) {
+                            ChatMaster.UNREAD_MESSAGES.stream()
+                                    .filter(msg -> msg.getRoomId().equals(room.getId()) &&
+                                            msg.getStatus() != Message.MessageStatus.DELIVERED)
+                                    .forEach(msg -> {
+                                        msg.setStatus(Message.MessageStatus.DELIVERED);
+                                        CH_MESSAGES.update(msg);
+                                    });
                         }
                     }
                 };
