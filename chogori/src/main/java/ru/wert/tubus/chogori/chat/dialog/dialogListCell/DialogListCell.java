@@ -7,55 +7,38 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Separator;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.chat.cards.*;
-import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.client.entity.models.Message;
-import ru.wert.tubus.client.entity.models.Pic;
-import ru.wert.tubus.chogori.images.ImageUtil;
-import ru.wert.tubus.chogori.statics.AppStatic;
-import ru.wert.tubus.chogori.application.services.ChogoriServices;
-import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.client.entity.models.Room;
+import ru.wert.tubus.chogori.statics.AppStatic;
+import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
-import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
-import static ru.wert.tubus.winform.statics.WinformStatic.WF_TEMPDIR;
 
-/**
- * Класс ChatListCell отвечает за отображение сообщений в списке чата.
- * Каждое сообщение форматируется в зависимости от его типа (текст, чертежи, паспорта и т.д.).
- */
 @Slf4j
 public class DialogListCell extends ListCell<Message> {
 
-    private final Boolean ONE_TO_ONE_CHAT; //Индивидуальный чат, не групповой
+    private final Boolean ONE_TO_ONE_CHAT; // Индивидуальный чат, не групповой
 
-    public DialogListCell(Room room) {
-        ONE_TO_ONE_CHAT = room.getName().startsWith("one-to-one");
-    }
-
-
-    VBox vbMessageContainer; // Самый верхний контейнер для сообщения
-    VBox vbOutlineMessage;   // Контейнер, включающий заголовок, сообщение и время создания
-    VBox vbMessage;          // Контейнер для самого сообщения
-    Label lblFrom;           // Метка для отображения имени отправителя
-    Label lblDate;           // Метка для отображения даты сообщения
-    Label lblTitle;          // Метка для отображения заголовка сообщения
-    Label lblTime;           // Метка для отображения времени сообщения
+    private VBox vbMessageContainer; // Самый верхний контейнер для сообщения
+    private VBox vbOutlineMessage;   // Контейнер, включающий заголовок, сообщение и время создания
+    private VBox vbMessage;          // Контейнер для самого сообщения
+    private Label lblFrom;           // Метка для отображения имени отправителя
+    private Label lblDate;           // Метка для отображения даты сообщения
+    private Label lblTitle;          // Метка для отображения заголовка сообщения
+    private Label lblTime;           // Метка для отображения времени сообщения
 
     static final String OUT = "message_out"; // Стиль для исходящих сообщений
     static final String IN = "message_in";   // Стиль для входящих сообщений
 
     private Separator separator; // Разделитель между сообщениями
+
+    public DialogListCell(Room room) {
+        ONE_TO_ONE_CHAT = room.getName().startsWith("one-to-one");
+    }
 
     @Override
     protected void updateItem(Message message, boolean empty) {
@@ -66,8 +49,8 @@ public class DialogListCell extends ListCell<Message> {
         } else {
             setText(null);
             Parent mes;
-            if(message.getType().equals(Message.MessageType.CHAT_SEPARATOR)){
-                mes = mountSeparator(message);
+            if (message.getType().equals(Message.MessageType.CHAT_SEPARATOR)) {
+                mes = MessageRenderer.mountSeparator(message);
             } else {
                 // Определяем, является ли сообщение исходящим или входящим
                 if (message.getSenderId() != null && message.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId())) {
@@ -111,6 +94,8 @@ public class DialogListCell extends ListCell<Message> {
             lblTitle.setId("messageTitleLabel");
             lblTime.setId("messageTimeLabel");
 
+            MessageRenderer messageRenderer = new MessageRenderer(lblTitle);
+
             // Настройка стилей для исходящих и входящих сообщений
             if (in_out.equals(OUT)) {
                 vbMessageContainer.getChildren().removeAll(lblFrom);
@@ -121,7 +106,7 @@ public class DialogListCell extends ListCell<Message> {
                 vbOutlineMessage.setId("outOutlineMessageVBox");
                 vbMessage.setId("outMessageVBox");
             } else {
-                if(ONE_TO_ONE_CHAT){
+                if (ONE_TO_ONE_CHAT) {
                     vbMessageContainer.getChildren().removeAll(lblFrom);
                     vbMessageContainer.getChildren().removeAll(lblDate);
                 }
@@ -142,19 +127,20 @@ public class DialogListCell extends ListCell<Message> {
                 // В зависимости от типа сообщения вызываем соответствующий метод для отображения
                 switch (message.getType()) {
                     case CHAT_TEXT:
-                        mountText(vbMessage, message);
+                        vbOutlineMessage.getChildren().removeAll(lblTitle);
+                        messageRenderer.mountText(vbMessage, message);
                         break;
                     case CHAT_DRAFTS:
-                        mountDrafts(vbMessage, message);
+                        messageRenderer.mountDrafts(vbMessage, message);
                         break;
                     case CHAT_FOLDERS:
-                        mountFolders(vbMessage, message);
+                        messageRenderer.mountFolders(vbMessage, message);
                         break;
                     case CHAT_PICS:
-                        mountPics(vbMessage, message);
+                        messageRenderer.mountPics(vbMessage, message);
                         break;
                     case CHAT_PASSPORTS:
-                        mountPassports(vbMessage, message);
+                        messageRenderer.mountPassports(vbMessage, message);
                         break;
                 }
             });
@@ -166,170 +152,5 @@ public class DialogListCell extends ListCell<Message> {
         return inMessage;
     }
 
-    /**
-     * Отображает сепаратора с датой.
-     *
-     * @param message   Сообщение для отображения.
-     */
-    private Parent mountSeparator(Message message) {
-        Parent dateSeparator = null;
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/dateSeparator.fxml"));
-            dateSeparator = loader.load();
-            Label lblDate = (Label)dateSeparator.lookup("#lblDate");
-            lblDate.setStyle("-fx-text-fill: #6f6f71");
-            lblDate.setText(message.getText());
-        } catch (IOException e) {
-            log.error("Ошибка при загрузке FXML для изображения: {}", e.getMessage(), e);
-        }
-        return dateSeparator;
-    }
 
-    /**
-     * Отображает текстовое сообщение.
-     *
-     * @param vbMessage Контейнер для сообщения.
-     * @param message   Сообщение для отображения.
-     */
-    private void mountText(VBox vbMessage, Message message) {
-        vbOutlineMessage.getChildren().removeAll(lblTitle);
-        Label text = new Label(message.getText());
-        text.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-        text.setWrapText(true);
-        vbMessage.getChildren().add(text);
-        log.debug("Текстовое сообщение отображено: {}", message.getText());
-    }
-
-    /**
-     * Отображает сообщение с изображениями.
-     *
-     * @param vbMessage Контейнер для сообщения.
-     * @param message   Сообщение для отображения.
-     */
-    private void mountPics(VBox vbMessage, Message message) {
-        String text = message.getText();
-        List<Long> ids = Arrays.asList(text.split(" ", -1))
-                .stream().map(Long::valueOf).collect(Collectors.toList());
-        for (Long id : ids) {
-            Pic p = ChogoriServices.CH_PICS.findById(id);
-            String tempFileName = "chat" + "-" + p.getId() + "." + p.getExtension();
-            boolean res = ChogoriServices.CH_FILES.download("pics", String.valueOf(p.getId()),
-                    "." + p.getExtension(), WF_TEMPDIR.toString(), "chat", null);
-
-            File file = new File(WF_TEMPDIR.toString() + "\\" + tempFileName);
-            ImageView imageView = ImageUtil.createImageViewFromFile(file, null,
-                    (int) CHAT_WIDTH, DialogController.PORTRAIT_WIDTH, DialogController.LANDSCAPE_WIDTH, DialogController.SQUARE_WIDTH);
-
-            Parent cardWithImage = null;
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/card.fxml"));
-                cardWithImage = loader.load();
-                CardController controller = loader.getController();
-                controller.init(p.getInitName(), imageView);
-            } catch (IOException e) {
-                log.error("Ошибка при загрузке FXML для изображения: {}", e.getMessage(), e);
-            }
-
-            String title = "Рисунок";
-            if (ids.size() > 1) title = "Рисунки";
-            lblTitle.setText(title);
-
-            vbMessage.getChildren().add(cardWithImage);
-            imageView.fitWidthProperty().unbind();
-            log.debug("Изображение отображено: {}", p.getInitName());
-        }
-    }
-
-    /**
-     * Отображает сообщение с чертежами.
-     *
-     * @param vbMessage Контейнер для сообщения.
-     * @param message   Сообщение для отображения.
-     */
-    private void mountDrafts(VBox vbMessage, Message message) {
-        String text = message.getText();
-        List<String> ids = Arrays.asList(text.split(" ", -1));
-
-        for (String id : ids) {
-            Parent cardWithDraft = null;
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/draftCard.fxml"));
-                cardWithDraft = loader.load();
-                DraftCardController controller = loader.getController();
-                controller.init(id);
-            } catch (IOException e) {
-                log.error("Ошибка при загрузке FXML для чертежа: {}", e.getMessage(), e);
-            }
-
-            String title = "Чертеж:";
-            if (ids.size() > 1) title = "Чертежи:";
-            lblTitle.setText(title);
-
-            vbMessage.getChildren().add(cardWithDraft);
-            vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-            log.debug("Чертеж отображен: {}", id);
-        }
-    }
-
-    /**
-     * Отображает сообщение с комплектами чертежей.
-     *
-     * @param vbMessage Контейнер для сообщения.
-     * @param message   Сообщение для отображения.
-     */
-    private void mountFolders(VBox vbMessage, Message message) {
-        String text = message.getText();
-        List<String> ids = Arrays.asList(text.split(" ", -1));
-
-        for (String id : ids) {
-            Parent cardWithFolder = null;
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/folderCard.fxml"));
-                cardWithFolder = loader.load();
-                FolderCardController controller = loader.getController();
-                controller.init(id);
-            } catch (IOException e) {
-                log.error("Ошибка при загрузке FXML для комплекта чертежей: {}", e.getMessage(), e);
-            }
-
-            String title = "Комплект чертежей:";
-            if (ids.size() > 1) title = "Комплекты чертежей:";
-            lblTitle.setText(title);
-
-            vbMessage.getChildren().add(cardWithFolder);
-            vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-            log.debug("Комплект чертежей отображен: {}", id);
-        }
-    }
-
-    /**
-     * Отображает сообщение с паспортами.
-     *
-     * @param vbMessage Контейнер для сообщения.
-     * @param message   Сообщение для отображения.
-     */
-    private void mountPassports(VBox vbMessage, Message message) {
-        String text = message.getText();
-        List<String> ids = Arrays.asList(text.split(" ", -1));
-
-        for (String id : ids) {
-            Parent cardWithPassport = null;
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/passportCard.fxml"));
-                cardWithPassport = loader.load();
-                PassportCardController controller = loader.getController();
-                controller.init(id);
-            } catch (IOException e) {
-                log.error("Ошибка при загрузке FXML для паспорта: {}", e.getMessage(), e);
-            }
-
-            String title = "Пасспорт:";
-            if (ids.size() > 1) title = "Пасспорта:";
-            lblTitle.setText(title);
-
-            vbMessage.getChildren().add(cardWithPassport);
-            vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-            log.debug("Паспорт отображен: {}", id);
-        }
-    }
 }
