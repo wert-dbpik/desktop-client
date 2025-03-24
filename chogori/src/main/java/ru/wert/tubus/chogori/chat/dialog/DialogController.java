@@ -6,15 +6,11 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
@@ -83,7 +79,7 @@ public class DialogController {
 
     private ObservableList<Message> roomMessages = FXCollections.observableArrayList(); // Список сообщений в текущей комнате
     private Room room; // Текущая комната
-    private ListViewDialog lvCurrentDialog; // Текущий диалог (список сообщений)
+    private DialogListView lvCurrentDialog; // Текущий диалог (список сообщений)
 
     /**
      * Инициализация контроллера.
@@ -104,11 +100,11 @@ public class DialogController {
      */
     public void openDialogForRoom(Room room) {
         this.room = room;
-        ListViewDialog foundDialog = findDialogForRoom(room);
+        DialogListView foundDialog = findDialogForRoom(room);
 
         // Если диалог еще не открыт, создаем новый
         if (foundDialog == null) {
-            lvCurrentDialog = new ListViewDialog(room, taMessageText);
+            lvCurrentDialog = new DialogListView(room, taMessageText);
 
             // Создаем Task для загрузки сообщений в фоновом режиме
             Task<List<Message>> loadMessagesTask = new Task<List<Message>>() {
@@ -126,11 +122,11 @@ public class DialogController {
 
                 // Настраиваем ListView для отображения сообщений
                 lvCurrentDialog.setItems(roomMessages); // Привязываем roomMessages к ListView
-                lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new ChatListCell(room));
+                lvCurrentDialog.setCellFactory((ListView<Message> tv) -> new DialogListCell(room));
                 lvCurrentDialog.setId("listViewWithMessages");
 
                 // Добавляем манипулятор для обработки событий
-                new ListViewWithMessages_Manipulator(lvCurrentDialog, this);
+                new ListViewManipulator(lvCurrentDialog, this);
 
                 // Добавляем диалог в контейнер
                 spDialogsContainer.getChildren().add(lvCurrentDialog);
@@ -240,12 +236,12 @@ public class DialogController {
      * @param room Комната, для которой ищется диалог.
      * @return Найденный диалог или null, если диалог не найден.
      */
-    public ListViewDialog findDialogForRoom(Room room) {
-        ListViewDialog dialog = null;
+    public DialogListView findDialogForRoom(Room room) {
+        DialogListView dialog = null;
         for (Node lvd : spDialogsContainer.getChildren()) {
-            if (lvd instanceof ListViewDialog) {
-                if (((ListViewDialog) lvd).getRoom().equals(room))
-                    dialog = (ListViewDialog) lvd;
+            if (lvd instanceof DialogListView) {
+                if (((DialogListView) lvd).getRoom().equals(room))
+                    dialog = (DialogListView) lvd;
             }
         }
         return dialog;

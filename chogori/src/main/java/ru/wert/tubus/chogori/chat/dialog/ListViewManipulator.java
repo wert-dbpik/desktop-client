@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 
 @Slf4j
-public class ListViewWithMessages_Manipulator {
+public class ListViewManipulator {
 
     private final ListView<Message> listView;
     private DialogController chatController;
 
-    public ListViewWithMessages_Manipulator(ListViewDialog listView, DialogController chatController) {
+    public ListViewManipulator(DialogListView listView, DialogController chatController) {
         this.listView = listView;
         this.chatController = chatController;
 

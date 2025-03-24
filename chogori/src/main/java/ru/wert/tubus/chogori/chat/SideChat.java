@@ -116,7 +116,7 @@ public class SideChat {
      */
     private void createSideChatTalk() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/sideRoomDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/dialog.fxml"));
             sideChatTalk = loader.load();
             talkController = loader.getController();
             talkController.init(this);

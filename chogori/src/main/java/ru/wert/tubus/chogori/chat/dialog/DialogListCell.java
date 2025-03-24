@@ -34,11 +34,11 @@ import static ru.wert.tubus.winform.statics.WinformStatic.WF_TEMPDIR;
  * Каждое сообщение форматируется в зависимости от его типа (текст, чертежи, паспорта и т.д.).
  */
 @Slf4j
-public class ChatListCell extends ListCell<Message> {
+public class DialogListCell extends ListCell<Message> {
 
     private final Boolean ONE_TO_ONE_CHAT; //Индивидуальный чат, не групповой
 
-    public ChatListCell(Room room) {
+    public DialogListCell(Room room) {
         ONE_TO_ONE_CHAT = room.getName().startsWith("one-to-one");
     }
 
@@ -91,7 +91,7 @@ public class ChatListCell extends ListCell<Message> {
         VBox inMessage = null;
         try {
             // Загружаем шаблон сообщения из FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/message.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/message.fxml"));
             inMessage = loader.load();
             separator = (Separator) inMessage.lookup("#separator");
             separator.setVisible(false); // Скрываем разделитель
@@ -173,7 +173,7 @@ public class ChatListCell extends ListCell<Message> {
     private Parent mountSeparator(Message message) {
         Parent dateSeparator = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/dateSeparator.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/dateSeparator.fxml"));
             dateSeparator = loader.load();
             Label lblDate = (Label)dateSeparator.lookup("#lblDate");
             lblDate.setStyle("-fx-text-fill: #6f6f71");
@@ -221,7 +221,7 @@ public class ChatListCell extends ListCell<Message> {
 
             Parent cardWithImage = null;
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/card.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/card.fxml"));
                 cardWithImage = loader.load();
                 CardController controller = loader.getController();
                 controller.init(p.getInitName(), imageView);
@@ -252,7 +252,7 @@ public class ChatListCell extends ListCell<Message> {
         for (String id : ids) {
             Parent cardWithDraft = null;
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/draftCard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/draftCard.fxml"));
                 cardWithDraft = loader.load();
                 DraftCardController controller = loader.getController();
                 controller.init(id);
@@ -283,7 +283,7 @@ public class ChatListCell extends ListCell<Message> {
         for (String id : ids) {
             Parent cardWithFolder = null;
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/folderCard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/folderCard.fxml"));
                 cardWithFolder = loader.load();
                 FolderCardController controller = loader.getController();
                 controller.init(id);
@@ -314,7 +314,7 @@ public class ChatListCell extends ListCell<Message> {
         for (String id : ids) {
             Parent cardWithPassport = null;
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/passportCard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/passportCard.fxml"));
                 cardWithPassport = loader.load();
                 PassportCardController controller = loader.getController();
                 controller.init(id);

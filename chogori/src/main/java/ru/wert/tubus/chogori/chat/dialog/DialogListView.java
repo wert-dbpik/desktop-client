@@ -30,7 +30,7 @@ import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
  * изображения, чертежи и паспорта.
  */
 @Slf4j
-public class ListViewDialog extends ListView<Message> {
+public class DialogListView extends ListView<Message> {
 
     @Getter
     private final Room room; // Текущая комната чата
@@ -43,7 +43,7 @@ public class ListViewDialog extends ListView<Message> {
      * @param room         Комната, для которой создается диалог.
      * @param taMessageText Текстовое поле для ввода сообщений.
      */
-    public ListViewDialog(Room room, TextArea taMessageText) {
+    public DialogListView(Room room, TextArea taMessageText) {
         this.room = room;
         this.taMessageText = taMessageText;
         setItems(messages); // Привязываем ObservableList к ListView

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.ApplicationController;
-import ru.wert.tubus.chogori.chat.dialog.ListViewDialog;
+import ru.wert.tubus.chogori.chat.dialog.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.DialogController;
 import ru.wert.tubus.chogori.chat.RoomsController;
 import ru.wert.tubus.client.entity.models.*;
@@ -110,7 +110,7 @@ public class ServerMessageHandler {
         Room room = RoomService.getInstance().findById(message.getRoomId());
         if (room != null) {
             // Находим диалог для этой комнаты с помощью метода из SideRoomDialogController
-            ListViewDialog dialog = dialogController.findDialogForRoom(room);
+            DialogListView dialog = dialogController.findDialogForRoom(room);
             if (dialog != null) {
                 // Добавляем сообщение в диалог
                 dialog.getItems().add(message);
