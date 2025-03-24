@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.ApplicationController;
 import ru.wert.tubus.chogori.chat.dialog.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
-import ru.wert.tubus.chogori.chat.RoomsController;
+import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
 import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
 

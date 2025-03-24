@@ -9,7 +9,7 @@ import ru.wert.tubus.chogori.images.BtnImages;
 @Slf4j
 public class ButtonsManager {
 
-    private DialogController controller;
+    private final DialogController controller;
 
     public ButtonsManager(DialogController controller) {
         this.controller = controller;
