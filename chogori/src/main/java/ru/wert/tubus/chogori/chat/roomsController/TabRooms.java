@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.util.ChatMaster;
+import ru.wert.tubus.chogori.components.BlinkingImageView;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
@@ -20,6 +21,7 @@ import java.util.List;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_YOURSELF;
+import static ru.wert.tubus.chogori.chat.util.ChatMaster.UNREAD_MESSAGES;
 import static ru.wert.tubus.chogori.images.BtnImages.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
@@ -46,7 +48,8 @@ public class TabRooms {
             public ListCell<Room> call(ListView<Room> param) {
                 return new ListCell<Room>() {
                     private final ImageView dotImageView = new ImageView();
-                    private final ImageView unreadMessagesIcon = new ImageView(CHAT_YELLOW_IMG);
+                    private final BlinkingImageView unreadMessagesIcon = new BlinkingImageView(CHAT_LETTER_IMG);
+
                     private final Label nameLabel = new Label();
                     private final HBox hbox = new HBox();
 
@@ -98,11 +101,12 @@ public class TabRooms {
                             }
 
                             // Проверяем наличие непрочитанных сообщений для этой комнаты
-                            boolean hasUnreadMessages = ChatMaster.UNREAD_MESSAGES != null &&
-                                    ChatMaster.UNREAD_MESSAGES.stream()
+                            boolean hasUnreadMessages = UNREAD_MESSAGES != null &&
+                                    UNREAD_MESSAGES.stream()
                                             .anyMatch(msg -> msg.getRoomId().equals(room.getId()) &&
                                                     msg.getStatus() != Message.MessageStatus.DELIVERED);
 
+                            unreadMessagesIcon.startBlinking();
                             unreadMessagesIcon.setVisible(hasUnreadMessages);
 
                             // Устанавливаем контейнер в ячейку
@@ -142,8 +146,8 @@ public class TabRooms {
                     }
 
                     private void markMessagesAsDelivered(Room room) {
-                        if (ChatMaster.UNREAD_MESSAGES != null) {
-                            ChatMaster.UNREAD_MESSAGES.stream()
+                        if (UNREAD_MESSAGES != null) {
+                            UNREAD_MESSAGES.stream()
                                     .filter(msg -> msg.getRoomId().equals(room.getId()) &&
                                             msg.getStatus() != Message.MessageStatus.DELIVERED)
                                     .forEach(msg -> {

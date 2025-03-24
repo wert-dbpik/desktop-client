@@ -4,22 +4,15 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import ru.wert.tubus.chogori.chat.SideChat;
 
-import java.io.IOException;
-
 import static ru.wert.tubus.chogori.images.BtnImages.CHAT_WHITE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.CHAT_YELLOW_IMG;
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
-import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_CHAT;
 
 public class BtnChat{

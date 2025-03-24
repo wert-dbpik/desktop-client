@@ -2,6 +2,7 @@ package ru.wert.tubus.chogori.chat.socketwork;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.ApplicationController;
@@ -11,6 +12,7 @@ import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
 import ru.wert.tubus.chogori.chat.util.ChatMaster;
 import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
+import ru.wert.tubus.client.retrofit.GsonConfiguration;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
@@ -80,7 +82,8 @@ public class ServerMessageHandler {
 
             Platform.runLater(()->{
                 //Выключаем моргающую кнопку
-                ChatMaster.UNREAD_MESSAGES.add(message); //Добавляем сообщение в список непрочитанных сообщений
+                Gson gson = GsonConfiguration.createGson();
+                ChatMaster.UNREAD_MESSAGES.add(gson.fromJson(message.getText(), Message.class)); //Добавляем сообщение в список непрочитанных сообщений
                 ApplicationController.chat.hasNewMessagesProperty().set(true);
             });
 

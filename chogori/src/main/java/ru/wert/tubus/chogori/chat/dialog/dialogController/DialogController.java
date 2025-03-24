@@ -68,7 +68,7 @@ public class DialogController {
     @Getter
     private SideChat chat; // Ссылка на основной класс чата
 
-    List<DialogListView> openDialogs = new ArrayList<>();
+    private List<DialogListView> openDialogs = new ArrayList<>();
 
     // Константы для управления размерами сообщений
     public static final float MESSAGE_WIDTH = 0.7f;
@@ -76,7 +76,6 @@ public class DialogController {
     public static final float LANDSCAPE_WIDTH = 0.7f;
     public static final float SQUARE_WIDTH = 0.6f;
 
-    private Room room; // Текущая комната
     @Getter private DialogListView dialogListView; // Текущий диалог (список сообщений)
 
     /**
@@ -97,7 +96,7 @@ public class DialogController {
      * @param room Комната, для которой нужно открыть диалог.
      */
     public void openDialogForRoom(Room room) {
-        this.room = room;
+
         DialogListView openDialog = findDialogForRoom(room);
 
         // Если диалог еще не открыт, создаем новый
@@ -117,10 +116,7 @@ public class DialogController {
             loadMessagesTask.setOnSucceeded(event -> {
                 List<Message> messages = loadMessagesTask.getValue();
 
-                markMessagesAsDelivered(messages);
-
                 dialogListView.getRoomMessages().setAll(messages == null ? new ArrayList<>() : messages); // Обновляем ObservableList
-
 
                 // Настраиваем ListView для отображения сообщений
                 dialogListView.setCellFactory((ListView<Message> tv) -> new DialogListCell(room, dialogListView));
@@ -154,8 +150,6 @@ public class DialogController {
         openDialogs.add(dialogListView);
         log.info("Открыт диалог для комнаты: {}", room.getName());
     }
-
-
 
     /**
      * Ищет открытый диалог для указанной комнаты.
@@ -195,13 +189,4 @@ public class DialogController {
         log.debug("Прокрутка списка сообщений вниз");
     }
 
-    public static void markMessagesAsDelivered(List<Message> messages){
-        for(Message m: messages){
-            if(m.getStatus().equals(Message.MessageStatus.RECEIVED)){
-                m.setStatus(Message.MessageStatus.DELIVERED);
-                MessageService.getInstance().update(m);
-            }
-
-        }
-    }
 }
