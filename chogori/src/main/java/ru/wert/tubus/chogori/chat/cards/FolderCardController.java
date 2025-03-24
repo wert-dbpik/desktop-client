@@ -11,7 +11,7 @@ import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
-import ru.wert.tubus.chogori.chat.dialog.DialogController;
+import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;

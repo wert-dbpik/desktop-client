@@ -14,7 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.chat.dialog.DialogController;
+import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.util.ChatMaster;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Room;
@@ -50,8 +50,8 @@ public class SideChat {
     public SideChat() {
         log.info("Инициализация SideChat");
 
-        createSideChatTalk();
-        createSideChatGroups();
+        createDialog();
+        createRooms();
 
         chatVBox = new VBox();
         chatVBox.setFillWidth(true);
@@ -106,6 +106,7 @@ public class SideChat {
     public void showChatDialog(Room room) {
         log.debug("Открытие диалога чата для комнаты: {}", room.getName());
         talkController.getLblRoom().setText(ChatMaster.getRoomName(room.getName()));
+
         talkController.openDialogForRoom(room);
         mainPane.getChildren().clear();
         mainPane.getChildren().add(sideChatTalk);
@@ -114,7 +115,7 @@ public class SideChat {
     /**
      * Создает панель для отображения диалога чата.
      */
-    private void createSideChatTalk() {
+    private void createDialog() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/dialog.fxml"));
             sideChatTalk = loader.load();
@@ -128,17 +129,17 @@ public class SideChat {
     }
 
     /**
-     * Создает панель для отображения групп чатов.
+     * Создает панель для отображения комнат.
      */
-    private void createSideChatGroups() {
+    private void createRooms() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/sideRooms.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/rooms.fxml"));
             sideChatGroups = loader.load();
             groupsController = loader.getController();
             groupsController.init(this);
-            log.debug("Панель для групп чатов успешно создана");
+            log.debug("Панель для комнат успешно создана");
         } catch (IOException e) {
-            log.error("Ошибка при создании панели для групп чатов", e);
+            log.error("Ошибка при создании панели для комнат", e);
             e.printStackTrace();
         }
     }

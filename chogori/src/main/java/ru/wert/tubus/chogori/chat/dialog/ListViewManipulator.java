@@ -6,6 +6,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.client.entity.models.Message;
 
 import java.io.File;

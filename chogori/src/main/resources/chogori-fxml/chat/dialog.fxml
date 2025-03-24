@@ -8,13 +8,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.tubus.chogori.chat.dialog.DialogController">
+<AnchorPane maxHeight="1.7976931348623157E308" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                <children>
-                  <Button fx:id="btnRooms" mnemonicParsing="false" text="&lt;">
+                  <Button fx:id="btnBackToRooms" mnemonicParsing="false" text="&lt;">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>

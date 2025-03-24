@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.cards.*;
+import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Pic;
 import ru.wert.tubus.chogori.images.ImageUtil;
