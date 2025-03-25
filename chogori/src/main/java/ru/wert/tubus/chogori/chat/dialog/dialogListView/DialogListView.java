@@ -1,9 +1,6 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogListView;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -57,9 +54,14 @@ public class DialogListView extends ListView<Message> {
     public DialogListView(Room room, TextArea taMessageText) {
         this.room = room;
         this.taMessageText = taMessageText;
+        setId("dialogListView");
+
         setItems(roomMessages); // Привязываем ObservableList к ListView
+
         log.info("Создан новый диалог для комнаты: {}", room.getName());
     }
+
+
 
     /**
      * Создает и отправляет сообщение с паспортами.
@@ -242,9 +244,26 @@ public class DialogListView extends ListView<Message> {
      */
     public void scrollToBottom() {
         Platform.runLater(() -> {
-            PauseTransition pause = new PauseTransition(Duration.millis(150));
-            pause.setOnFinished(e -> scrollTo(getItems().size() - 1));
-            pause.play();
+            if (!roomMessages.isEmpty()) {
+                int lastIndex = roomMessages.size() - 1;
+
+                // Плавная прокрутка с анимацией
+                Timeline timeline = new Timeline();
+                ScrollBar scrollBar = (ScrollBar) lookup(".scroll-bar:vertical");
+
+                if (scrollBar != null) {
+                    DoubleProperty property = new SimpleDoubleProperty(scrollBar.getValue());
+                    property.addListener((obs, oldVal, newVal) -> scrollBar.setValue(newVal.doubleValue()));
+
+                    timeline.getKeyFrames().add(
+                            new KeyFrame(Duration.millis(300),
+                                    new KeyValue(property, 1.0))
+                    );
+                    timeline.play();
+                } else {
+                    scrollTo(lastIndex);
+                }
+            }
         });
     }
 
