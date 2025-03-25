@@ -61,4 +61,14 @@ public class InputTextArea {
         });
     }
 
+    /**
+     * Устанавливает текст в поле ввода и устанавливает фокус
+     * @param text Текст для установки
+     */
+    public void setTextWithFocus(String text) {
+        taMessageText.setText(text);
+        taMessageText.requestFocus();
+        taMessageText.positionCaret(text.length());
+    }
+
 }

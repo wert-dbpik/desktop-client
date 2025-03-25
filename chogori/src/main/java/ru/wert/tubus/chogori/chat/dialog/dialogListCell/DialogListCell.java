@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
@@ -33,6 +34,8 @@ import java.util.concurrent.Executors;
  */
 @Slf4j
 public class DialogListCell extends ListCell<Message> {
+
+    private final DialogController dialogController;
 
     // Стили для входящих и исходящих сообщений
     static final String OUT = "message_out"; // Стиль исходящих сообщений
@@ -63,9 +66,10 @@ public class DialogListCell extends ListCell<Message> {
      * @param room Комната чата
      * @param listView Родительский ListView
      */
-    public DialogListCell(Room room, ListView<Message> listView) {
+    public DialogListCell(Room room, ListView<Message> listView, DialogController dialogController) {
         this.messageManager = new MessageManager(room);
         this.listView = listView;
+        this.dialogController = dialogController;
 
         this.contextMenu = new MessageContextMenu(
                 this::handleDeleteAction,
@@ -261,7 +265,7 @@ public class DialogListCell extends ListCell<Message> {
     }
 
     /**
-     * Обработчик пересылки сообщения (заглушка)
+     * Обработчик пересылки сообщения
      */
     private void handleForwardAction() {
         if (currentMessage == null) return;
@@ -273,11 +277,29 @@ public class DialogListCell extends ListCell<Message> {
 
 
     /**
-     * Обработчик редактирования сообщения (заглушка)
+     * Обработчик редактирования сообщения
      */
     private void handleEditAction() {
         if (currentMessage == null || currentMessage.getType() != Message.MessageType.CHAT_TEXT) return;
         log.debug("Редактирование сообщения: {}", currentMessage.getId());
+
+        // Переносим текст сообщения в поле ввода
+        Platform.runLater(() -> {
+            dialogController.getTaMessageText().setText(currentMessage.getText());
+            dialogController.getTaMessageText().requestFocus();
+            dialogController.getTaMessageText().positionCaret(currentMessage.getText().length());
+
+            // Настраиваем кнопку отправки для редактирования
+            Button btnSend = dialogController.getBtnSend();
+            btnSend.setOnAction(e -> {
+                String updatedText = dialogController.getTaMessageText().getText().trim();
+                if (!updatedText.isEmpty()) {
+                    contextMenu.updateMessage(currentMessage, updatedText, listView);
+                    // Возвращаем обычное поведение кнопки
+                    btnSend.setOnAction(event -> dialogController.getDialogListView().sendText());
+                }
+            });
+        });
     }
 
     // Вспомогательные методы  ======================================================================================

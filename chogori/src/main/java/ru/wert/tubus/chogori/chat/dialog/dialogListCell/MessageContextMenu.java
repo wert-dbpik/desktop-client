@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import lombok.extern.slf4j.Slf4j;
@@ -325,11 +326,22 @@ public class MessageContextMenu {
 
             // Обновляем локальный интерфейс
             updateMessageInOpenRooms(updateCommand);
+
+            // Очищаем поле ввода
+            Platform.runLater(() -> {
+                if (listView != null && listView.getScene() != null) {
+                    TextArea taMessageText = (TextArea) listView.getScene().lookup("#taMessageText");
+                    if (taMessageText != null) {
+                        taMessageText.clear();
+                    }
+                }
+            });
         } catch (Exception e) {
             log.error("Ошибка при обработке команды обновления сообщения ID {}: {}",
                     currentMessage.getId(), e.getMessage(), e);
         }
     }
+
 
     /**
      * Обновляет сообщение во всех открытых диалогах в пользовательском интерфейсе.

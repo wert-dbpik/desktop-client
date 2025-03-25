@@ -117,7 +117,8 @@ public class DialogController {
                 dialogListView.getRoomMessages().setAll(messages == null ? new ArrayList<>() : messages); // Обновляем ObservableList
 
                 // Настраиваем ListView для отображения сообщений
-                dialogListView.setCellFactory((ListView<Message> tv) -> new DialogListCell(room, dialogListView));
+                dialogListView.setCellFactory((ListView<Message> tv) -> new DialogListCell(
+                        room, dialogListView, this));
                 dialogListView.setId("listViewWithMessages");
 
                 // Добавляем манипулятор для обработки событий
