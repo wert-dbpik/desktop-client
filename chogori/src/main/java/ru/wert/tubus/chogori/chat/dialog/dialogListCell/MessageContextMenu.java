@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 
+import javafx.application.Platform;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
@@ -12,6 +13,7 @@ import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.chat.util.ChatMaster;
 import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceREST.UserService;
+import ru.wert.tubus.client.retrofit.GsonConfiguration;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -162,16 +164,55 @@ public class MessageContextMenu {
         );
     }
 
+    /**
+     * Отправляет сообщение в открытую комнату чата, если она присутствует в списке открытых комнат.
+     *
+     * @param room Комната, в которую отправляется сообщение
+     * @param message Сообщение для отправки
+     */
+    private void sendMessageToOpenRoom(Room room, Message message) {
+        if (room == null || message == null) {
+            log.warn("Попытка отправить сообщение с null параметрами (room: {}, message: {})", room, message);
+            return;
+        }
 
-    private void sendMessageToOpenRoom(Room room, Message message){
-        List<DialogListView> openRooms = DialogController.openRooms;
+        // Используем Stream API для поиска открытой комнаты
+        DialogListView targetRoom = DialogController.openRooms.stream()
+                .filter(dlv -> dlv.getRoom().equals(room))
+                .findFirst()
+                .orElse(null);
+
+        if (targetRoom != null) {
+            // Добавляем сообщение в потоке JavaFX, так как это UI-операция
+            Platform.runLater(() -> {
+                targetRoom.getRoomMessages().add(message);
+                log.debug("Сообщение добавлено в открытую комнату '{}'", room.getName());
+            });
+        } else {
+            log.debug("Комната '{}' не найдена среди открытых", room.getName());
+        }
+    }
+
+    public void deleteMessage(Message currentMessage, ListView<Message> listView){
+        Message deleteMessage = new Message();
+        deleteMessage.setRoomId(currentMessage.getRoomId());
+        deleteMessage.setSenderId(CH_CURRENT_USER.getId());
+        deleteMessage.setCreationTime(LocalDateTime.now());
+        deleteMessage.setText(GsonConfiguration.createGson().toJson(currentMessage));
+        deleteMessage.setType(Message.MessageType.DELETE_MESSAGE);
+
+        SocketService.sendMessage(deleteMessage);
+        deleteMessageToOpenRooms(deleteMessage);
+    }
+
+    public void deleteMessageToOpenRooms(Message deleteMessage){
+        Message messageToBeDeleted = GsonConfiguration.createGson().fromJson(deleteMessage.getText(), Message.class);
         for(DialogListView dlv : DialogController.openRooms){
-            if(dlv.getRoom().equals(room)) {
-                dlv.getRoomMessages().add(message);
+            if(dlv.getRoom().getId().equals(messageToBeDeleted.getRoomId())) {
+                dlv.getRoomMessages().remove(messageToBeDeleted);
                 return;
             }
         }
-
     }
 
     /**

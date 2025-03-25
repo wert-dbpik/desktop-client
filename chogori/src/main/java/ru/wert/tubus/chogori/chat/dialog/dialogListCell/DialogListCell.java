@@ -256,6 +256,8 @@ public class DialogListCell extends ListCell<Message> {
     private void handleDeleteAction() {
         if (currentMessage == null) return;
         log.debug("Удаление сообщения: {}", currentMessage.getId());
+
+        contextMenu.deleteMessage(currentMessage, listView);
     }
 
     /**
@@ -266,7 +268,6 @@ public class DialogListCell extends ListCell<Message> {
         log.debug("Пересылка сообщения: {}", currentMessage.getId());
 
         contextMenu.forwardMessage(currentMessage, listView);
-
     }
 
 

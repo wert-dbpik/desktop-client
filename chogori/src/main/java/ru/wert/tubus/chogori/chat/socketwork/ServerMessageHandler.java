@@ -105,6 +105,8 @@ public class ServerMessageHandler {
 
             // Обрабатываем сообщение чата
             handleChatMessage(message);
+        } else if (type == Message.MessageType.DELETE_MESSAGE){
+
         }
 
         return str.toString();
