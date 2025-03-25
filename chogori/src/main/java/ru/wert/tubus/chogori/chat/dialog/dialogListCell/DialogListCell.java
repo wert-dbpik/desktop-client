@@ -15,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
+import ru.wert.tubus.client.entity.models.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -261,7 +264,12 @@ public class DialogListCell extends ListCell<Message> {
     private void handleForwardAction() {
         if (currentMessage == null) return;
         log.debug("Пересылка сообщения: {}", currentMessage.getId());
+
+        contextMenu.forwardMessage(currentMessage, listView);
+
     }
+
+
 
     /**
      * Обработчик редактирования сообщения (заглушка)

@@ -24,6 +24,7 @@ import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.roomsController;
+import static ru.wert.tubus.chogori.chat.util.ChatMaster.fetchOneToOneRoom;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
@@ -104,14 +105,12 @@ public class RoomsController {
 
     public void openChat(Room room){
         log.debug("Открытие чата {}", room.getName());
+
         chat.showChatDialog(room);
     }
 
     public void openOneToOneChat(User interlocutor) {
-        Long user1 = CH_CURRENT_USER.getId();
-        Long user2 = interlocutor.getId();
-        String roomName = "one-to-one:#" + Math.min(user1, user2) + "#" + Math.max(user1, user2);
-        Room room = createNewRoomIfNeeded(roomName);
+        Room room = fetchOneToOneRoom(interlocutor);
 
         // Делаем чат снова видимым для текущего пользователя
         Room updatedRoom = CH_ROOMS.setUserVisibility(room.getId(), CH_CURRENT_USER.getId(), true);
@@ -125,50 +124,50 @@ public class RoomsController {
         chat.showChatDialog(room);
     }
 
-    /**
-     * Создает новую комнату, если она не существует.
-     *
-     * @param roomName Имя комнаты.
-     * @return Созданная или найденная комната.
-     */
-    private Room createNewRoomIfNeeded(String roomName) {
-        // Поиск комнаты по имени
-        Room room = CH_ROOMS.findByName(roomName);
-
-        // Если комната не найдена, создаем новую
-        if (room == null) {
-            log.debug("Создание новой комнаты: {}", roomName);
-
-            // Создаем новую комнату
-            Room newRoom = new Room();
-            newRoom.setName(roomName);
-            newRoom.setCreatorId(CH_CURRENT_USER.getId());
-
-            // Создаем объект Roommate для текущего пользователя
-            Roommate currentUserRoommate = new Roommate();
-            currentUserRoommate.setUserId(CH_CURRENT_USER.getId()); // Устанавливаем ID пользователя
-            currentUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
-            currentUserRoommate.setMember(true); // По умолчанию пользователь является участником
-
-            // Если Roommates теперь управляются отдельно, добавляем текущего пользователя в список участников
-            if (newRoom.getRoommates() == null) {
-                newRoom.setRoommates(new ArrayList<>()); // Инициализируем список, если он null
-            }
-            newRoom.getRoommates().add(currentUserRoommate);
-            if(newRoom.getName().startsWith("one-to-one")){
-                Roommate otherUserRoommate = new Roommate();
-                otherUserRoommate.setUserId(ChatMaster.getSecondUserInOneToOneChat(newRoom).getId()); // Устанавливаем ID пользователя
-                otherUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
-                otherUserRoommate.setMember(true); // По умолчанию пользователь является участником
-                newRoom.getRoommates().add(otherUserRoommate);
-            }
-
-            // Сохраняем новую комнату в базе данных
-            room = CH_ROOMS.save(newRoom);
-        }
-
-        return room;
-    }
+//    /**
+//     * Создает новую комнату, если она не существует.
+//     *
+//     * @param roomName Имя комнаты.
+//     * @return Созданная или найденная комната.
+//     */
+//    private Room createNewRoomIfNeeded(String roomName) {
+//        // Поиск комнаты по имени
+//        Room room = CH_ROOMS.findByName(roomName);
+//
+//        // Если комната не найдена, создаем новую
+//        if (room == null) {
+//            log.debug("Создание новой комнаты: {}", roomName);
+//
+//            // Создаем новую комнату
+//            Room newRoom = new Room();
+//            newRoom.setName(roomName);
+//            newRoom.setCreatorId(CH_CURRENT_USER.getId());
+//
+//            // Создаем объект Roommate для текущего пользователя
+//            Roommate currentUserRoommate = new Roommate();
+//            currentUserRoommate.setUserId(CH_CURRENT_USER.getId()); // Устанавливаем ID пользователя
+//            currentUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
+//            currentUserRoommate.setMember(true); // По умолчанию пользователь является участником
+//
+//            // Если Roommates теперь управляются отдельно, добавляем текущего пользователя в список участников
+//            if (newRoom.getRoommates() == null) {
+//                newRoom.setRoommates(new ArrayList<>()); // Инициализируем список, если он null
+//            }
+//            newRoom.getRoommates().add(currentUserRoommate);
+//            if(newRoom.getName().startsWith("one-to-one")){
+//                Roommate otherUserRoommate = new Roommate();
+//                otherUserRoommate.setUserId(ChatMaster.getSecondUserInOneToOneChat(newRoom).getId()); // Устанавливаем ID пользователя
+//                otherUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
+//                otherUserRoommate.setMember(true); // По умолчанию пользователь является участником
+//                newRoom.getRoommates().add(otherUserRoommate);
+//            }
+//
+//            // Сохраняем новую комнату в базе данных
+//            room = CH_ROOMS.save(newRoom);
+//        }
+//
+//        return room;
+//    }
 
 
 

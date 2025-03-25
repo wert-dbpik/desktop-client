@@ -1,20 +1,29 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import ru.wert.tubus.client.entity.models.Draft;
-import ru.wert.tubus.client.entity.models.Folder;
-import ru.wert.tubus.client.entity.models.Message;
-import ru.wert.tubus.chogori.setteings.ChogoriSettings;
-import ru.wert.tubus.client.entity.models.Passport;
+import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
+import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
+import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
+import ru.wert.tubus.chogori.chat.util.ChatMaster;
+import ru.wert.tubus.client.entity.models.*;
+import ru.wert.tubus.client.entity.serviceREST.UserService;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
  * Класс для управления контекстным меню сообщений чата
  */
+@Slf4j
 public class MessageContextMenu {
     private final ContextMenu contextMenu = new ContextMenu();
     private final MenuItem copyItem = new MenuItem("Копировать");
@@ -110,12 +119,67 @@ public class MessageContextMenu {
         clipboard.setContent(content);
     }
 
+    public void forwardMessage(Message currentMessage, ListView<Message> listView){
+        List<User> allUsers = UserService.getInstance().findAll();
+
+        // Создаем список сообщений для пересылки (в данном случае одно сообщение)
+        List<Message> messagesToForward = new ArrayList<>();
+        messagesToForward.add(currentMessage);
+
+        ForwardMessageDialog.show(
+                listView.getScene().getWindow(),
+                messagesToForward,
+                allUsers,
+                () -> {
+                    // Логика пересылки сообщений выбранным пользователям
+                    List<User> recipients = ForwardMessageDialog.selectedUsers;
+                    if (recipients != null && !recipients.isEmpty()) {
+                        for (User recipient : recipients) {
+                            try {
+                                // Здесь должна быть логика отправки сообщения каждому получателю
+                                log.debug("Пересылка сообщения {} пользователю {}",
+                                        currentMessage.getId(), recipient.getName());
+                                Message forwardMessage = new Message();
+                                Room room = ChatMaster.fetchOneToOneRoom(recipient);
+                                forwardMessage.setRoomId(room.getId());
+                                forwardMessage.setStatus(Message.MessageStatus.RECEIVED);
+                                forwardMessage.setType(currentMessage.getType());
+                                forwardMessage.setSenderId(CH_CURRENT_USER.getId());
+                                forwardMessage.setText(currentMessage.getText());
+                                forwardMessage.setCreationTime(LocalDateTime.now());
+
+                                SocketService.sendMessage(forwardMessage);
+                                sendMessageToOpenRoom(room, currentMessage);
+
+                            } catch (IllegalArgumentException e) {
+                                log.error("Ошибка создания чата: {}", e.getMessage());
+                            } catch (RuntimeException e) {
+                                log.error("Ошибка сохранения комнаты: {}", e.getMessage());
+                            }
+                        }
+                    }
+                }
+        );
+    }
+
+
+    private void sendMessageToOpenRoom(Room room, Message message){
+        List<DialogListView> openRooms = DialogController.openRooms;
+        for(DialogListView dlv : DialogController.openRooms){
+            if(dlv.getRoom().equals(room)) {
+                dlv.getRoomMessages().add(message);
+                return;
+            }
+        }
+
+    }
+
     /**
      * Проверка, является ли сообщение исходящим
      */
     private boolean isOutgoingMessage(Message msg) {
         return msg.getSenderId() != null &&
-                msg.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId());
+                msg.getSenderId().equals(CH_CURRENT_USER.getId());
     }
 
     /**

@@ -1,6 +1,5 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogController;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -15,7 +14,6 @@ import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
-import ru.wert.tubus.client.entity.serviceREST.MessageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +66,7 @@ public class DialogController {
     @Getter
     private SideChat chat; // Ссылка на основной класс чата
 
-    private List<DialogListView> openDialogs = new ArrayList<>();
+    public static List<DialogListView> openRooms = new ArrayList<>();
 
     // Константы для управления размерами сообщений
     public static final float MESSAGE_WIDTH = 0.7f;
@@ -147,7 +145,7 @@ public class DialogController {
         // Устанавливаем название комнаты и переключаемся на диалог
         lblRoom.setText(ChatMaster.getRoomName(room.getName()));
         dialogListView.toFront();
-        openDialogs.add(dialogListView);
+        openRooms.add(dialogListView);
         log.info("Открыт диалог для комнаты: {}", room.getName());
     }
 
@@ -158,7 +156,7 @@ public class DialogController {
      * @return Найденный диалог или null, если диалог не найден.
      */
     public DialogListView findDialogForRoom(Room room) {
-        for(DialogListView dialog : openDialogs){
+        for(DialogListView dialog : openRooms){
             if(dialog.getRoom().equals(room))
                 return dialog;
         }
@@ -180,19 +178,5 @@ public class DialogController {
         InputTextArea inputTextArea = new InputTextArea(this);
         inputTextArea.createTextArea();    // Настройка текстового поля ввода
     }
-
-//    /**
-//     * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
-//     */
-//    public void scrollToBottom() {
-//        Platform.runLater(() -> {
-//            new Thread(() -> {
-//                try { Thread.sleep(50); } catch (InterruptedException e) { e.printStackTrace(); }
-//                Platform.runLater(() -> dialogListView.scrollTo(dialogListView.getItems().size() - 1));
-//            }).start();
-//        });
-//
-//        log.debug("Прокрутка списка сообщений вниз");
-//    }
 
 }
