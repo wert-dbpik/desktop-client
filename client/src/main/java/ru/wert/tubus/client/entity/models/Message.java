@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.interfaces.Item;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -52,6 +53,25 @@ public class Message extends _BaseEntity implements Item {
     private String text; // Текст сообщения, либо строку id-шников
     private LocalDateTime creationTime; // Время отправки сообщения
     private MessageStatus status; // Статус сообщения
+
+    /**
+     * Создает глубокую копию сообщения на основе оригинала
+     * @param original оригинальное сообщение для копирования (не должно быть null)
+     * @throws IllegalArgumentException если original равен null
+     */
+    public Message(Message original) {
+        if (original == null) {
+            throw new IllegalArgumentException("Оригинальное сообщение не может быть null");
+        }
+
+        this.id = original.id;
+        this.type = original.type;
+        this.roomId = original.roomId;
+        this.senderId = original.senderId;
+        this.text = original.text;
+        this.creationTime = original.creationTime;
+        this.status = original.status;
+    }
 
     @Override
     public String getName() {

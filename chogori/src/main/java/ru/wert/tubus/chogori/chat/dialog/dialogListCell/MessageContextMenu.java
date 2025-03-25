@@ -1,5 +1,7 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import javafx.application.Platform;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
@@ -18,6 +20,8 @@ import ru.wert.tubus.client.retrofit.GsonConfiguration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
@@ -27,6 +31,8 @@ import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
  */
 @Slf4j
 public class MessageContextMenu {
+    private final Gson gson = GsonConfiguration.createGson();
+
     private final ContextMenu contextMenu = new ContextMenu();
     private final MenuItem copyItem = new MenuItem("Копировать");
     private final MenuItem deleteItem = new MenuItem("Удалить");
@@ -193,26 +199,195 @@ public class MessageContextMenu {
         }
     }
 
-    public void deleteMessage(Message currentMessage, ListView<Message> listView){
-        Message deleteMessage = new Message();
-        deleteMessage.setRoomId(currentMessage.getRoomId());
-        deleteMessage.setSenderId(CH_CURRENT_USER.getId());
-        deleteMessage.setCreationTime(LocalDateTime.now());
-        deleteMessage.setText(GsonConfiguration.createGson().toJson(currentMessage));
-        deleteMessage.setType(Message.MessageType.DELETE_MESSAGE);
+    /**
+     * Удаляет сообщение из чата, отправляя запрос на сервер и обновляя локальный интерфейс.
+     *
+     * @param currentMessage сообщение, которое необходимо удалить (не должно быть null)
+     * @param listView список сообщений, связанный с интерфейсом (может быть null)
+     * @throws IllegalArgumentException если currentMessage равен null
+     */
+    public void deleteMessage(Message currentMessage, ListView<Message> listView) {
+        if (currentMessage == null) {
+            throw new IllegalArgumentException("Попытка удаления null сообщения");
+        }
 
-        SocketService.sendMessage(deleteMessage);
-        deleteMessageToOpenRooms(deleteMessage);
+        try {
+            // Создаем сообщение-команду для удаления
+            Message deleteMessage = new Message();
+            deleteMessage.setRoomId(currentMessage.getRoomId());
+            deleteMessage.setSenderId(CH_CURRENT_USER.getId());
+            deleteMessage.setCreationTime(LocalDateTime.now());
+            deleteMessage.setText(gson.toJson(currentMessage));
+            deleteMessage.setType(Message.MessageType.DELETE_MESSAGE);
+
+            // Отправляем команду на сервер
+            SocketService.sendMessage(deleteMessage);
+            log.info("Отправлена команда удаления сообщения ID {}: {}", currentMessage.getId(), deleteMessage);
+
+            // Обновляем локальный интерфейс
+            deleteMessageFromOpenRooms(deleteMessage);
+        } catch (Exception e) {
+            log.error("Ошибка при обработке команды удаления сообщения ID {}: {}",
+                    currentMessage.getId(), e.getMessage(), e);
+        }
     }
 
-    public void deleteMessageToOpenRooms(Message deleteMessage){
-        Message messageToBeDeleted = GsonConfiguration.createGson().fromJson(deleteMessage.getText(), Message.class);
-        for(DialogListView dlv : DialogController.openRooms){
-            if(dlv.getRoom().getId().equals(messageToBeDeleted.getRoomId())) {
-                dlv.getRoomMessages().remove(messageToBeDeleted);
-                return;
-            }
+    /**
+     * Удаляет сообщение из всех открытых диалогов в пользовательском интерфейсе.
+     * Выполняется в потоке JavaFX через Platform.runLater().
+     *
+     * @param deleteMessage сообщение-команда с данными для удаления (не должно быть null)
+     * @throws IllegalArgumentException если deleteMessage или его текст равен null
+     */
+    public void deleteMessageFromOpenRooms(Message deleteMessage) {
+        if (deleteMessage == null) {
+            throw new IllegalArgumentException("Не удалось обработать null сообщение");
         }
+        if (deleteMessage.getText() == null) {
+            throw new IllegalArgumentException("Сообщение для удаления содержит null текст");
+        }
+
+        Platform.runLater(() -> {
+            try {
+                Message messageToBeDeleted = gson.fromJson(deleteMessage.getText(), Message.class);
+
+                if (messageToBeDeleted == null) {
+                    log.error("Не удалось десериализовать сообщение из JSON: {}", deleteMessage.getText());
+                    return;
+                }
+                if (messageToBeDeleted.getId() == null) {
+                    log.error("Десериализованное сообщение не содержит ID: {}", messageToBeDeleted);
+                    return;
+                }
+
+                // Безопасная обработка списка открытых комнат
+                Optional.ofNullable(DialogController.openRooms)
+                        .ifPresent(rooms -> rooms.stream()
+                                .filter(Objects::nonNull)
+                                .filter(dialog -> dialog.getRoom() != null)
+                                .filter(dialog -> messageToBeDeleted.getRoomId() != null)
+                                .filter(dialog -> messageToBeDeleted.getRoomId().equals(dialog.getRoom().getId()))
+                                .findFirst()
+                                .ifPresent(dialog -> {
+                                    if (dialog.getRoomMessages() != null) {
+                                        boolean removed = dialog.getRoomMessages()
+                                                .removeIf(msg -> msg != null &&
+                                                        msg.getId() != null &&
+                                                        msg.getId().equals(messageToBeDeleted.getId()));
+
+                                        if (removed) {
+                                            log.debug("Сообщение ID {} удалено из комнаты {}",
+                                                    messageToBeDeleted.getId(), messageToBeDeleted.getRoomId());
+                                        }
+                                    }
+                                }));
+            } catch (JsonSyntaxException e) {
+                log.error("Ошибка синтаксиса JSON при разборе сообщения: {}\nОригинальный JSON: {}",
+                        e.getMessage(), deleteMessage.getText(), e);
+            } catch (Exception e) {
+                log.error("Неожиданная ошибка при обработке удаления сообщения: {}", e.getMessage(), e);
+            }
+        });
+    }
+
+    /**
+     * Обновляет сообщение в чате, отправляя запрос на сервер и обновляя локальный интерфейс.
+     *
+     * @param currentMessage оригинальное сообщение, которое необходимо обновить (не должно быть null)
+     * @param updatedText новый текст сообщения (не должен быть null или пустым)
+     * @param listView список сообщений, связанный с интерфейсом (может быть null)
+     * @throws IllegalArgumentException если currentMessage или updatedText равен null, или updatedText пуст
+     */
+    public void updateMessage(Message currentMessage, String updatedText, ListView<Message> listView) {
+        if (currentMessage == null) {
+            throw new IllegalArgumentException("Попытка обновления null сообщения");
+        }
+        if (updatedText == null || updatedText.trim().isEmpty()) {
+            throw new IllegalArgumentException("Новый текст сообщения не может быть null или пустым");
+        }
+
+        try {
+            // Создаем копию сообщения с обновленным текстом
+            Message updatedMessage = new Message(currentMessage);
+            updatedMessage.setText(updatedText);
+
+            // Создаем команду обновления
+            Message updateCommand = new Message();
+            updateCommand.setRoomId(currentMessage.getRoomId());
+            updateCommand.setSenderId(CH_CURRENT_USER.getId());
+            updateCommand.setCreationTime(LocalDateTime.now());
+            updateCommand.setText(gson.toJson(updatedMessage));
+            updateCommand.setType(Message.MessageType.UPDATE_MESSAGE);
+
+            // Отправляем команду на сервер
+            SocketService.sendMessage(updateCommand);
+            log.info("Отправлена команда обновления сообщения ID {}: {}", currentMessage.getId(), updateCommand);
+
+            // Обновляем локальный интерфейс
+            updateMessageInOpenRooms(updateCommand);
+        } catch (Exception e) {
+            log.error("Ошибка при обработке команды обновления сообщения ID {}: {}",
+                    currentMessage.getId(), e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Обновляет сообщение во всех открытых диалогах в пользовательском интерфейсе.
+     * Выполняется в потоке JavaFX через Platform.runLater().
+     *
+     * @param updateCommand сообщение-команда с обновленными данными (не должно быть null)
+     * @throws IllegalArgumentException если updateCommand или его текст равен null
+     */
+    public void updateMessageInOpenRooms(Message updateCommand) {
+        if (updateCommand == null) {
+            throw new IllegalArgumentException("Не удалось обработать null команду обновления");
+        }
+        if (updateCommand.getText() == null) {
+            throw new IllegalArgumentException("Команда обновления содержит null текст");
+        }
+
+        Platform.runLater(() -> {
+            try {
+                Message updatedMessage = gson.fromJson(updateCommand.getText(), Message.class);
+
+                if (updatedMessage == null) {
+                    log.error("Не удалось десериализовать сообщение из JSON: {}", updateCommand.getText());
+                    return;
+                }
+                if (updatedMessage.getId() == null) {
+                    log.error("Десериализованное сообщение не содержит ID: {}", updatedMessage);
+                    return;
+                }
+
+                // Безопасная обработка списка открытых комнат
+                Optional.ofNullable(DialogController.openRooms)
+                        .ifPresent(rooms -> rooms.stream()
+                                .filter(Objects::nonNull)
+                                .filter(dialog -> dialog.getRoom() != null)
+                                .filter(dialog -> updatedMessage.getRoomId() != null)
+                                .filter(dialog -> updatedMessage.getRoomId().equals(dialog.getRoom().getId()))
+                                .findFirst()
+                                .ifPresent(dialog -> {
+                                    if (dialog.getRoomMessages() != null) {
+                                        dialog.getRoomMessages().replaceAll(msg -> {
+                                            if (msg != null && msg.getId() != null &&
+                                                    msg.getId().equals(updatedMessage.getId())) {
+                                                return updatedMessage; // Заменяем старое сообщение на обновленное
+                                            }
+                                            return msg;
+                                        });
+
+                                        log.debug("Сообщение ID {} обновлено в комнате {}",
+                                                updatedMessage.getId(), updatedMessage.getRoomId());
+                                    }
+                                }));
+            } catch (JsonSyntaxException e) {
+                log.error("Ошибка синтаксиса JSON при разборе сообщения: {}\nОригинальный JSON: {}",
+                        e.getMessage(), updateCommand.getText(), e);
+            } catch (Exception e) {
+                log.error("Неожиданная ошибка при обработке обновления сообщения: {}", e.getMessage(), e);
+            }
+        });
     }
 
     /**
