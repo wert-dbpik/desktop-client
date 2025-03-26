@@ -1,7 +1,5 @@
 package ru.wert.tubus.chogori.chat.roomsController;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -10,10 +8,10 @@ import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.util.UserOnline;
 import ru.wert.tubus.chogori.images.BtnImages;
-import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
 
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_YOURSELF;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
@@ -141,4 +139,5 @@ public class TabUsers {
             return name1.compareToIgnoreCase(name2);
         });
     }
+
 }

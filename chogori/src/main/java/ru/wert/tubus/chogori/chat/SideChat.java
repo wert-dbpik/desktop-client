@@ -37,7 +37,7 @@ public class SideChat {
     private DialogController talkController;
 
     @Getter
-    private RoomsController groupsController;
+    private RoomsController roomsController;
 
     @Getter
     private final VBox chatVBox;
@@ -136,8 +136,8 @@ public class SideChat {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/rooms.fxml"));
             sideChatGroups = loader.load();
-            groupsController = loader.getController();
-            groupsController.init(this);
+            roomsController = loader.getController();
+            roomsController.init(this);
             log.debug("Панель для комнат успешно создана");
         } catch (IOException e) {
             log.error("Ошибка при создании панели для комнат", e);

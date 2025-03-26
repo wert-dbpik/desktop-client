@@ -111,52 +111,6 @@ public class RoomsController {
         chat.showChatDialog(room);
     }
 
-//    /**
-//     * Создает новую комнату, если она не существует.
-//     *
-//     * @param roomName Имя комнаты.
-//     * @return Созданная или найденная комната.
-//     */
-//    private Room createNewRoomIfNeeded(String roomName) {
-//        // Поиск комнаты по имени
-//        Room room = CH_ROOMS.findByName(roomName);
-//
-//        // Если комната не найдена, создаем новую
-//        if (room == null) {
-//            log.debug("Создание новой комнаты: {}", roomName);
-//
-//            // Создаем новую комнату
-//            Room newRoom = new Room();
-//            newRoom.setName(roomName);
-//            newRoom.setCreatorId(CH_CURRENT_USER.getId());
-//
-//            // Создаем объект Roommate для текущего пользователя
-//            Roommate currentUserRoommate = new Roommate();
-//            currentUserRoommate.setUserId(CH_CURRENT_USER.getId()); // Устанавливаем ID пользователя
-//            currentUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
-//            currentUserRoommate.setMember(true); // По умолчанию пользователь является участником
-//
-//            // Если Roommates теперь управляются отдельно, добавляем текущего пользователя в список участников
-//            if (newRoom.getRoommates() == null) {
-//                newRoom.setRoommates(new ArrayList<>()); // Инициализируем список, если он null
-//            }
-//            newRoom.getRoommates().add(currentUserRoommate);
-//            if(newRoom.getName().startsWith("one-to-one")){
-//                Roommate otherUserRoommate = new Roommate();
-//                otherUserRoommate.setUserId(ChatStaticMaster.getSecondUserInOneToOneChat(newRoom).getId()); // Устанавливаем ID пользователя
-//                otherUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
-//                otherUserRoommate.setMember(true); // По умолчанию пользователь является участником
-//                newRoom.getRoommates().add(otherUserRoommate);
-//            }
-//
-//            // Сохраняем новую комнату в базе данных
-//            room = CH_ROOMS.save(newRoom);
-//        }
-//
-//        return room;
-//    }
-
-
 
     public void deleteRoomFromList(Room room) {
         // Логика для удаления комнаты из списка
