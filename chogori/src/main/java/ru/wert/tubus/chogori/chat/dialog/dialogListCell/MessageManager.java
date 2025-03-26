@@ -2,17 +2,14 @@ package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Region;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
-import ru.wert.tubus.client.entity.models.User;
 
 import java.io.IOException;
 
@@ -22,135 +19,108 @@ import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.OU
 @Slf4j
 public class MessageManager {
 
-    private final Boolean ONE_TO_ONE_CHAT;
+    private final Boolean ONE_TO_ONE_CHAT; // Индивидуальный чат, не групповой
+
+    private VBox vbMessageContainer; // Самый верхний контейнер для сообщения
+    private VBox vbOutlineMessage;   // Контейнер, включающий заголовок, сообщение и время создания
+    private VBox vbMessage;          // Контейнер для самого сообщения
+    private Label lblFrom;           // Метка для отображения имени отправителя
+    private Label lblDate;           // Метка для отображения даты сообщения
+    private Label lblTitle;          // Метка для отображения заголовка сообщения
+    private Label lblTime;           // Метка для отображения времени сообщения
+
+    private Separator separator; // Разделитель между сообщениями
 
     public MessageManager(Room room) {
         ONE_TO_ONE_CHAT = room.getName().startsWith("one-to-one");
     }
 
+    /**
+     * Форматирует сообщение в зависимости от его типа (входящее или исходящее).
+     *
+     * @param message Сообщение для форматирования.
+     * @param in_out  Тип сообщения (входящее или исходящее).
+     * @return Отформатированное сообщение в виде VBox.
+     */
     public VBox formatMessage(Message message, String in_out) {
+        VBox inMessage = null;
         try {
+            // Загружаем шаблон сообщения из FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/message.fxml"));
-            VBox messageContainer = loader.load();
+            inMessage = loader.load();
+            separator = (Separator) inMessage.lookup("#separator");
+            separator.setVisible(false); // Скрываем разделитель
 
-            // Настройка разделителя
-            Separator separator = (Separator) messageContainer.lookup("#separator");
-            configureSeparator(separator);
-
-            // Получаем остальные элементы
-            Label lblFrom = (Label) messageContainer.lookup("#lblFrom");
-            Label lblDate = (Label) messageContainer.lookup("#lblDate");
-            Label lblTitle = (Label) messageContainer.lookup("#lblTitle");
-            Label lblTime = (Label) messageContainer.lookup("#lblTime");
-            VBox vbMessageContainer = (VBox) messageContainer.lookup("#vbMessageContainer");
-            VBox vbOutlineMessage = (VBox) messageContainer.lookup("#vbOutlineMessage");
-            VBox vbMessage = (VBox) messageContainer.lookup("#vbMessage");
-
-            // Настройка стилей
-            lblTitle.setId("messageTitleLabel");
-            lblTime.setId("messageTimeLabel");
+            // Инициализируем элементы интерфейса
+            lblFrom = (Label) inMessage.lookup("#lblFrom");
+            lblDate = (Label) inMessage.lookup("#lblDate");
+            lblTitle = (Label) inMessage.lookup("#lblTitle");
+            lblTime = (Label) inMessage.lookup("#lblTime");
             lblTime.setText(AppStatic.parseStringToTime(message.getCreationTime().toString()));
 
-            // Настройка отступов сообщения
-            configureMessageMargins(vbMessageContainer);
+            vbMessageContainer = (VBox) inMessage.lookup("#vbMessageContainer");
+            vbOutlineMessage = (VBox) inMessage.lookup("#vbOutlineMessage");
+            vbMessage = (VBox) inMessage.lookup("#vbMessage");
 
-            // Настройка стилей сообщения
-            configureMessageStyles(in_out, vbMessageContainer, vbOutlineMessage, vbMessage, lblFrom, lblDate);
+            lblTitle.setId("messageTitleLabel");
+            lblTime.setId("messageTimeLabel");
 
-            // Установка данных
-            setSenderData(message, lblFrom, lblDate);
-            renderMessageContent(message, lblTitle, vbOutlineMessage, vbMessage);
+            MessageRenderer messageRenderer = new MessageRenderer(lblTitle);
 
-            return messageContainer;
+            // Настройка стилей для исходящих и входящих сообщений
+            if (in_out.equals(OUT)) {
+                vbMessageContainer.getChildren().removeAll(lblFrom);
+                vbMessageContainer.getChildren().removeAll(lblDate);
+                vbMessageContainer.setAlignment(Pos.TOP_LEFT);
+                lblFrom.setId("outMessageDataLabel");
+                lblDate.setId("outMessageDataLabel");
+                vbOutlineMessage.setId("outOutlineMessageVBox");
+                vbMessage.setId("outMessageVBox");
+            } else {
+                if (ONE_TO_ONE_CHAT) {
+                    vbMessageContainer.getChildren().removeAll(lblFrom);
+                    vbMessageContainer.getChildren().removeAll(lblDate);
+                }
+                vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
+                lblFrom.setId("inMessageDataLabel");
+                lblDate.setId("inMessageDataLabel");
+                vbOutlineMessage.setId("inOutlineMessageVBox");
+                vbMessage.setId("inMessageVBox");
+            }
+
+            // Обновляем интерфейс в потоке JavaFX
+            Platform.runLater(() -> {
+                vbMessage.autosize();
+
+                lblFrom.setText(CH_USERS.findById(message.getSenderId()).getName());
+                lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime().toString()));
+
+                // В зависимости от типа сообщения вызываем соответствующий метод для отображения
+                switch (message.getType()) {
+                    case CHAT_TEXT:
+                        vbOutlineMessage.getChildren().removeAll(lblTitle);
+                        messageRenderer.mountText(vbMessage, message);
+                        break;
+                    case CHAT_DRAFTS:
+                        messageRenderer.mountDrafts(vbMessage, message);
+                        break;
+                    case CHAT_FOLDERS:
+                        messageRenderer.mountFolders(vbMessage, message);
+                        break;
+                    case CHAT_PICS:
+                        messageRenderer.mountPics(vbMessage, message);
+                        break;
+                    case CHAT_PASSPORTS:
+                        messageRenderer.mountPassports(vbMessage, message);
+                        break;
+                }
+            });
 
         } catch (IOException e) {
-            log.error("Error loading message FXML", e);
-            return createErrorNode("Failed to load message");
+            log.error("Ошибка при загрузке FXML для сообщения: {}", e.getMessage(), e);
+            return null;
         }
+        return inMessage;
     }
 
-    private void configureSeparator(Separator separator) {
-        separator.setVisible(false);
-        separator.setManaged(false);
-    }
-
-    private void configureMessageMargins(VBox messageContainer) {
-        // Уменьшенные отступы вокруг сообщения
-        VBox.setMargin(messageContainer, new Insets(2, 0, 2, 0)); // top, right, bottom, left
-    }
-
-    private void setSenderData(Message message, Label lblFrom, Label lblDate) {
-        try {
-            String senderName = "Unknown User";
-            if (message.getSenderId() != null) {
-                User sender = CH_USERS.findById(message.getSenderId());
-                if (sender != null) {
-                    senderName = sender.getName();
-                }
-            }
-            lblFrom.setText(senderName);
-            lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime().toString()));
-        } catch (Exception e) {
-            log.error("Error setting sender data", e);
-            lblFrom.setText("Error");
-            lblDate.setText("");
-        }
-    }
-
-    private void configureMessageStyles(String in_out, VBox vbMessageContainer,
-                                        VBox vbOutlineMessage, VBox vbMessage,
-                                        Label lblFrom, Label lblDate) {
-        if (in_out.equals(OUT)) {
-            vbMessageContainer.getChildren().removeAll(lblFrom, lblDate);
-            vbMessageContainer.setAlignment(Pos.TOP_LEFT);
-            lblFrom.setId("outMessageDataLabel");
-            lblDate.setId("outMessageDataLabel");
-            vbOutlineMessage.setId("outOutlineMessageVBox");
-            vbMessage.setId("outMessageVBox");
-        } else {
-            if (ONE_TO_ONE_CHAT) {
-                vbMessageContainer.getChildren().removeAll(lblFrom, lblDate);
-            }
-            vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
-            lblFrom.setId("inMessageDataLabel");
-            lblDate.setId("inMessageDataLabel");
-            vbOutlineMessage.setId("inOutlineMessageVBox");
-            vbMessage.setId("inMessageVBox");
-        }
-    }
-
-    private void renderMessageContent(Message message, Label lblTitle,
-                                      VBox vbOutlineMessage, VBox vbMessage) {
-        try {
-            MessageRenderer renderer = new MessageRenderer(lblTitle);
-
-            switch (message.getType()) {
-                case CHAT_TEXT:
-                    vbOutlineMessage.getChildren().remove(lblTitle);
-                    renderer.mountText(vbMessage, message);
-                    break;
-                case CHAT_DRAFTS:
-                    renderer.mountDrafts(vbMessage, message);
-                    break;
-                case CHAT_FOLDERS:
-                    renderer.mountFolders(vbMessage, message);
-                    break;
-                case CHAT_PICS:
-                    renderer.mountPics(vbMessage, message);
-                    break;
-                case CHAT_PASSPORTS:
-                    renderer.mountPassports(vbMessage, message);
-                    break;
-            }
-        } catch (Exception e) {
-            log.error("Error rendering message content", e);
-            vbMessage.getChildren().add(new Label("Error displaying content"));
-        }
-    }
-
-    private VBox createErrorNode(String errorText) {
-        VBox errorBox = new VBox();
-        errorBox.getChildren().add(new Label(errorText));
-        return errorBox;
-    }
 }
