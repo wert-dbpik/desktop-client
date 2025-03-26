@@ -16,6 +16,7 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
@@ -106,7 +107,13 @@ public class DialogController {
                 @Override
                 protected List<Message> call() throws Exception {
                     // Загружаем сообщения для комнаты
-                    return new DateSeparators().insertDateSeparators(CH_MESSAGES.findAllByRoom(room));
+                    List<Message> messages = CH_MESSAGES.findAllByRoom(room);
+
+                    // Сортируем сообщения по дате creationTime (от старых к новым)
+                    messages.sort(Comparator.comparing(Message::getCreationTime));
+
+                    // Вставляем разделители дат
+                    return new DateSeparators().insertDateSeparators(messages);
                 }
             };
 
