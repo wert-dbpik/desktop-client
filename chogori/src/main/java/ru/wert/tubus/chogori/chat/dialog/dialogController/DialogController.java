@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.ListViewManipulator;
-import ru.wert.tubus.chogori.chat.util.ChatMaster;
+import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
@@ -144,7 +144,7 @@ public class DialogController {
         }
 
         // Устанавливаем название комнаты и переключаемся на диалог
-        lblRoom.setText(ChatMaster.getRoomName(room.getName()));
+        lblRoom.setText(ChatStaticMaster.getRoomName(room.getName()));
         dialogListView.toFront();
         openRooms.add(dialogListView);
         log.info("Открыт диалог для комнаты: {}", room.getName());

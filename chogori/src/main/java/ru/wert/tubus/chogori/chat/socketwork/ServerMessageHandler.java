@@ -6,17 +6,19 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.ApplicationController;
+import ru.wert.tubus.chogori.chat.dialog.dialogListCell.MessageContextMenu;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
-import ru.wert.tubus.chogori.chat.util.ChatMaster;
+import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
-import static ru.wert.tubus.chogori.chat.util.ChatMaster.UNREAD_MESSAGES;
+import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
+import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.updateMessageInOpenRooms;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
 
@@ -83,7 +85,7 @@ public class ServerMessageHandler {
             Platform.runLater(()->{
                 //Выключаем моргающую кнопку
                 Gson gson = GsonConfiguration.createGson();
-                ChatMaster.UNREAD_MESSAGES.add(gson.fromJson(message.getText(), Message.class)); //Добавляем сообщение в список непрочитанных сообщений
+                ChatStaticMaster.UNREAD_MESSAGES.add(gson.fromJson(message.getText(), Message.class)); //Добавляем сообщение в список непрочитанных сообщений
                 ApplicationController.chat.hasNewMessagesProperty().set(true);
             });
 
@@ -105,8 +107,10 @@ public class ServerMessageHandler {
 
             // Обрабатываем сообщение чата
             handleChatMessage(message);
+        } else if (type == Message.MessageType.UPDATE_MESSAGE){
+            updateMessageInOpenRooms(message);
         } else if (type == Message.MessageType.DELETE_MESSAGE){
-
+            deleteMessageFromOpenRooms(message);
         }
 
         return str.toString();

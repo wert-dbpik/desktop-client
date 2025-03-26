@@ -7,7 +7,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.chat.util.ChatMaster;
+import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.chogori.components.BlinkingImageView;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.Message;
@@ -21,7 +21,7 @@ import java.util.List;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_YOURSELF;
-import static ru.wert.tubus.chogori.chat.util.ChatMaster.UNREAD_MESSAGES;
+import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.UNREAD_MESSAGES;
 import static ru.wert.tubus.chogori.images.BtnImages.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
@@ -78,9 +78,9 @@ public class TabRooms {
                             setText(null);
 
                             // Устанавливаем имя комнаты
-                            String roomName = ChatMaster.getRoomName(room.getName());
+                            String roomName = ChatStaticMaster.getRoomName(room.getName());
                             if (room.getName().startsWith("one-to-one")) {
-                                User secondUser = ChatMaster.getSecondUserInOneToOneChat(room);
+                                User secondUser = ChatStaticMaster.getSecondUserInOneToOneChat(room);
                                 if (secondUser != null && secondUser.getId().equals(CH_CURRENT_USER.getId())) {
                                     roomName = WRIGHT_YOURSELF; // "Написать себе"
                                 }
@@ -90,7 +90,7 @@ public class TabRooms {
 
                             // Устанавливаем изображение статуса для one-to-one чатов
                             if (room.getName().startsWith("one-to-one")) {
-                                User secondUser = ChatMaster.getSecondUserInOneToOneChat(room);
+                                User secondUser = ChatStaticMaster.getSecondUserInOneToOneChat(room);
                                 if (secondUser != null && secondUser.isOnline()) {
                                     dotImageView.setImage(DOT_BLUE_IMG);
                                 } else {
@@ -193,7 +193,7 @@ public class TabRooms {
             if (isCurrentUserInRoom && isRoomVisible) {
                 if (room.getName().startsWith("one-to-one")) {
                     // Получаем второго пользователя в one-to-one чате
-                    User secondUser = ChatMaster.getSecondUserInOneToOneChat(room);
+                    User secondUser = ChatStaticMaster.getSecondUserInOneToOneChat(room);
 
                     // Если второй пользователь - это текущий пользователь, это чат "Написать себе"
                     if (secondUser != null && secondUser.getId().equals(CH_CURRENT_USER.getId())) {
@@ -209,15 +209,15 @@ public class TabRooms {
 
         // Сортируем one-to-one чаты по имени
         oneToOneRooms.sort((room1, room2) -> {
-            String name1 = ChatMaster.getRoomName(room1.getName());
-            String name2 = ChatMaster.getRoomName(room2.getName());
+            String name1 = ChatStaticMaster.getRoomName(room1.getName());
+            String name2 = ChatStaticMaster.getRoomName(room2.getName());
             return name1.compareToIgnoreCase(name2);
         });
 
         // Сортируем групповые чаты по имени
         groupRooms.sort((room1, room2) -> {
-            String name1 = ChatMaster.getRoomName(room1.getName());
-            String name2 = ChatMaster.getRoomName(room2.getName());
+            String name1 = ChatStaticMaster.getRoomName(room1.getName());
+            String name2 = ChatStaticMaster.getRoomName(room2.getName());
             return name1.compareToIgnoreCase(name2);
         });
 

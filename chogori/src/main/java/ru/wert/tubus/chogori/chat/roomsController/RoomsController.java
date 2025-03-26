@@ -4,29 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.HBox;
-import javafx.util.Callback;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.SideChat;
-import ru.wert.tubus.chogori.chat.util.ChatMaster;
 import ru.wert.tubus.chogori.chat.util.UserOnline;
-import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.Room;
-import ru.wert.tubus.client.entity.models.Roommate;
 import ru.wert.tubus.client.entity.models.User;
-import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.roomsController;
-import static ru.wert.tubus.chogori.chat.util.ChatMaster.fetchOneToOneRoom;
-import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
-import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
+import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.fetchOneToOneRoom;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 @Slf4j
@@ -156,7 +143,7 @@ public class RoomsController {
 //            newRoom.getRoommates().add(currentUserRoommate);
 //            if(newRoom.getName().startsWith("one-to-one")){
 //                Roommate otherUserRoommate = new Roommate();
-//                otherUserRoommate.setUserId(ChatMaster.getSecondUserInOneToOneChat(newRoom).getId()); // Устанавливаем ID пользователя
+//                otherUserRoommate.setUserId(ChatStaticMaster.getSecondUserInOneToOneChat(newRoom).getId()); // Устанавливаем ID пользователя
 //                otherUserRoommate.setVisibleForUser(true); // По умолчанию чат виден
 //                otherUserRoommate.setMember(true); // По умолчанию пользователь является участником
 //                newRoom.getRoommates().add(otherUserRoommate);

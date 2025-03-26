@@ -297,6 +297,7 @@ public class DialogListCell extends ListCell<Message> {
                     contextMenu.updateMessage(currentMessage, updatedText, listView);
                     // Возвращаем обычное поведение кнопки
                     btnSend.setOnAction(event -> dialogController.getDialogListView().sendText());
+                    dialogController.getTaMessageText().clear();
                 }
             });
         });

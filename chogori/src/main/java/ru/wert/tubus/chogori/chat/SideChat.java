@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
-import ru.wert.tubus.chogori.chat.util.ChatMaster;
+import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Room;
 
@@ -106,7 +106,7 @@ public class SideChat {
      */
     public void showChatDialog(Room room) {
         log.debug("Открытие диалога чата для комнаты: {}", room.getName());
-        talkController.getLblRoom().setText(ChatMaster.getRoomName(room.getName()));
+        talkController.getLblRoom().setText(ChatStaticMaster.getRoomName(room.getName()));
 
         talkController.openDialogForRoom(room);
         mainPane.getChildren().clear();
