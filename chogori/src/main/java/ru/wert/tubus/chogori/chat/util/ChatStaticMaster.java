@@ -161,10 +161,6 @@ public class ChatStaticMaster {
                     log.error("Не удалось десериализовать сообщение из JSON: {}", updateCommand.getText());
                     return;
                 }
-                if (updatedMessage.getId() == null) {
-                    log.error("Десериализованное сообщение не содержит ID: {}", updatedMessage);
-                    return;
-                }
 
                 // Безопасная обработка списка открытых комнат
                 Optional.ofNullable(DialogController.openRooms)
@@ -219,10 +215,6 @@ public class ChatStaticMaster {
 
                 if (messageToBeDeleted == null) {
                     log.error("Не удалось десериализовать сообщение из JSON: {}", deleteMessage.getText());
-                    return;
-                }
-                if (messageToBeDeleted.getId() == null) {
-                    log.error("Десериализованное сообщение не содержит ID: {}", messageToBeDeleted);
                     return;
                 }
 

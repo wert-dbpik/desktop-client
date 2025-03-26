@@ -5,8 +5,6 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -16,10 +14,7 @@ import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
-import ru.wert.tubus.client.entity.models.User;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -72,9 +67,9 @@ public class DialogListCell extends ListCell<Message> {
         this.dialogController = dialogController;
 
         this.contextMenu = new MessageContextMenu(
-                this::handleDeleteAction,
-                this::handleForwardAction,
-                this::handleEditAction
+                this::handleDeleteMessageAction,
+                this::handleForwardMessageAction,
+                this::handleUpdateMessageAction
         );
 
         // Инициализация компонентов
@@ -257,7 +252,7 @@ public class DialogListCell extends ListCell<Message> {
     /**
      * Обработчик удаления сообщения (заглушка)
      */
-    private void handleDeleteAction() {
+    private void handleDeleteMessageAction() {
         if (currentMessage == null) return;
         log.debug("Удаление сообщения: {}", currentMessage.getId());
 
@@ -267,7 +262,7 @@ public class DialogListCell extends ListCell<Message> {
     /**
      * Обработчик пересылки сообщения
      */
-    private void handleForwardAction() {
+    private void handleForwardMessageAction() {
         if (currentMessage == null) return;
         log.debug("Пересылка сообщения: {}", currentMessage.getId());
 
@@ -279,7 +274,7 @@ public class DialogListCell extends ListCell<Message> {
     /**
      * Обработчик редактирования сообщения
      */
-    private void handleEditAction() {
+    private void handleUpdateMessageAction() {
         if (currentMessage == null || currentMessage.getType() != Message.MessageType.CHAT_TEXT) return;
         log.debug("Редактирование сообщения: {}", currentMessage.getId());
 

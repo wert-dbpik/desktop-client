@@ -95,6 +95,7 @@ public class MessageContextMenu {
         boolean isOwnMessage = isOutgoingMessage(currentMessage);
 
         editItem.setVisible(isTextMessage && isOwnMessage);
+        deleteItem.setVisible(isOwnMessage);
     }
 
     /**
