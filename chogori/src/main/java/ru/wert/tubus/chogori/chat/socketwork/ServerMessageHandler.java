@@ -10,6 +10,7 @@ import ru.wert.tubus.chogori.chat.dialog.dialogListCell.MessageContextMenu;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
+import ru.wert.tubus.chogori.chat.socketwork.messageHandler.*;
 import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
@@ -23,14 +24,14 @@ import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
 
 /**
- * Класс обработчик сообщений со стороны сервера.
- * Отвечает за обработку входящих сообщений и их отображение в интерфейсе.
+ * Основной класс-менеджер для обработки сообщений от сервера.
+ * Делегирует обработку специализированным классам в зависимости от типа сообщения.
  */
 @Slf4j
 public class ServerMessageHandler {
 
-    public static RoomsController roomsController; // Контроллер для управления списком комнат и пользователей
-    public static DialogController dialogController; // Контроллер для управления списком комнат и пользователей
+    public static RoomsController roomsController;
+    public static DialogController dialogController;
 
     /**
      * Обрабатывает входящее сообщение от сервера.
@@ -38,106 +39,61 @@ public class ServerMessageHandler {
      */
     public static void handle(Message message) {
         log.info(String.format("Message from server received: %s", message.toUsefulString()));
+
         Platform.runLater(() -> {
             if (SP_NOTIFICATION != null && message != null)
-                SP_NOTIFICATION.setText(makeString(message)); // Отображаем уведомление в интерфейсе
+                SP_NOTIFICATION.setText(processMessage(message));
         });
     }
 
     /**
-     * Формирует строку для отображения в уведомлении на основе типа сообщения.
-     * Если сообщение относится к комнате (тип CHAT_), комната добавляется в список, если она отсутствует.
-     *
+     * Определяет тип сообщения и делегирует обработку соответствующему обработчику.
      * @param message Входящее сообщение.
      * @return Строка для отображения в уведомлении.
      */
-    private static String makeString(Message message) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        StringBuilder str = new StringBuilder("");
+    private static String processMessage(Message message) {
         Message.MessageType type = message.getType();
+        StringBuilder str = new StringBuilder();
 
-        // Обработка сообщений о входе/выходе пользователя
-        if (type == Message.MessageType.USER_IN || type == Message.MessageType.USER_OUT) {
-            str.append(type.getTypeName()).append(" ").append(CH_USERS.findById(message.getSenderId()).getName());
-            roomsController.getUsersOnline().stream()
-                    .filter(userOnline -> userOnline.getUser().getId().equals(message.getSenderId()))
-                    .findFirst()
-                    .ifPresent(userOnline -> {
-                        userOnline.setOnline(type == Message.MessageType.USER_IN); // Обновляем статус пользователя
-                    });
-            roomsController.refreshListOfUsers(); // Обновляем список пользователей
+        switch (type) {
+            case USER_IN:
+            case USER_OUT:
+                UserStatusHandler.handle(message, type, str, roomsController);
+                break;
 
-            // Обработка сообщений о чертежах
-        } else if (type == Message.MessageType.ADD_DRAFT || type == Message.MessageType.UPDATE_DRAFT || type == Message.MessageType.DELETE_DRAFT) {
-            try {
-                Draft draft = objectMapper.readValue(message.getText(), Draft.class);
-                str.append("Пользователь ");
-                str.append(draft.getStatusUser().toUsefulString());
-                str.append(type.getTypeName()).append(draft.toUsefulString());
-            } catch (JsonProcessingException e) {
-                // Обработка ошибки парсинга JSON
-                System.err.println("Ошибка при парсинге JSON: " + e.getMessage());
-            }
+            case CHAT_TEXT:
+            case CHAT_PASSPORTS:
+            case CHAT_DRAFTS:
+            case CHAT_FOLDERS:
+            case CHAT_PICS:
+                ChatMessageHandler.handle(message);
+                break;
 
-            // Обработка push-уведомлений
-        } else if (type == Message.MessageType.PUSH) {
+            case UPDATE_MESSAGE:
+                updateMessageInOpenRooms(message);
+                break;
 
-            Platform.runLater(()->{
-                //Выключаем моргающую кнопку
-                Gson gson = GsonConfiguration.createGson();
-                ChatStaticMaster.UNREAD_MESSAGES.add(gson.fromJson(message.getText(), Message.class)); //Добавляем сообщение в список непрочитанных сообщений
-                ApplicationController.chat.hasNewMessagesProperty().set(true);
-            });
+            case DELETE_MESSAGE:
+                deleteMessageFromOpenRooms(message);
+                break;
 
-//            PushNotification.show(message.getText()); // Отображаем push-уведомление
+            case ADD_DRAFT:
+            case UPDATE_DRAFT:
+            case DELETE_DRAFT:
+                DraftMessageHandler.handle(message, type, str);
+                break;
 
-            // Обработка сообщений чата (текст, чертежи, паспорта и т.д.)
-        } else if (type == Message.MessageType.CHAT_TEXT ||
-                type == Message.MessageType.CHAT_PASSPORTS ||
-                type == Message.MessageType.CHAT_DRAFTS ||
-                type == Message.MessageType.CHAT_FOLDERS ||
-                type == Message.MessageType.CHAT_PICS) {
-            // Проверяем, входит ли пользователь в комнату
-            Long roomId = message.getRoomId();
-            Room room = RoomService.getInstance().findById(roomId);
-            if (room != null && room.getRoommates().contains(CH_CURRENT_USER.getId())) {
-                // Добавляем комнату в список, если она отсутствует
-                roomsController.addRoomIfAbsent(room);
-            }
+            case ADD_FOLDER:
+            case UPDATE_FOLDER:
+            case DELETE_FOLDER:
+                FolderMessageHandler.handle(message, type, str);
+                break;
 
-            // Обрабатываем сообщение чата
-            handleChatMessage(message);
-        } else if (type == Message.MessageType.UPDATE_MESSAGE){
-            updateMessageInOpenRooms(message);
-        } else if (type == Message.MessageType.DELETE_MESSAGE){
-            deleteMessageFromOpenRooms(message);
+            case PUSH:
+                PushMessageHandler.handle(message);
+                break;
         }
 
         return str.toString();
     }
-
-    /**
-     * Обрабатывает сообщение чата и добавляет его в соответствующий диалог.
-     * @param message Сообщение чата.
-     */
-    private static void handleChatMessage(Message message) {
-        Room room = RoomService.getInstance().findById(message.getRoomId());
-        if (room != null) {
-            // Находим диалог для этой комнаты с помощью метода из SideRoomDialogController
-            DialogListView dialog = dialogController.findDialogForRoom(room);
-            if (dialog != null) {
-                // Добавляем сообщение в диалог
-                dialog.getItems().add(message);
-                dialog.refresh();
-                dialog.scrollTo(message);
-
-                // Меняем статус сообщения на DELIVERED
-                message.setStatus(Message.MessageStatus.DELIVERED);
-
-                // Обновляем сообщение на сервере
-                CH_MESSAGES.update(message);
-            }
-        }
-    }
-
 }

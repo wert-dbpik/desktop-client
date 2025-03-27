@@ -49,10 +49,7 @@ public class StartChogori extends Application {
         try {
             initServices();
             initQuickServices();
-            // Добавляем shutdown hook для корректного завершения работы при завершении приложения
-            Runtime.getRuntime().addShutdownHook(new Thread(SocketService::stop));
-            // Запускаем сервис
-            SocketService.start();
+
             log.debug("init : DATA from server got well!");
         } catch (Exception e) {
             log.error("init : couldn't get DATA from server");

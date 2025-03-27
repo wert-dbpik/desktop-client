@@ -9,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
+import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.client.entity.models.AppSettings;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.retrofit.AppProperties;
@@ -19,6 +20,7 @@ import ru.wert.tubus.winform.warnings.Warning1;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.ServerSocket;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
@@ -69,6 +71,8 @@ public class LoginController {
         String pass = passwordField.getText();
 
         if (user.getPassword().equals(pass)) {
+            startSocketServerWithChats();
+
             CH_CURRENT_USER = user;
             loadApplicationSettings();
             showTabPaneWindow();
@@ -77,11 +81,19 @@ public class LoginController {
             ServiceMessaging.sendMessageUserIn(CH_CURRENT_USER.getId());
             //ОТКРЫВАЕМ ВКЛАДКУ С ЧЕРТЕЖАМИ
             if(CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart()) openDrafts();
+
         } else {
             passwordField.setText("");
             Warning1.create($ATTENTION, $NO_SUCH_USER, $TRY_MORE);
         }
 
+    }
+
+    private void startSocketServerWithChats() {
+        // Добавляем shutdown hook для корректного завершения работы при завершении приложения
+        Runtime.getRuntime().addShutdownHook(new Thread(SocketService::stop));
+        // Запускаем сервис
+        SocketService.start();
     }
 
     private void loadApplicationSettings() {

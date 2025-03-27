@@ -11,9 +11,8 @@ import java.util.List;
 public class PassportQuickService implements IPassportService {
 
     private static PassportQuickService instance;
-    private static List<Passport> passports;
+    public static List<Passport> LOADED_PASSPORTS;
     private static PassportService service = PassportService.getInstance();
-    public static Passport DEFAULT_FOLDER;
 
     private PassportQuickService() {
         reload();
@@ -28,7 +27,7 @@ public class PassportQuickService implements IPassportService {
     public static void reload(){
         while(true) {
             if(service != null) {
-                passports = new ArrayList<>(service.findAll());
+                LOADED_PASSPORTS = new ArrayList<>(service.findAll());
                 break;
             }
         }
@@ -61,7 +60,7 @@ public class PassportQuickService implements IPassportService {
 
     public Passport findByName(String name) {
         Passport foundPassport = null;
-        for(Passport passport : passports){
+        for(Passport passport : LOADED_PASSPORTS){
             if(passport.getName() != null && passport.getName().equals(name)) {
                 foundPassport = passport;
                 break;
@@ -73,7 +72,7 @@ public class PassportQuickService implements IPassportService {
     public Passport findByPrefixIdAndNumber(Prefix prefix, String number) {
 
         Passport foundPassport = null;
-        for(Passport passport : passports){
+        for(Passport passport : LOADED_PASSPORTS){
             if(passport.getNumber() != null && passport.getNumber().equals(number) && passport.getPrefix().getId().equals(prefix.getId())) {
                 foundPassport = passport;
                 break;
@@ -85,7 +84,7 @@ public class PassportQuickService implements IPassportService {
     @Override
     public List<Passport> findAllByName(String name) {
         List<Passport> foundPassports = new ArrayList<>();
-        for(Passport passport : passports){
+        for(Passport passport : LOADED_PASSPORTS){
             if(passport.getName().equals(name))
                 foundPassports.add(passport);
         }
@@ -94,7 +93,7 @@ public class PassportQuickService implements IPassportService {
 
     public Passport findById(Long id) {
         Passport foundPassport = null;
-        for(Passport passport : passports){
+        for(Passport passport : LOADED_PASSPORTS){
             if(passport.getId().equals(id)) {
                 foundPassport = passport;
                 break;
@@ -106,12 +105,12 @@ public class PassportQuickService implements IPassportService {
 
 
     public List<Passport> findAll() {
-        return passports;
+        return LOADED_PASSPORTS;
     }
 
     public List<Passport> findAllByText(String text) {
         List<Passport> foundPassports = new ArrayList<>();
-        for(Passport passport : passports){
+        for(Passport passport : LOADED_PASSPORTS){
             String name = passport.getName();
             String decNumber = passport.getPrefix().getName() + "." + passport.getNumber();
             if(name != null && name.contains(text) || decNumber.contains(text)) {

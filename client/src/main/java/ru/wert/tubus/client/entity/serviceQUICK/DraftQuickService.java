@@ -16,7 +16,7 @@ import java.util.Set;
 public class DraftQuickService implements IDraftService {
 
     private static DraftQuickService instance;
-    private static List<Draft> drafts;
+    public static List<Draft> LOADED_DRAFTS;
     private static DraftService service = DraftService.getInstance();
 
     private DraftQuickService() {
@@ -32,7 +32,7 @@ public class DraftQuickService implements IDraftService {
     public static void reload(){
         while(true) {
             if (service != null) {
-                drafts = new ArrayList<>(service.findAll());
+                LOADED_DRAFTS = new ArrayList<>(service.findAll());
                 break;
             }
         }
@@ -68,7 +68,7 @@ public class DraftQuickService implements IDraftService {
         Long id = passport.getId();
         List<Draft> foundDrafts = new ArrayList<>();
         Draft foundDraft = null;
-        for(Draft draft : drafts){
+        for(Draft draft : LOADED_DRAFTS){
             if(draft.getPassport().getId().equals(id)) {
                 foundDrafts.add(draft);
             }
@@ -79,7 +79,7 @@ public class DraftQuickService implements IDraftService {
     public List<Draft> findAllByFolder(Folder folder) {
         List<Draft> foundDrafts = new ArrayList<>();
         Long folderId = folder.getId();
-        for(Draft draft : drafts){
+        for(Draft draft : LOADED_DRAFTS){
             if(draft.getFolder() != null && draft.getFolder().getId().equals(folderId)) {
                 foundDrafts.add(draft);
             }
@@ -89,7 +89,7 @@ public class DraftQuickService implements IDraftService {
 
     public Draft findById(Long id) {
         Draft foundDraft = null;
-        for(Draft draft : drafts){
+        for(Draft draft : LOADED_DRAFTS){
             if(draft.getId().equals(id)) {
                 foundDraft = draft;
                 break;
@@ -120,12 +120,12 @@ public class DraftQuickService implements IDraftService {
     }
 
     public List<Draft> findAll() {
-        return drafts;
+        return LOADED_DRAFTS;
     }
     
     public List<Draft> findAllByText(String text) {
         List<Draft> foundDrafts = new ArrayList<>();
-        for(Draft draft : drafts){
+        for(Draft draft : LOADED_DRAFTS){
             String name = draft.getPassport().getName();
             String decNumber = draft.getPassport().getNumber();
             if((name != null && name.contains(text)) || (decNumber != null && decNumber.contains(text))) {
