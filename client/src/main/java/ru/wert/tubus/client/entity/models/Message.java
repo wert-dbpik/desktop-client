@@ -43,7 +43,9 @@ public class Message extends _BaseEntity implements Item {
         UPDATE_PRODUCT("Обновлено изделие"),
         DELETE_PRODUCT("Удалено изделие"),
 
-        PRODUCT_GROUP_CHANGED("Изменилась группа изделий"),
+        ADD_PRODUCT_GROUP("Добавлена группа изделий"),
+        UPDATE_PRODUCT_GROUP("Обновлена группа изделий"),
+        DELETE_PRODUCT_GROUP("Удалена группа изделий"),
 
         PUSH("Уведомление"),
         DELETE_MESSAGE("Удалить сообщение"),

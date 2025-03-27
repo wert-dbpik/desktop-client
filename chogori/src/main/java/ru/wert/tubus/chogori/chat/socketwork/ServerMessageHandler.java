@@ -83,7 +83,9 @@ public class ServerMessageHandler {
                 ProductMessageHandler.handle(message, type, str);
                 break;
 
-            case PRODUCT_GROUP_CHANGED:
+            case ADD_PRODUCT_GROUP:
+            case UPDATE_PRODUCT_GROUP:
+            case DELETE_PRODUCT_GROUP:
                 OtherChangesHandler.handle();
                 break;
 
