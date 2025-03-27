@@ -13,7 +13,7 @@ import java.util.List;
 public class ProductQuickService implements IProductService , CatalogService<Product> {
 
     private static ProductQuickService instance;
-    private static List<Product> products;
+    public static List<Product> LOADED_PRODUCTS;
     private static ProductService service = ProductService.getInstance();
     public static Product DEFAULT_PRODUCT;
 
@@ -30,7 +30,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
     public static void reload(){
         while(true) {
             if(service != null) {
-                products = new ArrayList<>(service.findAll());
+                LOADED_PRODUCTS = new ArrayList<>(service.findAll());
                 break;
             }
         }
@@ -39,7 +39,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
 
     public Product findByPassportId(Long id) {
         Product foundProduct = null;
-        for(Product product : products){
+        for(Product product : LOADED_PRODUCTS){
             if(product.getPassport().getId().equals(id)) {
                 foundProduct = product;
                 break;
@@ -50,7 +50,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
 
     public Product findByName(String name){
         Product foundProduct = null;
-        for(Product product : products){
+        for(Product product : LOADED_PRODUCTS){
             if(product.getPassport().getName().equals(name)) {
                 foundProduct = product;
                 break;
@@ -61,7 +61,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
 
     public List<Product> findAllByFolderId(Long id) {
         List<Product> foundProducts = new ArrayList<>();
-        for(Product product : products){
+        for(Product product : LOADED_PRODUCTS){
             if(product.getFolder().getId().equals(id)) {
                 foundProducts.add(product);
             }
@@ -72,7 +72,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
     @Override //CatalogService
     public List<Product> findAllByGroupId(Long id) {
         List<Product> foundProducts = new ArrayList<>();
-        for(Product product : products){
+        for(Product product : LOADED_PRODUCTS){
             if(product.getProductGroup().getId().equals(id)) {
                 foundProducts.add(product);
             }
@@ -83,7 +83,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
 
     public Product findById(Long id) {
         Product foundProduct = null;
-        for(Product product : products){
+        for(Product product : LOADED_PRODUCTS){
             if(product.getId().equals(id)) {
                 foundProduct = product;
                 break;
@@ -116,12 +116,12 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
     }
 
     public List<Product> findAll() {
-        return products;
+        return LOADED_PRODUCTS;
     }
 
     public List<Product> findAllByText(String text) {
         List<Product> foundProducts = new ArrayList<>();
-        for(Product product : products){
+        for(Product product : LOADED_PRODUCTS){
             String name = product.getPassport().getName();
             String decNumber = product.getPassport().getNumber();
             if((name != null && name.contains(text)) || (decNumber != null && decNumber.contains(text))) {
@@ -159,7 +159,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
     public List<Product> findAllByProductGroup(ProductGroup group) {
         List<Product> foundProducts = new ArrayList<>();
         Long groupId = group.getId();
-        for(Product product : products){
+        for(Product product : LOADED_PRODUCTS){
             if(product.getProductGroup().getId().equals(groupId)) {
                 foundProducts.add(product);
             }

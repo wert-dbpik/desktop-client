@@ -11,7 +11,6 @@ import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_YOURSELF;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
@@ -99,7 +98,7 @@ public class TabUsers {
     public void updateListOfUsers() {
         log.debug("Обновление списка пользователей");
         controller.getUsersOnline().clear();
-        for (User user : UserQuickService.users) {
+        for (User user : UserQuickService.LOADED_USERS) {
             controller.getUsersOnline().add(new UserOnline(user, user.isOnline()));
         }
 

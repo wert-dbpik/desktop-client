@@ -67,7 +67,7 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
 
     @Override
     public ObservableList<User> prepareList() {
-        return UserQuickService.users; // Возвращаем ObservableList<User>
+        return UserQuickService.LOADED_USERS; // Возвращаем ObservableList<User>
     }
 
     @Override

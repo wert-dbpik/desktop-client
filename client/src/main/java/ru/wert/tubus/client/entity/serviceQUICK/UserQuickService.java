@@ -10,7 +10,7 @@ import java.util.Optional;
 public class UserQuickService {
 
     private static volatile UserQuickService instance; // volatile для потокобезопасности
-    public static ObservableList<User> users; // Не static, чтобы каждый экземпляр имел свою копию
+    public static ObservableList<User> LOADED_USERS; // Не static, чтобы каждый экземпляр имел свою копию
     private final UserService service = UserService.getInstance();
 
     // Приватный конструктор
@@ -33,23 +33,23 @@ public class UserQuickService {
     // Метод для перезагрузки данных
     public void reload() {
         if (service != null) {
-            users = FXCollections.observableArrayList(service.findAll());
+            LOADED_USERS = FXCollections.observableArrayList(service.findAll());
         } else {
-            users = FXCollections.observableArrayList(); // Инициализация пустым списком, если service == null
+            LOADED_USERS = FXCollections.observableArrayList(); // Инициализация пустым списком, если service == null
         }
     }
 
     // Метод для получения списка пользователей
     public ObservableList<User> findAll() {
-        return users;
+        return LOADED_USERS;
     }
 
     // Метод для поиска пользователя по ID
     public Optional<User> fetchUserById(Long id) {
-        if (users == null || id == null) {
+        if (LOADED_USERS == null || id == null) {
             return Optional.empty();
         }
-        return users.stream()
+        return LOADED_USERS.stream()
                 .filter(user -> id.equals(user.getId()))
                 .findFirst();
     }

@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat.socketwork.messageHandler;
+package ru.wert.tubus.chogori.chat.socketwork.messageHandlers;
 
 import com.google.gson.Gson;
 import javafx.scene.control.Tab;
