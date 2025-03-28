@@ -2,12 +2,14 @@ package ru.wert.tubus.client.entity.serviceQUICK;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceREST.UserService;
+import ru.wert.tubus.client.entity.service_interfaces.IUserService;
 
-import java.util.Optional;
+import java.util.List;
 
-public class UserQuickService {
+public class UserQuickService implements IUserService {
 
     private static volatile UserQuickService instance; // volatile для потокобезопасности
     public static ObservableList<User> LOADED_USERS; // Не static, чтобы каждый экземпляр имел свою копию
@@ -38,7 +40,7 @@ public class UserQuickService {
             LOADED_USERS = FXCollections.observableArrayList(); // Инициализация пустым списком, если service == null
         }
     }
-
+    
     // Метод для получения списка пользователей
     public ObservableList<User> findAll() {
         return LOADED_USERS;
@@ -52,5 +54,6 @@ public class UserQuickService {
         return LOADED_USERS.stream()
                 .filter(user -> id.equals(user.getId()))
                 .findFirst();
+
     }
 }
