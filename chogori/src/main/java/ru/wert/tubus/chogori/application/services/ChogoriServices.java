@@ -1,10 +1,14 @@
 package ru.wert.tubus.chogori.application.services;
 
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.entity.serviceQUICK.*;
 import ru.wert.tubus.client.entity.serviceREST.*;
 import ru.wert.tubus.client.entity.service_interfaces.*;
 
+@Slf4j
 public class ChogoriServices {
 
     public static IPicService CH_PICS;
@@ -17,7 +21,7 @@ public class ChogoriServices {
     public static IChatMessageStatusService CH_CHAT_MESSAGE_STATUSES;
 
     public static IAppSettingsService CH_SETTINGS;
-    public static IUserService CH_USERS;
+    public static IUserQuickService CH_USERS;
     public static IAppLogService CH_LOGS;
     public static IUserGroupService CH_USER_GROUPS;
     public static IProductGroupService CH_PRODUCT_GROUPS;
@@ -80,6 +84,38 @@ public class ChogoriServices {
         ChogoriServices.CH_VERSIONS_SERVER = VersionServerService.getInstance();
     }
 
+    public static void initQuickServicesWithCache() {
+        // Пытаемся загрузить из кэша
+        BatchResponse cached = LocalCacheManager.loadFromCache("initial_data", BatchResponse.class);
+        if(cached != null) {
+            initFromBatch(cached);
+            log.info("Data loaded from cache");
+        }
+
+        // Загружаем свежие данные в фоне
+        Task<Void> updateTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    BatchResponse fresh = BatchService.loadInitialData();
+                    LocalCacheManager.saveToCache("initial_data", fresh);
+                    Platform.runLater(() -> initFromBatch(fresh));
+                } catch (Exception e) {
+                    log.error("Background update failed", e);
+                }
+                return null;
+            }
+        };
+        new Thread(updateTask).start();
+    }
+
+    private static void initFromBatch(BatchResponse batch) {
+        CH_QUICK_FOLDERS = FolderQuickService.getInstance().(batch.getFolders());
+        CH_QUICK_PRODUCTS = new ProductQuickService(batch.getProducts());
+        // ...
+    }
+
+
     public static void initQuickServices(){
         ChogoriServices.CH_QUICK_FOLDERS = FolderQuickService.getInstance();
         ChogoriServices.CH_QUICK_PRODUCTS = ProductQuickService.getInstance();
@@ -89,7 +125,8 @@ public class ChogoriServices {
         ChogoriServices.CH_QUICK_ANY_PARTS = AnyPartQuickService.getInstance();
         ChogoriServices.CH_QUICK_PASSPORTS = PassportQuickService.getInstance();
         ChogoriServices.CH_QUICK_MATERIALS = MaterialQuickService.getInstance();
-        UserQuickService.getInstance();
+
+        ChogoriServices.CH_USERS = UserQuickService.getInstance();
 
     }
 

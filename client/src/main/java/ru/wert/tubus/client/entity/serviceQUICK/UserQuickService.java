@@ -2,12 +2,14 @@ package ru.wert.tubus.client.entity.serviceQUICK;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceREST.UserService;
+import ru.wert.tubus.client.entity.service_interfaces.IUserService;
 
-import java.util.Optional;
+import java.util.List;
 
-public class UserQuickService {
+public class UserQuickService implements IUserService {
 
     private static volatile UserQuickService instance; // volatile для потокобезопасности
     public static ObservableList<User> users; // Не static, чтобы каждый экземпляр имел свою копию
@@ -39,18 +41,54 @@ public class UserQuickService {
         }
     }
 
-    // Метод для получения списка пользователей
-    public ObservableList<User> findAll() {
-        return users;
+
+    @Override
+    public User findByName(String name) {
+        return null;
     }
 
-    // Метод для поиска пользователя по ID
-    public Optional<User> fetchUserById(Long id) {
-        if (users == null || id == null) {
-            return Optional.empty();
-        }
-        return users.stream()
-                .filter(user -> id.equals(user.getId()))
-                .findFirst();
+    @Override
+    public User findByPassword(String pass) {
+        return null;
+    }
+
+    @Override
+    public List<Room> subscribeRoom(User user, Room room) {
+        return null;
+    }
+
+    @Override
+    public List<Room> unsubscribeRoom(User user, Room room) {
+        return null;
+    }
+
+    @Override
+    public User findById(Long id) {
+        return null;
+    }
+
+    @Override
+    public User save(User user) {
+        return null;
+    }
+
+    @Override
+    public boolean update(User user) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(User user) {
+        return false;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return null;
+    }
+
+    @Override
+    public List<User> findAllByText(String text) {
+        return null;
     }
 }
