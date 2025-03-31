@@ -59,7 +59,7 @@ public class ApplicationController {
     @FXML
     private Label lblUser;
 
-    @FXML
+    @FXML@Getter
     private Button btnChat;
 
     @FXML

@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import lombok.Getter;
 import ru.wert.tubus.chogori.chat.SideChat;
 
 import static ru.wert.tubus.chogori.images.BtnImages.CHAT_WHITE_IMG;
@@ -24,11 +25,16 @@ public class BtnChat{
     private boolean open;
     private SideChat sideChat = new SideChat();
 
+    @Getter
+    private Button btnChat;
+
     /**
      * Конструктор кнопки чата.
      *
      */
     public BtnChat(Button button) {
+        this.btnChat = button;
+
 
         // Устанавливаем начальное изображение и подсказку
         button.setGraphic(imageWhite);

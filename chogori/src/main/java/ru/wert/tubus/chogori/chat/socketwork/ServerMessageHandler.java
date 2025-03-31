@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
-import ru.wert.tubus.chogori.chat.socketwork.messageHandler.*;
+import ru.wert.tubus.chogori.chat.socketwork.messageHandlers.*;
 import ru.wert.tubus.client.entity.models.Message;
 
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
