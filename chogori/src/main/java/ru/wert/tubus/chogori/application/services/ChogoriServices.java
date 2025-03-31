@@ -12,6 +12,8 @@ import ru.wert.tubus.winform.warnings.Warning1;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+
 @Slf4j
 public class ChogoriServices {
 
@@ -90,42 +92,42 @@ public class ChogoriServices {
     }
 
     public static void initQuickServicesWithCache() {
-        // 1. Пытаемся загрузить из кэша (если есть)
+        // 1. Сначала загружаем данные из кэша (синхронно)
         BatchResponse cached = LocalCacheManager.loadFromCache("initial_data", BatchResponse.class);
         if(cached != null) {
             initFromBatch(cached);
-            log.info("Initial data loaded from cache");
+            log.info("Начальные данные загружены из кэша");
         } else {
-            log.info("No cached data available");
+            log.info("Данные кэша не доступны");
+            // Если кэша нет, инициализируем быстрые сервисы без данных
+            initQuickServices();
         }
 
-        // 2. Загружаем свежие данные с сервера в фоне
-        Task<Void> updateTask = new Task<Void>() {
-            @Override
-            protected Void call() {
-                try {
-                    log.info("Starting background data update from server...");
-                    BatchResponse fresh = BatchService.loadInitialData();
+        // 2. Запускаем фоновое обновление с пониженным приоритетом
+        Thread updateThread = new Thread(() -> {
 
-                    LocalCacheManager.saveToCache("initial_data", fresh);
-                    log.info("Data successfully updated from server");
+            try {
+                log.info("Начинается фоновое обновление данных с сервера...");
+                BatchResponse fresh = BatchService.loadInitialData();
 
+                LocalCacheManager.saveToCache("initial_data", fresh);
+                log.info("Данные кэша успешно обновлены");
+
+                // Обновляем UI только если пользователь уже вошел в систему
+                if(CH_CURRENT_USER != null) {
                     Platform.runLater(() -> {
                         initFromBatch(fresh);
-                        log.info("UI updated with fresh data");
+                        log.info("UI обновлен с актальными данными");
                     });
-
-                } catch (IOException e) {
-                    log.error("Server data update failed: {}", e.getMessage());
-                    // Можно показать notification пользователю
-                    Platform.runLater(() ->
-                            showErrorNotification("Не удалось обновить данные с сервера"));
                 }
-                return null;
+            } catch (IOException e) {
+                log.error("Обновить данные с сервера не удалось: {}", e.getMessage());
             }
-        };
+        });
 
-        new Thread(updateTask).start();
+        updateThread.setPriority(Thread.MIN_PRIORITY); // Понижаем приоритет потока
+        updateThread.setDaemon(true); // Делаем поток демоном
+        updateThread.start();
     }
 
     private static void showErrorNotification(String message) {
@@ -135,7 +137,7 @@ public class ChogoriServices {
                 "Возможно сервер не доступен. Обратитесь к администратору.");
     }
 
-    private static void initFromBatch(BatchResponse batch) {
+    public static void initFromBatch(BatchResponse batch) {
         CH_QUICK_FOLDERS = FolderQuickService.getInstance();
         if (batch.getFolders() != null) {
             FolderQuickService.LOADED_FOLDERS = new ArrayList<>(batch.getFolders());

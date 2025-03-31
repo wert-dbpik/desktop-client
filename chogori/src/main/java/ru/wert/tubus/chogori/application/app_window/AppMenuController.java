@@ -191,7 +191,14 @@ public class AppMenuController {
 //        chatItem.setOnAction(this::openChat);
 
         MenuItem updateData = new MenuItem("Обновить данные");
-        updateData.setOnAction(e->updateData());
+        updateData.setOnAction(e -> {
+            TaskUpdateData task = new TaskUpdateData();
+            task.setOnSucceeded(event -> {
+                // Дополнительные действия после успешного обновления
+                log.info("Данные и кэш успешно обновлены");
+            });
+            new Thread(task).start();
+        });
 
         MenuItem cleanSearchHistory = new MenuItem("Очистить историю поиска");
         cleanSearchHistory.setOnAction(e-> SearchHistoryFile.getInstance().clear());

@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
@@ -73,22 +74,25 @@ public class LoginController {
         String pass = passwordField.getText();
 
         if (user.getPassword().equals(pass)) {
-            startSocketServerWithChats();
+            // Инициализируем быстрые сервисы перед началом работы
+            if(ChogoriServices.CH_QUICK_DRAFTS == null) {
+                ChogoriServices.initQuickServices();
+            }
 
+            startSocketServerWithChats();
             CH_CURRENT_USER = user;
             loadApplicationSettings();
             showTabPaneWindow();
             AppProperties.getInstance().setLastUser(user.getId());
             AppStatic.createLog(true, "Подключился к серверу");
             ServiceMessaging.sendMessageUserIn(CH_CURRENT_USER.getId());
-            //ОТКРЫВАЕМ ВКЛАДКУ С ЧЕРТЕЖАМИ
-            if(CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart()) openDrafts();
 
+            if(CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart())
+                openDrafts();
         } else {
             passwordField.setText("");
             Warning1.create($ATTENTION, $NO_SUCH_USER, $TRY_MORE);
         }
-
     }
 
     private void startSocketServerWithChats() {
