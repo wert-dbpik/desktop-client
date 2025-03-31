@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.entities.drafts;
 
+import com.sun.javafx.css.Style;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.Label;
@@ -75,33 +76,37 @@ public class Draft_Columns {
             final Passport passport = cd.getValue().getPassport();
             String prefix = passport.getPrefix().getName().equals("-") ? "" : passport.getPrefix().getName() + ".";
 
-            if(!ChogoriSettings.CH_SHOW_PREFIX && passport.getPrefix().equals(ChogoriSettings.CH_DEFAULT_PREFIX)) prefix = "";
+            if(!ChogoriSettings.CH_SHOW_PREFIX && passport.getPrefix().equals(ChogoriSettings.CH_DEFAULT_PREFIX))
+                prefix = "";
+
             String decNumber = prefix + passport.getNumber();
 
             final EDraftType type = EDraftType.getDraftTypeById(cd.getValue().getDraftType());
             if(DXF_DOCKS.contains(type))
                 decNumber = decNumber + "-" + String.format("%02d", cd.getValue().getPageNumber());
 
-
             Label lblNumber = new Label(decNumber);
 
-            switch(passport.getNumber().substring(0,1)){
-                case "7" :
-                    lblNumber.setStyle("-fx-text-fill: darkgreen; -fx-font-size: 14;  -fx-font-weight: bold;");
-                    break;
-                case "3" :
-                    lblNumber.setStyle("-fx-text-fill: darkblue; -fx-font-size: 14;  -fx-font-weight: bold;");
-                    break;
-                case "4" :
-                    lblNumber.setStyle("-fx-text-fill: saddlebrown; -fx-font-size: 14;  -fx-font-weight: bold;");
-                    break;
-                default :
-                    lblNumber.setStyle("-fx-text-fill: black; -fx-font-size: 14;  -fx-font-weight: bold;");
+            // Устанавливаем цвет в зависимости от типа чертежа или первой цифры номера
+            if(type == EDraftType.IMAGE_DXF) {
+                lblNumber.setStyle("-fx-text-fill: #7322a3; -fx-font-size: 14; -fx-font-weight: bold;");
+            } else {
+                switch(passport.getNumber().substring(0,1)){
+                    case "7":
+                        lblNumber.setStyle("-fx-text-fill: darkgreen; -fx-font-size: 14; -fx-font-weight: bold;");
+                        break;
+                    case "3":
+                        lblNumber.setStyle("-fx-text-fill: darkblue; -fx-font-size: 14; -fx-font-weight: bold;");
+                        break;
+                    case "4":
+                        lblNumber.setStyle("-fx-text-fill: saddlebrown; -fx-font-size: 14; -fx-font-weight: bold;");
+                        break;
+                    default:
+                        lblNumber.setStyle("-fx-text-fill: black; -fx-font-size: 14; -fx-font-weight: bold;");
+                }
             }
 
-
             return new ReadOnlyObjectWrapper<>(lblNumber);
-
         });
 
         tcDraftNumber.setComparator(createLabelComparator(tcDraftNumber));
