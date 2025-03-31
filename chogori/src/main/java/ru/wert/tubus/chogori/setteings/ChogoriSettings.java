@@ -19,6 +19,7 @@ public class ChogoriSettings {
     //НАСТРОЙКИ ПРИЛОЖЕНИЯ
     public static File CH_DEFAULT_PATH_TO_NORMY_MK; //Путь к папке НОРМЫ МК
     public static boolean CH_SHOW_PREFIX; //Показывать префикс
+    public static boolean CH_SHOW_NOTIFICATION_LINE; //Показывать строку уведомлений
     public static boolean CH_OPEN_DRAFTS_TAB_ON_START; //Открывать вкладку ЧЕРТЕЖИ на старте
     public static boolean CH_VALIDATE_DEC_NUMBERS; //Показывать префикс
     public static Prefix CH_DEFAULT_PREFIX; //Префикс предприятия

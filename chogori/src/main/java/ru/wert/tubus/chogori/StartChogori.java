@@ -48,7 +48,6 @@ public class StartChogori extends Application {
 
         try {
             initServices();
-//            initQuickServices();
             initQuickServicesWithCache();
 
             log.debug("init : DATA from server got well!");

@@ -64,6 +64,9 @@ public class SettingsController {
     private CheckBox chbShowPrefixes;
 
     @FXML
+    private CheckBox chbShowNotificationLine;
+
+    @FXML
     private ComboBox<EPDFViewer> cmbPDFViewerChooser;
 
     // Drafts Settings =======================================
@@ -142,39 +145,51 @@ public class SettingsController {
             //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
             chbValidateDecNumbersEntering.setSelected(ChogoriSettings.CH_CURRENT_USER_SETTINGS.isValidateDecNumbers());
         }
+
         //КНОПКА СБРОС В ЗНАЧЕНИЯ ПО УМОЛЧАНИЮ
         btnReset.setText("");
         btnReset.setGraphic(new ImageView(BtnImages.BTN_HOME_IMG));
         btnReset.setTooltip(new Tooltip("Загрузить настройки по умолчанию"));
+
         //МОНИТОР
         List<String> screens = new BXMonitor().create(cmbMonitorChooser);
         cmbMonitorChooser.getSelectionModel().select(AppProperties.getInstance().getMonitor());
+
         //PDF просмотрщик
         cmbPDFViewerChooser.getItems().addAll(EPDFViewer.values());
         cmbPDFViewerChooser.getSelectionModel().select(EPDFViewer.values()[ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPdfViewer()]);
         cmbPDFViewerChooser.setDisable(true);
+
         //НОРМЫ МК
         tfPathToNormyMK.setText(ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToNormyMK());
         btnPathToNormyMK.setText("");
         btnPathToNormyMK.setGraphic(new ImageView(AppImages.TREE_NODE_IMG));
         btnPathToNormyMK.setTooltip(new Tooltip("Выберите директорию"));
+
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         chbShowPrefixes.setSelected(ChogoriSettings.CH_CURRENT_USER_SETTINGS.isShowPrefixes());
+
+        //ПОКАЗЫВАТЬ СТРОКУ УВЕДОМЛЕНИЙ
+        chbShowNotificationLine.setSelected(ChogoriSettings.CH_CURRENT_USER_SETTINGS.isShowNotificationLine());
+
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         new BXPrefix().create(cmbPrefixChooser);
         cmbPrefixChooser.getSelectionModel().select(ChogoriSettings.CH_CURRENT_USER_SETTINGS.getDefaultPrefix());
+
         //ПОКАЗЫАТЬ PDF В ПРОГРАММЕ
         String openPDFWith = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith();
         tfPathToOpenPDFWith.setText(openPDFWith.equals("") ? USE_SYSTEM_SETTINGS : openPDFWith);
         btnPathToOpenPDFWith.setText("");
         btnPathToOpenPDFWith.setGraphic(new ImageView(AppImages.TREE_NODE_IMG));
         btnPathToOpenPDFWith.setTooltip(new Tooltip("Выберите исполняемый файл(.ехе)"));
+
         //ПОКАЗЫАТЬ ФОТО В ПРОГРАММЕ
         String openImageWith = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith();
         tfPathToOpenImageWith.setText(openImageWith.equals("") ? USE_SYSTEM_SETTINGS : openImageWith);
         btnPathToOpenImageWith.setText("");
         btnPathToOpenImageWith.setGraphic(new ImageView(AppImages.TREE_NODE_IMG));
         btnPathToOpenImageWith.setTooltip(new Tooltip("Выберите исполняемый файл(.ехе)"));
+
         //ПОКАЗЫАТЬ 3D ИЗОБРАЖЕНИЯ В ПРОГРАММЕ
         String openSolidWith = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenSolidWith();
         tfPathToOpenSolidWith.setText(openSolidWith.equals("") ? USE_SYSTEM_SETTINGS : openSolidWith);
@@ -249,6 +264,8 @@ public class SettingsController {
         tfPathToOpenSolidWith.setText(USE_SYSTEM_SETTINGS);
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         chbShowPrefixes.setSelected(defSettings.isShowPrefixes());
+        //ПОКАЗЫВАТЬ СТРОКУ СОСТОЯНИЙ
+        chbShowNotificationLine.setSelected(defSettings.isShowNotificationLine());
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         cmbPrefixChooser.getSelectionModel().select(defSettings.getDefaultPrefix());
         //ОТКРЫВАТЬ ВКЛАДКУ ЧЕРТЕЖИ ПРИ СТАРТЕ
@@ -277,29 +294,41 @@ public class SettingsController {
 
         //ПОКАЗЫВАТЬ PDF В ПРОГРАММЕ
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setPathToOpenPDFWith(pathToPDFOpener.equals(USE_SYSTEM_SETTINGS) ? "" : pathToPDFOpener);
+
         //ПОКАЗЫАТЬ IMAGE В ПРОГРАММЕ
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setPathToOpenImageWith(pathToImageOpener.equals(USE_SYSTEM_SETTINGS) ? "" : pathToImageOpener);
+
         //ПОКАЗЫАТЬ SOLID В ПРОГРАММЕ
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setPathToOpenSolidWith(pathToSolidOpener.equals(USE_SYSTEM_SETTINGS) ? "" : pathToSolidOpener);
 
         //МОНИТОР
         AppProperties.getInstance().setMonitor(cmbMonitorChooser.getSelectionModel().getSelectedIndex());
+
         //PDF просмотрщик
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setPdfViewer(cmbPDFViewerChooser.getSelectionModel().getSelectedIndex());
         ChogoriSettings.CH_PDF_VIEWER = cmbPDFViewerChooser.getSelectionModel().getSelectedItem();
+
         //НОРМЫ МК
         ChogoriSettings.CH_DEFAULT_PATH_TO_NORMY_MK = new File(tfPathToNormyMK.getText().trim());
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setPathToNormyMK(tfPathToNormyMK.getText().trim());
+
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setShowPrefixes(chbShowPrefixes.isSelected());
         ChogoriSettings.CH_SHOW_PREFIX = chbShowPrefixes.isSelected(); //для моментального применения
+
+        //ПОКАЗЫВАТЬ СТРОКУ УВЕДОМЛЕНИЙ
+        ChogoriSettings.CH_CURRENT_USER_SETTINGS.setShowNotificationLine(chbShowNotificationLine.isSelected());
+        ChogoriSettings.CH_SHOW_NOTIFICATION_LINE = chbShowNotificationLine.isSelected(); //для моментального применения
+
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         Prefix newPrefix = cmbPrefixChooser.getSelectionModel().getSelectedItem();
         ChogoriSettings.CH_DEFAULT_PREFIX = newPrefix;
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setDefaultPrefix(newPrefix);
+
         //ОТКРЫВАТЬ ВКЛАДКУ ЧЕРТЕЖИ ПРИ СТАРТЕ
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setOpenDraftsTabOnStart(chbOpenDraftsTab.isSelected());
         ChogoriSettings.CH_OPEN_DRAFTS_TAB_ON_START = chbOpenDraftsTab.isSelected();
+
         //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setValidateDecNumbers(chbValidateDecNumbersEntering.isSelected());
         ChogoriSettings.CH_VALIDATE_DEC_NUMBERS = chbValidateDecNumbersEntering.isSelected();

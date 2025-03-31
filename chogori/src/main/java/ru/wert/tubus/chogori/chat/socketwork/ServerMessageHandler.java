@@ -1,26 +1,16 @@
 package ru.wert.tubus.chogori.chat.socketwork;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.application.app_window.ApplicationController;
-import ru.wert.tubus.chogori.chat.dialog.dialogListCell.MessageContextMenu;
-import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
 import ru.wert.tubus.chogori.chat.socketwork.messageHandler.*;
-import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
-import ru.wert.tubus.client.entity.models.*;
-import ru.wert.tubus.client.entity.serviceREST.RoomService;
-import ru.wert.tubus.client.retrofit.GsonConfiguration;
+import ru.wert.tubus.client.entity.models.Message;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.updateMessageInOpenRooms;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_SHOW_NOTIFICATION_LINE;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
 
 /**
@@ -38,7 +28,7 @@ public class ServerMessageHandler {
      * @param message Входящее сообщение.
      */
     public static void handle(Message message) {
-        if (SP_NOTIFICATION == null || message == null) return;
+        if (SP_NOTIFICATION == null || !CH_SHOW_NOTIFICATION_LINE || message == null) return;
         log.info(String.format("Message from server received: %s", message.toUsefulString()));
         Platform.runLater(() -> {
             Message.MessageType type = message.getType();

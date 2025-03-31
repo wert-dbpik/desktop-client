@@ -31,6 +31,7 @@ import java.util.*;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
+import static ru.wert.tubus.client.entity.serviceQUICK.DraftQuickService.LOADED_DRAFTS;
 import static ru.wert.tubus.winform.enums.EDraftType.*;
 
 public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<Draft> {
@@ -211,7 +212,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         if(modifyingClass instanceof Folder){
             if(tempSelectedFolders == null || tempSelectedFolders.isEmpty()) {
                 if (modifyingItem == null)
-                    list = new ArrayList<>(ChogoriServices.CH_QUICK_DRAFTS.findAll());
+                    list = new ArrayList<>(LOADED_DRAFTS);
                 else {
                     list = new ArrayList<>(ChogoriServices.CH_QUICK_DRAFTS.findAllByFolder((Folder) modifyingItem));
                 }

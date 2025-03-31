@@ -23,6 +23,7 @@ public class AppSettings extends _BaseEntity implements Item{
     private String pathToOpenImageWith; //путь до папки НормыМК
     private String pathToOpenSolidWith; //путь до папки НормыМК
     private boolean showPrefixes; //показывать префиксы
+    private boolean showNotificationLine; //показывать строку уведомлений
     private Prefix defaultPrefix; //Префикс по умолчанию
     private boolean openDraftsTabOnStart = false; //Открывать вкладку чертежи при старте приложения
     private boolean validateDecNumbers; //Проверять вводимый децимальный номер
@@ -46,6 +47,7 @@ public class AppSettings extends _BaseEntity implements Item{
         newSettings.setPathToOpenImageWith(getPathToOpenImageWith());
         newSettings.setPathToOpenSolidWith(getPathToOpenSolidWith());
         newSettings.setShowPrefixes(isShowPrefixes());
+        newSettings.setShowNotificationLine(isShowNotificationLine());
         newSettings.setDefaultPrefix(getDefaultPrefix());
         newSettings.setOpenDraftsTabOnStart(isOpenDraftsTabOnStart());
         newSettings.setValidateDecNumbers(isValidateDecNumbers());
