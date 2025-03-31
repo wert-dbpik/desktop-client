@@ -89,6 +89,19 @@ public class ServerMessageHandler {
                 FolderMessageHandler.handle(message, type, str);
                 break;
 
+            case ADD_PRODUCT:
+            case UPDATE_PRODUCT:
+            case DELETE_PRODUCT:
+                ProductMessageHandler.handle(message, type, str);
+                break;
+
+            case ADD_PRODUCT_GROUP:
+            case UPDATE_PRODUCT_GROUP:
+            case DELETE_PRODUCT_GROUP:
+                OtherChangesHandler.handle();
+                break;
+
+
             case PUSH:
                 PushMessageHandler.handle(message);
                 break;
