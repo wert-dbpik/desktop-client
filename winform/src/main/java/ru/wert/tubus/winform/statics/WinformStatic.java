@@ -19,12 +19,13 @@ public class WinformStatic {
 
     public static String PROGRAM_NAME = "TUBUS"; //Наименование программы
     public static String CURRENT_PROJECT_VERSION = "7.1"; //Версия приложения обновляется вручную
-    public static String VERSION_CREATED_DATE = "1.03.2025"; //Дата выпуска версии
+    public static String VERSION_CREATED_DATE = "01.04.2025"; //Дата выпуска версии
     public static boolean TEST_VERSION = true; //тестовая версия - работает с тестовым сервером
 
     public static String LAST_VERSION_IN_DB; //Последняя доступная версия в базе данных
     public static Stage WF_MAIN_STAGE;
     public static File WF_TEMPDIR; //Директория временного хранения
+    public static String HOME_DIRECTORY = System.getProperty("user.home") + File.separator + "AppData" + File.separator + "Local" + File.separator + "Tubus";
 
     /**
      * Метод обеспечивает закрытие любого окна

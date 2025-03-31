@@ -12,7 +12,7 @@ import java.util.List;
 public class FolderQuickService implements IFolderService, CatalogService<Folder>, ItemService<Folder> {
 
     private static FolderQuickService instance;
-    private static List<Folder> folders;
+    public static List<Folder> LOADED_FOLDERS;
     private static FolderService service = FolderService.getInstance();
     public static Folder DEFAULT_FOLDER;
 
@@ -32,7 +32,7 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
     public static void reload(){
         while(true) {
             if(service != null) {
-                folders = new ArrayList<>(service.findAll());
+                LOADED_FOLDERS = new ArrayList<>(service.findAll());
                 break;
             }
         }
@@ -40,7 +40,7 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
 
     public Folder findByName(String name) {
         Folder foundFolder = null;
-        for(Folder folder : folders){
+        for(Folder folder : LOADED_FOLDERS){
             if(folder.getName() != null && folder.getName().equals(name)) {
                 foundFolder = folder;
                 break;
@@ -53,7 +53,7 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
     @Override //CatalogService
     public List<Folder> findAllByGroupId(Long id) {
         List<Folder> foundFolders = new ArrayList<>();
-        for(Folder folder : folders){
+        for(Folder folder : LOADED_FOLDERS){
             if(folder.getProductGroup().getId().equals(id)) {
                 foundFolders.add(folder);
             }
@@ -63,7 +63,7 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
 
     public Folder findById(Long id) {
         Folder foundFolder = null;
-        for(Folder folder : folders){
+        for(Folder folder : LOADED_FOLDERS){
             if(folder.getId().equals(id)) {
                 foundFolder = folder;
                 break;
@@ -94,12 +94,12 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
     }
 
     public List<Folder> findAll() {
-        return folders;
+        return LOADED_FOLDERS;
     }
 
     public List<Folder> findAllByText(String text) {
         List<Folder> foundFolders = new ArrayList<>();
-        for(Folder folder : folders){
+        for(Folder folder : LOADED_FOLDERS){
             String name = folder.getName();
 
             if(name != null && name.contains(text)) {

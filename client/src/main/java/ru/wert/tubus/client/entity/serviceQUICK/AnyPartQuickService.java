@@ -10,7 +10,7 @@ import java.util.List;
 public class AnyPartQuickService implements IAnyPartService {
 
     private static AnyPartQuickService instance;
-    private static List<AnyPart> parts;
+    public static List<AnyPart> LOADED_ANY_PARTS;
     private static final AnyPartService service = AnyPartService.getInstance();
 
 
@@ -28,7 +28,7 @@ public class AnyPartQuickService implements IAnyPartService {
     public static void reload(){
         while(true) {
             if(service != null) {
-                parts = new ArrayList<>(service.findAll());
+                LOADED_ANY_PARTS = new ArrayList<>(service.findAll());
                 break;
             }
         }
@@ -37,7 +37,7 @@ public class AnyPartQuickService implements IAnyPartService {
 
     public AnyPart findByName(String name) {
         AnyPart foundAnyPart = null;
-        for(AnyPart part : parts){
+        for(AnyPart part : LOADED_ANY_PARTS){
             if(part.getName() != null && part.getName().equals(name)) {
                 foundAnyPart = part;
                 break;
@@ -54,7 +54,7 @@ public class AnyPartQuickService implements IAnyPartService {
      */
     public AnyPart findByNumberAndName(String number, String name) {
         AnyPart foundAnyPart = null;
-        for(AnyPart part : parts){
+        for(AnyPart part : LOADED_ANY_PARTS){
             if((part.getName() != null && part.getName().equals(number)) &&
                     (part.getSecondName() != null && part.getSecondName().equals(name))) {
                 foundAnyPart = part;
@@ -67,7 +67,7 @@ public class AnyPartQuickService implements IAnyPartService {
 
     public AnyPart findById(Long id) {
         AnyPart foundAnyPart = null;
-        for(AnyPart part : parts){
+        for(AnyPart part : LOADED_ANY_PARTS){
             if(part.getId().equals(id)) {
                 foundAnyPart = part;
                 break;
@@ -98,12 +98,12 @@ public class AnyPartQuickService implements IAnyPartService {
     }
 
     public List<AnyPart> findAll() {
-        return parts;
+        return LOADED_ANY_PARTS;
     }
 
     public List<AnyPart> findAllByText(String text) {
         List<AnyPart> foundAnyParts = new ArrayList<>();
-        for(AnyPart part : parts){
+        for(AnyPart part : LOADED_ANY_PARTS){
             String name = part.getName() + part.getSecondName();
             if(name != null && name.contains(text)) {
                 foundAnyParts.add(part);

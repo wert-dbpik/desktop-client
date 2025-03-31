@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.entities.users;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -67,7 +68,7 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
 
     @Override
     public ObservableList<User> prepareList() {
-        return UserQuickService.users; // Возвращаем ObservableList<User>
+        return FXCollections.observableArrayList(UserQuickService.LOADED_USERS); // Возвращаем ObservableList<User>
     }
 
     @Override

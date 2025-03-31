@@ -6,6 +6,7 @@ import ru.wert.tubus.winform.warnings.Warning1;
 import java.io.*;
 import java.util.Properties;
 
+import static ru.wert.tubus.winform.statics.WinformStatic.HOME_DIRECTORY;
 import static ru.wert.tubus.winform.statics.WinformStatic.TEST_VERSION;
 @Slf4j
 public class AppProperties {
@@ -21,14 +22,14 @@ public class AppProperties {
 
     private int attempt = 0;
     private Properties connectionProps;
-    private String homeDir = System.getProperty("user.home") + File.separator + "AppData" + File.separator + "Local" + File.separator + "Tubus";
+//    public static String HOME_DIRECTORY = System.getProperty("user.home") + File.separator + "AppData" + File.separator + "Local" + File.separator + "Tubus";
     private String appConfigPath;
 
     {
         if (TEST_VERSION)
-            appConfigPath = homeDir + File.separator + "connectionSettingsTest.properties";
+            appConfigPath = HOME_DIRECTORY + File.separator + "connectionSettingsTest.properties";
         else
-            appConfigPath = homeDir + File.separator + "connectionSettings.properties";
+            appConfigPath = HOME_DIRECTORY + File.separator + "connectionSettings.properties";
     }
 
 
@@ -64,7 +65,7 @@ public class AppProperties {
         log.debug("createFileOfConnectionSettings : connectionSettings.properties создается  ...");
         try {
             log.debug("File of application settings is creating...");
-            File dir = new File(homeDir);
+            File dir = new File(HOME_DIRECTORY);
             dir.mkdirs();
 
             File props = new File(appConfigPath);

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
-public class UserService implements IUserService, ItemService<User> {
+public class UserService implements IUserService {
 
     private static UserService instance;
     private UserApiInterface api;

@@ -13,11 +13,19 @@ public class BatchService {
             apiService = RetrofitClient.getInstance().getRetrofit().create(BatchApiService.class);
         }
 
-        Response<BatchResponse> response = apiService.getInitialData(true, true,true,true,true,true,true).execute();
-        if(response.isSuccessful()) {
-            return response.body();
+        Response<BatchResponse> response = apiService.getInitialData(
+                true, true, true, true, true, true, true)
+                .execute();
+
+        if(!response.isSuccessful()) {
+            String errorBody = response.errorBody() != null ?
+                    response.errorBody().string() : "No error body";
+            throw new IOException(String.format(
+                    "Batch request failed. Code: %d, Error: %s",
+                    response.code(), errorBody));
         }
-        throw new IOException("Batch request failed");
+
+        return response.body();
     }
 }
 

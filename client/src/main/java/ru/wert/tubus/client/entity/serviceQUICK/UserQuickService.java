@@ -1,18 +1,18 @@
 package ru.wert.tubus.client.entity.serviceQUICK;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceREST.UserService;
 import ru.wert.tubus.client.entity.service_interfaces.IUserService;
+import ru.wert.tubus.client.interfaces.ItemService;
 
 import java.util.List;
 
-public class UserQuickService implements IUserService {
+public class UserQuickService implements IUserService, ItemService<User> {
 
     private static volatile UserQuickService instance; // volatile для потокобезопасности
-    public static ObservableList<User> users; // Не static, чтобы каждый экземпляр имел свою копию
+    public static List<User> LOADED_USERS; // Не static, чтобы каждый экземпляр имел свою копию
     private final UserService service = UserService.getInstance();
 
     // Приватный конструктор
@@ -35,31 +35,49 @@ public class UserQuickService implements IUserService {
     // Метод для перезагрузки данных
     public void reload() {
         if (service != null) {
-            users = FXCollections.observableArrayList(service.findAll());
+            LOADED_USERS = FXCollections.observableArrayList(service.findAll());
         } else {
-            users = FXCollections.observableArrayList(); // Инициализация пустым списком, если service == null
+            LOADED_USERS = FXCollections.observableArrayList(); // Инициализация пустым списком, если service == null
         }
     }
 
 
     @Override
     public User findByName(String name) {
-        return null;
+        User user = null;
+        for(User u : LOADED_USERS){
+            if(u.getName().equals(name)) {
+                user = u;
+                break;
+            }
+        }
+        return user;
     }
 
     @Override
     public User findByPassword(String pass) {
-        return null;
+        User user = null;
+        for(User u : LOADED_USERS){
+            if(u.getPassword().equals(pass)) {
+                user = u;
+                break;
+            }
+        }
+        return user;
     }
 
     @Override
     public List<Room> subscribeRoom(User user, Room room) {
-        return null;
+        List<Room> rooms = service.subscribeRoom(user, room);
+        reload();
+        return rooms;
     }
 
     @Override
     public List<Room> unsubscribeRoom(User user, Room room) {
-        return null;
+        List<Room> rooms = service.unsubscribeRoom(user, room);
+        reload();
+        return rooms;
     }
 
     @Override
@@ -69,22 +87,28 @@ public class UserQuickService implements IUserService {
 
     @Override
     public User save(User user) {
-        return null;
+        User res = service.save(user);
+        reload();
+        return res;
     }
 
     @Override
     public boolean update(User user) {
-        return false;
+        boolean res = service.update(user);
+        reload();
+        return res;
     }
 
     @Override
     public boolean delete(User user) {
-        return false;
+        boolean res = service.delete(user);
+        reload();
+        return res;
     }
 
     @Override
     public List<User> findAll() {
-        return null;
+        return LOADED_USERS;
     }
 
     @Override

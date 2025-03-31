@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.entity.serviceQUICK.*;
 import ru.wert.tubus.client.entity.serviceREST.*;
 import ru.wert.tubus.client.entity.service_interfaces.*;
+import ru.wert.tubus.winform.warnings.Warning1;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 @Slf4j
 public class ChogoriServices {
@@ -21,7 +25,7 @@ public class ChogoriServices {
     public static IChatMessageStatusService CH_CHAT_MESSAGE_STATUSES;
 
     public static IAppSettingsService CH_SETTINGS;
-    public static IUserQuickService CH_USERS;
+    public static IUserService CH_USERS;
     public static IAppLogService CH_LOGS;
     public static IUserGroupService CH_USER_GROUPS;
     public static IProductGroupService CH_PRODUCT_GROUPS;
@@ -49,6 +53,7 @@ public class ChogoriServices {
     public static AnyPartQuickService CH_QUICK_ANY_PARTS;
     public static PassportQuickService CH_QUICK_PASSPORTS;
     public static MaterialQuickService CH_QUICK_MATERIALS;
+    public static UserQuickService CH_QUICK_USERS;
 
     public static void initServices(){
 
@@ -85,49 +90,98 @@ public class ChogoriServices {
     }
 
     public static void initQuickServicesWithCache() {
-        // Пытаемся загрузить из кэша
+        // 1. Пытаемся загрузить из кэша (если есть)
         BatchResponse cached = LocalCacheManager.loadFromCache("initial_data", BatchResponse.class);
         if(cached != null) {
             initFromBatch(cached);
-            log.info("Data loaded from cache");
+            log.info("Initial data loaded from cache");
+        } else {
+            log.info("No cached data available");
         }
 
-        // Загружаем свежие данные в фоне
+        // 2. Загружаем свежие данные с сервера в фоне
         Task<Void> updateTask = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 try {
+                    log.info("Starting background data update from server...");
                     BatchResponse fresh = BatchService.loadInitialData();
+
                     LocalCacheManager.saveToCache("initial_data", fresh);
-                    Platform.runLater(() -> initFromBatch(fresh));
-                } catch (Exception e) {
-                    log.error("Background update failed", e);
+                    log.info("Data successfully updated from server");
+
+                    Platform.runLater(() -> {
+                        initFromBatch(fresh);
+                        log.info("UI updated with fresh data");
+                    });
+
+                } catch (IOException e) {
+                    log.error("Server data update failed: {}", e.getMessage());
+                    // Можно показать notification пользователю
+                    Platform.runLater(() ->
+                            showErrorNotification("Не удалось обновить данные с сервера"));
                 }
                 return null;
             }
         };
+
         new Thread(updateTask).start();
     }
 
+    private static void showErrorNotification(String message) {
+        log.error("Ошибка загрузки данных с сервера в КЭШ! - {}", message);
+        Warning1.create("ВНИМАНИЕ!",
+                "Произошел сбой при загрузке данных с сервера в кэш",
+                "Возможно сервер не доступен. Обратитесь к администратору.");
+    }
+
     private static void initFromBatch(BatchResponse batch) {
-        CH_QUICK_FOLDERS = FolderQuickService.getInstance().(batch.getFolders());
-        CH_QUICK_PRODUCTS = new ProductQuickService(batch.getProducts());
-        // ...
+        CH_QUICK_FOLDERS = FolderQuickService.getInstance();
+        if (batch.getFolders() != null) {
+            FolderQuickService.LOADED_FOLDERS = new ArrayList<>(batch.getFolders());
+        }
+
+        CH_QUICK_PRODUCTS = ProductQuickService.getInstance();
+        if (batch.getProducts() != null) {
+            ProductQuickService.LOADED_PRODUCTS = new ArrayList<>(batch.getProducts());
+        }
+
+        CH_QUICK_DRAFTS = DraftQuickService.getInstance();
+        if (batch.getDrafts() != null) {
+            DraftQuickService.LOADED_DRAFTS = new ArrayList<>(batch.getDrafts());
+        }
+
+        CH_QUICK_PREFIXES = PrefixQuickService.getInstance();
+        if (batch.getPrefixes() != null) {
+            PrefixQuickService.LOADED_PREFIXES = new ArrayList<>(batch.getPrefixes());
+        }
+
+        CH_QUICK_ANY_PARTS = AnyPartQuickService.getInstance();
+        if (batch.getAnyParts() != null) {
+            AnyPartQuickService.LOADED_ANY_PARTS = new ArrayList<>(batch.getAnyParts());
+        }
+
+        CH_QUICK_PASSPORTS = PassportQuickService.getInstance();
+        if (batch.getPassports() != null) {
+            PassportQuickService.LOADED_PASSPORTS = new ArrayList<>(batch.getPassports());
+        }
+
+        if (batch.getUsers() != null) {
+            UserQuickService.LOADED_USERS = new ArrayList<>(batch.getUsers());
+        }
     }
 
 
     public static void initQuickServices(){
+        ChogoriServices.CH_QUICK_USERS = UserQuickService.getInstance();
         ChogoriServices.CH_QUICK_FOLDERS = FolderQuickService.getInstance();
         ChogoriServices.CH_QUICK_PRODUCTS = ProductQuickService.getInstance();
         ChogoriServices.CH_QUICK_DRAFTS = DraftQuickService.getInstance();
         ChogoriServices.CH_QUICK_PREFIXES = PrefixQuickService.getInstance();
-        ChogoriServices.CH_QUICK_DETAILS = DetailQuickService.getInstance();
+//        ChogoriServices.CH_QUICK_DETAILS = DetailQuickService.getInstance();
         ChogoriServices.CH_QUICK_ANY_PARTS = AnyPartQuickService.getInstance();
         ChogoriServices.CH_QUICK_PASSPORTS = PassportQuickService.getInstance();
-        ChogoriServices.CH_QUICK_MATERIALS = MaterialQuickService.getInstance();
-
-        ChogoriServices.CH_USERS = UserQuickService.getInstance();
-
+//        ChogoriServices.CH_QUICK_MATERIALS = MaterialQuickService.getInstance();
     }
 
 

@@ -48,7 +48,8 @@ public class StartChogori extends Application {
 
         try {
             initServices();
-            initQuickServices();
+//            initQuickServices();
+            initQuickServicesWithCache();
 
             log.debug("init : DATA from server got well!");
         } catch (Exception e) {
@@ -80,9 +81,6 @@ public class StartChogori extends Application {
         log.info("AppProperties.getInstance().getMonitor() passed");
 
     }
-
-
-
 
     @Override
     public void start(Stage stage) throws Exception {

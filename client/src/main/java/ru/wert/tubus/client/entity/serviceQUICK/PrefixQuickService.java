@@ -10,7 +10,7 @@ import java.util.List;
 public class PrefixQuickService implements IPrefixService {
 
     private static PrefixQuickService instance;
-    private static List<Prefix> prefixes;
+    public static List<Prefix> LOADED_PREFIXES;
     private static PrefixService service = PrefixService.getInstance();
 
     private PrefixQuickService() {
@@ -26,7 +26,7 @@ public class PrefixQuickService implements IPrefixService {
     public static void reload(){
         while(true) {
             if(service != null) {
-                prefixes = new ArrayList<>(service.findAll());
+                LOADED_PREFIXES = new ArrayList<>(service.findAll());
                 break;
             }
         }
@@ -34,7 +34,7 @@ public class PrefixQuickService implements IPrefixService {
 
     public Prefix findByName(String name) {
         Prefix foundPrefix = null;
-        for(Prefix prefix : prefixes){
+        for(Prefix prefix : LOADED_PREFIXES){
             if(prefix.getName() != null && prefix.getName().equals(name)) {
                 foundPrefix = prefix;
                 break;
@@ -46,7 +46,7 @@ public class PrefixQuickService implements IPrefixService {
 
     public Prefix findById(Long id) {
         Prefix foundPrefix = null;
-        for(Prefix prefix : prefixes){
+        for(Prefix prefix : LOADED_PREFIXES){
             if(prefix.getId().equals(id)) {
                 foundPrefix = prefix;
                 break;
@@ -77,12 +77,12 @@ public class PrefixQuickService implements IPrefixService {
     }
 
     public List<Prefix> findAll() {
-        return prefixes;
+        return LOADED_PREFIXES;
     }
 
     public List<Prefix> findAllByText(String text) {
         List<Prefix> foundPrefixes = new ArrayList<>();
-        for(Prefix prefix : prefixes){
+        for(Prefix prefix : LOADED_PREFIXES){
             String name = prefix.getName();
             if((name != null && name.contains(text))) {
                 foundPrefixes.add(prefix);

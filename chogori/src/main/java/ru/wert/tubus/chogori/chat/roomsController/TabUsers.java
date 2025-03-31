@@ -10,12 +10,15 @@ import ru.wert.tubus.chogori.chat.util.UserOnline;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
+import ru.wert.tubus.client.entity.serviceREST.UserService;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
+import java.util.List;
+
 import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_YOURSELF;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.tubus.client.entity.serviceQUICK.UserQuickService.LOADED_USERS;
 
 @Slf4j
 public class TabUsers {
@@ -99,7 +102,8 @@ public class TabUsers {
     public void updateListOfUsers() {
         log.debug("Обновление списка пользователей");
         controller.getUsersOnline().clear();
-        for (User user : UserQuickService.users) {
+        List<User> allUsers = LOADED_USERS.isEmpty() ?  UserService.getInstance().findAll() : LOADED_USERS;
+        for (User user : allUsers) {
             controller.getUsersOnline().add(new UserOnline(user, user.isOnline()));
         }
 
