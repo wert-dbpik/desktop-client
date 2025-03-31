@@ -1,149 +1,225 @@
 package ru.wert.tubus.chogori.chat.socketwork;
 
 import javafx.application.Platform;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Screen;
-import ru.wert.tubus.chogori.application.app_window.ApplicationController;
-import ru.wert.tubus.chogori.statics.AppStatic;
+import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.dialog.dialogListCell.MessageRenderer;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
+import ru.wert.tubus.winform.modal.ModalWindow;
+import ru.wert.tubus.winform.statics.WinformStatic;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.*;
 
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
-/**
- * Класс для создания и отображения push-уведомлений в стиле чата.
- */
+@Slf4j
 public class PushNotification {
+    // Стилизация заголовка
+    private static final String HEADER_STYLE =
+            "-fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 0 0 5 0;";
 
-    private VBox vbMessageContainer; // Самый верхний контейнер для сообщения
-    private VBox vbOutlineMessage;   // Контейнер, включающий заголовок, сообщение и время создания
-    private VBox vbMessage;          // Контейнер для самого сообщения
-    private Label lblFrom;           // Метка для отображения имени отправителя
-    private Label lblDate;           // Метка для отображения даты сообщения
-    private Label lblTitle;          // Метка для отображения заголовка сообщения
-    private Label lblTime;           // Метка для отображения времени сообщения
+    // Очередь для управления уведомлениями (roomId -> Stage)
+    private static final Map<Long, Stage> activeNotifications = new ConcurrentHashMap<>();
+    private static final ScheduledExecutorService cleanupExecutor = Executors.newSingleThreadScheduledExecutor();
+
+    // Пул потоков для фоновых задач
+    private static final ExecutorService workerPool = Executors.newFixedThreadPool(2, r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        return t;
+    });
+
+    static {
+        // Очистка устаревших ссылок каждые 10 минут
+        cleanupExecutor.scheduleAtFixedRate(
+                activeNotifications::clear,
+                10, 10, TimeUnit.MINUTES
+        );
+    }
+
+    public static void show(Message message) {
+        if (message == null || message.getRoomId() == null) return;
+
+        workerPool.submit(() -> {
+            try {
+                // Быстрая проверка перед обработкой
+                if (shouldSkipNotification(message)) return;
+
+                // Подготовка данных в фоне
+                User sender = loadSender(message.getSenderId());
+
+                Platform.runLater(() -> {
+                    // Закрываем предыдущее уведомление для этой комнаты
+                    closeExistingNotification(message.getRoomId());
+
+                    // Создаем контейнер уведомления
+                    VBox notificationContainer = new VBox(5);
+                    notificationContainer.setStyle("-fx-background-color: #f5f5f5; -fx-padding: 10;");
+
+                    // Заголовок с именем отправителя
+                    Label senderLabel = new Label(sender.getName());
+                    senderLabel.setStyle(HEADER_STYLE);
+
+                    // Контейнер для содержимого сообщения
+                    VBox messageContent = new VBox();
+                    messageContent.setStyle("-fx-background-color: white; -fx-padding: 10;");
+
+                    // Используем MessageRenderer для отображения сообщения
+                    Label titleLabel = new Label(); // Заголовок не нужен в уведомлении
+                    MessageRenderer renderer = new MessageRenderer(titleLabel);
+                    renderMessage(renderer, messageContent, message);
+
+                    notificationContainer.getChildren().addAll(senderLabel, messageContent);
+
+                    // Создаем и показываем Stage
+                    Stage stage = createStage(notificationContainer);
+                    positionAtScreenCorner(stage);
+                    stage.show();
+
+                    // Сохраняем ссылку
+                    activeNotifications.put(message.getRoomId(), stage);
+
+                    // Автозакрытие через 5 секунд
+                    scheduleAutoClose(stage, message.getRoomId());
+                });
+            } catch (Exception e) {
+                log.error("Ошибка при показе уведомления", e);
+            }
+        });
+    }
+
+    private static void renderMessage(MessageRenderer renderer, VBox container, Message message) {
+        switch (message.getType()) {
+            case CHAT_TEXT:
+                renderer.mountText(container, message);
+                break;
+            case CHAT_PICS:
+                renderer.mountPics(container, message);
+                break;
+            case CHAT_DRAFTS:
+                renderer.mountDrafts(container, message);
+                break;
+            case CHAT_FOLDERS:
+                renderer.mountFolders(container, message);
+                break;
+            case CHAT_PASSPORTS:
+                renderer.mountPassports(container, message);
+                break;
+            default:
+                Label fallback = new Label("Новый тип сообщения: " + message.getType());
+                container.getChildren().add(fallback);
+        }
+    }
+
+    private static boolean shouldSkipNotification(Message message) {
+        return message.getSenderId().equals(CH_CURRENT_USER.getId()) ||
+                !message.getType().name().startsWith("CHAT_");
+    }
+
+    private static User loadSender(Long senderId) {
+        return ChogoriServices.CH_USERS.findById(senderId);
+    }
+
+    private static Stage createStage(Node content) {
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initModality(Modality.NONE);
+        stage.setAlwaysOnTop(true);
+        stage.setResizable(false);
+        stage.setScene(new Scene((Parent) content));
+        return stage;
+    }
 
     /**
-     * Создает и отображает push-уведомление с заданным сообщением.
-     *
-     * @param message Сообщение для уведомления.
+     * Позиционирует уведомление в правом нижнем углу текущего монитора
      */
-    public static void show(Message message) {
-        Platform.runLater(() -> {
-            Stage notificationStage = new Stage();
-            notificationStage.initStyle(StageStyle.UTILITY);
-            notificationStage.initModality(Modality.NONE);
-            notificationStage.setAlwaysOnTop(true);
-            notificationStage.setResizable(false);
+    private static void positionAtScreenCorner(Stage notificationStage) {
+        notificationStage.sizeToScene();
 
-            // Инициализация элементов
-            PushNotification notification = new PushNotification();
-            notification.initElements();
+        Stage mainStage = WinformStatic.WF_MAIN_STAGE;
+        if (mainStage == null) {
+            positionAtPrimaryScreenCorner(notificationStage);
+            return;
+        }
 
-            // Установка данных сообщения
-            User sender = ChogoriServices.CH_USERS.findById(message.getSenderId());
-            if (sender == null) return;
+        // Определяем текущий монитор
+        int monitor = ModalWindow.findCurrentMonitorByMainStage(mainStage);
+        List<Screen> screens = Screen.getScreens();
+        if (monitor >= screens.size()) {
+            positionAtPrimaryScreenCorner(notificationStage);
+            return;
+        }
 
-            // Показываем уведомление только если сообщение не от текущего пользователя
-            if (sender.equals(CH_CURRENT_USER)) return;
+        Screen screen = screens.get(monitor);
+        Rectangle2D bounds = screen.getBounds();
 
-            notification.lblFrom.setText(sender.getName());
-            notification.lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime().toString()));
-            notification.lblTime.setText(AppStatic.parseStringToTime(message.getCreationTime().toString()));
+        // Рассчитываем позицию с небольшим отступом
+        double padding = 20;
+        double x = bounds.getMaxX() - notificationStage.getWidth() - padding;
+        double y = bounds.getMaxY() - notificationStage.getHeight() - padding;
 
-            // Обработка текста сообщения
-            Label text = new Label(message.getText());
-            text.setWrapText(true);
-            text.setMaxWidth(250);
-            text.setStyle("-fx-text-fill: black; -fx-font-size: 14px;");
-            notification.vbMessage.getChildren().add(text);
+        notificationStage.setX(x);
+        notificationStage.setY(y);
 
-            // Стилизация контейнеров
-            notification.vbMessageContainer.setStyle(
-                    "-fx-background-color: #f0f0f0; " +
-                            "-fx-background-radius: 10; " +
-                            "-fx-border-radius: 10; " +
-                            "-fx-border-color: #d0d0d0; " +
-                            "-fx-border-width: 1; " +
-                            "-fx-padding: 10;"
-            );
+        log.debug("Positioning notification at monitor {}: {:.1f}, {:.1f}", monitor, x, y);
+    }
 
-            notification.vbOutlineMessage.setStyle("-fx-spacing: 5;");
-            notification.lblFrom.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;");
-            notification.lblTime.setStyle("-fx-font-size: 11px; -fx-text-fill: #666;");
+    /**
+     * Фолбэк-позиционирование на основном мониторе
+     */
+    private static void positionAtPrimaryScreenCorner(Stage stage) {
+        Rectangle2D bounds = Screen.getPrimary().getBounds();
+        double padding = 20;
+        double x = bounds.getMaxX() - stage.getWidth() - padding;
+        double y = bounds.getMaxY() - stage.getHeight() - padding;
+        stage.setX(x);
+        stage.setY(y);
 
-            // Создание сцены
-            VBox root = new VBox(notification.vbMessageContainer);
-            root.setStyle("-fx-padding: 0; -fx-background-color: transparent;");
+        log.debug("Fallback positioning at primary screen: {:.1f}, {:.1f}", x, y);
+    }
 
-            Scene scene = new Scene(root);
-            scene.setFill(null);
-            notificationStage.setScene(scene);
-
-            // Позиционирование уведомления относительно кнопки чата
-            if (ApplicationController.chat != null && ApplicationController.chat.getBtnChat() != null) {
-                Button chatButton = ApplicationController.chat.getBtnChat();
-                Bounds bounds = chatButton.localToScreen(chatButton.getBoundsInLocal());
-
-                notificationStage.setX(bounds.getMinX() - 300); // Смещаем влево от кнопки
-                notificationStage.setY(bounds.getMinY() - 150); // Поднимаем выше кнопки
-
-                // Проверка границ экрана
-                Screen screen = Screen.getPrimary();
-                Rectangle2D screenBounds = screen.getVisualBounds();
-
-                if (notificationStage.getX() < screenBounds.getMinX()) {
-                    notificationStage.setX(screenBounds.getMinX() + 10);
-                }
-
-                if (notificationStage.getY() < screenBounds.getMinY()) {
-                    notificationStage.setY(screenBounds.getMinY() + 10);
-                }
+    private static void closeExistingNotification(Long roomId) {
+        if (activeNotifications.containsKey(roomId)) {
+            Stage oldStage = activeNotifications.get(roomId);
+            if (oldStage != null) {
+                Platform.runLater(oldStage::close);
             }
+            activeNotifications.remove(roomId);
+        }
+    }
 
-            notificationStage.show();
-
-            // Автоматическое закрытие уведомления через 5 секунд
+    private static void scheduleAutoClose(Stage stage, Long roomId) {
+        Platform.runLater(() -> {
             new Thread(() -> {
                 try {
                     Thread.sleep(5000);
-                    Platform.runLater(notificationStage::close);
+                    Platform.runLater(() -> {
+                        if (stage.isShowing()) {
+                            stage.close();
+                            activeNotifications.remove(roomId);
+                        }
+                    });
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }).start();
         });
     }
 
-    /**
-     * Инициализирует элементы уведомления.
-     */
-    private void initElements() {
-        vbMessageContainer = new VBox();
-        vbOutlineMessage = new VBox();
-        vbMessage = new VBox();
-
-        lblFrom = new Label();
-        lblDate = new Label();
-        lblTitle = new Label();
-        lblTime = new Label();
-
-        // Настройка контейнеров
-        vbMessageContainer.getChildren().addAll(lblFrom, vbOutlineMessage, lblTime);
-        vbOutlineMessage.getChildren().add(vbMessage);
-
-        vbMessageContainer.setAlignment(Pos.TOP_LEFT);
-        vbMessageContainer.setSpacing(5);
-        vbOutlineMessage.setSpacing(5);
-        vbMessage.setSpacing(5);
+    public static void shutdown() {
+        workerPool.shutdown();
+        cleanupExecutor.shutdown();
+        Platform.runLater(() -> activeNotifications.values().forEach(Stage::close));
     }
 }

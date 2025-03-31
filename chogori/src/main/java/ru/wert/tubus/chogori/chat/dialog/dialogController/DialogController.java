@@ -269,4 +269,12 @@ public class DialogController {
         inputTextArea.createTextArea();    // Настройка текстового поля ввода
     }
 
+    /**
+     * Возвращает текущую открытую комнату (если есть)
+     * @return Текущая открытая комната или null, если ни одна комната не открыта
+     */
+    public Room getCurrentOpenRoom() {
+        return dialogListView != null ? dialogListView.getRoom() : null;
+    }
+
 }

@@ -1,11 +1,15 @@
 package ru.wert.tubus.chogori.chat.socketwork;
 
+import com.google.gson.Gson;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
+import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
 import ru.wert.tubus.chogori.chat.socketwork.messageHandlers.*;
 import ru.wert.tubus.client.entity.models.Message;
+import ru.wert.tubus.client.entity.models.Room;
+import ru.wert.tubus.client.retrofit.GsonConfiguration;
 
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.updateMessageInOpenRooms;
@@ -28,22 +32,77 @@ public class ServerMessageHandler {
      * @param message Входящее сообщение.
      */
     public static void handle(Message message) {
-        if (SP_NOTIFICATION == null || !CH_SHOW_NOTIFICATION_LINE || message == null) return;
-        log.info(String.format("Message from server received: %s", message.toUsefulString()));
-        Platform.runLater(() -> {
-            Message.MessageType type = message.getType();
-            boolean isAdmin = CH_CURRENT_USER.getUserGroup().isAdministrate();
-            boolean isUserInOut = type.equals(Message.MessageType.USER_IN) ||
-                    type.equals(Message.MessageType.USER_OUT);
+        if (message == null) return;
 
-            //Сообщения о входе и выходе пользователя из приложения касаются только администратора
-            if(!isUserInOut)
-                SP_NOTIFICATION.setText(processMessage(message));
-            else {
-                if (isAdmin)
+        log.info("Message from server received: {}", message.toUsefulString());
+
+        // Обработка уведомлений в строке состояния
+        if (SP_NOTIFICATION != null && CH_SHOW_NOTIFICATION_LINE) {
+            Platform.runLater(() -> {
+                Message.MessageType type = message.getType();
+                boolean isAdmin = CH_CURRENT_USER.getUserGroup().isAdministrate();
+                boolean isUserInOut = type.equals(Message.MessageType.USER_IN) ||
+                        type.equals(Message.MessageType.USER_OUT);
+
+                // Сообщения о входе/выходе показываем только админам
+                if (!isUserInOut || isAdmin) {
                     SP_NOTIFICATION.setText(processMessage(message));
+                }
+            });
+        }
+
+        // Обработка сообщений чата
+        processChatMessage(message);
+    }
+
+    /**
+     * Обрабатывает сообщения чата с учетом активности комнаты
+     * @param message Входящее сообщение
+     */
+    private static void processChatMessage(Message message) {
+        Message.MessageType type = message.getType();
+        log.debug("Обработка сообщения типа: {}", type);
+
+        // Обрабатываем только сообщения типа PUSH
+        if (type == Message.MessageType.PUSH) {
+            try {
+                // Парсим вложенное сообщение из текста PUSH-уведомления
+                Gson gson = GsonConfiguration.createGson();
+                Message innerMessage = gson.fromJson(message.getText(), Message.class);
+
+                // Проверяем, что вложенное сообщение является CHAT_ типом
+                if (innerMessage.getType().name().startsWith("CHAT_")) {
+                    Platform.runLater(() -> {
+                        // Проверяем, открыта ли комната этого сообщения
+                        boolean isRoomOpen = false;
+                        Room currentRoom = dialogController != null ? dialogController.getCurrentOpenRoom() : null;
+                        log.debug("Текущая открытая комната: {}", currentRoom != null ? currentRoom.getId() : "null");
+                        log.debug("Комната сообщения: {}", innerMessage.getRoomId());
+
+                        if (currentRoom != null && currentRoom.getId().equals(innerMessage.getRoomId())) {
+                            isRoomOpen = true;
+                        }
+
+                        // Если комната не открыта - показываем push-уведомление
+                        log.debug("Комната открыта? {}", isRoomOpen);
+                        if (!isRoomOpen) {
+                            log.debug("Показываем пуш для сообщения из закрытой комнаты");
+                            PushNotification.show(innerMessage); // Передаем вложенное сообщение
+                        }
+
+                        // Передаем сообщение в соответствующий диалог
+                        for (DialogListView dialog : DialogController.openRooms) {
+                            if (dialog.getRoom().getId().equals(innerMessage.getRoomId())) {
+                                dialog.receiveMessageFromServer(innerMessage);
+                                break;
+                            }
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                log.error("Ошибка при парсинге вложенного сообщения PUSH: {}", e.getMessage());
             }
-        });
+        }
     }
 
     /**
@@ -100,7 +159,6 @@ public class ServerMessageHandler {
             case DELETE_PRODUCT_GROUP:
                 OtherChangesHandler.handle();
                 break;
-
 
             case PUSH:
                 PushMessageHandler.handle(message);
