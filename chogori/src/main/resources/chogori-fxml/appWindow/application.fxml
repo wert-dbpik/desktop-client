@@ -39,7 +39,7 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
                <children>
-                  <Label fx:id="lbNotification" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Label" textAlignment="CENTER" StackPane.alignment="CENTER" />
+                  <Label fx:id="lbNotification" alignment="CENTER" maxWidth="1.7976931348623157E308" textAlignment="CENTER" StackPane.alignment="CENTER" />
                </children></StackPane>
             <HBox alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="NEVER">
                <children>

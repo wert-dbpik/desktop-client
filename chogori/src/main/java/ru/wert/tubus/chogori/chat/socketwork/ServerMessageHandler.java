@@ -38,11 +38,21 @@ public class ServerMessageHandler {
      * @param message Входящее сообщение.
      */
     public static void handle(Message message) {
+        if (SP_NOTIFICATION == null || message == null) return;
         log.info(String.format("Message from server received: %s", message.toUsefulString()));
-
         Platform.runLater(() -> {
-            if (SP_NOTIFICATION != null && message != null)
+            Message.MessageType type = message.getType();
+            boolean isAdmin = CH_CURRENT_USER.getUserGroup().isAdministrate();
+            boolean isUserInOut = type.equals(Message.MessageType.USER_IN) ||
+                    type.equals(Message.MessageType.USER_OUT);
+
+            //Сообщения о входе и выходе пользователя из приложения касаются только администратора
+            if(!isUserInOut)
                 SP_NOTIFICATION.setText(processMessage(message));
+            else {
+                if (isAdmin)
+                    SP_NOTIFICATION.setText(processMessage(message));
+            }
         });
     }
 
