@@ -43,12 +43,12 @@ public class TaskUpdateData extends Task<Void> {
     @Override
     protected Void call() throws Exception {
         Platform.runLater(() -> {
-            LongProcess.create("ОБНОВЛЕНИЕ ДАННЫХ И КЭША", this);
+            LongProcess.create("ОБНОВЛЕНИЕ ДАННЫХ", this);
         });
         updateProgress(progress += 0.2, max);
 
         // 1. Очищаем кэш
-        updateMessage("\nОчистка кэша...");
+        updateMessage("Очистка кэша...");
         try {
             Files.walk(LocalCacheManager.CACHE_DIR)
                     .filter(Files::isRegularFile)
@@ -66,18 +66,18 @@ public class TaskUpdateData extends Task<Void> {
         updateProgress(progress += 1.0, max);
 
         // 2. Загружаем свежие данные с сервера
-        updateMessage("\nЗагрузка данных с сервера...");
+        updateMessage("Загрузка данных с сервера...");
         BatchResponse freshData = BatchService.loadInitialData();
         updateProgress(progress += 1.0, max);
 
         // 3. Сохраняем данные в кэш
-        updateMessage("\nСохранение данных в кэш...");
+        updateMessage("Сохранение данных в кэш...");
         LocalCacheManager.saveToCache("initial_data", freshData);
         updateProgress(progress += 1.0, max);
 
         // Остальной код остается без изменений
         // 4. Обновляем QuickServices
-        updateMessage("\nОбновление сервисов...");
+        updateMessage("Обновление сервисов...");
         Platform.runLater(() -> ChogoriServices.initFromBatch(freshData));
         updateProgress(progress += 1.0, max);
 

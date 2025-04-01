@@ -19,11 +19,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblCountNewItems" text="0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
+                  <Label fx:id="lblCountNewItems" text="0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
             <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="518.0" progress="0.0" />
