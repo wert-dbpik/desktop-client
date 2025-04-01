@@ -25,5 +25,6 @@ public class UserStatusHandler {
                     userOnline.setOnline(type == Message.MessageType.USER_IN);
                 });
         roomsController.refreshListOfUsers();
+
     }
 }

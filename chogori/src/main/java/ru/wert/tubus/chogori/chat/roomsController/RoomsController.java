@@ -80,8 +80,9 @@ public class RoomsController {
     public void refreshListOfUsers() {
         Platform.runLater(()->{
             if (listOfUsers != null) {
-                log.debug("Обновление списка пользователей");
+                log.debug("Обновление списка пользователей и комнат");
                 listOfUsers.refresh();
+                listOfRooms.refresh();
             }
         });
     }
