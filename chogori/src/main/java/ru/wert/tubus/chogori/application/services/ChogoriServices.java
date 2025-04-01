@@ -92,13 +92,18 @@ public class ChogoriServices {
     }
 
     public static void initQuickServicesWithCache() {
+
+        // Проверяем свежесть кэша (например, не старше 24 часов)
+        boolean isCacheFresh = LocalCacheManager.isCacheFresh("initial_data", 24);
+
         // 1. Сначала загружаем данные из кэша (синхронно)
         BatchResponse cached = LocalCacheManager.loadFromCache("initial_data", BatchResponse.class);
-        if(cached != null) {
+        if(cached != null && isCacheFresh) {
             initFromBatch(cached);
             log.info("Начальные данные загружены из кэша");
         } else {
             log.info("Данные кэша не доступны");
+
             // Если кэша нет, инициализируем быстрые сервисы без данных
             initQuickServices();
         }

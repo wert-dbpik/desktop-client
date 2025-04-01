@@ -87,5 +87,25 @@ public class LocalCacheManager {
         log.debug("Данные не найдены в кэше для ключа: {}", key);
         return null;
     }
+
+    /**
+     * Проверка свежести кэша
+     * @param key
+     * @param maxAgeInHours
+     * @return
+     */
+    public static boolean isCacheFresh(String key, long maxAgeInHours) {
+        try {
+            Path cacheFile = CACHE_DIR.resolve(key + ".json");
+            if (Files.exists(cacheFile)) {
+                long lastModified = Files.getLastModifiedTime(cacheFile).toMillis();
+                long currentTime = System.currentTimeMillis();
+                return (currentTime - lastModified) < (maxAgeInHours * 60 * 60 * 1000);
+            }
+        } catch (IOException e) {
+            log.error("Ошибка при проверке свежести кэша", e);
+        }
+        return false;
+    }
 }
 

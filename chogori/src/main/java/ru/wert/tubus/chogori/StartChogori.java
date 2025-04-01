@@ -2,6 +2,7 @@ package ru.wert.tubus.chogori;
 
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +14,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.AppMenuController;
+import ru.wert.tubus.chogori.application.services.BatchResponse;
+import ru.wert.tubus.chogori.application.services.BatchService;
+import ru.wert.tubus.chogori.application.services.ChogoriServices;
+import ru.wert.tubus.chogori.application.services.LocalCacheManager;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.search.SearchHistoryFile;
 import ru.wert.tubus.client.entity.models.VersionDesktop;
@@ -32,6 +37,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_APPLICATION_CONTROLLER;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.MAIN_CLOSE_BUTTON;
 import static ru.wert.tubus.winform.statics.WinformStatic.PROGRAM_NAME;
 import static ru.wert.tubus.winform.statics.WinformStatic.TEST_VERSION;
@@ -79,6 +85,37 @@ public class StartChogori extends Application {
 
         log.info("AppProperties.getInstance().getMonitor() passed");
 
+    }
+
+    /**
+     * Метод для фонового обновления кэша
+     */
+    private void startBackgroundCacheUpdate() {
+        Thread updateThread = new Thread(() -> {
+            try {
+                log.info("Начинается фоновое обновление кэша и данных...");
+
+                // 1. Загружаем свежие данные с сервера
+                BatchResponse freshData = BatchService.loadInitialData();
+
+                // 2. Обновляем кэш
+                LocalCacheManager.saveToCache("initial_data", freshData);
+                log.info("Кэш успешно обновлен");
+
+                // 3. Обновляем коллекции в QuickServices
+                Platform.runLater(() -> {
+                    ChogoriServices.initFromBatch(freshData);
+                    log.info("Коллекции в QuickServices обновлены");
+                });
+
+            } catch (IOException e) {
+                log.error("Ошибка при фоновом обновлении кэша и данных: {}", e.getMessage());
+            }
+        });
+
+        updateThread.setPriority(Thread.MIN_PRIORITY);
+        updateThread.setDaemon(true);
+        updateThread.start();
     }
 
     @Override
@@ -130,6 +167,10 @@ public class StartChogori extends Application {
 
             controller.centerInitialWindow(stage, true, WinformSettings.CH_MONITOR);
 
+            // Запускаем фоновое обновление после показа UI
+//            Platform.runLater(()->CH_APPLICATION_CONTROLLER.startBlinkingAnimation());
+            startBackgroundCacheUpdate();
+//            Platform.runLater(()->CH_APPLICATION_CONTROLLER.stopBlinkingAnimation());
 
         }catch (IOException e) {
             e.printStackTrace();

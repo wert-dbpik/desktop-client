@@ -242,12 +242,21 @@ public class AppMenuController {
     /**
      * ОБНОВИТЬ ДАННЫЕ
      */
-    public static void updateData() {
+//    public static void updateData() {
+//
+//        Task<Void> updateTask = new TaskUpdateData();
+//        Thread t = new Thread(updateTask);
+//        t.setDaemon(true);
+//        t.start();
+//    }
 
+    public static void updateData(Runnable onComplete) {
         Task<Void> updateTask = new TaskUpdateData();
-        Thread t = new Thread(updateTask);
-        t.setDaemon(true);
-        t.start();
+        updateTask.setOnSucceeded(e -> onComplete.run());
+        updateTask.setOnFailed(e -> onComplete.run());
+        updateTask.setOnCancelled(e -> onComplete.run());
+
+        new Thread(updateTask).start();
     }
 
     /**

@@ -1,5 +1,8 @@
 package ru.wert.tubus.chogori.application.app_window;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -8,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -16,15 +20,14 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.components.BtnChat;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.chogori.tabs.MainTabPane;
-import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.winform.statics.WinformStatic;
-import ru.wert.tubus.winform.winform_settings.WinformSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +38,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_BLUE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
@@ -87,6 +89,7 @@ public class ApplicationController {
     @FXML
     void initialize() {
         log.debug("initialize : запускается блок инициализации");
+        CH_APPLICATION_CONTROLLER = this;
         CH_APPLICATION_ROOT_PANEL = rootPanel;
         CH_APPLICATION_WAITING_BLIND = waitingBlind;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
@@ -143,16 +146,83 @@ public class ApplicationController {
         });
 
 
-        btnUpdateAllData.setStyle("-fx-text-fill: #FFFFFF;");
-        btnUpdateAllData.setPadding(Insets.EMPTY);
-        btnUpdateAllData.setGraphic(new ImageView(BTN_UPDATE_BLUE_IMG));
-        btnUpdateAllData.setText("Обновить данные!");
-        btnUpdateAllData.setOnAction(e->AppMenuController.updateData());
+        initBtnUpdateAllData();
 
 
         log.debug("initialize : блок инициализации успешно выполнен");
 
     }
+
+    //==================================================  btnUpdateAllData  ===========================================
+
+    private Timeline blinkTimeline;
+    private ImageView updateIcon;
+
+    private void initBtnUpdateAllData() {
+        // Создаем ImageView для иконки
+        updateIcon = new ImageView(BTN_UPDATE_BLUE_IMG);
+        btnUpdateAllData.setGraphic(updateIcon);
+        btnUpdateAllData.setStyle("-fx-text-fill: #FFFFFF;");
+        btnUpdateAllData.setPadding(Insets.EMPTY);
+        btnUpdateAllData.setText("Обновить данные!");
+        btnUpdateAllData.setOnAction(e -> {
+            startBlinkingAnimation();
+            AppMenuController.updateData(this::stopBlinkingAnimation);
+        });
+
+        // Инициализация анимации мигания прозрачности
+        blinkTimeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(updateIcon.opacityProperty(), 1.0)),
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(updateIcon.opacityProperty(), 0.3)),
+                new KeyFrame(Duration.seconds(1.0), new KeyValue(updateIcon.opacityProperty(), 1.0))
+        );
+        blinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    }
+
+    public void startBlinkingAnimation() {
+        Platform.runLater(() -> {
+            try {
+                btnUpdateAllData.setDisable(true);
+                if(blinkTimeline != null) {
+                    blinkTimeline.play();
+                }
+            } catch (Exception e) {
+                log.error("Ошибка при запуске анимации", e);
+            }
+        });
+    }
+
+    public void stopBlinkingAnimation() {
+        Platform.runLater(() -> {
+            try {
+                blinkTimeline.stop();
+                updateIcon.setOpacity(1.0);
+
+                // Эффект успешного завершения
+                Glow successGlow = new Glow(0.7);
+                successGlow.setLevel(0.7);
+                btnUpdateAllData.setEffect(successGlow);
+
+                Timeline successTimeline = new Timeline(
+                        new KeyFrame(Duration.seconds(0.5),
+                                new KeyValue(successGlow.levelProperty(), 0.0)
+                        ));
+                successTimeline.setOnFinished(e -> btnUpdateAllData.setEffect(null));
+                successTimeline.play();
+
+                btnUpdateAllData.setDisable(false);
+            } catch (Exception e) {
+                log.error("Ошибка при остановке анимации", e);
+            }
+        });
+    }
+
+    public void triggerBlinking(boolean start) {
+            if (start) startBlinkingAnimation();
+            else stopBlinkingAnimation();
+    }
+
+    //=================================================================================================================
 
     /**
      * Возвращает true если требуется запустить анонс новой программы,
