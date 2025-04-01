@@ -37,8 +37,13 @@ public class ServerMessageHandler {
 
         log.info("Message from server received: {}", message.toUsefulString());
 
-        // Обработка уведомлений в строке состояния
-        if (SP_NOTIFICATION != null && CH_SHOW_NOTIFICATION_LINE) {
+        // Все сообщения должны проходить через обработку
+        String notificationText = processMessage(message);
+
+        // Отображение уведомления (если нужно)
+        if (notificationText != null && !notificationText.isEmpty() &&
+                SP_NOTIFICATION != null && CH_SHOW_NOTIFICATION_LINE) {
+
             Platform.runLater(() -> {
                 Message.MessageType type = message.getType();
                 boolean isAdmin = CH_CURRENT_USER.getUserGroup().isAdministrate();
@@ -47,7 +52,7 @@ public class ServerMessageHandler {
 
                 // Сообщения о входе/выходе показываем только админам
                 if (!isUserInOut || isAdmin) {
-                    SP_NOTIFICATION.setText(processMessage(message));
+                    SP_NOTIFICATION.setText(notificationText);
                 }
             });
         }
@@ -118,14 +123,13 @@ public class ServerMessageHandler {
             } catch (Exception e) {
                 log.error("Ошибка при обработке сообщения чата: {}", e.getMessage());
             }
-//            processMessage(message);
         }
     }
 
     /**
      * Определяет тип сообщения и делегирует обработку соответствующему обработчику.
      * @param message Входящее сообщение.
-     * @return Строка для отображения в уведомлении.
+     * @return Строка для отображения в уведомлении (может быть пустой или null).
      */
     private static String processMessage(Message message) {
         Message.MessageType type = message.getType();
