@@ -118,6 +118,7 @@ public class ServerMessageHandler {
             } catch (Exception e) {
                 log.error("Ошибка при обработке сообщения чата: {}", e.getMessage());
             }
+//            processMessage(message);
         }
     }
 
