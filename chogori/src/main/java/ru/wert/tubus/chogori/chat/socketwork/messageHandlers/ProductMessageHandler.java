@@ -82,8 +82,12 @@ public class ProductMessageHandler {
         str.append("Обновлено изделие: ").append(product.toUsefulString());
 
         // Обновляем данные в кеше
-        ProductQuickService.LOADED_PRODUCTS.remove(product);
-        ProductQuickService.LOADED_PRODUCTS.add(product);
+        Product foundProduct = ProductQuickService.getInstance().findById(product.getId());
+        if(foundProduct != null) {
+            ProductQuickService.LOADED_PRODUCTS.remove(foundProduct);
+            ProductQuickService.LOADED_PRODUCTS.add(product);
+        } else
+            ProductQuickService.LOADED_PRODUCTS.add(product);
 
         updateDraftsEditorTab();
     }

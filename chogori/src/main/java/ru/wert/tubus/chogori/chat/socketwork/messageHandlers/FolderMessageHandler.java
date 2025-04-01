@@ -12,6 +12,7 @@ import ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
+import static ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService.LOADED_FOLDERS;
 
 /**
  * Обработчик сообщений о папках.
@@ -39,8 +40,8 @@ public class FolderMessageHandler {
         str.append("Пользователь добавил комплект чертежей: ");
         str.append(folder.toUsefulString());
 
-        if(!FolderQuickService.LOADED_FOLDERS.contains(folder))
-            FolderQuickService.LOADED_FOLDERS.add(folder);
+        if(!LOADED_FOLDERS.contains(folder))
+            LOADED_FOLDERS.add(folder);
 
         for(Tab tab: CH_TAB_PANE.getTabs()){
             if(((AppTab)tab).getTabController() instanceof DraftsEditorController){
@@ -54,11 +55,12 @@ public class FolderMessageHandler {
         str.append(folder.toUsefulString());
 
         // Обновляем чертеж в кеше
-        if(FolderQuickService.LOADED_FOLDERS.contains(folder)) {
-            FolderQuickService.LOADED_FOLDERS.remove(folder);
-            FolderQuickService.LOADED_FOLDERS.add(folder);
+        Folder foundFolder = FolderQuickService.getInstance().findById(folder.getId());
+        if(foundFolder != null) {
+            LOADED_FOLDERS.remove(foundFolder);
+            LOADED_FOLDERS.add(folder);
         } else {
-            FolderQuickService.LOADED_FOLDERS.add(folder);
+            LOADED_FOLDERS.add(folder);
         }
 
         // Обновляем все открытые вкладки редактора чертежей
@@ -74,7 +76,7 @@ public class FolderMessageHandler {
         str.append(folder.toUsefulString());
 
         // Удаляем чертеж из кеша
-        FolderQuickService.LOADED_FOLDERS.remove(folder);
+        LOADED_FOLDERS.remove(folder);
 
         // Обновляем все открытые вкладки редактора чертежей
         for(Tab tab: CH_TAB_PANE.getTabs()) {

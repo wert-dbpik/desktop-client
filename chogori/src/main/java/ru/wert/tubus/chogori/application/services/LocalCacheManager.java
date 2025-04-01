@@ -24,7 +24,7 @@ public class LocalCacheManager {
     private static final String CACHE_SUBDIR = "cache";
 
     // Полный путь к директории кэша: {HOME_DIRECTORY}/cache/
-    private static final Path CACHE_DIR = Paths.get(HOME_DIRECTORY, CACHE_SUBDIR);
+    public static final Path CACHE_DIR = Paths.get(HOME_DIRECTORY, CACHE_SUBDIR);
 
     // Экземпляр Gson для сериализации/десериализации
     private static final Gson gson = new GsonBuilder().create();

@@ -81,13 +81,14 @@ public class PushNotification {
                         stage.getIcons().addAll(WinformStatic.WF_MAIN_STAGE.getIcons());
                     }
 
+                    // Позиционируем уведомление до показа
+                    positionNewNotification(stage);
+
                     setupNotificationBehavior(stage, message.getRoomId(), notificationContainer);
 
-                    // Ждем полного отображения перед позиционированием
                     stage.setOnShown(e -> {
                         activeNotifications.put(message.getRoomId(), stage);
                         notificationStack.add(stage);
-                        repositionAllNotifications();
 
                         // Если приложение свернуто - просто показываем уведомление
                         if (WinformStatic.WF_MAIN_STAGE != null && WinformStatic.WF_MAIN_STAGE.isIconified()) {
@@ -104,7 +105,21 @@ public class PushNotification {
         });
     }
 
+    private static void positionNewNotification(Stage stage) {
+        Rectangle2D visualBounds = getCurrentScreenBounds();
+        double startX = visualBounds.getMaxX() - NOTIFICATION_WIDTH - PADDING_FROM_SCREEN_EDGE;
+        double startY = visualBounds.getMaxY() - PADDING_FROM_SCREEN_EDGE;
 
+        // Вычисляем позицию для нового уведомления
+        for (Stage existingStage : notificationStack) {
+            if (existingStage.isShowing()) {
+                startY -= (existingStage.getHeight() + SPACING_BETWEEN_NOTIFICATIONS);
+            }
+        }
+
+        stage.setX(startX);
+        stage.setY(startY);
+    }
 
     private static VBox createNotificationContainer(User sender, Message message) {
         VBox notificationContainer = new VBox(5);
@@ -270,5 +285,4 @@ public class PushNotification {
             activeNotifications.clear();
         });
     }
-
 }

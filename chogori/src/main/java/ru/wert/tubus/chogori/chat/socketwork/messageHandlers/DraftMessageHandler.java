@@ -13,6 +13,8 @@ import ru.wert.tubus.client.entity.serviceQUICK.PassportQuickService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
+import static ru.wert.tubus.client.entity.serviceQUICK.DraftQuickService.LOADED_DRAFTS;
+import static ru.wert.tubus.client.entity.serviceQUICK.PassportQuickService.LOADED_PASSPORTS;
 
 /**
  * Обработчик сообщений о чертежах.
@@ -43,11 +45,11 @@ public class DraftMessageHandler {
         str.append(draft.getPassport().toUsefulString());
 
         Passport passport = draft.getPassport();
-        if(!PassportQuickService.LOADED_PASSPORTS.contains(passport))
-            PassportQuickService.LOADED_PASSPORTS.add(passport);
+        if(!LOADED_PASSPORTS.contains(passport))
+            LOADED_PASSPORTS.add(passport);
 
-        if(!DraftQuickService.LOADED_DRAFTS.contains(draft))
-            DraftQuickService.LOADED_DRAFTS.add(draft);
+        if(!LOADED_DRAFTS.contains(draft))
+            LOADED_DRAFTS.add(draft);
 
         for(Tab tab: CH_TAB_PANE.getTabs()){
             if(((AppTab)tab).getTabController() instanceof DraftsEditorController){
@@ -64,17 +66,19 @@ public class DraftMessageHandler {
 
         Passport passport = draft.getPassport();
         // Обновляем паспорт в кеше, если он там есть
-        if(PassportQuickService.LOADED_PASSPORTS.contains(passport)) {
-            PassportQuickService.LOADED_PASSPORTS.remove(passport);
-            PassportQuickService.LOADED_PASSPORTS.add(passport);
+        Passport foundPassport = PassportQuickService.getInstance().findById(passport.getId());
+        if(foundPassport != null) {
+            LOADED_PASSPORTS.remove(foundPassport);
+            LOADED_PASSPORTS.add(passport);
         }
 
+        Draft foundDraft = DraftQuickService.getInstance().findById(draft.getId());
         // Обновляем чертеж в кеше
-        if(DraftQuickService.LOADED_DRAFTS.contains(draft)) {
-            DraftQuickService.LOADED_DRAFTS.remove(draft);
-            DraftQuickService.LOADED_DRAFTS.add(draft);
+        if(foundDraft != null) {
+            LOADED_DRAFTS.remove(foundDraft);
+            LOADED_DRAFTS.add(draft);
         } else {
-            DraftQuickService.LOADED_DRAFTS.add(draft);
+            LOADED_DRAFTS.add(draft);
         }
 
         // Обновляем все открытые вкладки редактора чертежей
@@ -92,7 +96,7 @@ public class DraftMessageHandler {
         str.append(draft.getPassport().toUsefulString());
 
         // Удаляем чертеж из кеша
-        DraftQuickService.LOADED_DRAFTS.remove(draft);
+        LOADED_DRAFTS.remove(draft);
 
         // Обновляем все открытые вкладки редактора чертежей
         for(Tab tab: CH_TAB_PANE.getTabs()) {

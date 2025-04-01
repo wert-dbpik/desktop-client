@@ -14,6 +14,8 @@ import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.winform.modal.LongProcess;
 import ru.wert.tubus.winform.warnings.Warning1;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,22 +47,41 @@ public class TaskUpdateData extends Task<Void> {
         });
         updateProgress(progress += 0.2, max);
 
-        // 1. Загружаем свежие данные с сервера
+        // 1. Очищаем кэш
+        updateMessage("\nОчистка кэша...");
+        try {
+            Files.walk(LocalCacheManager.CACHE_DIR)
+                    .filter(Files::isRegularFile)
+                    .forEach(file -> {
+                        try {
+                            Files.delete(file);
+                            log.debug("Удален файл кэша: {}", file);
+                        } catch (IOException e) {
+                            log.error("Ошибка удаления файла кэша: {}", file, e);
+                        }
+                    });
+        } catch (IOException e) {
+            log.error("Ошибка очистки кэша", e);
+        }
+        updateProgress(progress += 1.0, max);
+
+        // 2. Загружаем свежие данные с сервера
         updateMessage("\nЗагрузка данных с сервера...");
         BatchResponse freshData = BatchService.loadInitialData();
         updateProgress(progress += 1.0, max);
 
-        // 2. Сохраняем данные в кэш
+        // 3. Сохраняем данные в кэш
         updateMessage("\nСохранение данных в кэш...");
         LocalCacheManager.saveToCache("initial_data", freshData);
         updateProgress(progress += 1.0, max);
 
-        // 3. Обновляем QuickServices
+        // Остальной код остается без изменений
+        // 4. Обновляем QuickServices
         updateMessage("\nОбновление сервисов...");
         Platform.runLater(() -> ChogoriServices.initFromBatch(freshData));
         updateProgress(progress += 1.0, max);
 
-        // 4. Обновляем отдельные сервисы (если нужно)
+        // 5. Обновляем отдельные сервисы (если нужно)
         PrefixQuickService.reload();
         updateProgress(progress += 1.0, max);
 
@@ -82,7 +103,7 @@ public class TaskUpdateData extends Task<Void> {
         DetailQuickService.reload();
         updateProgress(progress += 1.0, max);
 
-        // 5. Обновляем вкладки
+        // 6. Обновляем вкладки
         updateMessage("\nОбновление интерфейса...");
         for(UpdatableTabController tab: updatableTabControllerList){
             Platform.runLater(tab::updateTab);
