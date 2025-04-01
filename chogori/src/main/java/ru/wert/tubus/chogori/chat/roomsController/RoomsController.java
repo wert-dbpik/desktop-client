@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.chat.roomsController;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -77,10 +78,12 @@ public class RoomsController {
     }
 
     public void refreshListOfUsers() {
-        if (listOfUsers != null) {
-            log.debug("Обновление списка пользователей");
-            listOfUsers.refresh();
-        }
+        Platform.runLater(()->{
+            if (listOfUsers != null) {
+                log.debug("Обновление списка пользователей");
+                listOfUsers.refresh();
+            }
+        });
     }
 
     public void init(SideChat chat) {
