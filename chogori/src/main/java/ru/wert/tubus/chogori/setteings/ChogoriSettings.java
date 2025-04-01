@@ -37,6 +37,8 @@ public class ChogoriSettings {
     public static UserGroup CH_CURRENT_USER_GROUP;//группа текущего пользователя
     public static AppSettings CH_CURRENT_USER_SETTINGS;//группа текущего пользователя
     public static List<KeyCode> CH_KEYS_NOW_PRESSED; //Массив хранения нажатых клавиш
+    public static final boolean CORRECT_ASSEMBLE_TYPE_TO_DRAFT = true; //Исправлять тип ДЕТ на СБ если номер начинается с 3 или с 4
+
 
 
     //ПОСЛЕДНИЕ ВЫБРАННЫЕ ДАННЫЕ

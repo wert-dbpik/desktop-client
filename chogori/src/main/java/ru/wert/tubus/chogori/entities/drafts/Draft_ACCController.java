@@ -63,6 +63,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CORRECT_ASSEMBLE_TYPE_TO_DRAFT;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
@@ -1171,7 +1172,14 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
             //Получениее расширения при ИЗМЕНЕНИИ полей записи
             newDraft.setExtension(FilenameUtils.getExtension(lblFileName.getText()).toLowerCase());
         //
-        newDraft.setDraftType(bxType.getValue().getTypeId());
+        EDraftType type = bxType.getValue();
+        String num = newPassport.getNumber();
+        if (CORRECT_ASSEMBLE_TYPE_TO_DRAFT && // Если допускается исправлять ДЕТ на СБ для номеров 3ХХХХХ.ХХХ и 4ХХХХХ.ХХХ
+                type.equals(EDraftType.DETAIL) &&
+                (num.matches("^[34]\\d{5}\\.\\d{3}$"))) {
+            type = EDraftType.ASSEMBLE;
+        }
+        newDraft.setDraftType(type.getTypeId());
         newDraft.setPageNumber(bxPage.getValue());
         // СТАТУС
         newDraft.setStatus(EDraftStatus.LEGAL.getStatusId());
