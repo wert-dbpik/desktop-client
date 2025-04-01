@@ -271,33 +271,4 @@ public class PushNotification {
         });
     }
 
-    /**
-     * Мигает иконкой в панели задач для привлечения внимания
-     * @param stage Сцена уведомления
-     */
-    private static void flashTaskbarIcon(Stage stage) {
-        if (WinformStatic.WF_MAIN_STAGE != null) {
-            Platform.runLater(() -> {
-                WinformStatic.WF_MAIN_STAGE.setIconified(false);
-                WinformStatic.WF_MAIN_STAGE.requestFocus();
-                WinformStatic.WF_MAIN_STAGE.setIconified(true);
-
-                // Повторяем мигание несколько раз
-                for (int i = 0; i < 3; i++) {
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(500);
-                            Platform.runLater(() -> {
-                                WinformStatic.WF_MAIN_STAGE.setIconified(false);
-                                WinformStatic.WF_MAIN_STAGE.requestFocus();
-                                WinformStatic.WF_MAIN_STAGE.setIconified(true);
-                            });
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }).start();
-                }
-            });
-        }
-    }
 }
