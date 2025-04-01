@@ -75,6 +75,12 @@ public class PushNotification {
 
                     VBox notificationContainer = createNotificationContainer(sender, message);
                     Stage stage = createStage(notificationContainer);
+
+                    // Устанавливаем иконку приложения для уведомления
+                    if (WinformStatic.WF_MAIN_STAGE != null) {
+                        stage.getIcons().addAll(WinformStatic.WF_MAIN_STAGE.getIcons());
+                    }
+
                     setupNotificationBehavior(stage, message.getRoomId(), notificationContainer);
 
                     // Ждем полного отображения перед позиционированием
@@ -82,6 +88,11 @@ public class PushNotification {
                         activeNotifications.put(message.getRoomId(), stage);
                         notificationStack.add(stage);
                         repositionAllNotifications();
+
+                        // Если приложение свернуто - просто показываем уведомление
+                        if (WinformStatic.WF_MAIN_STAGE != null && WinformStatic.WF_MAIN_STAGE.isIconified()) {
+                            stage.setAlwaysOnTop(true); // Гарантируем видимость
+                        }
                     });
 
                     stage.show();
@@ -92,6 +103,8 @@ public class PushNotification {
             }
         });
     }
+
+
 
     private static VBox createNotificationContainer(User sender, Message message) {
         VBox notificationContainer = new VBox(5);
@@ -256,5 +269,35 @@ public class PushNotification {
             notificationStack.clear();
             activeNotifications.clear();
         });
+    }
+
+    /**
+     * Мигает иконкой в панели задач для привлечения внимания
+     * @param stage Сцена уведомления
+     */
+    private static void flashTaskbarIcon(Stage stage) {
+        if (WinformStatic.WF_MAIN_STAGE != null) {
+            Platform.runLater(() -> {
+                WinformStatic.WF_MAIN_STAGE.setIconified(false);
+                WinformStatic.WF_MAIN_STAGE.requestFocus();
+                WinformStatic.WF_MAIN_STAGE.setIconified(true);
+
+                // Повторяем мигание несколько раз
+                for (int i = 0; i < 3; i++) {
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(500);
+                            Platform.runLater(() -> {
+                                WinformStatic.WF_MAIN_STAGE.setIconified(false);
+                                WinformStatic.WF_MAIN_STAGE.requestFocus();
+                                WinformStatic.WF_MAIN_STAGE.setIconified(true);
+                            });
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }).start();
+                }
+            });
+        }
     }
 }

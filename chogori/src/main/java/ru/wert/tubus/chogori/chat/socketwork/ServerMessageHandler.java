@@ -10,6 +10,7 @@ import ru.wert.tubus.chogori.chat.socketwork.messageHandlers.*;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
+import ru.wert.tubus.winform.statics.WinformStatic;
 
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.updateMessageInOpenRooms;
@@ -56,51 +57,66 @@ public class ServerMessageHandler {
     }
 
     /**
-     * Обрабатывает сообщения чата с учетом активности комнаты
+     * Обрабатывает сообщения чата с учетом активности комнаты и состояния приложения
      * @param message Входящее сообщение
      */
     private static void processChatMessage(Message message) {
         Message.MessageType type = message.getType();
         log.debug("Обработка сообщения типа: {}", type);
 
-        // Обрабатываем только сообщения типа PUSH
-        if (type == Message.MessageType.PUSH) {
+        // Обрабатываем сообщения типа PUSH и CHAT_
+        if (type == Message.MessageType.PUSH || type.name().startsWith("CHAT_")) {
             try {
-                // Парсим вложенное сообщение из текста PUSH-уведомления
-                Gson gson = GsonConfiguration.createGson();
-                Message innerMessage = gson.fromJson(message.getText(), Message.class);
+                Message messageToProcess;
 
-                // Проверяем, что вложенное сообщение является CHAT_ типом
-                if (innerMessage.getType().name().startsWith("CHAT_")) {
+                // Для PUSH-сообщений парсим вложенное сообщение из текста
+                if (type == Message.MessageType.PUSH) {
+                    Gson gson = GsonConfiguration.createGson();
+                    messageToProcess = gson.fromJson(message.getText(), Message.class);
+                } else {
+                    // Для CHAT_ сообщений используем само сообщение
+                    messageToProcess = message;
+                }
+
+                // Проверяем, что сообщение является CHAT_ типом
+                if (messageToProcess.getType().name().startsWith("CHAT_")) {
                     Platform.runLater(() -> {
                         // Проверяем, открыта ли комната этого сообщения
                         boolean isRoomOpen = false;
                         Room currentRoom = dialogController != null ? dialogController.getCurrentOpenRoom() : null;
                         log.debug("Текущая открытая комната: {}", currentRoom != null ? currentRoom.getId() : "null");
-                        log.debug("Комната сообщения: {}", innerMessage.getRoomId());
+                        log.debug("Комната сообщения: {}", messageToProcess.getRoomId());
 
-                        if (currentRoom != null && currentRoom.getId().equals(innerMessage.getRoomId())) {
+                        if (currentRoom != null && currentRoom.getId().equals(messageToProcess.getRoomId())) {
                             isRoomOpen = true;
                         }
 
-                        // Если комната не открыта - показываем push-уведомление
-                        log.debug("Комната открыта? {}", isRoomOpen);
-                        if (!isRoomOpen) {
-                            log.debug("Показываем пуш для сообщения из закрытой комнаты");
-                            PushNotification.show(innerMessage); // Передаем вложенное сообщение
+                        // Проверяем, свернуто ли приложение
+                        boolean isAppMinimized = WinformStatic.WF_MAIN_STAGE != null
+                                && WinformStatic.WF_MAIN_STAGE.isIconified();
+
+                        // Показываем уведомление если:
+                        // 1. Комната не открыта ИЛИ
+                        // 2. Приложение свернуто
+                        boolean showNotification = !isRoomOpen || isAppMinimized;
+                        log.debug("Комната открыта? {}, Приложение свернуто? {}", isRoomOpen, isAppMinimized);
+
+                        if (showNotification) {
+                            log.debug("Показываем пуш для сообщения");
+                            PushNotification.show(messageToProcess);
                         }
 
                         // Передаем сообщение в соответствующий диалог
                         for (DialogListView dialog : DialogController.openRooms) {
-                            if (dialog.getRoom().getId().equals(innerMessage.getRoomId())) {
-                                dialog.receiveMessageFromServer(innerMessage);
+                            if (dialog.getRoom().getId().equals(messageToProcess.getRoomId())) {
+                                dialog.receiveMessageFromServer(messageToProcess);
                                 break;
                             }
                         }
                     });
                 }
             } catch (Exception e) {
-                log.error("Ошибка при парсинге вложенного сообщения PUSH: {}", e.getMessage());
+                log.error("Ошибка при обработке сообщения чата: {}", e.getMessage());
             }
         }
     }
