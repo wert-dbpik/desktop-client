@@ -20,7 +20,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308">
                                  <children>
-                                    <Button fx:id="btnAddNewChatGroup" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="+Добавить групповой чат" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                    <Button fx:id="btnAddNewChatGroup" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Мои чаты" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font name="System Bold Italic" size="14.0" />
                                        </font></Button>
