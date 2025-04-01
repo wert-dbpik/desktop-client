@@ -145,48 +145,53 @@ public class PushNotification {
      * Позиционирует уведомление в правом нижнем углу текущего монитора
      */
     private static void positionAtScreenCorner(Stage notificationStage) {
+        // Принудительно применяем изменения размера
         notificationStage.sizeToScene();
 
-        Stage mainStage = WinformStatic.WF_MAIN_STAGE;
-        if (mainStage == null) {
-            positionAtPrimaryScreenCorner(notificationStage);
-            return;
-        }
+        // Даём время на применение изменений размера
+        Platform.runLater(() -> {
+            Stage mainStage = WinformStatic.WF_MAIN_STAGE;
+            Screen targetScreen;
 
-        // Определяем текущий монитор
-        int monitor = ModalWindow.findCurrentMonitorByMainStage(mainStage);
-        List<Screen> screens = Screen.getScreens();
-        if (monitor >= screens.size()) {
-            positionAtPrimaryScreenCorner(notificationStage);
-            return;
-        }
+            if (mainStage == null || !mainStage.isShowing()) {
+                targetScreen = Screen.getPrimary();
+            } else {
+                targetScreen = Screen.getScreens().stream()
+                        .filter(screen -> {
+                            Rectangle2D bounds = screen.getBounds();
+                            return bounds.contains(mainStage.getX(), mainStage.getY());
+                        })
+                        .findFirst()
+                        .orElse(Screen.getPrimary());
+            }
 
-        Screen screen = screens.get(monitor);
-        Rectangle2D bounds = screen.getBounds();
+            Rectangle2D visualBounds = targetScreen.getVisualBounds();
+            double padding = 20;
+            double x = visualBounds.getMaxX() - notificationStage.getWidth() - padding;
+            double y = visualBounds.getMaxY() - notificationStage.getHeight() - padding;
 
-        // Рассчитываем позицию с небольшим отступом
-        double padding = 20;
-        double x = bounds.getMaxX() - notificationStage.getWidth() - padding;
-        double y = bounds.getMaxY() - notificationStage.getHeight() - padding;
+            notificationStage.setX(x);
+            notificationStage.setY(y);
 
-        notificationStage.setX(x);
-        notificationStage.setY(y);
-
-        log.debug("Positioning notification at monitor {}: {:.1f}, {:.1f}", monitor, x, y);
+            log.debug("Positioning notification at screen {}: {:.1f}, {:.1f}",
+                    targetScreen, x, y);
+        });
     }
 
     /**
      * Фолбэк-позиционирование на основном мониторе
      */
     private static void positionAtPrimaryScreenCorner(Stage stage) {
-        Rectangle2D bounds = Screen.getPrimary().getBounds();
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
         double padding = 20;
-        double x = bounds.getMaxX() - stage.getWidth() - padding;
-        double y = bounds.getMaxY() - stage.getHeight() - padding;
-        stage.setX(x);
-        stage.setY(y);
+        double x = visualBounds.getMaxX() - stage.getWidth() - padding;
+        double y = visualBounds.getMaxY() - stage.getHeight() - padding;
 
-        log.debug("Fallback positioning at primary screen: {:.1f}, {:.1f}", x, y);
+        Platform.runLater(() -> {
+            stage.setX(x);
+            stage.setY(y);
+            log.debug("Fallback positioning at primary screen: {:.1f}, {:.1f}", x, y);
+        });
     }
 
     private static void closeExistingNotification(Long roomId) {
