@@ -27,9 +27,11 @@ public class TaskUpdateData extends Task<Void> {
     private final double max;
     private double progress;
     private final List<UpdatableTabController> updatableTabControllerList;
+    private final LocalCacheManager cacheManager;
 
     public TaskUpdateData() {
         this.progress = 0.0;
+        this.cacheManager = LocalCacheManager.getInstance();
 
         updatableTabControllerList = new ArrayList<>();
 
@@ -50,7 +52,7 @@ public class TaskUpdateData extends Task<Void> {
         // 1. Очищаем кэш
         updateMessage("Очистка кэша...");
         try {
-            Files.walk(LocalCacheManager.CACHE_DIR)
+            Files.walk(cacheManager.getCacheDir())
                     .filter(Files::isRegularFile)
                     .forEach(file -> {
                         try {
@@ -72,10 +74,9 @@ public class TaskUpdateData extends Task<Void> {
 
         // 3. Сохраняем данные в кэш
         updateMessage("Сохранение данных в кэш...");
-        LocalCacheManager.saveToCache("initial_data", freshData);
+        cacheManager.saveToCache("initial_data", freshData);
         updateProgress(progress += 1.0, max);
 
-        // Остальной код остается без изменений
         // 4. Обновляем QuickServices
         updateMessage("Обновление сервисов...");
         Platform.runLater(() -> ChogoriServices.initFromBatch(freshData));

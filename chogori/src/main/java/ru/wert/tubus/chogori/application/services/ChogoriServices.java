@@ -94,7 +94,7 @@ public class ChogoriServices {
     public static void initQuickServicesWithCache() {
 
         // 1. Сначала загружаем данные из кэша (синхронно)
-        BatchResponse cached = LocalCacheManager.loadFromCache("initial_data", BatchResponse.class);
+        BatchResponse cached = LocalCacheManager.getInstance().loadFromCache("initial_data", BatchResponse.class);
         if(cached != null) {
             initFromBatch(cached);
             log.info("Начальные данные загружены из кэша");
@@ -112,7 +112,7 @@ public class ChogoriServices {
                 log.info("Начинается фоновое обновление данных с сервера...");
                 BatchResponse fresh = BatchService.loadInitialData();
 
-                LocalCacheManager.saveToCache("initial_data", fresh);
+                LocalCacheManager.getInstance().saveToCache("initial_data", fresh);
                 log.info("Данные кэша успешно обновлены");
 
                 // Обновляем UI только если пользователь уже вошел в систему

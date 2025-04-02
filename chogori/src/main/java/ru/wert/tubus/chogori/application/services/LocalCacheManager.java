@@ -23,21 +23,50 @@ import static ru.wert.tubus.winform.statics.WinformStatic.HOME_DIRECTORY;
 /**
  * Менеджер локального кэширования данных.
  * Обеспечивает сохранение, загрузку и регулярное обновление данных в формате JSON.
+ * Реализован как синглтон.
  */
 @Slf4j
 public class LocalCacheManager {
 
     private static final String CACHE_SUBDIR = "cache";
-    public static final Path CACHE_DIR = Paths.get(HOME_DIRECTORY, CACHE_SUBDIR);
+    private static final Path CACHE_DIR = Paths.get(HOME_DIRECTORY, CACHE_SUBDIR);
     private static final Gson gson = new GsonBuilder().create();
     private static final long UPDATE_INTERVAL_HOURS = 1;
-    private static ScheduledExecutorService scheduler;
+
+    private ScheduledExecutorService scheduler;
+
+    // Экземпляр синглтона
+    private static volatile LocalCacheManager instance;
+
+    /**
+     * Приватный конструктор для предотвращения создания экземпляров извне
+     */
+    private LocalCacheManager() {
+        // Инициализация при необходимости
+    }
+
+    /**
+     * Возвращает экземпляр синглтона
+     * @return Экземпляр LocalCacheManager
+     */
+    public static LocalCacheManager getInstance() {
+        LocalCacheManager localInstance = instance;
+        if (localInstance == null) {
+            synchronized (LocalCacheManager.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new LocalCacheManager();
+                }
+            }
+        }
+        return localInstance;
+    }
 
     /**
      * Запускает обновление кэша с задержкой в 5 минут
      * @param onFinishCallback Колбек при завершении обновления
      */
-    public static void startDelayedCacheUpdate(Runnable onFinishCallback) {
+    public void startDelayedCacheUpdate(Runnable onFinishCallback) {
         log.info("Запланировано обновление кэша через 5 минут...");
 
         ScheduledExecutorService delayedExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -62,7 +91,7 @@ public class LocalCacheManager {
      * @param onStartCallback Колбек при начале обновления
      * @param onFinishCallback Колбек при завершении обновления
      */
-    public static void startScheduledCacheUpdates(Runnable onStartCallback, Runnable onFinishCallback) {
+    public void startScheduledCacheUpdates(Runnable onStartCallback, Runnable onFinishCallback) {
         log.info("Запуск регулярного обновления кэша с интервалом {} часов", UPDATE_INTERVAL_HOURS);
 
         // Последующие обновления по расписанию
@@ -84,7 +113,7 @@ public class LocalCacheManager {
      * Принудительное обновление кэша
      * @param onFinishCallback Колбек при завершении обновления
      */
-    public static void forceCacheUpdate(Runnable onFinishCallback) {
+    public void forceCacheUpdate(Runnable onFinishCallback) {
         log.info("Запуск принудительного обновления кэша...");
 
         Thread updateThread = new Thread(() -> {
@@ -126,7 +155,7 @@ public class LocalCacheManager {
      * @param key Ключ для сохранения
      * @param data Данные для сохранения
      */
-    public static void saveToCache(String key, Object data) {
+    public void saveToCache(String key, Object data) {
         try {
             if (!Files.exists(CACHE_DIR)) {
                 Files.createDirectories(CACHE_DIR);
@@ -147,7 +176,7 @@ public class LocalCacheManager {
      * @param type Тип возвращаемых данных
      * @return Загруженные данные или null
      */
-    public static <T> T loadFromCache(String key, Class<T> type) {
+    public <T> T loadFromCache(String key, Class<T> type) {
         try {
             Path cacheFile = CACHE_DIR.resolve(key + ".json");
             if (Files.exists(cacheFile)) {
@@ -163,5 +192,8 @@ public class LocalCacheManager {
         return null;
     }
 
+    public Path getCacheDir() {
+        return CACHE_DIR;
+    }
 }
 

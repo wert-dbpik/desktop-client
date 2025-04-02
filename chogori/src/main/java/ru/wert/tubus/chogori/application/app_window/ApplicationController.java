@@ -156,7 +156,7 @@ public class ApplicationController {
         log.debug("initialize : блок инициализации успешно выполнен");
 
         // Запуск регулярного обновления кэша
-        LocalCacheManager.startScheduledCacheUpdates(this::startBlinkingAnimation, this::stopBlinkingAnimation);
+        LocalCacheManager.getInstance().startScheduledCacheUpdates(this::startBlinkingAnimation, this::stopBlinkingAnimation);
 
     }
 
