@@ -29,7 +29,7 @@ import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 public class TabRooms {
     private final Tab tabPaneRooms;
     private final ListView<Room> listOfRooms;
-    private RoomsController controller;
+    private final RoomsController controller;
 
     public TabRooms(RoomsController controller) {
         this.controller = controller;

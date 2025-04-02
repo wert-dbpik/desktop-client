@@ -9,6 +9,7 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.Roommate;
 import ru.wert.tubus.client.entity.models.User;
+import ru.wert.tubus.client.entity.serviceREST.UserService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class ChatStaticMaster {
             roomNameDB = roomNameDB.replace("one-to-one:#", "");
             String[] usersId = roomNameDB.split("#", -1);
             for(String id : usersId){
-                User user = CH_USERS.findById(Long.parseLong(id));
+                User user = UserService.getInstance().findById(Long.parseLong(id));
                 if(!user.getId().equals(CH_CURRENT_USER.getId())) {
                     finalName = user.getName();
                     break;
@@ -70,9 +71,9 @@ public class ChatStaticMaster {
 
         // Сравниваем ID и возвращаем пользователя, чей ID не равен ID текущего пользователя
         if (id1.equals(currentUserId)) {
-            return CH_USERS.findById(id2); // Возвращаем второго пользователя
+            return UserService.getInstance().findById(id2); // Возвращаем второго пользователя
         } else if (id2.equals(currentUserId)) {
-            return CH_USERS.findById(id1); // Возвращаем первого пользователя
+            return UserService.getInstance().findById(id1); // Возвращаем первого пользователя
         } else {
             throw new IllegalArgumentException("Ни один из ID в комнате не соответствует ID текущего пользователя.");
         }

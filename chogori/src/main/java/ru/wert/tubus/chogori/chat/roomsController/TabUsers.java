@@ -102,7 +102,7 @@ public class TabUsers {
     public void updateListOfUsers() {
         log.debug("Обновление списка пользователей");
         controller.getUsersOnline().clear();
-        List<User> allUsers = LOADED_USERS.isEmpty() ?  UserService.getInstance().findAll() : LOADED_USERS;
+        List<User> allUsers = UserService.getInstance().findAll();
         for (User user : allUsers) {
             controller.getUsersOnline().add(new UserOnline(user, user.isOnline()));
         }
