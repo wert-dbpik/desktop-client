@@ -7,7 +7,6 @@ import retrofit2.http.Query;
 public interface BatchApiService {
     @GET("batch/init-data")
     Call<BatchResponse> getInitialData(
-            @Query("includeUsers") boolean includeUsers,
             @Query("includeDrafts") boolean includeDrafts,
             @Query("includeProducts") boolean includeProducts,
             @Query("includeFolders") boolean includeFolders,

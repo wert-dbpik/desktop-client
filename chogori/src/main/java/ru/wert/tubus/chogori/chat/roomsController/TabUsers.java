@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.util.UserOnline;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.User;
-import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
 import ru.wert.tubus.client.entity.serviceREST.UserService;
 
 import java.util.List;
@@ -18,7 +17,6 @@ import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
-import static ru.wert.tubus.client.entity.serviceQUICK.UserQuickService.LOADED_USERS;
 
 @Slf4j
 public class TabUsers {

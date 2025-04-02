@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
-import static ru.wert.tubus.client.entity.serviceQUICK.UserQuickService.LOADED_USERS;
-
 public class BXUsers {
 
     public BXUsers(ComboBox<User> bxUsers) {

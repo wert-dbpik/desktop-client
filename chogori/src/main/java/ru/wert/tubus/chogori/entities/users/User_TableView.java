@@ -13,7 +13,7 @@ import ru.wert.tubus.chogori.common.tableView.RoutineTableView;
 import ru.wert.tubus.chogori.entities.users.commands._UserCommands;
 import ru.wert.tubus.chogori.statics.Comparators;
 import ru.wert.tubus.client.entity.models.User;
-import ru.wert.tubus.client.entity.serviceQUICK.UserQuickService;
+import ru.wert.tubus.client.entity.serviceREST.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public class User_TableView extends RoutineTableView<User> implements Sorting<Us
 
     @Override
     public ObservableList<User> prepareList() {
-        return FXCollections.observableArrayList(UserQuickService.LOADED_USERS); // Возвращаем ObservableList<User>
+        return FXCollections.observableArrayList(UserService.getInstance().findAll()); // Возвращаем ObservableList<User>
     }
 
     @Override

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration packagingData="false" debug="false">
 
-    <contextName>BazaPIK</contextName>
+    <contextName>Tubus</contextName>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${user.home}/AppData/Local/BazaPIK/logs/mainLog.log</file>
+        <file>${user.home}/AppData/Local/Tubus/logs/mainLog.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <FileNamePattern>${user.home}/AppData/Local/BazaPIK/logs/mainLog.%i.log.zip</FileNamePattern>
+            <FileNamePattern>${user.home}/AppData/Local/Tubus/logs/mainLog.%i.log.zip</FileNamePattern>
             <MinIndex>1</MinIndex>
             <MaxIndex>5</MaxIndex>
         </rollingPolicy>

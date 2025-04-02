@@ -6,8 +6,6 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceREST.UserService;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_QUICK_USERS;
-
 /**
  * Обработчик сообщений о статусе пользователя (вход/выход).
  */

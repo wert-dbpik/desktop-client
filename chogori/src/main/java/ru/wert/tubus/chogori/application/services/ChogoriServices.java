@@ -55,7 +55,6 @@ public class ChogoriServices {
     public static AnyPartQuickService CH_QUICK_ANY_PARTS;
     public static PassportQuickService CH_QUICK_PASSPORTS;
     public static MaterialQuickService CH_QUICK_MATERIALS;
-    public static UserQuickService CH_QUICK_USERS;
 
     public static void initServices(){
 
@@ -169,23 +168,16 @@ public class ChogoriServices {
         if (batch.getPassports() != null) {
             PassportQuickService.LOADED_PASSPORTS = new ArrayList<>(batch.getPassports());
         }
-
-        if (batch.getUsers() != null) {
-            UserQuickService.LOADED_USERS = new ArrayList<>(batch.getUsers());
-        }
     }
 
 
     public static void initQuickServices(){
-        ChogoriServices.CH_QUICK_USERS = UserQuickService.getInstance();
         ChogoriServices.CH_QUICK_FOLDERS = FolderQuickService.getInstance();
         ChogoriServices.CH_QUICK_PRODUCTS = ProductQuickService.getInstance();
         ChogoriServices.CH_QUICK_DRAFTS = DraftQuickService.getInstance();
         ChogoriServices.CH_QUICK_PREFIXES = PrefixQuickService.getInstance();
-//        ChogoriServices.CH_QUICK_DETAILS = DetailQuickService.getInstance();
         ChogoriServices.CH_QUICK_ANY_PARTS = AnyPartQuickService.getInstance();
         ChogoriServices.CH_QUICK_PASSPORTS = PassportQuickService.getInstance();
-//        ChogoriServices.CH_QUICK_MATERIALS = MaterialQuickService.getInstance();
     }
 
 

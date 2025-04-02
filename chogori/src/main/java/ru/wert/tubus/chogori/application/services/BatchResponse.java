@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class BatchResponse {
-    private List<User> users;
     private List<Draft> drafts;
     private List<Product> products;
     private List<Folder> folders;
