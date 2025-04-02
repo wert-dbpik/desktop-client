@@ -198,7 +198,7 @@ public class DraftService implements IDraftService {
             Call<List<Draft>> call = api.getAll();
             return call.execute().body();
         } catch (IOException e) {
-            log.error("getAll : не удалось загрузить чертежи с сервера");
+            log.error("findAll : не удалось загрузить чертежи с сервера");
         }
         return null;
     }
