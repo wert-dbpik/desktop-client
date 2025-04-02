@@ -23,6 +23,10 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.application.services.BatchResponse;
+import ru.wert.tubus.chogori.application.services.BatchService;
+import ru.wert.tubus.chogori.application.services.ChogoriServices;
+import ru.wert.tubus.chogori.application.services.LocalCacheManager;
 import ru.wert.tubus.chogori.components.BtnChat;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
 import ru.wert.tubus.chogori.tabs.AppTab;
@@ -151,6 +155,9 @@ public class ApplicationController {
 
         log.debug("initialize : блок инициализации успешно выполнен");
 
+        // Запуск регулярного обновления кэша
+        LocalCacheManager.startScheduledCacheUpdates(this::startBlinkingAnimation, this::stopBlinkingAnimation);
+
     }
 
     //==================================================  btnUpdateAllData  ===========================================
@@ -215,11 +222,6 @@ public class ApplicationController {
                 log.error("Ошибка при остановке анимации", e);
             }
         });
-    }
-
-    public void triggerBlinking(boolean start) {
-            if (start) startBlinkingAnimation();
-            else stopBlinkingAnimation();
     }
 
     //=================================================================================================================

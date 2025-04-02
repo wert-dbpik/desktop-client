@@ -87,37 +87,6 @@ public class StartChogori extends Application {
 
     }
 
-    /**
-     * Метод для фонового обновления кэша
-     */
-    private void startBackgroundCacheUpdate() {
-        Thread updateThread = new Thread(() -> {
-            try {
-                log.info("Начинается фоновое обновление кэша и данных...");
-
-                // 1. Загружаем свежие данные с сервера
-                BatchResponse freshData = BatchService.loadInitialData();
-
-                // 2. Обновляем кэш
-                LocalCacheManager.saveToCache("initial_data", freshData);
-                log.info("Кэш успешно обновлен");
-
-                // 3. Обновляем коллекции в QuickServices
-                Platform.runLater(() -> {
-                    ChogoriServices.initFromBatch(freshData);
-                    log.info("Коллекции в QuickServices обновлены");
-                });
-
-            } catch (IOException e) {
-                log.error("Ошибка при фоновом обновлении кэша и данных: {}", e.getMessage());
-            }
-        });
-
-        updateThread.setPriority(Thread.MIN_PRIORITY);
-        updateThread.setDaemon(true);
-        updateThread.start();
-    }
-
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -166,11 +135,6 @@ public class StartChogori extends Application {
             stage.show();
 
             controller.centerInitialWindow(stage, true, WinformSettings.CH_MONITOR);
-
-            // Запускаем фоновое обновление после показа UI
-//            Platform.runLater(()->CH_APPLICATION_CONTROLLER.startBlinkingAnimation());
-            startBackgroundCacheUpdate();
-//            Platform.runLater(()->CH_APPLICATION_CONTROLLER.stopBlinkingAnimation());
 
         }catch (IOException e) {
             e.printStackTrace();
