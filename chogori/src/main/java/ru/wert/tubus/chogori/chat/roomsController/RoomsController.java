@@ -2,6 +2,7 @@ package ru.wert.tubus.chogori.chat.roomsController;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,6 +18,10 @@ import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.roomsCo
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.fetchOneToOneRoom;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
+/**
+ * Контроллер для управления списком комнат и пользователей в чате.
+ * Обеспечивает взаимодействие между интерфейсом и логикой чата.
+ */
 @Slf4j
 public class RoomsController {
 
@@ -45,6 +50,9 @@ public class RoomsController {
     @Getter
     private ObservableList<UserOnline> usersOnline = FXCollections.observableArrayList();
 
+    /**
+     * Инициализация контроллера. Создает и обновляет списки комнат и пользователей.
+     */
     @FXML
     void initialize() {
         log.info("Инициализация SideRoomsController");
@@ -66,9 +74,9 @@ public class RoomsController {
     }
 
     /**
-     * Добавляет комнату в список listOfRooms, если она отсутствует.
+     * Добавляет комнату в список, если она отсутствует.
      *
-     * @param room Комната, которую нужно добавить.
+     * @param room Комната для добавления.
      */
     public void addRoomIfAbsent(Room room) {
         if (room != null && !listOfRooms.getItems().contains(room)) {
@@ -77,29 +85,71 @@ public class RoomsController {
         }
     }
 
+    /**
+     * Обновляет список пользователей и комнат, а также индикаторы статусов.
+     */
     public void refreshListOfUsers() {
         Platform.runLater(()->{
             if (listOfUsers != null) {
                 log.debug("Обновление списка пользователей и комнат");
                 listOfUsers.refresh();
                 listOfRooms.refresh();
+
+                // Явно триггерим обновление индикаторов
+                updateAllRoomNameIndicators();
             }
         });
     }
 
+    /**
+     * Инициализирует контроллер с указанным чатом.
+     *
+     * @param chat Объект SideChat для взаимодействия.
+     */
     public void init(SideChat chat) {
         log.info("Инициализация SideRoomsController с SideChat");
         this.chat = chat;
         roomsController = this;
+
+        // Добавляем слушатель изменений списка пользователей
+        usersOnline.addListener((ListChangeListener<UserOnline>) c -> {
+            while (c.next()) {
+                if (c.wasUpdated() || c.wasAdded() || c.wasRemoved()) {
+                    updateAllRoomNameIndicators();
+                }
+            }
+        });
     }
 
+    /**
+     * Обновляет индикаторы статусов для всех комнат.
+     */
+    private void updateAllRoomNameIndicators() {
+        if (chat != null && chat.getDialogController() != null) {
+            Room currentRoom = chat.getDialogController().getCurrentOpenRoom();
+            if (currentRoom != null) {
+                Platform.runLater(() -> {
+                    chat.getDialogController().setRoomNameWithOnlineStatus(currentRoom);
+                });
+            }
+        }
+    }
 
+    /**
+     * Открывает чат для указанной комнаты.
+     *
+     * @param room Комната, для которой открывается чат.
+     */
     public void openChat(Room room){
         log.debug("Открытие чата {}", room.getName());
-
         chat.showChatDialog(room);
     }
 
+    /**
+     * Открывает индивидуальный чат с указанным пользователем.
+     *
+     * @param interlocutor Пользователь, с которым открывается чат.
+     */
     public void openOneToOneChat(User interlocutor) {
         Room room = fetchOneToOneRoom(interlocutor);
 
@@ -115,33 +165,34 @@ public class RoomsController {
         chat.showChatDialog(room);
     }
 
-
+    /**
+     * Удаляет комнату из списка и скрывает её для текущего пользователя.
+     *
+     * @param room Комната для удаления.
+     */
     public void deleteRoomFromList(Room room) {
-        // Логика для удаления комнаты из списка
         if (room != null) {
-            // Получаем ID текущего пользователя
             Long currentUserId = CH_CURRENT_USER.getId();
-
-            // Скрываем комнату для пользователя
             Room updatedRoom = CH_ROOMS.setUserVisibility(room.getId(), currentUserId, false);
             if (updatedRoom != null) {
-                // Удаляем комнату из списка
-                listOfRooms.getItems().remove(room); // Удаляем комнату из ObservableList
+                listOfRooms.getItems().remove(room);
             } else {
                 log.error("Ошибка при скрытии комнаты.");
             }
         }
     }
 
+    /**
+     * Обрабатывает выход пользователя из чата.
+     *
+     * @param room Комната, из которой выходит пользователь.
+     */
     public void exitFromChat(Room room) {
-        // Логика для выхода из чата
         if (room != null) {
-            // Предположим, что currentUserId — это ID текущего пользователя
-            Long currentUserId = CH_CURRENT_USER.getId(); // Нужно реализовать метод для получения ID текущего пользователя
+            Long currentUserId = CH_CURRENT_USER.getId();
             Room updatedRoom = CH_ROOMS.setUserMembership(room.getId(), currentUserId, false);
             if (updatedRoom != null) {
                 System.out.println("Пользователь вышел из чата: " + room.getName());
-                // Дополнительные действия, например, обновление UI
             } else {
                 System.out.println("Ошибка при выходе из чата.");
             }

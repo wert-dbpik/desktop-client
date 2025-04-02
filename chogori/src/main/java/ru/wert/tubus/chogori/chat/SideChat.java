@@ -34,7 +34,7 @@ public class SideChat {
     private Parent sideChatGroups;
 
     @Getter
-    private DialogController talkController;
+    private DialogController dialogController;
 
     @Getter
     private RoomsController roomsController;
@@ -106,9 +106,9 @@ public class SideChat {
      */
     public void showChatDialog(Room room) {
         log.debug("Открытие диалога чата для комнаты: {}", room.getName());
-        talkController.getLblRoom().setText(ChatStaticMaster.getRoomName(room.getName()));
+        dialogController.getLblRoom().setText(ChatStaticMaster.getRoomName(room.getName()));
 
-        talkController.openDialogForRoom(room);
+        dialogController.openDialogForRoom(room);
         mainPane.getChildren().clear();
         mainPane.getChildren().add(sideChatTalk);
     }
@@ -120,8 +120,8 @@ public class SideChat {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/dialog.fxml"));
             sideChatTalk = loader.load();
-            talkController = loader.getController();
-            talkController.init(this);
+            dialogController = loader.getController();
+            dialogController.init(this);
             log.debug("Панель для диалога чата успешно создана");
         } catch (IOException e) {
             log.error("Ошибка при создании панели для диалога чата", e);
