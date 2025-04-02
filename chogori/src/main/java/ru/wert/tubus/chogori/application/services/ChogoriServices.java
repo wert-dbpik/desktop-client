@@ -94,7 +94,7 @@ public class ChogoriServices {
 
         // 1. Сначала загружаем данные из кэша (синхронно)
         BatchResponse cached = LocalCacheManager.getInstance().loadFromCache("initial_data", BatchResponse.class);
-        if(cached != null) {
+        if (cached != null) {
             initFromBatch(cached);
             log.info("Начальные данные загружены из кэша");
         } else {
@@ -103,40 +103,9 @@ public class ChogoriServices {
             // Если кэша нет, инициализируем быстрые сервисы без данных
             initQuickServices();
         }
-
-        // 2. Запускаем фоновое обновление с пониженным приоритетом
-        Thread updateThread = new Thread(() -> {
-
-            try {
-                log.info("Начинается фоновое обновление данных с сервера...");
-                BatchResponse fresh = BatchService.loadInitialData();
-
-                LocalCacheManager.getInstance().saveToCache("initial_data", fresh);
-                log.info("Данные кэша успешно обновлены");
-
-                // Обновляем UI только если пользователь уже вошел в систему
-                if(CH_CURRENT_USER != null) {
-                    Platform.runLater(() -> {
-                        initFromBatch(fresh);
-                        log.info("UI обновлен с актальными данными");
-                    });
-                }
-            } catch (IOException e) {
-                log.error("Обновить данные с сервера не удалось: {}", e.getMessage());
-            }
-        });
-
-        updateThread.setPriority(Thread.MIN_PRIORITY); // Понижаем приоритет потока
-        updateThread.setDaemon(true); // Делаем поток демоном
-        updateThread.start();
     }
 
-    private static void showErrorNotification(String message) {
-        log.error("Ошибка загрузки данных с сервера в КЭШ! - {}", message);
-        Warning1.create("ВНИМАНИЕ!",
-                "Произошел сбой при загрузке данных с сервера в кэш",
-                "Возможно сервер не доступен. Обратитесь к администратору.");
-    }
+
 
     public static void initFromBatch(BatchResponse batch) {
         CH_QUICK_FOLDERS = FolderQuickService.getInstance();

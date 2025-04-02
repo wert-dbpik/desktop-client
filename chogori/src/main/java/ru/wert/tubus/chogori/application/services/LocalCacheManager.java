@@ -31,7 +31,8 @@ public class LocalCacheManager {
     private static final String CACHE_SUBDIR = "cache";
     private static final Path CACHE_DIR = Paths.get(HOME_DIRECTORY, CACHE_SUBDIR);
     private static final Gson gson = new GsonBuilder().create();
-    private static final long UPDATE_INTERVAL_HOURS = 1;
+    private static final long UPDATE_INTERVAL_MINUTES = 60;
+    private static final long INITIAL_DELAY_MINUTES = 1;
 
     private ScheduledExecutorService scheduler;
 
@@ -62,29 +63,6 @@ public class LocalCacheManager {
         return localInstance;
     }
 
-    /**
-     * Запускает обновление кэша с задержкой в 5 минут
-     * @param onFinishCallback Колбек при завершении обновления
-     */
-    public void startDelayedCacheUpdate(Runnable onFinishCallback) {
-        log.info("Запланировано обновление кэша через 5 минут...");
-
-        ScheduledExecutorService delayedExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r);
-            t.setDaemon(true);
-            t.setPriority(Thread.MIN_PRIORITY);
-            t.setName("Delayed-Cache-Update-Thread");
-            return t;
-        });
-
-        delayedExecutor.schedule(() -> {
-            try {
-                forceCacheUpdate(onFinishCallback);
-            } finally {
-                delayedExecutor.shutdown();
-            }
-        }, 5, TimeUnit.MINUTES);
-    }
 
     /**
      * Запускает регулярное обновление кэша с заданным интервалом
@@ -92,9 +70,9 @@ public class LocalCacheManager {
      * @param onFinishCallback Колбек при завершении обновления
      */
     public void startScheduledCacheUpdates(Runnable onStartCallback, Runnable onFinishCallback) {
-        log.info("Запуск регулярного обновления кэша с интервалом {} часов", UPDATE_INTERVAL_HOURS);
+        log.info("Запуск регулярного обновления кэша: первый апдейт через {} минут, затем каждые {} минут",
+                INITIAL_DELAY_MINUTES, UPDATE_INTERVAL_MINUTES);
 
-        // Последующие обновления по расписанию
         scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r);
             t.setDaemon(true);
@@ -103,10 +81,11 @@ public class LocalCacheManager {
             return t;
         });
 
+        // Первый запуск через INITIAL_DELAY_MINUTES минут, затем каждый час
         scheduler.scheduleAtFixedRate(() -> {
             Platform.runLater(onStartCallback);
             forceCacheUpdate(onFinishCallback);
-        }, UPDATE_INTERVAL_HOURS, UPDATE_INTERVAL_HOURS, TimeUnit.HOURS);
+        }, INITIAL_DELAY_MINUTES, UPDATE_INTERVAL_MINUTES, TimeUnit.MINUTES);
     }
 
     /**
