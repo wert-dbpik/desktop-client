@@ -8,9 +8,12 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
@@ -190,6 +193,7 @@ public class ApplicationController {
         Platform.runLater(() -> {
             try {
                 btnUpdateAllData.setDisable(true);
+                btnUpdateAllData.setText("Данные обновляются..."); // Новый текст во время обновления
                 if(blinkTimeline != null) {
                     blinkTimeline.play();
                 }
@@ -204,6 +208,7 @@ public class ApplicationController {
             try {
                 blinkTimeline.stop();
                 updateIcon.setOpacity(1.0);
+                btnUpdateAllData.setText("Обновить данные!"); // Возвращаем исходный текст
 
                 // Эффект успешного завершения
                 Glow successGlow = new Glow(0.7);
