@@ -79,6 +79,20 @@ public class SocketService {
         }
     };
 
+    public static void reconnect() {
+        Platform.runLater(() -> {
+            try {
+                log.info("Инициировано переподключение...");
+                connectionManager.close();
+                if (messageReceiver != null) messageReceiver.stop();
+                if (messageSender != null) messageSender.stop();
+                socketService.restart();
+            } catch (Exception e) {
+                log.error("Ошибка при переподключении: {}", e.getMessage());
+            }
+        });
+    }
+
     // Метод для запуска сервиса сокета
     public static void start() {
         if (!socketService.isRunning()) {

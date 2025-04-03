@@ -21,6 +21,8 @@ public class Message extends _BaseEntity implements Item {
     }
 
     public enum MessageType {
+        HEARTBEAT("Пользователь онлай"),
+
         USER_IN("Вошел пользователь"),
         USER_OUT("Вышел пользователь"),
 

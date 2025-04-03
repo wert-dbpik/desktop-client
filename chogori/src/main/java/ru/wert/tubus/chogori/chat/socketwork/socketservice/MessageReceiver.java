@@ -19,6 +19,7 @@ public class MessageReceiver {
     private final BufferedReader in; // Поток для чтения данных от сервера
     private final Gson gson = GsonConfiguration.createGson(); // Объект для преобразования JSON в объекты Java и обратно
     private volatile boolean running = true; // Флаг для управления циклом работы потока
+    private long lastHeartbeatTime = System.currentTimeMillis();
 
     // Конструктор, принимающий BufferedReader для чтения данных от сервера
     public MessageReceiver(BufferedReader in) {
@@ -36,6 +37,12 @@ public class MessageReceiver {
                         // Преобразование JSON-строки в объект Message
                         Message message = gson.fromJson(serverMessage, Message.class);
                         // Запуск обработки сообщения в потоке JavaFX
+                        // Обработка HEARTBEAT от сервера
+                        if (message.getType() == Message.MessageType.HEARTBEAT) {
+                            lastHeartbeatTime = System.currentTimeMillis();
+                            log.debug("Получен HEARTBEAT от сервера");
+                            continue;
+                        }
                         Platform.runLater(() -> {
                             ServerMessageHandler.handle(message);
                             // Логирование полученного сообщения
@@ -56,6 +63,14 @@ public class MessageReceiver {
             // Логирование остановки потока получения сообщений
             log.info("Поток получения сообщений остановлен.");
         }).start();
+    }
+
+    private void checkHeartbeatTimeout() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastHeartbeatTime > 30000) { // 30 секунд таймаут
+            log.warn("Превышен таймаут HEARTBEAT, переподключаемся...");
+            SocketService.reconnect();
+        }
     }
 
     // Метод для остановки потока получения сообщений
