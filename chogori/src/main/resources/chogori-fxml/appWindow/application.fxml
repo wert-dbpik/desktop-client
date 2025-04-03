@@ -33,6 +33,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
          <children>
+            <ImageView fx:id="imgIndicator" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
             <Button fx:id="btnUpdateAllData" mnemonicParsing="false" styleClass="btnOnMenuPane" />
             <StackPane fx:id="spAdvert" HBox.hgrow="ALWAYS">
                <padding>

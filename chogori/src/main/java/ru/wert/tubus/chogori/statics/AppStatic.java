@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
@@ -20,10 +21,12 @@ import ru.wert.tubus.chogori.pdf.readers.PdfJSOldReader;
 import ru.wert.tubus.chogori.previewer.PreviewerPatch;
 import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
+import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.AppLog;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Prefix;
 import ru.wert.tubus.client.entity.models.VersionDesktop;
+import ru.wert.tubus.client.interfaces.UpdatableTabController;
 import ru.wert.tubus.client.retrofit.RetrofitClient;
 import ru.wert.tubus.winform.enums.EDraftStatus;
 import ru.wert.tubus.winform.enums.EDraftType;
@@ -449,6 +452,17 @@ public class AppStatic {
                                     "с данным файлом, или файл поврежден");
                     ex.printStackTrace();
                 }
+            }
+        }
+    }
+
+    /**
+     * Обновляет таблицы после любого обновления данных или кэша
+     */
+    public static void updateTables(){
+        for(Tab tab: CH_TAB_PANE.getTabs()){
+            if(((AppTab)tab).getTabController() instanceof UpdatableTabController){
+                ((UpdatableTabController)((AppTab)tab).getTabController()).updateTab();
             }
         }
     }

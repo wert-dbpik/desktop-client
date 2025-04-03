@@ -8,12 +8,9 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
@@ -26,9 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.application.services.BatchResponse;
-import ru.wert.tubus.chogori.application.services.BatchService;
-import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.application.services.LocalCacheManager;
 import ru.wert.tubus.chogori.components.BtnChat;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
@@ -85,6 +79,9 @@ public class ApplicationController {
 
     @FXML
     private StackPane spChat;
+
+    @FXML
+    private ImageView imgIndicator;
 
     @FXML
     Button btnUpdateAllData;
@@ -166,66 +163,63 @@ public class ApplicationController {
     //==================================================  btnUpdateAllData  ===========================================
 
     private Timeline blinkTimeline;
-    private ImageView updateIcon;
 
     private void initBtnUpdateAllData() {
-        // Создаем ImageView для иконки
-        updateIcon = new ImageView(BTN_UPDATE_BLUE_IMG);
-        btnUpdateAllData.setGraphic(updateIcon);
+        // Устанавливаем изображение для imgIndicator
+        imgIndicator.setImage(BTN_UPDATE_BLUE_IMG);
+
+        // Настраиваем кнопку
         btnUpdateAllData.setStyle("-fx-text-fill: #FFFFFF;");
         btnUpdateAllData.setPadding(Insets.EMPTY);
         btnUpdateAllData.setText("Обновить данные!");
+
+        // Обработчик нажатия на кнопку
         btnUpdateAllData.setOnAction(e -> {
             startBlinkingAnimation();
-            AppMenuController.updateData(this::stopBlinkingAnimation);
+            btnUpdateAllData.setText("Обновление данных...");
+            AppMenuController.updateData(() -> {
+                stopBlinkingAnimation();
+                btnUpdateAllData.setText("Обновить данные!");
+            });
         });
 
-        // Инициализация анимации мигания прозрачности
+        // Настройка анимации мигания для imgIndicator
         blinkTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(updateIcon.opacityProperty(), 1.0)),
-                new KeyFrame(Duration.seconds(0.5), new KeyValue(updateIcon.opacityProperty(), 0.3)),
-                new KeyFrame(Duration.seconds(1.0), new KeyValue(updateIcon.opacityProperty(), 1.0))
+                new KeyFrame(Duration.ZERO, new KeyValue(imgIndicator.opacityProperty(), 1.0)),
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(imgIndicator.opacityProperty(), 0.3)),
+                new KeyFrame(Duration.seconds(1.0), new KeyValue(imgIndicator.opacityProperty(), 1.0))
         );
         blinkTimeline.setCycleCount(Timeline.INDEFINITE);
     }
 
     public void startBlinkingAnimation() {
         Platform.runLater(() -> {
-            try {
-                btnUpdateAllData.setDisable(true);
-                btnUpdateAllData.setText("Данные обновляются..."); // Новый текст во время обновления
-                if(blinkTimeline != null) {
-                    blinkTimeline.play();
-                }
-            } catch (Exception e) {
-                log.error("Ошибка при запуске анимации", e);
-            }
+            btnUpdateAllData.setDisable(true);  // Блокируем кнопку
+            imgIndicator.setOpacity(1.0);      // Сбрасываем прозрачность перед началом анимации
+            blinkTimeline.play();              // Запускаем мигание
         });
     }
 
     public void stopBlinkingAnimation() {
         Platform.runLater(() -> {
-            try {
-                blinkTimeline.stop();
-                updateIcon.setOpacity(1.0);
-                btnUpdateAllData.setText("Обновить данные!"); // Возвращаем исходный текст
+            blinkTimeline.stop();  // Останавливаем мигание
 
-                // Эффект успешного завершения
-                Glow successGlow = new Glow(0.7);
-                successGlow.setLevel(0.7);
-                btnUpdateAllData.setEffect(successGlow);
+            // Эффект успешного завершения (Glow) для imgIndicator
+            Glow successGlow = new Glow(0.7);
+            imgIndicator.setEffect(successGlow);
 
-                Timeline successTimeline = new Timeline(
-                        new KeyFrame(Duration.seconds(0.5),
-                                new KeyValue(successGlow.levelProperty(), 0.0)
-                        ));
-                successTimeline.setOnFinished(e -> btnUpdateAllData.setEffect(null));
-                successTimeline.play();
+            // Плавное исчезновение свечения
+            Timeline glowFadeTimeline = new Timeline(
+                    new KeyFrame(Duration.seconds(0.5),
+                            new KeyValue(successGlow.levelProperty(), 0.0))
+            );
+            glowFadeTimeline.setOnFinished(e -> {
+                imgIndicator.setEffect(null);  // Убираем эффект
+                imgIndicator.setOpacity(1.0);  // Полная непрозрачность
+            });
+            glowFadeTimeline.play();
 
-                btnUpdateAllData.setDisable(false);
-            } catch (Exception e) {
-                log.error("Ошибка при остановке анимации", e);
-            }
+            btnUpdateAllData.setDisable(false);  // Разблокируем кнопку
         });
     }
 

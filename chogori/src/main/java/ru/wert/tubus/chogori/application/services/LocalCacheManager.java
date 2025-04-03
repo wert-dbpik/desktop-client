@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.statics.AppStatic;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -105,13 +106,14 @@ public class LocalCacheManager {
                 saveToCache("initial_data", freshData);
                 log.info("Кэш успешно обновлен");
 
-                // 3. Обновление коллекций в QuickServices
+                // 3. Обновление коллекций в QuickServices и таблиц в UI
                 Platform.runLater(() -> {
                     ChogoriServices.initFromBatch(freshData);
+                    AppStatic.updateTables(); // Добавленный вызов обновления таблиц
                     if (onFinishCallback != null) {
                         onFinishCallback.run();
                     }
-                    log.info("Коллекции в QuickServices обновлены");
+                    log.info("Коллекции в QuickServices и таблицы обновлены");
                 });
 
             } catch (IOException e) {

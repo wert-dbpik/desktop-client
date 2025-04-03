@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.StartChogori;
+import ru.wert.tubus.chogori.application.drafts.DraftsEditorController;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
@@ -32,8 +33,10 @@ import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.chogori.search.SearchField;
 import ru.wert.tubus.chogori.search.SearchHistoryButton;
 import ru.wert.tubus.chogori.search.SearchHistoryFile;
+import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.User;
+import ru.wert.tubus.client.interfaces.UpdatableTabController;
 import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.window_decoration.WindowDecoration;
 
@@ -237,18 +240,6 @@ public class AppMenuController {
             e.printStackTrace();
         }
     }
-
-
-    /**
-     * ОБНОВИТЬ ДАННЫЕ
-     */
-//    public static void updateData() {
-//
-//        Task<Void> updateTask = new TaskUpdateData();
-//        Thread t = new Thread(updateTask);
-//        t.setDaemon(true);
-//        t.start();
-//    }
 
     public static void updateData(Runnable onComplete) {
         Task<Void> updateTask = new TaskUpdateData();

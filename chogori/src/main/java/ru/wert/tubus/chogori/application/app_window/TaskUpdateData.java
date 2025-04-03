@@ -8,6 +8,7 @@ import ru.wert.tubus.chogori.application.services.BatchResponse;
 import ru.wert.tubus.chogori.application.services.BatchService;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.application.services.LocalCacheManager;
+import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.serviceQUICK.*;
 import ru.wert.tubus.client.interfaces.UpdatableTabController;
 import ru.wert.tubus.chogori.tabs.AppTab;
@@ -117,6 +118,7 @@ public class TaskUpdateData extends Task<Void> {
     @Override
     protected void succeeded() {
         super.succeeded();
+        AppStatic.updateTables();
         LongProcess.close();
     }
 

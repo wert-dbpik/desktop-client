@@ -39,9 +39,4 @@ public class AppTab extends Tab {
         });
     }
 
-//    public void update(){
-////        Thread t = new Thread(updateTask);
-////        t.setDaemon(true);
-////        t.start();
-//    }
 }
