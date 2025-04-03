@@ -131,11 +131,13 @@ public class PushNotification {
     private static void openChatForMessage(Message message) {
         if (sideChat == null) return;
 
+        // Закрываем все уведомления перед открытием чата
+        closeAllNotifications();
+
         // Получаем комнату из сообщения
         Room room = ChogoriServices.CH_ROOMS.findById(message.getRoomId());
         if (room == null) return;
 
-        // Открываем чат с этой комнатой
         Platform.runLater(() -> {
             try {
                 // Разворачиваем главное окно, если оно свернуто
@@ -153,6 +155,41 @@ public class PushNotification {
             } catch (Exception e) {
                 log.error("Ошибка при открытии чата из уведомления", e);
             }
+        });
+    }
+
+    public static void closeAllNotifications() {
+        Platform.runLater(() -> {
+            // Создаем копию списка, чтобы избежать ConcurrentModificationException
+            List<Stage> stagesToClose = new ArrayList<>(notificationStack);
+
+            for (Stage stage : stagesToClose) {
+                if (stage != null && stage.isShowing()) {
+                    // Находим roomId для этого stage
+                    Long roomIdToRemove = activeNotifications.entrySet().stream()
+                            .filter(entry -> entry.getValue().equals(stage))
+                            .map(Map.Entry::getKey)
+                            .findFirst()
+                            .orElse(null);
+
+                    // Закрываем с анимацией
+                    FadeTransition fadeOut = new FadeTransition(Duration.millis(FADE_OUT_DURATION), stage.getScene().getRoot());
+                    fadeOut.setFromValue(1.0);
+                    fadeOut.setToValue(0.0);
+                    fadeOut.setOnFinished(e -> {
+                        stage.close();
+                        if (roomIdToRemove != null) {
+                            activeNotifications.remove(roomIdToRemove);
+                        }
+                        notificationStack.remove(stage);
+                    });
+                    fadeOut.play();
+                }
+            }
+
+            // Очищаем коллекции после закрытия всех уведомлений
+            activeNotifications.clear();
+            notificationStack.clear();
         });
     }
 
@@ -207,26 +244,23 @@ public class PushNotification {
         return stage;
     }
 
-    private static void setupNotificationBehavior(Stage stage, Long roomId, Node container) {
-        FadeTransition hoverFade = new FadeTransition(Duration.millis(FADE_DURATION_MS), container);
-        hoverFade.setFromValue(1.0);
-        hoverFade.setToValue(0.7);
-        hoverFade.setCycleCount(2);
-        hoverFade.setAutoReverse(true);
-
-        container.setOnMouseEntered(e -> hoverFade.playFromStart());
-        container.setOnMouseClicked(e -> closeNotificationWithFade(stage, roomId));
-    }
-
     private static void closeNotificationWithFade(Stage stage, Long roomId) {
+        if (stage == null || !stage.isShowing()) return;
+
         FadeTransition fadeOut = new FadeTransition(Duration.millis(FADE_OUT_DURATION), stage.getScene().getRoot());
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
         fadeOut.setOnFinished(e -> {
-            stage.close();
-            activeNotifications.remove(roomId);
-            notificationStack.remove(stage);
-            repositionAllNotifications();
+            try {
+                stage.close();
+                if (roomId != null) {
+                    activeNotifications.remove(roomId);
+                }
+                notificationStack.remove(stage);
+                repositionAllNotifications();
+            } catch (Exception ex) {
+                log.error("Ошибка при закрытии уведомления", ex);
+            }
         });
         fadeOut.play();
     }
