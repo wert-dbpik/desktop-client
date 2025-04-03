@@ -152,6 +152,9 @@ public class PushNotification {
 
                 // Открываем чат с нужной комнатой
                 sideChat.showChatDialog(room);
+
+                // Помечаем сообщения как доставленные
+                sideChat.getDialogController().markMessagesAsDelivered(room);
             } catch (Exception e) {
                 log.error("Ошибка при открытии чата из уведомления", e);
             }

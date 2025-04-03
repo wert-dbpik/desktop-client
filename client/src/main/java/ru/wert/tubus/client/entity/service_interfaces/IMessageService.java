@@ -10,4 +10,8 @@ import java.util.List;
 public interface IMessageService extends ItemService<Message> {
 
     List<Message> findAllByRoom(Room room);
+
+    List<Message> findUndeliveredByRoomAndUser(Room room, Long userId);
+
+    void markMessagesAsDelivered(Room room, Long secondUserId);
 }

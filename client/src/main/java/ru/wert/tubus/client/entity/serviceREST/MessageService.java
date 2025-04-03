@@ -11,6 +11,7 @@ import ru.wert.tubus.client.retrofit.RetrofitClient;
 import ru.wert.tubus.client.utils.BLlinks;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageService implements IMessageService, ItemService<Message> {
@@ -64,6 +65,27 @@ public class MessageService implements IMessageService, ItemService<Message> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void markMessagesAsDelivered(Room room, Long userId) {
+        List<Message> undeliveredMessages = findUndeliveredByRoomAndUser(room, userId);
+        undeliveredMessages.forEach(message -> {
+            message.setStatus(Message.MessageStatus.DELIVERED);
+            update(message);
+        });
+    }
+
+    @Override
+    public List<Message> findUndeliveredByRoomAndUser(Room room, Long secondUserId) {
+        List<Message> undeliveredMessages = new ArrayList<>();
+        List<Message> messagesByRoom = findAllByRoom(room);
+        for(Message m : messagesByRoom){
+            if(m.getSenderId().equals(secondUserId) && !m.getStatus().equals(Message.MessageStatus.DELIVERED)){
+                undeliveredMessages.add(m);
+            }
+        }
+        return undeliveredMessages;
     }
 
     @Override

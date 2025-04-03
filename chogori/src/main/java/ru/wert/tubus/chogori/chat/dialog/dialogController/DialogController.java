@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.ListViewManipulator;
@@ -32,6 +33,7 @@ import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
  * Контроллер для управления диалогами в комнатах чата.
@@ -167,6 +169,24 @@ public class DialogController {
         dialogListView.toFront();
         openRooms.add(dialogListView);
         log.info("Открыт диалог для комнаты: {}", room.getName());
+
+        // После открытия диалога помечаем сообщения как доставленные
+        markMessagesAsDelivered(room);
+    }
+
+    public void markMessagesAsDelivered(Room room) {
+        Task<Void> markDeliveredTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                ChogoriServices.CH_MESSAGES.markMessagesAsDelivered(
+                        room,
+                        ChatStaticMaster.getSecondUserInOneToOneChat(room).getId()
+                );
+                return null;
+            }
+        };
+
+        new Thread(markDeliveredTask).start();
     }
 
     /**
