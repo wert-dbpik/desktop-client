@@ -12,8 +12,11 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.application.app_window.ApplicationController;
+import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.dialog.dialogListCell.MessageRenderer;
 import ru.wert.tubus.client.entity.models.Message;
+import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.winform.statics.WinformStatic;
@@ -54,11 +57,17 @@ public class PushNotification {
         return t;
     });
 
+    private static SideChat sideChat;
+
     static {
         cleanupExecutor.scheduleAtFixedRate(
                 () -> activeNotifications.clear(),
                 10, 10, TimeUnit.MINUTES
         );
+    }
+
+    public static void init(SideChat chat) {
+        sideChat = chat;
     }
 
     public static void show(Message message) {
@@ -84,7 +93,7 @@ public class PushNotification {
                     // Позиционируем уведомление до показа
                     positionNewNotification(stage);
 
-                    setupNotificationBehavior(stage, message.getRoomId(), notificationContainer);
+                    setupNotificationBehavior(stage, message.getRoomId(), notificationContainer, message);
 
                     stage.setOnShown(e -> {
                         activeNotifications.put(message.getRoomId(), stage);
@@ -101,6 +110,48 @@ public class PushNotification {
                 });
             } catch (Exception e) {
                 log.error("Ошибка при показе уведомления", e);
+            }
+        });
+    }
+
+    private static void setupNotificationBehavior(Stage stage, Long roomId, Node container, Message message) {
+        FadeTransition hoverFade = new FadeTransition(Duration.millis(FADE_DURATION_MS), container);
+        hoverFade.setFromValue(1.0);
+        hoverFade.setToValue(0.7);
+        hoverFade.setCycleCount(2);
+        hoverFade.setAutoReverse(true);
+
+        container.setOnMouseEntered(e -> hoverFade.playFromStart());
+        container.setOnMouseClicked(e -> {
+            closeNotificationWithFade(stage, roomId);
+            openChatForMessage(message);
+        });
+    }
+
+    private static void openChatForMessage(Message message) {
+        if (sideChat == null) return;
+
+        // Получаем комнату из сообщения
+        Room room = ChogoriServices.CH_ROOMS.findById(message.getRoomId());
+        if (room == null) return;
+
+        // Открываем чат с этой комнатой
+        Platform.runLater(() -> {
+            try {
+                // Разворачиваем главное окно, если оно свернуто
+                if (WinformStatic.WF_MAIN_STAGE != null && WinformStatic.WF_MAIN_STAGE.isIconified()) {
+                    WinformStatic.WF_MAIN_STAGE.setIconified(false);
+                }
+
+                // Если чат закрыт - открываем его
+                if (ApplicationController.chat != null && !ApplicationController.chat.isChatOpen()) {
+                    ApplicationController.chat.openChat();
+                }
+
+                // Открываем чат с нужной комнатой
+                sideChat.showChatDialog(room);
+            } catch (Exception e) {
+                log.error("Ошибка при открытии чата из уведомления", e);
             }
         });
     }

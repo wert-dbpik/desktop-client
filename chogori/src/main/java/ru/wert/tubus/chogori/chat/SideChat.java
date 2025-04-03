@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
+import ru.wert.tubus.chogori.chat.socketwork.PushNotification;
 import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Room;
@@ -50,6 +51,8 @@ public class SideChat {
 
     public SideChat() {
         log.info("Инициализация SideChat");
+
+        PushNotification.init(this);
 
         createDialog();
         createRooms();

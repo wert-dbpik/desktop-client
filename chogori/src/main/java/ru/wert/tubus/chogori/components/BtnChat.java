@@ -76,11 +76,18 @@ public class BtnChat{
         });
     }
 
+    /**
+     * Проверяет, открыт ли чат в данный момент
+     * @return true если чат открыт, false если закрыт
+     */
+    public boolean isChatOpen() {
+        return open;
+    }
 
     /**
      * ОТКРЫТЬ ЧАТ
      */
-    private void openChat() {
+    public void openChat() {
         hasNewMessages.set(false); // Сбрасываем состояние новых сообщений
         open = !open;
         if(open) {
