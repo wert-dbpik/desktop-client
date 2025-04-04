@@ -85,7 +85,7 @@ public class LoginController {
             showTabPaneWindow();
             AppProperties.getInstance().setLastUser(user.getId());
             AppStatic.createLog(true, "Подключился к серверу");
-            ServiceMessaging.sendMessageUserIn(CH_CURRENT_USER.getId());
+            ServiceMessaging.sendMessageUserIn();
 
             if(CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart())
                 openDrafts();

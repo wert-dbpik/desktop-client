@@ -608,18 +608,7 @@ public class AppMenuController {
     }
 
     void makeTest(ActionEvent event){
-        Message m = new Message();
-        m.setCreationTime(LocalDateTime.now());
-        m.setRoomId(CH_ROOMS.findByName("group:###").getId());
-        m.setType(Message.MessageType.CHAT_TEXT);
-        m.setSenderId(CH_CURRENT_USER.getId());
-        m.setText( "Я работаю!!!!!!!!!!!!!!!!!");
-        SocketService.sendMessage(m);
-//        Room group = new Room();
-//        group.setName("#1#96");
-//        group.setCreator(CH_CURRENT_USER);
-//
-//        Room newGroup = CH_ROOMS.save(group);
+
     }
 
     //########################   ПОМОЩЬ    ###########################

@@ -39,9 +39,9 @@ public class SocketService {
                         try {
                             // Подключение к серверу
                             connectionManager.connect();
-
-                            // Отправка сообщения USER_IN для уведомления сервера о входе пользователя
-                            ServiceMessaging.sendMessageUserIn(AppProperties.getInstance().getLastUser());
+//
+//                            // Отправка сообщения USER_IN для уведомления сервера о входе пользователя
+//                            ServiceMessaging.sendMessageUserIn(AppProperties.getInstance().getLastUser());
 
                             // Инициализация и запуск потоков для получения и отправки сообщений
                             messageReceiver = new MessageReceiver(connectionManager.getIn());
@@ -105,8 +105,7 @@ public class SocketService {
 
     // Метод для остановки сервиса сокета
     public static void stop() {
-        // Отправляем сообщение USER_OUT перед остановкой сервиса
-        sendMessageUserOut();
+        ServiceMessaging.sendMessageUserOut();
 
         Platform.runLater(() -> {
             running = false;
@@ -118,25 +117,12 @@ public class SocketService {
         });
     }
 
-    private static void sendMessageUserOut() {
-        Message userOutMessage = new Message();
-        userOutMessage.setType(Message.MessageType.USER_OUT);
-        userOutMessage.setSenderId(CH_CURRENT_USER.getId());
-        userOutMessage.setCreationTime(LocalDateTime.now());
-        try {
-            if (messageSender != null) {
-                SocketService.sendMessage(userOutMessage);
-            }
-        } catch (Exception e) {
-            log.error("Ошибка при отправке USER_OUT сообщения: {}", e.getMessage());
-        }
-    }
-
     // Метод для отправки сообщения на сервер
     public static void sendMessage(Message message) {
         if (messageSender != null) {
             messageSender.sendMessage(message);
-        }
+        } else
+            log.error("не удалось отправить сообщение {}, т.к. messageSender = null", message);
     }
 }
 
