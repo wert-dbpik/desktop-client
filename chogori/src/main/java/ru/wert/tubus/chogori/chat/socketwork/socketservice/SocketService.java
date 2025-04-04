@@ -9,6 +9,9 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.retrofit.AppProperties;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 @Slf4j
 public class SocketService {
@@ -102,6 +105,19 @@ public class SocketService {
 
     // Метод для остановки сервиса сокета
     public static void stop() {
+        // Отправляем сообщение USER_OUT перед остановкой сервиса
+        Message userOutMessage = new Message();
+        userOutMessage.setType(Message.MessageType.USER_OUT);
+        userOutMessage.setSenderId(CH_CURRENT_USER.getId());
+        userOutMessage.setCreationTime(LocalDateTime.now());
+        try {
+            if (messageSender != null) {
+                SocketService.sendMessage(userOutMessage);
+            }
+        } catch (Exception e) {
+            log.error("Ошибка при отправке USER_OUT сообщения: {}", e.getMessage());
+        }
+
         Platform.runLater(() -> {
             running = false;
             socketService.cancel();
