@@ -61,9 +61,9 @@ public class MessageSender {
     private void sendMessageToServer(Message message) {
         if (out != null) {
             String jsonMessage = GsonConfiguration.createGson().toJson(message);
-            log.debug("Отправка сообщения на сервер: {}", jsonMessage);
             out.println(jsonMessage);
-            log.info("Сообщение отправлено на сервер: {}", jsonMessage);
+            if(!message.getType().equals(Message.MessageType.HEARTBEAT))
+                log.info("Сообщение отправлено на сервер: {}", jsonMessage);
         } else {
             log.warn("Сокет не подключен, сообщение не отправлено: {}", message.toUsefulString());
             try {

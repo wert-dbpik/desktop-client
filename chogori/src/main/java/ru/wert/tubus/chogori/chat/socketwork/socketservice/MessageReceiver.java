@@ -40,7 +40,7 @@ public class MessageReceiver {
                         // Обработка HEARTBEAT от сервера
                         if (message.getType() == Message.MessageType.HEARTBEAT) {
                             lastHeartbeatTime = System.currentTimeMillis();
-                            log.debug("Получен HEARTBEAT от сервера");
+//                            log.debug("Получен HEARTBEAT от сервера");
                             continue;
                         }
                         Platform.runLater(() -> {
