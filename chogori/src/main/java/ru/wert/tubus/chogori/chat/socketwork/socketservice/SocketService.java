@@ -106,6 +106,19 @@ public class SocketService {
     // Метод для остановки сервиса сокета
     public static void stop() {
         // Отправляем сообщение USER_OUT перед остановкой сервиса
+        sendMessageUserOut();
+
+        Platform.runLater(() -> {
+            running = false;
+            socketService.cancel();
+            connectionManager.close();
+            if (messageReceiver != null) messageReceiver.stop();
+            if (messageSender != null) messageSender.stop();
+            log.info("Сервис сокета завершает работу...");
+        });
+    }
+
+    private static void sendMessageUserOut() {
         Message userOutMessage = new Message();
         userOutMessage.setType(Message.MessageType.USER_OUT);
         userOutMessage.setSenderId(CH_CURRENT_USER.getId());
@@ -117,15 +130,6 @@ public class SocketService {
         } catch (Exception e) {
             log.error("Ошибка при отправке USER_OUT сообщения: {}", e.getMessage());
         }
-
-        Platform.runLater(() -> {
-            running = false;
-            socketService.cancel();
-            connectionManager.close();
-            if (messageReceiver != null) messageReceiver.stop();
-            if (messageSender != null) messageSender.stop();
-            log.info("Сервис сокета завершает работу...");
-        });
     }
 
     // Метод для отправки сообщения на сервер
