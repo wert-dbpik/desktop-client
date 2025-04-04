@@ -199,13 +199,18 @@ public class PushNotification {
     private static void positionNewNotification(Stage stage) {
         Rectangle2D visualBounds = getCurrentScreenBounds();
         double startX = visualBounds.getMaxX() - NOTIFICATION_WIDTH - PADDING_FROM_SCREEN_EDGE;
-        double startY = visualBounds.getMaxY() - PADDING_FROM_SCREEN_EDGE;
+        double startY = visualBounds.getMaxY() - PADDING_FROM_SCREEN_EDGE - NOTIFICATION_HEIGHT; // Начинаем с нижнего края
 
-        // Вычисляем позицию для нового уведомления
+        // Вычисляем позицию для нового уведомления, учитывая уже показанные
         for (Stage existingStage : notificationStack) {
             if (existingStage.isShowing()) {
                 startY -= (existingStage.getHeight() + SPACING_BETWEEN_NOTIFICATIONS);
             }
+        }
+
+        // Проверяем, чтобы уведомление не выходило за верхнюю границу экрана
+        if (startY < visualBounds.getMinY()) {
+            startY = visualBounds.getMinY() + PADDING_FROM_SCREEN_EDGE;
         }
 
         stage.setX(startX);
@@ -271,7 +276,7 @@ public class PushNotification {
     private static void repositionAllNotifications() {
         Rectangle2D visualBounds = getCurrentScreenBounds();
         double startX = visualBounds.getMaxX() - NOTIFICATION_WIDTH - PADDING_FROM_SCREEN_EDGE;
-        double currentY = visualBounds.getMaxY() - PADDING_FROM_SCREEN_EDGE;
+        double currentY = visualBounds.getMaxY() - PADDING_FROM_SCREEN_EDGE - NOTIFICATION_HEIGHT; // Начинаем с нижнего края
 
         // Фильтруем только видимые и полностью инициализированные уведомления
         List<Stage> visibleNotifications = notificationStack.stream()
@@ -279,9 +284,14 @@ public class PushNotification {
                 .collect(Collectors.toList());
 
         for (Stage stage : visibleNotifications) {
-            currentY -= (stage.getHeight() + SPACING_BETWEEN_NOTIFICATIONS);
+            // Проверяем, чтобы уведомление не выходило за верхнюю границу экрана
+            if (currentY < visualBounds.getMinY()) {
+                currentY = visualBounds.getMinY() + PADDING_FROM_SCREEN_EDGE;
+            }
+
             stage.setX(startX);
             stage.setY(currentY);
+            currentY -= (stage.getHeight() + SPACING_BETWEEN_NOTIFICATIONS);
         }
     }
 
