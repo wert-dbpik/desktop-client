@@ -175,7 +175,7 @@ public class ExcelEditorNewController {
         Draft_PatchController draftPatchController = draftPatch.getDraftPatchController();
         draftPatchController.initDraftsTableView(previewerPatchController, new Passport(), SelectionMode.MULTIPLE, false);
         draftsTable = draftPatchController.getDraftsTable();
-        draftsTable.showTableColumns(false, true, true, true, false,
+        draftsTable.showTableColumns(false, true, true, true, true, false,
                 false, true);
         //Инструментальную панель инициируем в последнюю очередь
         draftPatchController.initDraftsToolBar(false, true, true, true);

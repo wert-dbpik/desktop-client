@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -66,6 +67,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     private TableColumn<Draft, Label> tcDraftNumber; //Номер чертежа
     private TableColumn<Draft, Label> tcDraftName; //Наименование чертежа
     private TableColumn<Draft, Label> tcDraftType; //Тип чертежа
+    private TableColumn<Draft, ImageView> tcRemarks; //Тип чертежа
     private TableColumn<Draft, Label> tcStatus; //Статус
     private TableColumn<Draft, String> tcInitialName; //Наименование файла
     private TableColumn<Draft, String> tcCreationTime; //Дата создания
@@ -78,6 +80,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     @Getter@Setter private boolean showName; //Наименование
     @Getter@Setter private boolean showDraftType  = true; //Тип чертежа
     @Getter@Setter private boolean showStatus  = true; //Статус
+    @Getter@Setter private boolean showRemarks = true; //Примечания
     @Getter@Setter private boolean showInitialName; //Изначальное имя файла
     @Getter@Setter private boolean showCreationTime; //Время создания
     @Getter@Setter private boolean showNote  = true; //Примечание
@@ -145,7 +148,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     }
 
 
-
     @Override
     public void setTableColumns() {
 
@@ -154,19 +156,20 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         tcDraftNumber = Draft_Columns.createTcDraftNumber(); //Колонка Дец номер
         tcDraftName = Draft_Columns.createTcDraftName(); //Колонка Наименование
         tcDraftType = Draft_Columns.createTcDraftType(); //Тип чертежа
+        tcRemarks = Draft_Columns.createTcRemarks(); //Наличие замечаний
         tcStatus = Draft_Columns.createTcStatus(); //Статус
         tcInitialName = Draft_Columns.createTcInitialDraftName(); //Наименование файла
         tcCreationTime = Draft_Columns.createTcCreation(); //Дата создания
         tcNote = Draft_Columns.createTcNote();   //Колонка Комментарии
 
-        getColumns().addAll(tcId, tcPassport, tcDraftNumber, tcDraftName, tcDraftType, tcStatus, tcInitialName, tcCreationTime, tcNote);
+        getColumns().addAll(tcId, tcPassport, tcDraftNumber, tcDraftName, tcDraftType, tcStatus, tcRemarks, tcInitialName, tcCreationTime, tcNote);
 
     }
 
     /**
      * Метод выключает ненужные столбцы
      */
-    public void showTableColumns(boolean useTcId, boolean useTcPassport, boolean useTcDraftType, boolean useTcStatus,
+    public void showTableColumns(boolean useTcId, boolean useTcPassport, boolean useTcDraftType, boolean useTcStatus,boolean useTcRemarks,
                                  boolean useTcInitialName, boolean useTcCreationTime, boolean useTcNote){
         tcId.setVisible(useTcId);
         showId = useTcId;
@@ -185,6 +188,9 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
         tcStatus.setVisible(useTcStatus);
         showStatus = useTcStatus;
+
+        tcRemarks.setVisible(useTcRemarks);
+        showRemarks = useTcRemarks;
 
         tcInitialName.setVisible(useTcInitialName);
         showInitialName = useTcInitialName;

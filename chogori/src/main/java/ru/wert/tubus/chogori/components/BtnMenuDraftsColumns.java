@@ -54,6 +54,13 @@ public class BtnMenuDraftsColumns extends MenuButton {
         useStatus.setContent(cbUseStatus);
         useStatus.setHideOnClick(false);
 
+        //КОММЕНТАРИИ
+        CustomMenuItem useRemarks = new CustomMenuItem();
+        CheckBox cbUseRemarks = new CheckBox("Комментарии(К)");
+        cbUseRemarks.setSelected(tableView.isShowRemarks());
+        useRemarks.setContent(cbUseRemarks);
+        useRemarks.setHideOnClick(false);
+
         //ИСХОДНОЕ НАИМЕНОВАНИЕ ФАЙЛА
         CustomMenuItem useInitialName = new CustomMenuItem();
         CheckBox cbUseInitialName = new CheckBox("Исходное наименование");
@@ -76,14 +83,14 @@ public class BtnMenuDraftsColumns extends MenuButton {
         useNote.setHideOnClick(false);
 
         if(CH_CURRENT_USER_GROUP.isAdministrate()) getItems().add(useId);
-        getItems().addAll(useIdentity, useDraftType, useStatus, useInitialName, useCreationTime, useNote);
+        getItems().addAll(useIdentity, useDraftType, useStatus, useRemarks, useInitialName, useCreationTime, useNote);
 
         showingProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue) {
 
                 Platform.runLater(() -> {
                     tableView.showTableColumns(cbUseId.isSelected(), cbUseIdentity.isSelected(),
-                            cbUseDraftType.isSelected(), cbUseStatus.isSelected(), cbUseInitialName.isSelected(),
+                            cbUseDraftType.isSelected(), cbUseStatus.isSelected(), cbUseRemarks.isSelected(), cbUseInitialName.isSelected(),
                             cbUseCreationTime.isSelected(), cbUseNote.isSelected());
                     tableView.updateView();
                     tableView.refresh();

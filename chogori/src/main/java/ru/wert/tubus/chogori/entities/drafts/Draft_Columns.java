@@ -6,15 +6,21 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.chogori.components.VBoxPassport;
 import ru.wert.tubus.chogori.popups.HintPopup;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
+import ru.wert.tubus.client.entity.models.Remark;
 import ru.wert.tubus.winform.enums.EDraftStatus;
 import ru.wert.tubus.winform.enums.EDraftType;
 
+import java.util.List;
+
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.tubus.chogori.statics.AppStatic.DXF_DOCKS;
 import static ru.wert.tubus.chogori.statics.Comparators.createLabelComparator;
 import static ru.wert.tubus.winform.statics.WinformStatic.parseLDTtoNormalDate;
@@ -252,6 +258,29 @@ public class Draft_Columns {
         tcDraftType.setMaxWidth(80);
         tcDraftType.setResizable(false);
         return tcDraftType;
+    };
+
+    /**
+     * КОММЕНТАРИИ
+     */
+    public static TableColumn<Draft, ImageView> createTcRemarks(){
+        TableColumn<Draft, ImageView> tcRemarks = new TableColumn<>("K");
+        tcRemarks.setCellValueFactory(cd->{
+            Draft draft = cd.getValue();
+            List<Remark> foundRemarks = CH_REMARKS.findAllByPassport(draft.getPassport());
+            ImageView image = new ImageView();
+            if(foundRemarks != null && !foundRemarks.isEmpty()){
+                image = new ImageView(BtnImages.BTN_REMARKS_IMG);
+            }
+            return new ReadOnlyObjectWrapper(image);
+        });
+
+        tcRemarks.setStyle("-fx-alignment: CENTER;");
+        tcRemarks.setMinWidth(40);//40
+        tcRemarks.setPrefWidth(40);//40
+        tcRemarks.setMaxWidth(40);
+        tcRemarks.setResizable(false);
+        return tcRemarks;
     };
 
     /**
