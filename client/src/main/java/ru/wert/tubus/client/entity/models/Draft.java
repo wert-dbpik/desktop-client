@@ -39,6 +39,8 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
 
     private String note;
 
+//    private boolean remarks; // чертежа есть Комментарии
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
