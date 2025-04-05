@@ -33,13 +33,6 @@ public class BtnMenuDraftsColumns extends MenuButton {
         useId.setContent(cbUseId);
         useId.setHideOnClick(false);
 
-        //ИДЕНТИФИКАТОР
-        CustomMenuItem useIdentity = new CustomMenuItem();
-        CheckBox cbUseIdentity = new CheckBox("Идентификатор");
-        cbUseIdentity.setSelected(tableView.isShowIdentity());
-        useIdentity.setContent(cbUseIdentity);
-        useIdentity.setHideOnClick(false);
-
         //ТИП ДОКУМЕНТА
         CustomMenuItem useDraftType = new CustomMenuItem();
         CheckBox cbUseDraftType = new CheckBox("Тип/стр");
@@ -83,13 +76,13 @@ public class BtnMenuDraftsColumns extends MenuButton {
         useNote.setHideOnClick(false);
 
         if(CH_CURRENT_USER_GROUP.isAdministrate()) getItems().add(useId);
-        getItems().addAll(useIdentity, useDraftType, useStatus, useRemarks, useInitialName, useCreationTime, useNote);
+        getItems().addAll(useDraftType, useStatus, useRemarks, useInitialName, useCreationTime, useNote);
 
         showingProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue) {
 
                 Platform.runLater(() -> {
-                    tableView.showTableColumns(cbUseId.isSelected(), cbUseIdentity.isSelected(),
+                    tableView.showTableColumns(cbUseId.isSelected(),
                             cbUseDraftType.isSelected(), cbUseStatus.isSelected(), cbUseRemarks.isSelected(), cbUseInitialName.isSelected(),
                             cbUseCreationTime.isSelected(), cbUseNote.isSelected());
                     tableView.updateView();

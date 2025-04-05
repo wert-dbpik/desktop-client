@@ -63,7 +63,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     @Getter@Setter private boolean showAnnulled; //АННУЛИРОВАННЫЕ
 
     private TableColumn<Draft, String> tcId;
-    private TableColumn<Draft, VBox> tcPassport; //Колонка Идентификатор
     private TableColumn<Draft, Label> tcDraftNumber; //Номер чертежа
     private TableColumn<Draft, Label> tcDraftName; //Наименование чертежа
     private TableColumn<Draft, Label> tcDraftType; //Тип чертежа
@@ -75,7 +74,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
     //Показывать колонки
     @Getter@Setter private boolean showId; //Идентификатор
-    @Getter@Setter private boolean showIdentity; //Идентификатор
     @Getter@Setter private boolean showNumber; //Дец номер
     @Getter@Setter private boolean showName; //Наименование
     @Getter@Setter private boolean showDraftType  = true; //Тип чертежа
@@ -152,7 +150,6 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
     public void setTableColumns() {
 
         tcId = Draft_Columns.createTcId(); //id Чертежа
-        tcPassport = Draft_Columns.createTcPassport(); //Колонка Чертеж
         tcDraftNumber = Draft_Columns.createTcDraftNumber(); //Колонка Дец номер
         tcDraftName = Draft_Columns.createTcDraftName(); //Колонка Наименование
         tcDraftType = Draft_Columns.createTcDraftType(); //Тип чертежа
@@ -162,26 +159,17 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
         tcCreationTime = Draft_Columns.createTcCreation(); //Дата создания
         tcNote = Draft_Columns.createTcNote();   //Колонка Комментарии
 
-        getColumns().addAll(tcId, tcPassport, tcDraftNumber, tcDraftName, tcDraftType, tcStatus, tcRemarks, tcInitialName, tcCreationTime, tcNote);
+        getColumns().addAll(tcId, tcDraftNumber, tcDraftName, tcDraftType, tcStatus, tcRemarks, tcInitialName, tcCreationTime, tcNote);
 
     }
 
     /**
      * Метод выключает ненужные столбцы
      */
-    public void showTableColumns(boolean useTcId, boolean useTcPassport, boolean useTcDraftType, boolean useTcStatus,boolean useTcRemarks,
+    public void showTableColumns(boolean useTcId, boolean useTcDraftType, boolean useTcStatus,boolean useTcRemarks,
                                  boolean useTcInitialName, boolean useTcCreationTime, boolean useTcNote){
         tcId.setVisible(useTcId);
         showId = useTcId;
-
-        tcPassport.setVisible(useTcPassport);
-        showIdentity = useTcPassport;
-
-        tcDraftNumber.setVisible(!useTcPassport);
-        showNumber = !useTcPassport;
-
-        tcDraftName.setVisible(!useTcPassport);
-        showName = !useTcPassport;
 
         tcDraftType.setVisible(useTcDraftType);
         showDraftType = useTcDraftType;

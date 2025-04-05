@@ -252,20 +252,7 @@ public class PreviewerPatchController {
         btnShowRemarks.setGraphic(new ImageView(BtnImages.BTN_REMARKS_IMG));
         btnShowRemarks.setTooltip(new Tooltip("Показать комментарии"));
         btnShowRemarks.setOnAction(event -> {
-            if(currentDraft.get() == null) return;
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/remarks/remarks.fxml"));
-                Parent parent = loader.load();
-                parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
-                Passport draftPassport = currentDraft.get().getPassport();
-                RemarksController controller = loader.getController();
-                controller.init(draftPassport);
-                String tabName = "> " + draftPassport.toUsefulString();
-                String tabId = tabName;
-                CH_TAB_PANE.createNewTab(tabId, tabName, parent, true,  null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            openRemarksEditor();
         });
 
         //ОБНОВИТЬ ИЗОБРАЖЕНИЕ
@@ -285,6 +272,23 @@ public class PreviewerPatchController {
         if (useBtnOpenInOuterApp) hboxPreviewerButtons.getChildren().add(openInOuterApp);
         if (useBtnOpenInNewTab) hboxPreviewerButtons.getChildren().add(btnOpenInNewTab);
 
+    }
+
+    private void openRemarksEditor() {
+        if(currentDraft.get() == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/remarks/remarks.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            Passport draftPassport = currentDraft.get().getPassport();
+            RemarksController controller = loader.getController();
+            controller.init(draftPassport);
+            String tabName = "> " + draftPassport.toUsefulString();
+            String tabId = tabName;
+            CH_TAB_PANE.createNewTab(tabId, tabName, parent, true,  null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

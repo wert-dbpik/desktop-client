@@ -9,6 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.tubus.chogori.images.BtnImages;
+import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.chogori.components.VBoxPassport;
