@@ -145,28 +145,30 @@ public class ImageUtil {
      * Затем изображение, соответствующее Pic загружается на сервер
      * Возвращается сохраненный в базе Pic
      */
-    public static Pic createPicFromFileAndSaveItToDB(Image image, File file){
-        //Создаем новый экземпляр Pic с полями
+    public static Pic createPicFromFileAndSaveItToDB(Image image, File file) {
         Pic newPic = new Pic();
         newPic.setInitName(file.getName());
         newPic.setUser(CH_CURRENT_USER);
         newPic.setTime(AppStatic.getCurrentTime());
         newPic.setWidth((int) image.getWidth());
         newPic.setHeight((int) image.getHeight());
-        //Готовим файл для добавления картинки в папку "pics" на сервере
-        //сжимаем картинку до приемлимых значений
-        File compressedFile = ImageUtil.compressImageToFile(file, null);
-        //Добавляем расширение уже сжатого файла
-        newPic.setExtension(FilenameUtils.getExtension(compressedFile.toString()));
 
-        //Сохраняем Pic в базе данных
+        // Получаем расширение исходного файла
+        String extension = FilenameUtils.getExtension(file.getName()).toLowerCase();
+        newPic.setExtension(extension);
+
+        // Для теста: отключаем сжатие
+        File fileToUpload = file;
+        // Или используем сжатие только для JPEG
+        if (!extension.equals("png")) {
+            fileToUpload = ImageUtil.compressImageToFile(file, null);
+        }
+
         Pic savedPic = CH_PICS.save(newPic);
 
-        //Загружаем картинку на сервер
-        String fileName = savedPic.getId() + "." + FilenameUtils.getExtension(compressedFile.toString());
+        String fileName = savedPic.getId() + "." + extension;
         try {
-
-            CH_FILES.upload(fileName, "pics", compressedFile);
+            CH_FILES.upload(fileName, "pics", fileToUpload);
         } catch (IOException e) {
             e.printStackTrace();
         }

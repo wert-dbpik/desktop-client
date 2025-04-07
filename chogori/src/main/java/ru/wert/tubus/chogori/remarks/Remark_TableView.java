@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_QUICK_REMARKS;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 
@@ -86,7 +87,7 @@ public class Remark_TableView extends RoutineTableView<Remark>{
 
     @Override
     public List<Remark> prepareList() {
-        List<Remark> foundRemarks = CH_REMARKS.findAllByPassport(passport);
+        List<Remark> foundRemarks = CH_QUICK_REMARKS.findAllByPassport(passport);
         if (foundRemarks.size() > 1) {
             foundRemarks =
                     new ArrayList<>(foundRemarks.stream()

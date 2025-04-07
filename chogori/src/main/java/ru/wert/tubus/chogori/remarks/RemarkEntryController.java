@@ -74,8 +74,7 @@ public class RemarkEntryController {
                 weight = 0.4f;
 
             ImageView imageView = new ImageView(image);
-            imageView.setStyle("-fx-start-margin: 5");
-            imageView.setStyle("-fx-end-margin: 5");
+            imageView.setStyle("-fx-start-margin: 5; -fx-end-margin: 5; -fx-background-color: transparent;");
             imageView.setPreserveRatio(true);
             imageView.fitWidthProperty().bind(WF_MAIN_STAGE.widthProperty().multiply(weight));
 
