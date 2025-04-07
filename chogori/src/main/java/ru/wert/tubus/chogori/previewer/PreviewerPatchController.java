@@ -47,7 +47,7 @@ import java.net.MalformedURLException;
 import java.util.*;
 
 import static java.lang.String.format;
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_REMARKS;
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
@@ -300,12 +300,15 @@ public class PreviewerPatchController {
         this.currentDraftPath = draftPath;
 
         if(currentDraft.getValue() != null){
-            List<Remark> foundRemarks = CH_REMARKS.findAllByPassport(currentDraft.getValue().getPassport());
-            if(foundRemarks != null && !foundRemarks.isEmpty() && !hboxPreviewerButtons.getChildren().contains(btnShowRemarks))
-                hboxPreviewerButtons.getChildren().add(0, btnShowRemarks);
-            else
+            boolean hasRemarks = CH_QUICK_DRAFTS.hasRemarks(currentDraft.getValue());
+            if(hasRemarks){
+                if(!hboxPreviewerButtons.getChildren().contains(btnShowRemarks)){
+                    hboxPreviewerButtons.getChildren().add(0, btnShowRemarks);
+                }
+            } else {
                 if(hboxPreviewerButtons.getChildren().contains(btnShowRemarks))
                     hboxPreviewerButtons.getChildren().removeAll(btnShowRemarks);
+            }
         }
 
         //Вилка решений зависит от расширения файла
@@ -392,5 +395,7 @@ public class PreviewerPatchController {
         HISTORY_PREVIEW.removeIf(d -> d.equals(draft));
         HISTORY_PREVIEW.add(draft);
     }
+
+
 
 }

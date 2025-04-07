@@ -250,8 +250,6 @@ public class AppStatic {
 
     /**
      * Проверяет наличие файла во временной папке
-     * @param fileId Long id файла совпадает с его именем
-     * @param ext String расширение файла
      * @return boolean, true - если файл есть в папке
      */
     private static boolean draftInTempDir(String nameWithExt) {
@@ -460,9 +458,12 @@ public class AppStatic {
      * Обновляет таблицы после любого обновления данных или кэша
      */
     public static void updateTables(){
+
         for(Tab tab: CH_TAB_PANE.getTabs()){
             if(((AppTab)tab).getTabController() instanceof UpdatableTabController){
-                ((UpdatableTabController)((AppTab)tab).getTabController()).updateTab();
+                Platform.runLater(()->{
+                    ((UpdatableTabController)((AppTab)tab).getTabController()).updateTab();
+                });
             }
         }
     }

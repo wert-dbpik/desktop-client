@@ -184,4 +184,5 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
         folderTableView.updateVisibleLeafOfTableView(folderTableView.getUpwardRow().getValue());
         draftsTable.updateTableView();
     }
+
 }

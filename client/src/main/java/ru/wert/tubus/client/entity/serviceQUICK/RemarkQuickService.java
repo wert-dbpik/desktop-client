@@ -52,7 +52,7 @@ public class RemarkQuickService implements IRemarkService, ItemService<Remark> {
 
     @Override
     public List<Remark> findAllByPassport(Passport passport) {
-        List<Remark> foundRemarks = null;
+        List<Remark> foundRemarks = new ArrayList<>();
         for(Remark remark : LOADED_REMARKS){
             if(remark.getPassport().equals(passport)) {
                 foundRemarks.add(remark);

@@ -42,6 +42,8 @@ public class RemarkAddCommand implements ICommand {
                 AppStatic.createLog(true, String.format("Добавил комментарий '%s' для '%s'", finalRemark.getId(), finalRemark.getPassport().toUsefulString()));
             });
 
+            AppStatic.updateTables();
+
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_ADDING_ITEM, $SERVER_IS_NOT_AVAILABLE_MAYBE);
             log.error("При добавление комментария {} для {} произошла ошибка {}", remark.getId(), remark.getPassport().toUsefulString(), e.getMessage());

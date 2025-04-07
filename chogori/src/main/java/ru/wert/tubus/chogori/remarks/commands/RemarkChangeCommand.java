@@ -42,6 +42,8 @@ public class RemarkChangeCommand implements ICommand {
 
             log.info("Обновлен комментарий {} для {}", item.getId(), item.getPassport().toUsefulString());
             AppStatic.createLog(true, String.format("Изменил пользователя '%s'", item.getName()));
+
+            AppStatic.updateTables();
         } catch (Exception e) {
             Warning1.create($ATTENTION, $ERROR_WHILE_CHANGING_ITEM, $ITEM_IS_NOT_AVAILABLE_MAYBE);
             log.error("При обновлении комментария {} для {} произошла ошибка {}", item.getId(), item.getPassport().toUsefulString(), e.getMessage());

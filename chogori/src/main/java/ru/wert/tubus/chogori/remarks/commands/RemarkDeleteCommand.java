@@ -35,7 +35,7 @@ public class RemarkDeleteCommand implements ICommand {
 
         for(Remark item : items){
             try {
-                CH_REMARKS.delete(item);
+                CH_QUICK_REMARKS.delete(item);
                 log.info("Удален комментарий {}", item.getName());
                 AppStatic.createLog(true, String.format("Удалил комментарий '%s' для '%s'", item.getId(), item.getPassport().toUsefulString()));
             } catch (Exception e) {
@@ -47,6 +47,9 @@ public class RemarkDeleteCommand implements ICommand {
         tableView.updateTableView();
 
         tableView.getSelectionModel().select(row);
+
+        AppStatic.updateTables();
+
 
     }
 }
