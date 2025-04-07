@@ -396,6 +396,11 @@ public class PreviewerPatchController {
         HISTORY_PREVIEW.add(draft);
     }
 
+    public void updatePreviewer(){
+        if(currentDraftPath == null) return;
+        showDraft(currentDraftPath);
+    }
+
 
 
 }
