@@ -1,9 +1,6 @@
 package ru.wert.tubus.client.entity.serviceQUICK;
 
-import ru.wert.tubus.client.entity.models.Draft;
-import ru.wert.tubus.client.entity.models.Folder;
-import ru.wert.tubus.client.entity.models.Passport;
-import ru.wert.tubus.client.entity.models.Product;
+import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceREST.DraftService;
 import ru.wert.tubus.client.entity.service_interfaces.IDraftService;
 
@@ -12,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static ru.wert.tubus.client.entity.serviceQUICK.RemarkQuickService.LOADED_REMARKS;
 
 public class DraftQuickService implements IDraftService {
 
@@ -37,6 +36,16 @@ public class DraftQuickService implements IDraftService {
             }
         }
     }
+
+    public boolean hasRemarks(Draft draft){
+        Passport p = draft.getPassport();
+        for(Remark r : LOADED_REMARKS){
+            if(r.getPassport().equals(p))
+                return true;
+        }
+        return false;
+    }
+
 
 
     @Override

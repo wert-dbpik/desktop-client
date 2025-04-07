@@ -21,7 +21,7 @@ import ru.wert.tubus.winform.enums.EDraftType;
 
 import java.util.List;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_REMARKS;
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
 import static ru.wert.tubus.chogori.statics.AppStatic.DXF_DOCKS;
 import static ru.wert.tubus.chogori.statics.Comparators.createLabelComparator;
 import static ru.wert.tubus.winform.statics.WinformStatic.parseLDTtoNormalDate;
@@ -268,9 +268,8 @@ public class Draft_Columns {
         TableColumn<Draft, ImageView> tcRemarks = new TableColumn<>("K");
         tcRemarks.setCellValueFactory(cd->{
             Draft draft = cd.getValue();
-            List<Remark> foundRemarks = CH_REMARKS.findAllByPassport(draft.getPassport());
             ImageView image = new ImageView();
-            if(foundRemarks != null && !foundRemarks.isEmpty()){
+            if(CH_QUICK_DRAFTS.hasRemarks(draft)){
                 image = new ImageView(BtnImages.BTN_REMARKS_IMG);
             }
             return new ReadOnlyObjectWrapper(image);

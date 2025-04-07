@@ -4,6 +4,7 @@ package ru.wert.tubus.chogori.application.services;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.client.entity.models.Remark;
 import ru.wert.tubus.client.entity.serviceQUICK.*;
 import ru.wert.tubus.client.entity.serviceREST.*;
 import ru.wert.tubus.client.entity.service_interfaces.*;
@@ -48,6 +49,7 @@ public class ChogoriServices {
     public static IVersionServerService CH_VERSIONS_SERVER;
 
     public static FolderQuickService CH_QUICK_FOLDERS;
+    public static RemarkQuickService CH_QUICK_REMARKS;
     public static ProductQuickService CH_QUICK_PRODUCTS;
     public static DraftQuickService CH_QUICK_DRAFTS;
     public static PrefixQuickService CH_QUICK_PREFIXES;
@@ -108,6 +110,12 @@ public class ChogoriServices {
 
 
     public static void initFromBatch(BatchResponse batch) {
+
+        CH_QUICK_REMARKS = RemarkQuickService.getInstance();
+        if (batch.getRemarks() != null) {
+            RemarkQuickService.LOADED_REMARKS = new ArrayList<>(batch.getRemarks());
+        }
+
         CH_QUICK_FOLDERS = FolderQuickService.getInstance();
         if (batch.getFolders() != null) {
             FolderQuickService.LOADED_FOLDERS = new ArrayList<>(batch.getFolders());
@@ -141,6 +149,7 @@ public class ChogoriServices {
 
 
     public static void initQuickServices(){
+        ChogoriServices.CH_QUICK_REMARKS = RemarkQuickService.getInstance();
         ChogoriServices.CH_QUICK_FOLDERS = FolderQuickService.getInstance();
         ChogoriServices.CH_QUICK_PRODUCTS = ProductQuickService.getInstance();
         ChogoriServices.CH_QUICK_DRAFTS = DraftQuickService.getInstance();

@@ -14,7 +14,7 @@ public class BatchService {
         }
 
         Response<BatchResponse> response = apiService.getInitialData(
-                 true, true, true, true, true, true)
+                 true, true, true, true, true, true, true)
                 .execute();
 
         if(!response.isSuccessful()) {
