@@ -8,6 +8,7 @@ import ru.wert.tubus.chogori.remarks.Remark_TableView;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.winform.warnings.Warning1;
 
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_QUICK_REMARKS;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_REMARKS;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
 
@@ -32,7 +33,7 @@ public class RemarkChangeCommand implements ICommand {
 
 
         try {
-            CH_REMARKS.update(item);
+            CH_QUICK_REMARKS.update(item);
 
             Platform.runLater(() -> {
                 tableView.updateTableView();
