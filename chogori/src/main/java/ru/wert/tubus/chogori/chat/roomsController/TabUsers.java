@@ -102,7 +102,8 @@ public class TabUsers {
         controller.getUsersOnline().clear();
         List<User> allUsers = UserService.getInstance().findAll();
         for (User user : allUsers) {
-            controller.getUsersOnline().add(new UserOnline(user, user.isOnline()));
+            if(user.isActive())
+                controller.getUsersOnline().add(new UserOnline(user, user.isOnline()));
         }
 
         sortUsersOnlineByName();

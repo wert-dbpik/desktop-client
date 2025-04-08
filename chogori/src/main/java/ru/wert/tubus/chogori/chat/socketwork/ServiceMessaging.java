@@ -3,6 +3,7 @@ package ru.wert.tubus.chogori.chat.socketwork;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.client.entity.models.Message;
+import ru.wert.tubus.client.entity.models.User;
 
 import java.time.LocalDateTime;
 
@@ -17,11 +18,11 @@ public class ServiceMessaging {
     /**
      * Отправляет сообщение о входе пользователя в систему.
      */
-    public static void sendMessageUserIn() {
+    public static void sendMessageUserIn(Long userId) {
         try {
             Message userInMessage = new Message();
             userInMessage.setType(Message.MessageType.USER_IN);
-            userInMessage.setSenderId(CH_CURRENT_USER.getId());
+            userInMessage.setSenderId(userId);
             SocketService.sendMessage(userInMessage);
         } catch (Exception e) {
             log.error("Ошибка при отправке USER_IN сообщения: {}", e.getMessage());

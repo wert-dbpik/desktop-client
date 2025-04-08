@@ -77,13 +77,14 @@ public class LoginController {
                 ChogoriServices.initQuickServices();
             }
 
-            startSocketServerWithChats();
             CH_CURRENT_USER = user;
+            startSocketServerWithChats();
+
             loadApplicationSettings();
             showTabPaneWindow();
             AppProperties.getInstance().setLastUser(user.getId());
             AppStatic.createLog(true, "Подключился к серверу");
-            ServiceMessaging.sendMessageUserIn();
+            ServiceMessaging.sendMessageUserIn(CH_CURRENT_USER.getId());
 
             if(CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart())
                 openDrafts();

@@ -39,9 +39,6 @@ public class SocketService {
                         try {
                             // Подключение к серверу
                             connectionManager.connect();
-//
-//                            // Отправка сообщения USER_IN для уведомления сервера о входе пользователя
-//                            ServiceMessaging.sendMessageUserIn(AppProperties.getInstance().getLastUser());
 
                             // Инициализация и запуск потоков для получения и отправки сообщений
                             messageReceiver = new MessageReceiver(connectionManager.getIn());
@@ -49,6 +46,9 @@ public class SocketService {
 
                             messageReceiver.start();
                             messageSender.start();
+
+                            // Отправка сообщения USER_IN для уведомления сервера о входе пользователя
+                            ServiceMessaging.sendMessageUserIn(CH_CURRENT_USER.getId());
 
                             // Логирование успешного подключения и запуска потоков
                             log.info("Сокет успешно подключен, потоки запущены.");
@@ -122,7 +122,7 @@ public class SocketService {
         if (messageSender != null) {
             messageSender.sendMessage(message);
         } else
-            log.error("не удалось отправить сообщение {}, т.к. messageSender = null", message);
+            log.error("не удалось отправить сообщение {}, т.к. messageSender = null", message.toUsefulString());
     }
 }
 
