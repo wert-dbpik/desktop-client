@@ -78,6 +78,9 @@ public class SettingsController {
     private CheckBox chbOpenDraftsTab;
 
     @FXML
+    private CheckBox chbCorrectDetToAssm;
+
+    @FXML
     private CheckBox chbValidateDecNumbersEntering;
 
     @FXML
@@ -172,6 +175,9 @@ public class SettingsController {
         //ПОКАЗЫВАТЬ СТРОКУ УВЕДОМЛЕНИЙ
         chbShowNotificationLine.setSelected(ChogoriSettings.CH_CURRENT_USER_SETTINGS.isShowNotificationLine());
 
+        //ИЗМЕНЯТЬ ДЕТ НА СБ ЕСЛИ НОМЕР НАЧИНАЕТСЯ НА 3 или 4
+        chbCorrectDetToAssm.setSelected(ChogoriSettings.CH_CURRENT_USER_SETTINGS.isCorrectDetToAssm());
+
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         new BXPrefix().create(cmbPrefixChooser);
         cmbPrefixChooser.getSelectionModel().select(ChogoriSettings.CH_CURRENT_USER_SETTINGS.getDefaultPrefix());
@@ -252,26 +258,40 @@ public class SettingsController {
 
         List<String> cmbItems = cmbMonitorChooser.getItems();
         cmbMonitorChooser.getSelectionModel().select(0);
+
         //PDF просмотрщик
         cmbPDFViewerChooser.getSelectionModel().select(EPDFViewer.values()[defSettings.getPdfViewer()]);
+
         //НОРМЫ МК
         tfPathToNormyMK.setText(defSettings.getPathToNormyMK());
+
         //ПОКАЗЫАТЬ PDF В ПРОГРАММЕ
         tfPathToOpenPDFWith.setText(USE_SYSTEM_SETTINGS);
+
         //ПОКАЗЫАТЬ IMAGE В ПРОГРАММЕ
         tfPathToOpenImageWith.setText(USE_SYSTEM_SETTINGS);
+
         //ПОКАЗЫАТЬ SOLID  В ПРОГРАММЕ
         tfPathToOpenSolidWith.setText(USE_SYSTEM_SETTINGS);
+
         //ПОКАЗЫВАТЬ ПРЕФИКСЫ
         chbShowPrefixes.setSelected(defSettings.isShowPrefixes());
+
         //ПОКАЗЫВАТЬ СТРОКУ СОСТОЯНИЙ
         chbShowNotificationLine.setSelected(defSettings.isShowNotificationLine());
+
+        //ИЗМЕНЯТЬ ДЕТ НА СБ ЕСЛИ НОМЕР НАЧИНАЕТСЯ НА 3 или 4
+        chbCorrectDetToAssm.setSelected(defSettings.isCorrectDetToAssm());
+
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         cmbPrefixChooser.getSelectionModel().select(defSettings.getDefaultPrefix());
+
         //ОТКРЫВАТЬ ВКЛАДКУ ЧЕРТЕЖИ ПРИ СТАРТЕ
         chbOpenDraftsTab.setSelected(defSettings.isOpenDraftsTabOnStart());
+
         //ПРОВЕРЯТЬ ВВЕДЕННЫЕ ДЕЦИМАЛЬНЫЕ НОМЕРА
         chbValidateDecNumbersEntering.setSelected(defSettings.isValidateDecNumbers());
+
         //ПОСЛЕДНЯЯ ВЕРСИЯ
         VersionDesktop lastVersion = AppStatic.findCurrentLastAppVersion();
         tfLastVersion.setText(lastVersion.getName());
@@ -319,6 +339,10 @@ public class SettingsController {
         //ПОКАЗЫВАТЬ СТРОКУ УВЕДОМЛЕНИЙ
         ChogoriSettings.CH_CURRENT_USER_SETTINGS.setShowNotificationLine(chbShowNotificationLine.isSelected());
         ChogoriSettings.CH_SHOW_NOTIFICATION_LINE = chbShowNotificationLine.isSelected(); //для моментального применения
+
+        //ИЗМЕНЯТЬ ДЕТ НА СБ ЕСЛИ НОМЕР НАЧИНАЕТСЯ НА 3 или 4
+        ChogoriSettings.CH_CURRENT_USER_SETTINGS.setCorrectDetToAssm(chbCorrectDetToAssm.isSelected());
+        ChogoriSettings.CH_CORRECT_DET_TO_ASSM = chbCorrectDetToAssm.isSelected(); //для моментального применения
 
         //ПРЕФИКС ПО УМОЛЧАНИЮ
         Prefix newPrefix = cmbPrefixChooser.getSelectionModel().getSelectedItem();

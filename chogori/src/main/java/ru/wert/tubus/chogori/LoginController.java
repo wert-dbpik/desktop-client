@@ -11,21 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
-import ru.wert.tubus.chogori.statics.UtilStaticNodes;
+import ru.wert.tubus.chogori.components.BXUsers;
+import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.AppSettings;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.retrofit.AppProperties;
-import ru.wert.tubus.chogori.components.BXUsers;
-import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.winform.enums.EPDFViewer;
-import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.warnings.Warning1;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ServerSocket;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_SETTINGS;
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_DECORATION_ROOT_PANEL;
 import static ru.wert.tubus.winform.warnings.WarningMessages.*;
@@ -117,6 +115,7 @@ public class LoginController {
 
         CH_SHOW_PREFIX = CH_CURRENT_USER_SETTINGS.isShowPrefixes();
         CH_SHOW_NOTIFICATION_LINE = CH_CURRENT_USER_SETTINGS.isShowNotificationLine();
+        CH_CORRECT_DET_TO_ASSM = CH_CURRENT_USER_SETTINGS.isCorrectDetToAssm();
         CH_DEFAULT_PREFIX = CH_CURRENT_USER_SETTINGS.getDefaultPrefix();
         CH_OPEN_DRAFTS_TAB_ON_START = CH_CURRENT_USER_SETTINGS.isOpenDraftsTabOnStart();
         CH_VALIDATE_DEC_NUMBERS = CH_CURRENT_USER_SETTINGS.isValidateDecNumbers();

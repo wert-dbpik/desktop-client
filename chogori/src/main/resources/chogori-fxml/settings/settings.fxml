@@ -178,13 +178,13 @@
                                     <Font size="14.0" />
                                  </font>
                               </CheckBox>
-                              <Label text="Открывать файлы" GridPane.rowIndex="1">
+                              <Label text="Открывать файлы" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
                               <VBox />
-                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <children>
                                     <TextField fx:id="tfPathToOpenPDFWith" GridPane.columnIndex="1" HBox.hgrow="ALWAYS">
                                        <font>
@@ -201,7 +201,7 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="2">
+                              <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="3">
                                  <children>
                                     <Label alignment="BOTTOM_RIGHT" text="PDF -" GridPane.rowIndex="2">
                                        <HBox.margin>
@@ -213,7 +213,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
                                     <TextField fx:id="tfPathToOpenImageWith" GridPane.columnIndex="1" HBox.hgrow="ALWAYS">
                                        <font>
@@ -230,7 +230,7 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                  <children>
                                     <TextField fx:id="tfPathToOpenSolidWith" GridPane.columnIndex="1" HBox.hgrow="ALWAYS">
                                        <font>
@@ -247,7 +247,7 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="3">
+                              <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="4">
                                  <children>
                                     <Label alignment="BOTTOM_RIGHT" text="PICTURE(.png, .jpg) -" GridPane.rowIndex="2">
                                        <font>
@@ -259,7 +259,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="4">
+                              <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="5">
                                  <children>
                                     <Label alignment="BOTTOM_RIGHT" text="SOLID(.easm) -" GridPane.rowIndex="2">
                                        <font>
@@ -271,11 +271,16 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <Label text="С помощью:" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Label text="С помощью:" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
+                              <CheckBox fx:id="chbCorrectDetToAssm" mnemonicParsing="false" text="Изменять ДЕТ на СБ если номер начинается на 3 или 4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
                            </children>
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="165.0" />
@@ -285,6 +290,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <rowConstraints>
+                              <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />

@@ -24,8 +24,9 @@ public class AppSettings extends _BaseEntity implements Item{
     private String pathToOpenSolidWith; //путь до папки НормыМК
     private boolean showPrefixes; //показывать префиксы
     private boolean showNotificationLine; //показывать строку уведомлений
+    private boolean correctDetToAssm; //Исправлять DET на ASSM если номер начинается на 3 или 4
     private Prefix defaultPrefix; //Префикс по умолчанию
-    private boolean openDraftsTabOnStart = false; //Открывать вкладку чертежи при старте приложения
+    private boolean openDraftsTabOnStart; //Открывать вкладку чертежи при старте приложения
     private boolean validateDecNumbers; //Проверять вводимый децимальный номер
     private String lastPathToDrafts; //Последний использованный путь до папки с чертежами
 
@@ -48,6 +49,7 @@ public class AppSettings extends _BaseEntity implements Item{
         newSettings.setPathToOpenSolidWith(getPathToOpenSolidWith());
         newSettings.setShowPrefixes(isShowPrefixes());
         newSettings.setShowNotificationLine(isShowNotificationLine());
+        newSettings.setCorrectDetToAssm(isCorrectDetToAssm());
         newSettings.setDefaultPrefix(getDefaultPrefix());
         newSettings.setOpenDraftsTabOnStart(isOpenDraftsTabOnStart());
         newSettings.setValidateDecNumbers(isValidateDecNumbers());
