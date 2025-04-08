@@ -72,6 +72,8 @@ public class DialogListCell extends ListCell<Message> {
                 this::handleUpdateMessageAction
         );
 
+        setStyle("-fx-padding: 0px 10px; -fx-background-insets: 0;");
+
         // Инициализация компонентов
         initContainer();
         initWhiteCurtain();
@@ -83,7 +85,7 @@ public class DialogListCell extends ListCell<Message> {
      * Инициализация основного контейнера ячейки
      */
     private void initContainer() {
-        container.setStyle("-fx-background-color: transparent;"); // Прозрачный фон
+        container.setStyle("-fx-background-color: transparent; "); // Прозрачный фон
         container.setMaxHeight(Double.MAX_VALUE); // Максимальная возможная высота
     }
 
