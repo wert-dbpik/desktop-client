@@ -97,7 +97,7 @@ public class Message extends _BaseEntity implements Item {
 
     @Override
     public String toUsefulString() {
-        return "from: " + senderId + ", type: " + type.name() + " ,message: " + text;
+        return "id: " + id + " ,tempId: " + tempId + " ,from: " + senderId + ", type: " + type.name() + " ,message: " + text;
     }
 
 }

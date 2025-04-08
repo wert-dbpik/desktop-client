@@ -39,7 +39,12 @@ public class ServerMessageHandler {
     public static void handle(Message message) {
         if (message == null) return;
 
-        log.info("Message from server received: {}", message.toUsefulString());
+        log.info("От сервера получено сообщение: {}", message.toUsefulString());
+
+        if(message.getType().equals(Message.MessageType.CHAT_UPDATE_TEMP_ID)){
+            handleTempIdUpdate(message);
+            return;
+        }
 
         // Все сообщения должны проходить через обработку
         String notificationText = processMessage(message);
@@ -61,11 +66,8 @@ public class ServerMessageHandler {
             });
         }
 
-        if(message.getType().equals(Message.MessageType.CHAT_UPDATE_TEMP_ID))
-            handleTempIdUpdate(message);
-        else
-            // Обработка сообщений чата
-            processChatMessage(message);
+        // Обработка сообщений чата
+        processChatMessage(message);
     }
 
     /**
@@ -138,6 +140,7 @@ public class ServerMessageHandler {
      * @param message Сообщение с новым ID (в поле tempId хранится оригинальный временный ID)
      */
     private static void handleTempIdUpdate(Message message) {
+        log.info("Обрабатывается служебное сообщение типа CHAT_UPDATE_TEMP_ID {}", message.toUsefulString());
         Room room = RoomService.getInstance().findById(message.getRoomId());
         if (room == null) {
             log.warn("Комната для обновления ID не найдена");
@@ -156,6 +159,7 @@ public class ServerMessageHandler {
                 .findFirst();
 
         if (existingMessage.isPresent()) {
+            log.debug("Обновляется id для сообщения {}", existingMessage.get().toUsefulString());
             // Обновляем ID сообщения
             Message msgToUpdate = existingMessage.get();
             msgToUpdate.setId(message.getId());
@@ -171,7 +175,7 @@ public class ServerMessageHandler {
 
 
             // Обновляем в базе
-            CH_MESSAGES.update(msgToUpdate);
+//            CH_MESSAGES.update(msgToUpdate);
 
             log.debug("Обновлен ID сообщения. TempId: {}, новый ID: {}",
                     message.getTempId(), message.getId());
@@ -200,7 +204,6 @@ public class ServerMessageHandler {
             case CHAT_DRAFTS:
             case CHAT_FOLDERS:
             case CHAT_PICS:
-            case CHAT_UPDATE_TEMP_ID:
                 ChatMessageHandler.handle(message);
                 break;
 

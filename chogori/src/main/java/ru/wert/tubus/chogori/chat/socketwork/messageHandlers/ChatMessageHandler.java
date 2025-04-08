@@ -31,12 +31,11 @@ public class ChatMessageHandler {
         Long roomId = message.getRoomId();
         Room room = RoomService.getInstance().findById(roomId);
 
-
-        if (!message.getType().equals(Message.MessageType.CHAT_UPDATE_TEMP_ID) &&
-                (room == null || !room.getRoommates().contains(CH_CURRENT_USER.getId()))) {
+        if (room == null || !room.getRoommates().contains(CH_CURRENT_USER.getId())) {
             log.debug("Сообщение не предназначено текущему пользователю или комната не найдена");
             return;
         }
+
         processRegularChatMessage(message);
 
     }
@@ -68,7 +67,7 @@ public class ChatMessageHandler {
             message.setStatus(Message.MessageStatus.DELIVERED);
             CH_MESSAGES.update(message);
 
-            log.debug("Добавлено новое сообщение в комнату {}", room.getId());
+            log.debug("Добавлено новое сообщение {} в комнату {}", message.toUsefulString(), room.getId());
         }
     }
 }
