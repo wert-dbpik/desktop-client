@@ -32,6 +32,7 @@ public class Message extends _BaseEntity implements Item {
         CHAT_PICS("изображения"),
         CHAT_PASSPORTS("пасспорта"),
         CHAT_SEPARATOR("сепаратор с датой"),
+        CHAT_UPDATE_TEMP_ID("Обновить временный ID"),
 
         ADD_DRAFT("Добавление чертежа"),
         UPDATE_DRAFT("Обновлен чертеж"),
@@ -61,6 +62,7 @@ public class Message extends _BaseEntity implements Item {
         }
     }
 
+    private String tempId; //Временный Id для отправки на сервер
     private MessageType type; // Тип сообщения (текстовый, чертеж и т.д.)
     private Long roomId; // id группы чата
     private Long senderId; // id пользователя, написавшего в группе

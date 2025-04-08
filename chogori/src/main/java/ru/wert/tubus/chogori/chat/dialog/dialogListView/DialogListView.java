@@ -61,7 +61,12 @@ public class DialogListView extends ListView<Message> {
         log.info("Создан новый диалог для комнаты: {}", room.getName());
     }
 
-
+    /**
+     * Создает временный ID сообщения
+     */
+    private String generateTempId(){
+        return "temp_" + System.currentTimeMillis() + "_" + (int)(Math.random() * 1000);
+    }
 
     /**
      * Создает и отправляет сообщение с паспортами.
@@ -203,6 +208,7 @@ public class DialogListView extends ListView<Message> {
      */
     private Message createChatMessage(Message.MessageType type, String text) {
         Message message = new Message();
+        message.setTempId(generateTempId());
         message.setType(type);
         message.setRoomId(room.getId());
         message.setSenderId(CH_CURRENT_USER.getId());

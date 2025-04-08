@@ -146,6 +146,7 @@ public class ServerMessageHandler {
             case CHAT_DRAFTS:
             case CHAT_FOLDERS:
             case CHAT_PICS:
+            case CHAT_UPDATE_TEMP_ID:
                 ChatMessageHandler.handle(message);
                 break;
 

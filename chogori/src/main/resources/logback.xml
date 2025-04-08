@@ -19,6 +19,7 @@
         </triggeringPolicy>
 
         <encoder>
+            <charset>UTF-8</charset> <!-- Добавлено для поддержки русского -->
             <Pattern>[%d{HH:mm:ss.SSS}] [%-5level] [%thread] [%logger{36}] : %msg%n</Pattern>
         </encoder>
     </appender>
@@ -29,6 +30,7 @@
         </filter>
 
         <encoder>
+            <charset>UTF-8</charset> <!-- Добавлено для поддержки русского -->
             <pattern>[%highlight(%-5level)] %d{HH:mm:ss.SSS} [%t] %logger{36} : %highlight(%msg%n)</pattern>
         </encoder>
     </appender>
