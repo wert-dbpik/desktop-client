@@ -183,6 +183,7 @@ public class DialogListView extends ListView<Message> {
 
         // Создаем сообщение
         Message message = new Message();
+        message.setTempId(generateTempId());
         message.setType(Message.MessageType.CHAT_TEXT);
         message.setRoomId(room.getId());
         message.setSenderId(CH_CURRENT_USER.getId());

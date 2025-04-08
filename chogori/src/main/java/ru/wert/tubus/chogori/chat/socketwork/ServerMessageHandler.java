@@ -9,9 +9,13 @@ import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
 import ru.wert.tubus.chogori.chat.socketwork.messageHandlers.*;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
+import ru.wert.tubus.client.entity.serviceREST.RoomService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 import ru.wert.tubus.winform.statics.WinformStatic;
 
+import java.util.Optional;
+
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.updateMessageInOpenRooms;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
@@ -57,8 +61,11 @@ public class ServerMessageHandler {
             });
         }
 
-        // Обработка сообщений чата
-        processChatMessage(message);
+        if(message.getType().equals(Message.MessageType.CHAT_UPDATE_TEMP_ID))
+            handleTempIdUpdate(message);
+        else
+            // Обработка сообщений чата
+            processChatMessage(message);
     }
 
     /**
@@ -123,6 +130,53 @@ public class ServerMessageHandler {
             } catch (Exception e) {
                 log.error("Ошибка при обработке сообщения чата: {}", e.getMessage());
             }
+        }
+    }
+
+    /**
+     * Обрабатывает сообщение с обновлением временного ID
+     * @param message Сообщение с новым ID (в поле tempId хранится оригинальный временный ID)
+     */
+    private static void handleTempIdUpdate(Message message) {
+        Room room = RoomService.getInstance().findById(message.getRoomId());
+        if (room == null) {
+            log.warn("Комната для обновления ID не найдена");
+            return;
+        }
+
+        DialogListView dialog = ServerMessageHandler.dialogController.findDialogForRoom(room);
+        if (dialog == null) {
+            log.warn("Диалог для комнаты {} не найден", room.getId());
+            return;
+        }
+
+        // Ищем сообщение с совпадающим tempId
+        Optional<Message> existingMessage = dialog.getItems().stream()
+                .filter(m -> m.getTempId() != null && m.getTempId().equals(message.getTempId()))
+                .findFirst();
+
+        if (existingMessage.isPresent()) {
+            // Обновляем ID сообщения
+            Message msgToUpdate = existingMessage.get();
+            msgToUpdate.setId(message.getId());
+
+            // Обновляем статус, если нужно
+            msgToUpdate.setStatus(Message.MessageStatus.DELIVERED);
+
+            // Обновляем в UI
+            Platform.runLater(()->{
+                dialog.refresh();
+                dialog.scrollTo(msgToUpdate);
+            });
+
+
+            // Обновляем в базе
+            CH_MESSAGES.update(msgToUpdate);
+
+            log.debug("Обновлен ID сообщения. TempId: {}, новый ID: {}",
+                    message.getTempId(), message.getId());
+        } else {
+            log.warn("Сообщение с tempId {} не найдено для обновления", message.getTempId());
         }
     }
 
