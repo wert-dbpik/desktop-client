@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -137,18 +138,22 @@ public class LocalCacheManager {
      * @param data Данные для сохранения
      */
     public void saveToCache(String key, Object data) {
-        try {
-            if (!Files.exists(CACHE_DIR)) {
-                Files.createDirectories(CACHE_DIR);
-            }
+        Executors.newSingleThreadExecutor().submit(() -> {
+            try {
+                if (!Files.exists(CACHE_DIR)) {
+                    Files.createDirectories(CACHE_DIR);
+                }
 
-            Path cacheFile = CACHE_DIR.resolve(key + ".json");
-            String json = gson.toJson(data);
-            Files.write(cacheFile, json.getBytes(StandardCharsets.UTF_8));
-            log.debug("Данные сохранены в кэш: {}", cacheFile);
-        } catch (IOException e) {
-            log.error("Ошибка сохранения данных в кэш", e);
-        }
+                Path cacheFile = CACHE_DIR.resolve(key + ".json");
+                String json = gson.toJson(data);
+                // Используем временный файл для атомарной записи
+                Path tempFile = Files.createTempFile(CACHE_DIR, "temp", ".tmp");
+                Files.write(tempFile, json.getBytes(StandardCharsets.UTF_8));
+                Files.move(tempFile, cacheFile, StandardCopyOption.ATOMIC_MOVE);
+            } catch (IOException e) {
+                log.error("Ошибка сохранения кэша", e);
+            }
+        });
     }
 
     /**
