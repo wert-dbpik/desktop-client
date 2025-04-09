@@ -22,7 +22,7 @@ public class BtnChat{
     private final ImageView imageYellow = new ImageView(CHAT_YELLOW_IMG); // Изображение кнопки в активном состоянии (желтый чат)
     private final BooleanProperty hasNewMessages = new SimpleBooleanProperty(false); // Состояние наличия новых сообщений
     private final Timeline timeline; // Анимация мигания
-    private boolean open;
+    public static boolean CHAT_OPEN;
     private SideChat sideChat = new SideChat();
 
     @Getter
@@ -81,7 +81,7 @@ public class BtnChat{
      * @return true если чат открыт, false если закрыт
      */
     public boolean isChatOpen() {
-        return open;
+        return CHAT_OPEN;
     }
 
     /**
@@ -89,8 +89,8 @@ public class BtnChat{
      */
     public void openChat() {
         hasNewMessages.set(false); // Сбрасываем состояние новых сообщений
-        open = !open;
-        if(open) {
+        CHAT_OPEN = !CHAT_OPEN;
+        if(CHAT_OPEN) {
             SP_CHAT.setPrefWidth(CHAT_WIDTH);
             SP_CHAT.setMinWidth(CHAT_WIDTH);
             SP_CHAT.setMaxWidth(CHAT_WIDTH);

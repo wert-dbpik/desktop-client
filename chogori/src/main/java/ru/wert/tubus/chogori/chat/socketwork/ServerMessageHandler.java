@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.updateMessageInOpenRooms;
+import static ru.wert.tubus.chogori.components.BtnChat.CHAT_OPEN;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_SHOW_NOTIFICATION_LINE;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
@@ -111,7 +112,7 @@ public class ServerMessageHandler {
                         // Показываем уведомление если:
                         // 1. Комната не открыта ИЛИ
                         // 2. Приложение свернуто
-                        boolean showNotification = !isRoomOpen || isAppMinimized;
+                        boolean showNotification = !CHAT_OPEN || !isRoomOpen || isAppMinimized;
                         log.debug("Комната открыта? {}, Приложение свернуто? {}", isRoomOpen, isAppMinimized);
 
                         if (showNotification) {

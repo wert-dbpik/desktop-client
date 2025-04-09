@@ -106,7 +106,7 @@ public class PushNotification {
                     });
 
                     stage.show();
-                    scheduleAutoClose(stage, message.getRoomId());
+//                    scheduleAutoClose(stage, message.getRoomId());
                 });
             } catch (Exception e) {
                 log.error("Ошибка при показе уведомления", e);
@@ -351,6 +351,12 @@ public class PushNotification {
         }
     }
 
+    /**
+     * Задержка перед автозакрытием уведомления
+     * НЕ ИСПОЛЬЗУЕТСЯ
+     * @param stage
+     * @param roomId
+     */
     private static void scheduleAutoClose(Stage stage, Long roomId) {
         new Thread(() -> {
             try {
