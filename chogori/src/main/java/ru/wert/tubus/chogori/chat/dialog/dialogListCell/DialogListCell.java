@@ -6,8 +6,6 @@ import javafx.concurrent.Task;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
@@ -31,36 +29,25 @@ import java.util.concurrent.Executors;
 public class DialogListCell extends ListCell<Message> {
 
     private final DialogController dialogController;
-
-    // Стили для входящих и исходящих сообщений
-    static final String OUT = "message_out"; // Стиль исходящих сообщений
-    static final String IN = "message_in";   // Стиль входящих сообщений
-
-    // Пул потоков для фонового рендеринга сообщений (4 потока)
+    private final MessageManager messageManager;
+    private final ConcurrentHashMap<Message, Parent> messageCache = new ConcurrentHashMap<>();
+    private Parent separatorCache;
+    private final StackPane container = new StackPane();
+    private final ListView<Message> listView;
+    private Message currentMessage;
+    private final MessageContextMenu contextMenu;
     private static final ExecutorService renderExecutor = Executors.newFixedThreadPool(4);
 
-    // Основные компоненты ячейки
-    private final MessageManager messageManager; // Менеджер для форматирования сообщений
-    private final ConcurrentHashMap<Message, Parent> messageCache = new ConcurrentHashMap<>(); // Кэш сообщений
-    private Parent separatorCache; // Кэш для разделителей чата
-    private final StackPane container = new StackPane(); // Основной контейнер ячейки
-    private final Rectangle whiteCurtain = new Rectangle(); // "Шторка" для анимации загрузки
-    private FadeTransition fadeOut; // Анимация исчезновения шторки
-    private final ListView<Message> listView; // Ссылка на родительский ListView
-    private Message currentMessage; // Текущее отображаемое сообщение
-    private final MessageContextMenu contextMenu;
+    // Стили для сообщений
+    static final String OUT = "message_out";
+    static final String IN = "message_in";
 
     // Элементы контекстного меню
-    private final MenuItem copyItem = new MenuItem("Копировать"); // Копировать текст
-    private final MenuItem deleteItem = new MenuItem("Удалить");  // Удалить сообщение
-    private final MenuItem forwardItem = new MenuItem("Переслать"); // Переслать сообщение
-    private final MenuItem editItem = new MenuItem("Изменить");   // Редактировать сообщение
+    private final MenuItem copyItem = new MenuItem("Копировать");
+    private final MenuItem deleteItem = new MenuItem("Удалить");
+    private final MenuItem forwardItem = new MenuItem("Переслать");
+    private final MenuItem editItem = new MenuItem("Изменить");
 
-    /**
-     * Конструктор ячейки
-     * @param room Комната чата
-     * @param listView Родительский ListView
-     */
     public DialogListCell(Room room, ListView<Message> listView, DialogController dialogController) {
         this.messageManager = new MessageManager(room);
         this.listView = listView;
@@ -73,102 +60,42 @@ public class DialogListCell extends ListCell<Message> {
         );
 
         setStyle("-fx-padding: 0px 10px; -fx-background-insets: 0;");
-
-        // Инициализация компонентов
         initContainer();
-        initWhiteCurtain();
-        initFadeTransition();
         setContextMenu(contextMenu.getContextMenu());
     }
 
-    /**
-     * Инициализация основного контейнера ячейки
-     */
     private void initContainer() {
-        container.setStyle("-fx-background-color: transparent; "); // Прозрачный фон
-        container.setMaxHeight(Double.MAX_VALUE); // Максимальная возможная высота
+        container.setStyle("-fx-background-color: transparent;");
+        container.setMaxHeight(Double.MAX_VALUE);
     }
 
-    /**
-     * Инициализация "шторки" для анимации загрузки
-     */
-    private void initWhiteCurtain() {
-        whiteCurtain.setFill(Color.WHITE); // Белый цвет
-        whiteCurtain.setVisible(false);   // Изначально невидима
-        // Привязка размеров к размерам ListView (с учетом полосы прокрутки)
-        whiteCurtain.widthProperty().bind(listView.widthProperty().subtract(getVerticalScrollbarWidth()));
-        whiteCurtain.heightProperty().bind(heightProperty());
-    }
-
-    /**
-     * Инициализация анимации исчезновения шторки
-     */
-    private void initFadeTransition() {
-        fadeOut = new FadeTransition(Duration.millis(200), whiteCurtain);
-        fadeOut.setFromValue(1.0);    // Начальная прозрачность (полностью видима)
-        fadeOut.setToValue(0.0);      // Конечная прозрачность (полностью прозрачна)
-        fadeOut.setOnFinished(e -> whiteCurtain.setVisible(false)); // После завершения скрыть шторку
-    }
-
-    /**
-     * Обновление содержимого ячейки
-     * @param message Сообщение для отображения
-     * @param empty Флаг пустой ячейки
-     */
     @Override
     protected void updateItem(Message message, boolean empty) {
         super.updateItem(message, empty);
 
-        // Очистка ячейки, если она пустая
         if (empty || message == null) {
             clearCell();
             return;
         }
 
-        // Если сообщение не изменилось, ничего не делаем
         if (message.equals(currentMessage)) {
             return;
         }
 
-        // Обновление текущего сообщения и связанных компонентов
         currentMessage = message;
-        contextMenu.setCurrentMessage(message); // Обновляем текущее сообщение в меню
-        showWhiteCurtain();           // Показ анимации загрузки
-        renderMessageInBackground(message); // Фоновый рендеринг сообщения
+        contextMenu.setCurrentMessage(message);
+        renderMessageInBackground(message);
     }
 
-    /**
-     * Очистка ячейки
-     */
     private void clearCell() {
         currentMessage = null;
         setText(null);
         setGraphic(null);
     }
 
-    /**
-     * Показ анимации загрузки (белой шторки)
-     */
-    private void showWhiteCurtain() {
-        Platform.runLater(() -> {
-            setText(null);
-            whiteCurtain.setVisible(true);
-            whiteCurtain.setOpacity(1.0);
-            container.getChildren().clear();
-            container.getChildren().add(whiteCurtain);
-            setGraphic(container);
-        });
-    }
-
-    /**
-     * Рендеринг сообщения в фоновом потоке
-     * @param message Сообщение для рендеринга
-     */
     private void renderMessageInBackground(Message message) {
-        // Проверка актуальности сообщения
         if (!message.equals(currentMessage)) return;
 
-        // Создание задачи для фонового рендеринга
         Task<Parent> renderTask = new Task<Parent>() {
             @Override
             protected Parent call() {
@@ -176,7 +103,6 @@ public class DialogListCell extends ListCell<Message> {
             }
         };
 
-        // Обработка успешного завершения рендеринга
         renderTask.setOnSucceeded(e -> {
             if (!message.equals(currentMessage)) return;
 
@@ -185,47 +111,32 @@ public class DialogListCell extends ListCell<Message> {
                 Platform.runLater(() -> {
                     if (!message.equals(currentMessage)) return;
 
-                    // Обновление содержимого ячейки
                     container.getChildren().clear();
                     container.getChildren().add(renderedNode);
                     setGraphic(container);
-
-                    // Анимация появления сообщения
                     animateMessageAppearance(renderedNode);
-                    fadeOut.play(); // Запуск анимации исчезновения шторки
                 });
             }
         });
 
-        // Обработка отмены задачи
         renderTask.setOnCancelled(e -> {
             if (!isVisible()) {
                 Platform.runLater(() -> setGraphic(null));
             }
         });
 
-        // Запуск задачи в пуле потоков
         renderExecutor.execute(renderTask);
     }
 
-    /**
-     * Анимация плавного появления сообщения
-     * @param node Узел с сообщением
-     */
     private void animateMessageAppearance(Parent node) {
+        node.setOpacity(0);
         FadeTransition fadeIn = new FadeTransition(Duration.millis(150), node);
-        fadeIn.setFromValue(0);   // Начальная прозрачность (полностью прозрачен)
-        fadeIn.setToValue(1);     // Конечная прозрачность (полностью видим)
-        fadeIn.play();            // Запуск анимации
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
     }
 
-    /**
-     * Получение узла для отображения сообщения (с использованием кэша)
-     * @param message Сообщение
-     * @return Визуальный узел для отображения
-     */
     private Parent getCellNodeForMessage(Message message) {
-        // Обработка разделителя чата (специальный тип сообщения)
         if (message.getType() == Message.MessageType.CHAT_SEPARATOR) {
             synchronized (this) {
                 if (separatorCache == null) {
@@ -235,13 +146,11 @@ public class DialogListCell extends ListCell<Message> {
             }
         }
 
-        // Проверка кэша сообщений
         Parent cachedNode = messageCache.get(message);
         if (cachedNode != null && !isMessageChanged(message, cachedNode)) {
             return cachedNode;
         }
 
-        // Создание нового узла для сообщения
         boolean isOutgoing = isOutgoingMessage(message);
         Parent newNode = messageManager.formatMessage(message, isOutgoing ? OUT : IN);
         messageCache.put(message, newNode);
@@ -249,50 +158,33 @@ public class DialogListCell extends ListCell<Message> {
         return newNode;
     }
 
-    // Обработчики действий контекстного меню ================================================================
-
-    /**
-     * Обработчик удаления сообщения (заглушка)
-     */
+    // Обработчики контекстного меню
     private void handleDeleteMessageAction() {
         if (currentMessage == null) return;
         log.debug("Удаление сообщения: {}", currentMessage.getId());
-
         contextMenu.deleteMessage(currentMessage, listView);
     }
 
-    /**
-     * Обработчик пересылки сообщения
-     */
     private void handleForwardMessageAction() {
         if (currentMessage == null) return;
         log.debug("Пересылка сообщения: {}", currentMessage.getId());
-
         contextMenu.forwardMessage(currentMessage, listView);
     }
 
-
-
-    /**
-     * Обработчик редактирования сообщения
-     */
     private void handleUpdateMessageAction() {
         if (currentMessage == null || currentMessage.getType() != Message.MessageType.CHAT_TEXT) return;
         log.debug("Редактирование сообщения: {}", currentMessage.getId());
 
-        // Переносим текст сообщения в поле ввода
         Platform.runLater(() -> {
             dialogController.getTaMessageText().setText(currentMessage.getText());
             dialogController.getTaMessageText().requestFocus();
             dialogController.getTaMessageText().positionCaret(currentMessage.getText().length());
 
-            // Настраиваем кнопку отправки для редактирования
             Button btnSend = dialogController.getBtnSend();
             btnSend.setOnAction(e -> {
                 String updatedText = dialogController.getTaMessageText().getText().trim();
                 if (!updatedText.isEmpty()) {
                     contextMenu.updateMessage(currentMessage, updatedText, listView);
-                    // Возвращаем обычное поведение кнопки
                     btnSend.setOnAction(event -> dialogController.getDialogListView().sendText());
                     dialogController.getTaMessageText().clear();
                 }
@@ -300,44 +192,16 @@ public class DialogListCell extends ListCell<Message> {
         });
     }
 
-    // Вспомогательные методы  ======================================================================================
-
-    /**
-     * Получение ширины вертикальной полосы прокрутки
-     * @return Ширина полосы прокрутки или 0, если не найдена
-     */
-    private double getVerticalScrollbarWidth() {
-        for (javafx.scene.Node node : listView.lookupAll(".scroll-bar")) {
-            if (node instanceof ScrollBar && ((ScrollBar) node).getOrientation() == javafx.geometry.Orientation.VERTICAL) {
-                return ((ScrollBar) node).getWidth();
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * Проверка, является ли сообщение исходящим
-     * @param msg Сообщение для проверки
-     * @return true если сообщение от текущего пользователя
-     */
+    // Вспомогательные методы
     private boolean isOutgoingMessage(Message msg) {
         return msg.getSenderId() != null &&
                 msg.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId());
     }
 
-    /**
-     * Проверка, изменилось ли сообщение (заглушка)
-     * @param message Сообщение
-     * @param cachedNode Кэшированный узел
-     * @return Всегда false (требует реализации)
-     */
     private boolean isMessageChanged(Message message, Parent cachedNode) {
         return false;
     }
 
-    /**
-     * Завершение работы пула потоков
-     */
     public static void shutdown() {
         renderExecutor.shutdown();
     }
