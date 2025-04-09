@@ -244,6 +244,7 @@ public class DialogController {
         } else {
             lblRoom.setGraphic(null);
             lblRoom.setText(roomName);
+            lblRoom.setStyle("-fx-alignment: CENTER_LEFT; -fx-font-size: 14px; -fx-font-weight: bold;");
         }
     }
 
