@@ -245,6 +245,7 @@ public class Draft_Columns {
                 case DETAIL: label.setStyle("-fx-text-fill: green"); break;
                 case ASSEMBLE: label.setStyle("-fx-text-fill: darkblue"); break;
                 case SPECIFICATION: label.setStyle("-fx-text-fill: brown"); break;
+                case IMAGE_DXF: label.setStyle("-fx-text-fill: #7322a3"); break;
                 default: label.setStyle("-fx-text-fill: black");
             }
 
