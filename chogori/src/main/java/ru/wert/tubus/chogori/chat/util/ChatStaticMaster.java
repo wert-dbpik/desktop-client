@@ -30,19 +30,23 @@ public class ChatStaticMaster {
         String finalName = "";
         if(roomNameDB.startsWith("one-to-one:")){
             roomNameDB = roomNameDB.replace("one-to-one:#", "");
-            String[] usersId = roomNameDB.split("#", -1);
-            for(String id : usersId){
-                User user = UserService.getInstance().findById(Long.parseLong(id));
-                if(!user.getId().equals(CH_CURRENT_USER.getId())) {
-                    finalName = user.getName();
-                } else
-                    finalName = "Написать себе";
+            String[] usersIds = roomNameDB.split("#", -1);
+            if(usersIds[0].equals(usersIds[1]))
+                finalName = "Написать себе";
+            else{
+                for(String id : usersIds) {
+                    User user = UserService.getInstance().findById(Long.parseLong(id));
+                    if (!user.getId().equals(CH_CURRENT_USER.getId())) {
+                        finalName = user.getName();
+                        break;
+                    }
+                }
             }
+        } else if(roomNameDB.startsWith("group:")){
+            finalName = roomNameDB.split(":", -1)[1];
         } else
             finalName = roomNameDB;
-
         return finalName;
-
     }
 
     public static User getSecondUserInOneToOneChat(Room oneToOneRoom) {
