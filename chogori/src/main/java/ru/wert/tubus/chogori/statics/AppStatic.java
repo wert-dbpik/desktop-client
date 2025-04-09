@@ -171,7 +171,7 @@ public class AppStatic {
             //и расширение
             String ext = draft.getExtension();
 
-            String realName = draft.toUsefulString() + "." + draft.getExtension();
+            String realName = draft.getId() + "." + draft.getExtension();
 
             //Если файл отсутствует в папке temp/bddrafts, то файл туда загружается из БД
             if(!draftInTempDir(realName)) {

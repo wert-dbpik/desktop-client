@@ -2,11 +2,13 @@ package ru.wert.tubus.client.entity.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.sun.org.apache.xerces.internal.parsers.CachingParserPool;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.wert.tubus.client.interfaces.Item;
 import ru.wert.tubus.winform.enums.EDraftStatus;
+import ru.wert.tubus.winform.enums.EDraftType;
 //import EDraftStatus;
 
 import java.util.Objects;
@@ -67,6 +69,22 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
     @Override
     public String toUsefulString() {
         return passport.toUsefulString();
+    }
+
+    /**
+     * Если чертеж DXF - ПИК.745222.256-02 Имя
+     * Если чертеж обычный - ПИК.745222.256 СП Имя
+     */
+    public String toFullName() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(passport.getPrefix().getName()).append(".").append(getDecimalNumber());
+        if (draftType == EDraftType.IMAGE_DXF.ordinal() && pageNumber > 0)
+            sb.append("-").append(pageNumber);
+        else
+            sb.append(" ").append(EDraftType.getDraftTypeById(draftType).getShortName());
+        sb.append(" ").append(getName());
+
+        return sb.toString();
     }
 
     public String getDecimalNumber(){

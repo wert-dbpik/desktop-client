@@ -13,6 +13,7 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,15 +23,15 @@ public class DialogListCell extends ListCell<Message> {
 
     private final DialogController dialogController;
     private final MessageManager messageManager;
-    private final ConcurrentHashMap<Long, Parent> messageCache = new ConcurrentHashMap<>(); // Изменено на хранение по ID
+    private final ConcurrentHashMap<String, Parent> messageCache = new ConcurrentHashMap<>();
     private Parent separatorCache;
     private final StackPane container = new StackPane();
     private final ListView<Message> listView;
-    private volatile Message currentMessage; // Добавлено volatile для thread-safety
+    private Message currentMessage;
     private final MessageContextMenu contextMenu;
     private static final ExecutorService renderExecutor = Executors.newFixedThreadPool(4, r -> {
         Thread t = new Thread(r);
-        t.setDaemon(true); // Потоки-демоны для автоматического завершения
+        t.setDaemon(true);
         return t;
     });
 
@@ -62,26 +63,13 @@ public class DialogListCell extends ListCell<Message> {
     protected void updateItem(Message message, boolean empty) {
         super.updateItem(message, empty);
 
-        // Очищаем ячейку перед обновлением
         if (empty || message == null) {
             clearCell();
             return;
         }
 
-        // Проверяем, действительно ли сообщение изменилось
-        if (message.equals(currentMessage)) {
-            return;
-        }
-
-        // Обновляем текущее сообщение
         currentMessage = message;
         contextMenu.setCurrentMessage(message);
-
-        // Очищаем предыдущее содержимое перед рендерингом нового
-        Platform.runLater(() -> {
-            container.getChildren().clear();
-            setGraphic(container);
-        });
 
         renderMessageInBackground(message);
     }
@@ -94,30 +82,22 @@ public class DialogListCell extends ListCell<Message> {
     }
 
     private void renderMessageInBackground(Message message) {
-        if(message == null) return;
-        final String messageTempId = message.getTempId(); // Сохраняем ID для проверки актуальности
+        // Генерируем временный ключ для сообщений без ID
+        String cacheKey = message.getId() != null ?
+                message.getId().toString() :
+                "temp_" + UUID.randomUUID().toString();
 
         Task<Parent> renderTask = new Task<Parent>() {
             @Override
             protected Parent call() {
-                return getCellNodeForMessage(message);
+                return getCellNodeForMessage(message, cacheKey);
             }
         };
 
         renderTask.setOnSucceeded(e -> {
-            // Двойная проверка актуальности сообщения
-            if (currentMessage == null || messageTempId != currentMessage.getTempId()) {
-                return;
-            }
-
             Parent renderedNode = renderTask.getValue();
-            if (renderedNode != null) {
+            if (renderedNode != null && message.equals(currentMessage)) {
                 Platform.runLater(() -> {
-                    // Тройная проверка актуальности сообщения
-                    if (currentMessage == null || messageTempId != currentMessage.getTempId()) {
-                        return;
-                    }
-
                     container.getChildren().clear();
                     container.getChildren().add(renderedNode);
                     setGraphic(container);
@@ -127,10 +107,39 @@ public class DialogListCell extends ListCell<Message> {
         });
 
         renderTask.setOnFailed(e -> {
-            log.error("Ошибка при рендеринге сообщения: {}", e.getSource().getException().getMessage());
+            log.error("Ошибка рендеринга сообщения: {}", e.getSource().getException().getMessage());
         });
 
         renderExecutor.execute(renderTask);
+    }
+
+    private Parent getCellNodeForMessage(Message message, String cacheKey) {
+        if (message.getType() == Message.MessageType.CHAT_SEPARATOR) {
+            synchronized (this) {
+                if (separatorCache == null) {
+                    separatorCache = MessageRenderer.mountSeparator(message);
+                }
+                return separatorCache;
+            }
+        }
+
+        // Для сообщений с ID проверяем кэш
+        if (message.getId() != null) {
+            Parent cachedNode = messageCache.get(cacheKey);
+            if (cachedNode != null) {
+                return cachedNode;
+            }
+        }
+
+        boolean isOutgoing = isOutgoingMessage(message);
+        Parent newNode = messageManager.formatMessage(message, isOutgoing ? OUT : IN);
+
+        // Кэшируем только сообщения с ID
+        if (message.getId() != null) {
+            messageCache.put(cacheKey, newNode);
+        }
+
+        return newNode;
     }
 
     private void animateMessageAppearance(Parent node) {
@@ -141,38 +150,15 @@ public class DialogListCell extends ListCell<Message> {
         fadeIn.play();
     }
 
-    private Parent getCellNodeForMessage(Message message) {
-        if (message.getType() == Message.MessageType.CHAT_SEPARATOR) {
-            synchronized (this) {
-                if (separatorCache == null) {
-                    separatorCache = MessageRenderer.mountSeparator(message);
-                }
-                return separatorCache;
-            }
-        }
-
-        // Проверяем кэш по ID сообщения
-        Parent cachedNode = messageCache.get(message.getId());
-        if (cachedNode != null) {
-            return cachedNode;
-        }
-
-        boolean isOutgoing = isOutgoingMessage(message);
-        Parent newNode = messageManager.formatMessage(message, isOutgoing ? OUT : IN);
-        messageCache.put(message.getId(), newNode); // Сохраняем по ID
-
-        return newNode;
+    private boolean isOutgoingMessage(Message msg) {
+        return msg.getSenderId() != null &&
+                msg.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId());
     }
 
     // Обработчики контекстного меню остаются без изменений
     private void handleDeleteMessageAction() { /* ... */ }
     private void handleForwardMessageAction() { /* ... */ }
     private void handleUpdateMessageAction() { /* ... */ }
-
-    private boolean isOutgoingMessage(Message msg) {
-        return msg.getSenderId() != null &&
-                msg.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId());
-    }
 
     public static void shutdown() {
         renderExecutor.shutdownNow();
