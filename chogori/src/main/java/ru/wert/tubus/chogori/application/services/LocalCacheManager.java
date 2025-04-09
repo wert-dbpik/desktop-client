@@ -1,4 +1,3 @@
-// LocalCacheManager.java
 package ru.wert.tubus.chogori.application.services;
 
 import com.google.gson.Gson;
@@ -13,12 +12,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import static ru.wert.tubus.winform.statics.WinformStatic.HOME_DIRECTORY;
 
@@ -35,6 +34,7 @@ public class LocalCacheManager {
     private static final Gson gson = new GsonBuilder().create();
     private static final long UPDATE_INTERVAL_MINUTES = 60;
     private static final long INITIAL_DELAY_MINUTES = 0;
+    private static final long CACHE_FRESHNESS_THRESHOLD_MINUTES = 10; // Кэш считается свежим, если младше 10 минут
 
     private ScheduledExecutorService scheduler;
 
@@ -65,6 +65,27 @@ public class LocalCacheManager {
         return localInstance;
     }
 
+    /**
+     * Проверяет, является ли кэш свежим (моложе CACHE_FRESHNESS_THRESHOLD_MINUTES минут)
+     * @param key Ключ кэша для проверки
+     * @return true если кэш свежий, false в противном случае
+     */
+    private boolean isCacheFresh(String key) {
+        try {
+            Path cacheFile = CACHE_DIR.resolve(key + ".json");
+            if (Files.exists(cacheFile)) {
+                FileTime lastModifiedTime = Files.getLastModifiedTime(cacheFile);
+                Instant lastModified = lastModifiedTime.toInstant();
+                Instant now = Instant.now();
+
+                long minutesSinceLastUpdate = ChronoUnit.MINUTES.between(lastModified, now);
+                return minutesSinceLastUpdate < CACHE_FRESHNESS_THRESHOLD_MINUTES;
+            }
+        } catch (IOException e) {
+            log.error("Ошибка при проверке свежести кэша", e);
+        }
+        return false;
+    }
 
     /**
      * Запускает регулярное обновление кэша с заданным интервалом
@@ -96,6 +117,15 @@ public class LocalCacheManager {
      */
     public void forceCacheUpdate(Runnable onFinishCallback) {
         log.info("Запуск принудительного обновления кэша...");
+
+        // Проверяем свежесть кэша перед обновлением
+        if (isCacheFresh("initial_data")) {
+            log.info("Кэш еще свежий (моложе {} минут), обновление не требуется", CACHE_FRESHNESS_THRESHOLD_MINUTES);
+            if (onFinishCallback != null) {
+                Platform.runLater(onFinishCallback);
+            }
+            return;
+        }
 
         Thread updateThread = new Thread(() -> {
             try {
