@@ -36,7 +36,7 @@
             <StackPane prefHeight="150.0" prefWidth="200.0" />
             <Label text="Разработчик : Cимонов Алексей" />
             <Label text="Дизайн : AV4" />
-            <Label text="2019-2023гг.">
+            <Label text="2019-2025гг.">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
