@@ -415,6 +415,7 @@ public class AppStatic {
 
         File oldFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
                 draft.getId() + "." + draft.getExtension());
+
         if (!oldFile.exists() || !oldFile.isFile()) return;
 
         File newFile = new File(WinformStatic.WF_TEMPDIR + File.separator +

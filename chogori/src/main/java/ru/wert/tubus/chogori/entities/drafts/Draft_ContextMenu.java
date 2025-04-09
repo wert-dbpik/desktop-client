@@ -2,6 +2,7 @@ package ru.wert.tubus.chogori.entities.drafts;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.chogori.common.contextMenuACC.FormView_ContextMenu;
 import ru.wert.tubus.chogori.common.utils.ClipboardUtils;
@@ -126,7 +127,14 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         replaceDraft.setOnAction(commands::replaceDraft);
         nullifyDraft.setOnAction(commands::nullifyDraft);
         openInTab.setOnAction(commands::openInTab);
-        openInOuterApp.setOnAction(commands::openInOuterApp);
+        openInOuterApp.setOnAction(e->{
+            Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
+            AppStatic.openDraftInPreviewer(
+                    selectedDraft,
+                    tableView.getPreviewerController(),
+                    true);
+            AppStatic.openInOuterApplication(selectedDraft);
+        });
         openFolderWithDraft.setOnAction(commands::goToFolderWithTheDraft);
         showRemarks.setOnAction(commands::showRemarks);
         showInfo.setOnAction(commands::showInfo);
