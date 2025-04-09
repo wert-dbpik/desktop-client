@@ -3,6 +3,7 @@ package ru.wert.tubus.chogori.chat.cards;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -50,6 +51,10 @@ public class FolderCardController {
                 if(pane != null){
                     DraftsEditorController controller = (DraftsEditorController) pane.getTabController();
                     controller.openFolderByName(folder, null);
+                    for(Tab t : CH_TAB_PANE.getTabs()){
+                        if(t.getId().equals("Чертежи") && !t.isSelected())
+                            CH_TAB_PANE.getSelectionModel().select(t);
+                    }
                 } else {
                     OpenDraftsEditorTask openDraftsTask = new OpenDraftsEditorTask();
                     openDraftsTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,

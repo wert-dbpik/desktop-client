@@ -2,16 +2,20 @@ package ru.wert.tubus.chogori.chat.cards;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import ru.wert.tubus.chogori.components.VBoxPassport;
 import ru.wert.tubus.chogori.statics.AppStatic;
+import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.winform.enums.EDraftType;
 
 import java.util.Collections;
+
+import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
 public class DraftCardController {
 

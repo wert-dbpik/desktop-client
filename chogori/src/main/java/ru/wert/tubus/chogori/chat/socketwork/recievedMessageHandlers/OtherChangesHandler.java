@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat.socketwork.messageHandlers;
+package ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers;
 
 import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;

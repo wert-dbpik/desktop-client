@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat.socketwork.messageHandlers;
+package ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers;
 
 import com.google.gson.Gson;
 import javafx.scene.control.Tab;
@@ -7,7 +7,6 @@ import ru.wert.tubus.chogori.application.drafts.DraftsEditorController;
 import ru.wert.tubus.chogori.tabs.AppTab;
 import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.Message;
-import ru.wert.tubus.client.entity.serviceQUICK.DraftQuickService;
 import ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 

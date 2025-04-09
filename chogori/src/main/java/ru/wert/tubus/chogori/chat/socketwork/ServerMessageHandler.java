@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
-import ru.wert.tubus.chogori.chat.socketwork.messageHandlers.*;
+import ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers.*;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
@@ -15,7 +15,6 @@ import ru.wert.tubus.winform.statics.WinformStatic;
 
 import java.util.Optional;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.updateMessageInOpenRooms;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;

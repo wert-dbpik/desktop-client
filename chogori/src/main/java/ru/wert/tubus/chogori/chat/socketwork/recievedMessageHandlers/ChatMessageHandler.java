@@ -1,4 +1,4 @@
-package ru.wert.tubus.chogori.chat.socketwork.messageHandlers;
+package ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers;
 
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,6 @@ import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
-
-import java.util.Optional;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
