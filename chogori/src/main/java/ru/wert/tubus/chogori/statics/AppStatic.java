@@ -11,7 +11,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.components.FileFwdSlash;
@@ -395,6 +397,7 @@ public class AppStatic {
     /**
      * Метод открывает файл во внешнем приложении
      */
+    @SneakyThrows
     public static void openInOuterApplication(Draft draft) {
         if (draft == null) return;
         if (!CH_CURRENT_USER_GROUP.isReadDrafts() && //Если нет разрешения на печать файлов
@@ -407,17 +410,19 @@ public class AppStatic {
                 CH_CURRENT_USER.toUsefulString(), draft.toUsefulString()));
 
 
-        File myFile;
+
         //Если отображается чертеж из БД
 
-        //Если отображается вновь добавляемый файл
-        myFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
-                draft.toUsefulString() + "." + draft.getExtension());
+        File oldFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
+                draft.getId() + "." + draft.getExtension());
+        if (!oldFile.exists() || !oldFile.isFile()) return;
 
-        if (!myFile.exists() || !myFile.isFile()) return;
+        File newFile = new File(WinformStatic.WF_TEMPDIR + File.separator +
+                draft.toFullName() + "." + draft.getExtension());
+        FileUtils.copyFile(oldFile, newFile);
 
         String executingFile = null;
-        String ext = FilenameUtils.getExtension(myFile.getName());
+        String ext = FilenameUtils.getExtension(newFile.getName());
         if (PDF_EXTENSIONS.contains(ext) && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith().equals(""))
             executingFile = ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenPDFWith();
         else if (IMAGE_EXTENSIONS.contains(ext) && !ChogoriSettings.CH_CURRENT_USER_SETTINGS.getPathToOpenImageWith().equals(""))
@@ -428,9 +433,9 @@ public class AppStatic {
 
         if (executingFile != null)
             try {
-                Runtime.getRuntime().exec(executingFile + " " + myFile.getAbsolutePath());
+                Runtime.getRuntime().exec(executingFile + " " + newFile.getAbsolutePath());
             } catch (IOException e) {
-                log.error("openInOuterApp : не удалось открыть файл '{}' во внешнем приложении '{}'", myFile.getAbsolutePath(), executingFile);
+                log.error("openInOuterApp : не удалось открыть файл '{}' во внешнем приложении '{}'", newFile.getAbsolutePath(), executingFile);
                 Warning1.create("Ошибка",
                         "Не удалось открыть файл во внешнем приложении",
                         "Возможно, программа не предназначена для открытия\n" +
@@ -441,9 +446,9 @@ public class AppStatic {
             //Открываем в стандартном приложении
             if (Desktop.isDesktopSupported()) {
                 try {
-                    Desktop.getDesktop().open(myFile);
+                    Desktop.getDesktop().open(newFile);
                 } catch (IOException ex) {
-                    log.error("openInOuterApp : не удалось открыть файл '{}' в стандартном приложении", myFile.getAbsolutePath());
+                    log.error("openInOuterApp : не удалось открыть файл '{}' в стандартном приложении", newFile.getAbsolutePath());
                     Warning1.create("Ошибка",
                             "Не удалось открыть файл в стандартном приложении",
                             "Возможно ни одно приложение не ассоциировано с\n " +

@@ -77,11 +77,15 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
      */
     public String toFullName() {
         StringBuilder sb = new StringBuilder();
-        sb.append(passport.getPrefix().getName()).append(".").append(getDecimalNumber());
-        if (draftType == EDraftType.IMAGE_DXF.ordinal() && pageNumber > 0)
-            sb.append("-").append(pageNumber);
-        else
-            sb.append(" ").append(EDraftType.getDraftTypeById(draftType).getShortName());
+        sb.append(getDecimalNumber());
+        if (draftType.equals(EDraftType.IMAGE_DXF.getTypeId()) && pageNumber > 0) {
+            sb.append("-").append(String.format("%02d", getPageNumber()));
+        }
+        else{
+            sb.append(" ");
+            if(draftType != EDraftType.DETAIL.ordinal())
+                sb.append(EDraftType.getDraftTypeById(draftType).getShortName());
+        }
         sb.append(" ").append(getName());
 
         return sb.toString();
