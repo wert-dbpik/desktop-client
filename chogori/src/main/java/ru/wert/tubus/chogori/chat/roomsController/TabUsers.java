@@ -13,7 +13,7 @@ import ru.wert.tubus.client.entity.serviceREST.UserService;
 
 import java.util.List;
 
-import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_YOURSELF;
+import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRITE_YOURSELF;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.SPACE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
@@ -59,7 +59,7 @@ public class TabUsers {
 
                             // Устанавливаем имя пользователя
                             if (userOnline.getUser().equals(CH_CURRENT_USER))
-                                nameLabel.setText(WRIGHT_YOURSELF);
+                                nameLabel.setText(WRITE_YOURSELF);
                             else
                                 nameLabel.setText(userOnline.getUser().getName());
 

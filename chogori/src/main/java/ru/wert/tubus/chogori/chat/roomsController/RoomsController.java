@@ -25,7 +25,7 @@ import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 @Slf4j
 public class RoomsController {
 
-    public static final String WRIGHT_YOURSELF = "Написать себе";
+    public static final String WRITE_YOURSELF = "Написать себе";
 
     @FXML
     private Button btnAddNewChatGroup;

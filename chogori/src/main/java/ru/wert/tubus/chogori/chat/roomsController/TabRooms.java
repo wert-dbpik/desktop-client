@@ -20,7 +20,7 @@ import java.util.List;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
-import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRIGHT_YOURSELF;
+import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRITE_YOURSELF;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.UNREAD_MESSAGES;
 import static ru.wert.tubus.chogori.images.BtnImages.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
@@ -82,7 +82,7 @@ public class TabRooms {
                             if (room.getName().startsWith("one-to-one")) {
                                 User secondUser = ChatStaticMaster.getSecondUserInOneToOneChat(room);
                                 if (secondUser != null && secondUser.getId().equals(CH_CURRENT_USER.getId())) {
-                                    roomName = WRIGHT_YOURSELF; // "Написать себе"
+                                    roomName = WRITE_YOURSELF; // "Написать себе"
                                 }
                             }
                             nameLabel.setText(roomName);
