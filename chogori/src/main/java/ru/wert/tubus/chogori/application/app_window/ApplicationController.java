@@ -176,7 +176,7 @@ public class ApplicationController {
         // Обработчик нажатия на кнопку
         btnUpdateAllData.setOnAction(e -> {
             startBlinkingAnimation();
-            btnUpdateAllData.setText("Обновление данных...");
+            btnUpdateAllData.setText("Данные обновляются...");
             AppMenuController.updateData(() -> {
                 stopBlinkingAnimation();
                 btnUpdateAllData.setText("Обновить данные!");
@@ -194,6 +194,7 @@ public class ApplicationController {
 
     public void startBlinkingAnimation() {
         Platform.runLater(() -> {
+            btnUpdateAllData.setText("Данные обновляются ...");
             btnUpdateAllData.setDisable(true);  // Блокируем кнопку
             imgIndicator.setOpacity(1.0);      // Сбрасываем прозрачность перед началом анимации
             blinkTimeline.play();              // Запускаем мигание
@@ -218,7 +219,7 @@ public class ApplicationController {
                 imgIndicator.setOpacity(1.0);  // Полная непрозрачность
             });
             glowFadeTimeline.play();
-
+            btnUpdateAllData.setText("Обновить данные!");
             btnUpdateAllData.setDisable(false);  // Разблокируем кнопку
         });
     }

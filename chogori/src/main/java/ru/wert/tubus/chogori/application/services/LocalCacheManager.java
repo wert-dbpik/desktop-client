@@ -33,7 +33,7 @@ public class LocalCacheManager {
     private static final Path CACHE_DIR = Paths.get(HOME_DIRECTORY, CACHE_SUBDIR);
     private static final Gson gson = new GsonBuilder().create();
     private static final long UPDATE_INTERVAL_MINUTES = 60;
-    private static final long INITIAL_DELAY_MINUTES = 1;
+    private static final long INITIAL_DELAY_MINUTES = 0;
 
     private ScheduledExecutorService scheduler;
 
