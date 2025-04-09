@@ -35,8 +35,8 @@ public class ChatStaticMaster {
                 User user = UserService.getInstance().findById(Long.parseLong(id));
                 if(!user.getId().equals(CH_CURRENT_USER.getId())) {
                     finalName = user.getName();
-                    break;
-                }
+                } else
+                    finalName = "Написать себе";
             }
         } else
             finalName = roomNameDB;
@@ -88,10 +88,6 @@ public class ChatStaticMaster {
     public static Room fetchOneToOneRoom(User secondUser) {
         if (secondUser == null) {
             throw new IllegalArgumentException("Второй пользователь не может быть null");
-        }
-
-        if (secondUser.getId().equals(CH_CURRENT_USER.getId())) {
-            throw new IllegalArgumentException("Нельзя создать чат с самим собой");
         }
 
         // Формируем имя комнаты по шаблону one-to-one:#minId#maxId
