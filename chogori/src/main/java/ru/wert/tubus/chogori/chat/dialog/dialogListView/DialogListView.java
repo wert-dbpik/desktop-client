@@ -241,7 +241,7 @@ public class DialogListView extends ListView<Message> {
      * @param message Полученное сообщение.
      */
     public void receiveMessageFromServer(Message message) {
-        log.info("id сообщения = {}", message.getTempId());
+        log.info("!!!!id сообщения = {}", message.getTempId());
         Platform.runLater(() -> {
             roomMessages.add(message); // Добавляем сообщение в ObservableList
             if(isListNearBottom()) smartScrollToLastMessage();
