@@ -21,8 +21,8 @@ import java.util.concurrent.Executors;
 public class DialogListCell extends ListCell<Message> {
 
     private final DialogController dialogController;
-    private static final String OUT = "message_out";
-    private static final String IN = "message_in";
+    public static final String OUT = "message_out";
+    public static final String IN = "message_in";
     private static final ExecutorService renderExecutor = Executors.newFixedThreadPool(4);
 
     private final MessageManager messageManager;

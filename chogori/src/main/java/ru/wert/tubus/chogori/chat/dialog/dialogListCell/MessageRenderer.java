@@ -3,6 +3,7 @@ package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,7 @@ public class MessageRenderer {
             FXMLLoader loader = new FXMLLoader(MessageRenderer.class.getResource("/chogori-fxml/chat/cards/dateSeparator.fxml"));
             dateSeparator = loader.load();
             Label lblDate = (Label) dateSeparator.lookup("#lblDate");
+//            Image imgStatus = (Image) dateSeparator.lookup("#imgStatus");
             lblDate.setStyle("-fx-text-fill: #6f6f71");
             lblDate.setText(message.getText());
         } catch (IOException e) {

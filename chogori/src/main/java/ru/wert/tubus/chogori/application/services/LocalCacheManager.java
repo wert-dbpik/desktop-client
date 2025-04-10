@@ -34,7 +34,7 @@ public class LocalCacheManager {
     private static final Gson gson = new GsonBuilder().create();
     private static final long UPDATE_INTERVAL_MINUTES = 60;
     private static final long INITIAL_DELAY_MINUTES = 0;
-    private static final long CACHE_FRESHNESS_THRESHOLD_MINUTES = 10; // Кэш считается свежим, если младше 10 минут
+    private static final long CACHE_FRESHNESS_THRESHOLD_MINUTES = 60; // Кэш считается свежим, если младше 10 минут
 
     private ScheduledExecutorService scheduler;
 

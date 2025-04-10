@@ -17,7 +17,7 @@ public class Message extends _BaseEntity implements Item {
 
     public enum MessageStatus {
         RECEIVED, // Уведомление получено
-        DELIVERED // Сообщение прочитано
+        DELIVERED, // Сообщение прочитано
     }
 
     public enum MessageType {

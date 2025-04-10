@@ -153,7 +153,7 @@ public class DialogController {
                 dialogListView.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
                     if (!scrolled.get() && newVal.getWidth() > 0 && newVal.getHeight() > 0) {
                         scrolled.set(true);
-                        Platform.runLater(() -> dialogListView.smartScrollToLastMessage(false));
+                        Platform.runLater(() -> dialogListView.smartScrollToLastMessage());
                     }
                 });
 
@@ -163,7 +163,7 @@ public class DialogController {
                         Thread.sleep(300);
                         Platform.runLater(() -> {
                             if (!scrolled.get()) {
-                                dialogListView.smartScrollToLastMessage(false);
+                                dialogListView.smartScrollToLastMessage();
                                 scrolled.set(true);
                             }
                         });

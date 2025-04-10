@@ -5,6 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.statics.AppStatic;
@@ -14,7 +17,10 @@ import ru.wert.tubus.client.entity.models.Room;
 import java.io.IOException;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
+import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.IN;
 import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.OUT;
+import static ru.wert.tubus.chogori.images.BtnImages.CHAT_DELIVERED_IMG;
+import static ru.wert.tubus.chogori.images.BtnImages.CHAT_READ_IMG;
 
 @Slf4j
 public class MessageManager {
@@ -27,7 +33,9 @@ public class MessageManager {
     private Label lblFrom;           // Метка для отображения имени отправителя
     private Label lblDate;           // Метка для отображения даты сообщения
     private Label lblTitle;          // Метка для отображения заголовка сообщения
+    private HBox hbStatus;           // Строка статус, где время и статус
     private Label lblTime;           // Метка для отображения времени сообщения
+    private ImageView imgStatus;         // Метка о статусе сообщения
 
     private Separator separator; // Разделитель между сообщениями
 
@@ -55,8 +63,17 @@ public class MessageManager {
             lblFrom = (Label) inMessage.lookup("#lblFrom");
             lblDate = (Label) inMessage.lookup("#lblDate");
             lblTitle = (Label) inMessage.lookup("#lblTitle");
+            hbStatus = (HBox) inMessage.lookup("#hbStatus");
             lblTime = (Label) inMessage.lookup("#lblTime");
             lblTime.setText(AppStatic.parseStringToTime(message.getCreationTime().toString()));
+            imgStatus = (ImageView) inMessage.lookup("#imgStatus");
+
+            if(in_out.equals(IN)){
+                hbStatus.getChildren().remove(imgStatus);
+            } else {
+                if(message.getStatus().equals(Message.MessageStatus.DELIVERED))
+                    imgStatus.setImage(CHAT_DELIVERED_IMG);
+            }
 
             vbMessageContainer = (VBox) inMessage.lookup("#vbMessageContainer");
             vbOutlineMessage = (VBox) inMessage.lookup("#vbOutlineMessage");
@@ -71,7 +88,7 @@ public class MessageManager {
             if (in_out.equals(OUT)) {
                 vbMessageContainer.getChildren().removeAll(lblFrom);
                 vbMessageContainer.getChildren().removeAll(lblDate);
-                vbMessageContainer.setAlignment(Pos.TOP_LEFT);
+                vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
                 lblFrom.setId("outMessageDataLabel");
                 lblDate.setId("outMessageDataLabel");
                 vbOutlineMessage.setId("outOutlineMessageVBox");
@@ -81,7 +98,7 @@ public class MessageManager {
                     vbMessageContainer.getChildren().removeAll(lblFrom);
                     vbMessageContainer.getChildren().removeAll(lblDate);
                 }
-                vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
+                vbMessageContainer.setAlignment(Pos.TOP_LEFT);
                 lblFrom.setId("inMessageDataLabel");
                 lblDate.setId("inMessageDataLabel");
                 vbOutlineMessage.setId("inOutlineMessageVBox");

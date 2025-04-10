@@ -197,7 +197,7 @@ public class DialogListView extends ListView<Message> {
         SocketService.sendMessage(message);
         roomMessages.add(message); // Добавляем сообщение в список
 
-        smartScrollToLastMessage(true);
+        smartScrollToLastMessage();
 
         taMessageText.setText(""); // Очищаем текстовое поле
     }
@@ -230,7 +230,7 @@ public class DialogListView extends ListView<Message> {
         SocketService.sendMessage(message);
         Platform.runLater(() -> {
             roomMessages.add(message); // Добавляем сообщение в ObservableList
-            smartScrollToLastMessage(true);
+            smartScrollToLastMessage();
             log.debug("Сообщение отправлено и добавлено в список: {}", message.getText());
         });
     }
@@ -244,12 +244,12 @@ public class DialogListView extends ListView<Message> {
         log.info("id сообщения = {}", message.getTempId());
         Platform.runLater(() -> {
             roomMessages.add(message); // Добавляем сообщение в ObservableList
-            if(isListNearBottom()) smartScrollToLastMessage(false);
+            if(isListNearBottom()) smartScrollToLastMessage();
             log.debug("Сообщение получено и добавлено в список: {}", message.getText());
         });
     }
 
-    public void smartScrollToLastMessage(boolean selectLastRow) {
+    public void smartScrollToLastMessage() {
         if (getItems().isEmpty()) return;
         int lastIndex = getItems().size() - 1;
 
@@ -257,8 +257,6 @@ public class DialogListView extends ListView<Message> {
         Platform.runLater(() -> {
             layout();
             scrollTo(lastIndex);
-            if(selectLastRow)
-                getSelectionModel().select(lastIndex);
         });
     }
 
