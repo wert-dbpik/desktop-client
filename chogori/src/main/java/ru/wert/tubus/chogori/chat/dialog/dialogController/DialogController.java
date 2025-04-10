@@ -30,6 +30,7 @@ import ru.wert.tubus.client.entity.models.User;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
@@ -144,10 +145,32 @@ public class DialogController {
 
                 // Добавляем манипулятор для обработки событий
                 new ListViewManipulator(dialogListView, this);
-
                 // Добавляем диалог в контейнер
                 spDialogsContainer.getChildren().add(dialogListView);
-                dialogListView.scrollToBottom();
+
+                // Слушатель + задержка для подстраховки
+                AtomicBoolean scrolled = new AtomicBoolean(false);
+                dialogListView.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+                    if (!scrolled.get() && newVal.getWidth() > 0 && newVal.getHeight() > 0) {
+                        scrolled.set(true);
+                        Platform.runLater(() -> dialogListView.smartScrollToLastMessage(false));
+                    }
+                });
+
+                // Подстраховка на случай, если слушатель не сработает
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(300);
+                        Platform.runLater(() -> {
+                            if (!scrolled.get()) {
+                                dialogListView.smartScrollToLastMessage(false);
+                                scrolled.set(true);
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }).start();
 
                 log.info("Сообщения успешно загружены для комнаты: {}", room.getName());
             });

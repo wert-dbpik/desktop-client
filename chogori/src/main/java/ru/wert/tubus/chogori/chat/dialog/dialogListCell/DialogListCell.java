@@ -47,87 +47,11 @@ public class DialogListCell extends ListCell<Message> {
         setStyle("-fx-padding: 0px 10px; -fx-background-insets: 0;");
         initContainer();
         setContextMenu(contextMenu.getContextMenu());
-
-        // Добавляем слушатель изменения размера списка для автоматической прокрутки
-        listView.getItems().addListener((javafx.collections.ListChangeListener<Message>) c -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    Platform.runLater(() -> {
-                        // Добавляем небольшую задержку для гарантированной прокрутки
-                        new Thread(() -> {
-                            try {
-                                Thread.sleep(50); // Небольшая задержка
-                            } catch (InterruptedException e) {
-                                Thread.currentThread().interrupt();
-                            }
-                            Platform.runLater(this::smartScrollToLastMessage);
-                        }).start();
-                    });
-                }
-            }
-        });
     }
 
     private void initContainer() {
         container.setStyle("-fx-background-color: transparent;");
         container.setMaxHeight(Double.MAX_VALUE);
-    }
-
-    // Умная прокрутка с дополнительными проверками
-    private void smartScrollToLastMessage() {
-        if (listView == null || listView.getItems().isEmpty()) return;
-
-        int lastIndex = listView.getItems().size() - 1;
-        Message lastMessage = listView.getItems().get(lastIndex);
-
-        // Прокручиваем только если это новое сообщение или последнее видимое
-        if (shouldScrollToMessage(lastMessage)) {
-            listView.scrollTo(lastIndex);
-            // Дополнительная прокрутка через layout() для гарантии
-            Platform.runLater(() -> {
-                listView.layout();
-                listView.scrollTo(lastIndex);
-            });
-        }
-    }
-
-    // Проверяем, нужно ли прокручивать к этому сообщению
-    private boolean shouldScrollToMessage(Message message) {
-        // Прокручиваем если:
-        // 1. Это исходящее сообщение (от текущего пользователя)
-        // 2. Или список уже был прокручен близко к концу
-        return isOutgoingMessage(message) || isListNearBottom();
-    }
-
-    // Проверяем, находится ли список близко к концу
-    private boolean isListNearBottom() {
-        if (listView == null || listView.getItems().isEmpty()) return false;
-
-        ScrollBar vbar = getVerticalScrollbar();
-        if (vbar == null) return true;
-
-        // Считаем что "близко к концу" - это последние 3 сообщения
-        double position = vbar.getValue();
-        double max = vbar.getMax();
-        return (max - position) < 0.3; // 30% от конца
-    }
-
-    // Получаем вертикальный скроллбар
-    private ScrollBar getVerticalScrollbar() {
-        for (javafx.scene.Node node : listView.lookupAll(".scroll-bar")) {
-            if (node instanceof ScrollBar && ((ScrollBar) node).getOrientation() == javafx.geometry.Orientation.VERTICAL) {
-                return (ScrollBar) node;
-            }
-        }
-        return null;
-    }
-
-    // Метод для прокрутки к последнему сообщению
-    private void scrollToLastMessage() {
-        if (listView.getItems().size() > 0) {
-            int lastIndex = listView.getItems().size() - 1;
-            listView.scrollTo(lastIndex);
-        }
     }
 
     @Override
@@ -177,10 +101,6 @@ public class DialogListCell extends ListCell<Message> {
                     setGraphic(container);
                     animateMessageAppearance(renderedNode);
 
-                    // Прокрутка к новому сообщению, если оно последнее
-                    if (listView.getItems().indexOf(message) == listView.getItems().size() - 1) {
-                        smartScrollToLastMessage();
-                    }
                 });
             }
         });
@@ -258,8 +178,6 @@ public class DialogListCell extends ListCell<Message> {
                     contextMenu.updateMessage(currentMessage, updatedText, listView);
                     btnSend.setOnAction(event -> dialogController.getDialogListView().sendText());
                     dialogController.getTaMessageText().clear();
-                    Platform.runLater(()->scrollToLastMessage());// Прокрутка после отправки
-
                 }
             });
         });

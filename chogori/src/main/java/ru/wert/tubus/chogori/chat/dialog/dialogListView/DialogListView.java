@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
@@ -195,7 +197,7 @@ public class DialogListView extends ListView<Message> {
         SocketService.sendMessage(message);
         roomMessages.add(message); // Добавляем сообщение в список
 
-        scrollToBottom();
+        smartScrollToLastMessage(true);
 
         taMessageText.setText(""); // Очищаем текстовое поле
     }
@@ -228,7 +230,7 @@ public class DialogListView extends ListView<Message> {
         SocketService.sendMessage(message);
         Platform.runLater(() -> {
             roomMessages.add(message); // Добавляем сообщение в ObservableList
-            scrollTo(roomMessages.size() - 1);
+            smartScrollToLastMessage(true);
             log.debug("Сообщение отправлено и добавлено в список: {}", message.getText());
         });
     }
@@ -241,37 +243,40 @@ public class DialogListView extends ListView<Message> {
     public void receiveMessageFromServer(Message message) {
         Platform.runLater(() -> {
             roomMessages.add(message); // Добавляем сообщение в ObservableList
-            scrollTo(roomMessages.size() - 1);; // Прокручиваем к новому сообщению
+            if(isListNearBottom()) smartScrollToLastMessage(false);
             log.debug("Сообщение получено и добавлено в список: {}", message.getText());
         });
     }
 
-    /**
-     * Прокручивает вертикальный ScrollBar контейнера spDialogsContainer в самый низ.
-     */
-    public void scrollToBottom() {
+    public void smartScrollToLastMessage(boolean selectLastRow) {
+        if (getItems().isEmpty()) return;
+        int lastIndex = getItems().size() - 1;
+
+        scrollTo(lastIndex);
         Platform.runLater(() -> {
-            if (!roomMessages.isEmpty()) {
-                int lastIndex = roomMessages.size() - 1;
-
-                // Плавная прокрутка с анимацией
-                Timeline timeline = new Timeline();
-                ScrollBar scrollBar = (ScrollBar) lookup(".scroll-bar:vertical");
-
-                if (scrollBar != null) {
-                    DoubleProperty property = new SimpleDoubleProperty(scrollBar.getValue());
-                    property.addListener((obs, oldVal, newVal) -> scrollBar.setValue(newVal.doubleValue()));
-
-                    timeline.getKeyFrames().add(
-                            new KeyFrame(Duration.millis(300),
-                                    new KeyValue(property, 1.0))
-                    );
-                    timeline.play();
-                } else {
-                    scrollTo(lastIndex);
-                }
-            }
+            layout();
+            scrollTo(lastIndex);
+            if(selectLastRow)
+                getSelectionModel().select(lastIndex);
         });
+    }
+
+    public boolean isListNearBottom() {
+        ScrollBar vbar = getVerticalScrollbar();
+        if (vbar == null) return true;
+
+        double position = vbar.getValue();
+        double max = vbar.getMax();
+        return (max - position) < 0.3;
+    }
+
+    private ScrollBar getVerticalScrollbar() {
+        for (Node node : lookupAll(".scroll-bar")) {
+            if (node instanceof ScrollBar && ((ScrollBar) node).getOrientation() == Orientation.VERTICAL) {
+                return (ScrollBar) node;
+            }
+        }
+        return null;
     }
 
 }
