@@ -13,5 +13,7 @@ public interface IMessageService extends ItemService<Message> {
 
     List<Message> findUndeliveredByRoomAndUser(Room room, Long userId);
 
+    List<Message> findUndeliveredMessages(Long roomId, Long userId);
+
     void markMessagesAsDelivered(Room room, Long secondUserId);
 }

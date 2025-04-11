@@ -26,6 +26,12 @@ public interface MessageApiInterface {
     @DELETE("chat-messages/delete/{id}")
     Call<Void> deleteById(@Path("id") Long id);
 
+    @GET("chat-messages/undelivered/{roomId}/{userId}")
+    Call<List<Message>> findUndeliveredMessages(
+            @Path("roomId") Long roomId,
+            @Path("userId") Long userId
+    );
+
 
 
 }

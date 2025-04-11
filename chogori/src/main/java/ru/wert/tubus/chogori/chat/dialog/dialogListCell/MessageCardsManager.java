@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,10 +19,9 @@ import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USER
 import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.IN;
 import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.OUT;
 import static ru.wert.tubus.chogori.images.BtnImages.CHAT_DELIVERED_IMG;
-import static ru.wert.tubus.chogori.images.BtnImages.CHAT_READ_IMG;
 
 @Slf4j
-public class MessageManager {
+public class MessageCardsManager {
 
     private final Boolean ONE_TO_ONE_CHAT; // Индивидуальный чат, не групповой
 
@@ -39,7 +37,7 @@ public class MessageManager {
 
     private Separator separator; // Разделитель между сообщениями
 
-    public MessageManager(Room room) {
+    public MessageCardsManager(Room room) {
         ONE_TO_ONE_CHAT = room.getName().startsWith("one-to-one");
     }
 
@@ -82,7 +80,7 @@ public class MessageManager {
             lblTitle.setId("messageTitleLabel");
             lblTime.setId("messageTimeLabel");
 
-            MessageRenderer messageRenderer = new MessageRenderer(lblTitle);
+            MessageCardsRenderer messageCardsRenderer = new MessageCardsRenderer(lblTitle);
 
             // Настройка стилей для исходящих и входящих сообщений
             if (in_out.equals(OUT)) {
@@ -116,19 +114,19 @@ public class MessageManager {
                 switch (message.getType()) {
                     case CHAT_TEXT:
                         vbOutlineMessage.getChildren().removeAll(lblTitle);
-                        messageRenderer.mountText(vbMessage, message);
+                        messageCardsRenderer.mountText(vbMessage, message);
                         break;
                     case CHAT_DRAFTS:
-                        messageRenderer.mountDrafts(vbMessage, message);
+                        messageCardsRenderer.mountDrafts(vbMessage, message);
                         break;
                     case CHAT_FOLDERS:
-                        messageRenderer.mountFolders(vbMessage, message);
+                        messageCardsRenderer.mountFolders(vbMessage, message);
                         break;
                     case CHAT_PICS:
-                        messageRenderer.mountPics(vbMessage, message);
+                        messageCardsRenderer.mountPics(vbMessage, message);
                         break;
                     case CHAT_PASSPORTS:
-                        messageRenderer.mountPassports(vbMessage, message);
+                        messageCardsRenderer.mountPassports(vbMessage, message);
                         break;
                 }
             });

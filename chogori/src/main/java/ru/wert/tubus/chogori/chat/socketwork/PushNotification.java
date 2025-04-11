@@ -14,7 +14,7 @@ import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.app_window.ApplicationController;
 import ru.wert.tubus.chogori.chat.SideChat;
-import ru.wert.tubus.chogori.chat.dialog.dialogListCell.MessageRenderer;
+import ru.wert.tubus.chogori.chat.dialog.dialogListCell.MessageCardsRenderer;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
@@ -231,7 +231,7 @@ public class PushNotification {
         messageContent.setPrefHeight(NOTIFICATION_HEIGHT - 40);
 
         Label titleLabel = new Label();
-        MessageRenderer renderer = new MessageRenderer(titleLabel);
+        MessageCardsRenderer renderer = new MessageCardsRenderer(titleLabel);
         renderMessage(renderer, messageContent, message);
 
         notificationContainer.getChildren().addAll(senderLabel, messageContent);
@@ -311,7 +311,7 @@ public class PushNotification {
         return targetScreen.getVisualBounds();
     }
 
-    private static void renderMessage(MessageRenderer renderer, VBox container, Message message) {
+    private static void renderMessage(MessageCardsRenderer renderer, VBox container, Message message) {
         switch (message.getType()) {
             case CHAT_TEXT:
                 renderer.mountText(container, message);

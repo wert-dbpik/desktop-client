@@ -25,7 +25,7 @@ public class DialogListCell extends ListCell<Message> {
     public static final String IN = "message_in";
     private static final ExecutorService renderExecutor = Executors.newFixedThreadPool(4);
 
-    private final MessageManager messageManager;
+    private final MessageCardsManager messageCardsManager;
     private final ConcurrentHashMap<String, Parent> messageCache = new ConcurrentHashMap<>();
     private Parent separatorCache;
     private final StackPane container = new StackPane();
@@ -34,7 +34,7 @@ public class DialogListCell extends ListCell<Message> {
     private final MessageContextMenu contextMenu;
 
     public DialogListCell(Room room, ListView<Message> listView, DialogController dialogController) {
-        this.messageManager = new MessageManager(room);
+        this.messageCardsManager = new MessageCardsManager(room);
         this.listView = listView;
         this.dialogController = dialogController;
 
@@ -126,7 +126,7 @@ public class DialogListCell extends ListCell<Message> {
         if (message.getType() == Message.MessageType.CHAT_SEPARATOR) {
             synchronized (this) {
                 if (separatorCache == null) {
-                    separatorCache = MessageRenderer.mountSeparator(message);
+                    separatorCache = MessageCardsRenderer.mountSeparator(message);
                 }
                 return separatorCache;
             }
@@ -147,7 +147,7 @@ public class DialogListCell extends ListCell<Message> {
 
     private Parent createNewMessageNode(Message message) {
         boolean isOutgoing = isOutgoingMessage(message);
-        return messageManager.formatMessage(message, isOutgoing ? OUT : IN);
+        return messageCardsManager.formatMessage(message, isOutgoing ? OUT : IN);
     }
 
     private void handleDeleteMessageAction() {

@@ -112,6 +112,8 @@ public class MaterialService implements IMaterialService, ItemService<Material>,
         }
     }
 
+
+
     //Получаем строку из модели Класса, там ее удобнее написать
 
     @Override

@@ -164,9 +164,6 @@ public class ServerMessageHandler {
             Message msgToUpdate = existingMessage.get();
             msgToUpdate.setId(message.getId());
 
-            // Обновляем статус, если нужно
-            msgToUpdate.setStatus(Message.MessageStatus.DELIVERED);
-
             // Обновляем в UI
             Platform.runLater(()->{
                 dialog.refresh();
@@ -183,6 +180,43 @@ public class ServerMessageHandler {
             log.warn("Сообщение с tempId {} не найдено для обновления", message.getTempId());
         }
     }
+
+    /**
+     * Обновляет статус сообщения на DELIVERED в открытых комнатах чата.
+     * @param message Сообщение с типом MESSAGE_DELIVERED, содержащее ID сообщения,
+     *                статус которого нужно обновить
+     */
+    private static void updateDeliveredMessageInChatRoom(Message message) {
+        try {
+            Gson gson = GsonConfiguration.createGson();
+            // Парсим данные о доставленном сообщении из текста
+            Message deliveredMessage = gson.fromJson(message.getText(), Message.class);
+            log.debug("Обновление статуса сообщения {} на DELIVERED", deliveredMessage.getId());
+
+            Platform.runLater(() -> {
+                // Ищем все открытые диалоги для комнаты этого сообщения
+                for (DialogListView dialog : DialogController.openRooms) {
+                    if (dialog.getRoom().getId().equals(deliveredMessage.getRoomId())) {
+                        // Ищем сообщение в списке по ID
+                        for (Message msg : dialog.getItems()) {
+                            if (msg.getId() != null && msg.getId().equals(deliveredMessage.getId())) {
+                                // Обновляем статус сообщения
+                                msg.setStatus(Message.MessageStatus.DELIVERED);
+                                // Обновляем отображение ячейки
+                                dialog.refresh();
+                                log.debug("Статус сообщения {} обновлен в диалоге комнаты {}",
+                                        deliveredMessage.getId(), deliveredMessage.getRoomId());
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            log.error("Ошибка при обновлении статуса сообщения: {}", e.getMessage());
+        }
+    }
+
 
     /**
      * Определяет тип сообщения и делегирует обработку соответствующему обработчику.
@@ -206,7 +240,9 @@ public class ServerMessageHandler {
             case CHAT_PICS:
                 ChatMessageHandler.handle(message);
                 break;
-
+            case MESSAGE_DELIVERED:
+                updateDeliveredMessageInChatRoom(message);
+                break;
             case UPDATE_MESSAGE:
                 updateMessageInOpenRooms(message);
                 break;

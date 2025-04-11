@@ -128,5 +128,20 @@ public class MessageService implements IMessageService, ItemService<Message> {
         }
     }
 
+    public List<Message> findUndeliveredMessages(Long roomId, Long userId) {
+        try {
+            // Создаем временный вызов к API сообщений
+            MessageApiInterface messageApi = RetrofitClient.getInstance()
+                    .getRetrofit()
+                    .create(MessageApiInterface.class);
+
+            Call<List<Message>> call = messageApi.findUndeliveredMessages(roomId, userId);
+            return call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }

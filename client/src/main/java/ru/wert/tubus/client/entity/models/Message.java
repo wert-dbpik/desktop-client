@@ -33,6 +33,7 @@ public class Message extends _BaseEntity implements Item {
         CHAT_PASSPORTS("пасспорта"),
         CHAT_SEPARATOR("сепаратор с датой"),
         CHAT_UPDATE_TEMP_ID("Обновить временный ID"),
+        MESSAGE_DELIVERED("Сообщение доставлено"),
 
         ADD_DRAFT("Добавление чертежа"),
         UPDATE_DRAFT("Обновлен чертеж"),

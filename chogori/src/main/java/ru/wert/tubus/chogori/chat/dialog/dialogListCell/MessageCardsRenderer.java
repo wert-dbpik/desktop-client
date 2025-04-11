@@ -3,7 +3,6 @@ package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,6 @@ import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Pic;
 import ru.wert.tubus.chogori.images.ImageUtil;
-import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.winform.statics.WinformStatic;
 
@@ -25,11 +23,11 @@ import java.util.stream.Collectors;
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 
 @Slf4j
-public class MessageRenderer {
+public class MessageCardsRenderer {
 
     private Label lblTitle; // Метка для отображения заголовка сообщения
 
-    public MessageRenderer(Label lblTitle) {
+    public MessageCardsRenderer(Label lblTitle) {
         this.lblTitle = lblTitle;
     }
 
@@ -43,7 +41,7 @@ public class MessageRenderer {
     public static Parent mountSeparator(Message message) {
         Parent dateSeparator = null;
         try {
-            FXMLLoader loader = new FXMLLoader(MessageRenderer.class.getResource("/chogori-fxml/chat/cards/dateSeparator.fxml"));
+            FXMLLoader loader = new FXMLLoader(MessageCardsRenderer.class.getResource("/chogori-fxml/chat/cards/dateSeparator.fxml"));
             dateSeparator = loader.load();
             Label lblDate = (Label) dateSeparator.lookup("#lblDate");
 //            Image imgStatus = (Image) dateSeparator.lookup("#imgStatus");

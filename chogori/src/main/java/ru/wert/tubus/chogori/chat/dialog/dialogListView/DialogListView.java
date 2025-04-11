@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
+import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.images.ImageUtil;
 import ru.wert.tubus.chogori.statics.AppStatic;
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.wert.tubus.chogori.components.BtnChat.CHAT_OPEN;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
@@ -241,7 +243,7 @@ public class DialogListView extends ListView<Message> {
      * @param message Полученное сообщение.
      */
     public void receiveMessageFromServer(Message message) {
-        log.info("!!!!id сообщения = {}", message.getTempId());
+        if(CHAT_OPEN) ServiceMessaging.sendNotificationMessageDelivered(message);
         Platform.runLater(() -> {
             roomMessages.add(message); // Добавляем сообщение в ObservableList
             if(isListNearBottom()) smartScrollToLastMessage();

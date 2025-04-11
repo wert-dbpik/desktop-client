@@ -19,6 +19,7 @@ import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.ListViewManipulator;
 import ru.wert.tubus.chogori.chat.roomsController.TabUsers;
+import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
@@ -197,14 +198,42 @@ public class DialogController {
         markMessagesAsDelivered(room);
     }
 
+    /**
+     * Помечает сообщения как доставленные и отправляет уведомления на сервер
+     * @param room Комната, для которой нужно пометить сообщения как доставленные
+     */
     public void markMessagesAsDelivered(Room room) {
         Task<Void> markDeliveredTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                ChogoriServices.CH_MESSAGES.markMessagesAsDelivered(
-                        room,
-                        ChatStaticMaster.getSecondUserInOneToOneChat(room).getId()
-                );
+                // Получаем собеседника (для one-to-one чатов)
+                User interlocutor = ChatStaticMaster.getSecondUserInOneToOneChat(room);
+                if (interlocutor == null) {
+                    log.warn("Не удалось определить собеседника для комнаты {}", room.getName());
+                    return null;
+                }
+
+                // Получаем все сообщения в комнате, которые еще не были доставлены
+                List<Message> undeliveredMessages = ChogoriServices.CH_MESSAGES
+                        .findUndeliveredMessages(room.getId(), CH_CURRENT_USER.getId());
+
+                // Для каждого сообщения отправляем уведомление о доставке
+                for (Message message : undeliveredMessages) {
+                    try {
+                        // Отправляем уведомление о доставке через сервис сообщений
+                        ServiceMessaging.sendNotificationMessageDelivered(message);
+
+                        // Помечаем сообщение как доставленное локально
+                        message.setStatus(Message.MessageStatus.DELIVERED);
+                        ChogoriServices.CH_MESSAGES.update(message);
+
+                        log.debug("Отправлено уведомление о доставке для сообщения {}", message.getId());
+                    } catch (Exception e) {
+                        log.error("Ошибка при отправке уведомления для сообщения {}: {}",
+                                message.getId(), e.getMessage());
+                    }
+                }
+
                 return null;
             }
         };
