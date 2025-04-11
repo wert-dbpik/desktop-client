@@ -121,7 +121,7 @@ public class ServerMessageHandler {
                         }
 
                         // Передаем сообщение в соответствующий диалог
-                        for (DialogListView dialog : DialogController.openRooms) {
+                        for (DialogListView dialog : DialogController.openRooms.keySet()) {
                             if (dialog.getRoom().getId().equals(messageToProcess.getRoomId())) {
                                 dialog.receiveMessageFromServer(messageToProcess);
                                 break;
@@ -195,7 +195,7 @@ public class ServerMessageHandler {
 
             Platform.runLater(() -> {
                 // Ищем все открытые диалоги для комнаты этого сообщения
-                for (DialogListView dialog : DialogController.openRooms) {
+                for (DialogListView dialog : DialogController.openRooms.keySet()) {
                     if (dialog.getRoom().getId().equals(deliveredMessage.getRoomId())) {
                         // Ищем сообщение в списке по ID
                         for (Message msg : dialog.getItems()) {

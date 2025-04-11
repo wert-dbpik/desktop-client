@@ -12,10 +12,7 @@ import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.entity.serviceREST.UserService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
@@ -163,8 +160,9 @@ public class ChatStaticMaster {
                     return;
                 }
 
-                // Безопасная обработка списка открытых комнат
+                // Безопасная обработка открытых комнат (из keySet() мапы)
                 Optional.ofNullable(DialogController.openRooms)
+                        .map(Map::keySet)  // Получаем ключи (DialogListView)
                         .ifPresent(rooms -> rooms.stream()
                                 .filter(Objects::nonNull)
                                 .filter(dialog -> dialog.getRoom() != null)
@@ -219,8 +217,9 @@ public class ChatStaticMaster {
                     return;
                 }
 
-                // Безопасная обработка списка открытых комнат
+                // Безопасная обработка открытых комнат (из keySet() мапы)
                 Optional.ofNullable(DialogController.openRooms)
+                        .map(Map::keySet)  // Получаем ключи (DialogListView)
                         .ifPresent(rooms -> rooms.stream()
                                 .filter(Objects::nonNull)
                                 .filter(dialog -> dialog.getRoom() != null)

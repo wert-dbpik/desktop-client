@@ -28,9 +28,7 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
@@ -83,7 +81,17 @@ public class DialogController {
     @Getter
     private SideChat chat; // Ссылка на основной класс чата
 
-    public static List<DialogListView> openRooms = new ArrayList<>();
+    public static Map<DialogListView, Boolean> openRooms = new HashMap<>();
+
+    public static void openOneRoom(DialogListView room) {
+        // 1. Сбросить все значения в false
+        for (Map.Entry<DialogListView, Boolean> entry : openRooms.entrySet()) {
+            entry.setValue(false);
+        }
+
+        // 2. Установить true только для указанной комнаты
+        openRooms.put(room, true);
+    }
 
     // Константы для управления размерами сообщений
     public static final float MESSAGE_WIDTH = 0.7f;
@@ -191,7 +199,8 @@ public class DialogController {
         // Устанавливаем название комнаты и переключаемся на диалог
         setRoomNameWithOnlineStatus(room);
         dialogListView.toFront();
-        openRooms.add(dialogListView);
+        openRooms.put(dialogListView, false);
+        openOneRoom(dialogListView);
         log.info("Открыт диалог для комнаты: {}", room.getName());
 
         // После открытия диалога помечаем сообщения как доставленные
@@ -333,7 +342,7 @@ public class DialogController {
      * @return Найденный диалог или null, если диалог не найден.
      */
     public DialogListView findDialogForRoom(Room room) {
-        for(DialogListView dialog : openRooms){
+        for(DialogListView dialog : openRooms.keySet()){
             if(dialog.getRoom().equals(room))
                 return dialog;
         }

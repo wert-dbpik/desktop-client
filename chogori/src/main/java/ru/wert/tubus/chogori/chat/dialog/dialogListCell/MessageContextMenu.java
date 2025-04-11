@@ -187,10 +187,12 @@ public class MessageContextMenu {
         }
 
         // Используем Stream API для поиска открытой комнаты
-        DialogListView targetRoom = DialogController.openRooms.stream()
-                .filter(dlv -> dlv.getRoom().equals(room))
+        DialogListView targetRoom = DialogController.openRooms.keySet().stream()
+                .filter(Objects::nonNull)  // Фильтруем null-элементы
+                .filter(dlv -> dlv.getRoom() != null)  // Проверяем что room не null
+                .filter(dlv -> dlv.getRoom().equals(room))  // Сравниваем комнаты
                 .findFirst()
-                .orElse(null);
+                .orElse(null);  // Возвращаем null если ничего не найдено
 
         if (targetRoom != null) {
             // Добавляем сообщение в потоке JavaFX, так как это UI-операция
