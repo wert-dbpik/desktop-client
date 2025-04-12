@@ -38,7 +38,7 @@ public class _Draft_Commands implements ItemCommands<Draft> {
 
     @Override
     public void add(Event event, Draft newItem){
-        ICommand command = new Draft_AddCommand(newItem, tableView);
+        ICommand command = new Draft_QuickAddCommand(newItem, tableView);
         command.execute();
     }
 

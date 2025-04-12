@@ -2,6 +2,7 @@ package ru.wert.tubus.client.retrofit;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -25,7 +26,8 @@ public class RetrofitClient{
 
     private static RetrofitClient mInstance;
     private static Retrofit mRetrofit;
-    private Gson gson;
+    @Getter
+    private static Gson gson;
 
     public static RetrofitClient getInstance() {
         if (mInstance == null) {

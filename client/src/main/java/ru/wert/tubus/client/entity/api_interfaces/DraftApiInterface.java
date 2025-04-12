@@ -1,6 +1,7 @@
 package ru.wert.tubus.client.entity.api_interfaces;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -69,5 +70,14 @@ public interface DraftApiInterface {
 
     @GET("drafts/remove-product-in-draft/{draftId}/{productId}")
     Call<Set<Product>> removeProduct(@Path("draftId") Long draftId, @Path("productId") Long productId);
+
+    //========== QUICK
+
+    @Multipart
+    @POST("drafts/create-with-file")
+    Call<Draft> quickCreateDraft(
+            @Part("passport") RequestBody passport,
+            @Part("draft") RequestBody draft,
+            @Part MultipartBody.Part file);
 
 }

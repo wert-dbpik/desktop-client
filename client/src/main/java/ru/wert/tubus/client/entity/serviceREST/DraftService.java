@@ -8,6 +8,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import ru.wert.tubus.client.entity.api_interfaces.DraftApiInterface;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Folder;
@@ -285,6 +286,37 @@ public class DraftService implements IDraftService {
                 return FXCollections.observableSet(res);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    //================= QUICK
+
+    public Draft quickCreateDraft(Passport passport, Draft draft, File file) {
+        try {
+            // Подготовка частей запроса
+            RequestBody passportPart = RequestBody.create(
+                    MediaType.parse("application/json"),
+                    RetrofitClient.getGson().toJson(passport));
+
+            RequestBody draftPart = RequestBody.create(
+                    MediaType.parse("application/json"),
+                    RetrofitClient.getGson().toJson(draft));
+
+            MultipartBody.Part filePart = MultipartBody.Part.createFormData(
+                    "file",
+                    file.getName(),
+                    RequestBody.create(MediaType.parse("application/octet-stream"),
+                            file));
+
+            Call<Draft> call = api.quickCreateDraft(passportPart, draftPart, filePart);
+            Response<Draft> response = call.execute();
+
+            if (response.isSuccessful()) {
+                return response.body();
+            }
+        } catch (IOException e) {
+            log.error("Ошибка быстрого создания чертежа", e);
         }
         return null;
     }

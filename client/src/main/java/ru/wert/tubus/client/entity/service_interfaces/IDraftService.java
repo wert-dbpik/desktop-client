@@ -1,5 +1,8 @@
 package ru.wert.tubus.client.entity.service_interfaces;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
 import ru.wert.tubus.client.interfaces.ItemService;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Folder;
@@ -43,6 +46,8 @@ public interface IDraftService extends ItemService<Draft> {
      * Удалить изделие, относящееся к чертежу
      */
     Set<Product> removeProduct(Draft draft, Product product);
+
+    //=====================  QUICK
 
 
 }

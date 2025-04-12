@@ -463,7 +463,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                 replaceDraft();
             } else if(operationProperty.get().equals(EOperation.ADD)){ //EOperation.ADD
                 currentDraft = getNewItem();
-                currentCommand = new Draft_AddCommand(currentDraft, tableView);
+                currentCommand = new Draft_QuickAddCommand(currentDraft, tableView);
                 btnOk.setDisable(true);
                 spIndicator.setVisible(true);
 
@@ -683,7 +683,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                         }
                         //FALSE -->
                         if (operation.equals(EOperation.ADD)) {
-                            return ((Draft_AddCommand) currentCommand).executeWithReturn();
+                            return ((Draft_QuickAddCommand) currentCommand).executeWithReturn();
                         } else //operation.equals(EOperation.ADD_FOLDER)
                             return ((Draft_MultipleAddCommand) currentCommand).addDraft();
                     }

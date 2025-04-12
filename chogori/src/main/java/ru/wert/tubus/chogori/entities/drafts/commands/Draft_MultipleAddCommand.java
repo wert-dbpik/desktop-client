@@ -7,7 +7,7 @@ import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
  * Класс дублирует функцию AddCommand, но позволяет вернуть сохраненный Чертеж,
  * чтобы далее использовать его id для добавления в список (File, Long)
  */
-public class Draft_MultipleAddCommand extends Draft_AddCommand{
+public class Draft_MultipleAddCommand extends Draft_QuickAddCommand{
     /**
      * Конструктор
      * @param newItem Draft
