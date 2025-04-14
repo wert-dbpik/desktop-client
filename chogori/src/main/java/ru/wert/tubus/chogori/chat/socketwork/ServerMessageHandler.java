@@ -251,6 +251,10 @@ public class ServerMessageHandler {
                 deleteMessageFromOpenRooms(message);
                 break;
 
+            case UPDATE_PASSPORT:
+                PassportMessageHandler.handle(message, type, str);
+                break;
+
             case ADD_DRAFT:
             case UPDATE_DRAFT:
             case DELETE_DRAFT:
