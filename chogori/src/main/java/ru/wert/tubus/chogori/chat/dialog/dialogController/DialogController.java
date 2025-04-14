@@ -83,14 +83,21 @@ public class DialogController {
 
     public static Map<DialogListView, Boolean> openRooms = new HashMap<>();
 
+    /**
+     *
+     * @param room
+     */
     public static void openOneRoom(DialogListView room) {
+        closeAllRooms();
+        // 2. Установить true только для указанной комнаты
+        openRooms.put(room, true);
+    }
+
+    public static void closeAllRooms() {
         // 1. Сбросить все значения в false
         for (Map.Entry<DialogListView, Boolean> entry : openRooms.entrySet()) {
             entry.setValue(false);
         }
-
-        // 2. Установить true только для указанной комнаты
-        openRooms.put(room, true);
     }
 
     // Константы для управления размерами сообщений
@@ -199,8 +206,11 @@ public class DialogController {
         // Устанавливаем название комнаты и переключаемся на диалог
         setRoomNameWithOnlineStatus(room);
         dialogListView.toFront();
+
         openRooms.put(dialogListView, false);
+        //Делаем комнату активной
         openOneRoom(dialogListView);
+
         log.info("Открыт диалог для комнаты: {}", room.getName());
 
         // После открытия диалога помечаем сообщения как доставленные

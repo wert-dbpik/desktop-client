@@ -68,8 +68,8 @@ public class MessageService implements IMessageService, ItemService<Message> {
     }
 
     @Override
-    public void markMessagesAsDelivered(Room room, Long userId) {
-        List<Message> undeliveredMessages = findUndeliveredByRoomAndUser(room, userId);
+    public void markMessagesAsDelivered(Room room, Long secondUserId) {
+        List<Message> undeliveredMessages = findUndeliveredByRoomAndUser(room, secondUserId);
         undeliveredMessages.forEach(message -> {
             message.setStatus(Message.MessageStatus.DELIVERED);
             update(message);
@@ -81,7 +81,7 @@ public class MessageService implements IMessageService, ItemService<Message> {
         List<Message> undeliveredMessages = new ArrayList<>();
         List<Message> messagesByRoom = findAllByRoom(room);
         for(Message m : messagesByRoom){
-            if(m.getSenderId().equals(secondUserId) && !m.getStatus().equals(Message.MessageStatus.DELIVERED)){
+            if(m.getSenderId().equals(secondUserId) && m.getStatus().equals(Message.MessageStatus.RECEIVED)){
                 undeliveredMessages.add(m);
             }
         }
