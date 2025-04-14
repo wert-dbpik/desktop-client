@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.chogori.common.commands.ICommand;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
+import ru.wert.tubus.winform.warnings.Warning2;
 
 import java.util.List;
 
@@ -21,7 +22,6 @@ public class Draft_DeleteCommand implements ICommand {
     public Draft_DeleteCommand(List<Draft> items, Draft_TableView tableView) {
         this.items = items;
         this.tableView = tableView;
-
     }
 
     @Override

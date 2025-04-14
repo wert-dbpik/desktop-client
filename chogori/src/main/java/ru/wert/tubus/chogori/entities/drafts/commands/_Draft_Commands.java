@@ -18,6 +18,7 @@ import ru.wert.tubus.chogori.entities.drafts.info.DraftInfoPatch;
 import ru.wert.tubus.chogori.remarks.RemarksController;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.winform.statics.WinformStatic;
+import ru.wert.tubus.winform.warnings.Warning2;
 
 import java.awt.*;
 import java.io.File;
@@ -49,6 +50,11 @@ public class _Draft_Commands implements ItemCommands<Draft> {
 
     @Override
     public void delete(Event event, List<Draft> items){
+        boolean res = Warning2.create("Внимание!",
+                "Вы уверены что хотите что-то сегодня удалять?",
+                "Чертежи восстановлению в базе не подлежат!");
+        if(!res) return;
+
         ICommand command = new Draft_DeleteCommand(items, tableView);
         command.execute();
     }
