@@ -16,6 +16,7 @@ import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.winform.warnings.Warning1;
 
 import java.util.Collections;
+import java.util.function.Consumer;
 
 import static ru.wert.tubus.winform.warnings.WarningMessages.$ATTENTION;
 
@@ -36,6 +37,10 @@ public class Draft_RenameController {
     private Draft_TableView tableView;
     private Passport passport;
     private Draft selectedDraft = null;
+    private Consumer<Boolean> renameCallback;
+    public void setRenameCallback(Consumer<Boolean> callback) {
+        this.renameCallback = callback;
+    }
 
     /**
      *
@@ -58,6 +63,9 @@ public class Draft_RenameController {
 
     @FXML
     void cancel(ActionEvent event) {
+        if (renameCallback != null) {
+            renameCallback.accept(false);
+        }
         AppStatic.closeWindow(event);
     }
 
@@ -83,7 +91,7 @@ public class Draft_RenameController {
                 PassportQuickService.getInstance();
                 DraftQuickService.getInstance();
                 //А теперь обновляем
-                tableView.updateRoutineTableView(Collections.singletonList(selectedDraft), false);
+                tableView.updateTableView();
 
                 AppStatic.closeWindow(event);
             }

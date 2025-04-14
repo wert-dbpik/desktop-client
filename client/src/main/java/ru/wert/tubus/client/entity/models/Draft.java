@@ -84,7 +84,8 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
         else{
             sb.append(" ");
             if(draftType != EDraftType.DETAIL.ordinal())
-                sb.append(EDraftType.getDraftTypeById(draftType).getShortName());
+                sb.append(EDraftType.getDraftTypeById(draftType).getShortName().toLowerCase())
+                        .append(getPageNumber());
         }
         sb.append(" ").append(getName());
 
