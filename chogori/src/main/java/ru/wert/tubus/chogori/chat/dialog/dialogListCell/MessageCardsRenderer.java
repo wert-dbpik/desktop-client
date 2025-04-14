@@ -60,6 +60,7 @@ public class MessageCardsRenderer {
      * @param message   Сообщение для отображения.
      */
     public void mountText(VBox vbMessage, Message message) {
+        vbMessage.getChildren().clear();
         Label text = new Label(message.getText());
         text.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
         text.setWrapText(true);
@@ -74,6 +75,7 @@ public class MessageCardsRenderer {
      * @param message   Сообщение для отображения.
      */
     public void mountPics(VBox vbMessage, Message message) {
+        vbMessage.getChildren().clear();
         String text = message.getText();
         List<Long> ids = Arrays.asList(text.split(" ", -1))
                 .stream().map(Long::valueOf).collect(Collectors.toList());
@@ -114,6 +116,7 @@ public class MessageCardsRenderer {
      * @param message   Сообщение для отображения.
      */
     public void mountDrafts(VBox vbMessage, Message message) {
+        vbMessage.getChildren().clear();
         String text = message.getText();
         List<String> ids = Arrays.asList(text.split(" ", -1));
 
@@ -145,6 +148,7 @@ public class MessageCardsRenderer {
      * @param message   Сообщение для отображения.
      */
     public void mountFolders(VBox vbMessage, Message message) {
+        vbMessage.getChildren().clear();
         String text = message.getText();
         List<String> ids = Arrays.asList(text.split(" ", -1));
 
@@ -176,6 +180,7 @@ public class MessageCardsRenderer {
      * @param message   Сообщение для отображения.
      */
     public void mountPassports(VBox vbMessage, Message message) {
+        vbMessage.getChildren().clear();
         String text = message.getText();
         List<String> ids = Arrays.asList(text.split(" ", -1));
 
