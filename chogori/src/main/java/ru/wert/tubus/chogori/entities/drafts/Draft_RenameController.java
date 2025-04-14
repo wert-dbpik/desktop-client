@@ -80,7 +80,7 @@ public class Draft_RenameController {
         Task<Void> renameTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                ChogoriServices.CH_PASSPORTS.update(passport);
+                ChogoriServices.CH_QUICK_PASSPORTS.update(passport);
                 return null;
             }
 

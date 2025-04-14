@@ -19,7 +19,8 @@ public class Passport extends _BaseEntity implements Item  {
     private Prefix prefix;
     private String number;
     private String name;
-    private List<Long> draftsInPassport = new ArrayList<>(0);
+
+    transient private List<Long> draftIds = new ArrayList<>(0);
 
     @Override
     public String toUsefulString() {

@@ -53,7 +53,7 @@ public class RetrofitClient{
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
-//                .addInterceptor(interceptor)
+                .addInterceptor(interceptor)
                 ;
 
 
