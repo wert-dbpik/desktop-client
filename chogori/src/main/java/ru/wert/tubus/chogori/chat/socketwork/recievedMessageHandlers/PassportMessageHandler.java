@@ -54,6 +54,8 @@ public class PassportMessageHandler {
         }
         LOADED_PASSPORTS.add(passport);
 
+        DraftQuickService.reload();
+
         // Обновляем все открытые вкладки редактора чертежей
         for(Tab tab: CH_TAB_PANE.getTabs()) {
             if(((AppTab)tab).getTabController() instanceof DraftsEditorController) {
