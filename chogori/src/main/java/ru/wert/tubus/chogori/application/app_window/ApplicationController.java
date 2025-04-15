@@ -48,9 +48,6 @@ import static ru.wert.tubus.winform.statics.WinformStatic.WF_MAIN_STAGE;
 public class ApplicationController {
 
     @FXML
-    private Label lbNotification;
-
-    @FXML
     private VBox vbApplication;
 
     @FXML
@@ -69,7 +66,13 @@ public class ApplicationController {
     private Label lblTime;
 
    @FXML
-    private StackPane spAdvert;
+    private HBox spAdvert;
+
+    @FXML
+    private Label lblNewVersion;
+
+    @FXML
+    private Label lbNotification;
 
     @FXML
     private StackPane stackPaneForToolPane;
@@ -98,6 +101,7 @@ public class ApplicationController {
         CH_APPLICATION_WAITING_BLIND = waitingBlind;
         CH_TOOL_STACK_PANE = stackPaneForToolPane;
         SP_NOTIFICATION = lbNotification;
+
 
         SP_CHAT = spChat;
         chat = new BtnChat(btnChat);
@@ -301,7 +305,6 @@ public class ApplicationController {
 
     private void createAdvertLabel(){
         log.debug("createAdvertLabel : создается надпись с новой доступной версией программы");
-        Label lblNewVersion = new Label();
         lblNewVersion.setStyle("-fx-text-fill: #FFFF99; -fx-background-color: -fx-my-black;");
         lblNewVersion.setText("Доступна новая версия v." + WinformStatic.LAST_VERSION_IN_DB);
 
@@ -315,9 +318,8 @@ public class ApplicationController {
                     lblNewVersion.setVisible(true);
             }
         }, 0, 500);
-        spAdvert.getChildren().add(lblNewVersion);
-        spAdvert.setOnMouseClicked((event)->{
-            spAdvert.getChildren().clear();
+        lblNewVersion.setOnMouseClicked((event)->{
+            lblNewVersion.setText(null);
             new TaskDownloadNewVersion();
         });
 
