@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 public class Message extends _BaseEntity implements Item {
 
     public enum MessageStatus {
-        RECEIVED, // Уведомление получено
+        SENT, //Сообщение отравлено
+        RECEIVED, // Сообщение получено
         DELIVERED, // Сообщение прочитано
     }
 

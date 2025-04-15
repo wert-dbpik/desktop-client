@@ -192,7 +192,7 @@ public class DialogListView extends ListView<Message> {
         message.setRoomId(room.getId());
         message.setSenderId(CH_CURRENT_USER.getId());
         message.setCreationTime(LocalDateTime.now());
-        message.setStatus(Message.MessageStatus.RECEIVED);
+        message.setStatus(Message.MessageStatus.SENT);
         message.setText(text);
 
         // Отправляем сообщение через SocketService
@@ -243,12 +243,33 @@ public class DialogListView extends ListView<Message> {
      * @param message Полученное сообщение.
      */
     public void receiveMessageFromServer(Message message) {
-        if(CHAT_OPEN) ServiceMessaging.sendNotificationMessageDelivered(message);
-        Platform.runLater(() -> {
-            roomMessages.add(message); // Добавляем сообщение в ObservableList
-            if(isListNearBottom()) smartScrollToLastMessage();
-            log.debug("Сообщение получено и добавлено в список: {}", message.getText());
-        });
+        if (message.getSenderId().equals(CH_CURRENT_USER.getId())) {
+            // Это наше же сообщение, вернувшееся от сервера
+            if (CHAT_OPEN) ServiceMessaging.sendNotificationMessageDelivered(message);
+
+            // Обновляем статус сообщения
+            message.setStatus(Message.MessageStatus.DELIVERED);
+
+            Platform.runLater(() -> {
+                // Ищем сообщение с таким же tempId в списке
+                boolean messageExists = roomMessages.stream()
+                        .anyMatch(m -> message.getTempId() != null &&
+                                message.getTempId().equals(m.getTempId()));
+
+                if (!messageExists) {
+                    roomMessages.add(message);
+                    if (isListNearBottom()) smartScrollToLastMessage();
+                    log.debug("Подтверждение отправки сообщения: {}", message.getText());
+                }
+            });
+        } else {
+            // Это входящее сообщение от другого пользователя
+            Platform.runLater(() -> {
+                roomMessages.add(message);
+                if (isListNearBottom()) smartScrollToLastMessage();
+                log.debug("Получено новое сообщение: {}", message.getText());
+            });
+        }
     }
 
     public void smartScrollToLastMessage() {
