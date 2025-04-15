@@ -19,7 +19,10 @@ public class MessageSender {
     private final PrintWriter out;
     private volatile boolean running = true;
     private static final int RECONNECT_DELAY_MS = 5000;
-    private static final int HEARTBEAT_INTERVAL = USE_HEARTBEAT ? 15000 : 15000 * 1000; // 15000 = 15  секунд
+    private static final int HEARTBEAT_INTERVAL =
+            USE_HEARTBEAT ?
+                    15 * 1000 : // 15000 = 15  секунд
+                    15 * 1000 * 1000;
 
     public MessageSender(PrintWriter out) {
         this.out = out;
