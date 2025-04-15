@@ -218,7 +218,7 @@ public class DialogListView extends ListView<Message> {
         message.setRoomId(room.getId());
         message.setSenderId(CH_CURRENT_USER.getId());
         message.setCreationTime(LocalDateTime.now());
-        message.setStatus(Message.MessageStatus.RECEIVED);
+        message.setStatus(Message.MessageStatus.SENT);
         message.setText(text);
         return message;
     }
