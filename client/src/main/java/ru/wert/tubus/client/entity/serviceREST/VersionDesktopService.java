@@ -29,7 +29,7 @@ public class VersionDesktopService implements IVersionDesktopService, ItemServic
 
     public static VersionDesktopService getInstance() {
         if (instance == null)
-            return new VersionDesktopService();
+            instance = new VersionDesktopService();
         return instance;
     }
 

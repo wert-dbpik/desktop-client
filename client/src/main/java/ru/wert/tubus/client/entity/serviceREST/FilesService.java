@@ -34,7 +34,7 @@ public class FilesService implements IFilesService {
 
     public static FilesService getInstance() {
         if (instance == null)
-            return new FilesService();
+            instance = new FilesService();
         return instance;
     }
 

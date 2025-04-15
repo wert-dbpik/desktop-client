@@ -28,7 +28,7 @@ public class AnyPartService implements IAnyPartService, ItemService<AnyPart> {
 
     public static AnyPartService getInstance() {
         if (instance == null)
-            return new AnyPartService();
+            instance =  new AnyPartService();
         return instance;
     }
 

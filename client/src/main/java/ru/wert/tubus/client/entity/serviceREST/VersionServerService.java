@@ -29,7 +29,7 @@ public class VersionServerService implements IVersionServerService, ItemService<
 
     public static VersionServerService getInstance() {
         if (instance == null)
-            return new VersionServerService();
+            instance = new VersionServerService();
         return instance;
     }
 

@@ -28,7 +28,7 @@ public class CoatService implements ICoatService, ItemService<Coat> {
 
     public static CoatService getInstance() {
         if (instance == null)
-            return new CoatService();
+            instance = new CoatService();
         return instance;
     }
 

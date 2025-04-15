@@ -31,7 +31,7 @@ public class AppLogService implements IAppLogService, ItemService<AppLog> {
 
     public static AppLogService getInstance() {
         if (instance == null)
-            return new AppLogService();
+            instance =  new AppLogService();
         return instance;
     }
 

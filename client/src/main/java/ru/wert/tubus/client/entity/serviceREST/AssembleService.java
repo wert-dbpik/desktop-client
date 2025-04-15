@@ -30,7 +30,7 @@ public class AssembleService implements IAssembleService, ItemService<Assemble> 
 
     public static AssembleService getInstance() {
         if (instance == null)
-            return new AssembleService();
+            instance = new AssembleService();
         return instance;
     }
 

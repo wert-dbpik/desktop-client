@@ -27,7 +27,7 @@ public class FolderService implements IFolderService, ItemService<Folder> {
 
     public static FolderService getInstance() {
         if (instance == null)
-            return new FolderService();
+            instance = new FolderService();
         return instance;
     }
 

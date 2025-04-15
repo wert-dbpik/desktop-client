@@ -19,7 +19,7 @@ public class PrefixQuickService implements IPrefixService {
 
     public static PrefixQuickService getInstance() {
         if (instance == null)
-            return new PrefixQuickService();
+            instance =  new PrefixQuickService();
         return instance;
     }
 

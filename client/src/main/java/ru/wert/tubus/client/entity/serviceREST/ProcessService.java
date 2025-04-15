@@ -28,7 +28,7 @@ public class ProcessService implements IProcessService, ItemService<TechProcess>
 
     public static ProcessService getInstance() {
         if (instance == null)
-            return new ProcessService();
+            instance = new ProcessService();
         return instance;
     }
 

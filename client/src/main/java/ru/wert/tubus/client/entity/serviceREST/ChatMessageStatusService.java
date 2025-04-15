@@ -28,7 +28,7 @@ public class ChatMessageStatusService implements IChatMessageStatusService, Item
 
     public static ChatMessageStatusService getInstance() {
         if (instance == null)
-            return new ChatMessageStatusService();
+            instance = new ChatMessageStatusService();
         return instance;
     }
 

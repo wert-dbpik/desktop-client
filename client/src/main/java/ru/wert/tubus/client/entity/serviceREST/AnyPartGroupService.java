@@ -17,7 +17,7 @@ public class AnyPartGroupService implements IAnyPartGroupService, ItemService<An
 
     public static AnyPartGroupService getInstance() {
         if (instance == null)
-            return new AnyPartGroupService();
+            instance = new AnyPartGroupService();
         return instance;
     }
 

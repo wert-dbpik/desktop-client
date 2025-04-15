@@ -27,7 +27,7 @@ public class MaterialGroupService implements IMaterialGroupService, ItemService<
 
     public static MaterialGroupService getInstance() {
         if (instance == null)
-            return new MaterialGroupService();
+            instance = new MaterialGroupService();
         return instance;
     }
 

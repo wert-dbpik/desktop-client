@@ -27,7 +27,7 @@ public class MatTypeService implements IMatTypeService, ItemService<MatType> {
 
     public static MatTypeService getInstance() {
         if (instance == null)
-            return new MatTypeService();
+            instance =  new MatTypeService();
         return instance;
     }
 

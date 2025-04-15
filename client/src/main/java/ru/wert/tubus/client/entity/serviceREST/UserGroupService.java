@@ -27,7 +27,7 @@ public class UserGroupService implements IUserGroupService, ItemService<UserGrou
 
     public static UserGroupService getInstance() {
         if (instance == null)
-            return new UserGroupService();
+            instance = new UserGroupService();
         return instance;
     }
 

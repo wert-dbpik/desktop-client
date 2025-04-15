@@ -19,8 +19,9 @@ public class PassportQuickService implements IPassportService {
     }
 
     public static PassportQuickService getInstance() {
-        if (instance == null)
-            return new PassportQuickService();
+        if (instance == null) {
+            instance = new PassportQuickService();
+        }
         return instance;
     }
 

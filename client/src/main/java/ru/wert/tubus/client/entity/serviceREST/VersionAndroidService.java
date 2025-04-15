@@ -30,7 +30,7 @@ public class VersionAndroidService implements IVersionAndroidService, ItemServic
 
     public static VersionAndroidService getInstance() {
         if (instance == null)
-            return new VersionAndroidService();
+            instance = new VersionAndroidService();
         return instance;
     }
 

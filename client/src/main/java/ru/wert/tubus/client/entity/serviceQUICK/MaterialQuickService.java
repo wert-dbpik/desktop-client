@@ -21,7 +21,7 @@ public class MaterialQuickService implements IMaterialService , CatalogService<M
 
     public static MaterialQuickService getInstance() {
         if (instance == null)
-            return new MaterialQuickService();
+            instance =  new MaterialQuickService();
         return instance;
     }
 

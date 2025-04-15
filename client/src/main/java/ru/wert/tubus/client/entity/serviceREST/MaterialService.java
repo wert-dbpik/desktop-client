@@ -30,7 +30,7 @@ public class MaterialService implements IMaterialService, ItemService<Material>,
 
     public static MaterialService getInstance() {
         if (instance == null)
-            return new MaterialService();
+            instance = new MaterialService();
         return instance;
     }
 

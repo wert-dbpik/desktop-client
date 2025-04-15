@@ -28,7 +28,7 @@ public class PassportService implements IPassportService, ItemService<Passport> 
 
     public static PassportService getInstance() {
         if (instance == null)
-            return new PassportService();
+            instance =  new PassportService();
         return instance;
     }
 

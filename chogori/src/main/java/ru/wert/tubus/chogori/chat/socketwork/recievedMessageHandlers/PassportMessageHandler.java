@@ -1,6 +1,7 @@
 package ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers;
 
 import com.google.gson.Gson;
+import javafx.application.Platform;
 import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.drafts.DraftsEditorController;
@@ -33,25 +34,33 @@ public class PassportMessageHandler {
         }
     }
 
-
     private static void processUpdatePassport(Passport passport, StringBuilder str) {
         str.append("Пользователь ");
         str.append("обновил пасспорт: ");
         str.append(passport.toUsefulString());
 
-
-        // Обновляем чертеж в кеше
-        if(passport != null) {
-            LOADED_PASSPORTS.remove(passport);
-            LOADED_PASSPORTS.add(passport);
-        } else {
-            LOADED_PASSPORTS.add(passport);
+        // Получаем текущую версию паспорта из кеша (до обновления)
+        Passport foundPassport = null;
+        for(Passport p : LOADED_PASSPORTS) {
+            if(p.getId().equals(passport.getId())) {
+                foundPassport = p;
+                break;
+            }
         }
+
+        // Обновляем паспорт в кеше
+        if(foundPassport != null) {
+            LOADED_PASSPORTS.remove(foundPassport);
+        }
+        LOADED_PASSPORTS.add(passport);
 
         // Обновляем все открытые вкладки редактора чертежей
         for(Tab tab: CH_TAB_PANE.getTabs()) {
             if(((AppTab)tab).getTabController() instanceof DraftsEditorController) {
-                ((DraftsEditorController)((AppTab)tab).getTabController()).updateTab();
+                Platform.runLater(()->{
+                    ((DraftsEditorController)((AppTab)tab).getTabController()).updateTab();
+                });
+
             }
         }
     }

@@ -41,7 +41,7 @@ public class DraftService implements IDraftService {
 
     public static DraftService getInstance() {
         if (instance == null)
-            return new DraftService();
+            instance = new DraftService();
         return instance;
     }
 

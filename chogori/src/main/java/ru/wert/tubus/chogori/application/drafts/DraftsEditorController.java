@@ -180,10 +180,10 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
 
     @Override //UpdatableTabController
     public void updateTab() {
-        productGroupsTreeView.updateView();
-        folderTableView.updateVisibleLeafOfTableView(folderTableView.getUpwardRow().getValue());
-        draftsTable.updateTableView();
-        previewerPatchController.updatePreviewer();
+            productGroupsTreeView.updateView();
+            folderTableView.updateVisibleLeafOfTableView(folderTableView.getUpwardRow().getValue());
+            draftsTable.updateTableView();
+            previewerPatchController.updatePreviewer();
     }
 
 }

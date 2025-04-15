@@ -27,7 +27,7 @@ public class DensityService implements IDensityService, ItemService<Density> {
 
     public static DensityService getInstance() {
         if (instance == null)
-            return new DensityService();
+            instance = new DensityService();
         return instance;
     }
 

@@ -19,7 +19,7 @@ public class DetailQuickService implements IDetailService {
 
     public static DetailQuickService getInstance() {
         if (instance == null)
-            return new DetailQuickService();
+            instance = new DetailQuickService();
         return instance;
     }
 

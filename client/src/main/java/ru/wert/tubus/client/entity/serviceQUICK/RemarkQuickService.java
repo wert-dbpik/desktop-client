@@ -26,7 +26,7 @@ public class RemarkQuickService implements IRemarkService, ItemService<Remark> {
 
     public static RemarkQuickService getInstance() {
         if (instance == null)
-            return new RemarkQuickService();
+            instance =  new RemarkQuickService();
         return instance;
     }
 

@@ -26,7 +26,7 @@ public class PicService implements IPicService {
 
     public static PicService getInstance() {
         if (instance == null)
-            return new PicService();
+            instance = new PicService();
         return instance;
     }
 

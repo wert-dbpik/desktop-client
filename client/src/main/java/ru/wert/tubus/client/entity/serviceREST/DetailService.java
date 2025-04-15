@@ -30,7 +30,7 @@ public class DetailService implements IDetailService, ItemService<Detail>, PartI
 
     public static DetailService getInstance() {
         if (instance == null)
-            return new DetailService();
+            instance = new DetailService();
         return instance;
     }
 

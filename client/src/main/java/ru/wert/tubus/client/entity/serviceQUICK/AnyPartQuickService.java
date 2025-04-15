@@ -21,7 +21,7 @@ public class AnyPartQuickService implements IAnyPartService {
 
     public static AnyPartQuickService getInstance() {
         if (instance == null)
-            return new AnyPartQuickService();
+            instance = new AnyPartQuickService();
         return instance;
     }
 

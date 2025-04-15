@@ -31,7 +31,7 @@ public class ProductService implements IProductService, PartItem {
 
     public static ProductService getInstance() {
         if (instance == null)
-            return new ProductService();
+            instance = new ProductService();
         return instance;
     }
 

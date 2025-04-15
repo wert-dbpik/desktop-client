@@ -23,7 +23,7 @@ public class ProductQuickService implements IProductService , CatalogService<Pro
 
     public static ProductQuickService getInstance() {
         if (instance == null)
-            return new ProductQuickService();
+            instance =  new ProductQuickService();
         return instance;
     }
 

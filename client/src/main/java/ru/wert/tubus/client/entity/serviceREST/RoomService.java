@@ -27,7 +27,7 @@ public class RoomService implements IRoomService, ItemService<Room> {
 
     public static RoomService getInstance() {
         if (instance == null)
-            return new RoomService();
+            instance = new RoomService();
         return instance;
     }
 

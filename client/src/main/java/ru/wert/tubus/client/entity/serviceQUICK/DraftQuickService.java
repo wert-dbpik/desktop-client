@@ -24,7 +24,7 @@ public class DraftQuickService implements IDraftService {
 
     public static DraftQuickService getInstance() {
         if (instance == null)
-            return new DraftQuickService();
+            instance = new DraftQuickService();
         return instance;
     }
 

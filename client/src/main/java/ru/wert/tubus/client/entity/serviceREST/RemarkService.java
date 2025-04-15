@@ -31,7 +31,7 @@ public class RemarkService implements IRemarkService {
 
     public static RemarkService getInstance() {
         if (instance == null)
-            return new RemarkService();
+            instance = new RemarkService();
         return instance;
     }
 

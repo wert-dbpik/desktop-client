@@ -27,7 +27,7 @@ public class ProductGroupService implements IProductGroupService, ItemService<Pr
 
     public static ProductGroupService getInstance() {
         if (instance == null)
-            return new ProductGroupService();
+            instance = new ProductGroupService();
         return instance;
     }
 

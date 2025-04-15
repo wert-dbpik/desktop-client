@@ -29,7 +29,7 @@ public class VersionNormicService implements IVersionNormicService, ItemService<
 
     public static VersionNormicService getInstance() {
         if (instance == null)
-            return new VersionNormicService();
+            instance = new VersionNormicService();
         return instance;
     }
 

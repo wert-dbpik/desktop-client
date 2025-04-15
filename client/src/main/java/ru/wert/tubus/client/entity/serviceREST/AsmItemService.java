@@ -27,7 +27,7 @@ public class AsmItemService implements IAsmItemService, ItemService<AsmItem> {
 
     public static AsmItemService getInstance() {
         if (instance == null)
-            return new AsmItemService();
+            instance = new AsmItemService();
         return instance;
     }
 

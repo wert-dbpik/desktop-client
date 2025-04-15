@@ -32,7 +32,7 @@ public class UserService implements IUserService {
 
     public static UserService getInstance() {
         if (instance == null)
-            return new UserService();
+            instance = new UserService();
         return instance;
     }
 

@@ -30,7 +30,7 @@ public class MessageService implements IMessageService, ItemService<Message> {
 
     public static MessageService getInstance() {
         if (instance == null)
-            return new MessageService();
+            instance = new MessageService();
         return instance;
     }
 

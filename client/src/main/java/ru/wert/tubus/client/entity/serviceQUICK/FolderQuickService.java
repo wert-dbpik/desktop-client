@@ -25,7 +25,7 @@ public class FolderQuickService implements IFolderService, CatalogService<Folder
 
     public static FolderQuickService getInstance() {
         if (instance == null)
-            return new FolderQuickService();
+            instance =  new FolderQuickService();
         return instance;
     }
 

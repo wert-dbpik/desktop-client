@@ -27,7 +27,7 @@ public class PrefixService implements IPrefixService, ItemService<Prefix> {
 
     public static PrefixService getInstance() {
         if (instance == null)
-            return new PrefixService();
+            instance =  new PrefixService();
         return instance;
     }
 

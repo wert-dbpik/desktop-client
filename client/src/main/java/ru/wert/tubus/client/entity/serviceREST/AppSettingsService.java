@@ -28,7 +28,7 @@ public class AppSettingsService implements IAppSettingsService, ItemService<AppS
 
     public static AppSettingsService getInstance() {
         if (instance == null)
-            return new AppSettingsService();
+            instance = new AppSettingsService();
         return instance;
     }
 
