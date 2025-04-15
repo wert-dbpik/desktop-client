@@ -10,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static ru.wert.tubus.winform.statics.WinformStatic.USE_HEARTBEAT;
+
 @Slf4j
 public class MessageSender {
 
@@ -17,7 +19,7 @@ public class MessageSender {
     private final PrintWriter out;
     private volatile boolean running = true;
     private static final int RECONNECT_DELAY_MS = 5000;
-    private static final int HEARTBEAT_INTERVAL = 15000 * 1000; // 15 секунд убрать * 1000 потом
+    private static final int HEARTBEAT_INTERVAL = USE_HEARTBEAT ? 15000 : 15000 * 1000; // 15000 = 15  секунд
 
     public MessageSender(PrintWriter out) {
         this.out = out;
