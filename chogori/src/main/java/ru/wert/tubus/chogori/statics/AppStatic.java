@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
+import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.components.FileFwdSlash;
 import ru.wert.tubus.chogori.pdf.PDFReader;
 import ru.wert.tubus.chogori.pdf.readers.PdfJSNewReader;
@@ -67,6 +68,7 @@ public class AppStatic {
 
 //    public static boolean SEARCH_PRO = true;
 
+    public static SideChat SIDE_CHAT;
     public static final String KOMPLEKT = "компл: ";
     public static final double CHAT_WIDTH = 250; //первоначальная ширина чата
 

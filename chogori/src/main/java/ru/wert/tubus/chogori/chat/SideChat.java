@@ -52,6 +52,8 @@ public class SideChat {
     public SideChat() {
         log.info("Инициализация SideChat");
 
+        AppStatic.SIDE_CHAT = this;
+
         PushNotification.init(this);
 
         createDialog();
