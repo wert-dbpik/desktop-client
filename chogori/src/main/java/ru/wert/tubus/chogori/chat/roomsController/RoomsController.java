@@ -40,6 +40,10 @@ public class RoomsController {
 
     @FXML
     @Getter
+    private TabPane chatTabPane;
+
+    @FXML
+    @Getter
     private Tab tabPaneRooms;
 
     @FXML
@@ -69,6 +73,7 @@ public class RoomsController {
             if (tabPaneRooms.isSelected()) {
                 log.debug("Вкладка 'Комнаты' выбрана, обновление списка комнат");
                 tabRooms.updateListOfRooms();
+                tabRooms.getListOfRooms().refresh();
             }
         });
     }

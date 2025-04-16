@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.chat;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
@@ -102,6 +103,8 @@ public class SideChat {
         log.debug("Отображение панели с группами чатов");
         mainPane.getChildren().clear();
         mainPane.getChildren().add(sideChatGroups);
+        roomsController.getListOfRooms().refresh();
+
     }
 
     /**

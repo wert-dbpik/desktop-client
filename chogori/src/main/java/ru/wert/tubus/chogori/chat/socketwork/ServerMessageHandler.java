@@ -2,11 +2,13 @@ package ru.wert.tubus.chogori.chat.socketwork;
 
 import com.google.gson.Gson;
 import javafx.application.Platform;
+import javafx.scene.control.ListView;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
 import ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers.*;
+import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
@@ -15,11 +17,13 @@ import ru.wert.tubus.winform.statics.WinformStatic;
 
 import java.util.Optional;
 
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.deleteMessageFromOpenRooms;
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.updateMessageInOpenRooms;
 import static ru.wert.tubus.chogori.components.BtnChat.CHAT_OPEN;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_SHOW_NOTIFICATION_LINE;
+import static ru.wert.tubus.chogori.statics.AppStatic.SIDE_CHAT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_NOTIFICATION;
 
 /**
@@ -95,11 +99,31 @@ public class ServerMessageHandler {
                 // Проверяем, что сообщение является CHAT_ типом
                 if (messageToProcess.getType().name().startsWith("CHAT_")) {
                     Platform.runLater(() -> {
+                        // Проверяем, есть ли комната в списке комнат
+                        RoomsController roomsController = SIDE_CHAT.getRoomsController();
+                        Room room = CH_ROOMS.findById(message.getRoomId());
+                        if (roomsController != null) {
+                            ListView<Room> listOfRooms = roomsController.getListOfRooms();
+                            if (listOfRooms != null && !listOfRooms.getItems().contains(room)) {
+                                // Если комнаты нет в списке, добавляем её
+                                roomsController.addRoomIfAbsent(room);
+//                                if(!ChatStaticMaster.UNREAD_MESSAGES.contains(message))
+//                                    ChatStaticMaster.UNREAD_MESSAGES.add(message);
+                                listOfRooms.refresh();
+                                log.debug("Добавлена новая комната в список: {}", room.getName());
+                            }
+                        }
+
                         // Проверяем, открыта ли комната этого сообщения
                         boolean isRoomOpen = false;
                         Room currentRoom = dialogController != null ? dialogController.getCurrentOpenRoom() : null;
                         log.debug("Текущая открытая комната: {}", currentRoom != null ? currentRoom.getId() : "null");
                         log.debug("Комната сообщения: {}", messageToProcess.getRoomId());
+
+                        boolean t = roomsController.getChatTabPane().isVisible();
+                        boolean r = roomsController.getTabPaneRooms().isSelected();
+                        boolean u = roomsController.getTabPaneUsers().isSelected();
+                        boolean isTabPaneOpen =  t;
 
                         if (currentRoom != null && currentRoom.getId().equals(messageToProcess.getRoomId())) {
                             isRoomOpen = true;
@@ -112,12 +136,15 @@ public class ServerMessageHandler {
                         // Показываем уведомление если:
                         // 1. Комната не открыта ИЛИ
                         // 2. Приложение свернуто
-                        boolean showNotification = !CHAT_OPEN || !isRoomOpen || isAppMinimized;
+                        boolean showNotification = !CHAT_OPEN || !isRoomOpen || isAppMinimized || isTabPaneOpen;
                         log.debug("Комната открыта? {}, Приложение свернуто? {}", isRoomOpen, isAppMinimized);
 
                         if (showNotification) {
                             log.debug("Показываем пуш для сообщения");
+                            if(!ChatStaticMaster.UNREAD_MESSAGES.contains(messageToProcess))
+                                ChatStaticMaster.UNREAD_MESSAGES.add(messageToProcess);
                             PushNotification.show(messageToProcess);
+                            roomsController.getListOfRooms().refresh();
                         }
 
                         // Передаем сообщение в соответствующий диалог
@@ -134,6 +161,31 @@ public class ServerMessageHandler {
             }
         }
     }
+
+    public boolean isChatTabPaneOnTop() {
+        if (.getParent() instanceof StackPane) {
+            StackPane stackPane = (StackPane) chatTabPane.getParent();
+            int lastIndex = stackPane.getChildren().size() - 1;
+            return stackPane.getChildren().indexOf(chatTabPane) == lastIndex;
+        }
+        return false;
+    }
+
+//    Можно сравнить индексы панелей:
+//
+//    java
+//            Copy
+//    StackPane parentStackPane = (StackPane) roomsController.getChatTabPane().getParent();
+//    List<Node> children = parentStackPane.getChildren();
+//
+//    // Индекс чата (chatTabPane) в StackPane
+//    int chatIndex = children.indexOf(roomsController.getChatTabPane());
+//
+//    // Индекс другой панели (например, другой контент)
+//    int otherPanelIndex = children.indexOf(otherPanel); // замените otherPanel на нужную панель
+//
+//    // Если chatTabPane последний в списке (верхний) → он видим
+//    boolean isChatOnTop = (chatIndex == children.size() - 1);
 
     /**
      * Обрабатывает сообщение с обновлением временного ID

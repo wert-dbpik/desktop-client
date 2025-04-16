@@ -12,7 +12,7 @@
    <children>
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+            <TabPane fx:id="chatTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
               <tabs>
                 <Tab fx:id="tabPaneRooms" text="чаты">
                      <content>

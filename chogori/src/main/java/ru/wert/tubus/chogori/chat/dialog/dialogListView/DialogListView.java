@@ -238,7 +238,7 @@ public class DialogListView extends ListView<Message> {
     }
 
     /**
-     * Получает сообщение от сервера.
+     * Получает сообщение от сервера в ОТКРЫТЫЙ чат.
      *
      * @param message Полученное сообщение.
      */

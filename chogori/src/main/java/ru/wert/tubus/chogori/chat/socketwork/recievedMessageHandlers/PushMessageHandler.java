@@ -16,7 +16,9 @@ public class PushMessageHandler {
     public static void handle(Message message) {
         Platform.runLater(() -> {
             Gson gson = GsonConfiguration.createGson();
-            ChatStaticMaster.UNREAD_MESSAGES.add(gson.fromJson(message.getText(), Message.class));
+            Message unreadMessage = gson.fromJson(message.getText(), Message.class);
+            if(!ChatStaticMaster.UNREAD_MESSAGES.contains(unreadMessage))
+                ChatStaticMaster.UNREAD_MESSAGES.add(unreadMessage);
             ApplicationController.chat.hasNewMessagesProperty().set(true);
         });
     }

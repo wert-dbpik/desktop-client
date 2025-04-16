@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.chogori.components.BlinkingImageView;
@@ -28,6 +29,7 @@ import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 @Slf4j
 public class TabRooms {
     private final Tab tabPaneRooms;
+    @Getter
     private final ListView<Room> listOfRooms;
     private final RoomsController controller;
 
