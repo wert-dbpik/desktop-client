@@ -280,6 +280,10 @@ public class DialogListView extends ListView<Message> {
         Platform.runLater(() -> {
             layout();
             scrollTo(lastIndex);
+
+            new Timeline(new KeyFrame(Duration.millis(100), e -> {
+                scrollTo(lastIndex);
+            })).play();
         });
     }
 

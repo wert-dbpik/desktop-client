@@ -111,8 +111,6 @@ public class ServerMessageHandler {
                             if (listOfRooms != null && !listOfRooms.getItems().contains(room)) {
                                 // Если комнаты нет в списке, добавляем её
                                 roomsController.addRoomIfAbsent(room);
-//                                if(!ChatStaticMaster.UNREAD_MESSAGES.contains(message))
-//                                    ChatStaticMaster.UNREAD_MESSAGES.add(message);
                                 listOfRooms.refresh();
                                 log.debug("Добавлена новая комната в список: {}", room.getName());
                             }
@@ -161,6 +159,10 @@ public class ServerMessageHandler {
         }
     }
 
+    /**
+     * Метод определяет, находится ли панель с комнатами поверх панели с диалогом
+     * если true, то необходимо уведомление о пришедшем сообщении
+     */
     private static boolean isChatRoomPaneOnTop(){
         StackPane mainChatPane = SIDE_CHAT.getMainChatPane();
         Parent chatRoomPane = SIDE_CHAT.getChatRooms();
