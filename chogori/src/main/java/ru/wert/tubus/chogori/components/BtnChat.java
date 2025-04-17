@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
+import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
+import ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers.ChatMessageHandler;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
@@ -113,7 +115,7 @@ public class BtnChat{
             DialogController dialogController = sideChat.getDialogController();
             if (dialogController != null && sideChat.getMainChatPane().getChildren().contains(sideChat.getChatDialog())) {
                 DialogListView currentDialog = dialogController.getDialogListView();
-                if (currentDialog != null) {
+                if (currentDialog != null && !ServerMessageHandler.isChatRoomPaneOnTop()) {
                     Platform.runLater(()->currentDialog.refresh());
                     openOneRoom(currentDialog);
                     Room room = currentDialog.getRoom();

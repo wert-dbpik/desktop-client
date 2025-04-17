@@ -49,6 +49,13 @@ public class DialogListCell extends ListCell<Message> {
         setContextMenu(contextMenu.getContextMenu());
     }
 
+    // Добавьте метод для очистки кэша
+    public void clearCache() {
+        messageCache.clear();
+        separatorCache = null;
+        log.debug("Кэш сообщений очищен");
+    }
+
     private void initContainer() {
         container.setStyle("-fx-background-color: transparent;");
         container.setMaxHeight(Double.MAX_VALUE);
@@ -63,6 +70,7 @@ public class DialogListCell extends ListCell<Message> {
             return;
         }
 
+        // Проверяем, действительно ли сообщение изменилось
         if (message.equals(currentMessage)) {
             return;
         }

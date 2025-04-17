@@ -228,12 +228,19 @@ public class DialogListView extends ListView<Message> {
      *
      * @param message Сообщение для отправки.
      */
-    private void sendMessageToRecipient(Message message) {
+    public void sendMessageToRecipient(Message message) {
         SocketService.sendMessage(message);
         Platform.runLater(() -> {
-            roomMessages.add(message); // Добавляем сообщение в ObservableList
-            smartScrollToLastMessage();
-            log.debug("Сообщение отправлено и добавлено в список: {}", message.getText());
+            // Проверяем, нет ли уже такого сообщения
+            boolean exists = roomMessages.stream().anyMatch(m ->
+                    (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
+                            (message.getId() != null && message.getId().equals(m.getId())));
+
+            if (!exists) {
+                roomMessages.add(message);
+                smartScrollToLastMessage();
+                log.debug("Сообщение отправлено и добавлено в список: {}", message.getText());
+            }
         });
     }
 
@@ -251,23 +258,34 @@ public class DialogListView extends ListView<Message> {
             message.setStatus(Message.MessageStatus.DELIVERED);
 
             Platform.runLater(() -> {
-                // Ищем сообщение с таким же tempId в списке
-                boolean messageExists = roomMessages.stream()
-                        .anyMatch(m -> message.getTempId() != null &&
-                                message.getTempId().equals(m.getTempId()));
+                // Проверяем по tempId (для новых) или id (для сохраненных)
+                boolean messageExists = roomMessages.stream().anyMatch(m ->
+                        (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
+                                (message.getId() != null && message.getId().equals(m.getId())));
 
                 if (!messageExists) {
                     roomMessages.add(message);
                     if (isListNearBottom()) smartScrollToLastMessage();
                     log.debug("Подтверждение отправки сообщения: {}", message.getText());
+                } else {
+                    // Обновляем существующее сообщение
+                    roomMessages.replaceAll(m -> (message.getTempId() != null
+                            && message.getTempId().equals(m.getTempId())) ||
+                                    (message.getId() != null && message.getId().equals(m.getId())) ? message : m);
                 }
             });
         } else {
             // Это входящее сообщение от другого пользователя
             Platform.runLater(() -> {
-                roomMessages.add(message);
-                if (isListNearBottom()) smartScrollToLastMessage();
-                log.debug("Получено новое сообщение: {}", message.getText());
+                boolean messageExists = roomMessages.stream().anyMatch(m ->
+                        (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
+                                (message.getId() != null && message.getId().equals(m.getId())));
+
+                if (!messageExists) {
+                    roomMessages.add(message);
+                    if (isListNearBottom()) smartScrollToLastMessage();
+                    log.debug("Получено новое сообщение: {}", message.getText());
+                }
             });
         }
     }
