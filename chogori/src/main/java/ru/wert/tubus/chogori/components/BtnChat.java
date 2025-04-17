@@ -26,7 +26,6 @@ import static ru.wert.tubus.chogori.chat.dialog.dialogController.DialogControlle
 import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.getSecondUserInOneToOneChat;
 import static ru.wert.tubus.chogori.images.BtnImages.CHAT_WHITE_IMG;
 import static ru.wert.tubus.chogori.images.BtnImages.CHAT_YELLOW_IMG;
-import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_CHAT;
 @Slf4j
@@ -112,7 +111,7 @@ public class BtnChat{
 
             // Проверяем, есть ли открытый диалог в SideChat
             DialogController dialogController = sideChat.getDialogController();
-            if (dialogController != null && sideChat.getMainPane().getChildren().contains(sideChat.getSideChatTalk())) {
+            if (dialogController != null && sideChat.getMainChatPane().getChildren().contains(sideChat.getChatDialog())) {
                 DialogListView currentDialog = dialogController.getDialogListView();
                 if (currentDialog != null) {
                     Platform.runLater(()->currentDialog.refresh());

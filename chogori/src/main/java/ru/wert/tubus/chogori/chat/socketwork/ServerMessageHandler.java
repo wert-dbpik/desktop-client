@@ -2,7 +2,11 @@ package ru.wert.tubus.chogori.chat.socketwork;
 
 import com.google.gson.Gson;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
@@ -120,11 +124,6 @@ public class ServerMessageHandler {
                         log.debug("Текущая открытая комната: {}", currentRoom != null ? currentRoom.getId() : "null");
                         log.debug("Комната сообщения: {}", messageToProcess.getRoomId());
 
-                        boolean t = roomsController.getChatTabPane().isVisible();
-                        boolean r = roomsController.getTabPaneRooms().isSelected();
-                        boolean u = roomsController.getTabPaneUsers().isSelected();
-                        boolean isTabPaneOpen =  t;
-
                         if (currentRoom != null && currentRoom.getId().equals(messageToProcess.getRoomId())) {
                             isRoomOpen = true;
                         }
@@ -136,7 +135,7 @@ public class ServerMessageHandler {
                         // Показываем уведомление если:
                         // 1. Комната не открыта ИЛИ
                         // 2. Приложение свернуто
-                        boolean showNotification = !CHAT_OPEN || !isRoomOpen || isAppMinimized || isTabPaneOpen;
+                        boolean showNotification = !CHAT_OPEN || !isRoomOpen || isAppMinimized || isChatRoomPaneOnTop();
                         log.debug("Комната открыта? {}, Приложение свернуто? {}", isRoomOpen, isAppMinimized);
 
                         if (showNotification) {
@@ -162,30 +161,21 @@ public class ServerMessageHandler {
         }
     }
 
-    public boolean isChatTabPaneOnTop() {
-        if (.getParent() instanceof StackPane) {
-            StackPane stackPane = (StackPane) chatTabPane.getParent();
-            int lastIndex = stackPane.getChildren().size() - 1;
-            return stackPane.getChildren().indexOf(chatTabPane) == lastIndex;
-        }
-        return false;
-    }
+    private static boolean isChatRoomPaneOnTop(){
+        StackPane mainChatPane = SIDE_CHAT.getMainChatPane();
+        Parent chatRoomPane = SIDE_CHAT.getChatRooms();
+        Parent chatDialogPane = SIDE_CHAT.getChatDialog();
 
-//    Можно сравнить индексы панелей:
-//
-//    java
-//            Copy
-//    StackPane parentStackPane = (StackPane) roomsController.getChatTabPane().getParent();
-//    List<Node> children = parentStackPane.getChildren();
-//
-//    // Индекс чата (chatTabPane) в StackPane
-//    int chatIndex = children.indexOf(roomsController.getChatTabPane());
-//
-//    // Индекс другой панели (например, другой контент)
-//    int otherPanelIndex = children.indexOf(otherPanel); // замените otherPanel на нужную панель
-//
-//    // Если chatTabPane последний в списке (верхний) → он видим
-//    boolean isChatOnTop = (chatIndex == children.size() - 1);
+        // Получаем список всех дочерних элементов StackPane
+        ObservableList<Node> children = mainChatPane.getChildren();
+
+        // Проверяем индексы элементов в списке (последний элемент находится сверху)
+        int indexChatRoom = children.indexOf(chatRoomPane);
+        int indexChatDialog = children.indexOf(chatDialogPane);
+
+        // Если chatRoomPane находится в списке после chatDialogPane, значит он сверху
+        return indexChatRoom > indexChatDialog;
+    }
 
     /**
      * Обрабатывает сообщение с обновлением временного ID

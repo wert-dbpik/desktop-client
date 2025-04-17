@@ -1,6 +1,5 @@
 package ru.wert.tubus.chogori.chat;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
@@ -30,10 +29,10 @@ import static ru.wert.tubus.chogori.statics.UtilStaticNodes.SP_CHAT;
 public class SideChat {
 
     @Getter
-    private Parent sideChatTalk;
+    private Parent chatDialog;
 
     @Getter
-    private Parent sideChatGroups;
+    private Parent chatRooms;
 
     @Getter
     private DialogController dialogController;
@@ -45,7 +44,7 @@ public class SideChat {
     private final VBox chatVBox;
 
     @Getter
-    private final StackPane mainPane;
+    private final StackPane mainChatPane;
 
     private double mouseXStart, mouseXCurrent;
     private double spChatCurrentWidth;
@@ -87,13 +86,13 @@ public class SideChat {
 
         AppStatic.setNodeInAnchorPane(chatVBox);
 
-        mainPane = new StackPane();
+        mainChatPane = new StackPane();
 
         // Сначала открываются группы
         showChatGroups();
 
-        hbox.getChildren().add(mainPane);
-        HBox.setHgrow(mainPane, Priority.ALWAYS);
+        hbox.getChildren().add(mainChatPane);
+        HBox.setHgrow(mainChatPane, Priority.ALWAYS);
     }
 
     /**
@@ -101,8 +100,8 @@ public class SideChat {
      */
     public void showChatGroups() {
         log.debug("Отображение панели с группами чатов");
-        mainPane.getChildren().clear();
-        mainPane.getChildren().add(sideChatGroups);
+        mainChatPane.getChildren().clear();
+        mainChatPane.getChildren().add(chatRooms);
         roomsController.getListOfRooms().refresh();
 
     }
@@ -117,8 +116,8 @@ public class SideChat {
         dialogController.getLblRoom().setText(ChatStaticMaster.getRoomName(room.getName()));
 
         dialogController.openDialogForRoom(room);
-        mainPane.getChildren().clear();
-        mainPane.getChildren().add(sideChatTalk);
+        mainChatPane.getChildren().clear();
+        mainChatPane.getChildren().add(chatDialog);
     }
 
     /**
@@ -127,7 +126,7 @@ public class SideChat {
     private void createDialog() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/dialog.fxml"));
-            sideChatTalk = loader.load();
+            chatDialog = loader.load();
             dialogController = loader.getController();
             dialogController.init(this);
             log.debug("Панель для диалога чата успешно создана");
@@ -143,7 +142,7 @@ public class SideChat {
     private void createRooms() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/rooms.fxml"));
-            sideChatGroups = loader.load();
+            chatRooms = loader.load();
             roomsController = loader.getController();
             roomsController.init(this);
             log.debug("Панель для комнат успешно создана");
