@@ -69,23 +69,11 @@ public class MessageService implements IMessageService, ItemService<Message> {
 
     @Override
     public void markMessagesAsDelivered(Room room, Long secondUserId) {
-        List<Message> undeliveredMessages = findUndeliveredByRoomAndUser(room, secondUserId);
+        List<Message> undeliveredMessages = findUndeliveredMessagesByRoomAndSecondUser(room.getId(), secondUserId);
         undeliveredMessages.forEach(message -> {
             message.setStatus(Message.MessageStatus.DELIVERED);
             update(message);
         });
-    }
-
-    @Override
-    public List<Message> findUndeliveredByRoomAndUser(Room room, Long secondUserId) {
-        List<Message> undeliveredMessages = new ArrayList<>();
-        List<Message> messagesByRoom = findAllByRoom(room);
-        for(Message m : messagesByRoom){
-            if(m.getSenderId().equals(secondUserId) && m.getStatus().equals(Message.MessageStatus.RECEIVED)){
-                undeliveredMessages.add(m);
-            }
-        }
-        return undeliveredMessages;
     }
 
     @Override
@@ -128,14 +116,14 @@ public class MessageService implements IMessageService, ItemService<Message> {
         }
     }
 
-    public List<Message> findUndeliveredMessages(Long roomId, Long userId) {
+    public List<Message> findUndeliveredMessagesByRoomAndSecondUser(Long roomId, Long secondUserId) {
         try {
             // Создаем временный вызов к API сообщений
             MessageApiInterface messageApi = RetrofitClient.getInstance()
                     .getRetrofit()
                     .create(MessageApiInterface.class);
 
-            Call<List<Message>> call = messageApi.findUndeliveredMessages(roomId, userId);
+            Call<List<Message>> call = messageApi.findUndeliveredMessages(roomId, secondUserId);
             return call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();

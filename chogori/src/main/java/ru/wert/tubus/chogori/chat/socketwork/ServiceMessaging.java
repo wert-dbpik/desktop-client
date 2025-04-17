@@ -55,6 +55,7 @@ public class ServiceMessaging {
             String jsonMessage = gson.toJson(message, Message.class);
             notification.setText(jsonMessage);
             SocketService.sendMessage(notification);
+            log.info("Отправлено уведомление о принятом сообщении {}", message.toUsefulString());
         } catch (Exception e) {
             log.error("Ошибка при отправке уведомления о полученном сообщении: {}", e.getMessage());
         }

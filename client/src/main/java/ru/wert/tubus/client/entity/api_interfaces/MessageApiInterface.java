@@ -29,7 +29,7 @@ public interface MessageApiInterface {
     @GET("chat-messages/undelivered/{roomId}/{userId}")
     Call<List<Message>> findUndeliveredMessages(
             @Path("roomId") Long roomId,
-            @Path("userId") Long userId
+            @Path("userId") Long userId //Пользователь
     );
 
 

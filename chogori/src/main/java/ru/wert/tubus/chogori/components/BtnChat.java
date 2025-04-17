@@ -121,7 +121,7 @@ public class BtnChat{
 
                     // Запускаем обработку неотправленных сообщений в отдельном потоке
                     new Thread(() -> {
-                        List<Message> undeliveredMessages = CH_MESSAGES.findUndeliveredByRoomAndUser(room, secondUser.getId());
+                        List<Message> undeliveredMessages = CH_MESSAGES.findUndeliveredMessagesByRoomAndSecondUser(room.getId(), secondUser.getId());
                         for (Message m : undeliveredMessages) {
                             m.setStatus(Message.MessageStatus.DELIVERED);
                             CH_MESSAGES.update(m);

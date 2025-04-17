@@ -234,7 +234,8 @@ public class DialogController {
 
                 // Получаем все сообщения в комнате, которые еще не были доставлены
                 List<Message> undeliveredMessages = ChogoriServices.CH_MESSAGES
-                        .findUndeliveredMessages(room.getId(), CH_CURRENT_USER.getId());
+                        .findUndeliveredMessagesByRoomAndSecondUser(room.getId(), interlocutor.getId());
+                log.debug("Обнаружено недоставленных сообщений {} штук", undeliveredMessages.size());
 
                 // Для каждого сообщения отправляем уведомление о доставке
                 for (Message message : undeliveredMessages) {

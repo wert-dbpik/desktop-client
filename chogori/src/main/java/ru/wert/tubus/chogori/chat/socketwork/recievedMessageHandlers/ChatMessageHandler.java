@@ -4,11 +4,17 @@ import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
+import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
+import ru.wert.tubus.client.entity.models.Roommate;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
 
+import java.util.stream.Collectors;
+
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
+import static ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler.*;
+import static ru.wert.tubus.chogori.components.BtnChat.CHAT_OPEN;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
@@ -29,7 +35,10 @@ public class ChatMessageHandler {
         Long roomId = message.getRoomId();
         Room room = RoomService.getInstance().findById(roomId);
 
-        if (room == null || !room.getRoommates().contains(CH_CURRENT_USER.getId())) {
+        if (room == null || !room.getRoommates().stream()
+                .map(Roommate::getUserId)
+                .collect(Collectors.toList())
+                .contains(CH_CURRENT_USER.getId())) {
             log.debug("Сообщение не предназначено текущему пользователю или комната не найдена");
             return;
         }
@@ -62,8 +71,12 @@ public class ChatMessageHandler {
             });
 
             // Обновляем статус сообщения
-            message.setStatus(Message.MessageStatus.DELIVERED);
-            CH_MESSAGES.update(message);
+            if(isRoomOpen(room.getId()) && !isChatRoomPaneOnTop() && CHAT_OPEN && !isAppMinimized()){
+                message.setStatus(Message.MessageStatus.DELIVERED);
+                CH_MESSAGES.update(message);
+                // Отправляем уведомление о доставке через сервис сообщений
+                ServiceMessaging.sendNotificationMessageDelivered(message);
+            }
 
             log.debug("Добавлено новое сообщение {} в комнату {}", message.toUsefulString(), room.getId());
         }

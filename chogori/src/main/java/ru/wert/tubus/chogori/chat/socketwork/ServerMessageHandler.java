@@ -117,18 +117,10 @@ public class ServerMessageHandler {
                         }
 
                         // Проверяем, открыта ли комната этого сообщения
-                        boolean isRoomOpen = false;
-                        Room currentRoom = dialogController != null ? dialogController.getCurrentOpenRoom() : null;
-                        log.debug("Текущая открытая комната: {}", currentRoom != null ? currentRoom.getId() : "null");
-                        log.debug("Комната сообщения: {}", messageToProcess.getRoomId());
-
-                        if (currentRoom != null && currentRoom.getId().equals(messageToProcess.getRoomId())) {
-                            isRoomOpen = true;
-                        }
+                        boolean isRoomOpen = isRoomOpen(messageToProcess.getRoomId());
 
                         // Проверяем, свернуто ли приложение
-                        boolean isAppMinimized = WinformStatic.WF_MAIN_STAGE != null
-                                && WinformStatic.WF_MAIN_STAGE.isIconified();
+                        boolean isAppMinimized = isAppMinimized();
 
                         // Показываем уведомление если:
                         // 1. Комната не открыта ИЛИ
@@ -159,11 +151,26 @@ public class ServerMessageHandler {
         }
     }
 
+    public static boolean isAppMinimized() {
+        return WinformStatic.WF_MAIN_STAGE != null
+                                    && WinformStatic.WF_MAIN_STAGE.isIconified();
+    }
+
+    public static boolean isRoomOpen(Long roomId) {
+        boolean isRoomOpen = false;
+        Room currentRoom = dialogController != null ? dialogController.getCurrentOpenRoom() : null;
+
+        if (currentRoom != null && currentRoom.getId().equals(roomId)) {
+            isRoomOpen = true;
+        }
+        return isRoomOpen;
+    }
+
     /**
      * Метод определяет, находится ли панель с комнатами поверх панели с диалогом
      * если true, то необходимо уведомление о пришедшем сообщении
      */
-    private static boolean isChatRoomPaneOnTop(){
+    public static boolean isChatRoomPaneOnTop(){
         StackPane mainChatPane = SIDE_CHAT.getMainChatPane();
         Parent chatRoomPane = SIDE_CHAT.getChatRooms();
         Parent chatDialogPane = SIDE_CHAT.getChatDialog();
