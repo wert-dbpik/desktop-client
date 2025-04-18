@@ -71,7 +71,7 @@ public class PushNotification {
     }
 
     public static void show(Message message) {
-        if (message == null || message.getRoomId() == null) return;
+        if (message == null || message.roomIdProperty().getValue() == null) return;
 
         workerPool.submit(() -> {
             try {
@@ -336,7 +336,7 @@ public class PushNotification {
     }
 
     private static boolean shouldSkipNotification(Message message) {
-        return message.getSenderId().equals(CH_CURRENT_USER.getId()) ||
+        return message.senderIdProperty().getValue().equals(CH_CURRENT_USER.getId()) ||
                 !message.getType().name().startsWith("CHAT_");
     }
 

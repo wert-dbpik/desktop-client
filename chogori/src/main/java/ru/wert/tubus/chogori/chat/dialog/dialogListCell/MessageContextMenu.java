@@ -290,8 +290,8 @@ public class MessageContextMenu {
      * Проверка, является ли сообщение исходящим
      */
     private boolean isOutgoingMessage(Message msg) {
-        return msg.getSenderId() != null &&
-                msg.getSenderId().equals(CH_CURRENT_USER.getId());
+        return msg.senderIdProperty().getValue() != null &&
+                msg.senderIdProperty().getValue().equals(CH_CURRENT_USER.getId());
     }
 
     /**

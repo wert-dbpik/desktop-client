@@ -197,7 +197,7 @@ public class DialogController {
      */
     private void setupDialogListView(Room room) {
         dialogListView.setCellFactory((ListView<Message> tv) ->
-                new DialogListCell(room, dialogListView, this));
+                new DialogListCell(room, dialogListView, this, dialogListView));
         dialogListView.setId("listViewWithMessages");
         new ListViewManipulator(dialogListView, this);
     }

@@ -166,8 +166,8 @@ public class ChatStaticMaster {
                         .ifPresent(rooms -> rooms.stream()
                                 .filter(Objects::nonNull)
                                 .filter(dialog -> dialog.getRoom() != null)
-                                .filter(dialog -> updatedMessage.getRoomId() != null)
-                                .filter(dialog -> updatedMessage.getRoomId().equals(dialog.getRoom().getId()))
+                                .filter(dialog -> updatedMessage.roomIdProperty().getValue() != null)
+                                .filter(dialog -> updatedMessage.roomIdProperty().getValue().equals(dialog.getRoom().getId()))
                                 .findFirst()
                                 .ifPresent(dialog -> {
                                     if (dialog.getRoomMessages() != null) {
@@ -223,8 +223,8 @@ public class ChatStaticMaster {
                         .ifPresent(rooms -> rooms.stream()
                                 .filter(Objects::nonNull)
                                 .filter(dialog -> dialog.getRoom() != null)
-                                .filter(dialog -> messageToBeDeleted.getRoomId() != null)
-                                .filter(dialog -> messageToBeDeleted.getRoomId().equals(dialog.getRoom().getId()))
+                                .filter(dialog -> messageToBeDeleted.roomIdProperty().getValue() != null)
+                                .filter(dialog -> messageToBeDeleted.roomIdProperty().getValue().equals(dialog.getRoom().getId()))
                                 .findFirst()
                                 .ifPresent(dialog -> {
                                     if (dialog.getRoomMessages() != null) {

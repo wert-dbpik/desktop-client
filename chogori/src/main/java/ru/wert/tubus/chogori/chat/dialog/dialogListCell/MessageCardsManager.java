@@ -1,8 +1,10 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
@@ -15,6 +17,8 @@ import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.utils.MessageStatus;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.IN;
@@ -23,152 +27,195 @@ import static ru.wert.tubus.chogori.images.BtnImages.CHAT_DELIVERED_IMG;
 
 @Slf4j
 public class MessageCardsManager {
+    private final VBox root; // Корневой элемент сообщения
+    private final ImageView statusIcon; // Иконка статуса сообщения
+    private final Label timeLabel; // Метка времени
+    private final Label fromLabel; // Метка отправителя
+    private final Label dateLabel; // Метка даты
+    private final Label titleLabel; // Метка заголовка
+    private final VBox messageContainer; // Контейнер содержимого сообщения
+    private final VBox outlineContainer; // Контейнер с рамкой
+    private final HBox statusContainer; // Контейнер статуса
+    private final Separator separator; // Разделитель сообщений
 
-    private final Boolean ONE_TO_ONE_CHAT; // Индивидуальный чат, не групповой
-    private Message currentMessage;
+    private Message currentMessage; // Текущее отображаемое сообщение
+    private final boolean isOneToOneChat; // Флаг личного чата
 
-    private VBox vbMessageContainer; // Самый верхний контейнер для сообщения
-    private VBox vbOutlineMessage;   // Контейнер, включающий заголовок, сообщение и время создания
-    private VBox vbMessage;          // Контейнер для самого сообщения
-    private Label lblFrom;           // Метка для отображения имени отправителя
-    private Label lblDate;           // Метка для отображения даты сообщения
-    private Label lblTitle;          // Метка для отображения заголовка сообщения
-    private HBox hbStatus;           // Строка статус, где время и статус
-    private Label lblTime;           // Метка для отображения времени сообщения
-    private ImageView imgStatus;         // Метка о статусе сообщения
-
-    private Separator separator; // Разделитель между сообщениями
-
+    /**
+     * Конструктор, загружающий FXML и настраивающий базовые параметры
+     * @param room Комната чата, определяющая стиль отображения
+     */
     public MessageCardsManager(Room room) {
-        ONE_TO_ONE_CHAT = room.getName().startsWith("one-to-one");
+        try {
+            // Загрузка FXML шаблона
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/message.fxml"));
+            root = loader.load();
+
+            // Инициализация элементов интерфейса
+            statusIcon = (ImageView) root.lookup("#imgStatus");
+            timeLabel = (Label) root.lookup("#lblTime");
+            fromLabel = (Label) root.lookup("#lblFrom");
+            dateLabel = (Label) root.lookup("#lblDate");
+            titleLabel = (Label) root.lookup("#lblTitle");
+            messageContainer = (VBox) root.lookup("#vbMessage");
+            outlineContainer = (VBox) root.lookup("#vbOutlineMessage");
+            statusContainer = (HBox) root.lookup("#hbStatus");
+            separator = (Separator) root.lookup("#separator");
+
+            separator.setVisible(false);
+            isOneToOneChat = room.getName().startsWith("one-to-one");
+
+            // Базовая настройка стилей
+            configureBaseStyles();
+        } catch (IOException e) {
+            log.error("Ошибка загрузки FXML шаблона сообщения", e);
+            throw new RuntimeException("Не удалось загрузить шаблон сообщения", e);
+        }
     }
 
     /**
-     * Форматирует сообщение в зависимости от его типа (входящее или исходящее).
-     *
-     * @param message Сообщение для форматирования.
-     * @param in_out  Тип сообщения (входящее или исходящее).
-     * @return Отформатированное сообщение в виде VBox.
+     * Привязывает сообщение к UI элементам
+     * @param message Сообщение для отображения
+     * @param direction Направление сообщения (IN/OUT)
      */
-    public VBox formatMessage(Message message, String in_out) {
-        VBox inMessage = null;
-        try {
-            // Загружаем шаблон сообщения из FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/chat/cards/message.fxml"));
-            inMessage = loader.load();
-            separator = (Separator) inMessage.lookup("#separator");
-            separator.setVisible(false); // Скрываем разделитель
+    public void bindMessage(Message message, String direction) {
+        unbindCurrentMessage();
+        currentMessage = message;
 
-            // Инициализируем элементы интерфейса
-            lblFrom = (Label) inMessage.lookup("#lblFrom");
-            lblDate = (Label) inMessage.lookup("#lblDate");
-            lblTitle = (Label) inMessage.lookup("#lblTitle");
-            hbStatus = (HBox) inMessage.lookup("#hbStatus");
-            lblTime = (Label) inMessage.lookup("#lblTime");
-            lblTime.setText(AppStatic.parseStringToTime(message.getCreationTime().toString()));
-            imgStatus = (ImageView) inMessage.lookup("#imgStatus");
+        // Настройка стилей в зависимости от направления
+        configureDirectionStyles(direction);
 
+        // Биндинг свойств сообщения к UI элементам
+        bindProperties(message, direction);
 
-            if(in_out.equals(IN)){
-                hbStatus.getChildren().remove(imgStatus);
-            } else {
-                if(message.getStatus().equals(MessageStatus.DELIVERED))
-                    imgStatus.setImage(CHAT_DELIVERED_IMG);
-            }
+        // Отображение содержимого сообщения
+        renderMessageContent(message);
 
-            vbMessageContainer = (VBox) inMessage.lookup("#vbMessageContainer");
-            vbOutlineMessage = (VBox) inMessage.lookup("#vbOutlineMessage");
-            vbMessage = (VBox) inMessage.lookup("#vbMessage");
-
-            lblTitle.setId("messageTitleLabel");
-            lblTime.setId("messageTimeLabel");
-
-            MessageCardsRenderer messageCardsRenderer = new MessageCardsRenderer(lblTitle);
-
-            // Настройка стилей для исходящих и входящих сообщений
-            if (in_out.equals(OUT)) {
-                vbMessageContainer.getChildren().removeAll(lblFrom);
-                vbMessageContainer.getChildren().removeAll(lblDate);
-                vbMessageContainer.setAlignment(Pos.TOP_RIGHT);
-                lblFrom.setId("outMessageDataLabel");
-                lblDate.setId("outMessageDataLabel");
-                vbOutlineMessage.setId("outOutlineMessageVBox");
-                vbMessage.setId("outMessageVBox");
-            } else {
-                if (ONE_TO_ONE_CHAT) {
-                    vbMessageContainer.getChildren().removeAll(lblFrom);
-                    vbMessageContainer.getChildren().removeAll(lblDate);
-                }
-                vbMessageContainer.setAlignment(Pos.TOP_LEFT);
-                lblFrom.setId("inMessageDataLabel");
-                lblDate.setId("inMessageDataLabel");
-                vbOutlineMessage.setId("inOutlineMessageVBox");
-                vbMessage.setId("inMessageVBox");
-            }
-
-            // Обновляем интерфейс в потоке JavaFX
-            Platform.runLater(() -> {
-                vbMessage.autosize();
-
-                lblFrom.setText(CH_USERS.findById(message.getSenderId()).getName());
-                lblDate.setText(AppStatic.parseStringToDate(message.getCreationTime().toString()));
-
-                // В зависимости от типа сообщения вызываем соответствующий метод для отображения
-                switch (message.getType()) {
-                    case CHAT_TEXT:
-                        vbOutlineMessage.getChildren().removeAll(lblTitle);
-                        messageCardsRenderer.mountText(vbMessage, message);
-                        break;
-                    case CHAT_DRAFTS:
-                        messageCardsRenderer.mountDrafts(vbMessage, message);
-                        break;
-                    case CHAT_FOLDERS:
-                        messageCardsRenderer.mountFolders(vbMessage, message);
-                        break;
-                    case CHAT_PICS:
-                        messageCardsRenderer.mountPics(vbMessage, message);
-                        break;
-                    case CHAT_PASSPORTS:
-                        messageCardsRenderer.mountPassports(vbMessage, message);
-                        break;
-                }
-            });
-
-        } catch (IOException e) {
-            log.error("Ошибка при загрузке FXML для сообщения: {}", e.getMessage(), e);
-            return null;
-        }
-
-        this.currentMessage = message;
-        message.statusProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                updateMessageStatus(newVal);
-            }
-        });
-
-        return inMessage;
+        // Слушатель изменения статуса
+        message.statusProperty().addListener((obs, oldVal, newVal) ->
+                updateMessageStatus(newVal)
+        );
     }
 
-    public void updateMessageStatus(MessageStatus status) {
-        Platform.runLater(() -> {
-            if (imgStatus == null) {
-                log.warn("ImageView для статуса сообщения не инициализирован");
-                return;
+    /**
+     * Отвязывает текущее сообщение от UI элементов
+     */
+    public void unbindCurrentMessage() {
+        if (currentMessage != null) {
+            statusIcon.imageProperty().unbind();
+            timeLabel.textProperty().unbind();
+            fromLabel.textProperty().unbind();
+            dateLabel.textProperty().unbind();
+        }
+    }
+
+    /**
+     * Возвращает корневой элемент для отображения
+     */
+    public Node getView() {
+        return root;
+    }
+
+    // Приватные вспомогательные методы
+
+    private void configureBaseStyles() {
+        titleLabel.setId("messageTitleLabel");
+        timeLabel.setId("messageTimeLabel");
+    }
+
+    private void configureDirectionStyles(String direction) {
+        if (direction.equals(OUT)) {
+            root.getChildren().removeAll(fromLabel, dateLabel);
+            root.setAlignment(Pos.TOP_RIGHT);
+            outlineContainer.setId("outOutlineMessageVBox");
+            messageContainer.setId("outMessageVBox");
+        } else {
+            if (isOneToOneChat) {
+                root.getChildren().removeAll(fromLabel, dateLabel);
             }
+            root.setAlignment(Pos.TOP_LEFT);
+            fromLabel.setId("inMessageDataLabel");
+            dateLabel.setId("inMessageDataLabel");
+            outlineContainer.setId("inOutlineMessageVBox");
+            messageContainer.setId("inMessageVBox");
+        }
+    }
+
+    private void bindProperties(Message message, String direction) {
+        // Биндинг времени
+        timeLabel.textProperty().bind(
+                Bindings.createStringBinding(() ->
+                                formatTime(message.getCreationTime()),
+                        message.creationTimeProperty()
+                )
+        );
+
+        // Биндинг статуса (только для исходящих сообщений)
+        if (direction.equals(OUT)) {
+            statusIcon.visibleProperty().bind(
+                    message.statusProperty().isEqualTo(MessageStatus.DELIVERED)
+            );
+            statusIcon.imageProperty().set(CHAT_DELIVERED_IMG);
+        } else {
+            statusContainer.getChildren().remove(statusIcon);
+        }
+
+        // Биндинг отправителя и даты
+        Platform.runLater(() -> {
+            fromLabel.setText(CH_USERS.findById(message.getSenderId()).getName());
+            dateLabel.setText(formatDate(message.getCreationTime()));
+        });
+    }
+
+    private void renderMessageContent(Message message) {
+        MessageCardsRenderer renderer = new MessageCardsRenderer(titleLabel);
+
+        // Очистка предыдущего содержимого
+        messageContainer.getChildren().clear();
+        outlineContainer.getChildren().remove(titleLabel);
+
+        // Рендеринг в зависимости от типа сообщения
+        switch (message.getType()) {
+            case CHAT_TEXT:
+                renderer.mountText(messageContainer, message);
+                break;
+            case CHAT_DRAFTS:
+                renderer.mountDrafts(messageContainer, message);
+                break;
+            case CHAT_FOLDERS:
+                renderer.mountFolders(messageContainer, message);
+                break;
+            case CHAT_PICS:
+                renderer.mountPics(messageContainer, message);
+                break;
+            case CHAT_PASSPORTS:
+                renderer.mountPassports(messageContainer, message);
+                break;
+        }
+    }
+
+    void updateMessageStatus(MessageStatus status) {
+        Platform.runLater(() -> {
+            if (statusIcon == null) return;
 
             switch (status) {
                 case DELIVERED:
-                    imgStatus.setImage(CHAT_DELIVERED_IMG);
-                    imgStatus.setVisible(true);
+                    statusIcon.setImage(CHAT_DELIVERED_IMG);
+                    statusIcon.setVisible(true);
                     break;
                 default:
-                    imgStatus.setVisible(false);
+                    statusIcon.setVisible(false);
             }
 
-            if (hbStatus != null) {
-                hbStatus.requestLayout();
-            }
+            statusContainer.requestLayout();
         });
     }
 
+    private String formatTime(LocalDateTime time) {
+        return time != null ? AppStatic.parseStringToTime(time.toString()) : "";
+    }
+
+    private String formatDate(LocalDateTime time) {
+        return time != null ? AppStatic.parseStringToDate(time.toString()) : "";
+    }
 }

@@ -1,52 +1,55 @@
 package ru.wert.tubus.client.entity.models;
 
-import com.google.gson.*;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.interfaces.Item;
 import ru.wert.tubus.client.utils.MessageStatus;
 import ru.wert.tubus.client.utils.MessageType;
 
-import java.awt.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Slf4j
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class Message extends _BaseEntity implements Item {
 
-    private String tempId; //Временный Id для отправки на сервер
-    private MessageType type; // Тип сообщения (текстовый, чертеж и т.д.)
-    private Long roomId; // id группы чата
-    private Long senderId; // id пользователя, написавшего в группе
-    private String text; // Текст сообщения, либо строку id-шников
-    private LocalDateTime creationTime; // Время отправки сообщения
-    private MessageStatus status; // Статус сообщения
+    private final StringProperty tempId = new SimpleStringProperty();
+    private final ObjectProperty<MessageType> type = new SimpleObjectProperty<>();
+    private final LongProperty roomId = new SimpleLongProperty();
+    private final LongProperty senderId = new SimpleLongProperty();
+    private final StringProperty text = new SimpleStringProperty();
+    private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
+    private final ObjectProperty<MessageStatus> status = new SimpleObjectProperty<>(MessageStatus.SENT);
 
-    private transient ObjectProperty<MessageStatus> statusProperty;
+    // Property getters
+    public StringProperty tempIdProperty() { return tempId; }
+    public ObjectProperty<MessageType> typeProperty() { return type; }
+    public LongProperty roomIdProperty() { return roomId; }
+    public LongProperty senderIdProperty() { return senderId; }
+    public StringProperty textProperty() { return text; }
+    public ObjectProperty<LocalDateTime> creationTimeProperty() { return creationTime; }
+    public ObjectProperty<MessageStatus> statusProperty() { return status; }
 
-    public ObjectProperty<MessageStatus> statusProperty() {
-        if (statusProperty == null) {
-            statusProperty = new SimpleObjectProperty<>(this, "status", status);
-        }
-        return statusProperty;
-    }
+    // Traditional getters
+    public String getTempId() { return tempId.get(); }
+    public MessageType getType() { return type.get(); }
+    public long getRoomId() { return roomId.get(); }
+    public long getSenderId() { return senderId.get(); }
+    public String getText() { return text.get(); }
+    public LocalDateTime getCreationTime() { return creationTime.get(); }
+    public MessageStatus getStatus() { return status.get(); }
 
-    public MessageStatus getStatus() {
-        return statusProperty == null ? status : statusProperty.get();
-    }
-
-    public void setStatus(MessageStatus status) {
-        this.status = status;
-        if (statusProperty != null) {
-            statusProperty.set(status);
-        }
-    }
+    // Traditional setters
+    public void setTempId(String tempId) { this.tempId.set(tempId); }
+    public void setType(MessageType type) { this.type.set(type); }
+    public void setRoomId(long roomId) { this.roomId.set(roomId); }
+    public void setSenderId(long senderId) { this.senderId.set(senderId); }
+    public void setText(String text) { this.text.set(text); }
+    public void setCreationTime(LocalDateTime creationTime) { this.creationTime.set(creationTime); }
+    public void setStatus(MessageStatus status) { this.status.set(status); }
 
     /**
      * Создает глубокую копию сообщения на основе оригинала
@@ -58,13 +61,14 @@ public class Message extends _BaseEntity implements Item {
             throw new IllegalArgumentException("Оригинальное сообщение не может быть null");
         }
 
-        this.id = original.id;
-        this.type = original.type;
-        this.roomId = original.roomId;
-        this.senderId = original.senderId;
-        this.text = original.text;
-        this.creationTime = original.creationTime;
-        this.status = original.status;
+        this.id = original.getId();
+        this.type.set(original.getType());
+        this.roomId.set(original.getRoomId());
+        this.senderId.set(original.getSenderId());
+        this.text.set(original.getText());
+        this.creationTime.set(original.getCreationTime());
+        this.status.set(original.getStatus());
+        this.tempId.set(original.getTempId());
     }
 
     @Override
@@ -75,7 +79,7 @@ public class Message extends _BaseEntity implements Item {
 
     @Override
     public String toUsefulString() {
-        return "id: " + id + " ,tempId: " + tempId + " ,from: " + senderId + ", type: " + type.name() + " ,message: " + text;
+        return String.format("id: %d, tempId: %s, from: %d, type: %s, message: %s",
+                getId(), getTempId(), getSenderId(), getType().name(), getText());
     }
-
 }

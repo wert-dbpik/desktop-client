@@ -4,14 +4,17 @@ import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
+import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
+import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
-import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.client.utils.MessageType;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,46 +23,45 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 public class DialogListCell extends ListCell<Message> {
-
-    private final DialogController dialogController;
     public static final String OUT = "message_out";
     public static final String IN = "message_in";
     private static final ExecutorService renderExecutor = Executors.newFixedThreadPool(4);
 
-    private final MessageCardsManager messageCardsManager;
+    private final MessageCardsManager manager;
+    private final StackPane container;
+    private final ListView<Message> listView;
+    private final DialogController dialogController;
+    private final MessageContextMenu contextMenu;
     private final ConcurrentHashMap<String, Parent> messageCache = new ConcurrentHashMap<>();
     private Parent separatorCache;
-    private final StackPane container = new StackPane();
-    private final ListView<Message> listView;
     private Message currentMessage;
-    private final MessageContextMenu contextMenu;
+    DialogListView dialogListView;
 
-    public DialogListCell(Room room, ListView<Message> listView, DialogController dialogController) {
-        this.messageCardsManager = new MessageCardsManager(room);
+    public DialogListCell(Room room, ListView<Message> listView, DialogController dialogController, DialogListView dialogListView) {
+        this.manager = new MessageCardsManager(room);
         this.listView = listView;
         this.dialogController = dialogController;
+        this.dialogListView = dialogListView;
+
+        this.container = new StackPane();
+        container.setStyle("-fx-background-color: transparent; -fx-padding: 0px 10px;");
+        container.setMaxHeight(Double.MAX_VALUE);
 
         this.contextMenu = new MessageContextMenu(
-                this::handleDeleteMessageAction,
-                this::handleForwardMessageAction,
-                this::handleUpdateMessageAction
+                this::handleDeleteMessage,
+                this::handleForwardMessage,
+                this::handleUpdateMessage
         );
 
-        setStyle("-fx-padding: 0px 10px; -fx-background-insets: 0;");
-        initContainer();
+        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        setGraphic(container);
         setContextMenu(contextMenu.getContextMenu());
     }
 
-    // Добавьте метод для очистки кэша
     public void clearCache() {
         messageCache.clear();
         separatorCache = null;
-        log.debug("Кэш сообщений очищен");
-    }
-
-    private void initContainer() {
-        container.setStyle("-fx-background-color: transparent;");
-        container.setMaxHeight(Double.MAX_VALUE);
+        log.debug("Message cache cleared");
     }
 
     @Override
@@ -67,19 +69,26 @@ public class DialogListCell extends ListCell<Message> {
         super.updateItem(message, empty);
 
         if (empty || message == null) {
-            clearCell();
+            clearContent();
             return;
         }
 
-        // Проверяем, действительно ли сообщение изменилось
-        if (message.equals(currentMessage)) {
-            // Если это то же сообщение, но изменился статус - обновляем
-            if (currentMessage != null && !currentMessage.getStatus().equals(message.getStatus())) {
-                updateStatus(message);
-            }
-            return;
+        if (!message.equals(currentMessage)) {
+            updateContent(message);
+        } else if (currentMessage != null && !currentMessage.getStatus().equals(message.getStatus())) {
+            updateStatus(message);
         }
+    }
 
+    private void clearContent() {
+        if (manager != null) {
+            manager.unbindCurrentMessage(); // Используем существующий метод
+        }
+        container.getChildren().clear();
+        currentMessage = null;
+    }
+
+    private void updateContent(Message message) {
         currentMessage = message;
         contextMenu.setCurrentMessage(message);
         renderMessageInBackground(message);
@@ -97,15 +106,7 @@ public class DialogListCell extends ListCell<Message> {
         });
     }
 
-    private void clearCell() {
-        currentMessage = null;
-        setText(null);
-        setGraphic(null);
-    }
-
     private void renderMessageInBackground(Message message) {
-        if (!message.equals(currentMessage)) return;
-
         Task<Parent> renderTask = new Task<Parent>() {
             @Override
             protected Parent call() {
@@ -121,18 +122,9 @@ public class DialogListCell extends ListCell<Message> {
                 Platform.runLater(() -> {
                     if (!message.equals(currentMessage)) return;
 
-                    container.getChildren().clear();
-                    container.getChildren().add(renderedNode);
-                    setGraphic(container);
+                    container.getChildren().setAll(renderedNode);
                     animateMessageAppearance(renderedNode);
-
                 });
-            }
-        });
-
-        renderTask.setOnCancelled(e -> {
-            if (!isVisible()) {
-                Platform.runLater(() -> setGraphic(null));
             }
         });
 
@@ -157,51 +149,46 @@ public class DialogListCell extends ListCell<Message> {
             }
         }
 
-        String cacheKey = message.getTempId() != null ? message.getTempId() : message.getId() != null ? message.getId().toString() : null;
-        if (cacheKey == null) return createNewMessageNode(message);
+        String cacheKey = message.getTempId() != null ? message.getTempId() :
+                message.getId() != null ? message.getId().toString() : null;
 
-        Parent cachedNode = messageCache.get(cacheKey);
-        if (cachedNode != null) {
-            return cachedNode;
+        if (cacheKey == null) {
+            boolean isOutgoing = isOutgoingMessage(message);
+            manager.bindMessage(message, isOutgoing ? OUT : IN);
+            return (Parent) manager.getView();
         }
 
-        Parent newNode = createNewMessageNode(message);
-        messageCache.put(cacheKey, newNode);
-        return newNode;
+        return messageCache.computeIfAbsent(cacheKey, k -> {
+            boolean isOutgoing = isOutgoingMessage(message);
+            manager.bindMessage(message, isOutgoing ? OUT : IN);
+            return (Parent) manager.getView();
+        });
     }
 
-    private Parent createNewMessageNode(Message message) {
-        boolean isOutgoing = isOutgoingMessage(message);
-        return messageCardsManager.formatMessage(message, isOutgoing ? OUT : IN);
-    }
-
-    private void handleDeleteMessageAction() {
+    private void handleDeleteMessage() {
         if (currentMessage == null) return;
-        log.debug("Удаление сообщения: {}", currentMessage.getId());
         contextMenu.deleteMessage(currentMessage, listView);
     }
 
-    private void handleForwardMessageAction() {
+    private void handleForwardMessage() {
         if (currentMessage == null) return;
-        log.debug("Пересылка сообщения: {}", currentMessage.getId());
         contextMenu.forwardMessage(currentMessage, listView);
     }
 
-    private void handleUpdateMessageAction() {
+    private void handleUpdateMessage() {
         if (currentMessage == null || currentMessage.getType() != MessageType.CHAT_TEXT) return;
-        log.debug("Редактирование сообщения: {}", currentMessage.getId());
 
         Platform.runLater(() -> {
             dialogController.getTaMessageText().setText(currentMessage.getText());
             dialogController.getTaMessageText().requestFocus();
             dialogController.getTaMessageText().positionCaret(currentMessage.getText().length());
 
-            Button btnSend = dialogController.getBtnSend();
-            btnSend.setOnAction(e -> {
+            dialogController.getBtnSend().setOnAction(e -> {
                 String updatedText = dialogController.getTaMessageText().getText().trim();
                 if (!updatedText.isEmpty()) {
                     contextMenu.updateMessage(currentMessage, updatedText, listView);
-                    btnSend.setOnAction(event -> dialogController.getDialogListView().sendText());
+                    // Используем правильный метод для отправки сообщения
+                    dialogController.getBtnSend().setOnAction(event -> dialogListView.sendText());
                     dialogController.getTaMessageText().clear();
                 }
             });
@@ -209,8 +196,22 @@ public class DialogListCell extends ListCell<Message> {
     }
 
     private boolean isOutgoingMessage(Message msg) {
-        return msg.getSenderId() != null &&
-                msg.getSenderId().equals(ChogoriSettings.CH_CURRENT_USER.getId());
+        if (msg == null || ChogoriSettings.CH_CURRENT_USER == null) {
+            return false;
+        }
+
+        try {
+            long senderId = msg.getSenderId(); // Для примитивного long
+            long currentUserId = ChogoriSettings.CH_CURRENT_USER.getId();
+            return senderId == currentUserId;
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public void updateSelected(boolean selected) {
+        // Отключаем стандартное выделение
     }
 
     public static void shutdown() {

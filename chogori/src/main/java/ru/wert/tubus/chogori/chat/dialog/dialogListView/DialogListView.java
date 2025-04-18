@@ -1,15 +1,12 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogListView;
 
-import javafx.animation.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
@@ -18,7 +15,6 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.images.ImageUtil;
@@ -38,9 +34,8 @@ import static ru.wert.tubus.chogori.components.BtnChat.CHAT_OPEN;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 /**
- * Класс DialogListView отвечает за отображение списка сообщений в диалоге чата.
- * Он также обрабатывает отправку и получение сообщений, включая текстовые сообщения,
- * изображения, чертежи и паспорта.
+ * Класс для отображения и управления списком сообщений в диалоге чата.
+ * Обеспечивает отправку, получение и отображение сообщений различных типов.
  */
 @Slf4j
 public class DialogListView extends ListView<Message> {
@@ -53,167 +48,144 @@ public class DialogListView extends ListView<Message> {
 
     /**
      * Конструктор класса.
-     *
-     * @param room         Комната, для которой создается диалог.
-     * @param taMessageText Текстовое поле для ввода сообщений.
+     * @param room Комната чата
+     * @param taMessageText Текстовое поле для ввода сообщений
      */
     public DialogListView(Room room, TextArea taMessageText) {
         this.room = room;
         this.taMessageText = taMessageText;
         setId("dialogListView");
-
-        setItems(roomMessages); // Привязываем ObservableList к ListView
-
+        setItems(roomMessages);
         log.info("Создан новый диалог для комнаты: {}", room.getName());
     }
 
     /**
-     * Создает временный ID сообщения
+     * Плавно добавляет сообщение в список с автоматической прокруткой
+     * @param message Сообщение для добавления
      */
-    private String generateTempId(){
-        return "temp_" + System.currentTimeMillis() + "_" + (int)(Math.random() * 1000);
-    }
-
-    /**
-     * Создает и отправляет сообщение с паспортами.
-     *
-     * @param str Строка с данными паспортов.
-     */
-    public void createPassportsChatMessage(String str) {
-        StringBuilder text = new StringBuilder();
-        String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
-        for (String s : pasteData) {
-            String clazz = Arrays.asList(s.split("#", -1)).get(0);
-            if (!clazz.equals("PP")) continue;
-            else {
-                String strId = s.replace("PP#", "");
-                text.append(strId);
-                text.append(" ");
+    public void addMessageSmoothly(Message message) {
+        Platform.runLater(() -> {
+            roomMessages.add(message);
+            if (shouldScrollToNewMessage()) {
+                smartScrollToLastMessage();
             }
-        }
-
-        Message message = createChatMessage(MessageType.CHAT_PASSPORTS, text.toString().trim());
-        taMessageText.setText("");
-        sendMessageToRecipient(message);
-        log.debug("Создано сообщение с паспортами: {}", text.toString().trim());
+        });
     }
 
     /**
-     * Создает и отправляет сообщение с чертежами.
-     *
-     * @param str Строка с данными чертежей.
+     * Обновляет статус указанного сообщения
+     * @param messageId ID сообщения
+     * @param status Новый статус сообщения
      */
-    public void createDraftsChatMessage(String str) {
-        StringBuilder text = new StringBuilder();
-        String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
-        for (String s : pasteData) {
-            String clazz = Arrays.asList(s.split("#", -1)).get(0);
-            if (!clazz.equals("DR")) continue;
-            else {
-                String strId = s.replace("DR#", "");
-                text.append(strId);
-                text.append(" ");
-            }
-        }
-
-        Message message = createChatMessage(MessageType.CHAT_DRAFTS, text.toString().trim());
-        taMessageText.setText("");
-        sendMessageToRecipient(message);
-        log.debug("Создано сообщение с чертежами: {}", text.toString().trim());
+    public void updateMessageStatus(Long messageId, MessageStatus status) {
+        Platform.runLater(() -> {
+            roomMessages.stream()
+                    .filter(m -> m.getId() != null && m.getId().equals(messageId))
+                    .findFirst()
+                    .ifPresent(msg -> msg.setStatus(status));
+        });
     }
 
     /**
-     * Создает и отправляет сообщение с комплектами чертежей.
-     *
-     * @param str Строка с данными комплектов чертежей.
-     */
-    public void createFoldersChatMessage(String str) {
-        StringBuilder text = new StringBuilder();
-        String[] pasteData = (str.replace("pik!", "").trim()).split(" ", -1);
-        for (String s : pasteData) {
-            String clazz = Arrays.asList(s.split("#", -1)).get(0);
-            if (!clazz.equals("F")) continue;
-            else {
-                String strId = s.replace("F#", "");
-                text.append(strId);
-                text.append(" ");
-            }
-        }
-
-        Message message = createChatMessage(MessageType.CHAT_FOLDERS, text.toString().trim());
-        taMessageText.setText("");
-        sendMessageToRecipient(message);
-        log.debug("Создано сообщение с комплектами чертежей: {}", text.toString().trim());
-    }
-
-    /**
-     * Обрабатывает отправку изображений.
-     *
-     * @param event Событие нажатия на кнопку.
-     */
-    public void sendPicture(ActionEvent event) {
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Изображения", "*.png", "*.jpg");
-        List<File> chosenFiles = AppStatic.chooseManyFile(event, new File("C:\\"), filter);
-        if (chosenFiles == null || chosenFiles.isEmpty()) return;
-
-        createPicsChatMessage(chosenFiles);
-        log.debug("Пользователь выбрал изображения для отправки: {}", chosenFiles.size());
-    }
-
-    /**
-     * Создает и отправляет сообщение с изображениями.
-     *
-     * @param chosenFiles Список выбранных файлов изображений.
-     */
-    public void createPicsChatMessage(List<File> chosenFiles) {
-        StringBuilder text = new StringBuilder();
-        for (File file : chosenFiles) {
-            Image image = new Image(file.toURI().toString());
-            Pic savedPic = ImageUtil.createPicFromFileAndSaveItToDB(image, file);
-            text.append(savedPic.getId());
-            text.append(" ");
-        }
-
-        Message message = createChatMessage(MessageType.CHAT_PICS, text.toString().trim());
-        taMessageText.setText("");
-        sendMessageToRecipient(message);
-        log.debug("Создано сообщение с изображениями: {}", text.toString().trim());
-    }
-
-    /**
-     * Отправляет текстовое сообщение.
+     * Отправляет текстовое сообщение
      */
     public void sendText() {
         String text = taMessageText.getText();
         if (text == null || text.isEmpty()) return;
 
-        // Создаем сообщение
-        Message message = new Message();
-        message.setTempId(generateTempId());
-        message.setType(MessageType.CHAT_TEXT);
-        message.setRoomId(room.getId());
-        message.setSenderId(CH_CURRENT_USER.getId());
-        message.setCreationTime(LocalDateTime.now());
-        message.setStatus(MessageStatus.SENT);
-        message.setText(text);
-
-        // Отправляем сообщение через SocketService
+        Message message = createMessage(MessageType.CHAT_TEXT, text);
         SocketService.sendMessage(message);
-        roomMessages.add(message); // Добавляем сообщение в список
-
+        roomMessages.add(message);
         smartScrollToLastMessage();
-
-        taMessageText.setText(""); // Очищаем текстовое поле
+        taMessageText.setText("");
     }
 
     /**
-     * Создает объект сообщения.
-     *
-     * @param type Тип сообщения.
-     * @param text Текст сообщения.
-     * @return Созданное сообщение.
+     * Создает и отправляет сообщение с паспортами
+     * @param str Строка с данными паспортов
      */
-    private Message createChatMessage(MessageType type, String text) {
+    public void createPassportsChatMessage(String str) {
+        String text = parsePassportData(str);
+        Message message = createMessage(MessageType.CHAT_PASSPORTS, text);
+        sendMessage(message);
+    }
+
+    /**
+     * Создает и отправляет сообщение с чертежами
+     * @param str Строка с данными чертежей
+     */
+    public void createDraftsChatMessage(String str) {
+        String text = parseDraftData(str);
+        Message message = createMessage(MessageType.CHAT_DRAFTS, text);
+        sendMessage(message);
+    }
+
+    /**
+     * Создает и отправляет сообщение с комплектами чертежей
+     * @param str Строка с данными комплектов
+     */
+    public void createFoldersChatMessage(String str) {
+        String text = parseFolderData(str);
+        Message message = createMessage(MessageType.CHAT_FOLDERS, text);
+        sendMessage(message);
+    }
+
+    /**
+     * Обрабатывает отправку изображений
+     * @param event Событие нажатия кнопки
+     */
+    public void sendPicture(ActionEvent event) {
+        List<File> files = chooseImageFiles(event);
+        if (files != null && !files.isEmpty()) {
+            createPicsChatMessage(files);
+        }
+    }
+
+    /**
+     * Создает и отправляет сообщение с изображениями
+     * @param chosenFiles Список файлов изображений
+     */
+    public void createPicsChatMessage(List<File> chosenFiles) {
+        String text = buildImageIdsString(chosenFiles);
+        Message message = createMessage(MessageType.CHAT_PICS, text);
+        sendMessage(message);
+    }
+
+    /**
+     * Получает сообщение от сервера
+     * @param message Полученное сообщение
+     */
+    public void receiveMessageFromServer(Message message) {
+        if (isOwnMessage(message)) {
+            handleOwnMessage(message);
+        } else {
+            handleIncomingMessage(message);
+        }
+    }
+
+    /**
+     * Умная прокрутка к последнему сообщению
+     */
+    public void smartScrollToLastMessage() {
+        if (roomMessages.isEmpty()) return;
+
+        int lastIndex = roomMessages.size() - 1;
+        scrollTo(lastIndex);
+
+        Platform.runLater(() -> {
+            layout();
+            scrollTo(lastIndex);
+            new Timeline(new KeyFrame(Duration.millis(100), e -> scrollTo(lastIndex))).play();
+        });
+    }
+
+    // Приватные вспомогательные методы
+
+    private String generateTempId() {
+        return "temp_" + System.currentTimeMillis() + "_" + (int)(Math.random() * 1000);
+    }
+
+    private Message createMessage(MessageType type, String text) {
         Message message = new Message();
         message.setTempId(generateTempId());
         message.setType(type);
@@ -225,104 +197,98 @@ public class DialogListView extends ListView<Message> {
         return message;
     }
 
-    /**
-     * Отправляет сообщение получателю.
-     *
-     * @param message Сообщение для отправки.
-     */
-    public void sendMessageToRecipient(Message message) {
+    private void sendMessage(Message message) {
         SocketService.sendMessage(message);
-        Platform.runLater(() -> {
-            // Проверяем, нет ли уже такого сообщения
-            boolean exists = roomMessages.stream().anyMatch(m ->
-                    (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
-                            (message.getId() != null && message.getId().equals(m.getId())));
-
-            if (!exists) {
-                roomMessages.add(message);
-                smartScrollToLastMessage();
-                log.debug("Сообщение отправлено и добавлено в список: {}", message.getText());
-            }
-        });
+        taMessageText.setText("");
+        addMessageSmoothly(message);
     }
 
-    /**
-     * Получает сообщение от сервера в ОТКРЫТЫЙ чат.
-     *
-     * @param message Полученное сообщение.
-     */
-    public void receiveMessageFromServer(Message message) {
-        if (message.getSenderId().equals(CH_CURRENT_USER.getId())) {
-            // Это наше же сообщение, вернувшееся от сервера
-            if (CHAT_OPEN) ServiceMessaging.sendNotificationMessageDelivered(message);
+    private String parsePassportData(String str) {
+        return parseData(str, "PP#");
+    }
 
-            // Обновляем статус сообщения
-            message.setStatus(MessageStatus.DELIVERED);
+    private String parseDraftData(String str) {
+        return parseData(str, "DR#");
+    }
 
-            Platform.runLater(() -> {
-                // Проверяем по tempId (для новых) или id (для сохраненных)
-                boolean messageExists = roomMessages.stream().anyMatch(m ->
-                        (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
-                                (message.getId() != null && message.getId().equals(m.getId())));
+    private String parseFolderData(String str) {
+        return parseData(str, "F#");
+    }
 
-                if (!messageExists) {
-                    roomMessages.add(message);
-                    if (isListNearBottom()) smartScrollToLastMessage();
-                    log.debug("Подтверждение отправки сообщения: {}", message.getText());
-                } else {
-                    // Обновляем существующее сообщение
-                    roomMessages.replaceAll(m -> (message.getTempId() != null
-                            && message.getTempId().equals(m.getTempId())) ||
-                                    (message.getId() != null && message.getId().equals(m.getId())) ? message : m);
-                }
-            });
+    private String parseData(String str, String prefix) {
+        StringBuilder text = new StringBuilder();
+        Arrays.stream(str.replace("pik!", "").trim().split(" "))
+                .filter(s -> s.startsWith(prefix.replace("#", "")))
+                .forEach(s -> text.append(s.replace(prefix, "")).append(" "));
+        return text.toString().trim();
+    }
+
+    private List<File> chooseImageFiles(ActionEvent event) {
+        FileChooser.ExtensionFilter filter =
+                new FileChooser.ExtensionFilter("Изображения", "*.png", "*.jpg");
+        return AppStatic.chooseManyFile(event, new File("C:\\"), filter);
+    }
+
+    private String buildImageIdsString(List<File> files) {
+        StringBuilder text = new StringBuilder();
+        files.forEach(file -> {
+            Image image = new Image(file.toURI().toString());
+            Pic pic = ImageUtil.createPicFromFileAndSaveItToDB(image, file);
+            text.append(pic.getId()).append(" ");
+        });
+        return text.toString().trim();
+    }
+
+    private boolean isOwnMessage(Message message) {
+        return message.getSenderId() == CH_CURRENT_USER.getId();
+    }
+
+    private void handleOwnMessage(Message message) {
+        if (CHAT_OPEN) ServiceMessaging.sendNotificationMessageDelivered(message);
+        message.setStatus(MessageStatus.DELIVERED);
+        updateOrAddMessage(message);
+    }
+
+    private void handleIncomingMessage(Message message) {
+        Platform.runLater(() -> updateOrAddMessage(message));
+    }
+
+    private void updateOrAddMessage(Message message) {
+        boolean exists = roomMessages.stream()
+                .anyMatch(m -> (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
+                        (message.getId() != null && message.getId().equals(m.getId())));
+
+        if (!exists) {
+            roomMessages.add(message);
+            if (isListNearBottom()) smartScrollToLastMessage();
         } else {
-            // Это входящее сообщение от другого пользователя
-            Platform.runLater(() -> {
-                boolean messageExists = roomMessages.stream().anyMatch(m ->
-                        (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
-                                (message.getId() != null && message.getId().equals(m.getId())));
-
-                if (!messageExists) {
-                    roomMessages.add(message);
-                    if (isListNearBottom()) smartScrollToLastMessage();
-                    log.debug("Получено новое сообщение: {}", message.getText());
-                }
-            });
+            roomMessages.replaceAll(m ->
+                    (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
+                            (message.getId() != null && message.getId().equals(m.getId())) ? message : m);
         }
     }
 
-    public void smartScrollToLastMessage() {
-        if (getItems().isEmpty()) return;
-        int lastIndex = getItems().size() - 1;
-
-        scrollTo(lastIndex);
-        Platform.runLater(() -> {
-            layout();
-            scrollTo(lastIndex);
-
-            new Timeline(new KeyFrame(Duration.millis(100), e -> {
-                scrollTo(lastIndex);
-            })).play();
-        });
-    }
-
+    /**
+     * Проверяет, находится ли список около нижнего края
+     */
     public boolean isListNearBottom() {
         ScrollBar vbar = getVerticalScrollbar();
         if (vbar == null) return true;
-
-        double position = vbar.getValue();
-        double max = vbar.getMax();
-        return (max - position) < 0.3;
+        return (vbar.getMax() - vbar.getValue()) < 0.3;
     }
 
     private ScrollBar getVerticalScrollbar() {
-        for (Node node : lookupAll(".scroll-bar")) {
-            if (node instanceof ScrollBar && ((ScrollBar) node).getOrientation() == Orientation.VERTICAL) {
-                return (ScrollBar) node;
-            }
-        }
-        return null;
+        return (ScrollBar) lookupAll(".scroll-bar").stream()
+                .filter(n -> n instanceof ScrollBar &&
+                        ((ScrollBar)n).getOrientation() == Orientation.VERTICAL)
+                .findFirst()
+                .orElse(null);
     }
 
+    /**
+     * Определяет нужно ли прокручивать список к новому сообщению
+     */
+    private boolean shouldScrollToNewMessage() {
+        return isListNearBottom();
+    }
 }
