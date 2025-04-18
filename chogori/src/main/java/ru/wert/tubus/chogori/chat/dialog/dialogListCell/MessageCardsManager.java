@@ -66,6 +66,7 @@ public class MessageCardsManager {
             lblTime.setText(AppStatic.parseStringToTime(message.getCreationTime().toString()));
             imgStatus = (ImageView) inMessage.lookup("#imgStatus");
 
+
             if(in_out.equals(IN)){
                 hbStatus.getChildren().remove(imgStatus);
             } else {
@@ -136,6 +137,15 @@ public class MessageCardsManager {
             return null;
         }
         return inMessage;
+    }
+
+    public void updateMessageStatus(Message.MessageStatus status) {
+        Platform.runLater(() -> {
+            if (status.equals(Message.MessageStatus.DELIVERED)) {
+                imgStatus.setImage(CHAT_DELIVERED_IMG);
+            }
+            // Другие статусы при необходимости
+        });
     }
 
 }

@@ -22,7 +22,7 @@ import java.util.List;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.chat.roomsController.RoomsController.WRITE_YOURSELF;
-import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.UNREAD_MESSAGES;
+import static ru.wert.tubus.chogori.chat.util.ChatStaticMaster.getSecondUserInOneToOneChat;
 import static ru.wert.tubus.chogori.images.BtnImages.*;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
@@ -82,7 +82,7 @@ public class TabRooms {
                             // Устанавливаем имя комнаты
                             String roomName = ChatStaticMaster.getRoomName(room.getName());
                             if (room.getName().startsWith("one-to-one")) {
-                                User secondUser = ChatStaticMaster.getSecondUserInOneToOneChat(room);
+                                User secondUser = getSecondUserInOneToOneChat(room);
                                 if (secondUser != null && secondUser.getId().equals(CH_CURRENT_USER.getId())) {
                                     roomName = WRITE_YOURSELF; // "Написать себе"
                                 }
@@ -92,7 +92,7 @@ public class TabRooms {
 
                             // Устанавливаем изображение статуса для one-to-one чатов
                             if (room.getName().startsWith("one-to-one")) {
-                                User secondUser = ChatStaticMaster.getSecondUserInOneToOneChat(room);
+                                User secondUser = getSecondUserInOneToOneChat(room);
                                 if (secondUser != null && secondUser.isOnline()) {
                                     dotImageView.setImage(DOT_BLUE_IMG);
                                 } else {
@@ -103,10 +103,10 @@ public class TabRooms {
                             }
 
                             // Проверяем наличие непрочитанных сообщений для этой комнаты
-                            boolean hasUnreadMessages = UNREAD_MESSAGES != null &&
-                                    UNREAD_MESSAGES.stream()
-                                            .anyMatch(msg -> msg.getRoomId().equals(room.getId()) &&
-                                                    msg.getStatus() != Message.MessageStatus.DELIVERED);
+                            boolean hasUnreadMessages = !CH_MESSAGES.findUndeliveredMessagesByRoomAndSecondUser(
+                                    room.getId(),
+                                    getSecondUserInOneToOneChat(room).getId())
+                                    .isEmpty();
 
                             unreadMessagesIcon.startBlinking();
                             unreadMessagesIcon.setVisible(hasUnreadMessages);
@@ -120,13 +120,9 @@ public class TabRooms {
                                     // Двойной клик - открываем чат
                                     if (e.getClickCount() == 2) {
                                         log.debug("Открытие чата в комнате: {}", room.getName());
+                                        unreadMessagesIcon.setVisible(false);
                                         controller.openChat(room);
                                         e.consume();
-                                    }
-                                    // Одинарный клик - отмечаем сообщения как прочитанные
-                                    else if (e.getClickCount() == 1) {
-                                        markMessagesAsDelivered(room);
-                                        unreadMessagesIcon.setVisible(false);
                                     }
                                 }
                             });
@@ -144,18 +140,6 @@ public class TabRooms {
                                 contextMenu.getItems().add(exitItem);
                             }
                             setContextMenu(contextMenu);
-                        }
-                    }
-
-                    private void markMessagesAsDelivered(Room room) {
-                        if (UNREAD_MESSAGES != null) {
-                            UNREAD_MESSAGES.stream()
-                                    .filter(msg -> msg.getRoomId().equals(room.getId()) &&
-                                            msg.getStatus() != Message.MessageStatus.DELIVERED)
-                                    .forEach(msg -> {
-                                        msg.setStatus(Message.MessageStatus.DELIVERED);
-                                        CH_MESSAGES.update(msg);
-                                    });
                         }
                     }
                 };
@@ -195,7 +179,7 @@ public class TabRooms {
             if (isCurrentUserInRoom && isRoomVisible) {
                 if (room.getName().startsWith("one-to-one")) {
                     // Получаем второго пользователя в one-to-one чате
-                    User secondUser = ChatStaticMaster.getSecondUserInOneToOneChat(room);
+                    User secondUser = getSecondUserInOneToOneChat(room);
 
                     // Если второй пользователь - это текущий пользователь, это чат "Написать себе"
                     if (secondUser != null && secondUser.getId().equals(CH_CURRENT_USER.getId())) {

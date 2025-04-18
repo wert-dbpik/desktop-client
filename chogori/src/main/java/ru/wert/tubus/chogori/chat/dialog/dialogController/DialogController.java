@@ -126,95 +126,119 @@ public class DialogController {
      * @param room Комната, для которой нужно открыть диалог.
      */
     public void openDialogForRoom(Room room) {
-
         DialogListView openDialog = findDialogForRoom(room);
 
-        // Если диалог еще не открыт, создаем новый
         if (openDialog == null) {
-            dialogListView = new DialogListView(room, taMessageText);
-
-            // Создаем Task для загрузки сообщений в фоновом режиме
-            Task<List<Message>> loadMessagesTask = new Task<List<Message>>() {
-                @Override
-                protected List<Message> call() throws Exception {
-                    // Загружаем сообщения для комнаты
-                    List<Message> messages = CH_MESSAGES.findAllByRoom(room);
-
-                    // Сортируем сообщения по дате creationTime (от старых к новым)
-                    messages.sort(Comparator.comparing(Message::getCreationTime));
-
-                    // Вставляем разделители дат
-                    return new DateSeparators().insertDateSeparators(messages);
-                }
-            };
-
-            // Обработка успешного завершения Task
-            loadMessagesTask.setOnSucceeded(event -> {
-                List<Message> messages = loadMessagesTask.getValue();
-
-                dialogListView.getRoomMessages().setAll(messages == null ? new ArrayList<>() : messages); // Обновляем ObservableList
-
-                // Настраиваем ListView для отображения сообщений
-                dialogListView.setCellFactory((ListView<Message> tv) -> new DialogListCell(
-                        room, dialogListView, this));
-                dialogListView.setId("listViewWithMessages");
-
-                // Добавляем манипулятор для обработки событий
-                new ListViewManipulator(dialogListView, this);
-                // Добавляем диалог в контейнер
-                spDialogsContainer.getChildren().add(dialogListView);
-
-                // Слушатель + задержка для подстраховки
-                AtomicBoolean scrolled = new AtomicBoolean(false);
-                dialogListView.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
-                    if (!scrolled.get() && newVal.getWidth() > 0 && newVal.getHeight() > 0) {
-                        scrolled.set(true);
-                        Platform.runLater(() -> dialogListView.smartScrollToLastMessage());
-                    }
-                });
-
-                // Подстраховка на случай, если слушатель не сработает
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(300);
-                        Platform.runLater(() -> {
-                            if (!scrolled.get()) {
-                                dialogListView.smartScrollToLastMessage();
-                                scrolled.set(true);
-                            }
-                        });
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                }).start();
-
-                log.info("Сообщения успешно загружены для комнаты: {}", room.getName());
-            });
-
-            // Обработка ошибок в Task
-            loadMessagesTask.setOnFailed(event -> {
-                Throwable exception = loadMessagesTask.getException();
-                log.error("Ошибка при загрузке сообщений: {}", exception.getMessage(), exception);
-            });
-
-            // Запускаем Task в отдельном потоке
-            new Thread(loadMessagesTask).start();
+            createNewDialogForRoom(room);
         } else {
-            dialogListView = openDialog;
+            switchToExistingDialog(openDialog);
         }
 
-        // Устанавливаем название комнаты и переключаемся на диалог
+        setupRoomUI(room);
+        markMessagesAsDelivered(room);
+    }
+
+    /**
+     * Создает новый диалог для указанной комнаты.
+     *
+     * @param room Комната, для которой создается диалог.
+     */
+    private void createNewDialogForRoom(Room room) {
+        dialogListView = new DialogListView(room, taMessageText);
+        loadMessagesForRoom(room);
+        setupDialogListView(room);
+        spDialogsContainer.getChildren().add(dialogListView);
+        setupAutoScroll();
+    }
+
+    /**
+     * Переключается на существующий диалог.
+     *
+     * @param dialog Существующий диалог.
+     */
+    private void switchToExistingDialog(DialogListView dialog) {
+        dialogListView = dialog;
+    }
+
+    /**
+     * Загружает сообщения для комнаты в фоновом режиме.
+     *
+     * @param room Комната, для которой загружаются сообщения.
+     */
+    private void loadMessagesForRoom(Room room) {
+        Task<List<Message>> loadMessagesTask = new Task<List<Message>>() {
+            @Override
+            protected List<Message> call() throws Exception {
+                List<Message> messages = CH_MESSAGES.findAllByRoom(room);
+                messages.sort(Comparator.comparing(Message::getCreationTime));
+                return new DateSeparators().insertDateSeparators(messages);
+            }
+        };
+
+        loadMessagesTask.setOnSucceeded(event -> {
+            List<Message> messages = loadMessagesTask.getValue();
+            dialogListView.getRoomMessages().setAll(messages == null ? new ArrayList<>() : messages);
+            log.info("Сообщения успешно загружены для комнаты: {}", room.getName());
+        });
+
+        loadMessagesTask.setOnFailed(event -> {
+            Throwable exception = loadMessagesTask.getException();
+            log.error("Ошибка при загрузке сообщений: {}", exception.getMessage(), exception);
+        });
+
+        new Thread(loadMessagesTask).start();
+    }
+
+    /**
+     * Настраивает ListView для отображения сообщений.
+     *
+     * @param room Комната, для которой настраивается ListView.
+     */
+    private void setupDialogListView(Room room) {
+        dialogListView.setCellFactory((ListView<Message> tv) ->
+                new DialogListCell(room, dialogListView, this));
+        dialogListView.setId("listViewWithMessages");
+        new ListViewManipulator(dialogListView, this);
+    }
+
+    /**
+     * Настраивает автоматическую прокрутку к последнему сообщению.
+     */
+    private void setupAutoScroll() {
+        AtomicBoolean scrolled = new AtomicBoolean(false);
+        dialogListView.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            if (!scrolled.get() && newVal.getWidth() > 0 && newVal.getHeight() > 0) {
+                scrolled.set(true);
+                Platform.runLater(() -> dialogListView.smartScrollToLastMessage());
+            }
+        });
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(300);
+                Platform.runLater(() -> {
+                    if (!scrolled.get()) {
+                        dialogListView.smartScrollToLastMessage();
+                        scrolled.set(true);
+                    }
+                });
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+
+    /**
+     * Настраивает UI для отображения комнаты.
+     *
+     * @param room Комната, для которой настраивается UI.
+     */
+    private void setupRoomUI(Room room) {
         setRoomNameWithOnlineStatus(room);
         dialogListView.toFront();
-
         openRooms.put(dialogListView, false);
-        //Делаем комнату активной
         openOneRoom(dialogListView);
-
         log.info("Открыт диалог для комнаты: {}", room.getName());
-
-        // После открытия диалога помечаем сообщения как доставленные
-        markMessagesAsDelivered(room);
     }
 
     /**
@@ -226,15 +250,15 @@ public class DialogController {
             @Override
             protected Void call() throws Exception {
                 // Получаем собеседника (для one-to-one чатов)
-                User interlocutor = ChatStaticMaster.getSecondUserInOneToOneChat(room);
-                if (interlocutor == null) {
+                User secondUser = ChatStaticMaster.getSecondUserInOneToOneChat(room);
+                if (secondUser == null) {
                     log.warn("Не удалось определить собеседника для комнаты {}", room.getName());
                     return null;
                 }
 
                 // Получаем все сообщения в комнате, которые еще не были доставлены
                 List<Message> undeliveredMessages = ChogoriServices.CH_MESSAGES
-                        .findUndeliveredMessagesByRoomAndSecondUser(room.getId(), interlocutor.getId());
+                        .findUndeliveredMessagesByRoomAndSecondUser(room.getId(), secondUser.getId());
                 log.debug("Обнаружено недоставленных сообщений {} штук", undeliveredMessages.size());
 
                 // Для каждого сообщения отправляем уведомление о доставке

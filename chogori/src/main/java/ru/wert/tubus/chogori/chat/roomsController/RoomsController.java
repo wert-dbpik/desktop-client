@@ -153,20 +153,20 @@ public class RoomsController {
     /**
      * Открывает индивидуальный чат с указанным пользователем.
      *
-     * @param interlocutor Пользователь, с которым открывается чат.
+     * @param secondUser Пользователь, с которым открывается чат.
      */
-    public void openOneToOneChat(User interlocutor) {
-        Room room = fetchOneToOneRoom(interlocutor);
+    public void openOneToOneChat(User secondUser) {
+        Room room = fetchOneToOneRoom(secondUser);
 
         // Делаем чат снова видимым для текущего пользователя
         Room updatedRoom = CH_ROOMS.setUserVisibility(room.getId(), CH_CURRENT_USER.getId(), true);
         if (updatedRoom != null) {
-            log.debug("Чат с пользователем {} снова видим для текущего пользователя.", interlocutor.getName());
+            log.debug("Чат с пользователем {} снова видим для текущего пользователя.", secondUser.getName());
         } else {
             log.error("Не удалось сделать чат видимым для текущего пользователя.");
         }
 
-        log.debug("Открытие чата с пользователем: {}", interlocutor.getName());
+        log.debug("Открытие чата с пользователем: {}", secondUser.getName());
         chat.showChatDialog(room);
     }
 
