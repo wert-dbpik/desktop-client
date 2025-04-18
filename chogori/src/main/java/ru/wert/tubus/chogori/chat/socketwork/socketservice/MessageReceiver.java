@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 import ru.wert.tubus.client.entity.models.Message;
+import ru.wert.tubus.client.utils.MessageType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class MessageReceiver {
                         Message message = gson.fromJson(serverMessage, Message.class);
                         // Запуск обработки сообщения в потоке JavaFX
                         // Обработка HEARTBEAT от сервера
-                        if (message.getType() == Message.MessageType.HEARTBEAT) {
+                        if (message.getType() == MessageType.HEARTBEAT) {
                             lastHeartbeatTime = System.currentTimeMillis();
 //                            log.debug("Получен HEARTBEAT от сервера");
                             continue;

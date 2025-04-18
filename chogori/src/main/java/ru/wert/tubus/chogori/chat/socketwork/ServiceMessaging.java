@@ -6,6 +6,7 @@ import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
+import ru.wert.tubus.client.utils.MessageType;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +24,7 @@ public class ServiceMessaging {
     public static void sendMessageUserIn(Long userId) {
         try {
             Message userInMessage = new Message();
-            userInMessage.setType(Message.MessageType.USER_IN);
+            userInMessage.setType(MessageType.USER_IN);
             userInMessage.setSenderId(userId);
             SocketService.sendMessage(userInMessage);
         } catch (Exception e) {
@@ -38,7 +39,7 @@ public class ServiceMessaging {
     public static void sendMessageUserOut() {
         try {
             Message userOutMessage = new Message();
-            userOutMessage.setType(Message.MessageType.USER_OUT);
+            userOutMessage.setType(MessageType.USER_OUT);
             userOutMessage.setSenderId(CH_CURRENT_USER.getId());
             SocketService.sendMessage(userOutMessage);
         } catch (Exception e) {
@@ -49,7 +50,7 @@ public class ServiceMessaging {
     public static void sendNotificationMessageDelivered(Message message) {
         try {
             Message notification = new Message();
-            notification.setType(Message.MessageType.MESSAGE_DELIVERED);
+            notification.setType(MessageType.MESSAGE_DELIVERED);
             notification.setSenderId(CH_CURRENT_USER.getId());
             Gson gson = GsonConfiguration.createGson();
             String jsonMessage = gson.toJson(message, Message.class);

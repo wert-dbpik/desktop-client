@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
+import ru.wert.tubus.client.utils.MessageStatus;
 
 import java.io.IOException;
 
@@ -71,7 +72,7 @@ public class MessageCardsManager {
             if(in_out.equals(IN)){
                 hbStatus.getChildren().remove(imgStatus);
             } else {
-                if(message.getStatus().equals(Message.MessageStatus.DELIVERED))
+                if(message.getStatus().equals(MessageStatus.DELIVERED))
                     imgStatus.setImage(CHAT_DELIVERED_IMG);
             }
 
@@ -148,7 +149,7 @@ public class MessageCardsManager {
         return inMessage;
     }
 
-    public void updateMessageStatus(Message.MessageStatus status) {
+    public void updateMessageStatus(MessageStatus status) {
         Platform.runLater(() -> {
             if (imgStatus == null) {
                 log.warn("ImageView для статуса сообщения не инициализирован");

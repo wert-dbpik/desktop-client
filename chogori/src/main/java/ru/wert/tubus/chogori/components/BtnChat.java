@@ -20,6 +20,7 @@ import ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers.ChatMessage
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
+import ru.wert.tubus.client.utils.MessageStatus;
 
 import java.util.List;
 
@@ -125,7 +126,7 @@ public class BtnChat{
                     new Thread(() -> {
                         List<Message> undeliveredMessages = CH_MESSAGES.findUndeliveredMessagesByRoomAndSecondUser(room.getId(), secondUser.getId());
                         for (Message m : undeliveredMessages) {
-                            m.setStatus(Message.MessageStatus.DELIVERED);
+                            m.setStatus(MessageStatus.DELIVERED);
                             CH_MESSAGES.update(m);
                             ServiceMessaging.sendNotificationMessageDelivered(m);
                         }

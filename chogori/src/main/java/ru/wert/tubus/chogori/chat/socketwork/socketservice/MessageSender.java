@@ -3,6 +3,7 @@ package ru.wert.tubus.chogori.chat.socketwork.socketservice;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
 import ru.wert.tubus.client.entity.models.Message;
+import ru.wert.tubus.client.utils.MessageType;
 
 import java.io.PrintWriter;
 import java.io.OutputStreamWriter;
@@ -54,7 +55,7 @@ public class MessageSender {
                 try {
                     Thread.sleep(HEARTBEAT_INTERVAL);
                     Message heartbeat = new Message();
-                    heartbeat.setType(Message.MessageType.HEARTBEAT);
+                    heartbeat.setType(MessageType.HEARTBEAT);
                     sendMessageToServer(heartbeat);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -67,7 +68,7 @@ public class MessageSender {
         if (out != null) {
             String jsonMessage = GsonConfiguration.createGson().toJson(message);
             out.println(jsonMessage);
-            if(!message.getType().equals(Message.MessageType.HEARTBEAT))
+            if(!message.getType().equals(MessageType.HEARTBEAT))
                 log.info("Сообщение отправлено на сервер: {}", jsonMessage);
         } else {
             log.warn("Сокет не подключен, сообщение не отправлено: {}", message.toUsefulString());

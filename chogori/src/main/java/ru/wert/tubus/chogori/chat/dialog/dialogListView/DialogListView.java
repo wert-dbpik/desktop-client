@@ -26,6 +26,8 @@ import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Pic;
 import ru.wert.tubus.client.entity.models.Room;
+import ru.wert.tubus.client.utils.MessageStatus;
+import ru.wert.tubus.client.utils.MessageType;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -90,7 +92,7 @@ public class DialogListView extends ListView<Message> {
             }
         }
 
-        Message message = createChatMessage(Message.MessageType.CHAT_PASSPORTS, text.toString().trim());
+        Message message = createChatMessage(MessageType.CHAT_PASSPORTS, text.toString().trim());
         taMessageText.setText("");
         sendMessageToRecipient(message);
         log.debug("Создано сообщение с паспортами: {}", text.toString().trim());
@@ -114,7 +116,7 @@ public class DialogListView extends ListView<Message> {
             }
         }
 
-        Message message = createChatMessage(Message.MessageType.CHAT_DRAFTS, text.toString().trim());
+        Message message = createChatMessage(MessageType.CHAT_DRAFTS, text.toString().trim());
         taMessageText.setText("");
         sendMessageToRecipient(message);
         log.debug("Создано сообщение с чертежами: {}", text.toString().trim());
@@ -138,7 +140,7 @@ public class DialogListView extends ListView<Message> {
             }
         }
 
-        Message message = createChatMessage(Message.MessageType.CHAT_FOLDERS, text.toString().trim());
+        Message message = createChatMessage(MessageType.CHAT_FOLDERS, text.toString().trim());
         taMessageText.setText("");
         sendMessageToRecipient(message);
         log.debug("Создано сообщение с комплектами чертежей: {}", text.toString().trim());
@@ -172,7 +174,7 @@ public class DialogListView extends ListView<Message> {
             text.append(" ");
         }
 
-        Message message = createChatMessage(Message.MessageType.CHAT_PICS, text.toString().trim());
+        Message message = createChatMessage(MessageType.CHAT_PICS, text.toString().trim());
         taMessageText.setText("");
         sendMessageToRecipient(message);
         log.debug("Создано сообщение с изображениями: {}", text.toString().trim());
@@ -188,11 +190,11 @@ public class DialogListView extends ListView<Message> {
         // Создаем сообщение
         Message message = new Message();
         message.setTempId(generateTempId());
-        message.setType(Message.MessageType.CHAT_TEXT);
+        message.setType(MessageType.CHAT_TEXT);
         message.setRoomId(room.getId());
         message.setSenderId(CH_CURRENT_USER.getId());
         message.setCreationTime(LocalDateTime.now());
-        message.setStatus(Message.MessageStatus.SENT);
+        message.setStatus(MessageStatus.SENT);
         message.setText(text);
 
         // Отправляем сообщение через SocketService
@@ -211,14 +213,14 @@ public class DialogListView extends ListView<Message> {
      * @param text Текст сообщения.
      * @return Созданное сообщение.
      */
-    private Message createChatMessage(Message.MessageType type, String text) {
+    private Message createChatMessage(MessageType type, String text) {
         Message message = new Message();
         message.setTempId(generateTempId());
         message.setType(type);
         message.setRoomId(room.getId());
         message.setSenderId(CH_CURRENT_USER.getId());
         message.setCreationTime(LocalDateTime.now());
-        message.setStatus(Message.MessageStatus.SENT);
+        message.setStatus(MessageStatus.SENT);
         message.setText(text);
         return message;
     }
@@ -255,7 +257,7 @@ public class DialogListView extends ListView<Message> {
             if (CHAT_OPEN) ServiceMessaging.sendNotificationMessageDelivered(message);
 
             // Обновляем статус сообщения
-            message.setStatus(Message.MessageStatus.DELIVERED);
+            message.setStatus(MessageStatus.DELIVERED);
 
             Platform.runLater(() -> {
                 // Проверяем по tempId (для новых) или id (для сохраненных)

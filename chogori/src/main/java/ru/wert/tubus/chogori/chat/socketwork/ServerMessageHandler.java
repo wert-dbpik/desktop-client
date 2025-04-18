@@ -18,6 +18,8 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
+import ru.wert.tubus.client.utils.MessageStatus;
+import ru.wert.tubus.client.utils.MessageType;
 import ru.wert.tubus.winform.statics.WinformStatic;
 
 import java.util.Optional;
@@ -50,7 +52,7 @@ public class ServerMessageHandler {
 
         log.info("От сервера получено сообщение: {}", message.toUsefulString());
 
-        if(message.getType().equals(Message.MessageType.CHAT_UPDATE_TEMP_ID)){
+        if(message.getType().equals(MessageType.CHAT_UPDATE_TEMP_ID)){
             handleTempIdUpdate(message);
             return;
         }
@@ -63,10 +65,10 @@ public class ServerMessageHandler {
                 SP_NOTIFICATION != null && CH_SHOW_NOTIFICATION_LINE) {
 
             Platform.runLater(() -> {
-                Message.MessageType type = message.getType();
+                MessageType type = message.getType();
                 boolean isAdmin = CH_CURRENT_USER.getUserGroup().isAdministrate();
-                boolean isUserInOut = type.equals(Message.MessageType.USER_IN) ||
-                        type.equals(Message.MessageType.USER_OUT);
+                boolean isUserInOut = type.equals(MessageType.USER_IN) ||
+                        type.equals(MessageType.USER_OUT);
 
                 // Сообщения о входе/выходе показываем только админам
                 if (!isUserInOut || isAdmin) {
@@ -84,16 +86,16 @@ public class ServerMessageHandler {
      * @param message Входящее сообщение
      */
     private static void processChatMessage(Message message) {
-        Message.MessageType type = message.getType();
+        MessageType type = message.getType();
         log.debug("Обработка сообщения типа: {}", type);
 
         // Обрабатываем сообщения типа PUSH и CHAT_
-        if (type == Message.MessageType.PUSH || type.name().startsWith("CHAT_")) {
+        if (type == MessageType.PUSH || type.name().startsWith("CHAT_")) {
             try {
                 Message messageToProcess;
 
                 // Для PUSH-сообщений парсим вложенное сообщение из текста
-                if (type == Message.MessageType.PUSH) {
+                if (type == MessageType.PUSH) {
                     Gson gson = GsonConfiguration.createGson();
                     messageToProcess = gson.fromJson(message.getText(), Message.class);
                 } else {
@@ -252,7 +254,7 @@ public class ServerMessageHandler {
                                 .filter(m -> m.getId() != null && m.getId().equals(deliveredMessage.getId()))
                                 .findFirst()
                                 .ifPresent(msg -> {
-                                    msg.setStatus(Message.MessageStatus.DELIVERED);
+                                    msg.setStatus(MessageStatus.DELIVERED);
                                     // ListView автоматически обновит ячейку через property binding
                                 });
                         break;
@@ -271,7 +273,7 @@ public class ServerMessageHandler {
      * @return Строка для отображения в уведомлении (может быть пустой или null).
      */
     private static String processMessage(Message message) {
-        Message.MessageType type = message.getType();
+        MessageType type = message.getType();
         StringBuilder str = new StringBuilder();
 
         switch (type) {

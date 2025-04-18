@@ -12,6 +12,7 @@ import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
+import ru.wert.tubus.client.utils.MessageType;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -147,7 +148,7 @@ public class DialogListCell extends ListCell<Message> {
     }
 
     private Parent getCellNodeForMessage(Message message) {
-        if (message.getType() == Message.MessageType.CHAT_SEPARATOR) {
+        if (message.getType() == MessageType.CHAT_SEPARATOR) {
             synchronized (this) {
                 if (separatorCache == null) {
                     separatorCache = MessageCardsRenderer.mountSeparator(message);
@@ -187,7 +188,7 @@ public class DialogListCell extends ListCell<Message> {
     }
 
     private void handleUpdateMessageAction() {
-        if (currentMessage == null || currentMessage.getType() != Message.MessageType.CHAT_TEXT) return;
+        if (currentMessage == null || currentMessage.getType() != MessageType.CHAT_TEXT) return;
         log.debug("Редактирование сообщения: {}", currentMessage.getId());
 
         Platform.runLater(() -> {

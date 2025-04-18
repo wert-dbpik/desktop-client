@@ -2,6 +2,7 @@ package ru.wert.tubus.chogori.chat.dialog.dialogController;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.entity.models.Message;
+import ru.wert.tubus.client.utils.MessageType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -80,7 +81,7 @@ public class DateSeparators {
      */
     private Message getSeparatorMessage(LocalDateTime dateTime) {
         Message separator = new Message();
-        separator.setType(Message.MessageType.CHAT_SEPARATOR);
+        separator.setType(MessageType.CHAT_SEPARATOR);
         separator.setCreationTime(dateTime);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formattedDate = dateTime.format(formatter);

@@ -9,6 +9,7 @@ import ru.wert.tubus.client.entity.service_interfaces.IMessageService;
 import ru.wert.tubus.client.interfaces.ItemService;
 import ru.wert.tubus.client.retrofit.RetrofitClient;
 import ru.wert.tubus.client.utils.BLlinks;
+import ru.wert.tubus.client.utils.MessageStatus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class MessageService implements IMessageService, ItemService<Message> {
     public void markMessagesAsDelivered(Room room, Long secondUserId) {
         List<Message> undeliveredMessages = findUndeliveredMessagesByRoomAndSecondUser(room.getId(), secondUserId);
         undeliveredMessages.forEach(message -> {
-            message.setStatus(Message.MessageStatus.DELIVERED);
+            message.setStatus(MessageStatus.DELIVERED);
             update(message);
         });
     }

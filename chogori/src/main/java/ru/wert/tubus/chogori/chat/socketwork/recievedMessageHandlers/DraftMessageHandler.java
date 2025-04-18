@@ -11,6 +11,7 @@ import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.client.entity.serviceQUICK.DraftQuickService;
 import ru.wert.tubus.client.entity.serviceQUICK.PassportQuickService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
+import ru.wert.tubus.client.utils.MessageType;
 
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.tubus.client.entity.serviceQUICK.DraftQuickService.LOADED_DRAFTS;
@@ -21,7 +22,7 @@ import static ru.wert.tubus.client.entity.serviceQUICK.PassportQuickService.LOAD
  */
 @Slf4j
 public class DraftMessageHandler {
-    public static void handle(Message message, Message.MessageType type, StringBuilder str) {
+    public static void handle(Message message, MessageType type, StringBuilder str) {
         Gson gson = GsonConfiguration.createGson();
         Draft draft = gson.fromJson(message.getText(), Draft.class);
 

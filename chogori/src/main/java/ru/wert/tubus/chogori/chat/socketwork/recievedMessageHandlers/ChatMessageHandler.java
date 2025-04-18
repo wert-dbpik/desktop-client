@@ -9,6 +9,7 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.Roommate;
 import ru.wert.tubus.client.entity.serviceREST.RoomService;
+import ru.wert.tubus.client.utils.MessageStatus;
 
 import java.util.stream.Collectors;
 
@@ -72,7 +73,7 @@ public class ChatMessageHandler {
 
             // Обновляем статус сообщения
             if(isRoomOpen(room.getId()) && !isChatRoomPaneOnTop() && CHAT_OPEN && !isAppMinimized()){
-                message.setStatus(Message.MessageStatus.DELIVERED);
+                message.setStatus(MessageStatus.DELIVERED);
                 CH_MESSAGES.update(message);
                 // Отправляем уведомление о доставке через сервис сообщений
                 ServiceMessaging.sendNotificationMessageDelivered(message);

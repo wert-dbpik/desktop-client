@@ -17,6 +17,8 @@ import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.client.entity.models.*;
 import ru.wert.tubus.client.entity.serviceREST.UserService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
+import ru.wert.tubus.client.utils.MessageStatus;
+import ru.wert.tubus.client.utils.MessageType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -91,7 +93,7 @@ public class MessageContextMenu {
     public void updateMenuItemsVisibility() {
         if (currentMessage == null) return;
 
-        boolean isTextMessage = currentMessage.getType() == Message.MessageType.CHAT_TEXT;
+        boolean isTextMessage = currentMessage.getType() == MessageType.CHAT_TEXT;
         boolean isOwnMessage = isOutgoingMessage(currentMessage);
 
         editItem.setVisible(isTextMessage && isOwnMessage);
@@ -154,7 +156,7 @@ public class MessageContextMenu {
                                 Message forwardMessage = new Message();
                                 Room room = ChatStaticMaster.fetchOneToOneRoom(recipient);
                                 forwardMessage.setRoomId(room.getId());
-                                forwardMessage.setStatus(Message.MessageStatus.RECEIVED);
+                                forwardMessage.setStatus(MessageStatus.RECEIVED);
                                 forwardMessage.setType(currentMessage.getType());
                                 forwardMessage.setSenderId(CH_CURRENT_USER.getId());
                                 forwardMessage.setText(currentMessage.getText());
@@ -224,7 +226,7 @@ public class MessageContextMenu {
             deleteMessage.setSenderId(CH_CURRENT_USER.getId());
             deleteMessage.setCreationTime(LocalDateTime.now());
             deleteMessage.setText(gson.toJson(currentMessage));
-            deleteMessage.setType(Message.MessageType.DELETE_MESSAGE);
+            deleteMessage.setType(MessageType.DELETE_MESSAGE);
 
             // Отправляем команду на сервер
             SocketService.sendMessage(deleteMessage);
@@ -267,7 +269,7 @@ public class MessageContextMenu {
             updateCommand.setSenderId(CH_CURRENT_USER.getId());
             updateCommand.setCreationTime(LocalDateTime.now());
             updateCommand.setText(gson.toJson(updatedMessage));
-            updateCommand.setType(Message.MessageType.UPDATE_MESSAGE);
+            updateCommand.setType(MessageType.UPDATE_MESSAGE);
 
             // Отправляем команду на сервер
             SocketService.sendMessage(updateCommand);

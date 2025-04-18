@@ -27,6 +27,7 @@ import ru.wert.tubus.chogori.chat.util.UserOnline;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
+import ru.wert.tubus.client.utils.MessageStatus;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -268,7 +269,7 @@ public class DialogController {
                         ServiceMessaging.sendNotificationMessageDelivered(message);
 
                         // Помечаем сообщение как доставленное локально
-                        message.setStatus(Message.MessageStatus.DELIVERED);
+                        message.setStatus(MessageStatus.DELIVERED);
                         ChogoriServices.CH_MESSAGES.update(message);
 
                         log.debug("Отправлено уведомление о доставке для сообщения {}", message.getId());

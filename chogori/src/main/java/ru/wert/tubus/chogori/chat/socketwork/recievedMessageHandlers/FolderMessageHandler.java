@@ -9,6 +9,7 @@ import ru.wert.tubus.client.entity.models.Folder;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
+import ru.wert.tubus.client.utils.MessageType;
 
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 import static ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService.LOADED_FOLDERS;
@@ -18,7 +19,7 @@ import static ru.wert.tubus.client.entity.serviceQUICK.FolderQuickService.LOADED
  */
 @Slf4j
 public class FolderMessageHandler {
-    public static void handle(Message message, Message.MessageType type, StringBuilder str) {
+    public static void handle(Message message, MessageType type, StringBuilder str) {
         Gson gson = GsonConfiguration.createGson();
         Folder folder = gson.fromJson(message.getText(), Folder.class);
 

@@ -9,6 +9,7 @@ import ru.wert.tubus.client.entity.models.Product;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.serviceQUICK.ProductQuickService;
 import ru.wert.tubus.client.retrofit.GsonConfiguration;
+import ru.wert.tubus.client.utils.MessageType;
 
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
@@ -31,7 +32,7 @@ public class ProductMessageHandler {
 
      @param str StringBuilder для формирования ответного сообщения
      */
-    public static void handle(Message message, Message.MessageType type, StringBuilder str) {
+    public static void handle(Message message, MessageType type, StringBuilder str) {
         Gson gson = GsonConfiguration.createGson();
         Product product = gson.fromJson(message.getText(), Product.class);
 
