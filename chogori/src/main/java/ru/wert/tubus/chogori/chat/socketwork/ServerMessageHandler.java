@@ -9,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
+import ru.wert.tubus.chogori.chat.dialog.dialogListCell.MessageCardsManager;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.roomsController.RoomsController;
 import ru.wert.tubus.chogori.chat.socketwork.recievedMessageHandlers.*;
@@ -240,31 +241,26 @@ public class ServerMessageHandler {
     private static void updateDeliveredMessageInChatRoom(Message message) {
         try {
             Gson gson = GsonConfiguration.createGson();
-            // Парсим данные о доставленном сообщении из текста
             Message deliveredMessage = gson.fromJson(message.getText(), Message.class);
             log.debug("Обновление статуса сообщения {} на DELIVERED", deliveredMessage.getId());
 
             Platform.runLater(() -> {
-                // Ищем все открытые диалоги для комнаты этого сообщения
                 for (DialogListView dialog : DialogController.openRooms.keySet()) {
                     if (dialog.getRoom().getId().equals(deliveredMessage.getRoomId())) {
-                        // Ищем сообщение в списке по ID
-                        for (Message msg : dialog.getItems()) {
-                            if (msg.getId() != null && msg.getId().equals(deliveredMessage.getId())) {
-                                // Обновляем статус сообщения
-                                msg.setStatus(Message.MessageStatus.DELIVERED);
-                                // Обновляем отображение ячейки
-                                dialog.refresh();
-                                log.debug("Статус сообщения {} обновлен в диалоге комнаты {}",
-                                        deliveredMessage.getId(), deliveredMessage.getRoomId());
-                                break;
-                            }
-                        }
+                        // Находим и обновляем сообщение в списке
+                        dialog.getItems().stream()
+                                .filter(m -> m.getId() != null && m.getId().equals(deliveredMessage.getId()))
+                                .findFirst()
+                                .ifPresent(msg -> {
+                                    msg.setStatus(Message.MessageStatus.DELIVERED);
+                                    // ListView автоматически обновит ячейку через property binding
+                                });
+                        break;
                     }
                 }
             });
         } catch (Exception e) {
-            log.error("Ошибка при обновлении статуса сообщения: {}", e.getMessage());
+            log.error("Ошибка при обновлении статуса сообщения: {}", e.getMessage(), e);
         }
     }
 

@@ -72,12 +72,28 @@ public class DialogListCell extends ListCell<Message> {
 
         // Проверяем, действительно ли сообщение изменилось
         if (message.equals(currentMessage)) {
+            // Если это то же сообщение, но изменился статус - обновляем
+            if (currentMessage != null && !currentMessage.getStatus().equals(message.getStatus())) {
+                updateStatus(message);
+            }
             return;
         }
 
         currentMessage = message;
         contextMenu.setCurrentMessage(message);
         renderMessageInBackground(message);
+    }
+
+    private void updateStatus(Message message) {
+        Platform.runLater(() -> {
+            if (container.getChildren().isEmpty()) return;
+
+            Parent renderedNode = (Parent) container.getChildren().get(0);
+            if (renderedNode.getUserData() instanceof MessageCardsManager) {
+                MessageCardsManager manager = (MessageCardsManager) renderedNode.getUserData();
+                manager.updateMessageStatus(message.getStatus());
+            }
+        });
     }
 
     private void clearCell() {

@@ -1,6 +1,8 @@
 package ru.wert.tubus.client.entity.models;
 
 import com.google.gson.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.interfaces.Item;
@@ -73,6 +75,26 @@ public class Message extends _BaseEntity implements Item {
     private String text; // Текст сообщения, либо строку id-шников
     private LocalDateTime creationTime; // Время отправки сообщения
     private MessageStatus status; // Статус сообщения
+
+    private transient ObjectProperty<MessageStatus> statusProperty;
+
+    public ObjectProperty<MessageStatus> statusProperty() {
+        if (statusProperty == null) {
+            statusProperty = new SimpleObjectProperty<>(this, "status", status);
+        }
+        return statusProperty;
+    }
+
+    public MessageStatus getStatus() {
+        return statusProperty == null ? status : statusProperty.get();
+    }
+
+    public void setStatus(MessageStatus status) {
+        this.status = status;
+        if (statusProperty != null) {
+            statusProperty.set(status);
+        }
+    }
 
     /**
      * Создает глубокую копию сообщения на основе оригинала

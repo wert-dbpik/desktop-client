@@ -24,6 +24,7 @@ import static ru.wert.tubus.chogori.images.BtnImages.CHAT_DELIVERED_IMG;
 public class MessageCardsManager {
 
     private final Boolean ONE_TO_ONE_CHAT; // Индивидуальный чат, не групповой
+    private Message currentMessage;
 
     private VBox vbMessageContainer; // Самый верхний контейнер для сообщения
     private VBox vbOutlineMessage;   // Контейнер, включающий заголовок, сообщение и время создания
@@ -136,15 +137,36 @@ public class MessageCardsManager {
             log.error("Ошибка при загрузке FXML для сообщения: {}", e.getMessage(), e);
             return null;
         }
+
+        this.currentMessage = message;
+        message.statusProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateMessageStatus(newVal);
+            }
+        });
+
         return inMessage;
     }
 
     public void updateMessageStatus(Message.MessageStatus status) {
         Platform.runLater(() -> {
-            if (status.equals(Message.MessageStatus.DELIVERED)) {
-                imgStatus.setImage(CHAT_DELIVERED_IMG);
+            if (imgStatus == null) {
+                log.warn("ImageView для статуса сообщения не инициализирован");
+                return;
             }
-            // Другие статусы при необходимости
+
+            switch (status) {
+                case DELIVERED:
+                    imgStatus.setImage(CHAT_DELIVERED_IMG);
+                    imgStatus.setVisible(true);
+                    break;
+                default:
+                    imgStatus.setVisible(false);
+            }
+
+            if (hbStatus != null) {
+                hbStatus.requestLayout();
+            }
         });
     }
 
