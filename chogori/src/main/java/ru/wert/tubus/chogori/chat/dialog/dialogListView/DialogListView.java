@@ -59,11 +59,12 @@ public class DialogListView extends ListView<Message> {
         this.taMessageText = taMessageText;
         setId("dialogListView");
 
-        // Создаем SortedList на основе roomMessages с сортировкой по времени
         this.sortedMessages = new SortedList<>(roomMessages,
-                Comparator.comparing(Message::getCreationTime));
+                Comparator.comparing(Message::getCreationTime).thenComparing(Message::getTempId));
 
-        // Передаем sortedMessages в ListView
+        // Обновляем сортировку при изменении данных
+        sortedMessages.setComparator(Comparator.comparing(Message::getCreationTime)
+                .thenComparing(m -> m.getTempId() != null ? m.getTempId() : ""));
         setItems(sortedMessages);
         log.info("Создан новый диалог для комнаты: {}", room.getName());
     }
