@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ListView;
@@ -28,6 +29,7 @@ import ru.wert.tubus.client.utils.MessageType;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.components.BtnChat.CHAT_OPEN;
@@ -45,6 +47,7 @@ public class DialogListView extends ListView<Message> {
     private final TextArea taMessageText; // Текстовое поле для ввода сообщений
     @Getter
     private final ObservableList<Message> roomMessages = FXCollections.observableArrayList(); // Список сообщений
+    private final SortedList<Message> sortedMessages; // Сортированная версия для ListView
 
     /**
      * Конструктор класса.
@@ -55,7 +58,13 @@ public class DialogListView extends ListView<Message> {
         this.room = room;
         this.taMessageText = taMessageText;
         setId("dialogListView");
-        setItems(roomMessages);
+
+        // Создаем SortedList на основе roomMessages с сортировкой по времени
+        this.sortedMessages = new SortedList<>(roomMessages,
+                Comparator.comparing(Message::getCreationTime));
+
+        // Передаем sortedMessages в ListView
+        setItems(sortedMessages);
         log.info("Создан новый диалог для комнаты: {}", room.getName());
     }
 
@@ -94,10 +103,7 @@ public class DialogListView extends ListView<Message> {
         if (text == null || text.isEmpty()) return;
 
         Message message = createMessage(MessageType.CHAT_TEXT, text);
-        SocketService.sendMessage(message);
-        roomMessages.add(message);
-        smartScrollToLastMessage();
-        taMessageText.setText("");
+        sendMessage(message);
     }
 
     /**
@@ -201,6 +207,7 @@ public class DialogListView extends ListView<Message> {
         SocketService.sendMessage(message);
         taMessageText.setText("");
         addMessageSmoothly(message);
+        smartScrollToLastMessage();
     }
 
     private String parsePassportData(String str) {
