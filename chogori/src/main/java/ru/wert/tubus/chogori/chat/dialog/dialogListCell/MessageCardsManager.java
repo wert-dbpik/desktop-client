@@ -142,26 +142,26 @@ public class MessageCardsManager {
     }
 
     private void bindProperties(Message message, String direction) {
-        // Биндинг времени
-        timeLabel.textProperty().bind(
-                Bindings.createStringBinding(() ->
-                                formatTime(message.getCreationTime()),
-                        message.creationTimeProperty()
-                )
-        );
-
-        // Биндинг статуса (только для исходящих сообщений)
-        if (direction.equals(OUT)) {
-            statusIcon.visibleProperty().bind(
-                    message.statusProperty().isEqualTo(MessageStatus.DELIVERED)
-            );
-            statusIcon.imageProperty().set(CHAT_DELIVERED_IMG);
-        } else {
-            statusContainer.getChildren().remove(statusIcon);
-        }
-
-        // Биндинг отправителя и даты
         Platform.runLater(() -> {
+            // Биндинг времени
+            timeLabel.textProperty().bind(
+                    Bindings.createStringBinding(() ->
+                                    formatTime(message.getCreationTime()),
+                            message.creationTimeProperty()
+                    )
+            );
+
+            // Биндинг статуса (только для исходящих сообщений)
+            if (direction.equals(OUT)) {
+                statusIcon.visibleProperty().bind(
+                        message.statusProperty().isEqualTo(MessageStatus.DELIVERED)
+                );
+                statusIcon.imageProperty().set(CHAT_DELIVERED_IMG);
+            } else {
+                statusContainer.getChildren().remove(statusIcon);
+            }
+
+            // Биндинг отправителя и даты
             fromLabel.setText(CH_USERS.findById(message.getSenderId()).getName());
             dateLabel.setText(formatDate(message.getCreationTime()));
         });
@@ -197,6 +197,9 @@ public class MessageCardsManager {
     void updateMessageStatus(MessageStatus status) {
         Platform.runLater(() -> {
             if (statusIcon == null) return;
+
+            // Удаляем существующий binding
+            statusIcon.visibleProperty().unbind();
 
             switch (status) {
                 case DELIVERED:
