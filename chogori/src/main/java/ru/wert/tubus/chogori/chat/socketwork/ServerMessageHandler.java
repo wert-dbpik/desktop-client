@@ -63,8 +63,11 @@ public class ServerMessageHandler {
                 }
 
                 // Обработка уведомлений и сообщений
-                String notificationText = delegateToMessageHandlers(message);
-                showNotificationIfNeeded(message, notificationText);
+
+                Platform.runLater(()->{
+                    String notificationText = delegateToMessageHandlers(message);
+                    showNotificationIfNeeded(message, notificationText);
+                });
 
                 // Специальная обработка сообщений чата
                 if (isChatRelatedMessage(message.getType())) {
