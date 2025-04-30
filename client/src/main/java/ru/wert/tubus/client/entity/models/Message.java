@@ -8,6 +8,7 @@ import ru.wert.tubus.client.utils.MessageStatus;
 import ru.wert.tubus.client.utils.MessageType;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Slf4j
 @Getter
@@ -81,5 +82,19 @@ public class Message extends _BaseEntity implements Item {
     public String toUsefulString() {
         return String.format("id: %d, tempId: %s, from: %d, type: %s, message: %s",
                 getId(), getTempId(), getSenderId(), getType().name(), getText());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return Objects.equals(getTempId(), message.getTempId()) ||
+                (getId() != null && getId().equals(message.getId()));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTempId(), getId());
     }
 }
