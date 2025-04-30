@@ -207,8 +207,10 @@ public class DialogListView extends ListView<Message> {
     private void sendMessage(Message message) {
         SocketService.sendMessage(message);
         taMessageText.setText("");
-        addMessageSmoothly(message);
-        smartScrollToLastMessage();
+        Platform.runLater(()->{
+            addMessageSmoothly(message);
+        });
+
     }
 
     private String parsePassportData(String str) {

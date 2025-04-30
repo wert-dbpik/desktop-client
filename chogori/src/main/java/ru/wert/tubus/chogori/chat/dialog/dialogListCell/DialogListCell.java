@@ -141,12 +141,7 @@ public class DialogListCell extends ListCell<Message> {
 
     private Parent getCellNodeForMessage(Message message) {
         if (message.getType() == MessageType.CHAT_SEPARATOR) {
-            synchronized (this) {
-                if (separatorCache == null) {
-                    separatorCache = MessageCardsRenderer.mountSeparator(message);
-                }
-                return separatorCache;
-            }
+            return MessageCardsRenderer.mountSeparator(message);
         }
 
         String cacheKey = message.getTempId() != null ? message.getTempId() :
@@ -157,6 +152,9 @@ public class DialogListCell extends ListCell<Message> {
             manager.bindMessage(message, isOutgoing ? OUT : IN);
             return (Parent) manager.getView();
         }
+
+        // Удаляем старое сообщение из кэша, если оно изменилось
+        messageCache.remove(cacheKey);
 
         return messageCache.computeIfAbsent(cacheKey, k -> {
             boolean isOutgoing = isOutgoingMessage(message);
