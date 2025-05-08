@@ -17,7 +17,6 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.utils.MessageType;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,10 +31,9 @@ public class DialogListCell extends ListCell<Message> {
     private final ListView<Message> listView;
     private final DialogController dialogController;
     private final MessageContextMenu contextMenu;
-    private final ConcurrentHashMap<String, Parent> messageCache = new ConcurrentHashMap<>();
-    private Parent separatorCache;
     private Message currentMessage;
-    DialogListView dialogListView;
+    private DialogListView dialogListView;
+    private boolean isRendering = false;
 
     public DialogListCell(Room room, ListView<Message> listView, DialogController dialogController, DialogListView dialogListView) {
         this.manager = new MessageCardsManager(room);
@@ -58,77 +56,79 @@ public class DialogListCell extends ListCell<Message> {
         setContextMenu(contextMenu.getContextMenu());
     }
 
-    public void clearCache() {
-        messageCache.clear();
-        separatorCache = null;
-        log.debug("Message cache cleared");
-    }
-
     @Override
     protected void updateItem(Message message, boolean empty) {
         super.updateItem(message, empty);
 
+        // Очищаем предыдущее содержимое
+        clearContent();
+
         if (empty || message == null) {
-            clearContent();
             return;
         }
 
-        if (!message.equals(currentMessage)) {
-            updateContent(message);
-        } else if (currentMessage != null && !currentMessage.getStatus().equals(message.getStatus())) {
-            updateStatus(message);
-        }
+        // Устанавливаем текущее сообщение
+        currentMessage = message;
+        contextMenu.setCurrentMessage(message);
+
+        // Запускаем рендеринг сообщения
+        renderMessageInBackground(message);
     }
 
     private void clearContent() {
+        if (isRendering) return;
+
         if (manager != null) {
-            manager.unbindCurrentMessage(); // Используем существующий метод
+            manager.unbindCurrentMessage();
         }
         container.getChildren().clear();
         currentMessage = null;
     }
 
-    private void updateContent(Message message) {
-        currentMessage = message;
-        contextMenu.setCurrentMessage(message);
-        renderMessageInBackground(message);
-    }
-
-    private void updateStatus(Message message) {
-        Platform.runLater(() -> {
-            if (container.getChildren().isEmpty()) return;
-
-            Parent renderedNode = (Parent) container.getChildren().get(0);
-            if (renderedNode.getUserData() instanceof MessageCardsManager) {
-                MessageCardsManager manager = (MessageCardsManager) renderedNode.getUserData();
-                manager.updateMessageStatus(message.getStatus());
-            }
-        });
-    }
-
     private void renderMessageInBackground(Message message) {
+        if (isRendering) return;
+        isRendering = true;
+
         Task<Parent> renderTask = new Task<Parent>() {
             @Override
             protected Parent call() {
-                return getCellNodeForMessage(message);
+                return createMessageNode(message);
+            }
+
+            @Override
+            protected void succeeded() {
+                isRendering = false;
+                if (message.equals(currentMessage)) {
+                    Parent renderedNode = getValue();
+                    if (renderedNode != null) {
+                        Platform.runLater(() -> {
+                            container.getChildren().setAll(renderedNode);
+                            animateMessageAppearance(renderedNode);
+                        });
+                    }
+                }
+            }
+
+            @Override
+            protected void failed() {
+                isRendering = false;
+                log.error("Ошибка при рендеринге сообщения", getException());
             }
         };
 
-        renderTask.setOnSucceeded(e -> {
-            if (!message.equals(currentMessage)) return;
-
-            Parent renderedNode = renderTask.getValue();
-            if (renderedNode != null) {
-                Platform.runLater(() -> {
-                    if (!message.equals(currentMessage)) return;
-
-                    container.getChildren().setAll(renderedNode);
-                    animateMessageAppearance(renderedNode);
-                });
-            }
-        });
-
         renderExecutor.execute(renderTask);
+    }
+
+    private Parent createMessageNode(Message message) {
+        if (message.getType() == MessageType.CHAT_SEPARATOR) {
+            return MessageCardsRenderer.mountSeparator(message);
+        }
+
+        boolean isOutgoing = isOutgoingMessage(message);
+        manager.bindMessage(message, isOutgoing ? OUT : IN);
+        Parent view = (Parent) manager.getView();
+        view.setUserData(manager); // Сохраняем ссылку на менеджер для обновления статуса
+        return view;
     }
 
     private void animateMessageAppearance(Parent node) {
@@ -137,30 +137,6 @@ public class DialogListCell extends ListCell<Message> {
         fadeIn.setFromValue(0);
         fadeIn.setToValue(1);
         fadeIn.play();
-    }
-
-    private Parent getCellNodeForMessage(Message message) {
-        if (message.getType() == MessageType.CHAT_SEPARATOR) {
-            return MessageCardsRenderer.mountSeparator(message);
-        }
-
-        String cacheKey = message.getTempId() != null ? message.getTempId() :
-                message.getId() != null ? message.getId().toString() : null;
-
-        if (cacheKey == null) {
-            boolean isOutgoing = isOutgoingMessage(message);
-            manager.bindMessage(message, isOutgoing ? OUT : IN);
-            return (Parent) manager.getView();
-        }
-
-        // Удаляем старое сообщение из кэша, если оно изменилось
-        messageCache.remove(cacheKey);
-
-        return messageCache.computeIfAbsent(cacheKey, k -> {
-            boolean isOutgoing = isOutgoingMessage(message);
-            manager.bindMessage(message, isOutgoing ? OUT : IN);
-            return (Parent) manager.getView();
-        });
     }
 
     private void handleDeleteMessage() {
@@ -185,7 +161,6 @@ public class DialogListCell extends ListCell<Message> {
                 String updatedText = dialogController.getTaMessageText().getText().trim();
                 if (!updatedText.isEmpty()) {
                     contextMenu.updateMessage(currentMessage, updatedText, listView);
-                    // Используем правильный метод для отправки сообщения
                     dialogController.getBtnSend().setOnAction(event -> dialogListView.sendText());
                     dialogController.getTaMessageText().clear();
                 }
@@ -199,7 +174,7 @@ public class DialogListCell extends ListCell<Message> {
         }
 
         try {
-            long senderId = msg.getSenderId(); // Для примитивного long
+            long senderId = msg.getSenderId();
             long currentUserId = ChogoriSettings.CH_CURRENT_USER.getId();
             return senderId == currentUserId;
         } catch (NullPointerException e) {
