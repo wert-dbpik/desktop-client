@@ -28,10 +28,12 @@ import ru.wert.tubus.client.utils.MessageType;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.components.BtnChat.CHAT_OPEN;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
@@ -78,6 +80,24 @@ public class DialogListView extends ListView<Message> {
             roomMessages.add(message);
             if (shouldScrollToNewMessage()) {
                 smartScrollToLastMessage();
+            }
+            logAllMessagesOrdered();
+        });
+    }
+
+    /**
+     * Выводит в консоль все сообщения чата в порядке их отображения в ListView.
+     * Формат вывода: "[ID] Текст"
+     */
+    public void logAllMessagesOrdered() {
+        Platform.runLater(() -> {
+            // Получаем отсортированный список сообщений
+            List<Message> orderedMessages = new ArrayList<>(sortedMessages);
+
+            for (Message message : orderedMessages) {
+                log.info("Сообщение [{}] -  {}",
+                        message.getId() != null ? message.getId() : message.getTempId(),
+                        message.getText() != null ? message.getText() : "[нет текста]");
             }
         });
     }
@@ -244,6 +264,7 @@ public class DialogListView extends ListView<Message> {
         if (CHAT_OPEN) ServiceMessaging.sendNotificationMessageDelivered(message);
         message.setStatus(MessageStatus.DELIVERED);
         updateOrAddMessage(message);
+
     }
 
     private void handleIncomingMessage(Message message) {

@@ -61,14 +61,14 @@ public class DialogListCell extends ListCell<Message> {
         super.updateItem(message, empty);
 
         // Логирование начала обновления ячейки
-        log.debug("Начало обновления ячейки: message={}, text={}",
-                message != null ? message.getId() : "null",message != null ? message.getText() : "no text");
+//        log.debug("Начало обновления ячейки: message={}, text={}",
+//                message != null ? message.getId() : "null",message != null ? message.getText() : "no text");
 
         // Очищаем предыдущее содержимое
         clearContent();
 
         if (empty || message == null) {
-            log.debug("Ячейка пустая или сообщение null, пропускаем рендеринг");
+//            log.debug("Ячейка пустая или сообщение null, пропускаем рендеринг");
             return;
         }
 
@@ -147,6 +147,7 @@ public class DialogListCell extends ListCell<Message> {
     private void handleDeleteMessage() {
         if (currentMessage == null) return;
         contextMenu.deleteMessage(currentMessage, listView);
+        dialogListView.logAllMessagesOrdered();
     }
 
     private void handleForwardMessage() {
