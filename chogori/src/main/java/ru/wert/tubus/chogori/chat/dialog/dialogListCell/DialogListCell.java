@@ -60,10 +60,15 @@ public class DialogListCell extends ListCell<Message> {
     protected void updateItem(Message message, boolean empty) {
         super.updateItem(message, empty);
 
+        // Логирование начала обновления ячейки
+        log.debug("Начало обновления ячейки: message={}, text={}",
+                message != null ? message.getId() : "null",message != null ? message.getText() : "no text");
+
         // Очищаем предыдущее содержимое
         clearContent();
 
         if (empty || message == null) {
+            log.debug("Ячейка пустая или сообщение null, пропускаем рендеринг");
             return;
         }
 
@@ -71,7 +76,7 @@ public class DialogListCell extends ListCell<Message> {
         currentMessage = message;
         contextMenu.setCurrentMessage(message);
 
-        // Запускаем рендеринг сообщения
+        // Запускаем рендеринг сообщения в фоне
         renderMessageInBackground(message);
     }
 

@@ -82,19 +82,6 @@ public class DialogListView extends ListView<Message> {
         });
     }
 
-    /**
-     * Обновляет статус указанного сообщения
-     * @param messageId ID сообщения
-     * @param status Новый статус сообщения
-     */
-    public void updateMessageStatus(Long messageId, MessageStatus status) {
-        Platform.runLater(() -> {
-            roomMessages.stream()
-                    .filter(m -> m.getId() != null && m.getId().equals(messageId))
-                    .findFirst()
-                    .ifPresent(msg -> msg.setStatus(status));
-        });
-    }
 
     /**
      * Отправляет текстовое сообщение
