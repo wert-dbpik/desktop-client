@@ -19,6 +19,7 @@ import ru.wert.tubus.client.utils.MessageStatus;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.IN;
@@ -195,10 +196,12 @@ public class MessageCardsManager {
     }
 
     private String formatTime(LocalDateTime time) {
-        return time != null ? AppStatic.parseStringToTime(time.toString()) : "";
+        if (time == null) return "";
+        return time.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     private String formatDate(LocalDateTime time) {
-        return time != null ? AppStatic.parseStringToDate(time.toString()) : "";
+        if (time == null) return "";
+        return time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 }

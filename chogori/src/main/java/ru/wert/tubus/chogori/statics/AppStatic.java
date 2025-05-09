@@ -100,36 +100,6 @@ public class AppStatic {
 
     public static File LAST_DOWNLOAD_DIR = new File(System.getProperty("user.home") + "/Desktop");
 
-
-
-    /**
-     * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в фотрмат dd.MM.yyyy
-     */
-    public static  String parseStringToDate(String dateString){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        try {
-            Date date = format.parse(dateString);
-            SimpleDateFormat myFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-            return myFormat.format(date);
-        } catch (ParseException e) {
-            return dateString;
-        }
-    }
-
-    /**
-     * Метод парсит строку формата "yyyy-MM-dd'T'HH:mm:ss" в фотрмат HH:mm"
-     */
-    public static  String parseStringToTime(String dateString){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        try {
-            Date date = format.parse(dateString);
-            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            return myFormat.format(date);
-        } catch (ParseException e) {
-            return dateString;
-        }
-    }
-
     /**
      * Возвращает текущее время с миллисекундами
      */

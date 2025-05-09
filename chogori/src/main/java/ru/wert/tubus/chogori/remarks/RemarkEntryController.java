@@ -12,6 +12,8 @@ import ru.wert.tubus.client.entity.models.Remark;
 import ru.wert.tubus.chogori.statics.AppStatic;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -40,7 +42,8 @@ public class RemarkEntryController {
         lblRemarksAuthor.setText(remark.getUser().getName());
         lblRemarksAuthor.setStyle("-fx-text-fill: saddlebrown");
         //Дата
-        String date = AppStatic.parseStringToDate(remark.getCreationTime());
+        LocalDateTime fullDate = LocalDateTime.parse(remark.getCreationTime());
+        String date = fullDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         lblRemarksDate.setText(date);
         lblRemarksDate.setStyle("-fx-text-fill: saddlebrown; -fx-font-style: italic");
         //Текст
