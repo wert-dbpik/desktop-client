@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.dialog.dialogController.DialogController;
 import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
@@ -23,6 +24,7 @@ import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USER
 import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.IN;
 import static ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell.OUT;
 import static ru.wert.tubus.chogori.images.BtnImages.CHAT_DELIVERED_IMG;
+import static ru.wert.tubus.chogori.statics.AppStatic.CHAT_WIDTH;
 
 @Slf4j
 public class MessageCardsManager {
@@ -119,6 +121,7 @@ public class MessageCardsManager {
                 outlineContainer.setId("inOutlineMessageVBox");
                 messageContainer.setId("inMessageVBox");
             }
+            messageContainer.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
         });
     }
 
