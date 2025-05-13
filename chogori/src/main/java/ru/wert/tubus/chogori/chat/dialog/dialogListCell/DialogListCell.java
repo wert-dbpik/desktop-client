@@ -64,32 +64,18 @@ public class DialogListCell extends ListCell<Message> {
     protected void updateItem(Message message, boolean empty) {
         super.updateItem(message, empty);
 
-        // Логирование начала обновления ячейки
-//        log.debug("Начало обновления ячейки: message={}, text={}",
-//                message != null ? message.getId() : "null",message != null ? message.getText() : "no text");
-
-        // Очищаем предыдущее содержимое
-        clearContent();
-
         if (empty || message == null) {
-//            log.debug("Ячейка пустая или сообщение null, пропускаем рендеринг");
+            clearContent();
             return;
         }
 
-        // Устанавливаем текущее сообщение
-        currentMessage = message;
-        contextMenu.setCurrentMessage(message);
-
-        // Проверяем кэш перед рендерингом
+        // Проверяем кэш
         String cacheKey = getCacheKey(message);
         Parent cachedNode = messageCache.get(cacheKey);
 
         if (cachedNode != null) {
-            // Используем кэшированную версию
             container.getChildren().setAll(cachedNode);
-            animateMessageAppearance(cachedNode);
         } else {
-            // Запускаем рендеринг сообщения в фоне
             renderMessageInBackground(message);
         }
     }
@@ -126,28 +112,17 @@ public class DialogListCell extends ListCell<Message> {
             @Override
             protected void succeeded() {
                 isRendering = false;
-                if (message.equals(currentMessage)) {
-                    Parent renderedNode = getValue();
-                    if (renderedNode != null) {
-
-                        // Кэшируем отрендеренное сообщение
-                        messageCache.put(cacheKey, renderedNode);
-
-                        Platform.runLater(() -> {
+                Parent renderedNode = getValue();
+                if (renderedNode != null) {
+                    messageCache.put(cacheKey, renderedNode);
+                    Platform.runLater(() -> {
+                        if (message.equals(getItem())) {
                             container.getChildren().setAll(renderedNode);
-                            animateMessageAppearance(renderedNode);
-                        });
-                    }
+                        }
+                    });
                 }
             }
-
-            @Override
-            protected void failed() {
-                isRendering = false;
-                log.error("Ошибка при рендеринге сообщения", getException());
-            }
         };
-
         renderExecutor.execute(renderTask);
     }
 

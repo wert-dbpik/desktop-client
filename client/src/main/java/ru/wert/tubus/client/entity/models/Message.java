@@ -90,20 +90,23 @@ public class Message extends _BaseEntity implements Item {
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
 
-        // Сравниваем по ID, если оба имеют ID
+        // Приоритет ID над временным ID
         if (getId() != null && message.getId() != null) {
             return getId().equals(message.getId());
         }
 
-        // Иначе сравниваем по временному ID
-        return getTempId() != null && getTempId().equals(message.getTempId());
+        // Сравнение по временному ID только если оба имеют tempId
+        if (getTempId() != null && message.getTempId() != null) {
+            return getTempId().equals(message.getTempId());
+        }
+
+        return false;
     }
 
     @Override
     public int hashCode() {
-        if (getId() != null) {
-            return getId().hashCode();
-        }
-        return getTempId() != null ? getTempId().hashCode() : 0;
+        if (getId() != null) return getId().hashCode();
+        if (getTempId() != null) return getTempId().hashCode();
+        return 0;
     }
 }

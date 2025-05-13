@@ -272,18 +272,59 @@ public class DialogListView extends ListView<Message> {
     }
 
     private void updateOrAddMessage(Message message) {
-        boolean exists = roomMessages.stream()
-                .anyMatch(m -> (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
-                        (message.getId() != null && message.getId().equals(m.getId())));
+        synchronized (roomMessages) {
+            // Сохраняем текущую позицию просмотра
+            int firstVisibleIndex = getFirstVisibleIndex();
+            boolean wasNearBottom = isListNearBottom();
 
-        if (!exists) {
-            roomMessages.add(message);
-            if (isListNearBottom()) smartScrollToLastMessage();
-        } else {
-            roomMessages.replaceAll(m ->
-                    (message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
-                            (message.getId() != null && message.getId().equals(m.getId())) ? message : m);
+            // Обновляем данные
+            boolean updated = false;
+            for (int i = 0; i < roomMessages.size(); i++) {
+                Message m = roomMessages.get(i);
+                if ((message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
+                        (message.getId() != null && message.getId().equals(m.getId()))) {
+
+                    // Обновляем только статус, не создавая новый объект
+                    m.setStatus(message.getStatus());
+                    updated = true;
+                    break;
+                }
+            }
+
+            if (!updated) {
+                roomMessages.add(message);
+            }
+
+            // Восстанавливаем позицию
+            Platform.runLater(() -> {
+                if (wasNearBottom) {
+                    smartScrollToLastMessage();
+                } else {
+                    restoreScrollPosition(firstVisibleIndex);
+                }
+            });
         }
+    }
+
+    /**
+     * Возвращает индекс первого видимого элемента
+     */
+    private int getFirstVisibleIndex() {
+        ScrollBar vbar = getVerticalScrollbar();
+        if (vbar == null) return 0;
+
+        double position = vbar.getValue();
+        return (int) (position * (roomMessages.size() - 1));
+    }
+
+    /**
+     * Восстанавливает позицию прокрутки
+     */
+    private void restoreScrollPosition(int firstVisibleIndex) {
+        if (roomMessages.isEmpty()) return;
+
+        firstVisibleIndex = Math.min(Math.max(0, firstVisibleIndex), roomMessages.size() - 1);
+        scrollTo(firstVisibleIndex);
     }
 
     /**
