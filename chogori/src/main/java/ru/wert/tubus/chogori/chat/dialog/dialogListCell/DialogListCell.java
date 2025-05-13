@@ -17,6 +17,7 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.utils.MessageType;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -25,6 +26,9 @@ public class DialogListCell extends ListCell<Message> {
     public static final String OUT = "message_out";
     public static final String IN = "message_in";
     private static final ExecutorService renderExecutor = Executors.newFixedThreadPool(4);
+
+    // Кэш для хранения уже отрендеренных сообщений
+    private static final ConcurrentHashMap<String, Parent> messageCache = new ConcurrentHashMap<>();
 
     private final MessageCardsManager manager;
     private final StackPane container;
@@ -76,8 +80,25 @@ public class DialogListCell extends ListCell<Message> {
         currentMessage = message;
         contextMenu.setCurrentMessage(message);
 
-        // Запускаем рендеринг сообщения в фоне
-        renderMessageInBackground(message);
+        // Проверяем кэш перед рендерингом
+        String cacheKey = getCacheKey(message);
+        Parent cachedNode = messageCache.get(cacheKey);
+
+        if (cachedNode != null) {
+            // Используем кэшированную версию
+            container.getChildren().setAll(cachedNode);
+            animateMessageAppearance(cachedNode);
+        } else {
+            // Запускаем рендеринг сообщения в фоне
+            renderMessageInBackground(message);
+        }
+    }
+
+    private String getCacheKey(Message message) {
+        // Уникальный ключ для кэша: ID сообщения + тип + текст (или другие значимые поля)
+        return message.getId() != null ?
+                message.getId().toString() :
+                message.getTempId() + "_" + message.getType() + "_" + message.getText().hashCode();
     }
 
     private void clearContent() {
@@ -94,6 +115,8 @@ public class DialogListCell extends ListCell<Message> {
         if (isRendering) return;
         isRendering = true;
 
+        String cacheKey = getCacheKey(message);
+
         Task<Parent> renderTask = new Task<Parent>() {
             @Override
             protected Parent call() {
@@ -106,6 +129,10 @@ public class DialogListCell extends ListCell<Message> {
                 if (message.equals(currentMessage)) {
                     Parent renderedNode = getValue();
                     if (renderedNode != null) {
+
+                        // Кэшируем отрендеренное сообщение
+                        messageCache.put(cacheKey, renderedNode);
+
                         Platform.runLater(() -> {
                             container.getChildren().setAll(renderedNode);
                             animateMessageAppearance(renderedNode);
