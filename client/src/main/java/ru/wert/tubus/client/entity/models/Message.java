@@ -89,12 +89,21 @@ public class Message extends _BaseEntity implements Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return Objects.equals(getTempId(), message.getTempId()) ||
-                (getId() != null && getId().equals(message.getId()));
+
+        // Сравниваем по ID, если оба имеют ID
+        if (getId() != null && message.getId() != null) {
+            return getId().equals(message.getId());
+        }
+
+        // Иначе сравниваем по временному ID
+        return getTempId() != null && getTempId().equals(message.getTempId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTempId(), getId());
+        if (getId() != null) {
+            return getId().hashCode();
+        }
+        return getTempId() != null ? getTempId().hashCode() : 0;
     }
 }

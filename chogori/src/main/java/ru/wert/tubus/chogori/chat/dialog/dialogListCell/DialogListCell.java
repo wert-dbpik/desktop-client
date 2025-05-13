@@ -220,7 +220,12 @@ public class DialogListCell extends ListCell<Message> {
         // Отключаем стандартное выделение
     }
 
+    public static void clearCache() {
+        messageCache.clear();
+    }
+
     public static void shutdown() {
         renderExecutor.shutdown();
+        clearCache();
     }
 }
