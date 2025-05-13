@@ -156,6 +156,9 @@ public class MessageCardsManager {
             messageContainer.getChildren().clear();
             outlineContainer.getChildren().remove(titleLabel);
 
+            messageContainer.setFillWidth(false);
+            messageContainer.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
+
             switch (message.getType()) {
                 case CHAT_TEXT:
                     renderer.mountText(messageContainer, message);
