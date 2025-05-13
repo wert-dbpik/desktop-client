@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.cards.*;
@@ -44,7 +45,6 @@ public class MessageCardsRenderer {
             FXMLLoader loader = new FXMLLoader(MessageCardsRenderer.class.getResource("/chogori-fxml/chat/cards/dateSeparator.fxml"));
             dateSeparator = loader.load();
             Label lblDate = (Label) dateSeparator.lookup("#lblDate");
-//            Image imgStatus = (Image) dateSeparator.lookup("#imgStatus");
             lblDate.setStyle("-fx-text-fill: #6f6f71");
             lblDate.setText(message.getText());
         } catch (IOException e) {
@@ -60,12 +60,12 @@ public class MessageCardsRenderer {
      * @param message   Сообщение для отображения.
      */
     public void mountText(VBox vbMessage, Message message) {
+        Label textLabel = new Label(message.getText());
+        textLabel.setWrapText(true);
         vbMessage.getChildren().clear();
-        Label text = new Label(message.getText());
-        text.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-        text.setWrapText(true);
-        vbMessage.getChildren().add(text);
-//        log.debug("Текстовое сообщение отображено: {}", message.getText());
+        vbMessage.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
+        vbMessage.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        vbMessage.getChildren().add(textLabel);
     }
 
     /**
@@ -137,7 +137,6 @@ public class MessageCardsRenderer {
 
             vbMessage.getChildren().add(cardWithDraft);
             vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-//            log.debug("Чертеж отображен: {}", id);
         }
     }
 
@@ -169,7 +168,6 @@ public class MessageCardsRenderer {
 
             vbMessage.getChildren().add(cardWithFolder);
             vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-//            log.debug("Комплект чертежей отображен: {}", id);
         }
     }
 
@@ -201,7 +199,6 @@ public class MessageCardsRenderer {
 
             vbMessage.getChildren().add(cardWithPassport);
             vbMessage.setPrefWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-//            log.debug("Паспорт отображен: {}", id);
         }
     }
 }
