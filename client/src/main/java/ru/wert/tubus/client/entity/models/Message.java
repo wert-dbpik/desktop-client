@@ -90,12 +90,12 @@ public class Message extends _BaseEntity implements Item {
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
 
-        // Приоритет ID над временным ID
+        // Сравниваем по id, если они есть
         if (getId() != null && message.getId() != null) {
             return getId().equals(message.getId());
         }
 
-        // Сравнение по временному ID только если оба имеют tempId
+        // Иначе сравниваем по tempId
         if (getTempId() != null && message.getTempId() != null) {
             return getTempId().equals(message.getTempId());
         }

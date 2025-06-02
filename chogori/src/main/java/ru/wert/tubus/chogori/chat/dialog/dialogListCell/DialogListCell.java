@@ -63,13 +63,18 @@ public class DialogListCell extends ListCell<Message> {
     @Override
     protected void updateItem(Message message, boolean empty) {
         super.updateItem(message, empty);
-
+        clearContent();
         if (empty || message == null) {
-            clearContent();
+
             return;
         }
 
-        // Проверяем кэш
+        // Удаляем старый кэш, если сообщение изменилось
+        if (currentMessage != null && !currentMessage.equals(message)) {
+            messageCache.remove(getCacheKey(currentMessage));
+        }
+        currentMessage = message; // Обновляем текущее сообщение
+
         String cacheKey = getCacheKey(message);
         Parent cachedNode = messageCache.get(cacheKey);
 

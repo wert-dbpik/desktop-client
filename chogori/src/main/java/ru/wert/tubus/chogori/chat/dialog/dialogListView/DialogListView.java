@@ -273,19 +273,19 @@ public class DialogListView extends ListView<Message> {
 
     private void updateOrAddMessage(Message message) {
         synchronized (roomMessages) {
-            // Сохраняем текущую позицию просмотра
-            int firstVisibleIndex = getFirstVisibleIndex();
-            boolean wasNearBottom = isListNearBottom();
-
-            // Обновляем данные
             boolean updated = false;
             for (int i = 0; i < roomMessages.size(); i++) {
                 Message m = roomMessages.get(i);
                 if ((message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
                         (message.getId() != null && message.getId().equals(m.getId()))) {
 
-                    // Обновляем только статус, не создавая новый объект
+                    // Обновляем существующее сообщение вместо создания нового
+                    m.setId(message.getId());
+                    m.setType(message.getType());
+                    m.setText(message.getText());
                     m.setStatus(message.getStatus());
+                    m.setCreationTime(message.getCreationTime());
+
                     updated = true;
                     break;
                 }
@@ -295,12 +295,10 @@ public class DialogListView extends ListView<Message> {
                 roomMessages.add(message);
             }
 
-            // Восстанавливаем позицию
+            // Обновляем UI
             Platform.runLater(() -> {
-                if (wasNearBottom) {
+                if (isListNearBottom()) {
                     smartScrollToLastMessage();
-                } else {
-                    restoreScrollPosition(firstVisibleIndex);
                 }
             });
         }
