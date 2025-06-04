@@ -16,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
 import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.images.ImageUtil;
@@ -276,16 +277,25 @@ public class DialogListView extends ListView<Message> {
             boolean updated = false;
             for (int i = 0; i < roomMessages.size(); i++) {
                 Message m = roomMessages.get(i);
-                if ((message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
-                        (message.getId() != null && message.getId().equals(m.getId()))) {
+                if ((message.getTempId() != null && message.getTempId().equals(m.getTempId()))) {
+                    // Удаляем старое сообщение из кэша
+                    DialogListCell.clearCacheForMessage(m);
 
-                    // Обновляем существующее сообщение вместо создания нового
+                    // Обновляем существующее сообщение
                     m.setId(message.getId());
                     m.setType(message.getType());
                     m.setText(message.getText());
                     m.setStatus(message.getStatus());
                     m.setCreationTime(message.getCreationTime());
 
+                    updated = true;
+                    break;
+                } else if (message.getId() != null && message.getId().equals(m.getId())) {
+                    // Обновляем существующее сообщение
+                    m.setType(message.getType());
+                    m.setText(message.getText());
+                    m.setStatus(message.getStatus());
+                    m.setCreationTime(message.getCreationTime());
                     updated = true;
                     break;
                 }
@@ -295,7 +305,6 @@ public class DialogListView extends ListView<Message> {
                 roomMessages.add(message);
             }
 
-            // Обновляем UI
             Platform.runLater(() -> {
                 if (isListNearBottom()) {
                     smartScrollToLastMessage();

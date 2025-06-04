@@ -71,20 +71,18 @@ public class DialogListCell extends ListCell<Message> {
             return;
         }
 
-        // Если сообщение изменилось, очищаем кэш для старого сообщения
-        if (currentMessage != null && !currentMessage.equals(message)) {
-            messageCache.remove(getCacheKey(currentMessage));
-        }
+        // Всегда обновляем currentMessage
         currentMessage = message;
 
         String cacheKey = getCacheKey(message);
         Parent cachedNode = messageCache.get(cacheKey);
 
         if (cachedNode != null) {
-            // При использовании кэшированного узла убеждаемся, что он привязан к текущему сообщению
-            if (cachedNode.getUserData() instanceof MessageCardsManager) {
-                MessageCardsManager cachedManager = (MessageCardsManager) cachedNode.getUserData();
-                cachedManager.bindMessage(message, isOutgoingMessage(message) ? OUT : IN);
+            // При использовании кэшированного узла полностью переинициализируем его
+            MessageCardsManager manager = (MessageCardsManager) cachedNode.getUserData();
+            if (manager != null) {
+                manager.unbindCurrentMessage();
+                manager.bindMessage(message, isOutgoingMessage(message) ? OUT : IN);
             }
             container.getChildren().setAll(cachedNode);
         } else {
@@ -93,32 +91,58 @@ public class DialogListCell extends ListCell<Message> {
     }
 
     private String getCacheKey(Message message) {
-        // Уникальный ключ для кэша: ID сообщения + тип + текст (или другие значимые поля)
-        return message.getId() != null ?
-                message.getId().toString() :
-                message.getTempId() + "_" + message.getType() + "_" + message.getText().hashCode();
+        // Учитываем временный ID, если есть, иначе используем постоянный ID
+        String idPart = message.getTempId() != null ?
+                "temp_" + message.getTempId() :
+                "perm_" + (message.getId() != null ? message.getId().toString() : "null");
+
+        // Добавляем тип сообщения, хэш текста и статус
+        return idPart + "_" +
+                message.getType() + "_" +
+                (message.getText() != null ? message.getText().hashCode() : 0) + "_" +
+                message.getStatus();
+    }
+
+    public static void clearCacheForMessage(Message message) {
+        if (message == null) return;
+
+        // Удаляем все возможные варианты ключей для этого сообщения
+        String tempKey = "temp_" + message.getTempId() + "_" +
+                message.getType() + "_" +
+                (message.getText() != null ? message.getText().hashCode() : 0) + "_" +
+                message.getStatus();
+
+        String permKey = "perm_" + (message.getId() != null ? message.getId().toString() : "null") + "_" +
+                message.getType() + "_" +
+                (message.getText() != null ? message.getText().hashCode() : 0) + "_" +
+                message.getStatus();
+
+        messageCache.remove(tempKey);
+        messageCache.remove(permKey);
     }
 
     private void clearContent() {
-        if (isRendering) return;
-
+        // Всегда очищаем контейнер, независимо от состояния рендеринга
+        container.getChildren().clear();
         if (manager != null) {
             manager.unbindCurrentMessage();
         }
-        container.getChildren().clear();
         currentMessage = null;
     }
 
     private void renderMessageInBackground(Message message) {
-        if (isRendering) return;
-        isRendering = true;
+        // Отменяем предыдущий рендеринг для этой ячейки
+        if (isRendering ) {
+            return; // Не планируем повторную попытку, чтобы избежать накопления задач
+        }
 
-        String cacheKey = getCacheKey(message);
+        isRendering = true;
+        final Message messageToRender = message; // Фиксируем сообщение для рендеринга
 
         Task<Parent> renderTask = new Task<Parent>() {
             @Override
             protected Parent call() {
-                return createMessageNode(message);
+                return createMessageNode(messageToRender);
             }
 
             @Override
@@ -126,11 +150,13 @@ public class DialogListCell extends ListCell<Message> {
                 isRendering = false;
                 Parent renderedNode = getValue();
                 if (renderedNode != null) {
+                    String cacheKey = getCacheKey(messageToRender);
                     messageCache.put(cacheKey, renderedNode);
                     Platform.runLater(() -> {
                         // Проверяем, что ячейка все еще отображает то же сообщение
-                        if (message.equals(getItem())) {
+                        if (messageToRender.equals(getItem())) {
                             container.getChildren().setAll(renderedNode);
+                            animateMessageAppearance(renderedNode);
                         }
                     });
                 }
@@ -139,7 +165,7 @@ public class DialogListCell extends ListCell<Message> {
             @Override
             protected void failed() {
                 isRendering = false;
-                log.error("Ошибка при рендеринге сообщения", getException());
+                log.error("Ошибка при рендеринге сообщения {}", messageToRender.getId(), getException());
             }
         };
         renderExecutor.execute(renderTask);
