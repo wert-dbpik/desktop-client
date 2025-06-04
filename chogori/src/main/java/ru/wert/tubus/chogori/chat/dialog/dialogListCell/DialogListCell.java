@@ -63,22 +63,29 @@ public class DialogListCell extends ListCell<Message> {
     @Override
     protected void updateItem(Message message, boolean empty) {
         super.updateItem(message, empty);
-        clearContent();
-        if (empty || message == null) {
 
+        // Очищаем текущее содержимое
+        clearContent();
+
+        if (empty || message == null) {
             return;
         }
 
-        // Удаляем старый кэш, если сообщение изменилось
+        // Если сообщение изменилось, очищаем кэш для старого сообщения
         if (currentMessage != null && !currentMessage.equals(message)) {
             messageCache.remove(getCacheKey(currentMessage));
         }
-        currentMessage = message; // Обновляем текущее сообщение
+        currentMessage = message;
 
         String cacheKey = getCacheKey(message);
         Parent cachedNode = messageCache.get(cacheKey);
 
         if (cachedNode != null) {
+            // При использовании кэшированного узла убеждаемся, что он привязан к текущему сообщению
+            if (cachedNode.getUserData() instanceof MessageCardsManager) {
+                MessageCardsManager cachedManager = (MessageCardsManager) cachedNode.getUserData();
+                cachedManager.bindMessage(message, isOutgoingMessage(message) ? OUT : IN);
+            }
             container.getChildren().setAll(cachedNode);
         } else {
             renderMessageInBackground(message);
@@ -121,11 +128,18 @@ public class DialogListCell extends ListCell<Message> {
                 if (renderedNode != null) {
                     messageCache.put(cacheKey, renderedNode);
                     Platform.runLater(() -> {
+                        // Проверяем, что ячейка все еще отображает то же сообщение
                         if (message.equals(getItem())) {
                             container.getChildren().setAll(renderedNode);
                         }
                     });
                 }
+            }
+
+            @Override
+            protected void failed() {
+                isRendering = false;
+                log.error("Ошибка при рендеринге сообщения", getException());
             }
         };
         renderExecutor.execute(renderTask);
