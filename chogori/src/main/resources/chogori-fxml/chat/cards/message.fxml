@@ -13,7 +13,7 @@
    <children>
       <Separator fx:id="separator" maxWidth="1.7976931348623157E308">
          <VBox.margin>
-            <Insets bottom="5.0" top="5.0" />
+            <Insets bottom="1.0" top="1.0" />
          </VBox.margin>
       </Separator>
       <Label fx:id="lblFrom" alignment="CENTER_RIGHT" text="Алексей Симонов" textAlignment="RIGHT" />
@@ -26,7 +26,7 @@
                   <Insets />
                </VBox.margin>
             </VBox>
-            <HBox fx:id="hbStatus" alignment="BOTTOM_RIGHT" spacing="2.0">
+            <HBox fx:id="hbStatus" alignment="BOTTOM_RIGHT" spacing="1.0">
                <children>
                   <Label fx:id="lblTime" maxWidth="1.7976931348623157E308" text="07:36" />
                   <ImageView fx:id="imgStatus" fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" />
