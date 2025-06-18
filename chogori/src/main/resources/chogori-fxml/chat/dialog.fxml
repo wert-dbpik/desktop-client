@@ -24,6 +24,7 @@
                         <Font name="System Bold Italic" size="14.0" />
                      </font>
                   </Label>
+                  <Button fx:id="btnReloadChat" mnemonicParsing="false" />
                </children>
             </HBox>
             <Separator prefWidth="200.0" />

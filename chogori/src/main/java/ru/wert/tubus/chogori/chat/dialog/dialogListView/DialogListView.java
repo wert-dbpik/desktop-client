@@ -316,7 +316,7 @@ public class DialogListView extends ListView<Message> {
     /**
      * Возвращает индекс первого видимого элемента
      */
-    private int getFirstVisibleIndex() {
+    public int getFirstVisibleIndex() {
         ScrollBar vbar = getVerticalScrollbar();
         if (vbar == null) return 0;
 
@@ -327,7 +327,7 @@ public class DialogListView extends ListView<Message> {
     /**
      * Восстанавливает позицию прокрутки
      */
-    private void restoreScrollPosition(int firstVisibleIndex) {
+    public void restoreScrollPosition(int firstVisibleIndex) {
         if (roomMessages.isEmpty()) return;
 
         firstVisibleIndex = Math.min(Math.max(0, firstVisibleIndex), roomMessages.size() - 1);
@@ -343,7 +343,7 @@ public class DialogListView extends ListView<Message> {
         return (vbar.getMax() - vbar.getValue()) < 0.3;
     }
 
-    private ScrollBar getVerticalScrollbar() {
+    public ScrollBar getVerticalScrollbar() {
         return (ScrollBar) lookupAll(".scroll-bar").stream()
                 .filter(n -> n instanceof ScrollBar &&
                         ((ScrollBar)n).getOrientation() == Orientation.VERTICAL)

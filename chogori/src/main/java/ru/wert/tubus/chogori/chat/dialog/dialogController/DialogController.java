@@ -3,13 +3,13 @@ package ru.wert.tubus.chogori.chat.dialog.dialogController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -18,12 +18,10 @@ import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
 import ru.wert.tubus.chogori.chat.dialog.dialogListView.ListViewManipulator;
-import ru.wert.tubus.chogori.chat.roomsController.TabUsers;
 import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.chogori.chat.util.ChatStaticMaster;
 import ru.wert.tubus.chogori.chat.SideChat;
 import ru.wert.tubus.chogori.chat.socketwork.ServerMessageHandler;
-import ru.wert.tubus.chogori.chat.util.UserOnline;
 import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
@@ -33,8 +31,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_MESSAGES;
-import static ru.wert.tubus.chogori.images.BtnImages.DOT_BLUE_IMG;
-import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
+import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_IMG;
 
 /**
  * Контроллер для управления диалогами в комнатах чата.
@@ -58,6 +55,10 @@ public class DialogController {
     @FXML
     @Getter
     private Label lblRoom; // Название текущей комнаты
+
+    @FXML
+    @Getter
+    private Button btnReloadChat; // Название текущей комнаты
 
     @FXML
     @Getter
@@ -236,6 +237,7 @@ public class DialogController {
      */
     private void setupRoomUI(Room room) {
         setRoomNameWithOnlineStatus(room);
+        setBtnReloadChat();
         dialogListView.toFront();
         openRooms.put(dialogListView, false);
         openOneRoom(dialogListView);
@@ -343,6 +345,70 @@ public class DialogController {
             lblRoom.setText(roomName);
             lblRoom.setStyle("-fx-alignment: CENTER_LEFT; -fx-font-size: 14px; -fx-font-weight: bold;");
         }
+    }
+
+    /**
+     * Перезагружает диалог с сохранением позиции скролла
+     */
+    private void setBtnReloadChat() {
+        btnReloadChat.setGraphic(new ImageView(BTN_UPDATE_IMG));
+        btnReloadChat.setTooltip(new Tooltip("Обновить диалог"));
+        btnReloadChat.setOnMouseClicked(e -> {
+            if (dialogListView == null) return;
+
+            Room currentRoom = dialogListView.getRoom();
+            if (currentRoom == null) return;
+
+            // 1. Сохраняем текущую позицию скролла
+            int firstVisibleIndex = dialogListView.getFirstVisibleIndex();
+            double scrollPosition = dialogListView.getVerticalScrollbar() != null
+                    ? dialogListView.getVerticalScrollbar().getValue()
+                    : 0;
+
+            // 2. Очищаем данные
+            dialogListView.getRoomMessages().clear();
+            DialogListCell.clearCache();
+
+            // 3. Загружаем сообщения заново
+            Task<List<Message>> loadTask = new Task<List<Message>>() {
+                @Override
+                protected List<Message> call() throws Exception {
+                    List<Message> messages = CH_MESSAGES.findAllByRoom(currentRoom);
+                    messages.sort(Comparator.comparing(Message::getCreationTime));
+                    return new DateSeparators().insertDateSeparators(messages);
+                }
+            };
+
+            loadTask.setOnSucceeded(event -> {
+                List<Message> messages = loadTask.getValue();
+                ObservableList<Message> roomMessages = dialogListView.getRoomMessages();
+
+                // 4. Восстанавливаем сообщения
+                Platform.runLater(() -> {
+                    roomMessages.setAll(messages == null ? new ArrayList<>() : messages);
+
+                    // 5. Восстанавливаем позицию скролла
+                    if (scrollPosition == 1.0) {
+                        // Если были внизу - скроллим в конец
+                        dialogListView.smartScrollToLastMessage();
+                    } else {
+                        // Иначе восстанавливаем сохраненную позицию
+                        dialogListView.scrollTo(firstVisibleIndex);
+                        if (dialogListView.getVerticalScrollbar() != null) {
+                            dialogListView.getVerticalScrollbar().setValue(scrollPosition);
+                        }
+                    }
+                });
+
+                log.info("Диалог перезагружен. Позиция скролла восстановлена: {}", scrollPosition);
+            });
+
+            loadTask.setOnFailed(event -> {
+                log.error("Ошибка перезагрузки: {}", loadTask.getException().getMessage());
+            });
+
+            new Thread(loadTask).start();
+        });
     }
 
     /**
