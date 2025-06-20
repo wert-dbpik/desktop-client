@@ -272,7 +272,7 @@ public class DialogListView extends ListView<Message> {
         Platform.runLater(() -> updateOrAddMessage(message));
     }
 
-    private void updateOrAddMessage(Message message) {
+    public void updateOrAddMessage(Message message) {
         synchronized (roomMessages) {
             boolean updated = false;
             for (int i = 0; i < roomMessages.size(); i++) {
@@ -288,6 +288,15 @@ public class DialogListView extends ListView<Message> {
                     m.setStatus(message.getStatus());
                     m.setCreationTime(message.getCreationTime());
 
+                    // Обновляем ячейку напрямую
+                    int finalI2 = i;
+                    Platform.runLater(() -> {
+                        int finalI = finalI2;
+                        if (finalI < getItems().size()) {
+                            getItems().set(finalI, m);
+                        }
+                    });
+
                     updated = true;
                     break;
                 } else if (message.getId() != null && message.getId().equals(m.getId())) {
@@ -296,6 +305,16 @@ public class DialogListView extends ListView<Message> {
                     m.setText(message.getText());
                     m.setStatus(message.getStatus());
                     m.setCreationTime(message.getCreationTime());
+
+                    // Обновляем ячейку напрямую
+                    int finalI1 = i;
+                    Platform.runLater(() -> {
+                        int finalI = finalI1;
+                        if (finalI < getItems().size()) {
+                            getItems().set(finalI, m);
+                        }
+                    });
+
                     updated = true;
                     break;
                 }

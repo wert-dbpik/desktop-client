@@ -153,8 +153,8 @@ public class DialogListCell extends ListCell<Message> {
                     String cacheKey = getCacheKey(messageToRender);
                     messageCache.put(cacheKey, renderedNode);
                     Platform.runLater(() -> {
-                        // Проверяем, что ячейка все еще отображает то же сообщение
-                        if (messageToRender.equals(getItem())) {
+                        // Проверяем, что ячейка все еще отображает то же сообщение и не пуста
+                        if (!isEmpty() && messageToRender.equals(getItem())) {
                             container.getChildren().setAll(renderedNode);
                             animateMessageAppearance(renderedNode);
                         }
