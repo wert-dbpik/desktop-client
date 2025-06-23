@@ -145,21 +145,21 @@ public class AppStatic {
             //и расширение
             String ext = draft.getExtension();
 
-            String realName = draft.getId() + "." + draft.getExtension();
+            String idName = draft.getId() + "." + draft.getExtension();
 
             //Если файл отсутствует в папке temp/bddrafts, то файл туда загружается из БД
-            if(!draftInTempDir(realName)) {
+            if(!draftInTempDir(idName)) {
                 boolean res = ChogoriServices.CH_FILES.download("drafts", //Постоянная папка в каталоге для чертежей
                         String.valueOf(fileId), //название скачиваемого файла
                         "." + ext, //расширение скачиваемого файла
                         WF_TEMPDIR.toString(),  //временная папка, куда необходимо скачать файл
                         null,//префикс
-                        realName
+                        idName
                 );
                 if(res) {
-                    log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", realName + "." + ext);
+                    log.info("openDraftInPreviewer : файл '{}' загружен c сервера во временную папку", idName + "." + ext);
                 } else {
-                    log.error("openDraftInPreviewer : файл '{}' не был загружен с сервера", realName + "." + ext);
+                    log.error("openDraftInPreviewer : файл '{}' не был загружен с сервера", idName + "." + ext);
                     Platform.runLater(()->Warning1.create($ATTENTION, $DRAFT_IS_NOT_AVAILABLE, $MAYBE_IT_IS_CORRUPTED));
                     return;
                 }
@@ -168,10 +168,10 @@ public class AppStatic {
             //В итоге, загружаем файл из временной папки
             Platform.runLater(()->{
 //                if(previewerController != null)
-                previewerController.showDraft(draft, new FileFwdSlash(WF_TEMPDIR.toString() + "/" + realName));
+                previewerController.showDraft(draft, new FileFwdSlash(WF_TEMPDIR.toString() + "/" + idName));
                 log.debug("openDraftInPreviewer : " +
                                 "Из временной папки загружен файл {}",
-                        new FileFwdSlash(WF_TEMPDIR.toString() + "/" + realName).toStrong());
+                        new FileFwdSlash(WF_TEMPDIR.toString() + "/" + idName).toStrong());
             });
 
         } else { //Если чертежа нет, показываем NO IMAGE заглушку

@@ -81,15 +81,49 @@ public class Draft extends _BaseEntity implements Item, Comparable<Draft> {
         if (draftType.equals(EDraftType.IMAGE_DXF.getTypeId()) && pageNumber > 0) {
             sb.append("-").append(String.format("%02d", getPageNumber()));
         }
-        else{
+        else {
             sb.append(" ");
-            if(draftType != EDraftType.DETAIL.ordinal())
+            if (draftType != EDraftType.DETAIL.ordinal()) {
                 sb.append(EDraftType.getDraftTypeById(draftType).getShortName().toLowerCase())
                         .append(getPageNumber());
+            }
         }
-        sb.append(" ").append(getName());
+
+        // Обработка имени для удаления недопустимых символов
+        String name = getName();
+        if (name != null) {
+            name = sanitizeFileName(name);
+        }
+        sb.append(" ").append(name);
 
         return sb.toString();
+    }
+
+    /**
+     * Заменяет недопустимые символы в имени файла для Windows
+     */
+    private String sanitizeFileName(String fileName) {
+        if (fileName == null) {
+            return null;
+        }
+
+        String[][] replacements = {
+                {"\\\\", "-"},  // обратная косая черта
+                {"/", "-"},     // косая черта
+                {":", "-"},     // двоеточие
+                {"\\*", "x"},   // звездочка
+                {"\\?", "-"},   // вопросительный знак
+                {"\"", "-"},    // кавычка
+                {"<", "("},     // меньше
+                {">", ")"},     // больше
+                {"\\|", "-"}    // вертикальная черта
+        };
+
+        for (String[] replacement : replacements) {
+            fileName = fileName.replaceAll(replacement[0], replacement[1]);
+        }
+
+        return fileName;
     }
 
     public String getDecimalNumber(){
