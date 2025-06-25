@@ -304,6 +304,19 @@ public class DialogListView extends ListView<Message> {
                 // Просто обновляем ListView, так как roomMessages уже изменен
                 if (isListNearBottom()) {
                     smartScrollToLastMessage();
+                }else {
+                    // Сохраняем текущую позицию прокрутки
+                    int firstVisibleIndex = getFirstVisibleIndex();
+                    double scrollPosition = getVerticalScrollbar() != null ?
+                            getVerticalScrollbar().getValue() : 0;
+
+                    // Обновляем ListView
+                    refresh();
+
+                    // Восстанавливаем позицию
+                    if (getVerticalScrollbar() != null) {
+                        getVerticalScrollbar().setValue(scrollPosition);
+                    }
                 }
             });
         }

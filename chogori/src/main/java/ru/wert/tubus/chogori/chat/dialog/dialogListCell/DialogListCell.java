@@ -71,16 +71,16 @@ public class DialogListCell extends ListCell<Message> {
             return;
         }
 
-        // Всегда обновляем currentMessage
+        // Фиксируем текущее сообщение
         currentMessage = message;
 
         String cacheKey = getCacheKey(message);
         Parent cachedNode = messageCache.get(cacheKey);
 
         if (cachedNode != null) {
-            // При использовании кэшированного узла полностью переинициализируем его
-            MessageCardsManager manager = (MessageCardsManager) cachedNode.getUserData();
-            if (manager != null) {
+            // Проверяем, что кэшированный узел актуален
+            if (cachedNode.getUserData() instanceof MessageCardsManager) {
+                MessageCardsManager manager = (MessageCardsManager) cachedNode.getUserData();
                 manager.unbindCurrentMessage();
                 manager.bindMessage(message, isOutgoingMessage(message) ? OUT : IN);
             }
@@ -131,13 +131,12 @@ public class DialogListCell extends ListCell<Message> {
     }
 
     private void renderMessageInBackground(Message message) {
-        // Отменяем предыдущий рендеринг для этой ячейки
-        if (isRendering ) {
-            return; // Не планируем повторную попытку, чтобы избежать накопления задач
+        if (isRendering || message == null || !message.equals(currentMessage)) {
+            return;
         }
 
         isRendering = true;
-        final Message messageToRender = message; // Фиксируем сообщение для рендеринга
+        final Message messageToRender = message;
 
         Task<Parent> renderTask = new Task<Parent>() {
             @Override
@@ -149,11 +148,10 @@ public class DialogListCell extends ListCell<Message> {
             protected void succeeded() {
                 isRendering = false;
                 Parent renderedNode = getValue();
-                if (renderedNode != null) {
+                if (renderedNode != null && messageToRender.equals(currentMessage)) {
                     String cacheKey = getCacheKey(messageToRender);
                     messageCache.put(cacheKey, renderedNode);
                     Platform.runLater(() -> {
-                        // Проверяем, что ячейка все еще отображает то же сообщение и не пуста
                         if (!isEmpty() && messageToRender.equals(getItem())) {
                             container.getChildren().setAll(renderedNode);
                             animateMessageAppearance(renderedNode);
