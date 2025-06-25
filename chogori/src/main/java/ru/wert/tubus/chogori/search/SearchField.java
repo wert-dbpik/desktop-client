@@ -30,6 +30,7 @@ import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 public class SearchField extends TextField {
 
     private boolean blockTextPropertyListener; //Флаг блокировки слушателя
+    public static boolean SEARCHING_NOW;
 
     @Getter private String searchedText;
     @Getter private final List<String> searchHistory = new ArrayList<>();
@@ -127,6 +128,7 @@ public class SearchField extends TextField {
             addToHistory = true;
             search(searchedText, usePreview);
         }
+        SEARCHING_NOW = true;
 
     }
 

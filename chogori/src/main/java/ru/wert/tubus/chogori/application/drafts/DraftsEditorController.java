@@ -24,10 +24,9 @@ import ru.wert.tubus.client.interfaces.Item;
 import ru.wert.tubus.client.interfaces.SearchableTab;
 import ru.wert.tubus.client.interfaces.UpdatableTabController;
 
-import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
+import static ru.wert.tubus.chogori.search.SearchField.SEARCHING_NOW;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
 
@@ -150,6 +149,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
                     clearCash();
                     Platform.runLater(() -> {
                         updateListOfDrafts(selectedItem);
+                        SEARCHING_NOW = false;
                         draftsTable.requestFocus();
                     });
                 }
@@ -180,10 +180,10 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
 
     @Override //UpdatableTabController
     public void updateTab() {
-            productGroupsTreeView.updateView();
-            folderTableView.updateVisibleLeafOfTableView(folderTableView.getUpwardRow().getValue());
-            draftsTable.updateTableView();
-            previewerPatchController.updatePreviewer();
+        productGroupsTreeView.updateView();
+        folderTableView.updateVisibleLeafOfTableView(folderTableView.getUpwardRow().getValue());
+        if (!SEARCHING_NOW) draftsTable.updateTableView();
+        previewerPatchController.updatePreviewer();
     }
 
 }

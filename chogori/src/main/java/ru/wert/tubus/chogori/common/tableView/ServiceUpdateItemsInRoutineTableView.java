@@ -30,13 +30,14 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
      */
     public ServiceUpdateItemsInRoutineTableView(RoutineTableView<P> itemView, List<P> selectedItems, boolean savePreparedList) {
         this.itemView = itemView;
-        this.selectedItems = selectedItems;
         this.savePreparedList = savePreparedList;
+        this.selectedItems = (selectedItems != null)
+                ? new ArrayList<>(selectedItems)  // создаём новый независимый список
+                : null;
 
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(90, 90);
         Platform.runLater(()->itemView.setPlaceholder(new StackPane(progressIndicator)));
-
 
     }
 
@@ -61,12 +62,13 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
                     }
                 }
                 itemView.setCurrentItemSearchedList(items);
-
+                log.debug("Before Platform.runLater: selectedItems size = {}", selectedItems != null ? selectedItems.size() : 0);
                 List<P> finalItems = items;
                 Platform.runLater(() -> {
                     itemView.getItems().clear();
                     itemView.refresh();
                     itemView.setItems(FXCollections.observableArrayList(finalItems));
+                    log.debug("Inside Platform.runLater: selectedItems size = {}", selectedItems != null ? selectedItems.size() : 0);
                     if (selectedItems != null && !selectedItems.isEmpty()) {
                         for(P item : selectedItems) itemView.getSelectionModel().select(item);
                         itemView.scrollTo(selectedItems.get(selectedItems.size()-1));
@@ -89,6 +91,7 @@ public class ServiceUpdateItemsInRoutineTableView<P extends Item> extends Servic
                 super.succeeded();
                 log.debug("table updating has been finished");
                 progressIndicator.setVisible(false);
+
             }
 
             @Override

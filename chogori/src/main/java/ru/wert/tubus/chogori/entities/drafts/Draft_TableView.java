@@ -30,6 +30,7 @@ import ru.wert.tubus.winform.enums.EDraftType;
 
 import java.util.*;
 
+import static ru.wert.tubus.chogori.search.SearchField.SEARCHING_NOW;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.client.entity.serviceQUICK.DraftQuickService.LOADED_DRAFTS;

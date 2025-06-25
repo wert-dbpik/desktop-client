@@ -28,6 +28,7 @@ import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.images.AppImages;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.UPWARD;
@@ -226,6 +227,8 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
     @Override
     public void updateVisibleLeafOfTableView(CatalogGroup selectedProductGroup) {
 
+        List<Item> selectedFolders =  new ArrayList<>(getSelectionModel().getSelectedItems());
+
         upwardRowProperty.set(catalogTree.findTreeItemById(selectedProductGroup.getId()));
 
         List<Item> items = new ArrayList<>();
@@ -246,6 +249,14 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         getItems().clear();
         refresh();
         getItems().addAll(items);
+
+        if(!selectedFolders.isEmpty())
+
+            for(Item item : selectedFolders){
+                getSelectionModel().select(item);
+            }
+
+
 
     }
 

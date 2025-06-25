@@ -5,6 +5,8 @@ import ru.wert.tubus.client.interfaces.Item;
 import java.util.List;
 
 public interface Searchable<P extends Item> {
+
+
     /**
      * Searchable
      */
