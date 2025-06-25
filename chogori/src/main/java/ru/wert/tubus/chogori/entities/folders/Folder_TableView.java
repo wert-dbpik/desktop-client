@@ -250,14 +250,10 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         refresh();
         getItems().addAll(items);
 
-        if(!selectedFolders.isEmpty())
-
-            for(Item item : selectedFolders){
+        if (!selectedFolders.isEmpty())
+            for (Item item : selectedFolders) {
                 getSelectionModel().select(item);
             }
-
-
-
     }
 
 
