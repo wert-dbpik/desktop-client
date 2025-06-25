@@ -277,7 +277,9 @@ public class DialogListView extends ListView<Message> {
             boolean updated = false;
             for (int i = 0; i < roomMessages.size(); i++) {
                 Message m = roomMessages.get(i);
-                if ((message.getTempId() != null && message.getTempId().equals(m.getTempId()))) {
+                if ((message.getTempId() != null && message.getTempId().equals(m.getTempId())) ||
+                        (message.getId() != null && message.getId().equals(m.getId()))) {
+
                     // Удаляем старое сообщение из кэша
                     DialogListCell.clearCacheForMessage(m);
 
@@ -288,33 +290,6 @@ public class DialogListView extends ListView<Message> {
                     m.setStatus(message.getStatus());
                     m.setCreationTime(message.getCreationTime());
 
-                    // Обновляем ячейку напрямую
-                    int finalI2 = i;
-                    Platform.runLater(() -> {
-                        int finalI = finalI2;
-                        if (finalI < getItems().size()) {
-                            getItems().set(finalI, m);
-                        }
-                    });
-
-                    updated = true;
-                    break;
-                } else if (message.getId() != null && message.getId().equals(m.getId())) {
-                    // Обновляем существующее сообщение
-                    m.setType(message.getType());
-                    m.setText(message.getText());
-                    m.setStatus(message.getStatus());
-                    m.setCreationTime(message.getCreationTime());
-
-                    // Обновляем ячейку напрямую
-                    int finalI1 = i;
-                    Platform.runLater(() -> {
-                        int finalI = finalI1;
-                        if (finalI < getItems().size()) {
-                            getItems().set(finalI, m);
-                        }
-                    });
-
                     updated = true;
                     break;
                 }
@@ -324,7 +299,9 @@ public class DialogListView extends ListView<Message> {
                 roomMessages.add(message);
             }
 
+            // Обновляем отображение через основной список
             Platform.runLater(() -> {
+                // Просто обновляем ListView, так как roomMessages уже изменен
                 if (isListNearBottom()) {
                     smartScrollToLastMessage();
                 }
