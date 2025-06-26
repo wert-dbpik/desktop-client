@@ -83,6 +83,7 @@ public class DialogController {
     @Getter
     private SideChat chat; // Ссылка на основной класс чата
 
+    private static final boolean USE_BTN_RELOAD_CHAT = false;
     public static Map<DialogListView, Boolean> openRooms = new HashMap<>();
 
     /**
@@ -237,7 +238,11 @@ public class DialogController {
      */
     private void setupRoomUI(Room room) {
         setRoomNameWithOnlineStatus(room);
-        setBtnReloadChat();
+        if(USE_BTN_RELOAD_CHAT)
+            setBtnReloadChat();
+        else{
+            btnReloadChat.setVisible(false);
+        }
         dialogListView.toFront();
         openRooms.put(dialogListView, false);
         openOneRoom(dialogListView);

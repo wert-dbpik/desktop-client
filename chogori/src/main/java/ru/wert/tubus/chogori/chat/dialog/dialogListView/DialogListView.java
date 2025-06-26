@@ -34,7 +34,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_USERS;
 import static ru.wert.tubus.chogori.components.BtnChat.CHAT_OPEN;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
