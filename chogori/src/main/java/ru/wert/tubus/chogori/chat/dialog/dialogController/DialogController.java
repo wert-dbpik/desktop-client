@@ -1,5 +1,7 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogController;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -12,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
@@ -83,7 +86,7 @@ public class DialogController {
     @Getter
     private SideChat chat; // Ссылка на основной класс чата
 
-    private static final boolean USE_BTN_RELOAD_CHAT = false;
+    private static final boolean USE_BTN_RELOAD_CHAT = true;
     public static Map<DialogListView, Boolean> openRooms = new HashMap<>();
 
     /**
@@ -364,17 +367,19 @@ public class DialogController {
             Room currentRoom = dialogListView.getRoom();
             if (currentRoom == null) return;
 
-            // 1. Сохраняем текущую позицию скролла
+            // 1. Очищаем кэш сообщений
+            DialogListCell.clearCache();
+
+            // 2. Сохраняем текущую позицию скролла
             int firstVisibleIndex = dialogListView.getFirstVisibleIndex();
             double scrollPosition = dialogListView.getVerticalScrollbar() != null
                     ? dialogListView.getVerticalScrollbar().getValue()
                     : 0;
 
-            // 2. Очищаем данные
+            // 3. Очищаем данные
             dialogListView.getRoomMessages().clear();
-            DialogListCell.clearCache();
 
-            // 3. Загружаем сообщения заново
+            // 4. Загружаем сообщения заново
             Task<List<Message>> loadTask = new Task<List<Message>>() {
                 @Override
                 protected List<Message> call() throws Exception {
@@ -388,21 +393,21 @@ public class DialogController {
                 List<Message> messages = loadTask.getValue();
                 ObservableList<Message> roomMessages = dialogListView.getRoomMessages();
 
-                // 4. Восстанавливаем сообщения
+                // 5. Восстанавливаем сообщения
                 Platform.runLater(() -> {
                     roomMessages.setAll(messages == null ? new ArrayList<>() : messages);
 
-                    // 5. Восстанавливаем позицию скролла
-                    if (scrollPosition == 1.0) {
-                        // Если были внизу - скроллим в конец
-                        dialogListView.smartScrollToLastMessage();
-                    } else {
-                        // Иначе восстанавливаем сохраненную позицию
-                        dialogListView.scrollTo(firstVisibleIndex);
-                        if (dialogListView.getVerticalScrollbar() != null) {
-                            dialogListView.getVerticalScrollbar().setValue(scrollPosition);
+                    // 6. Восстанавливаем позицию скролла с небольшой задержкой
+                    new Timeline(new KeyFrame(Duration.millis(100), ev -> {
+                        if (scrollPosition == 1.0) {
+                            dialogListView.smartScrollToLastMessage();
+                        } else {
+                            dialogListView.scrollTo(firstVisibleIndex);
+                            if (dialogListView.getVerticalScrollbar() != null) {
+                                dialogListView.getVerticalScrollbar().setValue(scrollPosition);
+                            }
                         }
-                    }
+                    })).play();
                 });
 
                 log.info("Диалог перезагружен. Позиция скролла восстановлена: {}", scrollPosition);
