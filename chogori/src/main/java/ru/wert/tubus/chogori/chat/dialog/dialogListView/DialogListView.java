@@ -81,7 +81,7 @@ public class DialogListView extends ListView<Message> {
             if (shouldScrollToNewMessage()) {
                 smartScrollToLastMessage();
             }
-            logAllMessagesOrdered();
+//            logAllMessagesOrdered();
         });
     }
 

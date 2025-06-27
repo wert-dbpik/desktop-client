@@ -49,7 +49,7 @@ public class DateSeparators {
                 // Добавляем разделитель в список
                 messagesWithSeparators.add(separator);
                 lastDate = currentDate; // Обновляем последнюю дату
-                log.debug("Добавлен сепаратор с датой: {}", lastDate);
+//                log.debug("Добавлен сепаратор с датой: {}", lastDate);
             }
 
             // Добавляем текущее сообщение в список

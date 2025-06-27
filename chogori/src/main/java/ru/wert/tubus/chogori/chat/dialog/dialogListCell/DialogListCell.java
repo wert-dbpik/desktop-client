@@ -73,6 +73,7 @@ public class DialogListCell extends ListCell<Message> {
 
         // Фиксируем текущее сообщение
         currentMessage = message;
+        contextMenu.setCurrentMessage(message);
 
         String cacheKey = getCacheKey(message);
         Parent cachedNode = messageCache.get(cacheKey);
@@ -192,7 +193,7 @@ public class DialogListCell extends ListCell<Message> {
     private void handleDeleteMessage() {
         if (currentMessage == null) return;
         contextMenu.deleteMessage(currentMessage, listView);
-        dialogListView.logAllMessagesOrdered();
+//        dialogListView.logAllMessagesOrdered();
     }
 
     private void handleForwardMessage() {
