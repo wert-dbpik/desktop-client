@@ -21,6 +21,7 @@ public class ButtonsManager {
     public void createBtnSendText() {
         controller.getBtnSend().setText(null);
         controller.getBtnSend().setGraphic(new ImageView(BtnImages.SEND_MESSAGE_IMG));
+        controller.getBtnSend().setTooltip(new Tooltip("Ctrl-Enter"));
         controller.getBtnSend().setOnAction(e -> {
             controller.getDialogListView().sendText(); // Отправка текста при нажатии на кнопку
             log.debug("Отправлено текстовое сообщение");
