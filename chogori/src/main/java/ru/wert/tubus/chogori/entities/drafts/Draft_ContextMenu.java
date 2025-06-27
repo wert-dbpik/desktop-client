@@ -223,8 +223,12 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
      */
     private boolean downloadIsPossible(List<Draft> selectedDrafts){
         for(Draft d : selectedDrafts){
-            EDraftType type = EDraftType.getDraftTypeById(d.getDraftType());
-            if(DXF_DOCKS.contains(type)) return true;
+            String ext = d.getExtension();
+
+            if(ext.equals("dxf")) return true;
+
+//            EDraftType type = EDraftType.getDraftTypeById(d.getDraftType());
+//            if(DXF_DOCKS.contains(type)) return true;
         }
         return false;
     }

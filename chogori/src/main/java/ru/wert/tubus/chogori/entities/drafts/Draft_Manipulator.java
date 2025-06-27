@@ -239,12 +239,10 @@ public class Draft_Manipulator {
     public void downloadDrafts(List<Draft> selectedDrafts){
         List<Draft> draftsToBeDownloaded = new ArrayList<>();
         for(Draft d : selectedDrafts){
-            EDraftType type = EDraftType.getDraftTypeById(d.getDraftType());
-            if(DXF_DOCKS.contains(type)) draftsToBeDownloaded.add(d);
+           String ext = d.getExtension().toLowerCase();
+           if(ext.equals("dxf"))
+               draftsToBeDownloaded.add(d);
         }
-
         new TaskDownloadDXFDocks(draftsToBeDownloaded);
-
-
     }
 }
