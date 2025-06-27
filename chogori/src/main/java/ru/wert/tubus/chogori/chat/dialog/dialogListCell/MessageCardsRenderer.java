@@ -62,6 +62,10 @@ public class MessageCardsRenderer {
     public void mountText(VBox vbMessage, Message message) {
         Label textLabel = new Label(message.getText());
         textLabel.setWrapText(true);
+        // Устанавливаем максимальную ширину для Label, равную максимальной ширине VBox
+        textLabel.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
+        textLabel.setPrefWidth(Region.USE_COMPUTED_SIZE); // Предпочтительная ширина вычисляется автоматически
+
         vbMessage.getChildren().clear();
         vbMessage.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
         vbMessage.setPrefWidth(Region.USE_COMPUTED_SIZE);
