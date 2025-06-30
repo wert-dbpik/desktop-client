@@ -100,11 +100,9 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         setRowFactory( tv -> {
             TableRow<Item> row = new TableRow<>();
 
-            if(useContextMenu) {
-                row.setOnDragDetected(e -> manipulator.createOnDragDetected(e));
-                row.setOnDragOver(e -> manipulator.createOnDragOver(e,row));
-                row.setOnDragDropped(e -> manipulator.createOnDragDropped(e));
-            }
+            row.setOnDragDetected(e -> manipulator.createOnDragDetected(e));
+            row.setOnDragOver(e -> manipulator.createOnDragOver(e, row, useContextMenu));
+            row.setOnDragDropped(e -> manipulator.createOnDragDropped(e, useContextMenu));
 
             row.setOnMouseClicked(event -> {
                 Item prevRowData = null;
