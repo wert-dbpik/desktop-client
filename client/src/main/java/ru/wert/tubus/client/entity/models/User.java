@@ -1,5 +1,6 @@
 package ru.wert.tubus.client.entity.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.client.interfaces.Item;
