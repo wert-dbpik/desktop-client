@@ -1,8 +1,6 @@
 package ru.wert.tubus.chogori.components;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -21,6 +19,7 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.Room;
 import ru.wert.tubus.client.entity.models.User;
 import ru.wert.tubus.client.utils.MessageStatus;
+import javafx.animation.Interpolator;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -130,21 +129,35 @@ public class BtnChat {
      * Открытие чата с анимацией и инициализацией компонентов.
      */
     public void openChat() {
-        Platform.runLater(() -> {
-            hasNewMessages.set(false);
-            CHAT_OPEN = true;
+        hasNewMessages.set(false);
+        CHAT_OPEN = true;
 
-            // Настройка размеров панели чата
-            SP_CHAT.setPrefWidth(CHAT_WIDTH);
-            SP_CHAT.setMinWidth(CHAT_WIDTH);
-            SP_CHAT.setMaxWidth(CHAT_WIDTH);
+        // Сначала устанавливаем нулевую ширину и прозрачность
+        SP_CHAT.setPrefWidth(0);
+        SP_CHAT.setOpacity(0.0);
+        SP_CHAT.getChildren().add(sideChat.getChatVBox());
 
-            // Добавление основного компонента чата
-            SP_CHAT.getChildren().add(sideChat.getChatVBox());
+        // Параллельная анимация появления
+        ParallelTransition openAnimation = new ParallelTransition();
 
-            // Обработка активного диалога (если есть)
-            processActiveDialog();
-        });
+        Timeline widthAnimation = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(SP_CHAT.prefWidthProperty(), 0, Interpolator.EASE_BOTH)),
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(SP_CHAT.prefWidthProperty(), CHAT_WIDTH, Interpolator.EASE_BOTH))
+        );
+
+        Timeline fadeAnimation = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(SP_CHAT.opacityProperty(), 0.0, Interpolator.EASE_BOTH)),
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(SP_CHAT.opacityProperty(), 1.0, Interpolator.EASE_BOTH))
+        );
+
+        openAnimation.getChildren().addAll(widthAnimation, fadeAnimation);
+        openAnimation.play();
+
+        processActiveDialog(); // Остальная логика открытия чата
     }
 
     /**
@@ -180,25 +193,38 @@ public class BtnChat {
      * Закрытие чата с анимацией и очисткой ресурсов.
      */
     public void closeChat() {
-        Timeline closingAnimation = new Timeline();
-        KeyFrame shrinkFrame = new KeyFrame(
-                Duration.millis(200), // Увеличили длительность для плавности
-                new KeyValue(SP_CHAT.prefWidthProperty(), 0)
+        // Создаем параллельную анимацию для ширины и прозрачности
+        ParallelTransition parallelTransition = new ParallelTransition();
+
+        // Анимация уменьшения ширины с интерполяцией
+        Timeline widthAnimation = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(SP_CHAT.prefWidthProperty(), SP_CHAT.getWidth(), Interpolator.EASE_BOTH)),
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(SP_CHAT.prefWidthProperty(), 0, Interpolator.EASE_BOTH))
         );
 
-        closingAnimation.getKeyFrames().add(shrinkFrame);
-        closingAnimation.setOnFinished(e -> {
+        // Анимация исчезновения с интерполяцией
+        Timeline fadeAnimation = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(SP_CHAT.opacityProperty(), 1.0, Interpolator.EASE_BOTH)),
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(SP_CHAT.opacityProperty(), 0.0, Interpolator.EASE_BOTH))
+        );
+
+        parallelTransition.getChildren().addAll(widthAnimation, fadeAnimation);
+
+        parallelTransition.setOnFinished(e -> {
             Platform.runLater(() -> {
                 SP_CHAT.getChildren().clear();
+                SP_CHAT.setOpacity(1.0); // Восстанавливаем прозрачность
                 closeAllRooms();
                 CHAT_OPEN = false;
-                // Сбрасываем минимальную ширину после закрытия
-                SP_CHAT.setMinWidth(0);
             });
         });
-        closingAnimation.play();
-    }
 
+        parallelTransition.play();
+    }
     /**
      * Остановка всех фоновых процессов чата.
      */
