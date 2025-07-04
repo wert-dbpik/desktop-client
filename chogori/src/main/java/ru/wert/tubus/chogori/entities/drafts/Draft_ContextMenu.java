@@ -29,6 +29,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem renameDraft; //Заменить
     private MenuItem replaceDraft; //Заменить
     private MenuItem nullifyDraft; //Аннулировать
+    private MenuItem changeStatus; //Изменить статус
     private MenuItem addFolder; //Добавить папку
     private MenuItem openInTab; //Открыть в отдельной вкладке
     private MenuItem openInOuterApp; //Открыть во внешнем приложении
@@ -95,6 +96,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         boolean extraRenameDraft = false;
         boolean extraReplaceDraft = false;
         boolean extraNullifyDraft = false;
+        boolean extraChangeStatus = false;
         //=============================
         boolean extraOpenInTab = false;
         boolean extraOpenInOuterApp = false;
@@ -113,6 +115,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         renameDraft = new MenuItem("Переименовать чертеж");
         replaceDraft = new MenuItem("Заменить");
         nullifyDraft = new MenuItem("Аннулировать");
+        changeStatus = new MenuItem("Изменить статус");
         openInTab = new MenuItem("Открыть в отдельной вкладке" );
         openInOuterApp = new MenuItem("Открыть во внешней программе" );
         openFolderWithDraft = new MenuItem("Перейти в комплект с этим чертежом" );
@@ -126,6 +129,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         renameDraft.setOnAction(commands::renameDraft);
         replaceDraft.setOnAction(commands::replaceDraft);
         nullifyDraft.setOnAction(commands::nullifyDraft);
+        changeStatus.setOnAction(commands::changeStatus);
         openInTab.setOnAction(commands::openInTab);
         openInOuterApp.setOnAction(e->{
             Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
@@ -149,6 +153,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
             extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
             extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
             extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
+            extraChangeStatus = true; //ИЗМЕНИТЬ СТАТУС
 
         }
         if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
@@ -198,8 +203,9 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if (extraRenameDraft) extraItems.add(renameDraft);//ПЕРЕИМЕНОВАТЬ
         if (extraReplaceDraft) extraItems.add(replaceDraft);//ЗАМЕНИТЬ
         if (extraNullifyDraft) extraItems.add(nullifyDraft);//АННУЛИРОВАТЬ
+        if (extraChangeStatus) extraItems.add(changeStatus);//ИЗМЕНИТЬ СТАТУС
 //
-        if ((extraOpenInTab || extraOpenInOuterApp) && (extraRenameDraft || extraReplaceDraft || extraNullifyDraft)) extraItems.add(new SeparatorMenuItem());//==================
+        if ((extraOpenInTab || extraOpenInOuterApp) && (extraRenameDraft || extraReplaceDraft || extraNullifyDraft || extraChangeStatus)) extraItems.add(new SeparatorMenuItem());//==================
         if (extraOpenInTab) extraItems.add(openInTab);//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         if (extraOpenInOuterApp) extraItems.add(openInOuterApp);//ОТКРЫТЬ ВО ВНЕШНЕЙ ПРОГРАММЕ
 
