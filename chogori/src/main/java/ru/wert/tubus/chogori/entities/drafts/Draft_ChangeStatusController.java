@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.layout.StackPane;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.chogori.statics.AppStatic;
@@ -37,6 +38,7 @@ public class Draft_ChangeStatusController {
             EDraftStatus status = EDraftStatus.getStatusById(selectedDraft.getStatus());
 
             ObservableList<EDraftStatus> statuses = FXCollections.observableArrayList(EDraftStatus.values());
+            statuses.remove(EDraftStatus.UNKNOWN);
             cbStatus.setItems(statuses);
             cbStatus.getSelectionModel().select(status);
         }
@@ -110,5 +112,33 @@ public class Draft_ChangeStatusController {
         AppStatic.createSpIndicator(spIndicator);
         // Явная установка обработчика для кнопки отмены
         btnCancel.setOnAction(this::cancel);
+
+        cbStatus.setStyle("-fx-font-size: 16px;");
+
+        // Устанавливаем cellFactory для отображения statusName в выпадающем списке
+        cbStatus.setCellFactory(param -> new ListCell<EDraftStatus>() {
+            @Override
+            protected void updateItem(EDraftStatus item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getStatusName());
+                }
+            }
+        });
+
+        // Устанавливаем buttonCell для отображения выбранного значения
+        cbStatus.setButtonCell(new ListCell<EDraftStatus>() {
+            @Override
+            protected void updateItem(EDraftStatus item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getStatusName());
+                }
+            }
+        });
     }
 }

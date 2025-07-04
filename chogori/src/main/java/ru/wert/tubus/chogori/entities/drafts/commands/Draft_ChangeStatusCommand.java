@@ -36,13 +36,11 @@ public class Draft_ChangeStatusCommand implements ICommand {
             Parent parent = loader.load();
             Draft_ChangeStatusController controller = loader.getController();
 
-            String title = "";
             if(selectedDraft != null) {
                 controller.init(tableView, selectedDraft);
-                title = selectedDraft.getPassport().toUsefulString();
             }
 
-            new WindowDecoration("Статус чертежа " + title,
+            new WindowDecoration("Изменение статуса",
                     parent, false, WF_MAIN_STAGE, true);
 
         } catch (IOException e) {
