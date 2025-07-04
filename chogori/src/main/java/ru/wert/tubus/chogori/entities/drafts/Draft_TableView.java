@@ -195,9 +195,9 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
 
     @Override
     public void createContextMenu() {
-        setOnContextMenuRequested(event->{
+        Platform.runLater(() -> {
             contextMenu = new Draft_ContextMenu(this, commands, accWindowRes);
-            contextMenu.show(this.getScene().getWindow(), event.getScreenX(), event.getSceneY());
+            setContextMenu(contextMenu);
         });
     }
 
