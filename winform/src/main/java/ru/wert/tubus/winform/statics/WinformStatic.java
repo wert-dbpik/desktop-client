@@ -19,7 +19,7 @@ public class WinformStatic {
 
     public static String PROGRAM_NAME = "TUBUS"; //Наименование программы
     public static String CURRENT_PROJECT_VERSION = "7.5"; //Версия приложения обновляется вручную
-    public static String VERSION_CREATED_DATE = "03.07.2025"; //Дата выпуска версии
+    public static String VERSION_CREATED_DATE = "07.07.2025"; //Дата выпуска версии
     public static boolean TEST_VERSION = false; //тестовая версия - работает с тестовым сервером
     public static boolean USE_HEARTBEAT = true; //Использовать heartbeat, логирование которого очень мешает
 
