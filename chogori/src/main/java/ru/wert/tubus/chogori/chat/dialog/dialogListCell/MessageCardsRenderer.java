@@ -1,5 +1,6 @@
 package ru.wert.tubus.chogori.chat.dialog.dialogListCell;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -60,16 +61,30 @@ public class MessageCardsRenderer {
      * @param message   Сообщение для отображения.
      */
     public void mountText(VBox vbMessage, Message message) {
-        Label textLabel = new Label(message.getText());
+        String text = message.getText();
+
+        // Удаляем завершающие переводы строк
+        text = text.replaceAll("\\n+$", "");
+
+        Label textLabel = new Label(text);
         textLabel.setWrapText(true);
-        // Устанавливаем максимальную ширину для Label, равную максимальной ширине VBox
         textLabel.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
-        textLabel.setPrefWidth(Region.USE_COMPUTED_SIZE); // Предпочтительная ширина вычисляется автоматически
+        textLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
+
+        // Дополнительные настройки для надежного переноса
+        textLabel.setMinHeight(Region.USE_PREF_SIZE);
+        textLabel.setStyle("-fx-text-fill: black; -fx-font-size: 14px;");
 
         vbMessage.getChildren().clear();
         vbMessage.setMaxWidth(CHAT_WIDTH * DialogController.MESSAGE_WIDTH);
         vbMessage.setPrefWidth(Region.USE_COMPUTED_SIZE);
         vbMessage.getChildren().add(textLabel);
+
+        // Принудительное обновление layout
+        Platform.runLater(() -> {
+            vbMessage.requestLayout();
+            textLabel.requestLayout();
+        });
     }
 
     /**
