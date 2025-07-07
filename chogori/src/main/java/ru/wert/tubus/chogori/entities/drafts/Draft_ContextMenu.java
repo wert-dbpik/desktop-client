@@ -88,6 +88,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
     @Override
     public List<MenuItem> createExtraItems(){
+
         boolean extraAddFolder = false;
         //=============================
         boolean extraCutDrafts = false;
@@ -109,66 +110,31 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
-        addFolder = new MenuItem("Добавить папку с чертежами");
-        cutDrafts = new MenuItem("Перенести");
-        pasteDrafts = new MenuItem("Вставить");
-        renameDraft = new MenuItem("Переименовать чертеж");
-        replaceDraft = new MenuItem("Заменить");
-        nullifyDraft = new MenuItem("Аннулировать");
-        changeStatus = new MenuItem("Изменить статус");
-        openInTab = new MenuItem("Открыть в отдельной вкладке" );
-        openInOuterApp = new MenuItem("Открыть во внешней программе" );
-        openFolderWithDraft = new MenuItem("Перейти в комплект с этим чертежом" );
-        showRemarks = new MenuItem("Комментарии");
-        showInfo = new MenuItem("Инфо");
-        downloadDrafts = new MenuItem("Скачать DXF");
-
-        addFolder.setOnAction(commands::addFromFolder);
-        cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
-        pasteDrafts.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboardOutOfFXThread()));
-        renameDraft.setOnAction(commands::renameDraft);
-        replaceDraft.setOnAction(commands::replaceDraft);
-        nullifyDraft.setOnAction(commands::nullifyDraft);
-        changeStatus.setOnAction(commands::changeStatus);
-        openInTab.setOnAction(commands::openInTab);
-        openInOuterApp.setOnAction(e->{
-            Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
-            AppStatic.openDraftInPreviewer(
-                    selectedDraft,
-                    tableView.getPreviewerController(),
-                    true);
-            AppStatic.openInOuterApplication(selectedDraft);
-        });
-        openFolderWithDraft.setOnAction(commands::goToFolderWithTheDraft);
-        showRemarks.setOnAction(commands::showRemarks);
-        showInfo.setOnAction(commands::showInfo);
-        downloadDrafts.setOnAction(e->manipulator.downloadDrafts(selectedDrafts));
+        createItems(selectedDrafts);
 
         if(!selectedDrafts.isEmpty() && downloadIsPossible(selectedDrafts))
             extraDownloadDrafts = true;
 
         if(selectedDrafts.size() == 1) {
             extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
-            if(editDraftsPermission) extraCutDrafts = true; //ПЕРЕНЕСТИ
             extraShowRemarks = true;//КОММЕНТАРИИ
             extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
             extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
-            if(editDraftsPermission) extraChangeStatus = true; //ИЗМЕНИТЬ СТАТУС
-
         }
+
         if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
 
-//        if(editDraftsPermission) {
-        if(true) {
+        if(editDraftsPermission) {
+//        if(true) {
 
             if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboardOutOfFXThread()))
                 extraPasteDrafts = true; //ВСТАВИТЬ ЧЕРТЕЖИ
-
             //Если ничего не выделено
             if (selectedDrafts.size() == 0) {
                 extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
             } else if (selectedDrafts.size() == 1) {
-
+                extraChangeStatus = true; //ИЗМЕНИТЬ СТАТУС
+                extraCutDrafts = true; //ПЕРЕНЕСТИ
                 //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
                 if (selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId()) && editDraftsPermission) {
                     extraRenameDraft = true; //ПЕРЕИМЕНОВАТЬ
@@ -220,6 +186,43 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
 
         return extraItems;
+    }
+
+    private void createItems(List<Draft> selectedDrafts) {
+        addFolder = new MenuItem("Добавить папку с чертежами");
+        cutDrafts = new MenuItem("Перенести");
+        pasteDrafts = new MenuItem("Вставить");
+        renameDraft = new MenuItem("Переименовать чертеж");
+        replaceDraft = new MenuItem("Заменить");
+        nullifyDraft = new MenuItem("Аннулировать");
+        changeStatus = new MenuItem("Изменить статус");
+        openInTab = new MenuItem("Открыть в отдельной вкладке" );
+        openInOuterApp = new MenuItem("Открыть во внешней программе" );
+        openFolderWithDraft = new MenuItem("Перейти в комплект с этим чертежом" );
+        showRemarks = new MenuItem("Комментарии");
+        showInfo = new MenuItem("Инфо");
+        downloadDrafts = new MenuItem("Скачать DXF");
+
+        addFolder.setOnAction(commands::addFromFolder);
+        cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
+        pasteDrafts.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboardOutOfFXThread()));
+        renameDraft.setOnAction(commands::renameDraft);
+        replaceDraft.setOnAction(commands::replaceDraft);
+        nullifyDraft.setOnAction(commands::nullifyDraft);
+        changeStatus.setOnAction(commands::changeStatus);
+        openInTab.setOnAction(commands::openInTab);
+        openInOuterApp.setOnAction(e->{
+            Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
+            AppStatic.openDraftInPreviewer(
+                    selectedDraft,
+                    tableView.getPreviewerController(),
+                    true);
+            AppStatic.openInOuterApplication(selectedDraft);
+        });
+        openFolderWithDraft.setOnAction(commands::goToFolderWithTheDraft);
+        showRemarks.setOnAction(commands::showRemarks);
+        showInfo.setOnAction(commands::showInfo);
+        downloadDrafts.setOnAction(e->manipulator.downloadDrafts(selectedDrafts));
     }
 
     /**
