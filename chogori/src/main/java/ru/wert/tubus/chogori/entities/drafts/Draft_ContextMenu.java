@@ -149,16 +149,17 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         if(selectedDrafts.size() == 1) {
             extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
-            extraCutDrafts = true; //ВЫРЕЗАТЬ ЧЕРТЕЖ ДЛЯ ПЕРЕНОСА
-            extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
+            if(editDraftsPermission) extraCutDrafts = true; //ПЕРЕНЕСТИ
+            extraShowRemarks = true;//КОММЕНТАРИИ
             extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
             extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
-            extraChangeStatus = true; //ИЗМЕНИТЬ СТАТУС
+            if(editDraftsPermission) extraChangeStatus = true; //ИЗМЕНИТЬ СТАТУС
 
         }
         if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
 
-        if(editDraftsPermission) {
+//        if(editDraftsPermission) {
+        if(true) {
 
             if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboardOutOfFXThread()))
                 extraPasteDrafts = true; //ВСТАВИТЬ ЧЕРТЕЖИ
