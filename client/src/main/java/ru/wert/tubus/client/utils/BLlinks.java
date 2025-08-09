@@ -1,6 +1,7 @@
 package ru.wert.tubus.client.utils;
 
 import ru.wert.tubus.client.entity.serviceREST.*;
+import ru.wert.tubus.client.entity.service_interfaces.ICrashReportService;
 
 
 public class BLlinks {
@@ -13,6 +14,7 @@ public class BLlinks {
     public static ChatMessageStatusService chatMessageStatusService;
 
     public static UserService userService;
+    public static ICrashReportService crashReportService;
     public static AppLogService appLogService;
     public static VersionDesktopService versionDesktopService;
     public static VersionAndroidService versionAndroidService;
