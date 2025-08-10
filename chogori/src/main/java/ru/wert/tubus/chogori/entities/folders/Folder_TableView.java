@@ -100,11 +100,9 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
         setRowFactory( tv -> {
             TableRow<Item> row = new TableRow<>();
 
-            if(useContextMenu) {
-                row.setOnDragDetected(e -> manipulator.createOnDragDetected(e));
-                row.setOnDragOver(e -> manipulator.createOnDragOver(e,row));
-                row.setOnDragDropped(e -> manipulator.createOnDragDropped(e));
-            }
+            row.setOnDragDetected(e -> manipulator.createOnDragDetected(e));
+            row.setOnDragOver(e -> manipulator.createOnDragOver(e, row, useContextMenu));
+            row.setOnDragDropped(e -> manipulator.createOnDragDropped(e, useContextMenu));
 
             row.setOnMouseClicked(event -> {
                 Item prevRowData = null;
@@ -259,7 +257,7 @@ public class Folder_TableView extends RoutineTableView<Item> implements IFormVie
 
     @Override
     public void createContextMenu() {
-        setOnContextMenuRequested(event->{
+        setOnContextMenuRequested(event -> {
             contextMenu = new Folder_ContextMenu(this, catalogTree, (_Folder_Commands) commands, accWindowRes);
             contextMenu.show(this.getScene().getWindow(), event.getScreenX(), event.getSceneY());
         });

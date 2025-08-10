@@ -6,6 +6,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import javafx.scene.Scene;
@@ -34,7 +36,8 @@ public class PushNotification {
     private static final String NOTIFICATION_STYLE = "-fx-background-color: #f8f8f8; -fx-padding: 10; " +
             "-fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;";
     private static final String MESSAGE_CONTENT_STYLE = "-fx-background-color: #ffffff; -fx-padding: 10; " +
-            "-fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 3; -fx-background-radius: 3;";
+            "-fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 3; -fx-background-radius: 3; " +
+            "-fx-max-width: infinity; -fx-max-height: infinity;";
 
     // Размеры и отступы
     private static final double NOTIFICATION_WIDTH = 300;
@@ -229,12 +232,19 @@ public class PushNotification {
         VBox messageContent = new VBox();
         messageContent.setStyle(MESSAGE_CONTENT_STYLE);
         messageContent.setPrefHeight(NOTIFICATION_HEIGHT - 40);
+        // Добавляем растягивание содержимого
+        messageContent.setMaxWidth(Double.MAX_VALUE);
+        messageContent.setMaxHeight(Double.MAX_VALUE);
 
         Label titleLabel = new Label();
         MessageCardsRenderer renderer = new MessageCardsRenderer(titleLabel);
         renderMessage(renderer, messageContent, message);
 
         notificationContainer.getChildren().addAll(senderLabel, messageContent);
+
+        // Добавляем растягивание для контейнера сообщения
+        VBox.setVgrow(messageContent, Priority.ALWAYS);
+
         return notificationContainer;
     }
 
@@ -312,6 +322,9 @@ public class PushNotification {
     }
 
     private static void renderMessage(MessageCardsRenderer renderer, VBox container, Message message) {
+        container.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        container.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
         switch (message.getType()) {
             case CHAT_TEXT:
                 renderer.mountText(container, message);

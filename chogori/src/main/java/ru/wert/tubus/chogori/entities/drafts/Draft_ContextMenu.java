@@ -29,6 +29,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
     private MenuItem renameDraft; //Заменить
     private MenuItem replaceDraft; //Заменить
     private MenuItem nullifyDraft; //Аннулировать
+    private MenuItem changeStatus; //Изменить статус
     private MenuItem addFolder; //Добавить папку
     private MenuItem openInTab; //Открыть в отдельной вкладке
     private MenuItem openInOuterApp; //Открыть во внешнем приложении
@@ -87,6 +88,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
     @Override
     public List<MenuItem> createExtraItems(){
+
         boolean extraAddFolder = false;
         //=============================
         boolean extraCutDrafts = false;
@@ -95,6 +97,7 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         boolean extraRenameDraft = false;
         boolean extraReplaceDraft = false;
         boolean extraNullifyDraft = false;
+        boolean extraChangeStatus = false;
         //=============================
         boolean extraOpenInTab = false;
         boolean extraOpenInOuterApp = false;
@@ -107,62 +110,31 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
         List<Draft> selectedDrafts = tableView.getSelectionModel().getSelectedItems();
 
-        addFolder = new MenuItem("Добавить папку с чертежами");
-        cutDrafts = new MenuItem("Перенести");
-        pasteDrafts = new MenuItem("Вставить");
-        renameDraft = new MenuItem("Переименовать чертеж");
-        replaceDraft = new MenuItem("Заменить");
-        nullifyDraft = new MenuItem("Аннулировать");
-        openInTab = new MenuItem("Открыть в отдельной вкладке" );
-        openInOuterApp = new MenuItem("Открыть во внешней программе" );
-        openFolderWithDraft = new MenuItem("Перейти в комплект с этим чертежом" );
-        showRemarks = new MenuItem("Комментарии");
-        showInfo = new MenuItem("Инфо");
-        downloadDrafts = new MenuItem("Скачать DXF");
-
-        addFolder.setOnAction(commands::addFromFolder);
-        cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
-        pasteDrafts.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboardOutOfFXThread()));
-        renameDraft.setOnAction(commands::renameDraft);
-        replaceDraft.setOnAction(commands::replaceDraft);
-        nullifyDraft.setOnAction(commands::nullifyDraft);
-        openInTab.setOnAction(commands::openInTab);
-        openInOuterApp.setOnAction(e->{
-            Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
-            AppStatic.openDraftInPreviewer(
-                    selectedDraft,
-                    tableView.getPreviewerController(),
-                    true);
-            AppStatic.openInOuterApplication(selectedDraft);
-        });
-        openFolderWithDraft.setOnAction(commands::goToFolderWithTheDraft);
-        showRemarks.setOnAction(commands::showRemarks);
-        showInfo.setOnAction(commands::showInfo);
-        downloadDrafts.setOnAction(e->manipulator.downloadDrafts(selectedDrafts));
+        createItems(selectedDrafts);
 
         if(!selectedDrafts.isEmpty() && downloadIsPossible(selectedDrafts))
             extraDownloadDrafts = true;
 
         if(selectedDrafts.size() == 1) {
             extraOpenInOuterApp = true;//ОТКРЫТЬ ВО ВНЕШНЕМ ПРИЛОЖЕНИИ
-            extraCutDrafts = true; //ВЫРЕЗАТЬ ЧЕРТЕЖ ДЛЯ ПЕРЕНОСА
-            extraShowRemarks = true;//ОТКРЫТЬ КОММЕНТАРИИ
+            extraShowRemarks = true;//КОММЕНТАРИИ
             extraShowFolderWithDraft = true; //ПЕРЕЙТИ В КОМПЛЕКТ С ЭТИМ ЧЕРТЕЖОМ
             extraShowInfo = true; //ПОКАЗАТЬ ИНФОРМАЦИЮ О ЧЕРТЕЖЕ
-
         }
+
         if(selectedDrafts.size() > 0)  extraOpenInTab = true;//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
 
         if(editDraftsPermission) {
+//        if(true) {
 
             if (manipulator.pastePossible(ClipboardUtils.getStringFromClipboardOutOfFXThread()))
                 extraPasteDrafts = true; //ВСТАВИТЬ ЧЕРТЕЖИ
-
             //Если ничего не выделено
             if (selectedDrafts.size() == 0) {
                 extraAddFolder = true;//ДОБАВИТЬ ПАПКУ С ЧЕРТЕЖАМИ
             } else if (selectedDrafts.size() == 1) {
-
+                extraChangeStatus = true; //ИЗМЕНИТЬ СТАТУС
+                extraCutDrafts = true; //ПЕРЕНЕСТИ
                 //Следующие операции допустимы только с ДЕЙСТВУЮЩИМИ чертежами
                 if (selectedDrafts.get(0).getStatus().equals(EDraftStatus.LEGAL.getStatusId()) && editDraftsPermission) {
                     extraRenameDraft = true; //ПЕРЕИМЕНОВАТЬ
@@ -198,8 +170,9 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
         if (extraRenameDraft) extraItems.add(renameDraft);//ПЕРЕИМЕНОВАТЬ
         if (extraReplaceDraft) extraItems.add(replaceDraft);//ЗАМЕНИТЬ
         if (extraNullifyDraft) extraItems.add(nullifyDraft);//АННУЛИРОВАТЬ
+        if (extraChangeStatus) extraItems.add(changeStatus);//ИЗМЕНИТЬ СТАТУС
 //
-        if ((extraOpenInTab || extraOpenInOuterApp) && (extraRenameDraft || extraReplaceDraft || extraNullifyDraft)) extraItems.add(new SeparatorMenuItem());//==================
+        if ((extraOpenInTab || extraOpenInOuterApp) && (extraRenameDraft || extraReplaceDraft || extraNullifyDraft || extraChangeStatus)) extraItems.add(new SeparatorMenuItem());//==================
         if (extraOpenInTab) extraItems.add(openInTab);//ОТКРЫТЬ В ОТДЕЛЬНОЙ ВКЛАДКЕ
         if (extraOpenInOuterApp) extraItems.add(openInOuterApp);//ОТКРЫТЬ ВО ВНЕШНЕЙ ПРОГРАММЕ
 
@@ -213,6 +186,43 @@ public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 
 
         return extraItems;
+    }
+
+    private void createItems(List<Draft> selectedDrafts) {
+        addFolder = new MenuItem("Добавить папку с чертежами");
+        cutDrafts = new MenuItem("Перенести");
+        pasteDrafts = new MenuItem("Вставить");
+        renameDraft = new MenuItem("Переименовать чертеж");
+        replaceDraft = new MenuItem("Заменить");
+        nullifyDraft = new MenuItem("Аннулировать");
+        changeStatus = new MenuItem("Изменить статус");
+        openInTab = new MenuItem("Открыть в отдельной вкладке" );
+        openInOuterApp = new MenuItem("Открыть во внешней программе" );
+        openFolderWithDraft = new MenuItem("Перейти в комплект с этим чертежом" );
+        showRemarks = new MenuItem("Комментарии");
+        showInfo = new MenuItem("Инфо");
+        downloadDrafts = new MenuItem("Скачать DXF");
+
+        addFolder.setOnAction(commands::addFromFolder);
+        cutDrafts.setOnAction(e-> ClipboardUtils.copyToClipboardText(manipulator.cutItems()));
+        pasteDrafts.setOnAction(e->manipulator.pasteItems(ClipboardUtils.getStringFromClipboardOutOfFXThread()));
+        renameDraft.setOnAction(commands::renameDraft);
+        replaceDraft.setOnAction(commands::replaceDraft);
+        nullifyDraft.setOnAction(commands::nullifyDraft);
+        changeStatus.setOnAction(commands::changeStatus);
+        openInTab.setOnAction(commands::openInTab);
+        openInOuterApp.setOnAction(e->{
+            Draft selectedDraft = tableView.getSelectionModel().getSelectedItem();
+            AppStatic.openDraftInPreviewer(
+                    selectedDraft,
+                    tableView.getPreviewerController(),
+                    true);
+            AppStatic.openInOuterApplication(selectedDraft);
+        });
+        openFolderWithDraft.setOnAction(commands::goToFolderWithTheDraft);
+        showRemarks.setOnAction(commands::showRemarks);
+        showInfo.setOnAction(commands::showInfo);
+        downloadDrafts.setOnAction(e->manipulator.downloadDrafts(selectedDrafts));
     }
 
     /**

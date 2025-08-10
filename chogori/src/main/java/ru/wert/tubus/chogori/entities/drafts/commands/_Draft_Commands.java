@@ -85,6 +85,11 @@ public class _Draft_Commands implements ItemCommands<Draft> {
         command.execute();
     }
 
+    public void changeStatus(Event event){
+        ICommand command = new Draft_ChangeStatusCommand(tableView);
+        command.execute();
+    }
+
     public void openInTab(Event event){
         AppStatic.openDraftsInNewTabs(tableView.getSelectionModel().getSelectedItems());
     }

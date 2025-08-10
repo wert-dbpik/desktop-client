@@ -24,11 +24,12 @@
       <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
             <StackPane fx:id="rootPanel" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
-            <HBox>
+            <!-- Изменения здесь: обернули spChat в StackPane с минимальной шириной 0 -->
+            <StackPane>
                <children>
-                  <StackPane fx:id="spChat" />
+                  <StackPane fx:id="spChat" minWidth="0" />
                </children>
-            </HBox>
+            </StackPane>
          </children>
       </HBox>
       <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

@@ -15,114 +15,129 @@ import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.chogori.application.services.ChogoriServices;
 import ru.wert.tubus.winform.warnings.Warning1;
 
-import java.util.Collections;
-import java.util.function.Consumer;
-
 import static ru.wert.tubus.winform.warnings.WarningMessages.$ATTENTION;
 
 public class Draft_RenameController {
 
-    @FXML
-    private Button btnCancel;
-
-    @FXML
-    private Button btnRename;
-
-    @FXML
-    private TextField tfName;
-
-    @FXML
-    private StackPane spIndicator;
+    @FXML private Button btnCancel;
+    @FXML private Button btnRename;
+    @FXML private TextField tfName;
+    @FXML private StackPane spIndicator;
 
     private Draft_TableView tableView;
     private Passport passport;
     private Draft selectedDraft = null;
-    private Consumer<Boolean> renameCallback;
-    public void setRenameCallback(Consumer<Boolean> callback) {
-        this.renameCallback = callback;
-    }
+    private volatile boolean operationCancelled = false;
 
-    /**
-     *
-     * @param tableView Draft_TableView
-     * @param object object, либо Draft либо Passport
-     */
-    public void init(Draft_TableView tableView, Object object){
+    public void init(Draft_TableView tableView, Object object) {
         this.tableView = tableView;
-        if(object instanceof Draft){
-            this.selectedDraft = (Draft)object;
+        if (object instanceof Draft) {
+            this.selectedDraft = (Draft) object;
             passport = this.selectedDraft.getPassport();
+        } else if (object instanceof Passport) {
+            this.passport = (Passport) object;
         }
-        else if(object instanceof Passport){
-            this.passport = (Passport)object;
-        }
-
-        String oldName = passport.getName();
-        tfName.setText(oldName);
+        tfName.setText(passport.getName());
     }
 
     @FXML
     void cancel(ActionEvent event) {
-        if (renameCallback != null) {
-            renameCallback.accept(false);
-        }
+        operationCancelled = true;
         AppStatic.closeWindow(event);
     }
 
     @FXML
     void rename(ActionEvent event) {
-        spIndicator.setVisible(false);
-        btnRename.setDisable(true);
+        prepareUIForOperation();
 
         String newName = tfName.getText().trim();
+        if (newName.isEmpty()) {
+            handleEmptyName();
+            return;
+        }
+
         passport.setName(newName);
 
         Task<Void> renameTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                ChogoriServices.CH_QUICK_PASSPORTS.update(passport);
-                return null;
+                if (operationCancelled) return null;
+
+                try {
+                    ChogoriServices.CH_QUICK_PASSPORTS.update(passport);
+                    return null;
+                } catch (Exception e) {
+                    if (!operationCancelled) {
+                        throw e;
+                    }
+                    return null;
+                }
             }
 
             @Override
             protected void succeeded() {
-                super.succeeded();
-                //Глубокое обновление - перезагружаем
-                PassportQuickService.getInstance();
-                DraftQuickService.getInstance();
-                //А теперь обновляем
-                tableView.updateTableView();
-
-                AppStatic.closeWindow(event);
+                Platform.runLater(() -> {
+                    if (!operationCancelled) {
+                        updateServicesAndUI();
+                        AppStatic.closeWindow(event);
+                    }
+                });
             }
 
             @Override
             protected void failed() {
-                super.failed();
-                spIndicator.setVisible(false);
-                btnRename.setDisable(false);
-                Platform.runLater(()->{
-                    Warning1.create($ATTENTION, "Не удалось переименовать чертеж", "Возможно, сервер не доступен");
-                    AppStatic.closeWindow(event);
+                Platform.runLater(() -> {
+                    if (!operationCancelled) {
+                        resetUI();
+                        Warning1.create($ATTENTION, "Ошибка переименования", "Сервер недоступен");
+                    }
                 });
-
             }
 
             @Override
             protected void cancelled() {
-                super.cancelled();
-                spIndicator.setVisible(false);
-                btnRename.setDisable(false);
+                Platform.runLater(()->resetUI());
             }
         };
 
-        new Thread(renameTask).start();
+        btnCancel.setOnAction(cancelEvent -> {
+            operationCancelled = true;
+            renameTask.cancel(false); // Не прерываем поток
+            AppStatic.closeWindow(cancelEvent);
+        });
 
+        new Thread(renameTask).start();
+    }
+
+    private void prepareUIForOperation() {
+        operationCancelled = false;
+        spIndicator.setVisible(true);
+        btnRename.setDisable(true);
+        btnCancel.setDisable(false);
+    }
+
+    private void updateServicesAndUI() {
+        PassportQuickService.getInstance();
+        DraftQuickService.getInstance();
+        tableView.updateTableView();
+    }
+
+    private void handleEmptyName() {
+        Platform.runLater(() -> {
+            resetUI();
+            Warning1.create($ATTENTION, "Не указано имя", "Введите новое имя чертежа");
+        });
+    }
+
+    private void resetUI() {
+        spIndicator.setVisible(false);
+        btnRename.setDisable(false);
+        btnCancel.setDisable(false);
     }
 
     @FXML
     void initialize() {
         AppStatic.createSpIndicator(spIndicator);
+        btnCancel.setOnAction(this::cancel);
     }
-
 }

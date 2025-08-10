@@ -59,12 +59,12 @@ public class Folder_Manipulator {
     /**
      * Обработка события OnDragOver
      */
-    public void createOnDragOver(DragEvent event, TableRow<Item> row) {
+    public void createOnDragOver(DragEvent event, TableRow<Item> row, boolean allowEditDrafts) {
 
         Dragboard db = event.getDragboard();
         tableView.getSelectionModel().clearAndSelect(row.getIndex());
 
-        if (pastePossible(db.getString())) {
+        if (pastePossible(db.getString()) && allowEditDrafts) {
             event.acceptTransferModes(TransferMode.MOVE);
             event.consume();
         } else {
@@ -76,11 +76,11 @@ public class Folder_Manipulator {
     /**
      * Обработка события OnDragDropped
      */
-    public void createOnDragDropped(DragEvent event){
+    public void createOnDragDropped(DragEvent event, boolean allowEditDrafts){
         Dragboard db = event.getDragboard();
         if(db.hasString()) {
             String str = db.getString();
-            if (pastePossible(str)) {
+            if (pastePossible(str) && allowEditDrafts) {
                 if (event.getTransferMode().equals(TransferMode.MOVE)) {
                     pasteItems(str);
                     event.consume();
