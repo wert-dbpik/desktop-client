@@ -30,6 +30,7 @@ public class ChogoriServices {
     public static IAppSettingsService CH_SETTINGS;
     public static IUserService CH_USERS;
     public static IAppLogService CH_LOGS;
+    public static ICrashReportService CH_CRASH_REPORTS;
     public static IUserGroupService CH_USER_GROUPS;
     public static IProductGroupService CH_PRODUCT_GROUPS;
     public static IProductService CH_PRODUCTS;
@@ -71,6 +72,7 @@ public class ChogoriServices {
 
         ChogoriServices.CH_USERS = UserService.getInstance();
         ChogoriServices.CH_LOGS = AppLogService.getInstance();
+        ChogoriServices.CH_CRASH_REPORTS = CrashReportService.getInstance();
 
         ChogoriServices.CH_USER_GROUPS = UserGroupService.getInstance();
         ChogoriServices.CH_SETTINGS = AppSettingsService.getInstance();

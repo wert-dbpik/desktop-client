@@ -20,23 +20,17 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.StartChogori;
-import ru.wert.tubus.chogori.application.drafts.DraftsEditorController;
 import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
-import ru.wert.tubus.chogori.chat.dialog.dialogListView.DialogListView;
-import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
 import ru.wert.tubus.chogori.help.About;
 import ru.wert.tubus.chogori.images.BtnImages;
 import ru.wert.tubus.chogori.search.SearchField;
 import ru.wert.tubus.chogori.search.SearchHistoryButton;
 import ru.wert.tubus.chogori.search.SearchHistoryFile;
-import ru.wert.tubus.chogori.tabs.AppTab;
-import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.entity.models.User;
-import ru.wert.tubus.client.interfaces.UpdatableTabController;
 import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.window_decoration.WindowDecoration;
 
@@ -44,9 +38,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.time.LocalDateTime;
 
-import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_ROOMS;
 import static ru.wert.tubus.chogori.images.BtnImages.BTN_CLOSE_WHITE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER_GROUP;
@@ -526,6 +518,9 @@ public class AppMenuController {
         MenuItem logsItem = new MenuItem("Логи");
         logsItem.setOnAction(this::openLogs);
 
+        MenuItem crashReportsItem = new MenuItem("Отчеты крашей");
+        crashReportsItem.setOnAction(this::openCrashReports);
+
         MenuItem catalogOfFolders = new MenuItem("Каталог папок");
         catalogOfFolders.setOnAction(this::openCatalogOfFolders);
 
@@ -535,6 +530,7 @@ public class AppMenuController {
         adminMenu.getItems().add(usersItem);
         adminMenu.getItems().add(userGroupsItem);
         adminMenu.getItems().add(logsItem);
+        adminMenu.getItems().add(crashReportsItem);
         adminMenu.getItems().add(new SeparatorMenuItem());
         adminMenu.getItems().add(catalogOfFolders);
         adminMenu.getItems().add(test);
@@ -551,6 +547,22 @@ public class AppMenuController {
             Parent parent = loader.load();
             parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
             String tabName = "Логирование";
+            String tabId = tabName;
+            CH_TAB_PANE.createNewTab(tabId, tabName, parent, true, loader.getController());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * -- ОТЧЕТЫ КРАШЕЙ
+     */
+    private void openCrashReports(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/crashReports/crashReports.fxml"));
+            Parent parent = loader.load();
+            parent.getStylesheets().add(this.getClass().getResource("/chogori-css/details-dark.css").toString());
+            String tabName = "Краши";
             String tabId = tabName;
             CH_TAB_PANE.createNewTab(tabId, tabName, parent, true, loader.getController());
         } catch (IOException e) {
