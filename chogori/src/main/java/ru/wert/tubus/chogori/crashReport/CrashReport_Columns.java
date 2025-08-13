@@ -98,9 +98,9 @@ public class CrashReport_Columns {
         TableColumn<CrashReport, String> tc = new TableColumn<>("Версия");
         tc.setCellValueFactory(new PropertyValueFactory<>("version"));
         tc.setStyle("-fx-alignment: TOP-CENTER; ");
-        tc.setMinWidth(60);
-        tc.setPrefWidth(60);
-        tc.setMaxWidth(60);
+        tc.setMinWidth(100);
+        tc.setPrefWidth(100);
+        tc.setMaxWidth(100);
         tc.setResizable(false);
         tc.setSortable(false);
         return tc;

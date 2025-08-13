@@ -620,8 +620,11 @@ public class AppMenuController {
     }
 
     void makeTest(ActionEvent event){
-
+            int a = 20;
+            int b = 0;
+            System.out.println(a/b);
     }
+
 
     //########################   ПОМОЩЬ    ###########################
 

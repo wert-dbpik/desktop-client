@@ -7,13 +7,17 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import ru.wert.tubus.chogori.common.contextMenuACC.FormView_ACCController;
 import ru.wert.tubus.chogori.common.tableView.ReadOnlyTableView;
+import ru.wert.tubus.chogori.statics.Comparators;
+import ru.wert.tubus.client.entity.models.AppLog;
 import ru.wert.tubus.client.entity.models.CrashReport;
 import ru.wert.tubus.winform.warnings.Warning2;
 
 import java.io.IOException;
 import java.util.List;
 
+import static java.util.Collections.reverse;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_CRASH_REPORTS;
+import static ru.wert.tubus.chogori.application.services.ChogoriServices.CH_LOGS;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
 public class CrashReport_TableView extends ReadOnlyTableView<CrashReport> {
@@ -145,7 +149,9 @@ public class CrashReport_TableView extends ReadOnlyTableView<CrashReport> {
 
     @Override
     public List<CrashReport> prepareList() {
-        return CH_CRASH_REPORTS.findAll();
+        List<CrashReport> logs = CH_CRASH_REPORTS.findAll();
+        if(logs != null) reverse(logs);
+        return logs;
     }
 
     @Override

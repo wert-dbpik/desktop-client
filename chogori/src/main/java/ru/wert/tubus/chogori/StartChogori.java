@@ -139,10 +139,11 @@ public class StartChogori extends Application {
         }catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {
+        if(!TEST_VERSION)
+            SentryConfig.initialize();
         LauncherImpl.launchApplication(StartChogori.class, AppPreloader.class, args);
     }
 }
