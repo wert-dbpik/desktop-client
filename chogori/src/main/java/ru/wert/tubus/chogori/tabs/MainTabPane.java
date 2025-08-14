@@ -121,16 +121,19 @@ public class MainTabPane extends TabPane {
 
         lblTitle.setStyle("-fx-text-fill: black");
 
+        //======   ПОДСКАЗКА    =======================================================
 
-//        lblTitle.setOnMouseEntered(event ->{
-//            hint = new HintPopup(lblTitle ,name, 0.0);
-//            hint.showHint();
-//        });
-//        lblTitle.setOnMouseExited(event ->{
-//            if(hint != null){
-//                hint.closeHint();
-//            }
-//        });
+        lblTitle.setOnMouseEntered(event ->{
+            hint = new HintPopup(lblTitle ,name, 0.0);
+            hint.showHint();
+        });
+        lblTitle.setOnMouseExited(event ->{
+            if(hint != null){
+                hint.closeHint();
+            }
+        });
+
+        //=========================================================================
 
         lblTitle.setOnMouseClicked(event ->{
             getSelectionModel().select(tab);
