@@ -121,7 +121,7 @@ public class MainTabPane extends TabPane {
 
         lblTitle.setStyle("-fx-text-fill: black");
 
-        //======   ПОДСКАЗКА    =======================================================
+        //======   ПОДСКАЗКА    ==================================================
 
         lblTitle.setOnMouseEntered(event ->{
             hint = new HintPopup(lblTitle ,name, 0.0);
