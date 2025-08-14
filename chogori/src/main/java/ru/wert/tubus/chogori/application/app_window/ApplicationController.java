@@ -2,12 +2,14 @@ package ru.wert.tubus.chogori.application.app_window;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -208,14 +210,15 @@ public class ApplicationController {
      * Красная лампочка начинает моргать, когда сервер становится недоступным
      */
     private void initImageServerAvailable() {
-        // Устанавливаем изображение для imgIndicator
+        // Устанавливаем изображение для индикатора
         imgServerAvailableIndicator.setImage(SERVER_NOT_AVAILABLE_IMG);
         imgServerAvailableIndicator.setOpacity(0.0); // Изначально невидима
 
-        Tooltip tooltip = new Tooltip("Сервер недоступен");
-//        imgServerAvailableIndicator.setTooltip(tooltip);
+        // Создаем Tooltip
+        Tooltip tooltip = new Tooltip("Сервер недоступен.\nПытаюсь подключиться...");
+        tooltip.setOpacity(0); // Начинаем с невидимого состояния
 
-        // Создаем анимацию моргания
+        // Анимация моргания для иконки
         Timeline blinkTimeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(imgServerAvailableIndicator.opacityProperty(), 0.0)),
                 new KeyFrame(Duration.seconds(0.5), new KeyValue(imgServerAvailableIndicator.opacityProperty(), 0.0)),
@@ -224,20 +227,33 @@ public class ApplicationController {
         );
         blinkTimeline.setCycleCount(Timeline.INDEFINITE);
 
-        CHAT_SERVER_AVAILABLE_PROPERTY.addListener(observable -> {
+        // Обработчик изменения статуса сервера
+        CHAT_SERVER_AVAILABLE_PROPERTY.addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> {
-                if (!CHAT_SERVER_AVAILABLE_PROPERTY.get()) {
-                    // Сервер недоступен - запускаем моргание
-                    imgServerAvailableIndicator.setOpacity(1.0); // Сразу показываем
+                if (!newValue) {
+                    // Сервер недоступен - активируем Tooltip и анимацию
+                    Tooltip.install(imgServerAvailableIndicator, tooltip);
+                    tooltip.setOpacity(1); // Делаем Tooltip полностью видимым
+                    imgServerAvailableIndicator.setOpacity(1.0);
                     blinkTimeline.playFromStart();
                 } else {
-                    // Сервер доступен - останавливаем моргание
+                    // Сервер доступен - полностью убираем Tooltip и анимацию
+                    Tooltip.uninstall(imgServerAvailableIndicator, tooltip);
                     blinkTimeline.stop();
-                    imgServerAvailableIndicator.setOpacity(0.0); // Скрываем
+                    imgServerAvailableIndicator.setOpacity(0.0);
                 }
             });
         });
 
+        // Первоначальная настройка в зависимости от текущего состояния
+        Platform.runLater(() -> {
+            if (!CHAT_SERVER_AVAILABLE_PROPERTY.get()) {
+                Tooltip.install(imgServerAvailableIndicator, tooltip);
+                tooltip.setOpacity(1);
+                imgServerAvailableIndicator.setOpacity(1.0);
+                blinkTimeline.playFromStart();
+            }
+        });
     }
 
     public void startBlinkingAnimation() {
