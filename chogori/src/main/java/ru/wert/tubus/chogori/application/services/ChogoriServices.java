@@ -100,15 +100,15 @@ public class ChogoriServices {
         BatchResponse cached = LocalCacheManager.getInstance().loadFromCache("initial_data", BatchResponse.class);
         if (cached != null) {
             initFromBatch(cached);
+            ChogoriServices.CH_QUICK_MATERIALS = MaterialQuickService.getInstance();
             log.info("Начальные данные загружены из кэша");
         } else {
             log.info("Данные кэша не доступны");
-
             // Если кэша нет, инициализируем быстрые сервисы без данных
             initQuickServices();
         }
-    }
 
+    }
 
 
     public static void initFromBatch(BatchResponse batch) {
@@ -158,6 +158,7 @@ public class ChogoriServices {
         ChogoriServices.CH_QUICK_PREFIXES = PrefixQuickService.getInstance();
         ChogoriServices.CH_QUICK_ANY_PARTS = AnyPartQuickService.getInstance();
         ChogoriServices.CH_QUICK_PASSPORTS = PassportQuickService.getInstance();
+        ChogoriServices.CH_QUICK_MATERIALS = MaterialQuickService.getInstance();
     }
 
 

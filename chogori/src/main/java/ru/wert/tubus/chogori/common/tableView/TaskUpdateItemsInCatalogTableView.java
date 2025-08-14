@@ -33,8 +33,6 @@ public class TaskUpdateItemsInCatalogTableView< P extends Item, T extends Catalo
         this.setFocus = setFocus;
         this.itemService = itemService;
 
-
-
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(90, 90);
         itemView.setPlaceholder(new StackPane(progressIndicator));
@@ -104,8 +102,8 @@ public class TaskUpdateItemsInCatalogTableView< P extends Item, T extends Catalo
         progressIndicator.setVisible(false);
         log.error("The task ServiceUpdateItemsInRoutineTableView failed with the following exception:\n" + System.err);
 
-//        System.err.println("The task TaskUpdateItemsInCatalogTableView failed with the following exception:");
-//        getException().printStackTrace(System.err);
+        System.err.println("The task TaskUpdateItemsInCatalogTableView failed with the following exception:");
+        getException().printStackTrace(System.err);
 
 
     }
