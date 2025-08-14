@@ -1,20 +1,22 @@
 package ru.wert.tubus.chogori.chat.socketwork.socketservice;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.chat.socketwork.ServiceMessaging;
 import ru.wert.tubus.client.entity.models.Message;
-import ru.wert.tubus.client.retrofit.AppProperties;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
 @Slf4j
 public class SocketService {
+
+    public static BooleanProperty CHAT_SERVER_AVAILABLE_PROPERTY = new SimpleBooleanProperty(true);
 
     // Задержка перед повторной попыткой подключения к серверу (в миллисекундах)
     private static final int RECONNECT_DELAY_MS = 5000;
@@ -53,6 +55,8 @@ public class SocketService {
                             // Логирование успешного подключения и запуска потоков
                             log.info("Сокет успешно подключен, потоки запущены.");
 
+                            CHAT_SERVER_AVAILABLE_PROPERTY.set(true);
+
                             // Ожидание завершения работы сервиса
                             while (running && connectionManager.isConnected()) {
                                 Thread.sleep(1000);
@@ -61,6 +65,8 @@ public class SocketService {
                         } catch (IOException e) {
                             // Логирование ошибки подключения к серверу
                             log.error("Ошибка подключения к серверу: {}", e.getMessage());
+                            //TODO: Добавить оповещение и отключение оповещения
+                            CHAT_SERVER_AVAILABLE_PROPERTY.setValue(false);
                         } catch (Exception e) {
                             // Логирование непредвиденной ошибки
                             log.error("Непредвиденная ошибка: {}", e.getMessage(), e);

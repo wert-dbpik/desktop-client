@@ -48,6 +48,7 @@
             </StackPane>
             <HBox alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="NEVER">
                <children>
+                  <ImageView fx:id="imgServerAvailableIndicator" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                   <Label fx:id="lblUser" text="РЕЖИМ РАЗРАБОТЧИКА" HBox.hgrow="NEVER">
                      <HBox.margin>
                         <Insets left="5.0" right="5.0" />

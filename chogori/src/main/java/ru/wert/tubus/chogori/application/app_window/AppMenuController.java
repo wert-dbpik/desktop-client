@@ -24,6 +24,7 @@ import ru.wert.tubus.chogori.application.drafts.OpenDraftsEditorTask;
 import ru.wert.tubus.chogori.application.excel.ExcelChooser;
 import ru.wert.tubus.chogori.application.passports.OpenPassportsEditorTask;
 import ru.wert.tubus.chogori.chat.dialog.dialogListCell.DialogListCell;
+import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.components.BtnDoublePro;
 import ru.wert.tubus.chogori.help.About;
 import ru.wert.tubus.chogori.images.BtnImages;
@@ -619,10 +620,11 @@ public class AppMenuController {
         }
     }
 
+    private boolean testVal = false;
+
     void makeTest(ActionEvent event){
-            int a = 20;
-            int b = 0;
-            System.out.println(a/b);
+        SocketService.CHAT_SERVER_AVAILABLE_PROPERTY.setValue(testVal);
+        testVal = !testVal;
     }
 
 

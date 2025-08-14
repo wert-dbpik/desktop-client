@@ -68,6 +68,7 @@ public class BtnImages {
     public static Image CHAT_LETTER_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/letter.png"), size24, size24, true, true);
     public static Image CHAT_READ_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/read.png"), size16, size16, true, true);
     public static Image CHAT_DELIVERED_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/delivered.png"), size16, size16, true, true);
+    public static Image SERVER_NOT_AVAILABLE_IMG = new Image(BtnImages.class.getResourceAsStream("/chogori-pics/btns/lamp-red.png"), size24, size24, true, true);
 
 
 

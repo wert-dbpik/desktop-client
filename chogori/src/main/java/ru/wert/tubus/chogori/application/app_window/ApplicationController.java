@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
@@ -24,6 +25,7 @@ import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.wert.tubus.chogori.application.services.LocalCacheManager;
+import ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService;
 import ru.wert.tubus.chogori.components.BtnChat;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
 import ru.wert.tubus.chogori.tabs.AppTab;
@@ -39,7 +41,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static ru.wert.tubus.chogori.chat.socketwork.socketservice.SocketService.CHAT_SERVER_AVAILABLE_PROPERTY;
 import static ru.wert.tubus.chogori.images.BtnImages.BTN_UPDATE_BLUE_IMG;
+import static ru.wert.tubus.chogori.images.BtnImages.SERVER_NOT_AVAILABLE_IMG;
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.*;
 import static ru.wert.tubus.winform.statics.WinformStatic.CURRENT_PROJECT_VERSION;
@@ -85,6 +89,9 @@ public class ApplicationController {
 
     @FXML
     private ImageView imgIndicator;
+
+    @FXML
+    private ImageView imgServerAvailableIndicator;
 
     @FXML
     Button btnUpdateAllData;
@@ -155,6 +162,7 @@ public class ApplicationController {
 
 
         initBtnUpdateAllData();
+        initImageServerAvailable();
 
 
         log.debug("initialize : блок инициализации успешно выполнен");
@@ -194,6 +202,42 @@ public class ApplicationController {
                 new KeyFrame(Duration.seconds(1.0), new KeyValue(imgIndicator.opacityProperty(), 1.0))
         );
         blinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    }
+
+    /**
+     * Красная лампочка начинает моргать, когда сервер становится недоступным
+     */
+    private void initImageServerAvailable() {
+        // Устанавливаем изображение для imgIndicator
+        imgServerAvailableIndicator.setImage(SERVER_NOT_AVAILABLE_IMG);
+        imgServerAvailableIndicator.setOpacity(0.0); // Изначально невидима
+
+        Tooltip tooltip = new Tooltip("Сервер недоступен");
+//        imgServerAvailableIndicator.setTooltip(tooltip);
+
+        // Создаем анимацию моргания
+        Timeline blinkTimeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(imgServerAvailableIndicator.opacityProperty(), 0.0)),
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(imgServerAvailableIndicator.opacityProperty(), 0.0)),
+                new KeyFrame(Duration.seconds(1.5), new KeyValue(imgServerAvailableIndicator.opacityProperty(), 1.0)),
+                new KeyFrame(Duration.seconds(2.0), new KeyValue(imgServerAvailableIndicator.opacityProperty(), 0.0))
+        );
+        blinkTimeline.setCycleCount(Timeline.INDEFINITE);
+
+        CHAT_SERVER_AVAILABLE_PROPERTY.addListener(observable -> {
+            Platform.runLater(() -> {
+                if (!CHAT_SERVER_AVAILABLE_PROPERTY.get()) {
+                    // Сервер недоступен - запускаем моргание
+                    imgServerAvailableIndicator.setOpacity(1.0); // Сразу показываем
+                    blinkTimeline.playFromStart();
+                } else {
+                    // Сервер доступен - останавливаем моргание
+                    blinkTimeline.stop();
+                    imgServerAvailableIndicator.setOpacity(0.0); // Скрываем
+                }
+            });
+        });
+
     }
 
     public void startBlinkingAnimation() {
