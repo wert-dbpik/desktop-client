@@ -13,24 +13,29 @@ import java.io.IOException;
 
 import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 
+/**
+ * Сервис для управления сокет-соединением с чат-сервером.
+ * Обеспечивает подключение, переподключение и обмен сообщениями.
+ */
 @Slf4j
 public class SocketService {
 
-    public static BooleanProperty CHAT_SERVER_AVAILABLE_PROPERTY = new SimpleBooleanProperty(true);
+    /** Свойство для отслеживания доступности сервера */
+    public static final BooleanProperty CHAT_SERVER_AVAILABLE_PROPERTY = new SimpleBooleanProperty(true);
 
-    // Задержка перед повторной попыткой подключения к серверу (в миллисекундах)
-    private static final int RECONNECT_DELAY_MS = 5000;
-    // Флаг для управления циклом работы сервиса
+    // Настройки переподключения
+    private static final int INITIAL_RECONNECT_DELAY_MS = 1000;
+    private static final int MAX_RECONNECT_DELAY_MS = 30000;
+    private static int reconnectAttempts = 0;
     private static volatile boolean running = true;
+    private static volatile boolean isReconnecting = false;
 
-    // Менеджер для управления соединением с сервером
+    // Компоненты для работы с соединением
     private static final SocketConnectionManager connectionManager = new SocketConnectionManager();
-    // Получатель сообщений от сервера
     private static MessageReceiver messageReceiver;
-    // Отправитель сообщений на сервер
     private static MessageSender messageSender;
 
-    // Сервис для работы с сокетом в фоновом потоке
+    /** Сервис для работы в фоновом потоке */
     private static final Service<Void> socketService = new Service<Void>() {
         @Override
         protected Task<Void> createTask() {
@@ -39,48 +44,14 @@ public class SocketService {
                 protected Void call() throws Exception {
                     while (running) {
                         try {
-                            // Подключение к серверу
-                            connectionManager.connect();
-
-                            // Инициализация и запуск потоков для получения и отправки сообщений
-                            messageReceiver = new MessageReceiver(connectionManager.getIn());
-                            messageSender = new MessageSender(connectionManager.getOut());
-
-                            messageReceiver.start();
-                            messageSender.start();
-
-                            // Отправка сообщения USER_IN для уведомления сервера о входе пользователя
-                            ServiceMessaging.sendMessageUserIn(CH_CURRENT_USER.getId());
-
-                            // Логирование успешного подключения и запуска потоков
-                            log.info("Сокет успешно подключен, потоки запущены.");
-
-                            CHAT_SERVER_AVAILABLE_PROPERTY.set(true);
-
-                            // Ожидание завершения работы сервиса
-                            while (running && connectionManager.isConnected()) {
-                                Thread.sleep(1000);
-                            }
-
-                        } catch (IOException e) {
-                            // Логирование ошибки подключения к серверу
-                            log.error("Ошибка подключения к серверу: {}", e.getMessage());
-                            //TODO: Добавить оповещение и отключение оповещения
-                            CHAT_SERVER_AVAILABLE_PROPERTY.setValue(false);
+                            connectToServer();
+                            waitWhileConnected();
                         } catch (Exception e) {
-                            // Логирование непредвиденной ошибки
-                            log.error("Непредвиденная ошибка: {}", e.getMessage(), e);
+                            handleConnectionError(e);
                         } finally {
-                            // Закрытие соединения с сервером
-                            connectionManager.close();
-                            if (running) {
-                                // Логирование попытки переподключения
-                                log.info("Попытка переподключения через {} мс...", RECONNECT_DELAY_MS);
-                                Thread.sleep(RECONNECT_DELAY_MS);
-                            }
+                            cleanupAndScheduleReconnect();
                         }
                     }
-                    // Логирование остановки сервиса
                     log.info("Сервис сокета остановлен.");
                     return null;
                 }
@@ -88,47 +59,135 @@ public class SocketService {
         }
     };
 
-    public static void reconnect() {
+    /**
+     * Обновляет статус доступности сервера в UI-потоке.
+     * @param isAvailable true если сервер доступен, false в противном случае
+     */
+    public static void updateServerStatus(boolean isAvailable) {
         Platform.runLater(() -> {
-            try {
-                log.info("Инициировано переподключение...");
-                connectionManager.close();
-                if (messageReceiver != null) messageReceiver.stop();
-                if (messageSender != null) messageSender.stop();
-                socketService.restart();
-            } catch (Exception e) {
-                log.error("Ошибка при переподключении: {}", e.getMessage());
+            if (CHAT_SERVER_AVAILABLE_PROPERTY.get() != isAvailable) {
+                CHAT_SERVER_AVAILABLE_PROPERTY.set(isAvailable);
+                log.info("Статус сервера изменен: {}", isAvailable ? "доступен" : "недоступен");
             }
         });
     }
 
-    // Метод для запуска сервиса сокета
+    /**
+     * Инициирует переподключение к серверу.
+     * Выполняется в UI-потоке для безопасности.
+     */
+    public static void reconnect() {
+        if (isReconnecting) return;
+
+        Platform.runLater(() -> {
+            isReconnecting = true;
+            try {
+                log.info("Инициировано переподключение...");
+                stopComponents();
+                Thread.sleep(1000); // Даем время на завершение
+                startService();
+            } catch (Exception e) {
+                log.error("Ошибка при переподключении: {}", e.getMessage());
+            } finally {
+                isReconnecting = false;
+            }
+        });
+    }
+
+    /** Запускает сервис сокета */
     public static void start() {
         if (!socketService.isRunning()) {
             socketService.restart();
         }
     }
 
-    // Метод для остановки сервиса сокета
+    /** Останавливает сервис сокета */
     public static void stop() {
-        ServiceMessaging.sendMessageUserOut();
-
         Platform.runLater(() -> {
             running = false;
+            ServiceMessaging.sendMessageUserOut();
+            stopComponents();
             socketService.cancel();
-            connectionManager.close();
-            if (messageReceiver != null) messageReceiver.stop();
-            if (messageSender != null) messageSender.stop();
             log.info("Сервис сокета завершает работу...");
         });
     }
 
-    // Метод для отправки сообщения на сервер
+    /**
+     * Отправляет сообщение на сервер.
+     * @param message сообщение для отправки
+     */
     public static void sendMessage(Message message) {
         if (messageSender != null) {
             messageSender.sendMessage(message);
-        } else
-            log.error("не удалось отправить сообщение {}, т.к. messageSender = null", message.toUsefulString());
+        } else {
+            log.error("Не удалось отправить сообщение {}, т.к. messageSender = null", message.toUsefulString());
+        }
+    }
+
+    // Приватные вспомогательные методы
+
+    private static void connectToServer() throws IOException {
+        log.info("Попытка подключения к серверу...");
+        connectionManager.connect();
+
+        messageReceiver = new MessageReceiver(connectionManager.getIn());
+        messageSender = new MessageSender(connectionManager.getOut());
+
+        messageReceiver.start();
+        messageSender.start();
+
+        ServiceMessaging.sendMessageUserIn(CH_CURRENT_USER.getId());
+        log.info("Сокет успешно подключен, потоки запущены.");
+        CHAT_SERVER_AVAILABLE_PROPERTY.set(true);
+        reconnectAttempts = 0; // Сброс счетчика при успешном подключении
+    }
+
+    private static void waitWhileConnected() throws InterruptedException {
+        while (running && connectionManager.isConnected()) {
+            Thread.sleep(1000);
+        }
+    }
+
+    private static void handleConnectionError(Exception e) {
+        if (e instanceof IOException) {
+            log.error("Ошибка подключения к серверу: {}", e.getMessage());
+        } else {
+            log.error("Непредвиденная ошибка: {}", e.getMessage(), e);
+        }
+        CHAT_SERVER_AVAILABLE_PROPERTY.set(false);
+    }
+
+    private static void cleanupAndScheduleReconnect() throws InterruptedException {
+        connectionManager.close();
+        if (running) {
+            int delay = calculateReconnectDelay();
+            log.info("Попытка переподключения через {} мс...", delay);
+            Thread.sleep(delay);
+        }
+    }
+
+    private static int calculateReconnectDelay() {
+        reconnectAttempts++;
+        return Math.min(INITIAL_RECONNECT_DELAY_MS * (1 << Math.min(reconnectAttempts, 10)), MAX_RECONNECT_DELAY_MS);
+    }
+
+    private static void stopComponents() {
+        if (messageReceiver != null) {
+            messageReceiver.stop();
+            messageReceiver = null;
+        }
+        if (messageSender != null) {
+            messageSender.stop();
+            messageSender = null;
+        }
+        connectionManager.close();
+    }
+
+    private static void startService() {
+        if (socketService.isRunning()) {
+            socketService.cancel();
+        }
+        socketService.restart();
     }
 }
 

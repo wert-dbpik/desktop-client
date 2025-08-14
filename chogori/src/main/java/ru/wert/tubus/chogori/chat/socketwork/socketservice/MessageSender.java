@@ -6,47 +6,50 @@ import ru.wert.tubus.client.entity.models.Message;
 import ru.wert.tubus.client.utils.MessageType;
 
 import java.io.PrintWriter;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static ru.wert.tubus.winform.statics.WinformStatic.USE_HEARTBEAT;
 
+/**
+ * Класс для отправки сообщений на сервер.
+ * Обеспечивает очередь сообщений и heartbeat-пакеты.
+ */
 @Slf4j
 public class MessageSender {
 
     private final BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
     private final PrintWriter out;
     private volatile boolean running = true;
-    private static final int RECONNECT_DELAY_MS = 5000;
-    private static final int HEARTBEAT_INTERVAL =
-            USE_HEARTBEAT ?
-                    15 * 1000 : // 15000 = 15  секунд
-                    15 * 1000 * 1000;
+    private static final int HEARTBEAT_INTERVAL = USE_HEARTBEAT ? 15000 : Integer.MAX_VALUE;
 
+    /**
+     * Конструктор.
+     * @param out выходной поток для отправки сообщений
+     */
     public MessageSender(PrintWriter out) {
         this.out = out;
         startHeartbeatSender();
     }
 
+    /** Запускает отправку сообщений */
     public void start() {
-        new Thread(() -> {
-            while (running) {
-                try {
-                    Message message = messageQueue.take();
-                    sendMessageToServer(message);
-                } catch (InterruptedException e) {
-                    log.warn("Поток отправки сообщений прерван: {}", e.getMessage());
-                    Thread.currentThread().interrupt();
-                } catch (Exception e) {
-                    if (running) {
-                        log.error("Ошибка при отправке сообщений: {}", e.getMessage());
-                    }
-                }
+        new Thread(this::sendMessages).start();
+    }
+
+    private void sendMessages() {
+        while (running) {
+            try {
+                Message message = messageQueue.take();
+                sendMessageToServer(message);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.warn("Поток отправки прерван");
+            } catch (Exception e) {
+                log.error("Ошибка отправки: {}", e.getMessage());
             }
-            log.info("Поток отправки сообщений остановлен.");
-        }).start();
+        }
+        log.info("Поток отправки остановлен");
     }
 
     private void startHeartbeatSender() {
@@ -54,9 +57,7 @@ public class MessageSender {
             while (running) {
                 try {
                     Thread.sleep(HEARTBEAT_INTERVAL);
-                    Message heartbeat = new Message();
-                    heartbeat.setType(MessageType.HEARTBEAT);
-                    sendMessageToServer(heartbeat);
+                    sendHeartbeat();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -64,33 +65,59 @@ public class MessageSender {
         }).start();
     }
 
+    private void sendHeartbeat() {
+        Message heartbeat = new Message();
+        heartbeat.setType(MessageType.HEARTBEAT);
+        sendMessageToServer(heartbeat);
+    }
+
     private void sendMessageToServer(Message message) {
-        if (out != null) {
-            String jsonMessage = GsonConfiguration.createGson().toJson(message);
-            out.println(jsonMessage);
-            if(!message.getType().equals(MessageType.HEARTBEAT))
-                log.info("Сообщение отправлено на сервер: {}", jsonMessage);
-        } else {
-            log.warn("Сокет не подключен, сообщение не отправлено: {}", message.toUsefulString());
-            try {
-                messageQueue.put(message);
-                Thread.sleep(RECONNECT_DELAY_MS);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+        try {
+            if (out != null && !out.checkError()) {
+                String json = GsonConfiguration.createGson().toJson(message);
+                out.println(json);
+                out.flush();
+                if (!message.getType().equals(MessageType.HEARTBEAT)) {
+                    log.info("Отправлено: {}", json);
+                }
+            } else {
+                handleSendError(message);
             }
+        } catch (Exception e) {
+            handleSendError(message);
         }
     }
 
-    public void sendMessage(Message message) {
+    private void handleSendError(Message message) {
+        log.warn("Ошибка отправки: {}", message.toUsefulString());
+        if (running) {
+            requeueMessage(message);
+            SocketService.reconnect();
+        }
+    }
+
+    private void requeueMessage(Message message) {
         try {
             messageQueue.put(message);
-            log.debug("Сообщение добавлено в очередь: {}", message.toUsefulString());
         } catch (InterruptedException e) {
-            log.error("Ошибка при добавлении сообщения в очередь: {}", e.getMessage());
             Thread.currentThread().interrupt();
         }
     }
 
+    /**
+     * Добавляет сообщение в очередь на отправку.
+     * @param message сообщение для отправки
+     */
+    public void sendMessage(Message message) {
+        try {
+            messageQueue.put(message);
+            log.debug("Добавлено в очередь: {}", message.toUsefulString());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /** Останавливает отправку сообщений */
     public void stop() {
         running = false;
     }
