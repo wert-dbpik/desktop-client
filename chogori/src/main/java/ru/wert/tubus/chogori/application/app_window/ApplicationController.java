@@ -295,20 +295,25 @@ public class ApplicationController {
      * т.е. currentProjectVersion < lastVersionInDb
      */
     boolean compareVersions(String currentProjectVersion, String lastVersionInDb) {
-        String[] current = currentProjectVersion.split("\\.", -1);
-        String[] last = lastVersionInDb.split("\\.", -1);
-
-        for(int i = 0; i < 3 ; i++){
-            int cV = current.length < i+1 ?
-                            0 :
-                            Integer.parseInt(current[i]);
-            int lV = last.length < i+1 ?
-                    0 :
-                    Integer.parseInt(last[i]);
-            if(cV < lV)
-                return true;
+        if (currentProjectVersion == null || lastVersionInDb == null
+                || currentProjectVersion.isEmpty() || lastVersionInDb.isEmpty()) {
+            return false;
         }
-        return false;
+
+        String[] current = currentProjectVersion.split("\\.");
+        String[] last = lastVersionInDb.split("\\.");
+
+        for (int i = 0; i < Math.max(current.length, last.length); i++) {
+            int cV = (i < current.length) ? Integer.parseInt(current[i]) : 0;
+            int lV = (i < last.length) ? Integer.parseInt(last[i]) : 0;
+
+            if (cV < lV) {
+                return true;
+            } else if (cV > lV) {
+                return false;
+            }
+        }
+        return false; // версии равны
     }
 
 
