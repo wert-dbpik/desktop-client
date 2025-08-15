@@ -13,9 +13,11 @@ public class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, Json
 
     // Форматы для десериализации (добавляем поддержку ISO формата)
     private static final DateTimeFormatter[] DESERIALIZE_FORMATTERS = {
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"), // Основной формат
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME,             // Формат с 'T' (2025-08-11T11:01:24)
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS") // Формат с миллисекундами
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),       // Основной формат
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME,                    // Формат с 'T' (2025-08-11T11:01:24)
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"),   // Формат с 3 цифрами миллисекунд
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS"),    // Формат с 2 цифрами миллисекунд
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")      // Формат с 1 цифрой миллисекунд
     };
 
     @Override
