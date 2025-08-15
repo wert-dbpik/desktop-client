@@ -68,7 +68,7 @@ public class MessageReceiver {
 
     private void handleHeartbeat() {
         lastHeartbeatTime = System.currentTimeMillis();
-        log.debug("Получен HEARTBEAT от сервера");
+//        log.debug("Получен HEARTBEAT от сервера");
         SocketService.updateServerStatus(true);
     }
 
