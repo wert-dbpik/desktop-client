@@ -646,13 +646,24 @@ public class AppMenuController {
         MenuItem helpVideosOnline = new MenuItem("Обучающее видео");
         helpVideosOnline.setOnAction(this::openHelpVideosOnline);
 
+        MenuItem helpVersionInfo = new MenuItem("Что нового?");
+        helpVersionInfo.setOnAction(this::openVersionInfo);
+
         MenuItem aboutItem = new MenuItem("О программе...");
         aboutItem.setOnAction(this::openAbout);
 
         MenuItem test = new MenuItem("ТЕСТ");
         test.setOnAction(this::makeTest);
 
-        helpMenu.getItems().addAll(downloadLastVersion, openInstruction, helpVideosOnline, aboutItem);
+        helpMenu.getItems().addAll(
+                downloadLastVersion,
+                openInstruction,
+                helpVideosOnline,
+                helpVersionInfo);
+        helpMenu.getItems().add(new SeparatorMenuItem());
+        helpMenu.getItems().addAll(
+                aboutItem
+        );
 //        helpMenu.getItems().add(test);
 
         return helpMenu;
@@ -696,6 +707,20 @@ public class AppMenuController {
                 desktop.browse(uri);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * ЧТО НОВОГО
+     */
+    private void openVersionInfo(Event e){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chogori-fxml/help/versionInfo.fxml"));
+            Parent parent = loader.load();
+
+            new WindowDecoration("Что нового?", parent, false, WF_MAIN_STAGE, true);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
