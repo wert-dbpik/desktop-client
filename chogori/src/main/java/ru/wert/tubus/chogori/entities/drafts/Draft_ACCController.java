@@ -948,6 +948,7 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
                             file.toString().toLowerCase().endsWith(".jpg") ||
                             file.toString().toLowerCase().endsWith(".jpeg") ||
                             file.toString().toLowerCase().endsWith(".dxf") ||
+                            file.toString().toLowerCase().endsWith(".stl") ||
                             file.toString().toLowerCase().endsWith(".step") ||
                             file.toString().toLowerCase().endsWith(".eprt") ||
                             file.toString().toLowerCase().endsWith(".easm"))
@@ -1347,7 +1348,9 @@ public class Draft_ACCController extends FormView_ACCController<Draft> {
         } else if(extension.equals("dxf")){
             type = EDraftType.IMAGE_DXF;
             page = Integer.parseInt(parsVariant(initialFileName));
-
+        } else if(extension.equals("stl")){
+            type = EDraftType.IMAGE_STL;
+            page = Integer.parseInt(parsVariant(initialFileName));
         } else {
             String[] nameParts = partName.split(" ", -1);
             outer_loop:

@@ -2,7 +2,6 @@ package ru.wert.tubus.chogori.previewer;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -22,11 +21,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.http.server.DelegatingServerHttpResponse;
 import ru.wert.tubus.chogori.common.utils.TextUtils;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Passport;
-import ru.wert.tubus.client.entity.models.Remark;
 import ru.wert.tubus.chogori.components.ZoomableScrollPane;
 import ru.wert.tubus.chogori.entities.drafts.Draft_TableView;
 import ru.wert.tubus.chogori.entities.drafts.info.DraftInfoPatch;
@@ -49,7 +46,6 @@ import java.util.*;
 import static java.lang.String.format;
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
-import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_TAB_PANE;
 
 //import ru.wert.datapik.client.entity.models.Draft;
@@ -130,7 +126,7 @@ public class PreviewerPatchController {
             else
                 tfDraftInfo.setStyle("-fx-font-weight: normal; -fx-font-style: oblique; -fx-text-fill: darkred");
 
-            if (useBtnDownloadDXF && DXF_DOCKS.contains(EDraftType.getDraftTypeById(draft.getDraftType()))) {
+            if (useBtnDownloadDXF && DOWNLOADABLE_DOCKS.contains(EDraftType.getDraftTypeById(draft.getDraftType()))) {
                 if (!hboxPreviewerButtons.getChildren().contains(btnDownloadDXF))
                     hboxPreviewerButtons.getChildren().add(0, btnDownloadDXF);
             } else
@@ -326,6 +322,8 @@ public class PreviewerPatchController {
             showPlaceholder(BtnImages.SOLID_3D_IMG);
         } else if (DXF_EXTENSIONS.contains(ext)) {
             showPlaceholder(BtnImages.DXF_IMG);
+        } else if (STL_EXTENSIONS.contains(ext)) {
+            showPlaceholder(BtnImages.STL_IMG);
         } else {
             try {
                 showImage(draftPath);

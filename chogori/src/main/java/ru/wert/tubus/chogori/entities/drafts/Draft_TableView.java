@@ -30,11 +30,9 @@ import ru.wert.tubus.winform.enums.EDraftType;
 
 import java.util.*;
 
-import static ru.wert.tubus.chogori.search.SearchField.SEARCHING_NOW;
 import static ru.wert.tubus.chogori.statics.AppStatic.*;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
 import static ru.wert.tubus.client.entity.serviceQUICK.DraftQuickService.LOADED_DRAFTS;
-import static ru.wert.tubus.winform.enums.EDraftType.*;
 
 public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<Draft> {
 
@@ -256,7 +254,7 @@ public class Draft_TableView extends RoutineTableView<Draft> implements Sorting<
                         (status.equals(EDraftStatus.CHANGED) && !isShowChanged()) ||
                         (status.equals(EDraftStatus.ANNULLED) && !isShowAnnulled()) ||
                         (DRAFT_DOCKS.contains(type) && !isShowDraftDocks()) ||
-                        (DXF_DOCKS.contains(type) && !isShowDFXDocks())
+                        (EXPAND_DOCKS.contains(type) && !isShowDFXDocks())
                 )
                     i.remove();
             }

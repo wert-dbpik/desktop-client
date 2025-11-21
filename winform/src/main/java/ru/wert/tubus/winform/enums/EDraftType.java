@@ -20,6 +20,7 @@ public enum EDraftType {
     IMAGE_3D(6, "3D изображение", "3D"),
     IMAGE_STEP(10, "STEP изображение", "STEP"),
     IMAGE_DXF(11, "DXF развертка", "DXF"),
+    IMAGE_STL(12, "STL 3D печать", "STL"),
     DRAW(7, "CAD документ", "CAD"),
     MOUNT(8, "Монтажная схема", "ИМ"),
     ELECTRIC(9, "Электрическая схема", "ЭЛ");

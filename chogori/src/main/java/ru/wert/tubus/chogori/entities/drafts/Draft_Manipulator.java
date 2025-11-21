@@ -96,7 +96,8 @@ public class Draft_Manipulator {
                     if (PDF_EXTENSIONS.contains(ext) ||
                             IMAGE_EXTENSIONS.contains(ext) ||
                             SOLID_EXTENSIONS.contains(ext)||
-                            DXF_EXTENSIONS.contains(ext)
+                            DXF_EXTENSIONS.contains(ext) ||
+                            STL_EXTENSIONS.contains(ext)
                     ) {
                         if(tableView.getModifyingItem() == null){
                             event.acceptTransferModes(TransferMode.NONE);
@@ -125,7 +126,8 @@ public class Draft_Manipulator {
                                     .filter(file -> PDF_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
                                                     IMAGE_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
                                             SOLID_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
-                                            DXF_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase()))
+                                            DXF_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase())) ||
+                                            STL_EXTENSIONS.contains(FilenameUtils.getExtension(file.toFile().getName().toLowerCase()))
                                     )
                                     .collect(Collectors.toList());
                             for (Path p : filesInFolder)
@@ -135,6 +137,7 @@ public class Draft_Manipulator {
                             || IMAGE_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
                             || SOLID_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
                             || DXF_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
+                            || STL_EXTENSIONS.contains(FilenameUtils.getExtension(f.getName().toLowerCase()))
                             ) {
                                 acceptedFiles.add(f);
                             }

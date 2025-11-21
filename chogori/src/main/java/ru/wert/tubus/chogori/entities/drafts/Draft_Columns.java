@@ -1,6 +1,5 @@
 package ru.wert.tubus.chogori.entities.drafts;
 
-import com.sun.javafx.css.Style;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.Label;
@@ -9,20 +8,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import ru.wert.tubus.chogori.images.BtnImages;
-import ru.wert.tubus.chogori.previewer.PreviewerPatchController;
 import ru.wert.tubus.client.entity.models.Draft;
 import ru.wert.tubus.client.entity.models.Passport;
 import ru.wert.tubus.chogori.components.VBoxPassport;
 import ru.wert.tubus.chogori.popups.HintPopup;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
-import ru.wert.tubus.client.entity.models.Remark;
 import ru.wert.tubus.winform.enums.EDraftStatus;
 import ru.wert.tubus.winform.enums.EDraftType;
 
-import java.util.List;
-
 import static ru.wert.tubus.chogori.application.services.ChogoriServices.*;
-import static ru.wert.tubus.chogori.statics.AppStatic.DXF_DOCKS;
+import static ru.wert.tubus.chogori.statics.AppStatic.DOWNLOADABLE_DOCKS;
+import static ru.wert.tubus.chogori.statics.AppStatic.EXTENSIONS_DOCKS;
 import static ru.wert.tubus.chogori.statics.Comparators.createLabelComparator;
 import static ru.wert.tubus.winform.statics.WinformStatic.parseLDTtoNormalDate;
 
@@ -89,7 +85,7 @@ public class Draft_Columns {
             String decNumber = prefix + passport.getNumber();
 
             final EDraftType type = EDraftType.getDraftTypeById(cd.getValue().getDraftType());
-            if(DXF_DOCKS.contains(type))
+            if(EXTENSIONS_DOCKS.contains(type))
                 decNumber = decNumber + "-" + String.format("%02d", cd.getValue().getPageNumber());
 
             Label lblNumber = new Label(decNumber);

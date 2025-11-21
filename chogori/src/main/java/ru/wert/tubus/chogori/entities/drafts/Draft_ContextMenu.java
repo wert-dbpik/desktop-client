@@ -9,12 +9,9 @@ import ru.wert.tubus.chogori.common.utils.ClipboardUtils;
 import ru.wert.tubus.chogori.entities.drafts.commands._Draft_Commands;
 import ru.wert.tubus.chogori.setteings.ChogoriSettings;
 import ru.wert.tubus.winform.enums.EDraftStatus;
-import ru.wert.tubus.winform.enums.EDraftType;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static ru.wert.tubus.chogori.statics.AppStatic.DXF_DOCKS;
 
 public class Draft_ContextMenu extends FormView_ContextMenu<Draft> {
 

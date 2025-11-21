@@ -90,13 +90,16 @@ public class AppStatic {
     public static List<String> IMAGE_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
     public static List<String> SOLID_EXTENSIONS = Arrays.asList("eprt", "easm", "step");
     public static List<String> DXF_EXTENSIONS = Collections.singletonList("dxf");
+    public static List<String> STL_EXTENSIONS = Collections.singletonList("stl");
     public static List<String> DRAW_EXTENSIONS = Arrays.asList("prt", "sldprt", "asm", "sldasm", "drw", "sldrw", "dxf");
 
     public static final List<EDraftType> DRAFT_DOCKS = Arrays.asList(DETAIL, ASSEMBLE, SPECIFICATION, PACKAGE, TOOL,
-            MARKING, MOUNT, ELECTRIC, IMAGE_3D, IMAGE_STEP);
-    public static final List<EDraftType> DXF_DOCKS = Arrays.asList(IMAGE_DXF);
+            MARKING, MOUNT, ELECTRIC, IMAGE_3D, IMAGE_STEP, IMAGE_STL);
+    public static final List<EDraftType> EXPAND_DOCKS = Arrays.asList(IMAGE_DXF); //Документы развертки
+    public static final List<EDraftType> DOWNLOADABLE_DOCKS = Arrays.asList(IMAGE_DXF, IMAGE_STL); //Документы, которые можно скачать, а также зависимы от исполнения
+    public static final List<EDraftType> EXTENSIONS_DOCKS = Arrays.asList(IMAGE_DXF, IMAGE_STL); //Документы, которые зависимы от исполнения
 
-    public static final List<EDraftType> OUTER_APP_LIST = Arrays.asList(IMAGE_DXF, IMAGE_3D, IMAGE_STEP);//Список документов, открываемых сторонним приложением
+    public static final List<EDraftType> OUTER_APP_LIST = Arrays.asList(IMAGE_DXF, IMAGE_STL, IMAGE_3D, IMAGE_STEP);//Список документов, открываемых сторонним приложением
 
     public static File LAST_DOWNLOAD_DIR = new File(System.getProperty("user.home") + "/Desktop");
 
