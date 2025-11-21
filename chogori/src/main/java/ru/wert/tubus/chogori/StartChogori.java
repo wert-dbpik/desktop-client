@@ -16,6 +16,7 @@ import ru.wert.tubus.chogori.application.app_window.AppMenuController;
 import ru.wert.tubus.chogori.components.FileFwdSlash;
 import ru.wert.tubus.chogori.images.AppImages;
 import ru.wert.tubus.chogori.pdf.ICEpdfGlobalDialogBlocker;
+import ru.wert.tubus.chogori.pdf.ICEpdfLoggingBlocker;
 import ru.wert.tubus.chogori.search.SearchHistoryFile;
 import ru.wert.tubus.chogori.statics.UtilStaticNodes;
 import ru.wert.tubus.chogori.tempfile.TempDir;
@@ -138,6 +139,8 @@ public class StartChogori extends Application {
     public static void main(String[] args) {
         //Блокируем любые сообщения из ICEpdf библиотеки
         ICEpdfGlobalDialogBlocker.blockAllDialogs();
+        ICEpdfLoggingBlocker.disableAllLogging();
+
         //Запускаем приложение
         if(!TEST_VERSION) SentryConfig.initialize();
         LauncherImpl.launchApplication(StartChogori.class, AppPreloader.class, args);
