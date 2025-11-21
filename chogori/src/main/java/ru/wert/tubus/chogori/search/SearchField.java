@@ -20,11 +20,10 @@ import ru.wert.tubus.client.interfaces.Item;
 
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.wert.tubus.chogori.statics.AppStatic.KOMPLEKT;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
-import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
+import static ru.wert.tubus.winform.statics.WinformStatic.clearTempDir;
 
 
 public class SearchField extends TextField {
@@ -240,7 +239,7 @@ public class SearchField extends TextField {
      * @param folderName - String, содержит KOMPLEKT
      */
     public void openFolder(String folderName){
-        clearCash();
+        clearTempDir();
         Platform.runLater(() -> {
             Folder folder = FolderQuickService.getInstance().findByName(folderName.substring(KOMPLEKT.length()));
             Draft_TableView draftsTable = (Draft_TableView) CH_SEARCH_FIELD.getSearchedTableView();

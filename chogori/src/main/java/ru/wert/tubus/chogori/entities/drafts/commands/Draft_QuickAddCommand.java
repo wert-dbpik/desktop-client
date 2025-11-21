@@ -17,6 +17,7 @@ import ru.wert.tubus.chogori.statics.AppStatic;
 import ru.wert.tubus.client.entity.api_interfaces.DraftApiInterface;
 import ru.wert.tubus.client.retrofit.RetrofitClient;
 import ru.wert.tubus.winform.enums.EDraftType;
+import ru.wert.tubus.winform.statics.WinformStatic;
 import ru.wert.tubus.winform.warnings.Warning1;
 
 import java.io.File;

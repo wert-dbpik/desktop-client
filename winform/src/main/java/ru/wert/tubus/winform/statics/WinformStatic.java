@@ -45,7 +45,7 @@ public class WinformStatic {
      */
     public static void exitApplication(Event event){
         if(Warning2.create("ВНИМАНИЕ!", "Вы уверены, что хотите выйти", "из программы?")) {
-            clearCash();
+            clearTempDir();
             System.exit(0);
         }
     }
@@ -53,7 +53,7 @@ public class WinformStatic {
     /**
      * Метод удаляет все файлы из папки, где кэшируются данные
      */
-    public static void clearCash() {
+    public static void clearTempDir() {
         if (WF_TEMPDIR.exists()) {
             for (File file : WF_TEMPDIR.listFiles()) {
                 if (file.isFile())

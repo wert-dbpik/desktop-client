@@ -28,7 +28,7 @@ import java.util.*;
 
 import static ru.wert.tubus.chogori.search.SearchField.SEARCHING_NOW;
 import static ru.wert.tubus.chogori.statics.UtilStaticNodes.CH_SEARCH_FIELD;
-import static ru.wert.tubus.winform.statics.WinformStatic.clearCash;
+import static ru.wert.tubus.winform.statics.WinformStatic.clearTempDir;
 
 
 @Slf4j
@@ -146,7 +146,7 @@ public class DraftsEditorController implements SearchableTab, UpdatableTabContro
                 Item selectedItem = folderTableView.getSelectionModel().getSelectedItem();
                 if ( selectedItem instanceof Folder) {
                     CH_SEARCH_FIELD.updateSearchHistory("компл: " + selectedItem.getName());
-                    clearCash();
+                    clearTempDir();
                     Platform.runLater(() -> {
                         updateListOfDrafts(selectedItem);
                         SEARCHING_NOW = false;

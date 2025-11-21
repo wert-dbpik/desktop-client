@@ -189,6 +189,7 @@ public class ApplicationController {
 
         // Обработчик нажатия на кнопку
         btnUpdateAllData.setOnAction(e -> {
+            WinformStatic.clearTempDir();
             startBlinkingAnimation();
             btnUpdateAllData.setText("Данные обновляются...");
             AppMenuController.updateData(() -> {
