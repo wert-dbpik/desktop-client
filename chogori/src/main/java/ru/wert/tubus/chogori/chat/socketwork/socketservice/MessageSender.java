@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static ru.wert.tubus.chogori.setteings.ChogoriSettings.CH_CURRENT_USER;
 import static ru.wert.tubus.winform.statics.WinformStatic.USE_HEARTBEAT;
 
 /**
@@ -67,6 +68,7 @@ public class MessageSender {
 
     private void sendHeartbeat() {
         Message heartbeat = new Message();
+        heartbeat.setSenderId(CH_CURRENT_USER.getId());
         heartbeat.setType(MessageType.HEARTBEAT);
         sendMessageToServer(heartbeat);
     }
